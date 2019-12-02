@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="gradle-plugin-scaffold-clean-architecture.functionalTest" target="11" />
+      <module name="gradle-plugin-scaffold-clean-architecture.main" target="11" />
+      <module name="gradle-plugin-scaffold-clean-architecture.test" target="11" />
+      <module name="pluginClean.functionalTest" target="11" />
+      <module name="pluginClean.main" target="11" />
+      <module name="pluginClean.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

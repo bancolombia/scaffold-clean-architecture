@@ -12,12 +12,30 @@ import static org.junit.Assert.*;
  * A simple unit test for the 'co.com.bancolombia.greeting' plugin.
  */
 public class PluginCleanPluginTest {
-    @Test public void pluginRegistersATask() {
+    @Test
+    public void pluginRegistersATask() {
         // Create a test project and apply the plugin
         Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("co.com.bancolombia.greeting");
-
+        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
         // Verify the result
-        assertNotNull(project.getTasks().findByName("greeting"));
+        assertNotNull(project.getTasks().findByName("generate cleanArchitecture"));
+    }
+    @Test
+    public void pluginRegistersATask2() {
+        // Create a test project and apply the plugin
+        Project project = ProjectBuilder.builder().build();
+        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
+        // Verify the result
+        project.getTasks();
+        assertNotNull(project.getTasks().findByName("g cleanArchitecture"));
+    }
+    @Test
+    public void pluginRegistersATask3() {
+        // Create a test project and apply the plugin
+        Project project = ProjectBuilder.builder().build();
+        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
+        // Verify the result
+        project.getTasks();
+        assertNotNull(project.getTasks().findByName("test"));
     }
 }

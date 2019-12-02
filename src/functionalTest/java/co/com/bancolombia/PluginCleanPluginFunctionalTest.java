@@ -17,31 +17,5 @@ import static org.junit.Assert.*;
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
 public class PluginCleanPluginFunctionalTest {
-    @Test public void canRunTask() throws IOException {
-        // Setup the test build
-        File projectDir = new File("build/functionalTest");
-        Files.createDirectories(projectDir.toPath());
-        writeString(new File(projectDir, "settings.gradle"), "");
-        writeString(new File(projectDir, "build.gradle"),
-            "plugins {" +
-            "  id('co.com.bancolombia.greeting')" +
-            "}");
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments("greeting");
-        runner.withProjectDir(projectDir);
-        BuildResult result = runner.build();
-
-        // Verify the result
-        assertTrue(result.getOutput().contains("Hello from plugin 'co.com.bancolombia.greeting'"));
-    }
-
-    private void writeString(File file, String string) throws IOException {
-        try (Writer writer = new FileWriter(file)) {
-            writer.write(string);
-        }
-    }
 }

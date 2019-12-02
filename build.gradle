@@ -6,10 +6,27 @@
  * User Manual available at https://docs.gradle.org/5.6.3/userguide/custom_plugins.html
  */
 
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
+}
+
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id 'java-gradle-plugin'
+    id 'jacoco'
+    id 'idea'
+    id 'com.gradle.plugin-publish' version '0.10.1'
 }
+
+group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
+version '0.17'
 
 repositories {
     // Use jcenter for resolving dependencies.
@@ -29,6 +46,7 @@ gradlePlugin {
         ScaffoldCleanArchitecturePlugin  {
             id = 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
             displayName = 'Gradle Plugin Scaffold Clean Architecture Bancolombia'
+            description = 'Gradle Plugin Scaffold Clean Architecture Bancolombia'
             implementationClass = 'co.com.bancolombia.PluginCleanPlugin'
         }
     }
@@ -53,5 +71,14 @@ check {
     // Run the functional tests as part of `check`
     dependsOn(tasks.functionalTest)
 }
+
+
+pluginBundle {
+    website = 'https://github.com/santitigaga'
+    vcsUrl = 'https://github.com/santitigaga'
+    tags = ['gradle', 'plugin', 'scaffold', 'cleanarchitecture', 'bancolombia']
+}
+
+
 
 
