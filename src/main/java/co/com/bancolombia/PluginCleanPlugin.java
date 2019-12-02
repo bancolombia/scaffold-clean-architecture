@@ -8,15 +8,23 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.TaskContainer;
 
 /**
  * A simple 'hello world' plugin.
  */
 public class PluginCleanPlugin implements Plugin<Project> {
+
+    private static String taskGroup = "Clean Architecture";
+
     public void apply(Project project) {
 
         // Register a task
-        project.getTasks().register("cleanArchitecture",GenerateTask.class);
+        TaskContainer tasks = project.getTasks();
+        Task generate = tasks.create("cleanArchitecture",GenerateTask.class);
+        generate.setGroup(taskGroup);
+        generate.setDescription("Scaffold Project Clean Architecture");
+
 
     }
 }
