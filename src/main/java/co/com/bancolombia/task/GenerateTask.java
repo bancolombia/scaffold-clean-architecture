@@ -2,23 +2,19 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.Project;
-import org.gradle.api.file.SourceDirectorySet;
-import org.gradle.api.tasks.SourceSet;
-import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 
 
 public class GenerateTask extends DefaultTask {
     public String _package = "";
     public String type = "";
+    File f;
+    FileWriter fw;
 
 
 
@@ -79,12 +75,34 @@ public class GenerateTask extends DefaultTask {
 
         getProject().file(Constants.mainGradle).createNewFile();
         getProject().file(Constants.lombokConfig).createNewFile();
-        File f = new File(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.buildGradle));
-        FileWriter fw = new FileWriter(f);
-        fw.write(Constants.buildGradleModel);
-        fw.close();
+        getProject().file(Constants.settingsGradle).createNewFile();
+        getProject().file(Constants.gitignore).createNewFile();
+        getProject().file(Constants.readMe).createNewFile();
 
         System.out.println("Generated Base Files");
+        System.out.println("Writing in Files");
+
+         f = new File(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
+         fw = new FileWriter(f);
+        fw.write(Constants.buildGradleUseCaseContent);
+
+        f = new File(Constants.lombokConfig);
+        fw = new FileWriter(f);
+        fw.write(Constants.lombokConfigContent);
+
+        f = new File(Constants.gitignore);
+        fw = new FileWriter(f);
+        fw.write(Constants.gitIgnoreContent);
+
+        f = new File(Constants.readMe);
+        fw = new FileWriter(f);
+        fw.write(Constants.readmeContent);
+
+        fw.close();
+
+        System.out.println("Writed in Files");
+
+
 
     }
 
