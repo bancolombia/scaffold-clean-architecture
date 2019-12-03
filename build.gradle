@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-version '0.21'
+version '0.22'
 
 repositories {
     // Use jcenter for resolving dependencies.
@@ -45,8 +45,8 @@ gradlePlugin {
     plugins {
         ScaffoldCleanArchitecturePlugin  {
             id = 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-            displayName = 'Gradle Plugin Scaffold Clean Architecture Bancolombia'
-            description = 'Gradle Plugin Scaffold Clean Architecture Bancolombia'
+            displayName = 'Scaffold Clean Architecture Bancolombia'
+            description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
             implementationClass = 'co.com.bancolombia.PluginCleanPlugin'
         }
     }
@@ -74,9 +74,9 @@ check {
 
 
 pluginBundle {
-    website = 'https://github.com/santitigaga'
-    vcsUrl = 'https://github.com/santitigaga'
-    tags = ['gradle', 'plugin', 'scaffold', 'cleanarchitecture', 'bancolombia']
+    website = 'https://github.com/bancolombia/scaffold-clean-architecture'
+    vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
+    tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
 }
 
 
