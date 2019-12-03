@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-version '0.20'
+version '0.21'
 
 repositories {
     // Use jcenter for resolving dependencies.

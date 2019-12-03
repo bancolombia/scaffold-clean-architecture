@@ -4,10 +4,10 @@ import co.com.bancolombia.Constants;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 
 
 public class GenerateTask extends DefaultTask {
@@ -15,8 +15,6 @@ public class GenerateTask extends DefaultTask {
     public String type = "";
     File f;
     FileWriter fw;
-
-
 
 
     @Option(option = "package", description = "Set the package")
@@ -82,8 +80,8 @@ public class GenerateTask extends DefaultTask {
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
 
-         f = new File(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
-         fw = new FileWriter(f);
+        f = new File(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
+        fw = new FileWriter(f);
         fw.write(Constants.buildGradleUseCaseContent);
 
         f = new File(Constants.lombokConfig);
@@ -101,7 +99,6 @@ public class GenerateTask extends DefaultTask {
         fw.close();
 
         System.out.println("Writed in Files");
-
 
 
     }

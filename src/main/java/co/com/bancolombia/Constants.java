@@ -1,24 +1,32 @@
 package co.com.bancolombia;
 
 public class Constants {
-    /** Base Dirs **/
+    /**
+     * Base Dirs
+     **/
     public static final String infraestucture = "infraestucture";
     public static final String domain = "domain";
     public static final String application = "applications/app-service";
 
-    /** Child Dirs applications **/
+    /**
+     * Child Dirs applications
+     **/
     public static final String mainJava = "src/main/java";
     public static final String mainResource = "src/main/resources";
     public static final String config = "config";
     public static final String app = "app";
 
-    /** Child Dirs Infraestructure **/
+    /**
+     * Child Dirs Infraestructure
+     **/
 
     public static final String drivenAdapters = "driven-adapters";
     public static final String entryPoints = "entry-points";
     public static final String helpers = "helpers";
 
-    /** Child Dirs Domain **/
+    /**
+     * Child Dirs Domain
+     **/
 
     public static final String model = "model";
     public static final String usecase = "usecase";
@@ -33,8 +41,6 @@ public class Constants {
     public static final String settingsGradle = "settings.gradle";
     public static final String gitignore = ".gitignore";
     public static final String readMe = "Readme.md";
-
-
 
 
     public static final String buildGradleUseCaseContent = "dependencies {\n" +
@@ -123,7 +129,6 @@ public class Constants {
             "## OS X\n" +
             "##############################\n" +
             ".DS_Store";
-
 
 
     public static final String readmeContent = "# Proyecto Base Clean Architecture";

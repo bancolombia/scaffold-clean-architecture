@@ -3,6 +3,7 @@
  */
 package co.com.bancolombia;
 
+import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.gradle.api.Project;
 import org.junit.Test;
@@ -14,28 +15,20 @@ import static org.junit.Assert.*;
 public class PluginCleanPluginTest {
     @Test
     public void pluginRegistersATask() {
-        // Create a test project and apply the plugin
+
+        // Arrange
+        String taskGroup = "Clean Architecture";
+        String descriptionTask = "Scaffold Project Clean Architecture";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
-        // Verify the result
-        assertNotNull(project.getTasks().findByName("generate cleanArchitecture"));
+
+        // Act
+        Task task = project.getTasks().findByName("cleanArchitecture");
+
+        //Assert
+        assertNotNull(task);
+        assertEquals(taskGroup, task.getGroup());
+        assertEquals(descriptionTask, task.getDescription());
     }
-    @Test
-    public void pluginRegistersATask2() {
-        // Create a test project and apply the plugin
-        Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
-        // Verify the result
-        project.getTasks();
-        assertNotNull(project.getTasks().findByName("g cleanArchitecture"));
-    }
-    @Test
-    public void pluginRegistersATask3() {
-        // Create a test project and apply the plugin
-        Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
-        // Verify the result
-        project.getTasks();
-        assertNotNull(project.getTasks().findByName("test"));
-    }
+
 }
