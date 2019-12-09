@@ -45,11 +45,37 @@ public class PluginCleanPluginFunctionalTest {
         runner.withArguments("cleanArchitecture");
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        System.out.println(result.getOutput());
         // Verify the result
-        assertTrue(new File("build/functionalTest/infraestucture").exists());
+        assertTrue(new File("build/functionalTest/Readme.md").exists());
+        assertTrue(new File("build/functionalTest/.gitignore").exists());
+        assertTrue(new File("build/functionalTest/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/lombok.config").exists());
+        assertTrue(new File("build/functionalTest/main.gradle").exists());
+        assertTrue(new File("build/functionalTest/settings.gradle").exists());
 
-        assertTrue(result.getOutput().contains("Generating Base Dirs:"));
+        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/helpers").exists());
+
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/test/java/co/com/bancolombia/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/build.gradle").exists());
+
+        assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/application.yaml").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
+
+
+
+
+
+
         assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
     }
 
@@ -70,7 +96,6 @@ public class PluginCleanPluginFunctionalTest {
         runner.withArguments("tasks");
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        System.out.println(result.getOutput());
 
         // Verify the result
         assertTrue(result.getOutput().contains("cleanArchitecture"));

@@ -27,7 +27,7 @@ public class PluginCleanPluginTest {
         String taskGroup = "Clean Architecture";
         String descriptionTask = "Scaffold Project Clean Architecture";
         Project project = ProjectBuilder.builder().build();
-        project.getPlugins().apply("co.com.bancolombia.scaffoldJavaCleanArchitecture");
+        project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
         // Act
         Task task = project.getTasks().findByName("cleanArchitecture");
