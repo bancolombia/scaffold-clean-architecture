@@ -4,10 +4,85 @@
 package co.com.bancolombia;
 
 
+import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
 public class PluginCleanPluginFunctionalTest {
+    @Rule
+    public final TemporaryFolder testProjectDir = new TemporaryFolder();
+
+
+
+    @Test public void canRunTask() throws IOException {
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments("cleanArchitecture");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        System.out.println(result.getOutput());
+        // Verify the result
+        assertTrue(new File("build/functionalTest/infraestucture").exists());
+
+        assertTrue(result.getOutput().contains("Generating Base Dirs:"));
+        assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test public void createTasks() throws IOException {
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments("tasks");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        System.out.println(result.getOutput());
+
+        // Verify the result
+        assertTrue(result.getOutput().contains("cleanArchitecture"));
+
+        assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    private void writeString(File file, String string) throws IOException {
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(string);
+        }
+    }
+
 
 }

@@ -1,0 +1,56 @@
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  branches:
+   include:
+   - master
+   - feature/*
+
+resources:
+- repo: self
+  clean: true
+
+pool:
+  name: Build
+  demands:
+  - Agent.OS -equals Linux
+  - java
+
+steps:
+
+- task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
+  displayName: 'Prepare analysis on SonarQube'
+  inputs:
+    SonarQube: SonarQube
+    scannerMode: CLI
+    configMode: manual
+    cliProjectKey: '$(Build.Repository.Name)'
+    cliProjectName: '$(Build.Repository.Name)'
+    cliProjectVersion: '$(Build.BuildNumber)'
+    cliSources: src
+    extraProperties: |
+     sonar.branch.name=$(Build.SourceBranchName)
+     sonar.java.binaries=$(Build.SourcesDirectory)/build/classes
+     sonar.java.libraries=$(Build.SourcesDirectory)/build/libs/*.jar
+     sonar.sources=$(Build.SourcesDirectory)/src/main/java
+     sonar.junit.reportPaths=$(Build.SourcesDirectory)/build/test-results/test
+     sonar.test=$(Build.SourcesDirectory)/src/test/java
+     #sonar.jacoco.reportPaths=CCReport43F6D5EF/jacoco.exec
+     sonar.cobertura.reportPath=$(Build.SourcesDirectory)/build/reports/cobertura/coverage.xml
+     sonar.findbugs.nested=false
+
+- task: Gradle@1
+  displayName: 'Build, Restore Package And Run Unit Test'
+  inputs:
+    tasks: 'build'
+    testResultsFiles: '**/build/test-results/test/**/TEST-*.xml'
+    testRunTitle: '$(Build.DefinitionName)'
+
+- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+  displayName: 'Run Code Analysis'
+
+- task: SimondeLang.sonar-buildbreaker.sonar-buildbreaker.sonar-buildbreaker@8
+  displayName: 'Break build on quality gate failure'
+  inputs:
+    SonarQube: SonarQube
+

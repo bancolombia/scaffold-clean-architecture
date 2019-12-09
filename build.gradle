@@ -8,57 +8,57 @@
 
 buildscript {
 
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-    }
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+	}
 }
 
 
 
 plugins {
-    // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
-    id 'java-gradle-plugin'
-    id 'jacoco'
-    id 'idea'
-    id 'com.gradle.plugin-publish' version '0.10.1'
+	// Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
+	id 'java-gradle-plugin'
+	id 'jacoco'
+	id 'idea'
+	id 'com.gradle.plugin-publish' version '0.10.1'
 }
 
 group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
 version '0.32'
 
 repositories {
-    // Use jcenter for resolving dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+	// Use jcenter for resolving dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
 }
 
 dependencies {
-    // Use JUnit test framework for unit tests
-    testImplementation 'junit:junit:4.12'
-    compile gradleApi()
+	// Use JUnit test framework for unit tests
+	testImplementation 'junit:junit:4.12'
+	compile gradleApi()
 }
 
 gradlePlugin {
-    // Define the plugin
-    plugins {
-        ScaffoldCleanArchitecturePlugin  {
-            id = 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-            displayName = 'Scaffold Clean Architecture Bancolombia'
-            description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
-            implementationClass = 'co.com.bancolombia.PluginCleanPlugin'
-        }
-    }
+	// Define the plugin
+	plugins {
+		cleanArchitecture  {
+			id = 'co.com.bancolombia.cleanArchitecture'
+			displayName = 'Scaffold Clean Architecture Bancolombia'
+			description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
+			implementationClass = 'co.com.bancolombia.PluginCleanPlugin'
+		}
+	}
 }
 
 // Add a source set for the functional test suite
 sourceSets {
-    functionalTest {
-    }
+	functionalTest {
+	}
 }
 
 gradlePlugin.testSourceSets(sourceSets.functionalTest)
@@ -66,20 +66,20 @@ configurations.functionalTestImplementation.extendsFrom(configurations.testImple
 
 // Add a task to run the functional tests
 task functionalTest(type: Test) {
-    testClassesDirs = sourceSets.functionalTest.output.classesDirs
-    classpath = sourceSets.functionalTest.runtimeClasspath
+	testClassesDirs = sourceSets.functionalTest.output.classesDirs
+	classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 check {
-    // Run the functional tests as part of `check`
-    dependsOn(tasks.functionalTest)
+	// Run the functional tests as part of `check`
+	dependsOn(tasks.functionalTest)
 }
 
 
 pluginBundle {
-    website = 'https://github.com/bancolombia/scaffold-clean-architecture'
-    vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
-    tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
+	website = 'https://github.com/bancolombia/scaffold-clean-architecture'
+	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
+	tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
 }
 
 

@@ -1,18 +1,16 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
-import kotlin.reflect.jvm.internal.impl.load.java.Constant;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 
 public class GenerateTask extends DefaultTask {
-    public String _package = "";
+    public String _package = "co/com/bancolombia";
     public String type = "imperative";
     public String nameProject = "cleanArchitecture";
     File f;
@@ -21,7 +19,9 @@ public class GenerateTask extends DefaultTask {
 
     @Option(option = "package", description = "Set the package")
     public void setPackage(String _package) {
-        this._package = _package;
+        if (!_package.isEmpty()){
+            this._package = _package;
+        }
     }
 
     @Option(option = "type", description = "Set the type of the project (reactive | imperative) ")
@@ -41,12 +41,8 @@ public class GenerateTask extends DefaultTask {
 
     @TaskAction
     public void Generate() throws IOException {
-        if (_package.isEmpty()) {
-            System.out.println("Set the package ");
-            System.exit(-1);
-            return;
-        }
-        _package=  _package.replaceAll("\\.","/");
+
+        _package=  _package.replaceAll("\\.","\\/");
         System.out.println("Package: " + _package);
         System.out.println("Type Project: " + type);
         System.out.println("Name Project: " + nameProject);
@@ -56,7 +52,6 @@ public class GenerateTask extends DefaultTask {
         getProject().mkdir(Constants.domain);
         System.out.println("Created dir: " + Constants.domain);
         getProject().mkdir(Constants.application);
-        System.out.println("Created dir: " + Constants.application);
         System.out.println("Created dir: " + Constants.application);
         System.out.println("Generated Base Dirs");
 
@@ -93,66 +88,27 @@ public class GenerateTask extends DefaultTask {
 
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
-
-        f = new File(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
-        fw = new FileWriter(f);
-        fw.write(Constants.buildGradleUseCaseContent);
-        fw.close();
-
-        f = new File(Constants.lombokConfig);
-        fw = new FileWriter(f);
-        fw.write(Constants.lombokConfigContent);
-        fw.close();
-
-        f = new File(Constants.gitignore);
-        fw = new FileWriter(f);
-        fw.write(Constants.gitIgnoreContent);
-        fw.close();
-
-        f = new File(Constants.readMe);
-        fw = new FileWriter(f);
-        fw.write(Constants.readmeContent);
-        fw.close();
-
-        f = new File(Constants.settingsGradle);
-        fw = new FileWriter(f);
-        fw.write(Constants.getSettingsGradleContent(this.nameProject));
-        fw.close();
-
-        f = new File(Constants.mainGradle);
-        fw = new FileWriter(f);
-        fw.write(Constants.mainGradleContent);
-        fw.close();
-
-        f = new File(Constants.buildGradle);
-        fw = new FileWriter(f);
-        fw.write(Constants.buildGradleContent);
-        fw.close();
-
-        f = new File(Constants.application.concat("/").concat(Constants.buildGradle));
-        fw = new FileWriter(f);
-        fw.write(Constants.buildGradleApplicationContent);
-        fw.close();
-
-        f = new File(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties));
-        fw = new FileWriter(f);
-        fw.write(Constants.getApplicationPropertiesContent(this.nameProject));
-        fw.close();
-
-        f = new File(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j));
-        fw = new FileWriter(f);
-        fw.write(Constants.log4jContent);
-        fw.close();
-
-        f = new File(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication));
-        fw = new FileWriter(f);
-        fw.write(Constants.getMainApplicationContent(this.nameProject));
-        fw.close();
-
-
+        writeString(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle),Constants.buildGradleUseCaseContent);
+        writeString(Constants.lombokConfig,Constants.lombokConfigContent);
+        writeString(Constants.gitignore,Constants.gitIgnoreContent);
+        writeString(Constants.readMe,Constants.readmeContent);
+        writeString(Constants.settingsGradle,Constants.getSettingsGradleContent(this.nameProject));
+        writeString(Constants.mainGradle,Constants.mainGradleContent);
+        writeString(Constants.buildGradle,Constants.buildGradleContent);
+        writeString(Constants.application.concat("/").concat(Constants.buildGradle),Constants.buildGradleApplicationContent);
+        writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties),Constants.getApplicationPropertiesContent(this.nameProject));
+        writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j),Constants.log4jContent);
+        writeString(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication),Constants.getMainApplicationContent(this.nameProject));
         System.out.println("Writed in Files");
 
+    }
+    private void writeString(String nameFile, String data) throws IOException {
+        System.out.println(getProject().file(nameFile).getAbsolutePath());
 
+        f = new File((getProject().file(nameFile).getAbsolutePath()));
+        fw = new FileWriter(f);
+        fw.write(data);
+        fw.close();
     }
 
 }

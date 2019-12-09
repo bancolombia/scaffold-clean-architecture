@@ -8,6 +8,9 @@
       <module name="pluginClean.functionalTest" target="11" />
       <module name="pluginClean.main" target="11" />
       <module name="pluginClean.test" target="11" />
+      <module name="scaffoldJavaCleanArchitecture.functionalTest" target="11" />
+      <module name="scaffoldJavaCleanArchitecture.main" target="11" />
+      <module name="scaffoldJavaCleanArchitecture.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

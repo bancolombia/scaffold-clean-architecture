@@ -1,47 +1,20 @@
-# Scaffold clean Architecture
-Gradle plugin to create a clean application in Java that already works, It follows our best practices!
+# Proyecto Base Implementando Clean Architecture
 
+## Antes de Iniciar
 
-Usage - Applying the plugin
-===================
-To use the plugin with Gradle 5 or later, add the following to your 
-build.gradle file.
+Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.
 
-```groovy
-plugins {
- id "co.com.bancolombia.scaffoldJavaCleanArchitecture" version "0.32"
-}
-```
+## Infraestructure
 
+### Helpers
+En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.
 
+Estas utilidades no están arraigadas a objetos concretos, se realiza el uso de generics para modelar comportamientos genéricos de los diferentes objetos de persistencia que puedan existir, este tipo de implementaciones se realizan basadas en el patrón de diseño [Unit of Work y Repository](https://medium.com/@krzychukosobudzki/repository-design-pattern-bc490b256006) 
 
-Tasks
-=====
-The Scaffold Clean Architecture plugin will create 1 task you can use (more tasks will come) :
+Estas clases no puede existir solas y debe heredarse su compartimiento en los **Driven Adapters**
 
-1. The ```cleanArchitecture``` task will cause  Scaffold Project Clean Architecture, this task have 2 parameters ```package``` and ```type``` are required to use this task.
+## Driven Adapters
+Los driven adapter representan implementaciones externas a nuestro sistema, como lo son conexiones a servicios rest, soap, bases de datos, lectura de archivos planos, y en concreto cualquier origen y fuente de datos con la que debamos interactuar.
 
-```sh
-gradle cleanArchitecture --package=co/com/bancolombia --type=imperative
-```
-
-
-
-Configuration
-=============
-
-The behavior of this plugin is controlled by setting various options in the tasks.
-
-- ```package = <package/we/need>```: You must specify the package that will have the project.
-
-- ```type = <reactive | imperative>```: (It's coming) The project already works, but you should know what type of project you need to generate.
-
-How I can help?
-=============
-The following functionalities are within the roadMap of this script:
-
-    - Task to generate entry points
-    - Task to generate driven adapters
-    - Task to generate models
-    - Task to generate usecase
-    - Functional test.
+## Entry Points
+Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.

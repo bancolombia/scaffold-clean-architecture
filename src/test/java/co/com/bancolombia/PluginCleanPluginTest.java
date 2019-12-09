@@ -3,16 +3,23 @@
  */
 package co.com.bancolombia;
 
+import org.gradle.BuildResult;
 import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.gradle.api.Project;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
+
 import static org.junit.Assert.*;
 
 /**
  * A simple unit test for the 'co.com.bancolombia.greeting' plugin.
  */
 public class PluginCleanPluginTest {
+
     @Test
     public void pluginRegistersATask() {
 
