@@ -7,6 +7,7 @@
  */
 
 buildscript {
+
     repositories {
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -17,6 +18,8 @@ buildscript {
     }
 }
 
+
+
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id 'java-gradle-plugin'
@@ -26,7 +29,7 @@ plugins {
 }
 
 group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-version '0.22'
+version '0.32'
 
 repositories {
     // Use jcenter for resolving dependencies.

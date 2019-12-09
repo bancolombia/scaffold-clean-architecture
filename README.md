@@ -9,7 +9,7 @@ build.gradle file.
 
 ```groovy
 plugins {
- id "co.com.bancolombia.scaffoldJavaCleanArchitecture" version "0.22"
+ id "co.com.bancolombia.scaffoldJavaCleanArchitecture" version "0.32"
 }
 ```
 
