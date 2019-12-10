@@ -1,15 +1,15 @@
-# Scaffold clean Architecture
-Gradle plugin to create a clean application in Java that already works, It follows our best practices!
+# Scaffolding of Clean Architecture
+Gradle plugin to create a java application based on Clean Architecture following our best practices!
 
 
-Usage - Applying the plugin
+Plugin Implementation  
 ===================
-To use the plugin with Gradle 5 or later, add the following to your 
+To use the plugin you need Gradle version 5 or later, to start add the following section into your 
 build.gradle file.
 
 ```groovy
 plugins {
- id "co.com.bancolombia.scaffoldJavaCleanArchitecture" version "0.32"
+ id "co.com.bancolombia.cleanArchitecture" version "0.33"
 }
 ```
 
@@ -17,28 +17,25 @@ plugins {
 
 Tasks
 =====
-The Scaffold Clean Architecture plugin will create 1 task you can use (more tasks will come) :
+The Scaffolding Clean Architecture plugin will allow you create 1 task (more tasks are comming) :
 
-1. The ```cleanArchitecture``` task will cause  Scaffold Project Clean Architecture, this task have 2 parameters ```package``` and ```type``` are required to use this task.
+1. The ```cleanArchitecture``` task will generate a clean architecture structure in your project, this task have three optional parameters; ```package``` , ```type``` and ```name```.
+
+- ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
+
+- ```type = <imperative>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
+
+-  ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
 
 ```sh
-gradle cleanArchitecture --package=co/com/bancolombia --type=imperative
+gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject
 ```
 
 
 
-Configuration
-=============
-
-The behavior of this plugin is controlled by setting various options in the tasks.
-
-- ```package = <package/we/need>```: You must specify the package that will have the project.
-
-- ```type = <reactive | imperative>```: (It's coming) The project already works, but you should know what type of project you need to generate.
-
 How I can help?
 =============
-The following functionalities are within the roadMap of this script:
+The following functionalities are within the road map of this script:
 
     - Task to generate entry points
     - Task to generate driven adapters

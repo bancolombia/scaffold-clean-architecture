@@ -16,6 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,10 +25,6 @@ import static org.junit.Assert.assertTrue;
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
 public class PluginCleanPluginFunctionalTest {
-    @Rule
-    public final TemporaryFolder testProjectDir = new TemporaryFolder();
-
-
 
     @Test public void canRunTask() throws IOException {
         // Setup the test build
@@ -71,10 +69,56 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
 
+        assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test public void canRunTaskWithParameters() throws IOException {
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments("cleanArchitecture","--name=ProjectName","--package=co.com.test");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        // Verify the result
+        assertTrue(result.getOutput().contains("Name Project: ProjectName"));
+        assertTrue(result.getOutput().contains("Package: co/com/test"));
 
 
+        assertTrue(new File("build/functionalTest/Readme.md").exists());
+        assertTrue(new File("build/functionalTest/.gitignore").exists());
+        assertTrue(new File("build/functionalTest/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/lombok.config").exists());
+        assertTrue(new File("build/functionalTest/main.gradle").exists());
+        assertTrue(new File("build/functionalTest/settings.gradle").exists());
 
+        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/helpers").exists());
 
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/test/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/test/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/test/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/test/java/co/com/test/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/build.gradle").exists());
+
+        assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/test/MainApplication.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/test/config").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/application.yaml").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/test").exists());
 
         assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
     }

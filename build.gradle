@@ -28,8 +28,8 @@ plugins {
 	id 'com.gradle.plugin-publish' version '0.10.1'
 }
 
-group 'co.com.bancolombia.scaffoldJavaCleanArchitecture'
-version '0.32'
+group 'co.com.bancolombia.cleanArchitecture'
+version '0.33'
 
 repositories {
 	// Use jcenter for resolving dependencies.

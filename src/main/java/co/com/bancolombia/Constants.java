@@ -204,9 +204,14 @@ public class Constants {
             "\n" +
             "plugins {\n" +
             "\tid \"org.sonarqube\" version \"2.6\"\n" +
-            "\tid \"co.com.bancolombia.scaffoldJavaCleanArchitecture\" version \"0.28\"\n" +
+            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.33\"\n" +
             "}\n" +
             "\n" +
+            "task testReport(type: TestReport) {\n" +
+            "    destinationDir = file(\"$buildDir/reports/allTests\")\n" +
+            "    // Include the results from the `test` task in all subprojects\n" +
+            "    reportOn subprojects*.test\n" +
+            "}\n"+
             "apply from: './main.gradle'";
     public static final String buildGradleApplicationContent ="apply plugin: 'org.springframework.boot'\n"+
         "\n"+
@@ -233,7 +238,6 @@ public class Constants {
             "rootLogger.appenderRefs = stdout\n"+
             "rootLogger.appenderRef.stdout.ref = STDOUT";
     public static final String testJava = "src/test/java";
-    public static final String testResource = "src/test/resources";
 
     public static String getSettingsGradleContent(String nameProject) {
         return "rootProject.name = '"+ nameProject +"'\n" +
