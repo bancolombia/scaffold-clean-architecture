@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 public class PluginCleanPluginFunctionalTest {
 
     @Test public void canRunTask() throws IOException {
+        String task = "cleanArchitecture";
         // Setup the test build
         File projectDir = new File("build/functionalTest");
         Files.createDirectories(projectDir.toPath());
@@ -40,7 +41,7 @@ public class PluginCleanPluginFunctionalTest {
         GradleRunner runner = GradleRunner.create();
         runner.forwardOutput();
         runner.withPluginClasspath();
-        runner.withArguments("cleanArchitecture");
+        runner.withArguments(task);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
@@ -69,10 +70,14 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
 
-        assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
     @Test public void canRunTaskWithParameters() throws IOException {
+        String task = "cleanArchitecture";
+        String _package = "co.com.test";
+        String projectName = "ProjectName";
+
         // Setup the test build
         File projectDir = new File("build/functionalTest");
         Files.createDirectories(projectDir.toPath());
@@ -87,11 +92,11 @@ public class PluginCleanPluginFunctionalTest {
         GradleRunner runner = GradleRunner.create();
         runner.forwardOutput();
         runner.withPluginClasspath();
-        runner.withArguments("cleanArchitecture","--name=ProjectName","--package=co.com.test");
+        runner.withArguments(task,"--name="+ projectName,"--package="+ _package);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
-        assertTrue(result.getOutput().contains("Name Project: ProjectName"));
+        assertTrue(result.getOutput().contains("Name Project: " + projectName));
         assertTrue(result.getOutput().contains("Package: co/com/test"));
 
 
@@ -120,7 +125,7 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/test").exists());
 
-        assertEquals(result.task(":cleanArchitecture").getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
     @Test public void createTasks() throws IOException {

@@ -1,6 +1,9 @@
 package co.com.bancolombia;
 
 public class Constants {
+
+    public static final String extensionJava = ".java";
+
     /**
      * Base Dirs
      **/
@@ -28,6 +31,8 @@ public class Constants {
      **/
 
     public static final String model = "model";
+    public static final String gateway = "gateways";
+    public static final String repository = "Repository";
     public static final String usecase = "usecase";
 
     public static final String buildGradle = "build.gradle";
@@ -296,5 +301,27 @@ public class Constants {
                 "        SpringApplication.run(MainApplication.class, args);\n" +
                 "    }\n" +
                 "}";
+    }
+
+    public static String getModel(String nameModel, String _package) {
+        return "";
+    }
+
+    public static String getInterfaceModel(String nameModel, String _package) {
+        return "package " + _package + "." + domain + "." + nameModel + "." + gateway + ";\n" +
+                "\n" +
+                "import " + _package + "." + domain + "." + nameModel.toLowerCase() + "." + nameModel + ";\n"+
+        "\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "public interface MovieRepository {\n" +
+                "\n" +
+                "    Movie save(Movie movie);\n" +
+                "    void saveAll(List<Movie> movies);\n" +
+                "    Movie findById(String id);\n" +
+                "    List<Movie> findAll();\n" +
+                "    List<Movie> findMoviesByCategory(String category);\n" +
+                "\n" +
+                "}\n";
     }
 }

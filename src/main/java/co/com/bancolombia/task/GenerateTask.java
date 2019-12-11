@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
@@ -31,7 +32,7 @@ public class GenerateTask extends DefaultTask {
         }
     }
 
-    @Option(option = "name", description = "Set the name of the projectm default is cleanArchitecture ")
+    @Option(option = "name", description = "Set the name of the project default is cleanArchitecture ")
     public void setNameProject(String nameProject) {
         if (!nameProject.isEmpty()){
             this.nameProject = nameProject;
@@ -88,27 +89,20 @@ public class GenerateTask extends DefaultTask {
 
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
-        writeString(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle),Constants.buildGradleUseCaseContent);
-        writeString(Constants.lombokConfig,Constants.lombokConfigContent);
-        writeString(Constants.gitignore,Constants.gitIgnoreContent);
-        writeString(Constants.readMe,Constants.readmeContent);
-        writeString(Constants.settingsGradle,Constants.getSettingsGradleContent(this.nameProject));
-        writeString(Constants.mainGradle,Constants.mainGradleContent);
-        writeString(Constants.buildGradle,Constants.buildGradleContent);
-        writeString(Constants.application.concat("/").concat(Constants.buildGradle),Constants.buildGradleApplicationContent);
-        writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties),Constants.getApplicationPropertiesContent(this.nameProject));
-        writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j),Constants.log4jContent);
-        writeString(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication),Constants.getMainApplicationContent(this.nameProject));
+        Utils.writeString(getProject(), Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle),Constants.buildGradleUseCaseContent);
+        Utils.writeString(getProject(), Constants.lombokConfig,Constants.lombokConfigContent);
+        Utils.writeString(getProject(), Constants.gitignore,Constants.gitIgnoreContent);
+        Utils.writeString(getProject(), Constants.readMe,Constants.readmeContent);
+        Utils.writeString(getProject(), Constants.settingsGradle,Constants.getSettingsGradleContent(this.nameProject));
+        Utils.writeString(getProject(), Constants.mainGradle,Constants.mainGradleContent);
+        Utils.writeString(getProject(), Constants.buildGradle,Constants.buildGradleContent);
+        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.buildGradle),Constants.buildGradleApplicationContent);
+        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties),Constants.getApplicationPropertiesContent(this.nameProject));
+        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j),Constants.log4jContent);
+        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication),Constants.getMainApplicationContent(this.nameProject));
         System.out.println("Writed in Files");
 
     }
-    private void writeString(String nameFile, String data) throws IOException {
-        System.out.println(getProject().file(nameFile).getAbsolutePath());
 
-        f = new File((getProject().file(nameFile).getAbsolutePath()));
-        fw = new FileWriter(f);
-        fw.write(data);
-        fw.close();
-    }
 
 }

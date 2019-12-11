@@ -31,9 +31,11 @@ public class PluginCleanPluginTest {
 
         // Act
         Task task = project.getTasks().findByName("cleanArchitecture");
+        Task task2 = project.getTasks().findByName("generateModel");
 
         //Assert
         assertNotNull(task);
+        assertNotNull(task2);
         assertEquals(taskGroup, task.getGroup());
         assertEquals(descriptionTask, task.getDescription());
     }
