@@ -95,7 +95,7 @@ public class GenerateTask extends DefaultTask {
         writeString(Constants.settingsGradle,Constants.getSettingsGradleContent(this.nameProject));
         writeString(Constants.mainGradle,Constants.mainGradleContent);
         writeString(Constants.buildGradle,Constants.buildGradleContent);
-        writeString(Constants.application.concat("/").concat(Constants.buildGradle),Constants.buildGradleApplicationContent);
+        writeString(Constants.application.concat("/").concat(Constants.buildGradle),Constants.getbuildGradleApplicationContent());
         writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties),Constants.getApplicationPropertiesContent(this.nameProject));
         writeString(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j),Constants.log4jContent);
         writeString(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication),Constants.getMainApplicationContent(this.nameProject));

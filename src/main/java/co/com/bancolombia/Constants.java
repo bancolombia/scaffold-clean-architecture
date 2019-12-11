@@ -206,6 +206,14 @@ public class Constants {
             "\tid \"org.sonarqube\" version \"2.6\"\n" +
             "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.33\"\n" +
             "}\n" +
+            "subprojects {\n" +
+            "  apply plugin: \"java\"\n" +
+            "  apply plugin: \"jacoco\"\n" +
+            "    // Disable the test report for the individual test task\n" +
+            "    test {\n" +
+            "      reports.html.enabled = false\n" +
+            "    }\n" +
+            "}"+
             "\n" +
             "task testReport(type: TestReport) {\n" +
             "    destinationDir = file(\"$buildDir/reports/allTests\")\n" +
@@ -213,16 +221,6 @@ public class Constants {
             "    reportOn subprojects*.test\n" +
             "}\n"+
             "apply from: './main.gradle'";
-    public static final String buildGradleApplicationContent ="apply plugin: 'org.springframework.boot'\n"+
-        "\n"+
-        "\n"+
-        "\n"+
-        "dependencies {\n"+
-        "    compile 'org.springframework.boot:spring-boot-starter'\n"+
-        "    compile project(\":domain-usecase\")\n"+
-        "\n"+
-        "    runtime('org.springframework.boot:spring-boot-devtools')\n"+
-        "}\n";
 
     public static final String log4jContent ="name=PropertiesConfig\n"+
             "property.filename = logs\n"+
@@ -296,5 +294,22 @@ public class Constants {
                 "        SpringApplication.run(MainApplication.class, args);\n" +
                 "    }\n" +
                 "}";
+    }
+    public static String getbuildGradleApplicationContent(){
+
+        return "apply plugin: 'org.springframework.boot'\n"+
+                "\n"+
+                "\n"+
+                "\n"+
+                "dependencies {\n"+
+                "    compile 'org.springframework.boot:spring-boot-starter'\n"+
+                "    compile project(\":domain-usecase\")\n"+
+                "\n"+
+                "    runtime('org.springframework.boot:spring-boot-devtools')\n"+
+                "}\n"+
+                "jar {\n"+
+                "    archivesBaseName = rootProject.name\n"+
+                "    libsDirName = project(\":\").getBuildDir()\n"+
+                "}\n";
     }
 }
