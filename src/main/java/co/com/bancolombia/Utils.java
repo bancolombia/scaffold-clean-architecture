@@ -8,20 +8,20 @@ import java.io.IOException;
 
 public class Utils {
 
-    static File f;
-    static FileWriter fw;
+    private static File file;
+    private static FileWriter fileWriter;
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         System.out.println(project.file(nameFile).getAbsolutePath());
 
-        f = new File((project.file(nameFile).getAbsolutePath()));
-        fw = new FileWriter(f);
-        fw.write(data);
-        fw.close();
+        file = new File((project.file(nameFile).getAbsolutePath()));
+        fileWriter = new FileWriter(file);
+        fileWriter.write(data);
+        fileWriter.close();
     }
 
     public static String capitalize(String str) {
-        if(str == null || str.isEmpty()) {
+        if (str == null || str.isEmpty()) {
             return str;
         }
 

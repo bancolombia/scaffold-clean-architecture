@@ -21,7 +21,7 @@ public class GenerateModelTask extends DefaultTask {
     }
 
 
-    @TaskAction
+
     public void GenerateModel() throws IOException {
         if (modelName.isEmpty() || modelName.isBlank()) {
             System.out.println("Set the model name with the parameter --name");
@@ -29,15 +29,15 @@ public class GenerateModelTask extends DefaultTask {
         }
         _package = _package.replaceAll("\\.", "\\/");
         System.out.println("Model Name: " + modelName);
-
         System.out.println("Generating Childs Dirs");
         getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.gateway));
         System.out.println("Generated Childs Dirs");
 
         System.out.println("Generating Base Files");
+        getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(nameModel).concat("/").concat(Constants.gateway).concat("/").concat(Utils.capitalize(nameModel) + Constants.repository + Constants.javaExtension))).createNewFile();
+        getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(nameModel).concat("/").concat(Utils.capitalize(nameModel) + Constants.javaExtension))).createNewFile();
         getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Constants.gateway).concat("/").concat(Utils.capitalize(modelName) + Constants.repository + Constants.extensionJava))).createNewFile();
         getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Utils.capitalize(modelName) + Constants.extensionJava))).createNewFile();
-
 
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
