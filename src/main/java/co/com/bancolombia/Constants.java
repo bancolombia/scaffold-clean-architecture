@@ -2,7 +2,7 @@ package co.com.bancolombia;
 
 public class Constants {
 
-    public static final String extensionJava = ".java";
+    public static final String javaExtension = ".java";
 
     /**
      * Base Dirs
