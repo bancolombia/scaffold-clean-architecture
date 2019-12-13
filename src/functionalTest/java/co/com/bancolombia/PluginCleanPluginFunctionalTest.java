@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class PluginCleanPluginFunctionalTest {
 
-    @Test public void canRunTask() throws IOException {
+    @Test public void canRunTaskCleanArchitectureWithOutParameters() throws IOException {
         String task = "cleanArchitecture";
         // Setup the test build
         File projectDir = new File("build/functionalTest");
@@ -73,7 +73,7 @@ public class PluginCleanPluginFunctionalTest {
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void canRunTaskWithParameters() throws IOException {
+    @Test public void canRunTaskCleanArchitectureWithParameters() throws IOException {
         String task = "cleanArchitecture";
         String _package = "co.com.test";
         String projectName = "ProjectName";
@@ -148,6 +148,7 @@ public class PluginCleanPluginFunctionalTest {
 
         // Verify the result
         assertTrue(result.getOutput().contains("cleanArchitecture"));
+        assertTrue(result.getOutput().contains("generateModel"));
 
         assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
     }

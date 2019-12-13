@@ -209,14 +209,9 @@ public class Constants {
             "\n" +
             "plugins {\n" +
             "\tid \"org.sonarqube\" version \"2.6\"\n" +
-            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.33\"\n" +
+            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.38\"\n" +
             "}\n" +
             "\n" +
-            "task testReport(type: TestReport) {\n" +
-            "    destinationDir = file(\"$buildDir/reports/allTests\")\n" +
-            "    // Include the results from the `test` task in all subprojects\n" +
-            "    reportOn subprojects*.test\n" +
-            "}\n" +
             "apply from: './main.gradle'";
     public static final String buildGradleApplicationContent = "apply plugin: 'org.springframework.boot'\n" +
             "\n" +
@@ -305,6 +300,7 @@ public class Constants {
     }
 
     public static String getModel(String modelName, String _package) {
+        _package = _package.replaceAll( "\\/", "\\.");
         return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + ";\n" +
                 "\n" +
                 "import lombok.Builder;\n" +
@@ -319,6 +315,7 @@ public class Constants {
     }
 
     public static String getInterfaceModel(String modelName, String _package) {
+        _package = _package.replaceAll( "\\/", "\\.");
         return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + gateway + ";\n" +
                 "\n" +
                 "import " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +

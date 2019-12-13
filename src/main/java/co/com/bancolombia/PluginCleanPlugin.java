@@ -23,11 +23,11 @@ public class PluginCleanPlugin implements Plugin<Project> {
         TaskContainer tasks = project.getTasks();
         Task generateStructure = tasks.create("cleanArchitecture",GenerateTask.class);
         generateStructure.setGroup(taskGroup);
-        generateStructure.setDescription("Scaffold Project Clean Architecture");
+        generateStructure.setDescription("Scaffolding clean architecture project");
 
         Task generateModel = tasks.create("generateModel", GenerateModelTask.class);
         generateModel.setGroup(taskGroup);
-        generateModel.setDescription("Generate model in domain project");
+        generateModel.setDescription("Generate model project in domain layer");
 
 
     }

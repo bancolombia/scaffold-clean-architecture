@@ -20,14 +20,15 @@ public class GenerateModelTask extends DefaultTask {
         }
     }
 
-
-
+    @TaskAction
     public void GenerateModel() throws IOException {
-        if (modelName.isEmpty() || modelName.isBlank()) {
+        if (modelName.isEmpty()) {
             System.out.println("Set the model name with the parameter --name");
-            System.exit(1);
+            System.exit(-1);
+            return;
         }
         _package = _package.replaceAll("\\.", "\\/");
+        System.out.println("Project  Package: " + _package);
         System.out.println("Model Name: " + modelName);
         System.out.println("Generating Childs Dirs");
         getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.gateway));
