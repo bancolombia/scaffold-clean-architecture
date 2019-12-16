@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
-public class GenerateTask extends DefaultTask {
+public class GenerateStructureTask extends DefaultTask {
     public String _package = "co.com.bancolombia";
     public String type = "imperative";
     public String projectName = "cleanArchitecture";
