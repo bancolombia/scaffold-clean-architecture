@@ -5,5 +5,4 @@ jdk:
 
 os:
   - linux
-  - 
 script: ./gradlew build --refresh-dependencies --no-daemon --continue

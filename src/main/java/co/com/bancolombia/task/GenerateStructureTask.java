@@ -6,8 +6,6 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 
@@ -89,6 +87,7 @@ public class GenerateStructureTask extends DefaultTask {
 
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
+
         Utils.writeString(getProject(), Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle), Constants.buildGradleUseCaseContent);
         Utils.writeString(getProject(), Constants.lombokConfig, Constants.lombokConfigContent);
         Utils.writeString(getProject(), Constants.gitignore, Constants.gitIgnoreContent);
@@ -101,6 +100,7 @@ public class GenerateStructureTask extends DefaultTask {
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties), Constants.getApplicationPropertiesContent(this.projectName));
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j), Constants.log4jContent);
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication), Constants.getMainApplicationContent(this.projectName));
+
         System.out.println("Writed in Files");
 
     }

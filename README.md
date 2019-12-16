@@ -10,7 +10,7 @@ build.gradle file.
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "0.33"
+ id "co.com.bancolombia.cleanArchitecture" version "0.35"
 }
 ```
 
