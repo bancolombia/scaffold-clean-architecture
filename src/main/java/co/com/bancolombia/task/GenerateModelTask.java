@@ -21,12 +21,13 @@ public class GenerateModelTask extends DefaultTask {
     }
 
     @TaskAction
-    public void GenerateModel() throws IOException {
+    public void GenerateModel() throws Exception {
         if (modelName.isEmpty()) {
             System.out.println("Set the model name with the parameter --name");
             System.exit(-1);
             return;
         }
+        _package = Utils.readProperties("package");
         _package = _package.replaceAll("\\.", "\\/");
         System.out.println("Project  Package: " + _package);
         System.out.println("Model Name: " + modelName);

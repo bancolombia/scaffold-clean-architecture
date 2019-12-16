@@ -76,6 +76,7 @@ check {
 }
 
 
+
 pluginBundle {
 	website = 'https://github.com/bancolombia/scaffold-clean-architecture'
 	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'

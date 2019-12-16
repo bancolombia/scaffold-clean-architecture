@@ -4,20 +4,16 @@
 package co.com.bancolombia;
 
 
+import org.gradle.api.internal.project.IProjectFactory;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+
+import java.io.*;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -27,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class PluginCleanPluginFunctionalTest {
 
     @Test public void canRunTaskCleanArchitectureWithOutParameters() throws IOException {
+
         String task = "cleanArchitecture";
         // Setup the test build
         File projectDir = new File("build/functionalTest");
@@ -96,7 +93,7 @@ public class PluginCleanPluginFunctionalTest {
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
-        assertTrue(result.getOutput().contains("Name Project: " + projectName));
+        assertTrue(result.getOutput().contains( projectName));
         assertTrue(result.getOutput().contains("Package: co/com/test"));
 
 
@@ -124,6 +121,32 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/application.yaml").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/test").exists());
+
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test public void canRunTaskGenerateModelWithParameters() throws Exception {
+
+        String task = "generateModel";
+        String modelName = "testModel";
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task,"--name="+ modelName);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());
 
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }

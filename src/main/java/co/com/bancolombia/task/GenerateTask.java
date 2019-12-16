@@ -84,6 +84,8 @@ public class GenerateTask extends DefaultTask {
         getProject().file(Constants.settingsGradle).createNewFile();
         getProject().file(Constants.gitignore).createNewFile();
         getProject().file(Constants.readMe).createNewFile();
+        getProject().file(Constants.gradleProperties).createNewFile();
+
 
         System.out.println("Generated Base Files");
         System.out.println("Writing in Files");
@@ -91,6 +93,7 @@ public class GenerateTask extends DefaultTask {
         Utils.writeString(getProject(), Constants.lombokConfig, Constants.lombokConfigContent);
         Utils.writeString(getProject(), Constants.gitignore, Constants.gitIgnoreContent);
         Utils.writeString(getProject(), Constants.readMe, Constants.readmeContent);
+        Utils.writeString(getProject(), Constants.gradleProperties, Constants.getGradlePropertiesContent(_package));
         Utils.writeString(getProject(), Constants.settingsGradle, Constants.getSettingsGradleContent(this.projectName));
         Utils.writeString(getProject(), Constants.mainGradle, Constants.mainGradleContent);
         Utils.writeString(getProject(), Constants.buildGradle, Constants.buildGradleContent);

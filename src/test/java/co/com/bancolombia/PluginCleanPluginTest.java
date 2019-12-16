@@ -22,10 +22,9 @@ public class PluginCleanPluginTest {
 
     @Test
     public void pluginRegistersATask() {
-
         // Arrange
         String taskGroup = "Clean Architecture";
-        String descriptionTask = "Scaffold Project Clean Architecture";
+        String descriptionTask = "Scaffolding clean architecture project";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 

@@ -2,14 +2,15 @@ package co.com.bancolombia;
 
 import org.gradle.api.Project;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Properties;
 
 public class Utils {
 
     private static File file;
     private static FileWriter fileWriter;
+    private static Properties properties = new Properties();
+
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         System.out.println(project.file(nameFile).getAbsolutePath());
@@ -37,5 +38,15 @@ public class Utils {
         c[0] = Character.toLowerCase(c[0]);
 
         return new String(c);
+    }
+    public static String readProperties(String variable) throws Exception {
+        properties.load(new FileReader("gradle.properties"));
+        if (properties.getProperty(variable) != null)
+            return properties.getProperty(variable);
+        else {
+            throw new Exception("No parameter" +  variable + " in build.properties file");
+
+        }
+
     }
 }

@@ -36,6 +36,7 @@ public class Constants {
     public static final String usecase = "usecase";
 
     public static final String buildGradle = "build.gradle";
+    public static final String gradleProperties = "gradle.properties";
     public static final String applicationProperties = "application.yaml";
     public static final String mainApplication = "MainApplication.java";
 
@@ -324,5 +325,10 @@ public class Constants {
                 "\n" +
                 "\n" +
                 "}\n";
+    }
+
+    public static String getGradlePropertiesContent (String _package){
+        _package = _package.replaceAll( "\\/", "\\.");
+        return "package=" + _package;
     }
 }
