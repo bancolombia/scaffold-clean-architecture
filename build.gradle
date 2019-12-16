@@ -29,7 +29,8 @@ plugins {
 }
 
 group 'co.com.bancolombia.cleanArchitecture'
-version '0.35'
+
+version '0.38'
 
 repositories {
 	// Use jcenter for resolving dependencies.
@@ -74,6 +75,7 @@ check {
 	// Run the functional tests as part of `check`
 	dependsOn(tasks.functionalTest)
 }
+
 
 
 pluginBundle {

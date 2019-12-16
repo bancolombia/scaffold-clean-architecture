@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/bancolombia/scaffold-clean-architecture.svg?branch=master)](https://travis-ci.com/bancolombia/scaffold-clean-architecture)
 # Scaffolding of Clean Architecture
 Gradle plugin to create a java application based on Clean Architecture following our best practices!
 

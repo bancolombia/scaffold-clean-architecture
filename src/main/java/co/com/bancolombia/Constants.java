@@ -1,6 +1,9 @@
 package co.com.bancolombia;
 
 public class Constants {
+
+    public static final String javaExtension = ".java";
+
     /**
      * Base Dirs
      **/
@@ -28,9 +31,12 @@ public class Constants {
      **/
 
     public static final String model = "model";
+    public static final String gateway = "gateways";
+    public static final String repository = "Repository";
     public static final String usecase = "usecase";
 
     public static final String buildGradle = "build.gradle";
+    public static final String gradleProperties = "gradle.properties";
     public static final String applicationProperties = "application.yaml";
     public static final String mainApplication = "MainApplication.java";
 
@@ -151,41 +157,41 @@ public class Constants {
             "## Entry Points\n" +
             "Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.";
 
-    public static final String mainGradleContent ="subprojects {\n"+
-        "    apply plugin: \"java\"\n"+
-        "    apply plugin: \"jacoco\"\n"+
-        "    apply plugin: 'io.spring.dependency-management'\n"+
-        "\n"+
-        "    sourceCompatibility = JavaVersion.VERSION_1_8\n"+
-        "\n"+
-        "    repositories {\n"+
-        "  \t\t mavenCentral()\n"+
-        "         maven { url \"https://repo.spring.io/snapshot\" }\n"+
-        "         maven { url \"https://repo.spring.io/milestone\" }\n"+
-        "  \t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n"+
-        "    }\n"+
-        "\n"+
-        "    dependencies {\n"+
-        "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n"+
-        "\n"+
-        "        compileOnly 'org.projectlombok:lombok'\n"+
-        "        annotationProcessor 'org.projectlombok:lombok'\n"+
-        "        testAnnotationProcessor 'org.projectlombok:lombok'\n"+
-        "        testCompileOnly 'org.projectlombok:lombok'\n"+
-        "    }\n"+
-        "\n"+
-        "\n"+
-        "    jacoco {\n"+
-        "        toolVersion = '0.8.2'\n"+
-        "    }\n"+
-        "\n"+
-        "    dependencyManagement {\n"+
-        "        imports {\n"+
-        "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n"+
-        "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n"+
-        "        }\n"+
-        "    }\n"+
-        "}";
+    public static final String mainGradleContent = "subprojects {\n" +
+            "    apply plugin: \"java\"\n" +
+            "    apply plugin: \"jacoco\"\n" +
+            "    apply plugin: 'io.spring.dependency-management'\n" +
+            "\n" +
+            "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
+            "\n" +
+            "    repositories {\n" +
+            "  \t\t mavenCentral()\n" +
+            "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
+            "         maven { url \"https://repo.spring.io/milestone\" }\n" +
+            "  \t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n" +
+            "    }\n" +
+            "\n" +
+            "    dependencies {\n" +
+            "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n" +
+            "\n" +
+            "        compileOnly 'org.projectlombok:lombok'\n" +
+            "        annotationProcessor 'org.projectlombok:lombok'\n" +
+            "        testAnnotationProcessor 'org.projectlombok:lombok'\n" +
+            "        testCompileOnly 'org.projectlombok:lombok'\n" +
+            "    }\n" +
+            "\n" +
+            "\n" +
+            "    jacoco {\n" +
+            "        toolVersion = '0.8.2'\n" +
+            "    }\n" +
+            "\n" +
+            "    dependencyManagement {\n" +
+            "        imports {\n" +
+            "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n" +
+            "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
+            "        }\n" +
+            "    }\n" +
+            "}";
     public static final String buildGradleContent = "buildscript {\n" +
             "\text {\n" +
             "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
@@ -204,7 +210,7 @@ public class Constants {
             "\n" +
             "plugins {\n" +
             "\tid \"org.sonarqube\" version \"2.6\"\n" +
-            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.33\"\n" +
+            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.38\"\n" +
             "}\n" +
             "subprojects {\n" +
             "  apply plugin: \"java\"\n" +
@@ -215,30 +221,37 @@ public class Constants {
             "    }\n" +
             "}"+
             "\n" +
-            "task testReport(type: TestReport) {\n" +
-            "    destinationDir = file(\"$buildDir/reports/allTests\")\n" +
-            "    // Include the results from the `test` task in all subprojects\n" +
-            "    reportOn subprojects*.test\n" +
-            "}\n"+
             "apply from: './main.gradle'";
 
-    public static final String log4jContent ="name=PropertiesConfig\n"+
-            "property.filename = logs\n"+
-            "appenders = console\n"+
-            "\n"+
-            "appender.console.type = Console\n"+
-            "appender.console.name = STDOUT\n"+
-            "appender.console.layout.type = PatternLayout\n"+
-            "appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n\n"+
-            "\n"+
-            "\n"+
-            "rootLogger.level = debug\n"+
-            "rootLogger.appenderRefs = stdout\n"+
+    public static final String buildGradleApplicationContent = "apply plugin: 'org.springframework.boot'\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "dependencies {\n" +
+            "    compile 'org.springframework.boot:spring-boot-starter'\n" +
+            "    compile project(\":domain-usecase\")\n" +
+            "\n" +
+            "    runtime('org.springframework.boot:spring-boot-devtools')\n" +
+            "}\n";
+
+
+    public static final String log4jContent = "name=PropertiesConfig\n" +
+            "property.filename = logs\n" +
+            "appenders = console\n" +
+            "\n" +
+            "appender.console.type = Console\n" +
+            "appender.console.name = STDOUT\n" +
+            "appender.console.layout.type = PatternLayout\n" +
+            "appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n\n" +
+            "\n" +
+            "\n" +
+            "rootLogger.level = debug\n" +
+            "rootLogger.appenderRefs = stdout\n" +
             "rootLogger.appenderRef.stdout.ref = STDOUT";
     public static final String testJava = "src/test/java";
 
     public static String getSettingsGradleContent(String nameProject) {
-        return "rootProject.name = '"+ nameProject +"'\n" +
+        return "rootProject.name = '" + nameProject + "'\n" +
                 "\n" +
                 "FileTree buildFiles = fileTree(rootDir) {\n" +
                 "    List excludes = gradle.startParameter.projectProperties.get(\"excludeProjects\")?.split(\",\")\n" +
@@ -277,10 +290,11 @@ public class Constants {
     public static String getApplicationPropertiesContent(String nameProject) {
         return "##Spring Configuration\n" +
                 "server.port=8080\n" +
-                "spring.application.name="+nameProject;
+                "spring.application.name=" + nameProject;
     }
-    public static String getMainApplicationContent(String nameProject){
-        return "package "+ nameProject + ";\n" +
+
+    public static String getMainApplicationContent(String nameProject) {
+        return "package " + nameProject + ";\n" +
                 "\n" +
                 "import org.springframework.boot.SpringApplication;\n" +
                 "import org.springframework.boot.autoconfigure.EnableAutoConfiguration;\n" +
@@ -294,6 +308,38 @@ public class Constants {
                 "        SpringApplication.run(MainApplication.class, args);\n" +
                 "    }\n" +
                 "}";
+    }
+
+    public static String getModel(String modelName, String _package) {
+        _package = _package.replaceAll( "\\/", "\\.");
+        return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + ";\n" +
+                "\n" +
+                "import lombok.Builder;\n" +
+                "import lombok.Data;\n" +
+                "\n" +
+                "@Data\n" +
+                "@Builder(toBuilder = true)\n" +
+                "public class " + Utils.capitalize(modelName) + "{\n" +
+                "\n" +
+                "\n" +
+                "}\n";
+    }
+
+    public static String getInterfaceModel(String modelName, String _package) {
+        _package = _package.replaceAll( "\\/", "\\.");
+        return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + gateway + ";\n" +
+                "\n" +
+                "import " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
+                "\n" +
+                "public interface " + Utils.capitalize(modelName) + "Repository " + "{\n" +
+                "\n" +
+                "\n" +
+                "}\n";
+    }
+
+    public static String getGradlePropertiesContent (String _package){
+        _package = _package.replaceAll( "\\/", "\\.");
+        return "package=" + _package;
     }
     public static String getbuildGradleApplicationContent(){
 

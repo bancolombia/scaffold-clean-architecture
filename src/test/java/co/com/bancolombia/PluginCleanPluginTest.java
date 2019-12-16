@@ -22,18 +22,19 @@ public class PluginCleanPluginTest {
 
     @Test
     public void pluginRegistersATask() {
-
         // Arrange
         String taskGroup = "Clean Architecture";
-        String descriptionTask = "Scaffold Project Clean Architecture";
+        String descriptionTask = "Scaffolding clean architecture project";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
         // Act
         Task task = project.getTasks().findByName("cleanArchitecture");
+        Task task2 = project.getTasks().findByName("generateModel");
 
         //Assert
         assertNotNull(task);
+        assertNotNull(task2);
         assertEquals(taskGroup, task.getGroup());
         assertEquals(descriptionTask, task.getDescription());
     }
