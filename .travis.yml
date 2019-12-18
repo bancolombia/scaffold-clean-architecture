@@ -8,7 +8,7 @@ os:
 before_script:
   - chmod +x gradlew
 script:
-  - ./gradlew test codeCoverageReport
+  - ./gradlew test codeCoverageReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
   - ./gradlew build --refresh-dependencies --no-daemon --continue
 after_success:
   - bash <(curl -s https://codecov.io/bash)
