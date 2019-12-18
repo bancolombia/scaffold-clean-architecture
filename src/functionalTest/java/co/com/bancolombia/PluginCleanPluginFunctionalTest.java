@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
+
 public class PluginCleanPluginFunctionalTest {
 
     @Test public void canRunTaskCleanArchitectureWithOutParameters() throws IOException {
@@ -151,7 +152,7 @@ public class PluginCleanPluginFunctionalTest {
     }
 
     @Test public void canRunTaskvalidateStructureWithOutParameters() throws IOException {
-
+        canRunTaskCleanArchitectureWithOutParameters();
         String task = "validateStructure";
         // Setup the test build
         File projectDir = new File("build/functionalTest");
@@ -172,7 +173,7 @@ public class PluginCleanPluginFunctionalTest {
 
         // Verify the result
 
-        //assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
     @Test public void createTasks() throws IOException {

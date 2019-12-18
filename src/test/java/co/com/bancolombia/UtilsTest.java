@@ -16,7 +16,7 @@ import java.io.IOException;
 public class UtilsTest {
 
     @Mock
-    ProjectInternal projectInternal;
+    Project projectInternal;
 
     @Test
     public void getVersionPlugin() {
@@ -63,13 +63,13 @@ public class UtilsTest {
 
     }
 
-/*    @Test
+   /** @Test
     public void writeString() throws IOException {
         String nameFile = "temp.txt";
-        File file = Mockito.mock(File.class);
+        File file = new File("build/functionalTest/");
         Mockito.when(projectInternal.file(Mockito.anyString())).thenReturn(file);
-        Mockito.when(file.getAbsolutePath()).thenReturn("build/functionalTest/temp.txt");
+
         Utils.writeString(projectInternal, "temp.txt", "test");
         Assert.assertEquals(1, 1);
-    }*/
+    }**/
 }
