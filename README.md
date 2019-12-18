@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.com/bancolombia/scaffold-clean-architecture.svg?branch=master)](https://travis-ci.com/bancolombia/scaffold-clean-architecture)
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
+[![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
 # Scaffolding of Clean Architecture
 Gradle plugin to create a java application based on Clean Architecture following our best practices!
 
