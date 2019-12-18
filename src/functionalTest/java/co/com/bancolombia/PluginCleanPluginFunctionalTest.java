@@ -4,7 +4,6 @@
 package co.com.bancolombia;
 
 
-import org.gradle.api.internal.project.IProjectFactory;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -94,7 +93,7 @@ public class PluginCleanPluginFunctionalTest {
         BuildResult result = runner.build();
         // Verify the result
         assertTrue(result.getOutput().contains( projectName));
-        assertTrue(result.getOutput().contains("Package: co/com/test"));
+        assertTrue(result.getOutput().contains("Package: "+ _package));
 
 
         assertTrue(new File("build/functionalTest/Readme.md").exists());
