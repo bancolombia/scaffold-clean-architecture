@@ -3,15 +3,10 @@
  */
 package co.com.bancolombia;
 
-import org.gradle.BuildResult;
 import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.gradle.api.Project;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.File;
 
 import static org.junit.Assert.*;
 
@@ -24,19 +19,30 @@ public class PluginCleanPluginTest {
     public void pluginRegistersATask() {
         // Arrange
         String taskGroup = "Clean Architecture";
-        String descriptionTask = "Scaffolding clean architecture project";
+        String descriptionTask1 = "Scaffolding clean architecture project";
+        String descriptionTask2 = "Generate model project in domain layer";
+        String descriptionTask3 = "Validate that project references are not violated";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
         // Act
         Task task = project.getTasks().findByName("cleanArchitecture");
         Task task2 = project.getTasks().findByName("generateModel");
+        Task task3 = project.getTasks().findByName("validateStructure");
 
         //Assert
         assertNotNull(task);
         assertNotNull(task2);
+        assertNotNull(task3);
+
         assertEquals(taskGroup, task.getGroup());
-        assertEquals(descriptionTask, task.getDescription());
+        assertEquals(descriptionTask1, task.getDescription());
+
+        assertEquals(taskGroup, task2.getGroup());
+        assertEquals(descriptionTask2, task2.getDescription());
+
+        assertEquals(taskGroup, task3.getGroup());
+        assertEquals(descriptionTask3, task3.getDescription());
     }
 
 }

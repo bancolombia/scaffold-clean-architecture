@@ -30,7 +30,7 @@ plugins {
 
 group 'co.com.bancolombia.cleanArchitecture'
 
-version '0.38'
+version System.getProperty( 'version' )
 
 repositories {
 	// Use jcenter for resolving dependencies.
@@ -41,6 +41,7 @@ repositories {
 dependencies {
 	// Use JUnit test framework for unit tests
 	testImplementation 'junit:junit:4.12'
+	testCompile "org.mockito:mockito-core:2.9.0"
 	compile gradleApi()
 }
 
@@ -82,6 +83,23 @@ pluginBundle {
 	website = 'https://github.com/bancolombia/scaffold-clean-architecture'
 	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
 	tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
+}
+task codeCoverageReport(type: JacocoReport) {
+	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+	subprojects.each {
+		sourceSets it.sourceSets.main
+	}
+
+	reports {
+		xml.enabled true
+		html.enabled false
+		csv.enabled false
+	}
+}
+
+codeCoverageReport.dependsOn {
+	subprojects*.test
 }
 
 

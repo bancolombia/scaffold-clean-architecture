@@ -6,7 +6,6 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
-import java.io.IOException;
 
 
 public class GenerateStructureTask extends DefaultTask {
@@ -37,10 +36,11 @@ public class GenerateStructureTask extends DefaultTask {
 
 
     @TaskAction
-    public void GenerateStructure() throws IOException {
+    public void GenerateStructure() throws Exception {
 
-        _package = _package.replaceAll("\\.", "\\/");
+        System.out.println("Clean Architecture plugin version: " + Utils.getVersionPlugin());
         System.out.println("Package: " + _package);
+        _package = _package.replaceAll("\\.", "\\/");
         System.out.println("Project Type: " + type);
         System.out.println("Project Name: " + projectName);
         System.out.println("Generating base directories");
@@ -95,7 +95,7 @@ public class GenerateStructureTask extends DefaultTask {
         Utils.writeString(getProject(), Constants.gradleProperties, Constants.getGradlePropertiesContent(_package));
         Utils.writeString(getProject(), Constants.settingsGradle, Constants.getSettingsGradleContent(this.projectName));
         Utils.writeString(getProject(), Constants.mainGradle, Constants.mainGradleContent);
-        Utils.writeString(getProject(), Constants.buildGradle, Constants.buildGradleContent);
+        Utils.writeString(getProject(), Constants.buildGradle, Constants.getBuildGradleContent());
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.buildGradle), Constants.buildGradleApplicationContent);
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties), Constants.getApplicationPropertiesContent(this.projectName));
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j), Constants.log4jContent);

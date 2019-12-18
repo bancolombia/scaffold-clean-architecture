@@ -151,6 +151,31 @@ public class PluginCleanPluginFunctionalTest {
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
+    @Test public void canRunTaskvalidateStructureWithOutParameters() throws IOException {
+
+        String task = "validateStructure";
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        // Verify the result
+
+        //assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
     @Test public void createTasks() throws IOException {
         // Setup the test build
         File projectDir = new File("build/functionalTest");
@@ -172,6 +197,7 @@ public class PluginCleanPluginFunctionalTest {
         // Verify the result
         assertTrue(result.getOutput().contains("cleanArchitecture"));
         assertTrue(result.getOutput().contains("generateModel"));
+        assertTrue(result.getOutput().contains("validateStructure"));
 
         assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
     }

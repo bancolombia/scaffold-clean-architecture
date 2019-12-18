@@ -3,7 +3,13 @@ package co.com.bancolombia;
 import org.gradle.api.Project;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -19,6 +25,14 @@ public class Utils {
         fileWriter = new FileWriter(file);
         fileWriter.write(data);
         fileWriter.close();
+    }
+
+    public static Stream<String> readFile(Project project, String nameFile) throws IOException {
+        List<String> list = new ArrayList<>();
+        System.out.println(project.file(nameFile).getAbsolutePath());
+        Stream<String> stream = Files.lines(Paths.get(project.file(nameFile).getAbsolutePath()));
+        return stream ;
+
     }
 
     public static String capitalize(String str) {
@@ -44,9 +58,13 @@ public class Utils {
         if (properties.getProperty(variable) != null)
             return properties.getProperty(variable);
         else {
-            throw new Exception("No parameter" +  variable + " in build.properties file");
+            throw new Exception("No parameter" + variable + " in build.properties file");
 
         }
-
     }
+        public static String  getVersionPlugin(){
+            return Constants.versionPlugin;
+        }
+
+
 }
