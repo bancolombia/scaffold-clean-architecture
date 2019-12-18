@@ -1,7 +1,7 @@
 package co.com.bancolombia;
 
 public class Constants {
-    public static final String versionPlugin = "0.52";
+    public static final String versionPlugin = "0.53";
     public static final String javaExtension = ".java";
 
     /**
