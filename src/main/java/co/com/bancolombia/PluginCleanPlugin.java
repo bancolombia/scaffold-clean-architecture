@@ -5,6 +5,7 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.task.GenerateModelTask;
 import co.com.bancolombia.task.GenerateStructureTask;
+import co.com.bancolombia.task.validateStructureTask;
 import org.gradle.api.Project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Task;
@@ -21,6 +22,7 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         // Register a task
         TaskContainer tasks = project.getTasks();
+
         Task generateStructure = tasks.create("cleanArchitecture", GenerateStructureTask.class);
         generateStructure.setGroup(taskGroup);
         generateStructure.setDescription("Scaffolding clean architecture project");
@@ -28,6 +30,10 @@ public class PluginCleanPlugin implements Plugin<Project> {
         Task generateModel = tasks.create("generateModel", GenerateModelTask.class);
         generateModel.setGroup(taskGroup);
         generateModel.setDescription("Generate model project in domain layer");
+
+        Task validateStructure = tasks.create("validateStructure", validateStructureTask.class);
+        validateStructure.setGroup(taskGroup);
+        validateStructure.setDescription("Validate that project references are not violated");
 
 
     }

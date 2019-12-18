@@ -4,7 +4,6 @@
 package co.com.bancolombia;
 
 
-import org.gradle.api.internal.project.IProjectFactory;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -20,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
+
 public class PluginCleanPluginFunctionalTest {
 
     @Test public void canRunTaskCleanArchitectureWithOutParameters() throws IOException {
@@ -94,7 +94,7 @@ public class PluginCleanPluginFunctionalTest {
         BuildResult result = runner.build();
         // Verify the result
         assertTrue(result.getOutput().contains( projectName));
-        assertTrue(result.getOutput().contains("Package: co/com/test"));
+        assertTrue(result.getOutput().contains("Package: "+ _package));
 
 
         assertTrue(new File("build/functionalTest/Readme.md").exists());
@@ -151,6 +151,31 @@ public class PluginCleanPluginFunctionalTest {
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
+    @Test public void canRunTaskvalidateStructureWithOutParameters() throws IOException {
+        canRunTaskCleanArchitectureWithOutParameters();
+        String task = "validateStructure";
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        // Verify the result
+
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
     @Test public void createTasks() throws IOException {
         // Setup the test build
         File projectDir = new File("build/functionalTest");
@@ -172,6 +197,7 @@ public class PluginCleanPluginFunctionalTest {
         // Verify the result
         assertTrue(result.getOutput().contains("cleanArchitecture"));
         assertTrue(result.getOutput().contains("generateModel"));
+        assertTrue(result.getOutput().contains("validateStructure"));
 
         assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
     }

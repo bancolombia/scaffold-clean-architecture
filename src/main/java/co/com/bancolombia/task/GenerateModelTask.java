@@ -6,7 +6,6 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
-import java.io.IOException;
 
 
 public class GenerateModelTask extends DefaultTask {
@@ -23,13 +22,12 @@ public class GenerateModelTask extends DefaultTask {
     @TaskAction
     public void GenerateModel() throws Exception {
         if (modelName.isEmpty()) {
-            System.out.println("Set the model name with the parameter --name");
-            System.exit(-1);
-            return;
+            throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");
         }
         _package = Utils.readProperties("package");
-        _package = _package.replaceAll("\\.", "\\/");
+        System.out.println("Clean Architecture plugin version: " + Utils.getVersionPlugin());
         System.out.println("Project  Package: " + _package);
+        _package = _package.replaceAll("\\.", "\\/");
         System.out.println("Model Name: " + modelName);
         System.out.println("Generating Childs Dirs");
         getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.gateway));

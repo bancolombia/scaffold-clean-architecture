@@ -1,7 +1,7 @@
 package co.com.bancolombia;
 
 public class Constants {
-
+    public static final String versionPlugin = "0.52";
     public static final String javaExtension = ".java";
 
     /**
@@ -192,36 +192,7 @@ public class Constants {
             "        }\n" +
             "    }\n" +
             "}";
-    public static final String buildGradleContent = "buildscript {\n" +
-            "\text {\n" +
-            "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
-            "\t\tspringCloudVersion = 'Greenwich.M1'\n" +
-            "\t}\n" +
-            "\trepositories {\n" +
-            "\t\tmavenCentral()\n" +
-            "\t\tmaven { url \"https://repo.spring.io/snapshot\" }\n" +
-            "\t\tmaven { url \"https://repo.spring.io/milestone\" }\n" +
-            "\t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n" +
-            "\t}\n" +
-            "\tdependencies {\n" +
-            "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
-            "\t}\n" +
-            "}\n" +
-            "\n" +
-            "plugins {\n" +
-            "\tid \"org.sonarqube\" version \"2.6\"\n" +
-            "\tid \"co.com.bancolombia.cleanArchitecture\" version \"0.38\"\n" +
-            "}\n" +
-            "subprojects {\n" +
-            "  apply plugin: \"java\"\n" +
-            "  apply plugin: \"jacoco\"\n" +
-            "    // Disable the test report for the individual test task\n" +
-            "    test {\n" +
-            "      reports.html.enabled = false\n" +
-            "    }\n" +
-            "}"+
-            "\n" +
-            "apply from: './main.gradle'";
+
 
     public static final String buildGradleApplicationContent = "apply plugin: 'org.springframework.boot'\n" +
             "\n" +
@@ -312,7 +283,7 @@ public class Constants {
 
     public static String getModel(String modelName, String _package) {
         _package = _package.replaceAll( "\\/", "\\.");
-        return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + ";\n" +
+        return "package " + _package + "." + model + "." + Utils.decapitalize(modelName) + ";\n" +
                 "\n" +
                 "import lombok.Builder;\n" +
                 "import lombok.Data;\n" +
@@ -325,11 +296,44 @@ public class Constants {
                 "}\n";
     }
 
+    public static String getBuildGradleContent() throws Exception {
+        return  "buildscript {\n" +
+                "\text {\n" +
+                "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
+                "\t\tspringCloudVersion = 'Greenwich.M1'\n" +
+                "\t}\n" +
+                "\trepositories {\n" +
+                "\t\tmavenCentral()\n" +
+                "\t\tmaven { url \"https://repo.spring.io/snapshot\" }\n" +
+                "\t\tmaven { url \"https://repo.spring.io/milestone\" }\n" +
+                "\t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n" +
+                "\t}\n" +
+                "\tdependencies {\n" +
+                "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
+                "\t}\n" +
+                "}\n" +
+                "\n" +
+                "plugins {\n" +
+                "\tid \"org.sonarqube\" version \"2.6\"\n" +
+                "\tid \"co.com.bancolombia.cleanArchitecture\" version \""+ versionPlugin +"\"\n" +
+                "}\n" +
+                "subprojects {\n" +
+                "  apply plugin: \"java\"\n" +
+                "  apply plugin: \"jacoco\"\n" +
+                "    // Disable the test report for the individual test task\n" +
+                "    test {\n" +
+                "      reports.html.enabled = false\n" +
+                "    }\n" +
+                "}"+
+                "\n" +
+                "apply from: './main.gradle'";
+    }
+
     public static String getInterfaceModel(String modelName, String _package) {
         _package = _package.replaceAll( "\\/", "\\.");
-        return "package " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + gateway + ";\n" +
+        return "package " + _package + "." + model + "." + Utils.decapitalize(modelName) + "." + gateway + ";\n" +
                 "\n" +
-                "import " + _package + "." + domain + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
+                "import " + _package + "." + model + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
                 "\n" +
                 "public interface " + Utils.capitalize(modelName) + "Repository " + "{\n" +
                 "\n" +
@@ -337,9 +341,11 @@ public class Constants {
                 "}\n";
     }
 
-    public static String getGradlePropertiesContent (String _package){
+    public static String getGradlePropertiesContent (String _package) throws Exception {
         _package = _package.replaceAll( "\\/", "\\.");
-        return "package=" + _package;
+        return "package=" + _package+
+                "\n"+
+                "systemProp.version="+ versionPlugin;
     }
     public static String getbuildGradleApplicationContent(){
 
