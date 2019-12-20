@@ -85,13 +85,8 @@ pluginBundle {
 	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
 	tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
 }
-task codeCoverageReport(type: JacocoReport) {
-	executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
-	subprojects.each {
-		sourceSets it.sourceSets.main
-	}
-
+jacocoTestReport{
 	reports {
 		xml.enabled true
 		xml.destination file("${buildDir}/reports/jacoco/report.xml")
@@ -99,11 +94,3 @@ task codeCoverageReport(type: JacocoReport) {
 		csv.enabled false
 	}
 }
-
-codeCoverageReport.dependsOn {
-	subprojects*.test
-}
-
-
-
-
