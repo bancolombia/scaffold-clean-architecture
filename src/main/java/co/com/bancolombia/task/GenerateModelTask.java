@@ -27,22 +27,22 @@ public class GenerateModelTask extends DefaultTask {
             throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");
         }
         packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: " + Utils.getVersionPlugin());
-        logger.info("Project  Package: " + packageName);
+        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
+        logger.info("Project  Package: {0}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Model Name: " + modelName);
+        logger.info("Model Name: {0}", modelName);
         logger.info("Generating Childs Dirs");
-        getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.gateway));
+        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS));
         logger.info("Generated Childs Dirs");
 
         logger.info("Generating Base Files");
-        getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Constants.gateway).concat("/").concat(Utils.capitalize(modelName) + Constants.repository + Constants.javaExtension))).createNewFile();
-        getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Utils.capitalize(modelName) + Constants.javaExtension))).createNewFile();
+        getProject().file(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Utils.capitalize(modelName) + Constants.REPOSITORY + Constants.JAVA_EXTENSION))).createNewFile();
+        getProject().file(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName).concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION))).createNewFile();
 
         logger.info("Generated Base Files");
         logger.info("Writing in Files");
-        Utils.writeString(getProject(), Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.gateway).concat("/").concat(Utils.capitalize(modelName) + Constants.repository + Constants.javaExtension), Constants.getInterfaceModel(modelName, packageName));
-        Utils.writeString(getProject(), Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Utils.capitalize(modelName) + Constants.javaExtension), Constants.getModel(modelName, packageName));
+        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Utils.capitalize(modelName) + Constants.REPOSITORY + Constants.JAVA_EXTENSION), Constants.getInterfaceModel(modelName, packageName));
+        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION), Constants.getModel(modelName, packageName));
         logger.info("Writed in Files");
 
     }

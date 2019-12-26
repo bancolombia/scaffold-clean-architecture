@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 public class GenerateUseCaseTask extends DefaultTask {
     private Logger logger = LoggerFactory.getLogger(GenerateUseCaseTask.class);
     private String useCaseName = "";
-    private String packageName = "co.com.bancolombia";
 
     @Option(option = "name", description = "Set the UseCase name")
     public void setNameProject(String useCaseName) {
@@ -22,23 +21,24 @@ public class GenerateUseCaseTask extends DefaultTask {
 
     @TaskAction
     public void generateUseCase() throws Exception {
+        String packageName;
         if (useCaseName.isEmpty()) {
             throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
         }
-        String useCaseDir = Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.usecase).concat("/").concat(Utils.decapitalize(useCaseName));
         packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: " + Utils.getVersionPlugin());
-        logger.info("Project  Package: " + packageName);
+        logger.info("Clean Architecture plugin version: {0}" , Utils.getVersionPlugin());
+        logger.info("Project  Package: {0}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Use Case Name: " + useCaseName);
+        String useCaseDir = Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE).concat("/").concat(Utils.decapitalize(useCaseName));
+        logger.info("Use Case Name: {0}", useCaseName);
         logger.info("Generating Childs Dirs");
         getProject().mkdir(useCaseDir);
         logger.info("Generated Childs Dirs");
         logger.info("Generating Base Files");
-        getProject().file(useCaseDir.concat("/").concat(Utils.capitalize(useCaseName) + Constants.javaExtension)).createNewFile();
+        getProject().file(useCaseDir.concat("/").concat(Utils.capitalize(useCaseName) + Constants.JAVA_EXTENSION)).createNewFile();
         logger.info("Generated Base Files");
         logger.info("Writing in Files");
-        Utils.writeString(getProject(), useCaseDir.concat("/").concat(Utils.capitalize(useCaseName) + Constants.javaExtension), Constants.getUseCase(useCaseName, packageName));
+        Utils.writeString(getProject(), useCaseDir.concat("/").concat(Utils.capitalize(useCaseName) + Constants.JAVA_EXTENSION), Constants.getUseCase(useCaseName, packageName));
         logger.info("Writed in Files");
 
 

@@ -1,17 +1,9 @@
 package co.com.bancolombia;
 
 import org.gradle.api.internal.project.DefaultProject;
-import org.gradle.api.internal.project.ProjectInternal;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.gradle.api.Project;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
-
-import java.io.File;
-import java.io.IOException;
 
 public class UtilsTest {
 
@@ -20,7 +12,7 @@ public class UtilsTest {
 
     @Test
     public void getVersionPlugin() {
-        Assert.assertEquals(Constants.versionPlugin, Utils.getVersionPlugin());
+        Assert.assertEquals(Constants.VERSION_PLUGIN, Utils.getVersionPlugin());
     }
 
     @Test

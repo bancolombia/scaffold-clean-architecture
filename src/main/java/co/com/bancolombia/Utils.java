@@ -1,6 +1,5 @@
 package co.com.bancolombia;
 
-import co.com.bancolombia.task.GenerateStructureTask;
 import org.gradle.api.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +19,17 @@ public class Utils {
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         File file;
-        FileWriter fileWriter;
+        FileWriter fileWriter ;
         logger.debug(project.file(nameFile).getAbsolutePath());
 
-        file = new File((project.file(nameFile).getAbsolutePath()));
-        fileWriter = new FileWriter(file);
-        fileWriter.write(data);
-        fileWriter.close();
+        try {
+            file = new File((project.file(nameFile).getAbsolutePath()));
+            fileWriter = new FileWriter(file);
+            fileWriter.write(data);
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
@@ -63,7 +66,7 @@ public class Utils {
         }
     }
         public static String  getVersionPlugin(){
-            return Constants.versionPlugin;
+            return Constants.VERSION_PLUGIN;
         }
 
 

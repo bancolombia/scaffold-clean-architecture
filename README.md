@@ -8,7 +8,7 @@ Gradle plugin to create a java application based on Clean Architecture following
 Plugin Implementation  
 ===================
 To use the plugin you need Gradle version 5 or later, to start add the following section into your 
-build.gradle file.
+**build.gradle** file.
 
 ```groovy
 plugins {
@@ -20,7 +20,7 @@ plugins {
 
 Tasks
 =====
-The Scaffolding Clean Architecture plugin will allow you create 1 task (more tasks are comming) :
+The Scaffolding Clean Architecture plugin will allow you create 4 task (more tasks are comming) :
 
 1 The ```cleanArchitecture``` task will generate a clean architecture structure in your project, this task have three optional parameters; ```package``` , ```type``` and ```name```.
 
@@ -39,11 +39,17 @@ gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=N
 ```sh
 gradle generateModel --name=modelName
 ```
+3 The ```generateUseCase``` task will generate a class in model layer, this task have one required parameter ```name```.
+```sh
+gradle generateUseCase --name=useCaseName
+ ```
 
-3 The ```validateStructure``` Validate that project references are not violated.
+4 The ```validateStructure``` Validate that project references are not violated.
 ```sh
 gradle validateStructure
 ```
+
+
 
 How I can help?
 =============
@@ -51,4 +57,3 @@ The following functionalities are within the road map of this script:
 
     - Task to generate entry points
     - Task to generate driven adapters
-    - Task to generate usecase

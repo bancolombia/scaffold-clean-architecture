@@ -2,8 +2,11 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -11,26 +14,27 @@ import java.util.stream.Stream;
 
 
 public class ValidateStructureTask extends DefaultTask {
+    Logger logger = LoggerFactory.getLogger(ValidateStructureTask.class);
 
     @TaskAction
     public void validateStructure() throws Exception {
 
         String packageName = Utils.readProperties("package");
-        System.out.println("Clean Architecture plugin version: " + Utils.getVersionPlugin());
-        System.out.println("Project Package: " + packageName);
+        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
+        logger.info("Project Package: {0}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         if (!validateModelLayer()) {
-            throw new Exception("the model layer is invalid");
+            throw new CleanException("the model layer is invalid");
         }
         if (!validateUseCaseLayer()) {
-            throw new Exception("the useCase layer is invalid");
+            throw new CleanException("the useCase layer is invalid");
         }
-        System.out.println("The project is valid");
+        logger.info("The project is valid");
 
     }
 
     private boolean validateModelLayer() throws IOException {
-        Stream<String> stream = Utils.readFile(getProject(), Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.buildGradle));
+        Stream<String> stream = Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
 
         long countImplementationproject = stream
                 .map(line -> line.replaceAll(" ", ""))
@@ -47,9 +51,9 @@ public class ValidateStructureTask extends DefaultTask {
 
         Supplier<Stream<String>> stream = () -> {
             try {
-                return Utils.readFile(getProject(), Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
+                return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE));
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                logger.error(e.getMessage());
                 return null;
             }
         };

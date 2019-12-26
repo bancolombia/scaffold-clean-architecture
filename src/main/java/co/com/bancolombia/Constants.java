@@ -1,59 +1,59 @@
 package co.com.bancolombia;
 
 public class Constants {
-    public static final String versionPlugin = "0.53";
-    public static final String javaExtension = ".java";
+    public static final String VERSION_PLUGIN = "0.53";
+    public static final String JAVA_EXTENSION = ".java";
 
     /**
      * Base Dirs
      **/
-    public static final String infraestucture = "infraestucture";
-    public static final String domain = "domain";
-    public static final String application = "applications/app-service";
+    public static final String INFRAESTUCTURE = "infraestucture";
+    public static final String DOMAIN = "domain";
+    public static final String APPLICATION = "applications/app-service";
 
     /**
      * Child Dirs applications
      **/
-    public static final String mainJava = "src/main/java";
-    public static final String mainResource = "src/main/resources";
-    public static final String config = "config";
+    public static final String MAIN_JAVA = "src/main/java";
+    public static final String MAIN_RESOURCES = "src/main/resources";
+    public static final String CONFIG = "config";
 
     /**
      * Child Dirs Infraestructure
      **/
 
-    public static final String drivenAdapters = "driven-adapters";
-    public static final String entryPoints = "entry-points";
-    public static final String helpers = "helpers";
+    public static final String DRIVEN_ADAPTERS = "driven-adapters";
+    public static final String ENTRY_POINTS = "entry-points";
+    public static final String HELPERS = "helpers";
 
     /**
      * Child Dirs Domain
      **/
 
-    public static final String model = "model";
-    public static final String gateway = "gateways";
-    public static final String repository = "Repository";
-    public static final String usecase = "usecase";
+    public static final String MODEL = "model";
+    public static final String GATEWAYS = "gateways";
+    public static final String REPOSITORY = "Repository";
+    public static final String USECASE = "usecase";
 
-    public static final String buildGradle = "build.gradle";
-    public static final String gradleProperties = "gradle.properties";
-    public static final String applicationProperties = "application.yaml";
-    public static final String mainApplication = "MainApplication.java";
+    public static final String BUILD_GRADLE = "build.gradle";
+    public static final String GRADLE_PROPERTIES = "gradle.properties";
+    public static final String APPLICATION_PROPERTIES = "application.yaml";
+    public static final String MAIN_APPLICATION = "MainApplication.java";
 
-    public static final String log4j = "log4j2.properties";
-    public static final String mainGradle = "main.gradle";
-    public static final String lombokConfig = "lombok.config";
-    public static final String settingsGradle = "settings.gradle";
-    public static final String gitignore = ".gitignore";
-    public static final String readMe = "Readme.md";
+    public static final String LOG_4_J = "log4j2.properties";
+    public static final String MAIN_GRADLE = "main.gradle";
+    public static final String LOMBOK_CONFIG = "lombok.config";
+    public static final String SETTINGS_GRADLE = "settings.gradle";
+    public static final String GITIGNORE = ".gitignore";
+    public static final String READ_ME = "Readme.md";
 
 
-    public static final String buildGradleUseCaseContent = "dependencies {\n" +
+    public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
             "    compile project(':domain-model')\n" +
             "}";
 
-    public static final String lombokConfigContent = "lombok.addLombokGeneratedAnnotation = true";
-    public static final String gitIgnoreContent = "##############################\n" +
+    public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
+    public static final String GIT_IGNORE_CONTENT = "##############################\n" +
             "## Java\n" +
             "##############################\n" +
             ".mtj.tmp/\n" +
@@ -140,7 +140,7 @@ public class Constants {
             ".DS_Store";
 
 
-    public static final String readmeContent = "# Proyecto Base Implementando Clean Architecture\n" +
+    public static final String README_CONTENT = "# Proyecto Base Implementando Clean Architecture\n" +
             "\n" +
             "## Antes de Iniciar\n" +
             "\n" +
@@ -161,7 +161,7 @@ public class Constants {
             "## Entry Points\n" +
             "Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.";
 
-    public static final String mainGradleContent = "subprojects {\n" +
+    public static final String MAIN_GRADLE_CONTENT = "subprojects {\n" +
             "    apply plugin: \"java\"\n" +
             "    apply plugin: \"jacoco\"\n" +
             "    apply plugin: 'io.spring.dependency-management'\n" +
@@ -197,7 +197,7 @@ public class Constants {
             "}";
 
 
-    public static final String buildGradleApplicationContent = "apply plugin: 'org.springframework.boot'\n" +
+    public static final String BUILD_GRADLE_APPLICATION_CONTENT = "apply plugin: 'org.springframework.boot'\n" +
             "\n" +
             "\n" +
             "\n" +
@@ -209,7 +209,7 @@ public class Constants {
             "}\n";
 
 
-    public static final String log4jContent = "name=PropertiesConfig\n" +
+    public static final String LOG_4_J_CONTENT = "name=PropertiesConfig\n" +
             "property.filename = logs\n" +
             "appenders = console\n" +
             "\n" +
@@ -223,7 +223,7 @@ public class Constants {
             "rootLogger.appenderRefs = stdout\n" +
             "rootLogger.appenderRef.stdout.ref = STDOUT";
 
-    public static final String testJava = "src/test/java";
+    public static final String TEST_JAVA = "src/test/java";
 
     public static String getSettingsGradleContent(String nameProject) {
         return "rootProject.name = '" + nameProject + "'\n" +
@@ -287,7 +287,7 @@ public class Constants {
 
     public static String getModel(String modelName, String packageName) {
         packageName = packageName.replaceAll( "\\/", "\\.");
-        return "package " + packageName + "." + model + "." + Utils.decapitalize(modelName) + ";\n" +
+        return "package " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + ";\n" +
                 "\n" +
                 "import lombok.Builder;\n" +
                 "import lombok.Data;\n" +
@@ -319,7 +319,7 @@ public class Constants {
                 "\n" +
                 "plugins {\n" +
                 "\tid \"org.sonarqube\" version \"2.6\"\n" +
-                "\tid \"co.com.bancolombia.cleanArchitecture\" version \""+ versionPlugin +"\"\n" +
+                "\tid \"co.com.bancolombia.cleanArchitecture\" version \""+ VERSION_PLUGIN +"\"\n" +
                 "}\n" +
                 "subprojects {\n" +
                 "  apply plugin: \"java\"\n" +
@@ -335,9 +335,9 @@ public class Constants {
 
     public static String getInterfaceModel(String modelName, String packageName) {
         packageName = packageName.replaceAll( "\\/", "\\.");
-        return "package " + packageName + "." + model + "." + Utils.decapitalize(modelName) + "." + gateway + ";\n" +
+        return "package " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + "." + GATEWAYS + ";\n" +
                 "\n" +
-                "import " + packageName + "." + model + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
+                "import " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
                 "\n" +
                 "public interface " + Utils.capitalize(modelName) + "Repository " + "{\n" +
                 "\n" +
@@ -349,7 +349,7 @@ public class Constants {
         packageName = packageName.replaceAll( "\\/", "\\.");
         return "package=" + packageName+
                 "\n"+
-                "systemProp.version="+ versionPlugin;
+                "systemProp.version="+ VERSION_PLUGIN;
     }
     public static String getbuildGradleApplicationContent(){
 
@@ -372,7 +372,7 @@ public class Constants {
     public static String getUseCase(String useCaseName, String packageName) {
         packageName = packageName.replaceAll( "\\/", "\\.");
 
-        return "package " + packageName + "." + usecase + "." + Utils.decapitalize(useCaseName) + ";\n" +
+        return "package " + packageName + "." + USECASE + "." + Utils.decapitalize(useCaseName) + ";\n" +
                 "\n" +
                 "import lombok.RequiredArgsConstructor;\n" +
                 "\n" +
