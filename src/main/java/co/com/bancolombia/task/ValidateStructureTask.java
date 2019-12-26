@@ -10,16 +10,15 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 
-public class validateStructureTask extends DefaultTask {
-    public String _package = "co.com.bancolombia";
+public class ValidateStructureTask extends DefaultTask {
 
     @TaskAction
     public void validateStructure() throws Exception {
 
-        _package = Utils.readProperties("package");
+        String packageName = Utils.readProperties("package");
         System.out.println("Clean Architecture plugin version: " + Utils.getVersionPlugin());
-        System.out.println("Project Package: " + _package);
-        _package = _package.replaceAll("\\.", "\\/");
+        System.out.println("Project Package: " + packageName);
+        packageName = packageName.replaceAll("\\.", "\\/");
         if (!validateModelLayer()) {
             throw new Exception("the model layer is invalid");
         }
@@ -50,7 +49,7 @@ public class validateStructureTask extends DefaultTask {
             try {
                 return Utils.readFile(getProject(), Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle));
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
                 return null;
             }
         };

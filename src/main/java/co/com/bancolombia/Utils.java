@@ -1,25 +1,27 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.task.GenerateStructureTask;
 import org.gradle.api.Project;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Utils {
 
-    private static File file;
-    private static FileWriter fileWriter;
     private static Properties properties = new Properties();
+    private static Logger logger = LoggerFactory.getLogger(Utils.class);
+
 
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
-        System.out.println(project.file(nameFile).getAbsolutePath());
+        File file;
+        FileWriter fileWriter;
+        logger.debug(project.file(nameFile).getAbsolutePath());
 
         file = new File((project.file(nameFile).getAbsolutePath()));
         fileWriter = new FileWriter(file);
@@ -28,10 +30,8 @@ public class Utils {
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
-        List<String> list = new ArrayList<>();
-        System.out.println(project.file(nameFile).getAbsolutePath());
-        Stream<String> stream = Files.lines(Paths.get(project.file(nameFile).getAbsolutePath()));
-        return stream ;
+        logger.debug(project.file(nameFile).getAbsolutePath());
+        return Files.lines(Paths.get(project.file(nameFile).getAbsolutePath())) ;
 
     }
 

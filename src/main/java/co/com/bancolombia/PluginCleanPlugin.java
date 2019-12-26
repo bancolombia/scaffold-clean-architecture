@@ -3,9 +3,7 @@
  */
 package co.com.bancolombia;
 
-import co.com.bancolombia.task.GenerateModelTask;
-import co.com.bancolombia.task.GenerateStructureTask;
-import co.com.bancolombia.task.validateStructureTask;
+import co.com.bancolombia.task.*;
 import org.gradle.api.Project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Task;
@@ -29,9 +27,21 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         Task generateModel = tasks.create("generateModel", GenerateModelTask.class);
         generateModel.setGroup(taskGroup);
-        generateModel.setDescription("Generate model project in domain layer");
+        generateModel.setDescription("Generate model in domain layer");
 
-        Task validateStructure = tasks.create("validateStructure", validateStructureTask.class);
+        Task generateUseCase = tasks.create("generateUseCase", GenerateUseCaseTask.class);
+        generateUseCase.setGroup(taskGroup);
+        generateUseCase.setDescription("Generate use case in domain layer");
+
+        Task generateEntryPoint = tasks.create("generateEntryPoint", GenerateEntryPointTask.class);
+        generateEntryPoint.setGroup(taskGroup);
+        generateEntryPoint.setDescription("Generate entry point in infraestructure layer");
+
+        Task generateDrivenAdapter = tasks.create("generateDrivenAdapter", GenerateDrivenAdapterTask.class);
+        generateDrivenAdapter.setGroup(taskGroup);
+        generateDrivenAdapter.setDescription("Generate driven adapter in infraestructure layer");
+
+        Task validateStructure = tasks.create("validateStructure", ValidateStructureTask.class);
         validateStructure.setGroup(taskGroup);
         validateStructure.setDescription("Validate that project references are not violated");
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 public class UtilsTest {
 
     @Mock
-    Project projectInternal;
+    DefaultProject projectInternal;
 
     @Test
     public void getVersionPlugin() {
@@ -62,6 +62,17 @@ public class UtilsTest {
         Utils.readProperties(test1);
 
     }
+/*    @Test
+    public void readFile() throws IOException {
+    String nameFile = "temp.txt";
+    File file = new File("src/test/java/resources/"+nameFile);
+        Mockito.when(projectInternal.file(Mockito.anyString())).thenReturn(file);
+        Mockito.when(projectInternal.getFileOperations(Mockito.anyString())).thenReturn(file);
+
+
+    Utils.readFile(projectInternal, "temp.txt");
+    Assert.assertEquals(d1, 1);
+    }*/
 
    /** @Test
     public void writeString() throws IOException {

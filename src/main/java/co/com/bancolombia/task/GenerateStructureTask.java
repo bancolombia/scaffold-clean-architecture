@@ -5,18 +5,20 @@ import co.com.bancolombia.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class GenerateStructureTask extends DefaultTask {
-    public String _package = "co.com.bancolombia";
-    public String type = "imperative";
-    public String projectName = "cleanArchitecture";
+    private Logger logger = LoggerFactory.getLogger(GenerateStructureTask.class);
+    private String packageName = "co.com.bancolombia";
+    private String type = "imperative";
+    private String projectName = "cleanArchitecture";
 
     @Option(option = "package", description = "Set the principal package to use in the project")
-    public void setPackage(String _package) {
-        if (!_package.isEmpty()) {
-            this._package = _package;
+    public void setPackage(String packageName) {
+        if (!packageName.isEmpty()) {
+            this.packageName = packageName;
         }
     }
 
@@ -36,46 +38,46 @@ public class GenerateStructureTask extends DefaultTask {
 
 
     @TaskAction
-    public void GenerateStructure() throws Exception {
+    public void generateStructure() throws Exception {
 
-        System.out.println("Clean Architecture plugin version: " + Utils.getVersionPlugin());
-        System.out.println("Package: " + _package);
-        _package = _package.replaceAll("\\.", "\\/");
-        System.out.println("Project Type: " + type);
-        System.out.println("Project Name: " + projectName);
-        System.out.println("Generating base directories");
+        logger.info("Clean Architecture plugin version: " + Utils.getVersionPlugin());
+        logger.info("Package: " + packageName);
+        packageName = packageName.replaceAll("\\.", "\\/");
+        logger.info("Project Type: " + type);
+        logger.info("Project Name: " + projectName);
+        logger.info("Generating base directories");
         getProject().mkdir(Constants.infraestucture);
-        System.out.println("Directory " + Constants.infraestucture + "has been created.");
+        logger.info(Constants.infraestucture + "directory has been created.");
         getProject().mkdir(Constants.domain);
-        System.out.println("Directory " + Constants.domain + "has been created.");
+        logger.info(Constants.domain + "directory has been created.");
         getProject().mkdir(Constants.application);
-        System.out.println("Directory " + Constants.application + "has been created.");
-        System.out.println("Directories base have been created.");
+        logger.info(Constants.application + "directory has been created.");
+        logger.info("Directories base have been created.");
 
-        System.out.println("Generating sub directories");
-        getProject().mkdir(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.config));
-        getProject().mkdir(Constants.application.concat("/").concat(Constants.testJava).concat("/").concat(_package));
+        logger.info("Generating sub directories");
+        getProject().mkdir(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.config));
+        getProject().mkdir(Constants.application.concat("/").concat(Constants.testJava).concat("/").concat(packageName));
         getProject().mkdir(Constants.application.concat("/").concat(Constants.mainResource));
 
         getProject().mkdir(Constants.infraestucture.concat("/").concat(Constants.drivenAdapters));
         getProject().mkdir(Constants.infraestucture.concat("/").concat(Constants.entryPoints));
         getProject().mkdir(Constants.infraestucture.concat("/").concat(Constants.helpers));
 
-        getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.model));
-        getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.testJava).concat("/").concat(_package).concat("/").concat(Constants.model));
-        getProject().mkdir(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.usecase));
-        getProject().mkdir(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.testJava).concat("/").concat(_package).concat("/").concat(Constants.usecase));
+        getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.model));
+        getProject().mkdir(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.testJava).concat("/").concat(packageName).concat("/").concat(Constants.model));
+        getProject().mkdir(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.usecase));
+        getProject().mkdir(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.testJava).concat("/").concat(packageName).concat("/").concat(Constants.usecase));
 
-        System.out.println("Generated Childs Dirs");
+        logger.info("Generated Childs Dirs");
 
-        System.out.println("Generating Base Files");
+        logger.info("Generating Base Files");
         getProject().file(Constants.domain.concat("/").concat(Constants.model).concat("/").concat(Constants.buildGradle)).createNewFile();
         getProject().file(Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle)).createNewFile();
 
         getProject().file(Constants.application.concat("/").concat(Constants.buildGradle)).createNewFile();
         getProject().file(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties)).createNewFile();
         getProject().file(Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j)).createNewFile();
-        getProject().file(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication)).createNewFile();
+        getProject().file(Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.mainApplication)).createNewFile();
 
         getProject().file(Constants.mainGradle).createNewFile();
         getProject().file(Constants.lombokConfig).createNewFile();
@@ -85,23 +87,23 @@ public class GenerateStructureTask extends DefaultTask {
         getProject().file(Constants.gradleProperties).createNewFile();
 
 
-        System.out.println("Generated Base Files");
-        System.out.println("Writing in Files");
+        logger.info("Generated Base Files");
+        logger.info("Writing in Files");
 
         Utils.writeString(getProject(), Constants.domain.concat("/").concat(Constants.usecase).concat("/").concat(Constants.buildGradle), Constants.buildGradleUseCaseContent);
         Utils.writeString(getProject(), Constants.lombokConfig, Constants.lombokConfigContent);
         Utils.writeString(getProject(), Constants.gitignore, Constants.gitIgnoreContent);
         Utils.writeString(getProject(), Constants.readMe, Constants.readmeContent);
-        Utils.writeString(getProject(), Constants.gradleProperties, Constants.getGradlePropertiesContent(_package));
+        Utils.writeString(getProject(), Constants.gradleProperties, Constants.getGradlePropertiesContent(packageName));
         Utils.writeString(getProject(), Constants.settingsGradle, Constants.getSettingsGradleContent(this.projectName));
         Utils.writeString(getProject(), Constants.mainGradle, Constants.mainGradleContent);
         Utils.writeString(getProject(), Constants.buildGradle, Constants.getBuildGradleContent());
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.buildGradle), Constants.buildGradleApplicationContent);
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.applicationProperties), Constants.getApplicationPropertiesContent(this.projectName));
         Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainResource).concat("/").concat(Constants.log4j), Constants.log4jContent);
-        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(_package).concat("/").concat(Constants.mainApplication), Constants.getMainApplicationContent(this.projectName));
+        Utils.writeString(getProject(), Constants.application.concat("/").concat(Constants.mainJava).concat("/").concat(packageName).concat("/").concat(Constants.mainApplication), Constants.getMainApplicationContent(this.projectName));
 
-        System.out.println("Writed in Files");
+        logger.info("Writed in Files");
 
     }
 

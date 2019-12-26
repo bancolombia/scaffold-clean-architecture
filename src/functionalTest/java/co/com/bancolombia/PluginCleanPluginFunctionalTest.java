@@ -72,7 +72,7 @@ public class PluginCleanPluginFunctionalTest {
 
     @Test public void canRunTaskCleanArchitectureWithParameters() throws IOException {
         String task = "cleanArchitecture";
-        String _package = "co.com.test";
+        String packageName = "co.com.test";
         String projectName = "ProjectName";
 
         // Setup the test build
@@ -89,12 +89,12 @@ public class PluginCleanPluginFunctionalTest {
         GradleRunner runner = GradleRunner.create();
         runner.forwardOutput();
         runner.withPluginClasspath();
-        runner.withArguments(task,"--name="+ projectName,"--package="+ _package);
+        runner.withArguments(task,"--name="+ projectName,"--package="+ packageName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
         assertTrue(result.getOutput().contains( projectName));
-        assertTrue(result.getOutput().contains("Package: "+ _package));
+        assertTrue(result.getOutput().contains("Package: "+ packageName));
 
 
         assertTrue(new File("build/functionalTest/Readme.md").exists());
@@ -150,6 +150,32 @@ public class PluginCleanPluginFunctionalTest {
 
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
+
+    @Test public void canRunTaskGenerateUseCaseWithParameters() throws Exception {
+        canRunTaskCleanArchitectureWithOutParameters();
+        String task = "generateUseCase";
+        String useCaseName = "testUseCase";
+        // Setup the test build
+        File projectDir = new File("build/functionalTest");
+        Files.createDirectories(projectDir.toPath());
+        writeString(new File(projectDir, "settings.gradle"), "");
+        writeString(new File(projectDir, "build.gradle"),
+                "plugins {" +
+                        "  id('co.com.bancolombia.cleanArchitecture')" +
+                        "}");
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task,"--name="+ useCaseName);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/testUseCase/TestUseCase.java").exists());
+
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
 
     @Test public void canRunTaskvalidateStructureWithOutParameters() throws IOException {
         canRunTaskCleanArchitectureWithOutParameters();
