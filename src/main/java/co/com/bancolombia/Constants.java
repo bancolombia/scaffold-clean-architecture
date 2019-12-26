@@ -1,5 +1,9 @@
 package co.com.bancolombia;
 
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     public static final String VERSION_PLUGIN = "0.53";
     public static final String JAVA_EXTENSION = ".java";
@@ -46,6 +50,9 @@ public class Constants {
     public static final String SETTINGS_GRADLE = "settings.gradle";
     public static final String GITIGNORE = ".gitignore";
     public static final String READ_ME = "Readme.md";
+
+    private static final Map<Integer, String> ENTRY_POINTS_AVAILABLE = new HashMap<>();
+    private static final Map<Integer, String> DRIVEN_ADAPTERS_AVAILABLE = new HashMap<>();
 
 
     public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
@@ -225,6 +232,8 @@ public class Constants {
 
     public static final String TEST_JAVA = "src/test/java";
 
+    public static final String AUTHORIZATION_CONFIG = "AuthorizationConfig";
+
     public static String getSettingsGradleContent(String nameProject) {
         return "rootProject.name = '" + nameProject + "'\n" +
                 "\n" +
@@ -286,7 +295,7 @@ public class Constants {
     }
 
     public static String getModel(String modelName, String packageName) {
-        packageName = packageName.replaceAll( "\\/", "\\.");
+        packageName = packageName.replaceAll("\\/", "\\.");
         return "package " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + ";\n" +
                 "\n" +
                 "import lombok.Builder;\n" +
@@ -300,8 +309,8 @@ public class Constants {
                 "}\n";
     }
 
-    public static String getBuildGradleContent(){
-        return  "buildscript {\n" +
+    public static String getBuildGradleContent() {
+        return "buildscript {\n" +
                 "\text {\n" +
                 "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
                 "\t\tspringCloudVersion = 'Greenwich.M1'\n" +
@@ -319,7 +328,7 @@ public class Constants {
                 "\n" +
                 "plugins {\n" +
                 "\tid \"org.sonarqube\" version \"2.6\"\n" +
-                "\tid \"co.com.bancolombia.cleanArchitecture\" version \""+ VERSION_PLUGIN +"\"\n" +
+                "\tid \"co.com.bancolombia.cleanArchitecture\" version \"" + VERSION_PLUGIN + "\"\n" +
                 "}\n" +
                 "subprojects {\n" +
                 "  apply plugin: \"java\"\n" +
@@ -328,13 +337,13 @@ public class Constants {
                 "    test {\n" +
                 "      reports.html.enabled = false\n" +
                 "    }\n" +
-                "}"+
+                "}" +
                 "\n" +
                 "apply from: './main.gradle'";
     }
 
     public static String getInterfaceModel(String modelName, String packageName) {
-        packageName = packageName.replaceAll( "\\/", "\\.");
+        packageName = packageName.replaceAll("\\/", "\\.");
         return "package " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + "." + GATEWAYS + ";\n" +
                 "\n" +
                 "import " + packageName + "." + MODEL + "." + Utils.decapitalize(modelName) + "." + Utils.capitalize(modelName) + ";\n" +
@@ -345,40 +354,128 @@ public class Constants {
                 "}\n";
     }
 
-    public static String getGradlePropertiesContent(String packageName)  {
-        packageName = packageName.replaceAll( "\\/", "\\.");
-        return "package=" + packageName+
-                "\n"+
-                "systemProp.version="+ VERSION_PLUGIN;
+    public static String getGradlePropertiesContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+        return "package=" + packageName +
+                "\n" +
+                "systemProp.version=" + VERSION_PLUGIN;
     }
-    public static String getbuildGradleApplicationContent(){
 
-        return "apply plugin: 'org.springframework.boot'\n"+
-                "\n"+
-                "\n"+
-                "\n"+
-                "dependencies {\n"+
-                "    compile 'org.springframework.boot:spring-boot-starter'\n"+
-                "    compile project(\":domain-usecase\")\n"+
-                "\n"+
-                "    runtime('org.springframework.boot:spring-boot-devtools')\n"+
-                "}\n"+
-                "jar {\n"+
-                "    archivesBaseName = rootProject.name\n"+
-                "    libsDirName = project(\":\").getBuildDir()\n"+
+    public static String getbuildGradleApplicationContent() {
+
+        return "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "dependencies {\n" +
+                "    compile 'org.springframework.boot:spring-boot-starter'\n" +
+                "    compile project(\":domain-usecase\")\n" +
+                "\n" +
+                "    runtime('org.springframework.boot:spring-boot-devtools')\n" +
+                "}\n" +
+                "jar {\n" +
+                "    archivesBaseName = rootProject.name\n" +
+                "    libsDirName = project(\":\").getBuildDir()\n" +
                 "}\n";
     }
 
     public static String getUseCase(String useCaseName, String packageName) {
-        packageName = packageName.replaceAll( "\\/", "\\.");
+        packageName = packageName.replaceAll("\\/", "\\.");
 
         return "package " + packageName + "." + USECASE + "." + Utils.decapitalize(useCaseName) + ";\n" +
                 "\n" +
                 "import lombok.RequiredArgsConstructor;\n" +
                 "\n" +
                 "@RequiredArgsConstructor\n" +
-                "public class " + Utils.capitalize(useCaseName) +" {\n" +
+                "public class " + Utils.capitalize(useCaseName) + " {\n" +
                 "\n" +
                 "}\n";
+    }
+
+    public static String getNameEntryPoint(int numberEntryPoint) {
+
+        if (ENTRY_POINTS_AVAILABLE.isEmpty()) {
+            ENTRY_POINTS_AVAILABLE.put(1, "API REST IMPERATIVE");
+        }
+        return ENTRY_POINTS_AVAILABLE.get(numberEntryPoint);
+    }
+
+    public static String getNameDrivenAdapter(int numberDriverAdapter) {
+
+        if (DRIVEN_ADAPTERS_AVAILABLE.isEmpty()) {
+            DRIVEN_ADAPTERS_AVAILABLE.put(1, "JPA REPOSITORY");
+            DRIVEN_ADAPTERS_AVAILABLE.put(2, "MONGO REPOSITORY");
+            DRIVEN_ADAPTERS_AVAILABLE.put(3, "SECRETS MANAGER CONSUMER");
+        }
+        return DRIVEN_ADAPTERS_AVAILABLE.get(numberDriverAdapter);
+    }
+
+
+    public static String getBuildGradleApiRest() {
+
+      return "dependencies {\n" +
+              "    implementation project(':usecase')\n" +
+              "    implementation project(':model')\n" +
+              "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
+              "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
+              "    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter'\n" +
+              "}";
+
+    }
+
+    public static String getAuthorizationConfigApiRest(String packageName) {
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "import org.springframework.boot.web.servlet.FilterRegistrationBean;\n" +
+                "import org.springframework.context.annotation.Bean;\n" +
+                "import org.springframework.core.Ordered;\n" +
+                "import org.springframework.http.HttpMethod;\n" +
+                "import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;\n" +
+                "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n" +
+                "import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\n" +
+                "import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\n" +
+                "import org.springframework.security.config.http.SessionCreationPolicy;\n" +
+                "import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\n" +
+                "import org.springframework.security.web.csrf.CookieCsrfTokenRepository;\n" +
+                "import org.springframework.security.web.util.matcher.AntPathRequestMatcher;\n" +
+                "import org.springframework.web.cors.CorsConfiguration;\n" +
+                "import org.springframework.web.cors.UrlBasedCorsConfigurationSource;\n" +
+                "import org.springframework.web.filter.CorsFilter;\n" +
+                "\n" +
+                "import java.util.Arrays;\n" +
+                "\n" +
+                "@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)\n" +
+                "@EnableWebSecurity\n" +
+                "public class AuthorizationConfig extends WebSecurityConfigurerAdapter {\n" +
+                "\n" +
+                "    @Override\n" +
+                "    protected void configure(HttpSecurity http) throws Exception {\n" +
+                "        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);\n" +
+                "        http.authorizeRequests().antMatchers(HttpMethod.POST, \"/home\").permitAll();\n" +
+                "        http.authorizeRequests().antMatchers(\"/api/**\").authenticated();\n" +
+                "\n" +
+                "        http.logout().logoutRequestMatcher(new AntPathRequestMatcher(\"/logout\"))\n" +
+                "                .logoutSuccessUrl(\"/\").deleteCookies(\"JSESSIONID\").invalidateHttpSession(true);\n" +
+                "\n" +
+                "        http.authorizeRequests().anyRequest().permitAll();\n" +
+                "\n" +
+                "        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\n" +
+                "        http.csrf().disable();\n" +
+                "    }\n" +
+                "\n" +
+                "    @Bean\n" +
+                "    public FilterRegistrationBean corsFilter() {\n" +
+                "        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();\n" +
+                "        CorsConfiguration config = new CorsConfiguration();\n" +
+                "        config.setAllowCredentials(true);\n" +
+                "        config.addAllowedOrigin(\"http://localhost:4200\");\n" +
+                "        config.setAllowedMethods(Arrays.asList(\"POST\", \"OPTIONS\", \"GET\", \"DELETE\", \"PUT\"));\n" +
+                "        config.setAllowedHeaders(Arrays.asList(\"X-Requested-With\", \"Origin\", \"Content-Type\", \"Accept\", \"Authorization\"));\n" +
+                "        source.registerCorsConfiguration(\"/**\", config);\n" +
+                "        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));\n" +
+                "        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);\n" +
+                "        return bean;\n" +
+                "    }\n" +
+                "}";
     }
 }

@@ -152,7 +152,43 @@ public class PluginCleanPluginFunctionalTest {
 
         assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
     }
+    @Test public void canRunTaskGenerateEntryPointCaseWithParameters()  {
+        canRunTaskCleanArchitectureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "1";
 
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task,"--value="+ valueEntryPoint);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/java/co/com/bancolombia/apirest/config/AuthorizationConfig.java").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/resources/application.yaml").exists());
+
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test public void canRunTaskGenerateDrivenAdapterWithParameters()  {
+        canRunTaskCleanArchitectureWithOutParameters();
+        String task = "generateDrivenAdapter";
+        String valueEntryPoint = "1";
+
+        // Run the build
+        GradleRunner runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
+        runner.withArguments(task,"--value="+ valueEntryPoint);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/java/co/com/bancolombia/apirest/config/AuthorizationConfig.java").exists());
+        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/build.gradle").exists());
+        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/resources/application.yaml").exists());
+
+        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+    }
 
     @Test public void canRunTaskvalidateStructureWithOutParameters() {
         canRunTaskCleanArchitectureWithOutParameters();
