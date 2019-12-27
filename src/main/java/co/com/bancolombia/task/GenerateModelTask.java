@@ -27,10 +27,10 @@ public class GenerateModelTask extends DefaultTask {
             throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");
         }
         packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
-        logger.info("Project  Package: {0}", packageName);
+        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.info("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Model Name: {0}", modelName);
+        logger.info("Model Name: {}", modelName);
         logger.info("Generating Childs Dirs");
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS));
         logger.info("Generated Childs Dirs");

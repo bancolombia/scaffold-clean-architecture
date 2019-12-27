@@ -26,11 +26,11 @@ public class GenerateUseCaseTask extends DefaultTask {
             throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
         }
         packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: {0}" , Utils.getVersionPlugin());
-        logger.info("Project  Package: {0}", packageName);
+        logger.info("Clean Architecture plugin version: {}" , Utils.getVersionPlugin());
+        logger.info("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         String useCaseDir = Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE).concat("/").concat(Utils.decapitalize(useCaseName));
-        logger.info("Use Case Name: {0}", useCaseName);
+        logger.info("Use Case Name: {}", useCaseName);
         logger.info("Generating Childs Dirs");
         getProject().mkdir(useCaseDir);
         logger.info("Generated Childs Dirs");

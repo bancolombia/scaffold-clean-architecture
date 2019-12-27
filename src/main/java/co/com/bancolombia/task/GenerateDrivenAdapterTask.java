@@ -33,10 +33,10 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
         packageName = Utils.readProperties("package");
 
-        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
-        logger.info("Project  Package: {0}", packageName);
+        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.info("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Driven Adapter: {0} - {1}", numberDrivenAdapter, nameDrivenAdapter);
+        logger.info("Driven Adapter: {} - {}", numberDrivenAdapter, nameDrivenAdapter);
 
 
         switch (numberDrivenAdapter){

@@ -17,15 +17,17 @@ import java.nio.file.Files;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 /**
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
 
 public class PluginCleanPluginFunctionalTest {
     File projectDir = new File("build/functionalTest");
+    GradleRunner runner;
 
     @Before
-    public void init() throws IOException{
+    public void init() throws IOException {
         // Setup the test build
         Files.createDirectories(projectDir.toPath());
         writeString(new File(projectDir, "settings.gradle"), "");
@@ -33,15 +35,16 @@ public class PluginCleanPluginFunctionalTest {
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
+        runner = GradleRunner.create();
+        runner.forwardOutput();
+        runner.withPluginClasspath();
     }
-    @Test public void canRunTaskCleanArchitectureWithOutParameters() {
+
+    @Test
+    public void canRunTaskGenerateStructureWithOutParameters() {
 
         String task = "cleanArchitecture";
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
         runner.withArguments(task);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
@@ -71,20 +74,16 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void canRunTaskCleanArchitectureWithParameters()  {
+    @Test
+    public void canRunTaskGenerateStructureWithParameters() {
         String task = "cleanArchitecture";
         String packageName = "co.com.test";
         String projectName = "ProjectName";
 
-        // Run the build
-
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments(task,"--name="+ projectName,"--package="+ packageName);
+        runner.withArguments(task, "--name=" + projectName, "--package=" + packageName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
@@ -114,105 +113,86 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/test").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void canRunTaskGenerateModelWithParameters() {
-
+    @Test
+    public void canRunTaskGenerateModelWithParameters() {
         String task = "generateModel";
         String modelName = "testModel";
 
         // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments(task,"--name="+ modelName);
+        runner.withArguments(task, "--name=" + modelName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
         assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void canRunTaskGenerateUseCaseWithParameters()  {
-        canRunTaskCleanArchitectureWithOutParameters();
+    @Test
+    public void canRunTaskGenerateUseCaseWithParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
         String task = "generateUseCase";
         String useCaseName = "testUseCase";
-        // Setup the test build
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments(task,"--name="+ useCaseName);
+        // Setup the test build
+        runner.withArguments(task, "--name=" + useCaseName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/testUseCase/TestUseCase.java").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
-    @Test public void canRunTaskGenerateEntryPointCaseWithParameters()  {
-        canRunTaskCleanArchitectureWithOutParameters();
+
+    @Test
+    public void canRunTaskGenerateEntryPointCaseWithParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
         String task = "generateEntryPoint";
         String valueEntryPoint = "1";
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments(task,"--value="+ valueEntryPoint);
+        runner.withArguments(task, "--value=" + valueEntryPoint);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/java/co/com/bancolombia/apirest/config/AuthorizationConfig.java").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/build.gradle").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/resources/application.yaml").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points/api-rest/src/main/java/co/com/bancolombia/api-rest/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/entry-points/api-rest/build.gradle").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void canRunTaskGenerateDrivenAdapterWithParameters()  {
-        canRunTaskCleanArchitectureWithOutParameters();
+/*    @Test
+    public void canRunTaskGenerateDrivenAdapterWithParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
         String task = "generateDrivenAdapter";
         String valueEntryPoint = "1";
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
-        runner.withArguments(task,"--value="+ valueEntryPoint);
+        runner.withArguments(task, "--value=" + valueEntryPoint);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/java/co/com/bancolombia/apirest/config/AuthorizationConfig.java").exists());
         //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/build.gradle").exists());
         //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/resources/application.yaml").exists());
 
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
-    }
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }*/
 
-    @Test public void canRunTaskvalidateStructureWithOutParameters() {
-        canRunTaskCleanArchitectureWithOutParameters();
+    @Test
+    public void canRunTaskvalidateStructureWithOutParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
         String task = "validateStructure";
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
         runner.withArguments(task);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
 
         // Verify the result
-
-        assertEquals(result.task(":"+task).getOutcome(), TaskOutcome.SUCCESS);
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-    @Test public void createTasks() {
+    @Test
+    public void createTasks() {
 
-        // Run the build
-        GradleRunner runner = GradleRunner.create();
-        runner.forwardOutput();
-        runner.withPluginClasspath();
         runner.withArguments("tasks");
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();

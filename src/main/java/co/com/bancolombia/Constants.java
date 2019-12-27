@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+
+    private Constants() {
+    }
+
     public static final String VERSION_PLUGIN = "0.53";
     public static final String JAVA_EXTENSION = ".java";
 
@@ -14,6 +18,8 @@ public class Constants {
     public static final String INFRAESTUCTURE = "infraestucture";
     public static final String DOMAIN = "domain";
     public static final String APPLICATION = "applications/app-service";
+    public static final String DEPLOYMENT = "deployment";
+    public static final String DOCKERFILE = "Dockerfile";
 
     /**
      * Child Dirs applications
@@ -56,7 +62,7 @@ public class Constants {
 
 
     public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
-            "    compile project(':domain-model')\n" +
+            "    implementation project(':model')\n" +
             "}";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
@@ -210,10 +216,15 @@ public class Constants {
             "\n" +
             "dependencies {\n" +
             "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-            "    compile project(\":domain-usecase\")\n" +
+            "implementation project(':model')\n" +
+            "implementation project(':usecase')\n" +
             "\n" +
-            "    runtime('org.springframework.boot:spring-boot-devtools')\n" +
-            "}\n";
+            "runtime('org.springframework.boot:spring-boot-devtools')\n" +
+            "}\n"+
+            "jar {\n"+
+                    "    archivesBaseName = rootProject.name\n"+
+                    "    libsDirName = project(\":\").getBuildDir()\n"+
+                    "}";
 
 
     public static final String LOG_4_J_CONTENT = "name=PropertiesConfig\n" +
@@ -232,43 +243,25 @@ public class Constants {
 
     public static final String TEST_JAVA = "src/test/java";
 
-    public static final String AUTHORIZATION_CONFIG = "AuthorizationConfig";
+    public static final String API_REST_CLASS = "ApiRest";
+    public static final String DOCKER_FILE_CONTENT = "FROM adoptopenjdk/openjdk8-openj9:alpine-slim\n" +
+            "VOLUME /tmp\n" +
+            "COPY *.jar app.jar\n" +
+            "RUN sh -c 'touch /app.jar'\n" +
+            "ENV JAVA_OPTS=\" -Xshareclasses:name=cacheapp,cacheDir=/cache,nonfatal -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom\"\n" +
+            "ENTRYPOINT [ \"sh\", \"-c\", \"java $JAVA_OPTS  -jar /app.jar\" ]";
 
     public static String getSettingsGradleContent(String nameProject) {
         return "rootProject.name = '" + nameProject + "'\n" +
                 "\n" +
-                "FileTree buildFiles = fileTree(rootDir) {\n" +
-                "    List excludes = gradle.startParameter.projectProperties.get(\"excludeProjects\")?.split(\",\")\n" +
-                "    include '**/*.gradle'\n" +
-                "    exclude 'applications/admin-server', 'main.gradle','build', '**/gradle', 'settings.gradle', 'buildSrc', '/build.gradle', '.*', 'out'\n" +
-                "    if(excludes) {\n" +
-                "        exclude excludes\n" +
-                "    }\n" +
-                "}\n" +
+                "include \":app-service\"\n" +
+                "include \":model\"\n" +
+                "include \":usecase\"" +
                 "\n" +
-                "String rootDirPath = rootDir.absolutePath + File.separator;\n" +
-                "buildFiles.each { File buildFile ->\n" +
-                "\n" +
-                "    boolean isDefaultName = 'build.gradle'.equals(buildFile.name)\n" +
-                "    if(isDefaultName) {\n" +
-                "        String projectName = buildFile.parentFile.name\n" +
-                "        String projectPath = ':' + projectName\n" +
-                "        include projectPath\n" +
-                "        def project = findProject(\"${projectPath}\")\n" +
-                "        project.name = buildFile.parentFile.parentFile.name + '-' + projectName\n" +
-                "        project.projectDir = buildFile.parentFile\n" +
-                "        project.buildFileName = buildFile.name\n" +
-                "\n" +
-                "    } else {\n" +
-                "        String projectName = buildFile.name.replace('.gradle', '')\n" +
-                "        String projectPath = ':' + projectName\n" +
-                "        include projectPath\n" +
-                "        def project = findProject(\"${projectPath}\")\n" +
-                "        project.name = projectName\n" +
-                "        project.projectDir = buildFile.parentFile\n" +
-                "        project.buildFileName = buildFile.name\n" +
-                "    }\n" +
-                "}";
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')";
+
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {
@@ -413,17 +406,17 @@ public class Constants {
 
     public static String getBuildGradleApiRest() {
 
-      return "dependencies {\n" +
-              "    implementation project(':usecase')\n" +
-              "    implementation project(':model')\n" +
-              "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
-              "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
-              "    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter'\n" +
-              "}";
+        return "dependencies {\n" +
+                "    implementation project(':usecase')\n" +
+                "    implementation project(':model')\n" +
+                "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
+                "    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter'\n" +
+                "}";
 
     }
 
-    public static String getAuthorizationConfigApiRest(String packageName) {
+    public static String getApiRestClassContent(String packageName) {
         return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.boot.web.servlet.FilterRegistrationBean;\n" +

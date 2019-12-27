@@ -20,8 +20,8 @@ public class ValidateStructureTask extends DefaultTask {
     public void validateStructure() throws Exception {
 
         String packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
-        logger.info("Project Package: {0}", packageName);
+        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.info("Project Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         if (!validateModelLayer()) {
             throw new CleanException("the model layer is invalid");
@@ -46,8 +46,8 @@ public class ValidateStructureTask extends DefaultTask {
 
 
     private boolean validateUseCaseLayer() {
-        String modelDependency1 = "implementationproject(':domain-model')";
-        String modelDependency2 = "compileproject(':domain-model')";
+        String modelDependency1 = "implementationproject(':model')";
+        String modelDependency2 = "compileproject(':model')";
 
         Supplier<Stream<String>> stream = () -> {
             try {

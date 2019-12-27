@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 public class Utils {
+    private Utils(){}
 
     private static Properties properties = new Properties();
     private static Logger logger = LoggerFactory.getLogger(Utils.class);

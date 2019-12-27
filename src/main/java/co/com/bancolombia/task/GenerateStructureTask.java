@@ -40,18 +40,20 @@ public class GenerateStructureTask extends DefaultTask {
     @TaskAction
     public void generateStructure() throws Exception {
 
-        logger.info("Clean Architecture plugin version: {0}", Utils.getVersionPlugin());
-        logger.info("Package: {0}", packageName);
+        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.info("Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Project Type: {0}", type);
-        logger.info("Project Name: {0}", projectName);
+        logger.info("Project Type: {}", type);
+        logger.info("Project Name: {}", projectName);
         logger.info("Generating base directories");
         getProject().mkdir(Constants.INFRAESTUCTURE);
-        logger.info("{0} directory has been created.", Constants.INFRAESTUCTURE);
+        logger.info("{} directory has been created.", Constants.INFRAESTUCTURE);
         getProject().mkdir(Constants.DOMAIN);
-        logger.info("{0} directory has been created.",Constants.DOMAIN);
+        logger.info("{} directory has been created.",Constants.DOMAIN);
         getProject().mkdir(Constants.APPLICATION);
-        logger.info("{0} directory has been created.", Constants.APPLICATION);
+        logger.info("{} directory has been created.", Constants.APPLICATION);
+        getProject().mkdir(Constants.DEPLOYMENT);
+        logger.info("{} directory has been created.", Constants.DEPLOYMENT);
         logger.info("Directories base have been created.");
 
         logger.info("Generating sub directories");
@@ -74,6 +76,8 @@ public class GenerateStructureTask extends DefaultTask {
         getProject().file(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
         getProject().file(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
 
+        getProject().file(Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE)).createNewFile();
+
         getProject().file(Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
         getProject().file(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES)).createNewFile();
         getProject().file(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J)).createNewFile();
@@ -91,6 +95,7 @@ public class GenerateStructureTask extends DefaultTask {
         logger.info("Writing in Files");
 
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
+        Utils.writeString(getProject(), Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE), Constants.DOCKER_FILE_CONTENT);
         Utils.writeString(getProject(), Constants.LOMBOK_CONFIG, Constants.LOMBOK_CONFIG_CONTENT);
         Utils.writeString(getProject(), Constants.GITIGNORE, Constants.GIT_IGNORE_CONTENT);
         Utils.writeString(getProject(), Constants.READ_ME, Constants.README_CONTENT);
