@@ -3,17 +3,13 @@
  */
 package co.com.bancolombia;
 
-
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Before;
 import org.junit.Test;
-
-
 import java.io.*;
 import java.nio.file.Files;
-
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -43,7 +39,7 @@ public class PluginCleanPluginFunctionalTest {
     @Test
     public void canRunTaskGenerateStructureWithOutParameters() {
 
-        String task = "cleanArchitecture";
+        String task = "ca";
 
         runner.withArguments(task);
         runner.withProjectDir(projectDir);
@@ -76,6 +72,7 @@ public class PluginCleanPluginFunctionalTest {
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
+
 
     @Test
     public void canRunTaskGenerateStructureWithParameters() {
@@ -161,21 +158,20 @@ public class PluginCleanPluginFunctionalTest {
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
-/*    @Test
+    @Test
     public void canRunTaskGenerateDrivenAdapterWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateDrivenAdapter";
-        String valueEntryPoint = "1";
+        String valueDrivenAdapter = "3";
 
-        runner.withArguments(task, "--value=" + valueEntryPoint);
+        runner.withArguments(task, "--value=" + valueDrivenAdapter);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/java/co/com/bancolombia/apirest/config/AuthorizationConfig.java").exists());
-        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/build.gradle").exists());
-        //assertTrue(new File("build/functionalTest/infraestucture/entry-points/apirest/src/main/resources/application.yaml").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/secrets-manager-consumer/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets-manager-consumer/SecretsManager.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
-    }*/
+    }
 
     @Test
     public void canRunTaskvalidateStructureWithOutParameters() {

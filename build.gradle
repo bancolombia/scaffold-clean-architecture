@@ -94,5 +94,36 @@ jacocoTestReport{
 		csv.enabled false
 	}
 }
+FileTree buildFiles = fileTree(rootDir) {
+	List excludes = gradle.startParameter.projectProperties.get("excludeProjects")?.split(",")
+	include '**/*.gradle'
+	exclude 'applications/admin-server', 'main.gradle','build', '**/gradle', 'settings.gradle', 'buildSrc', '/build.gradle', '.*', 'out'
+	if(excludes) {
+		exclude excludes
+	}
+}
+
+buildFiles.each { File buildFile ->
+
+	boolean isDefaultName = 'build.gradle'.equals(buildFile.name)
+	if(isDefaultName) {
+		String projectName = buildFile.parentFile.name
+		String projectPath = ':' + projectName
+		include projectPath
+		def project = findProject("${projectPath}")
+		project.name = buildFile.parentFile.parentFile.name + '-' + projectName
+		project.projectDir = buildFile.parentFile
+		project.buildFileName = buildFile.name
+
+	} else {
+		String projectName = buildFile.name.replace('.gradle', '')
+		String projectPath = ':' + projectName
+		include projectPath
+		def project = findProject("${projectPath}")
+		project.name = projectName
+		project.projectDir = buildFile.parentFile
+		project.buildFileName = buildFile.name
+	}
+}
 
 

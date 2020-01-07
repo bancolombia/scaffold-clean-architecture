@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
 
@@ -57,18 +60,38 @@ public class Utils {
 
         return new String(c);
     }
-    public static String readProperties(String variable) throws Exception {
+    public static String readProperties(String variable) throws  IOException {
         properties.load(new FileReader("gradle.properties"));
         if (properties.getProperty(variable) != null)
             return properties.getProperty(variable);
         else {
-            throw new Exception("No parameter" + variable + " in build.properties file");
+            throw new IOException("No parameter" + variable + " in build.properties file");
 
         }
     }
-        public static String  getVersionPlugin(){
-            return Constants.VERSION_PLUGIN;
+    public static String  getVersionPlugin(){
+        return Constants.VERSION_PLUGIN;
+    }
+    public static Integer tryParse(String number) {
+        try {
+            return Integer.parseInt(number);
+        } catch (NumberFormatException  e) {
+            throw new NumberFormatException ("The value is invalid");
         }
+    }
+    public static List<File> finderSubProjects(String dirPath){
+        File[] directories = new File(dirPath).listFiles(File::isDirectory);
+        List<File> textFiles = new ArrayList<>();
+        for (File dir : directories) {
+            textFiles.addAll(Arrays.asList(dir.listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String filename) {
+                    return filename.endsWith("build.gradle");
+                }
+            })));
+        }
+
+        return textFiles;
+    }
 
 
 }

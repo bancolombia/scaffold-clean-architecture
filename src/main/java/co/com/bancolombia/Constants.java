@@ -9,7 +9,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String VERSION_PLUGIN = "0.53";
+    public static final String VERSION_PLUGIN = "0.56";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -220,11 +220,11 @@ public class Constants {
             "implementation project(':usecase')\n" +
             "\n" +
             "runtime('org.springframework.boot:spring-boot-devtools')\n" +
-            "}\n"+
-            "jar {\n"+
-                    "    archivesBaseName = rootProject.name\n"+
-                    "    libsDirName = project(\":\").getBuildDir()\n"+
-                    "}";
+            "}\n" +
+            "jar {\n" +
+            "    archivesBaseName = rootProject.name\n" +
+            "    libsDirName = project(\":\").getBuildDir()\n" +
+            "}";
 
 
     public static final String LOG_4_J_CONTENT = "name=PropertiesConfig\n" +
@@ -244,6 +244,13 @@ public class Constants {
     public static final String TEST_JAVA = "src/test/java";
 
     public static final String API_REST_CLASS = "ApiRest";
+    public static final String SECRET_MANAGER_CLASS = "SecretsManager";
+    public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
+    public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
+    public static final String JPA_REPOSITORY_CLASS = "JPARepositoryAdapter";
+    public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
+    public static final String MONGO_HELPER_CLASS = "AdapterOperations";
+    public static final String JPA_HELPER_CLASS = "AdapterOperations";
     public static final String DOCKER_FILE_CONTENT = "FROM adoptopenjdk/openjdk8-openj9:alpine-slim\n" +
             "VOLUME /tmp\n" +
             "COPY *.jar app.jar\n" +
@@ -262,6 +269,39 @@ public class Constants {
                 "project(':model').projectDir = file('./domain/model')\n" +
                 "project(':usecase').projectDir = file('./domain/usecase')";
 
+    }
+
+    public static String getSettingsGradleSecretsManagerContent() {
+        return "include \":secrets-manager\"\n" +
+                "project(':secrets-manager').projectDir = file('./infraestructure/driven-adapters/secrets-manager-consumer')\n";
+    }
+
+    public static String getSettingsJPARepositoryContent() {
+        return "\n" +
+                "include \":jpa-repository\"\n" +
+                "project(':jpa-repository').projectDir = file('./infraestructure/driven-adapters/jpa-repository')\n";
+    }
+
+    public static String getSettingsHelperJPAContent() {
+        return "include \":jpa-repository-commons\"\n" +
+                "project(':jpa-repository-commons').projectDir = file('./infraestructure/helpers/jpa-repository-commons')\n";
+    }
+
+    public static String getSettingsMongoRepositoryContent() {
+        return "\n" +
+                "include \":mongo-repository\"\n" +
+                "project(':mongo-repository').projectDir = file('./infraestructure/driven-adapters/mongo-repository')\n";
+    }
+
+    public static String getSettingsHelperMongoContent() {
+        return "include \":mongo-repository-commons\"\n" +
+                "project(':mongo-repository-commons').projectDir = file('./infraestructure/helpers/mongo-repository-commons')\n";
+    }
+
+
+    public static String getSettingsApiRestContent() {
+        return "include \":api-rest\"\n" +
+                "project(':api-rest').projectDir = file('./infraestructure/entry-points/api-rest')\n";
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {
@@ -416,7 +456,60 @@ public class Constants {
 
     }
 
+    public static String getBuildGradleSecretsManager() {
+
+        return "dependencies {\n" +
+                "    implementation project(':model')\n" +
+                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
+                "    implementation 'co.com.bancolombia:secretsmanager:2.0.1'\n" +
+                "}";
+
+    }
+
+    public static String getBuildGradleMongoRepository() {
+
+        return "dependencies {\n" +
+                "    implementation project(':model')\n" +
+                "    implementation project(':mongo-repository-commons')\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
+                "    implementation 'org.springframework:spring-context:5.2.0.RELEASE'\n" +
+                "    implementation 'javax.persistence:javax.persistence-api:2.2'\n" +
+                "}";
+    }
+
+    public static String getBuildGradleJPARepository() {
+
+        return "dependencies {\n" +
+                "    compile 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
+                "    compile 'org.apache.commons:commons-dbcp2:2.2.0'\n" +
+                "\n" +
+                "    testCompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n" +
+                "}";
+
+    }
+
+    public static String getBuildGradleHelperJPARepository() {
+
+        return "dependencies {\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
+                "}";
+
+    }
+
+    public static String getBuildGradleHelperMongoRepository() {
+
+        return "dependencies {\n" +
+                "  implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0' '\n" +
+                "}";
+
+    }
+
     public static String getApiRestClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
         return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.boot.web.servlet.FilterRegistrationBean;\n" +
@@ -471,4 +564,283 @@ public class Constants {
                 "    }\n" +
                 "}";
     }
+
+    public static String getSecretsManagerClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "import app.demo.domain.common.gateways.SecretsManagerConsumer;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "\n" +
+                "@Repository\n" +
+                "public class SecretsManager implements SecretsManagerConsumer {\n" +
+                "\n" +
+                "\n" +
+                "    public SecretsManager() {\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public Object getSecrets(Class cls, String secretRegion, String secretName) throws SecretException {\n" +
+                "        AbstractConnector connector = new AWSSecretManagerConnector(secretRegion);\n" +
+                "        GenericManager manager = new GenericManager(connector);\n" +
+                "        return manager.getSecretModel(secretName, cls);\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public static String getMongoRepositoryClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ".mongo-repository;\n" +
+                "\n" +
+                "import org.reactivecommons.utils.ObjectMapper;\n" +
+                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "@Repository\n" +
+                "public class " + MONGO_REPOSITORY_CLASS + " extends AdapterOperations<Object, Object, String, " + MONGO_REPOSITORY_INTERFACE + "> " +
+                "/**        implements <INTERFACE DOMAIN> **/" +
+                "\n{\n" +
+                "\n" +
+                "    @Autowired\n" +
+                "    public " + MONGO_REPOSITORY_CLASS + "("+MONGO_REPOSITORY_INTERFACE +" repository, ObjectMapper mapper) {\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public void saveAll(List<Object> objects) {\n" +
+                "        super.saveAllEntities(objects);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public List<Object> findMoviesByValue(String value) {\n" +
+                "        return null;\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public static String getJPARepositoryClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ".jpa-repository;\n" +
+                "\n" +
+                "import " + packageName + "." + "jpa-repository-commons." + JPA_HELPER_CLASS + ";\n" +
+                "import org.reactivecommons.utils.ObjectMapper;\n" +
+                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "@Repository\n" +
+                "public class " + JPA_REPOSITORY_CLASS + " extends AdapterOperations<Object, Object, String," + JPA_REPOSITORY_INTERFACE + ">\n" +
+                "/**        implements <INTERFACE DOMAIN> **/" +
+                "\n{\n" +
+                "\n" +
+                "    @Autowired\n" +
+                "    public " + JPA_REPOSITORY_CLASS + "(" + JPA_REPOSITORY_INTERFACE + " repository, ObjectMapper mapper) {\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public void saveAll(List<Object> objects) {\n" +
+                "        super.saveAllEntities(objects);\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public List<Object> findObjectByValue(String value) {\n" +
+                "        return super.toList(repository.findObjectByValue(value));\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public static String getJPARepositoryInterfaceContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ".jpa-repository;\n" +
+                "\n" +
+                "import org.springframework.data.jpa.repository.Query;\n" +
+                "import org.springframework.data.repository.CrudRepository;\n" +
+                "import org.springframework.data.repository.query.Param;\n" +
+                "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "public interface " + JPA_REPOSITORY_INTERFACE + " extends CrudRepository<Object, String>, QueryByExampleExecutor<Object> {\n" +
+                "}";
+    }
+
+    public static String getMongoRepositoryInterfaceContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ".mongo-repository;\n" +
+                "\n" +
+                "import org.springframework.data.mongodb.repository.MongoRepository;\n" +
+                "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
+                "\n" +
+                "public interface " + MONGO_REPOSITORY_INTERFACE + " extends MongoRepository<Object, String> , QueryByExampleExecutor<Object> {\n" +
+                "}";
+    }
+
+    public static String getHelperJPARepositoryClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ".jpa-repository-commons;\n" +
+                "\n" +
+                "import org.reactivecommons.utils.ObjectMapper;\n" +
+                "import org.springframework.data.domain.Example;\n" +
+                "import org.springframework.data.repository.CrudRepository;\n" +
+                "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
+                "\n" +
+                "import java.lang.reflect.ParameterizedType;\n" +
+                "import java.util.List;\n" +
+                "import java.util.function.Function;\n" +
+                "import java.util.stream.Collectors;\n" +
+                "\n" +
+                "import static java.util.stream.StreamSupport.stream;\n" +
+                "\n" +
+                "public abstract class " + JPA_HELPER_CLASS + "<E, D, I, R extends CrudRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
+                "\n" +
+                "\n" +
+                "    protected R repository;\n" +
+                "    private Class<D> dataClass;\n" +
+                "    protected ObjectMapper mapper;\n" +
+                "    private Function<D, E> toEntityFn;\n" +
+                "\n" +
+                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "        this.repository = repository;\n" +
+                "        this.mapper = mapper;\n" +
+                "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
+                "        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];\n" +
+                "        this.toEntityFn = toEntityFn;\n" +
+                "    }\n" +
+                "\n" +
+                "    protected D toData(E entity) {\n" +
+                "        return mapper.map(entity, dataClass);\n" +
+                "    }\n" +
+                "\n" +
+                "    protected E toEntity(D data) {\n" +
+                "        return data != null ? toEntityFn.apply(data) : null;\n" +
+                "    }\n" +
+                "\n" +
+                "    public E save(E entity) {\n" +
+                "        D data = toData(entity);\n" +
+                "        return toEntity(saveData(data));\n" +
+                "    }\n" +
+                "\n" +
+                "    protected List<E> saveAllEntities(List<E> entities) {\n" +
+                "        List<D> list = entities.stream().map(this::toData).collect(Collectors.toList());\n" +
+                "        return toList(saveData(list));\n" +
+                "    }\n" +
+                "\n" +
+                "    public List<E> toList(Iterable<D> iterable) {\n" +
+                "        return stream(iterable.spliterator(), false).map(this::toEntity).collect(Collectors.toList());\n" +
+                "    }\n" +
+                "\n" +
+                "    protected D saveData(D data) {\n" +
+                "        return repository.save(data);\n" +
+                "    }\n" +
+                "\n" +
+                "    protected Iterable<D> saveData(List<D> data) {\n" +
+                "        return repository.saveAll(data);\n" +
+                "    }\n" +
+                "\n" +
+                "    public E findById(I id) {\n" +
+                "        return toEntity(repository.findById(id).orElse(null));\n" +
+                "    }\n" +
+                "\n" +
+                "    public List<E> findByExample(E entity) {\n" +
+                "        return toList(repository.findAll( Example.of(toData(entity))));\n" +
+                "    }\n" +
+                "\n" +
+                "\n" +
+                "    public List<E> findAll(){\n" +
+                "        return toList(repository.findAll());\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public static String getHelperMongoRepositoryClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+        return "package " + packageName + ".mongo-repository-commons;\n" +
+                "\n" +
+                "import org.reactivecommons.utils.ObjectMapper;\n" +
+                "import org.springframework.data.domain.Example;\n" +
+                "import org.springframework.data.mongodb.repository.MongoRepository;\n" +
+                "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
+                "\n" +
+                "import java.lang.reflect.ParameterizedType;\n" +
+                "import java.util.List;\n" +
+                "import java.util.function.Function;\n" +
+                "import java.util.stream.Collectors;\n" +
+                "\n" +
+                "import static java.util.stream.StreamSupport.stream;\n" +
+                "\n" +
+                "public abstract class AdapterOperations<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
+                "\n" +
+                "    protected R repository;\n" +
+                "    private Class<D> dataClass;\n" +
+                "    protected ObjectMapper mapper;\n" +
+                "    private Function<D, E> toEntityFn;\n" +
+                "\n" +
+                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "        this.repository = repository;\n" +
+                "        this.mapper = mapper;\n" +
+                "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
+                "        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];\n" +
+                "        this.toEntityFn = toEntityFn;\n" +
+                "    }\n" +
+                "\n" +
+                "    protected D toData(E entity) {\n" +
+                "        return mapper.map(entity, dataClass);\n" +
+                "    }\n" +
+                "\n" +
+                "    protected E toEntity(D data) {\n" +
+                "        return data != null ? toEntityFn.apply(data) : null;\n" +
+                "    }\n" +
+                "\n" +
+                "    public E save(E entity) {\n" +
+                "        D data = toData(entity);\n" +
+                "        return toEntity(saveData(data));\n" +
+                "    }\n" +
+                "\n" +
+                "    protected List<E> saveAllEntities(List<E> entities) {\n" +
+                "        List<D> list = entities.stream().map(this::toData).collect(Collectors.toList());\n" +
+                "        return toList(saveData(list));\n" +
+                "    }\n" +
+                "\n" +
+                "    private List<E> toList(Iterable<D> iterable) {\n" +
+                "        return stream(iterable.spliterator(), false).map(this::toEntity).collect(Collectors.toList());\n" +
+                "    }\n" +
+                "\n" +
+                "    private D saveData(D data) {\n" +
+                "        return repository.save(data);\n" +
+                "    }\n" +
+                "\n" +
+                "    protected Iterable<D> saveData(List<D> data) {\n" +
+                "        return repository.saveAll(data);\n" +
+                "    }\n" +
+                "\n" +
+                "    public E findById(I id) {\n" +
+                "        return toEntity(repository.findById(id).orElse(null));\n" +
+                "    }\n" +
+                "\n" +
+                "    public List<E> findByExample(E entity) {\n" +
+                "        return toList(repository.findAll( Example.of(toData(entity))));\n" +
+                "    }\n" +
+                "\n" +
+                "    public List<E> findAll(){\n" +
+                "        return toList(repository.findAll());\n" +
+                "    }\n" +
+                "}";
+    }
+
+
 }

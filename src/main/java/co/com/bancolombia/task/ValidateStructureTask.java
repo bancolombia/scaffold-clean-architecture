@@ -8,7 +8,9 @@ import org.gradle.api.tasks.TaskAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -17,20 +19,42 @@ public class ValidateStructureTask extends DefaultTask {
     Logger logger = LoggerFactory.getLogger(ValidateStructureTask.class);
 
     @TaskAction
-    public void validateStructure() throws Exception {
+    public void validateStructure() throws IOException, CleanException {
 
         String packageName = Utils.readProperties("package");
         logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.info("Project Package: {}", packageName);
-        packageName = packageName.replaceAll("\\.", "\\/");
         if (!validateModelLayer()) {
             throw new CleanException("the model layer is invalid");
         }
         if (!validateUseCaseLayer()) {
-            throw new CleanException("the useCase layer is invalid");
+            throw new CleanException("the use case layer is invalid");
+        }
+        if (!validateEntryPointLayer()) {
+            throw new CleanException("the entry point layer is invalid");
+        }
+        if (!validateDrivenAdapterLayer()) {
+            throw new CleanException("the entry point layer is invalid");
         }
         logger.info("The project is valid");
 
+    }
+    //TODO: Complete
+    private boolean validateEntryPointLayer() throws IOException {
+        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/entry-points"));
+        for (File file : files) {
+            logger.info(file.getCanonicalPath());
+        }
+        return true;
+    }
+
+    //TODO: Complete
+    private boolean validateDrivenAdapterLayer() throws IOException {
+        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/driven-adapters"));
+        for (File file : files) {
+            logger.info(file.getCanonicalPath());
+        }
+        return true;
     }
 
     private boolean validateModelLayer() throws IOException {
@@ -40,7 +64,6 @@ public class ValidateStructureTask extends DefaultTask {
                 .map(line -> line.replaceAll(" ", ""))
                 .filter(line -> !line.startsWith("//") && line.contains("implementationproject"))
                 .count();
-
         return countImplementationproject == 0;
     }
 

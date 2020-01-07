@@ -8,6 +8,8 @@ import org.gradle.api.tasks.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 
 public class GenerateStructureTask extends DefaultTask {
     private Logger logger = LoggerFactory.getLogger(GenerateStructureTask.class);
@@ -38,8 +40,8 @@ public class GenerateStructureTask extends DefaultTask {
 
 
     @TaskAction
-    public void generateStructure() throws Exception {
-
+    public void generateStructure() throws IOException {
+        String directoryCreated =  "{} directory has been created.";
         logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.info("Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
@@ -47,13 +49,13 @@ public class GenerateStructureTask extends DefaultTask {
         logger.info("Project Name: {}", projectName);
         logger.info("Generating base directories");
         getProject().mkdir(Constants.INFRAESTUCTURE);
-        logger.info("{} directory has been created.", Constants.INFRAESTUCTURE);
+        logger.info(directoryCreated, Constants.INFRAESTUCTURE);
         getProject().mkdir(Constants.DOMAIN);
-        logger.info("{} directory has been created.",Constants.DOMAIN);
+        logger.info(directoryCreated,Constants.DOMAIN);
         getProject().mkdir(Constants.APPLICATION);
-        logger.info("{} directory has been created.", Constants.APPLICATION);
+        logger.info(directoryCreated, Constants.APPLICATION);
         getProject().mkdir(Constants.DEPLOYMENT);
-        logger.info("{} directory has been created.", Constants.DEPLOYMENT);
+        logger.info(directoryCreated, Constants.DEPLOYMENT);
         logger.info("Directories base have been created.");
 
         logger.info("Generating sub directories");

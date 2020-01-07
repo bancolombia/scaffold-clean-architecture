@@ -8,6 +8,8 @@ import org.gradle.api.tasks.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class GenerateUseCaseTask extends DefaultTask {
     private Logger logger = LoggerFactory.getLogger(GenerateUseCaseTask.class);
     private String useCaseName = "";
@@ -20,7 +22,7 @@ public class GenerateUseCaseTask extends DefaultTask {
     }
 
     @TaskAction
-    public void generateUseCase() throws Exception {
+    public void generateUseCase() throws IOException {
         String packageName;
         if (useCaseName.isEmpty()) {
             throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
