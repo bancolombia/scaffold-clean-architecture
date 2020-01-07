@@ -9,7 +9,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String VERSION_PLUGIN = "0.56";
+    public static final String VERSION_PLUGIN = "1.0";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
