@@ -17,14 +17,11 @@ public class Utils {
     private Utils(){}
 
     private static Properties properties = new Properties();
-    private static Logger logger = LoggerFactory.getLogger(Utils.class);
-
-
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         File file;
         FileWriter fileWriter ;
-        logger.debug(project.file(nameFile).getAbsolutePath());
+        project.getLogger().debug(project.file(nameFile).getAbsolutePath());
 
         try {
             file = new File((project.file(nameFile).getAbsolutePath()));
@@ -32,12 +29,12 @@ public class Utils {
             fileWriter.write(data);
             fileWriter.close();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            project.getLogger().error(e.getMessage());
         }
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
-        logger.debug(project.file(nameFile).getAbsolutePath());
+        project.getLogger().debug(project.file(nameFile).getAbsolutePath());
         return Files.lines(Paths.get(project.file(nameFile).getAbsolutePath())) ;
 
     }

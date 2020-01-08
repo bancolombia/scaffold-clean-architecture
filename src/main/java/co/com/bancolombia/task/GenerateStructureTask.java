@@ -3,16 +3,15 @@ package co.com.bancolombia.task;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 
 public class GenerateStructureTask extends DefaultTask {
-    private Logger logger = LoggerFactory.getLogger(GenerateStructureTask.class);
+    private Logger logger = getProject().getLogger();
     private String packageName = "co.com.bancolombia";
     private String type = "imperative";
     private String projectName = "cleanArchitecture";
@@ -42,23 +41,23 @@ public class GenerateStructureTask extends DefaultTask {
     @TaskAction
     public void generateStructure() throws IOException {
         String directoryCreated =  "{} directory has been created.";
-        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-        logger.info("Package: {}", packageName);
+        logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.lifecycle("Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.info("Project Type: {}", type);
-        logger.info("Project Name: {}", projectName);
-        logger.info("Generating base directories");
+        logger.lifecycle("Project Type: {}", type);
+        logger.lifecycle("Project Name: {}", projectName);
+        logger.lifecycle("Generating base directories");
         getProject().mkdir(Constants.INFRAESTUCTURE);
-        logger.info(directoryCreated, Constants.INFRAESTUCTURE);
+        logger.lifecycle(directoryCreated, Constants.INFRAESTUCTURE);
         getProject().mkdir(Constants.DOMAIN);
-        logger.info(directoryCreated,Constants.DOMAIN);
+        logger.lifecycle(directoryCreated,Constants.DOMAIN);
         getProject().mkdir(Constants.APPLICATION);
-        logger.info(directoryCreated, Constants.APPLICATION);
+        logger.lifecycle(directoryCreated, Constants.APPLICATION);
         getProject().mkdir(Constants.DEPLOYMENT);
-        logger.info(directoryCreated, Constants.DEPLOYMENT);
-        logger.info("Directories base have been created.");
+        logger.lifecycle(directoryCreated, Constants.DEPLOYMENT);
+        logger.lifecycle("Directories base have been created.");
 
-        logger.info("Generating sub directories");
+        logger.lifecycle("Generating sub directories");
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.CONFIG));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES));
@@ -72,9 +71,9 @@ public class GenerateStructureTask extends DefaultTask {
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
 
-        logger.info("Generated Childs Dirs");
+        logger.lifecycle("Generated Childs Dirs");
 
-        logger.info("Generating Base Files");
+        logger.lifecycle("Generating Base Files");
         getProject().file(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
         getProject().file(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
 
@@ -93,8 +92,8 @@ public class GenerateStructureTask extends DefaultTask {
         getProject().file(Constants.GRADLE_PROPERTIES).createNewFile();
 
 
-        logger.info("Generated Base Files");
-        logger.info("Writing in Files");
+        logger.lifecycle("Generated Base Files");
+        logger.lifecycle("Writing in Files");
 
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
         Utils.writeString(getProject(), Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE), Constants.DOCKER_FILE_CONTENT);
@@ -110,7 +109,7 @@ public class GenerateStructureTask extends DefaultTask {
         Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J), Constants.LOG_4_J_CONTENT);
         Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MAIN_APPLICATION), Constants.getMainApplicationContent(this.projectName));
 
-        logger.info("Writed in Files");
+        logger.lifecycle("Writed in Files");
 
     }
 

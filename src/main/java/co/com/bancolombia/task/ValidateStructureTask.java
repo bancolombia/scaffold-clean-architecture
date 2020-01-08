@@ -4,9 +4,8 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +15,14 @@ import java.util.stream.Stream;
 
 
 public class ValidateStructureTask extends DefaultTask {
-    Logger logger = LoggerFactory.getLogger(ValidateStructureTask.class);
+    private Logger logger = getProject().getLogger();
 
     @TaskAction
     public void validateStructure() throws IOException, CleanException {
 
         String packageName = Utils.readProperties("package");
-        logger.info("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-        logger.info("Project Package: {}", packageName);
+        logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        logger.lifecycle("Project Package: {}", packageName);
         if (!validateModelLayer()) {
             throw new CleanException("the model layer is invalid");
         }
@@ -36,14 +35,14 @@ public class ValidateStructureTask extends DefaultTask {
         if (!validateDrivenAdapterLayer()) {
             throw new CleanException("the entry point layer is invalid");
         }
-        logger.info("The project is valid");
+        logger.lifecycle("The project is valid");
 
     }
     //TODO: Complete
     private boolean validateEntryPointLayer() throws IOException {
         List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/entry-points"));
         for (File file : files) {
-            logger.info(file.getCanonicalPath());
+            logger.lifecycle(file.getCanonicalPath());
         }
         return true;
     }
@@ -52,7 +51,7 @@ public class ValidateStructureTask extends DefaultTask {
     private boolean validateDrivenAdapterLayer() throws IOException {
         List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/driven-adapters"));
         for (File file : files) {
-            logger.info(file.getCanonicalPath());
+            logger.lifecycle(file.getCanonicalPath());
         }
         return true;
     }
