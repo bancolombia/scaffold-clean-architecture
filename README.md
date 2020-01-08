@@ -8,11 +8,11 @@ Gradle plugin to create a java application based on Clean Architecture following
 Plugin Implementation  
 ===================
 To use the plugin you need Gradle version 5 or later, to start add the following section into your 
-build.gradle file.
+**build.gradle** file.
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "0.53"
+ id "co.com.bancolombia.cleanArchitecture" version "1.0"
 }
 ```
 
@@ -20,9 +20,9 @@ plugins {
 
 Tasks
 =====
-The Scaffolding Clean Architecture plugin will allow you create 1 task (more tasks are comming) :
+The Scaffolding Clean Architecture plugin will allow you create 6 task  :
 
-1 The ```cleanArchitecture``` task will generate a clean architecture structure in your project, this task have three optional parameters; ```package``` , ```type``` and ```name```.
+1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task have three optional parameters; ```package``` , ```type``` and ```name```.
 
  ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
 
@@ -33,22 +33,51 @@ The Scaffolding Clean Architecture plugin will allow you create 1 task (more tas
 
 ```sh
 gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject
+gradle ca 
 ```
 
-2 The ```generateModel``` task will generate a class and interface in model layer, this task have one required parameter ```name```.
+2 The ```generateModel | gm``` task will generate a class and interface in model layer, this task have one required parameter ```name```.
 ```sh
-gradle generateModel --name=modelName
+gradle generateModel --name=[modelName]
+gradle gm --name [modelName]
+```
+3 The ```generateUseCase | guc``` task will generate a class in model layer, this task have one required parameter ```name```.
+```sh
+gradle generateUseCase --name=[useCaseName]
+gradle guc --name [useCaseName]
+ ```
+4 The ```generateDrivenAdapter | gda``` task will generate a class in Infraestucture layer, this task have one required parameter ```value```.
+```sh
+gradle generateDrivenAdapter --value=[referenceNumberDrivenAdapter]
+gradle gda --value [referenceNumberDrivenAdapter]
+ ```
+
+|      Reference number driven adapter        | Name       |
+| ------------------ | ------------ |
+| 1|JPA Repository |
+| 2|Mongo Repository |
+| 3|Secrets Manager Consumer |
+
+5 The ```generateEntryPoint | gep``` task will generate a class in Infraestructure layer, this task have one required parameter ```value```.
+```sh
+gradle generateEntryPoint --value=referenceNumberEntryPoint
+gradle gs --value referenceNumberEntryPoint
+ ```
+|      Reference number entry point      | Name       |
+| ------------------ | ------------ |
+| 1|API REST (Spring Boot Starter Web) |
+
+
+
+6 The ```validateStructure | vs``` Validate that project references aren't violated.
+```sh
+gradle validateStructure  
+gradle vs
 ```
 
-3 The ```validateStructure``` Validate that project references are not violated.
-```sh
-gradle validateStructure
-```
+
 
 How I can help?
 =============
-The following functionalities are within the road map of this script:
+Review the issues, we hear new ideas.
 
-    - Task to generate entry points
-    - Task to generate driven adapters
-    - Task to generate usecase

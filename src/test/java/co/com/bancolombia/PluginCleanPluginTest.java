@@ -20,21 +20,23 @@ public class PluginCleanPluginTest {
         // Arrange
         String taskGroup = "Clean Architecture";
         String descriptionTask1 = "Scaffolding clean architecture project";
-        String descriptionTask2 = "Generate model project in domain layer";
-        String descriptionTask3 = "Validate that project references are not violated";
+        String descriptionTask2 = "Generate model in domain layer";
+        String descriptionTask3 = "Generate use case in domain layer";
+        String descriptionTask4 = "Generate entry point in infraestructure layer";
+        String descriptionTask5 = "Generate driven adapter in infraestructure layer";
+        String descriptionTask6 = "Validate that project references are not violated";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
         // Act
         Task task = project.getTasks().findByName("cleanArchitecture");
         Task task2 = project.getTasks().findByName("generateModel");
-        Task task3 = project.getTasks().findByName("validateStructure");
+        Task task3 = project.getTasks().findByName("generateUseCase");
+        Task task4 = project.getTasks().findByName("generateEntryPoint");
+        Task task5 = project.getTasks().findByName("generateDrivenAdapter");
+        Task task6 = project.getTasks().findByName("validateStructure");
 
         //Assert
-        assertNotNull(task);
-        assertNotNull(task2);
-        assertNotNull(task3);
-
         assertEquals(taskGroup, task.getGroup());
         assertEquals(descriptionTask1, task.getDescription());
 
@@ -43,6 +45,15 @@ public class PluginCleanPluginTest {
 
         assertEquals(taskGroup, task3.getGroup());
         assertEquals(descriptionTask3, task3.getDescription());
+
+        assertEquals(taskGroup, task4.getGroup());
+        assertEquals(descriptionTask4, task4.getDescription());
+
+        assertEquals(taskGroup, task5.getGroup());
+        assertEquals(descriptionTask5, task5.getDescription());
+
+        assertEquals(taskGroup, task6.getGroup());
+        assertEquals(descriptionTask6, task6.getDescription());
     }
 
 }

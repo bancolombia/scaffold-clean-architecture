@@ -1,26 +1,18 @@
 package co.com.bancolombia;
 
 import org.gradle.api.internal.project.DefaultProject;
-import org.gradle.api.internal.project.ProjectInternal;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.gradle.api.Project;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.matchers.Any;
-
-import java.io.File;
-import java.io.IOException;
 
 public class UtilsTest {
 
     @Mock
-    Project projectInternal;
+    DefaultProject projectInternal;
 
     @Test
     public void getVersionPlugin() {
-        Assert.assertEquals(Constants.versionPlugin, Utils.getVersionPlugin());
+        Assert.assertEquals(Constants.VERSION_PLUGIN, Utils.getVersionPlugin());
     }
 
     @Test
@@ -62,6 +54,17 @@ public class UtilsTest {
         Utils.readProperties(test1);
 
     }
+/*    @Test
+    public void readFile() throws IOException {
+    String nameFile = "temp.txt";
+    File file = new File("src/test/java/resources/"+nameFile);
+        Mockito.when(projectInternal.file(Mockito.anyString())).thenReturn(file);
+        Mockito.when(projectInternal.getFileOperations(Mockito.anyString())).thenReturn(file);
+
+
+    Utils.readFile(projectInternal, "temp.txt");
+    Assert.assertEquals(d1, 1);
+    }*/
 
    /** @Test
     public void writeString() throws IOException {
