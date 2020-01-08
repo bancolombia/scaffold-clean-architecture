@@ -15,7 +15,7 @@ public class Constants {
     /**
      * Base Dirs
      **/
-    public static final String INFRAESTUCTURE = "infraestucture";
+    public static final String INFRASTRUCTURE = "infrastructure";
     public static final String DOMAIN = "domain";
     public static final String APPLICATION = "applications/app-service";
     public static final String DEPLOYMENT = "deployment";
@@ -29,7 +29,7 @@ public class Constants {
     public static final String CONFIG = "config";
 
     /**
-     * Child Dirs Infraestructure
+     * Child Dirs Infrastructure
      **/
 
     public static final String DRIVEN_ADAPTERS = "driven-adapters";
@@ -159,7 +159,7 @@ public class Constants {
             "\n" +
             "Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.\n" +
             "\n" +
-            "## Infraestructure\n" +
+            "## Infrastructure\n" +
             "\n" +
             "### Helpers\n" +
             "En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.\n" +
@@ -273,35 +273,35 @@ public class Constants {
 
     public static String getSettingsGradleSecretsManagerContent() {
         return "include \":secrets-manager\"\n" +
-                "project(':secrets-manager').projectDir = file('./infraestructure/driven-adapters/secrets-manager-consumer')\n";
+                "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
     }
 
     public static String getSettingsJPARepositoryContent() {
         return "\n" +
                 "include \":jpa-repository\"\n" +
-                "project(':jpa-repository').projectDir = file('./infraestructure/driven-adapters/jpa-repository')\n";
+                "project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')\n";
     }
 
     public static String getSettingsHelperJPAContent() {
         return "include \":jpa-repository-commons\"\n" +
-                "project(':jpa-repository-commons').projectDir = file('./infraestructure/helpers/jpa-repository-commons')\n";
+                "project(':jpa-repository-commons').projectDir = file('./infrastructure/helpers/jpa-repository-commons')\n";
     }
 
     public static String getSettingsMongoRepositoryContent() {
         return "\n" +
                 "include \":mongo-repository\"\n" +
-                "project(':mongo-repository').projectDir = file('./infraestructure/driven-adapters/mongo-repository')\n";
+                "project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')\n";
     }
 
     public static String getSettingsHelperMongoContent() {
         return "include \":mongo-repository-commons\"\n" +
-                "project(':mongo-repository-commons').projectDir = file('./infraestructure/helpers/mongo-repository-commons')\n";
+                "project(':mongo-repository-commons').projectDir = file('./infrastructure/helpers/mongo-repository-commons')\n";
     }
 
 
     public static String getSettingsApiRestContent() {
         return "include \":api-rest\"\n" +
-                "project(':api-rest').projectDir = file('./infraestructure/entry-points/api-rest')\n";
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n";
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {

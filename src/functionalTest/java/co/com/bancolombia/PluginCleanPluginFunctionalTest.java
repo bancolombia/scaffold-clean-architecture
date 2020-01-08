@@ -52,9 +52,9 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/main.gradle").exists());
         assertTrue(new File("build/functionalTest/settings.gradle").exists());
 
-        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/helpers").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
 
         assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model").exists());
         assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model").exists());
@@ -92,9 +92,9 @@ public class PluginCleanPluginFunctionalTest {
         assertTrue(new File("build/functionalTest/main.gradle").exists());
         assertTrue(new File("build/functionalTest/settings.gradle").exists());
 
-        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/helpers").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
 
         assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/test/model").exists());
         assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/test/model").exists());
@@ -152,8 +152,8 @@ public class PluginCleanPluginFunctionalTest {
         runner.withArguments(task, "--value=" + valueEntryPoint);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points/api-rest/src/main/java/co/com/bancolombia/api-rest/ApiRest.java").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/entry-points/api-rest/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api-rest/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
@@ -167,8 +167,8 @@ public class PluginCleanPluginFunctionalTest {
         runner.withArguments(task, "--value=" + valueDrivenAdapter);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/secrets-manager-consumer/build.gradle").exists());
-        assertTrue(new File("build/functionalTest/infraestucture/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets-manager-consumer/SecretsManager.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets-manager-consumer/SecretsManager.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }

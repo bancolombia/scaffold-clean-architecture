@@ -55,7 +55,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private void generateApiRest(String packageName) throws IOException {
         logger.lifecycle("Generating Childs Dirs");
         String entryPoint = "api-rest";
-        String entryPointDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.ENTRY_POINTS).concat("/").concat(entryPoint);
+        String entryPointDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS).concat("/").concat(entryPoint);
         getProject().mkdir(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPoint));
 
         logger.lifecycle("Generated Childs Dirs");

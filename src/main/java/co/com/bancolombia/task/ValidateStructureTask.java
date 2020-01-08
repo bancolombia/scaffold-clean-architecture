@@ -40,7 +40,7 @@ public class ValidateStructureTask extends DefaultTask {
     }
     //TODO: Complete
     private boolean validateEntryPointLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/entry-points"));
+        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
         for (File file : files) {
             logger.lifecycle(file.getCanonicalPath());
         }
@@ -49,7 +49,7 @@ public class ValidateStructureTask extends DefaultTask {
 
     //TODO: Complete
     private boolean validateDrivenAdapterLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infraestucture/driven-adapters"));
+        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/driven-adapters"));
         for (File file : files) {
             logger.lifecycle(file.getCanonicalPath());
         }

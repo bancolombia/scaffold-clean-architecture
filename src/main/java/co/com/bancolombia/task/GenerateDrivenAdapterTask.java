@@ -67,8 +67,8 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         logger.info(gChildDirs);
         String drivenAdapter = "jpa-repository";
         String helperDrivenAdapter = "jpa-repository-commons";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
-        String helperDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
 
         getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter));
@@ -104,8 +104,8 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         logger.lifecycle(gChildDirs);
         String drivenAdapter = "mongo-repository";
         String helperDrivenAdapter = "mongo-repository-commons";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
-        String helperDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
 
         getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter));
@@ -140,7 +140,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private void generateSecretsManager(String packageName) throws IOException {
         logger.lifecycle(gChildDirs);
         String drivenAdapter = "secrets-manager-consumer";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
 
         logger.lifecycle(generatedChildDirs);
