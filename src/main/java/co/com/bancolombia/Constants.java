@@ -250,7 +250,7 @@ public class Constants {
     public static final String API_REST_CLASS = "ApiRest";
     public static final String SECRET_MANAGER_CLASS = "SecretsManager";
     public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
-    public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
+    public static final String MONGO_REPOSITORY_INTERFACE = "IMongoRepository";
     public static final String JPA_REPOSITORY_CLASS = "JPARepositoryAdapter";
     public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
     public static final String MONGO_HELPER_CLASS = "AdapterOperations";
@@ -276,35 +276,33 @@ public class Constants {
     }
 
     public static String getSettingsGradleSecretsManagerContent() {
-        return "include \":secrets-manager\"\n" +
+        return "\ninclude \":secrets-manager\"\n" +
                 "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
     }
 
     public static String getSettingsJPARepositoryContent() {
-        return "\n" +
-                "include \":jpa-repository\"\n" +
+        return "\ninclude \":jpa-repository\"\n" +
                 "project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')\n";
     }
 
     public static String getSettingsHelperJPAContent() {
-        return "include \":jpa-repository-commons\"\n" +
+        return "\ninclude \":jpa-repository-commons\"\n" +
                 "project(':jpa-repository-commons').projectDir = file('./infrastructure/helpers/jpa-repository-commons')\n";
     }
 
     public static String getSettingsMongoRepositoryContent() {
-        return "\n" +
-                "include \":mongo-repository\"\n" +
+        return "\ninclude \":mongo-repository\"\n" +
                 "project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')\n";
     }
 
     public static String getSettingsHelperMongoContent() {
-        return "include \":mongo-repository-commons\"\n" +
+        return "\ninclude \":mongo-repository-commons\"\n" +
                 "project(':mongo-repository-commons').projectDir = file('./infrastructure/helpers/mongo-repository-commons')\n";
     }
 
 
     public static String getSettingsApiRestContent() {
-        return "include \":api-rest\"\n" +
+        return "\ninclude \":api-rest\"\n" +
                 "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n";
     }
 
@@ -488,7 +486,7 @@ public class Constants {
 
         return "dependencies {\n" +
                 "  implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
-                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0' '\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
                 "}";
 
     }
@@ -498,56 +496,35 @@ public class Constants {
 
         return "package " + packageName + ";\n" +
                 "\n" +
-                "import org.springframework.boot.web.servlet.FilterRegistrationBean;\n" +
-                "import org.springframework.context.annotation.Bean;\n" +
-                "import org.springframework.core.Ordered;\n" +
-                "import org.springframework.http.HttpMethod;\n" +
-                "import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\n" +
-                "import org.springframework.security.config.http.SessionCreationPolicy;\n" +
-                "import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\n" +
-                "import org.springframework.security.web.csrf.CookieCsrfTokenRepository;\n" +
-                "import org.springframework.security.web.util.matcher.AntPathRequestMatcher;\n" +
-                "import org.springframework.web.cors.CorsConfiguration;\n" +
-                "import org.springframework.web.cors.UrlBasedCorsConfigurationSource;\n" +
-                "import org.springframework.web.filter.CorsFilter;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import org.springframework.http.HttpHeaders;\n" +
+                "import org.springframework.http.HttpStatus;\n" +
+                "import org.springframework.http.MediaType;\n" +
+                "import org.springframework.http.ResponseEntity;\n" +
+                "import org.springframework.web.bind.annotation.*;\n" +
+                "import org.springframework.web.context.request.WebRequest;\n" +
                 "\n" +
-                "import java.util.Arrays;\n" +
+                "import java.nio.file.AccessDeniedException;\n" +
                 "\n" +
-                "@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)\n" +
-                "@EnableWebSecurity\n" +
-                "public class AuthorizationConfig extends WebSecurityConfigurerAdapter {\n" +
                 "\n" +
-                "    @Override\n" +
-                "    protected void configure(HttpSecurity http) throws Exception {\n" +
-                "        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);\n" +
-                "        http.authorizeRequests().antMatchers(HttpMethod.POST, \"/home\").permitAll();\n" +
-                "        http.authorizeRequests().antMatchers(\"/api/**\").authenticated();\n" +
+                "@RestController\n" +
+                "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class "+ API_REST_CLASS +" {\n" +
                 "\n" +
-                "        http.logout().logoutRequestMatcher(new AntPathRequestMatcher(\"/logout\"))\n" +
-                "                .logoutSuccessUrl(\"/\").deleteCookies(\"JSESSIONID\").invalidateHttpSession(true);\n" +
+                "    private final Object useCase;\n" +
                 "\n" +
-                "        http.authorizeRequests().anyRequest().permitAll();\n" +
-                "\n" +
-                "        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\n" +
-                "        http.csrf().disable();\n" +
+                "    @GetMapping (path = \"/health\")\n" +
+                "    public Object health() {\n" +
+                "        return useCase;\n" +
                 "    }\n" +
                 "\n" +
-                "    @Bean\n" +
-                "    public FilterRegistrationBean corsFilter() {\n" +
-                "        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();\n" +
-                "        CorsConfiguration config = new CorsConfiguration();\n" +
-                "        config.setAllowCredentials(true);\n" +
-                "        config.addAllowedOrigin(\"http://localhost:4200\");\n" +
-                "        config.setAllowedMethods(Arrays.asList(\"POST\", \"OPTIONS\", \"GET\", \"DELETE\", \"PUT\"));\n" +
-                "        config.setAllowedHeaders(Arrays.asList(\"X-Requested-With\", \"Origin\", \"Content-Type\", \"Accept\", \"Authorization\"));\n" +
-                "        source.registerCorsConfiguration(\"/**\", config);\n" +
-                "        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));\n" +
-                "        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);\n" +
-                "        return bean;\n" +
-                "    }\n" +
+                "    @ExceptionHandler({ AccessDeniedException.class })\n" +
+                "    public ResponseEntity<Object> handleAccessDeniedException(\n" +
+                "            Exception ex, WebRequest request) {\n" +
+                "        return new ResponseEntity<Object>(\n" +
+                "                \"Access denied message here\", new HttpHeaders(), HttpStatus.FORBIDDEN);\n" +
+                "    }"+
                 "}";
     }
 
@@ -556,7 +533,7 @@ public class Constants {
 
         return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
                 "\n" +
-                "import "+packageName + "." + DOMAIN + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
+                "import "+packageName  + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
