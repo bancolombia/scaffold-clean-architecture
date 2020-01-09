@@ -39,7 +39,7 @@ public class ValidateStructureTask extends DefaultTask {
 
     }
     //TODO: Complete
-    private boolean validateEntryPointLayer() throws IOException {
+    public boolean validateEntryPointLayer() throws IOException {
         List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
         for (File file : files) {
             logger.lifecycle(file.getCanonicalPath());

@@ -92,15 +92,6 @@ public class ConstantsTest {
     }
 
     @Test
-    public void getbuildGradleApplicationContent() {
-        String packageName = "demo.package";
-        String act =  Constants.getGradlePropertiesContent(packageName);
-
-        Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
-    }
-
-    @Test
     public void getUseCase() {
         String useCaseName = "testProjectName";
         String packageName = "demo.package";

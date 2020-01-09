@@ -5,6 +5,9 @@ import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+
 public class GenerateStructureTaskTest {
 
     @Test
@@ -19,5 +22,19 @@ public class GenerateStructureTaskTest {
         task.setType("imperative");
     }
 
+    @Test
+    public void generateStructure() throws IOException {
+
+
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        project.getTasks().create("test", GenerateStructureTask.class);
+
+        GenerateStructureTask task = (GenerateStructureTask) project.getTasks().getByName("test");
+
+        task.setPackage("test");
+        task.setProjectName("projectTest");
+        task.setType("imperative");
+        task.generateStructure();
+    }
 
 }

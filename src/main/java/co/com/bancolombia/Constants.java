@@ -394,24 +394,6 @@ public class Constants {
                 "systemProp.version=" + VERSION_PLUGIN;
     }
 
-    public static String getbuildGradleApplicationContent() {
-
-        return "apply plugin: 'org.springframework.boot'\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "dependencies {\n" +
-                "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-                "    compile project(\":domain-usecase\")\n" +
-                "\n" +
-                "    runtime('org.springframework.boot:spring-boot-devtools')\n" +
-                "}\n" +
-                "jar {\n" +
-                "    archivesBaseName = rootProject.name\n" +
-                "    libsDirName = project(\":\").getBuildDir()\n" +
-                "}\n";
-    }
-
     public static String getUseCase(String useCaseName, String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
