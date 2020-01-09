@@ -20,7 +20,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     public void setEntryPoint(String number) { this.numberEntryPoint = Utils.tryParse(number); }
 
     @TaskAction
-    public void generateEntryPoint() throws IOException, CleanException {
+    public void generateEntryPoint() throws IOException {
         String packageName;
         String nameEntryPoint;
         if (numberEntryPoint < 0) {
@@ -51,7 +51,7 @@ public class GenerateEntryPointTask extends DefaultTask {
         String entryPoint = "api-rest";
         String entryPointPackage = "api";
         String entryPointDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS).concat("/").concat(entryPoint);
-        getProject().mkdir(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPoint));
+        getProject().mkdir(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPointPackage));
 
         logger.lifecycle("Generated Childs Dirs");
 

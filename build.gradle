@@ -42,8 +42,6 @@ dependencies {
 	// Use JUnit test framework for unit tests
 	testImplementation 'junit:junit:4.12'
 	testCompile "org.mockito:mockito-core:2.9.0"
-
-
 	compile gradleApi()
 }
 
@@ -78,8 +76,6 @@ check {
 	// Run the functional tests as part of `check`
 	dependsOn(tasks.functionalTest)
 }
-
-
 
 pluginBundle {
 	website = 'https://github.com/bancolombia/scaffold-clean-architecture'

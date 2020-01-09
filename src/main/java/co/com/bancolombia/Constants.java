@@ -3,13 +3,17 @@ package co.com.bancolombia;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Constants {
+
+    public static final String COMMON ="common" ;
+    public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
 
     private Constants() {
     }
 
-    public static final String VERSION_PLUGIN = "1.0";
+    public static final String VERSION_PLUGIN = "1.2a";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -547,12 +551,12 @@ public class Constants {
                 "}";
     }
 
-    public static String getSecretsManagerClassContent(String packageName) {
+    public static String getSecretsManagerClassContent(String packageName,String drivenAdapterPackage) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ";\n" +
+        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
                 "\n" +
-                "import app.demo.domain.common.gateways.SecretsManagerConsumer;\n" +
+                "import "+packageName + "." + DOMAIN + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
@@ -561,10 +565,10 @@ public class Constants {
                 "\n" +
                 "\n" +
                 "@Repository\n" +
-                "public class SecretsManager implements SecretsManagerConsumer {\n" +
+                "public class " + SECRET_MANAGER_CLASS + " implements "+ SECRET_MANAGER_CONSUMER_CLASS +" {\n" +
                 "\n" +
                 "\n" +
-                "    public SecretsManager() {\n" +
+                "    public " + SECRET_MANAGER_CLASS + "() {\n" +
                 "    }\n" +
                 "\n" +
                 "    @Override\n" +
@@ -594,18 +598,9 @@ public class Constants {
                 "\n" +
                 "    @Autowired\n" +
                 "    public " + MONGO_REPOSITORY_CLASS + "("+MONGO_REPOSITORY_INTERFACE +" repository, ObjectMapper mapper) {\n" +
-                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
                 "    }\n" +
                 "\n" +
-                "    @Override\n" +
-                "    public void saveAll(List<Object> objects) {\n" +
-                "        super.saveAllEntities(objects);\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public List<Object> findMoviesByValue(String value) {\n" +
-                "        return null;\n" +
-                "    }\n" +
                 "}";
     }
 
@@ -614,7 +609,6 @@ public class Constants {
 
         return "package " + packageName + ";\n" +
                 "\n" +
-                "import " + packageName + "." + "jpa-repository-commons." + JPA_HELPER_CLASS + ";\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.stereotype.Repository;\n" +
@@ -628,18 +622,9 @@ public class Constants {
                 "\n" +
                 "    @Autowired\n" +
                 "    public " + JPA_REPOSITORY_CLASS + "(" + JPA_REPOSITORY_INTERFACE + " repository, ObjectMapper mapper) {\n" +
-                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
                 "    }\n" +
                 "\n" +
-                "    @Override\n" +
-                "    public void saveAll(List<Object> objects) {\n" +
-                "        super.saveAllEntities(objects);\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public List<Object> findObjectByValue(String value) {\n" +
-                "        return super.toList(repository.findObjectByValue(value));\n" +
-                "    }\n" +
                 "}";
     }
 
@@ -696,7 +681,7 @@ public class Constants {
                 "    protected ObjectMapper mapper;\n" +
                 "    private Function<D, E> toEntityFn;\n" +
                 "\n" +
-                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "    public " + JPA_HELPER_CLASS + "(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
                 "        this.repository = repository;\n" +
                 "        this.mapper = mapper;\n" +
                 "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
@@ -765,14 +750,14 @@ public class Constants {
                 "\n" +
                 "import static java.util.stream.StreamSupport.stream;\n" +
                 "\n" +
-                "public abstract class AdapterOperations<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
+                "public abstract class " + MONGO_HELPER_CLASS + "<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
                 "\n" +
                 "    protected R repository;\n" +
                 "    private Class<D> dataClass;\n" +
                 "    protected ObjectMapper mapper;\n" +
                 "    private Function<D, E> toEntityFn;\n" +
                 "\n" +
-                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "    public " + MONGO_HELPER_CLASS + "(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
                 "        this.repository = repository;\n" +
                 "        this.mapper = mapper;\n" +
                 "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
@@ -825,4 +810,13 @@ public class Constants {
     }
 
 
+    public static String getSecretsManagerInterfaceContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "public interface " + SECRET_MANAGER_CONSUMER_CLASS + "<T> {\n" +
+                "    T getSecrets(Class<T> cls, String secretRegion, String secretName) throws Exception;\n" +
+                "}";
+    }
 }

@@ -2,7 +2,6 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateDrivenAdapterTask;
-import co.com.bancolombia.task.GenerateUseCaseTask;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
@@ -18,7 +17,6 @@ public class GenerateDrivenAdapterTaskTest {
     public void settersTask() {
         Project project = ProjectBuilder.builder().build();
         project.getTasks().create("test", GenerateDrivenAdapterTask.class);
-
         GenerateDrivenAdapterTask task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
 
         task.setDrivenAdapter("1");
@@ -36,7 +34,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void generateDrivenAdapterValueUnExistent() throws IOException, CleanException {
+    public void generateDrivenAdapterValueUnExistent() throws IOException {
         Project project = ProjectBuilder.builder().build();
         project.getTasks().create("test", GenerateDrivenAdapterTask.class);
 
@@ -47,7 +45,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
-    public void generateDrivenAdapter() throws IOException, CleanException {
+    public void generateDrivenAdapter() throws IOException {
         File projectDir = new File("build/unitTest");
         Files.createDirectories(projectDir.toPath());
         writeString(new File(projectDir, "settings.gradle"), "");

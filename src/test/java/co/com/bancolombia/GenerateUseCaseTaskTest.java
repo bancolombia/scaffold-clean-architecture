@@ -5,6 +5,7 @@ import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,9 +25,7 @@ public class GenerateUseCaseTaskTest {
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-
         project.getTasks().create("test", GenerateUseCaseTask.class);
-
 
         task = (GenerateUseCaseTask) project.getTasks().getByName("test");
     }

@@ -20,10 +20,10 @@ public class Utils {
         FileWriter fileWriter ;
         project.getLogger().debug(project.file(nameFile).getAbsolutePath());
 
-            file = new File((project.file(nameFile).getAbsolutePath()));
-            fileWriter = new FileWriter(file);
-            fileWriter.write(data);
-            fileWriter.close();
+        file = new File((project.file(nameFile).getAbsolutePath()));
+        fileWriter = new FileWriter(file);
+        fileWriter.write(data);
+        fileWriter.close();
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
@@ -75,13 +75,10 @@ public class Utils {
 
     public static List<File> finderSubProjects(String dirPath){
         File[] directories = new File(dirPath).listFiles(File::isDirectory);
+        FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
         List<File> textFiles = new ArrayList<>();
         for (File dir : directories) {
-            textFiles.addAll(Arrays.asList(dir.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String filename) {
-                    return filename.endsWith("build.gradle");
-                }
-            })));
+            textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
         }
         return textFiles;
     }

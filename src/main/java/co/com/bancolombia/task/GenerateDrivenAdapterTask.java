@@ -26,7 +26,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     public void setDrivenAdapter(String number) { this.numberDrivenAdapter = Utils.tryParse(number); }
 
     @TaskAction
-    public void generateDrivenAdapter() throws IOException, CleanException {
+    public void generateDrivenAdapter() throws IOException {
         String packageName;
         String nameDrivenAdapter;
         if (numberDrivenAdapter < 0) {
@@ -60,9 +60,9 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private void generateJPARepository(String packageName) throws IOException {
         logger.info(gChildDirs);
         String drivenAdapter = "jpa-repository";
-        String drivenAdapterPackage = "jpa";
         String helperDrivenAdapter = "jpa-repository-commons";
-        String helperDrivenAdapterPackage = "jpa-repository-commons";
+        String drivenAdapterPackage = "jpa";
+        String helperDrivenAdapterPackage = "jpa";
         String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
         String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
@@ -140,18 +140,22 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         String drivenAdapter = "secrets-manager-consumer";
         String drivenAdapterPackage = "secrets";
         String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String modelDir = Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+        getProject().mkdir(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS));
 
         logger.lifecycle(generatedChildDirs);
 
         logger.lifecycle(gBaseFiles);
         getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
         getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION));
         logger.lifecycle(generatedBaseFiles);
 
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleSecretsManager());
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerClassContent(packageName).concat(".").concat(drivenAdapterPackage));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerClassContent(packageName,drivenAdapterPackage));
+        Utils.writeString(getProject(),modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerInterfaceContent(packageName.concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS)));
 
         String settings = Utils.readFile(getProject(),Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += Constants.getSettingsGradleSecretsManagerContent();

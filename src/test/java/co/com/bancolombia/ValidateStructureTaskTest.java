@@ -7,7 +7,6 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,13 +31,14 @@ public class ValidateStructureTaskTest {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", ValidateStructureTask.class);
 
-         task = (ValidateStructureTask) project.getTasks().getByName("test");
+        task = (ValidateStructureTask) project.getTasks().getByName("test");
     }
 
     @Test
     public void validateStructure() throws IOException, CleanException {
-
+        // Act
         task.validateStructure();
+        // Assert
     }
 
 
