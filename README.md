@@ -12,7 +12,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.0"
+ id "co.com.bancolombia.cleanArchitecture" version "1.3"
 }
 ```
 

@@ -1,9 +1,7 @@
 package co.com.bancolombia;
 
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class Constants {
 
@@ -13,7 +11,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String VERSION_PLUGIN = "1.2a";
+    public static final String VERSION_PLUGIN = "1.3";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -435,7 +433,6 @@ public class Constants {
                 "    implementation project(':model')\n" +
                 "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
                 "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
-                "    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter'\n" +
                 "}";
 
     }
