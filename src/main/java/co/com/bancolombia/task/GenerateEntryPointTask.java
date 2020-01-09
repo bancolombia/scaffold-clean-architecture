@@ -49,6 +49,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private void generateApiRest(String packageName) throws IOException {
         logger.lifecycle("Generating Childs Dirs");
         String entryPoint = "api-rest";
+        String entryPointPackage = "api";
         String entryPointDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS).concat("/").concat(entryPoint);
         getProject().mkdir(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPoint));
 
@@ -56,12 +57,12 @@ public class GenerateEntryPointTask extends DefaultTask {
 
         logger.lifecycle("Generating Base Files");
         getProject().file(entryPointDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPoint).concat("/").concat(Constants.API_REST_CLASS).concat(Constants.JAVA_EXTENSION)).createNewFile();
+        getProject().file(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPointPackage).concat("/").concat(Constants.API_REST_CLASS).concat(Constants.JAVA_EXTENSION)).createNewFile();
         logger.lifecycle("Generated Base Files");
 
         logger.lifecycle("Writing in Files");
         Utils.writeString(getProject(),entryPointDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleApiRest());
-        Utils.writeString(getProject(),entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPoint).concat("/").concat(Constants.API_REST_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getApiRestClassContent(packageName));
+        Utils.writeString(getProject(),entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPointPackage).concat("/").concat(Constants.API_REST_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getApiRestClassContent(packageName.concat(".").concat(entryPointPackage)));
 
         String settings = Utils.readFile(getProject(),Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += Constants.getSettingsApiRestContent();

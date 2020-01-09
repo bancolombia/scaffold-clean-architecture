@@ -5,7 +5,6 @@ import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 
 public class GenerateUseCaseTaskTest {
-    GenerateUseCaseTask task;
+    private GenerateUseCaseTask task;
 
     @Before
     public void init() throws IOException {

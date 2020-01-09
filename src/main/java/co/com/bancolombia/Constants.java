@@ -579,7 +579,7 @@ public class Constants {
     public static String getMongoRepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".mongo-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
@@ -612,7 +612,7 @@ public class Constants {
     public static String getJPARepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import " + packageName + "." + "jpa-repository-commons." + JPA_HELPER_CLASS + ";\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
@@ -646,7 +646,7 @@ public class Constants {
     public static String getJPARepositoryInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.data.jpa.repository.Query;\n" +
                 "import org.springframework.data.repository.CrudRepository;\n" +
@@ -662,7 +662,7 @@ public class Constants {
     public static String getMongoRepositoryInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".mongo-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.data.mongodb.repository.MongoRepository;\n" +
                 "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
@@ -674,7 +674,7 @@ public class Constants {
     public static String getHelperJPARepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository-commons;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.data.domain.Example;\n" +
@@ -751,7 +751,7 @@ public class Constants {
 
     public static String getHelperMongoRepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
-        return "package " + packageName + ".mongo-repository-commons;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.data.domain.Example;\n" +
