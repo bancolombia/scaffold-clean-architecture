@@ -20,14 +20,10 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private static String gBaseFiles = "Generating Base Files";
     private static String generatedBaseFiles = "Generated Base Files";
     private static String wFiles = "Writing in Files";
-    private static String writedFiles =        "Writed in Files";
+    private static String writedFiles = "Writed in Files";
 
     @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer )")
-    public void setDrivenAdapter(String number) {
-        if (!number.isEmpty()) {
-            this.numberDrivenAdapter = Utils.tryParse(number);
-        }
-    }
+    public void setDrivenAdapter(String number) { this.numberDrivenAdapter = Utils.tryParse(number); }
 
     @TaskAction
     public void generateDrivenAdapter() throws IOException, CleanException {

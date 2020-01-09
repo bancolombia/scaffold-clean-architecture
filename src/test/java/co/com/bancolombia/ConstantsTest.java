@@ -9,64 +9,153 @@ public class ConstantsTest {
     @Test
     public void getSettingsGradleContent() {
         String nameProject = "testProjectName";
-        Assert.assertTrue(Constants.getSettingsGradleContent(nameProject).contains(nameProject));
+
+        String act = Constants.getSettingsGradleContent(nameProject);
+
+        Assert.assertTrue(act.contains(nameProject));
+        Assert.assertTrue(act instanceof  String);
+
     }
 
     @Test(expected = NullPointerException.class)
     public void getSettingsGradleContentException() {
         String nameProject = null;
-        Assert.assertTrue(Constants.getSettingsGradleContent(nameProject).contains(nameProject));
+
+        String act = Constants.getSettingsGradleContent(nameProject);
+
+        Assert.assertTrue(act.contains(nameProject));
+        Assert.assertTrue(act instanceof  String);
+
     }
 
     @Test
     public void getApplicationPropertiesContent() {
         String nameProject = "testProjectName";
-        Assert.assertTrue(Constants.getApplicationPropertiesContent(nameProject).contains(nameProject));
+
+        String act = Constants.getApplicationPropertiesContent(nameProject);
+
+        Assert.assertTrue(act.contains(nameProject));
+        Assert.assertTrue(act instanceof  String);
     }
 
     @Test
     public void getMainApplicationContent() {
         String nameProject = "testProjectName";
-        Assert.assertTrue(Constants.getMainApplicationContent(nameProject).contains(nameProject));
+
+        String act = Constants.getMainApplicationContent(nameProject);
+
+        Assert.assertTrue(act.contains(nameProject));
+        Assert.assertTrue(act instanceof  String);
+
     }
 
     @Test
     public void getModel() {
         String modelName = "testProjectName";
-        String _package = "demo.package";
-        Assert.assertTrue(Constants.getModel(modelName, _package).contains(modelName));
-        Assert.assertTrue(Constants.getModel(modelName, _package).contains(_package));
+        String packageName = "demo.package";
+
+        String act = Constants.getModel(modelName, packageName);
+
+        Assert.assertTrue(act.contains(modelName));
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
+
     }
 
     @Test
     public void getBuildGradleContent() {
-        Assert.assertEquals(String.class, Constants.getBuildGradleContent().getClass());
+        String act =  Constants.getBuildGradleContent();
+
+        Assert.assertTrue(act instanceof  String);
     }
 
     @Test
     public void getInterfaceModel() {
         String modelName = "testProjectName";
-        String _package = "demo.package";
-        Assert.assertTrue(Constants.getInterfaceModel(modelName, _package).contains(modelName));
-        Assert.assertTrue(Constants.getInterfaceModel(modelName, _package).contains(_package));
+        String packageName = "demo.package";
+
+        String act =  Constants.getInterfaceModel(modelName, packageName);
+
+        Assert.assertTrue(act.contains(modelName));
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
     }
 
     @Test
     public void getGradlePropertiesContent() {
-        String _package = "demo.package";
-        Assert.assertTrue(Constants.getGradlePropertiesContent(_package).contains(_package));
+        String packageName = "demo.package";
+
+        String act =  Constants.getGradlePropertiesContent(packageName);
+
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
     }
 
     @Test
     public void getbuildGradleApplicationContent() {
-        Assert.assertEquals(String.class, Constants.getbuildGradleApplicationContent().getClass());
+        String packageName = "demo.package";
+        String act =  Constants.getGradlePropertiesContent(packageName);
+
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
     }
 
     @Test
     public void getUseCase() {
         String useCaseName = "testProjectName";
-        String _package = "demo.package";
-        Assert.assertTrue(Constants.getUseCase(useCaseName, _package).contains(useCaseName));
-        Assert.assertTrue(Constants.getUseCase(useCaseName, _package).contains(_package));
+        String packageName = "demo.package";
+
+        String act =  Constants.getUseCase(useCaseName, packageName);
+
+        Assert.assertTrue(act.contains(useCaseName));
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
+
     }
+
+    @Test
+    public void getApiRestClassContent(){
+        String packageName = "demo.package";
+
+        String act =  Constants.getApiRestClassContent(packageName);
+
+        Assert.assertTrue(act.contains(packageName));
+        Assert.assertTrue(act instanceof  String);
+
+    }
+    @Test
+    public void getBuildGradleHelperMongoRepository(){
+        String act =  Constants.getBuildGradleHelperMongoRepository();
+
+        Assert.assertTrue(act instanceof  String);
+    }
+
+    @Test
+    public void getBuildGradleHelperJPARepository(){
+        String act =  Constants.getBuildGradleHelperJPARepository();
+
+        Assert.assertTrue(act instanceof  String);
+    }
+
+    @Test
+    public void getBuildGradleMongoRepository(){
+        String act =  Constants.getBuildGradleMongoRepository();
+
+        Assert.assertTrue(act instanceof  String);
+    }
+
+    @Test
+    public void getBuildGradleSecretsManager(){
+        String act =  Constants.getBuildGradleSecretsManager();
+
+        Assert.assertTrue(act instanceof  String);
+    }
+
+    @Test
+    public void getBuildGradleApiRest(){
+        String act =  Constants.getBuildGradleApiRest();
+
+        Assert.assertTrue(act instanceof  String);
+    }
+
 }

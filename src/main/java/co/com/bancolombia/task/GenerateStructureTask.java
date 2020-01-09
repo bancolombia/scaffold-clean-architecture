@@ -17,26 +17,17 @@ public class GenerateStructureTask extends DefaultTask {
     private String projectName = "cleanArchitecture";
 
     @Option(option = "package", description = "Set the principal package to use in the project")
-    public void setPackage(String packageName) {
-        if (!packageName.isEmpty()) {
-            this.packageName = packageName;
-        }
-    }
+    public void setPackage(String packageName) { this.packageName = packageName; }
 
     @Option(option = "type", description = "Set project type, the options are  (reactive | imperative) ")
     public void setType(String type) {
-        if (!type.isEmpty()) {
             this.type = type;
-        }
     }
 
     @Option(option = "name", description = "Set the project name, by default is cleanArchitecture ")
     public void setProjectName(String projectName) {
-        if (!projectName.isEmpty()) {
             this.projectName = projectName;
-        }
     }
-
 
     @TaskAction
     public void generateStructure() throws IOException {

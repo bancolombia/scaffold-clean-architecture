@@ -1,14 +1,18 @@
 package co.com.bancolombia;
 
-import org.gradle.api.internal.project.DefaultProject;
+import org.gradle.api.Project;
+import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UtilsTest {
 
-    @Mock
-    DefaultProject projectInternal;
+
 
     @Test
     public void getVersionPlugin() {
@@ -54,25 +58,49 @@ public class UtilsTest {
         Utils.readProperties(test1);
 
     }
-/*    @Test
+
+    @Test
+    public void tryParse()   {
+        String test = "1";
+
+        int act = Utils.tryParse(test);
+
+        Assert.assertEquals(1, act);
+    }
+    @Test(expected = NumberFormatException.class)
+    public void tryParseUnParse()   {
+        String test = "test";
+        Utils.tryParse(test);
+
+    }
+    @Test
     public void readFile() throws IOException {
-    String nameFile = "temp.txt";
-    File file = new File("src/test/java/resources/"+nameFile);
-        Mockito.when(projectInternal.file(Mockito.anyString())).thenReturn(file);
-        Mockito.when(projectInternal.getFileOperations(Mockito.anyString())).thenReturn(file);
+        Project project = ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
+        String response = Utils.readFile(project, "temp.txt").collect(Collectors.joining());
 
+        Assert.assertTrue(response instanceof String);
+        Assert.assertEquals("hello", response);
+    }
 
-    Utils.readFile(projectInternal, "temp.txt");
-    Assert.assertEquals(d1, 1);
-    }*/
-
-   /** @Test
+    @Test
     public void writeString() throws IOException {
-        String nameFile = "temp.txt";
-        File file = new File("build/functionalTest/");
-        Mockito.when(projectInternal.file(Mockito.anyString())).thenReturn(file);
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/tmp")).build();
+        Utils.writeString(project, "temp.txt","hello");
+        String response = Utils.readFile(project, "temp.txt").collect(Collectors.joining());
 
-        Utils.writeString(projectInternal, "temp.txt", "test");
-        Assert.assertEquals(1, 1);
-    }**/
+        Assert.assertTrue(response instanceof String);
+        Assert.assertEquals("hello", response);
+    }
+
+    @Test
+    public void finderSubProjects()  {
+        List<File> files = Utils.finderSubProjects("src/test/resources");
+
+        Assert.assertEquals(0, files.size());
+
+        List<File> files2 = Utils.finderSubProjects("src/test/resources/finderSubProjects/");
+
+        Assert.assertEquals(2, files2.size());
+    }
+
 }

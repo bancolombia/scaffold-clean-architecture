@@ -23,6 +23,7 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         Task generateStructure = tasks.create("cleanArchitecture", GenerateStructureTask.class);
         tasks.create("ca", GenerateStructureTask.class);
+
         generateStructure.setGroup(taskGroup);
         generateStructure.setDescription("Scaffolding clean architecture project");
 

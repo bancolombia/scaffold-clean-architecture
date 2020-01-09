@@ -17,11 +17,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private static String entryPoints =  "(1 -> API REST)";
 
     @Option(option = "value", description = "Set the number of the entry point (1 -> API REST)")
-    public void setEntryPoint(String number) {
-        if (!number.isEmpty()) {
-            this.numberEntryPoint = Utils.tryParse(number);
-        }
-    }
+    public void setEntryPoint(String number) { this.numberEntryPoint = Utils.tryParse(number); }
 
     @TaskAction
     public void generateEntryPoint() throws IOException, CleanException {

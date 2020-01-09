@@ -15,11 +15,7 @@ public class GenerateModelTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
 
     @Option(option = "name", description = "Set the model name")
-    public void setNameProject(String modelName) {
-        if (!modelName.isEmpty()) {
-            this.modelName = modelName;
-        }
-    }
+    public void setNameProject(String modelName) { this.modelName = modelName; }
 
     @TaskAction
     public void generateModel() throws IOException {
