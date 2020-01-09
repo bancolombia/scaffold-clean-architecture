@@ -43,8 +43,6 @@ public class GenerateEntryPointTask extends DefaultTask {
             case 1:
                 generateApiRest(packageName);
                 break;
-            default:
-                throw new CleanException("Entry point not is available ".concat(entryPoints));
         }
     }
 

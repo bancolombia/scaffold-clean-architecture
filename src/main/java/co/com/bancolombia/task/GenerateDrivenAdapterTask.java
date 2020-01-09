@@ -55,8 +55,6 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
             case 3:
                 generateSecretsManager(packageName);
                 break;
-            default:
-                throw new CleanException("Driven Adapter not is available ".concat(drivenAdapters));
         }
     }
     private void generateJPARepository(String packageName) throws IOException {
