@@ -12,3 +12,4 @@ script:
   - ./gradlew build --refresh-dependencies --no-daemon --continue
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - gradle publishPlugins -Pgradle.publish.key=KEY_GRADLE -Pgradle.publish.secret=SECRET_GRADLE
