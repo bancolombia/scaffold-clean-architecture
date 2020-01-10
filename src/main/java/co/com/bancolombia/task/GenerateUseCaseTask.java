@@ -14,11 +14,7 @@ public class GenerateUseCaseTask extends DefaultTask {
     private String useCaseName = "";
 
     @Option(option = "name", description = "Set the UseCase name")
-    public void setNameProject(String useCaseName) {
-        if (!useCaseName.isEmpty()) {
-            this.useCaseName = useCaseName;
-        }
-    }
+    public void setNameProject(String useCaseName) { this.useCaseName = useCaseName; }
 
     @TaskAction
     public void generateUseCase() throws IOException {

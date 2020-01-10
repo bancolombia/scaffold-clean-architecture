@@ -22,8 +22,8 @@ public class PluginCleanPluginTest {
         String descriptionTask1 = "Scaffolding clean architecture project";
         String descriptionTask2 = "Generate model in domain layer";
         String descriptionTask3 = "Generate use case in domain layer";
-        String descriptionTask4 = "Generate entry point in infraestructure layer";
-        String descriptionTask5 = "Generate driven adapter in infraestructure layer";
+        String descriptionTask4 = "Generate entry point in infrastructure layer";
+        String descriptionTask5 = "Generate driven adapter in infrastructure layer";
         String descriptionTask6 = "Validate that project references are not violated";
         Project project = ProjectBuilder.builder().build();
         project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");

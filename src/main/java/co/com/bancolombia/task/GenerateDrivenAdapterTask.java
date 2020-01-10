@@ -20,17 +20,13 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private static String gBaseFiles = "Generating Base Files";
     private static String generatedBaseFiles = "Generated Base Files";
     private static String wFiles = "Writing in Files";
-    private static String writedFiles =        "Writed in Files";
+    private static String writedFiles = "Writed in Files";
 
     @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer )")
-    public void setDrivenAdapter(String number) {
-        if (!number.isEmpty()) {
-            this.numberDrivenAdapter = Utils.tryParse(number);
-        }
-    }
+    public void setDrivenAdapter(String number) { this.numberDrivenAdapter = Utils.tryParse(number); }
 
     @TaskAction
-    public void generateDrivenAdapter() throws IOException, CleanException {
+    public void generateDrivenAdapter() throws IOException {
         String packageName;
         String nameDrivenAdapter;
         if (numberDrivenAdapter < 0) {
@@ -59,39 +55,39 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
             case 3:
                 generateSecretsManager(packageName);
                 break;
-            default:
-                throw new CleanException("Driven Adapter not is available ".concat(drivenAdapters));
         }
     }
     private void generateJPARepository(String packageName) throws IOException {
         logger.info(gChildDirs);
         String drivenAdapter = "jpa-repository";
         String helperDrivenAdapter = "jpa-repository-commons";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
-        String helperDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
-        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
+        String drivenAdapterPackage = "jpa";
+        String helperDrivenAdapterPackage = "jpa";
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
 
-        getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter));
+        getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
 
         logger.lifecycle(generatedChildDirs);
 
         logger.lifecycle(gBaseFiles);
         getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.JPA_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
+        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
 
         getProject().file(helperDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
 
         logger.lifecycle(generatedBaseFiles);
 
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleJPARepository());
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getJPARepositoryClassContent(packageName));
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.JPA_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION), Constants.getJPARepositoryInterfaceContent(packageName));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getJPARepositoryClassContent(packageName.concat(".").concat(drivenAdapterPackage)));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION), Constants.getJPARepositoryInterfaceContent(packageName.concat(".").concat(drivenAdapterPackage)));
 
         Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleHelperJPARepository());
-        Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getHelperJPARepositoryClassContent(packageName));
+        Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getHelperJPARepositoryClassContent(packageName.concat(".").concat(helperDrivenAdapterPackage)));
 
         String settings = Utils.readFile(getProject(),Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += Constants.getSettingsJPARepositoryContent();
@@ -104,31 +100,33 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         logger.lifecycle(gChildDirs);
         String drivenAdapter = "mongo-repository";
         String helperDrivenAdapter = "mongo-repository-commons";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
-        String helperDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
-        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
+        String drivenAdapterPackage = "mongo";
+        String helperDrivenAdapterPackage = "mongo";
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
 
-        getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter));
+        getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
 
         logger.lifecycle(generatedChildDirs);
 
         logger.lifecycle(gBaseFiles);
         getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.MONGO_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
+        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
 
         getProject().file(helperDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter).concat("/").concat(Constants.MONGO_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.MONGO_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
 
         logger.lifecycle(generatedBaseFiles);
 
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleMongoRepository());
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getMongoRepositoryClassContent(packageName));
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.MONGO_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION), Constants.getMongoRepositoryInterfaceContent(packageName));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getMongoRepositoryClassContent(packageName.concat(".").concat(drivenAdapterPackage)));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION), Constants.getMongoRepositoryInterfaceContent(packageName.concat(".").concat(drivenAdapterPackage)));
 
         Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleHelperMongoRepository());
-        Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapter).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getHelperMongoRepositoryClassContent(packageName));
+        Utils.writeString(getProject(),helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getHelperMongoRepositoryClassContent(packageName.concat(".").concat(helperDrivenAdapterPackage)));
 
         String settings = Utils.readFile(getProject(),Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += Constants.getSettingsMongoRepositoryContent();
@@ -140,19 +138,24 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private void generateSecretsManager(String packageName) throws IOException {
         logger.lifecycle(gChildDirs);
         String drivenAdapter = "secrets-manager-consumer";
-        String drivenAdapterDir = Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
-        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter));
+        String drivenAdapterPackage = "secrets";
+        String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
+        String modelDir = Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName);
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+        getProject().mkdir(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS));
 
         logger.lifecycle(generatedChildDirs);
 
         logger.lifecycle(gBaseFiles);
         getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION));
+        getProject().file(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION));
         logger.lifecycle(generatedBaseFiles);
 
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleSecretsManager());
-        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapter).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerClassContent(packageName));
+        Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerClassContent(packageName,drivenAdapterPackage));
+        Utils.writeString(getProject(),modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerInterfaceContent(packageName.concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS)));
 
         String settings = Utils.readFile(getProject(),Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += Constants.getSettingsGradleSecretsManagerContent();

@@ -1,21 +1,23 @@
 package co.com.bancolombia;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
 
+    public static final String COMMON ="common" ;
+    public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
+
     private Constants() {
     }
 
-    public static final String VERSION_PLUGIN = "1.0";
+    public static final String VERSION_PLUGIN = "1.3";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
      * Base Dirs
      **/
-    public static final String INFRAESTUCTURE = "infraestucture";
+    public static final String INFRASTRUCTURE = "infrastructure";
     public static final String DOMAIN = "domain";
     public static final String APPLICATION = "applications/app-service";
     public static final String DEPLOYMENT = "deployment";
@@ -29,7 +31,7 @@ public class Constants {
     public static final String CONFIG = "config";
 
     /**
-     * Child Dirs Infraestructure
+     * Child Dirs Infrastructure
      **/
 
     public static final String DRIVEN_ADAPTERS = "driven-adapters";
@@ -159,7 +161,7 @@ public class Constants {
             "\n" +
             "Empezaremos por explicar los diferentes componentes del proyectos y partiremos de los componentes externos, continuando con los componentes core de negocio (dominio) y por último el inicio y configuración de la aplicación.\n" +
             "\n" +
-            "## Infraestructure\n" +
+            "## Infrastructure\n" +
             "\n" +
             "### Helpers\n" +
             "En el apartado de helpers tendremos utilidades generales para los Driven Adapters y Entry Points.\n" +
@@ -246,7 +248,7 @@ public class Constants {
     public static final String API_REST_CLASS = "ApiRest";
     public static final String SECRET_MANAGER_CLASS = "SecretsManager";
     public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
-    public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
+    public static final String MONGO_REPOSITORY_INTERFACE = "IMongoRepository";
     public static final String JPA_REPOSITORY_CLASS = "JPARepositoryAdapter";
     public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
     public static final String MONGO_HELPER_CLASS = "AdapterOperations";
@@ -272,36 +274,34 @@ public class Constants {
     }
 
     public static String getSettingsGradleSecretsManagerContent() {
-        return "include \":secrets-manager\"\n" +
-                "project(':secrets-manager').projectDir = file('./infraestructure/driven-adapters/secrets-manager-consumer')\n";
+        return "\ninclude \":secrets-manager\"\n" +
+                "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
     }
 
     public static String getSettingsJPARepositoryContent() {
-        return "\n" +
-                "include \":jpa-repository\"\n" +
-                "project(':jpa-repository').projectDir = file('./infraestructure/driven-adapters/jpa-repository')\n";
+        return "\ninclude \":jpa-repository\"\n" +
+                "project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')\n";
     }
 
     public static String getSettingsHelperJPAContent() {
-        return "include \":jpa-repository-commons\"\n" +
-                "project(':jpa-repository-commons').projectDir = file('./infraestructure/helpers/jpa-repository-commons')\n";
+        return "\ninclude \":jpa-repository-commons\"\n" +
+                "project(':jpa-repository-commons').projectDir = file('./infrastructure/helpers/jpa-repository-commons')\n";
     }
 
     public static String getSettingsMongoRepositoryContent() {
-        return "\n" +
-                "include \":mongo-repository\"\n" +
-                "project(':mongo-repository').projectDir = file('./infraestructure/driven-adapters/mongo-repository')\n";
+        return "\ninclude \":mongo-repository\"\n" +
+                "project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')\n";
     }
 
     public static String getSettingsHelperMongoContent() {
-        return "include \":mongo-repository-commons\"\n" +
-                "project(':mongo-repository-commons').projectDir = file('./infraestructure/helpers/mongo-repository-commons')\n";
+        return "\ninclude \":mongo-repository-commons\"\n" +
+                "project(':mongo-repository-commons').projectDir = file('./infrastructure/helpers/mongo-repository-commons')\n";
     }
 
 
     public static String getSettingsApiRestContent() {
-        return "include \":api-rest\"\n" +
-                "project(':api-rest').projectDir = file('./infraestructure/entry-points/api-rest')\n";
+        return "\ninclude \":api-rest\"\n" +
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n";
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {
@@ -352,7 +352,6 @@ public class Constants {
                 "\t\tmavenCentral()\n" +
                 "\t\tmaven { url \"https://repo.spring.io/snapshot\" }\n" +
                 "\t\tmaven { url \"https://repo.spring.io/milestone\" }\n" +
-                "\t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n" +
                 "\t}\n" +
                 "\tdependencies {\n" +
                 "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
@@ -394,24 +393,6 @@ public class Constants {
                 "systemProp.version=" + VERSION_PLUGIN;
     }
 
-    public static String getbuildGradleApplicationContent() {
-
-        return "apply plugin: 'org.springframework.boot'\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "dependencies {\n" +
-                "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-                "    compile project(\":domain-usecase\")\n" +
-                "\n" +
-                "    runtime('org.springframework.boot:spring-boot-devtools')\n" +
-                "}\n" +
-                "jar {\n" +
-                "    archivesBaseName = rootProject.name\n" +
-                "    libsDirName = project(\":\").getBuildDir()\n" +
-                "}\n";
-    }
-
     public static String getUseCase(String useCaseName, String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
@@ -451,7 +432,6 @@ public class Constants {
                 "    implementation project(':model')\n" +
                 "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
                 "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
-                "    implementation 'com.microsoft.azure:azure-active-directory-spring-boot-starter'\n" +
                 "}";
 
     }
@@ -461,7 +441,7 @@ public class Constants {
         return "dependencies {\n" +
                 "    implementation project(':model')\n" +
                 "    implementation 'org.springframework:spring-context:2.0.5'\n" +
-                "    implementation 'co.com.bancolombia:secretsmanager:2.0.1'\n" +
+                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
                 "}";
 
     }
@@ -502,7 +482,7 @@ public class Constants {
 
         return "dependencies {\n" +
                 "  implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
-                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0' '\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
                 "}";
 
     }
@@ -512,65 +492,44 @@ public class Constants {
 
         return "package " + packageName + ";\n" +
                 "\n" +
-                "import org.springframework.boot.web.servlet.FilterRegistrationBean;\n" +
-                "import org.springframework.context.annotation.Bean;\n" +
-                "import org.springframework.core.Ordered;\n" +
-                "import org.springframework.http.HttpMethod;\n" +
-                "import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\n" +
-                "import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\n" +
-                "import org.springframework.security.config.http.SessionCreationPolicy;\n" +
-                "import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;\n" +
-                "import org.springframework.security.web.csrf.CookieCsrfTokenRepository;\n" +
-                "import org.springframework.security.web.util.matcher.AntPathRequestMatcher;\n" +
-                "import org.springframework.web.cors.CorsConfiguration;\n" +
-                "import org.springframework.web.cors.UrlBasedCorsConfigurationSource;\n" +
-                "import org.springframework.web.filter.CorsFilter;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import org.springframework.http.HttpHeaders;\n" +
+                "import org.springframework.http.HttpStatus;\n" +
+                "import org.springframework.http.MediaType;\n" +
+                "import org.springframework.http.ResponseEntity;\n" +
+                "import org.springframework.web.bind.annotation.*;\n" +
+                "import org.springframework.web.context.request.WebRequest;\n" +
                 "\n" +
-                "import java.util.Arrays;\n" +
+                "import java.nio.file.AccessDeniedException;\n" +
                 "\n" +
-                "@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)\n" +
-                "@EnableWebSecurity\n" +
-                "public class AuthorizationConfig extends WebSecurityConfigurerAdapter {\n" +
                 "\n" +
-                "    @Override\n" +
-                "    protected void configure(HttpSecurity http) throws Exception {\n" +
-                "        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);\n" +
-                "        http.authorizeRequests().antMatchers(HttpMethod.POST, \"/home\").permitAll();\n" +
-                "        http.authorizeRequests().antMatchers(\"/api/**\").authenticated();\n" +
+                "@RestController\n" +
+                "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class "+ API_REST_CLASS +" {\n" +
                 "\n" +
-                "        http.logout().logoutRequestMatcher(new AntPathRequestMatcher(\"/logout\"))\n" +
-                "                .logoutSuccessUrl(\"/\").deleteCookies(\"JSESSIONID\").invalidateHttpSession(true);\n" +
+                "    private final Object useCase;\n" +
                 "\n" +
-                "        http.authorizeRequests().anyRequest().permitAll();\n" +
-                "\n" +
-                "        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\n" +
-                "        http.csrf().disable();\n" +
+                "    @GetMapping (path = \"/health\")\n" +
+                "    public Object health() {\n" +
+                "        return useCase;\n" +
                 "    }\n" +
                 "\n" +
-                "    @Bean\n" +
-                "    public FilterRegistrationBean corsFilter() {\n" +
-                "        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();\n" +
-                "        CorsConfiguration config = new CorsConfiguration();\n" +
-                "        config.setAllowCredentials(true);\n" +
-                "        config.addAllowedOrigin(\"http://localhost:4200\");\n" +
-                "        config.setAllowedMethods(Arrays.asList(\"POST\", \"OPTIONS\", \"GET\", \"DELETE\", \"PUT\"));\n" +
-                "        config.setAllowedHeaders(Arrays.asList(\"X-Requested-With\", \"Origin\", \"Content-Type\", \"Accept\", \"Authorization\"));\n" +
-                "        source.registerCorsConfiguration(\"/**\", config);\n" +
-                "        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));\n" +
-                "        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);\n" +
-                "        return bean;\n" +
-                "    }\n" +
+                "    @ExceptionHandler({ AccessDeniedException.class })\n" +
+                "    public ResponseEntity<Object> handleAccessDeniedException(\n" +
+                "            Exception ex, WebRequest request) {\n" +
+                "        return new ResponseEntity<Object>(\n" +
+                "                \"Access denied message here\", new HttpHeaders(), HttpStatus.FORBIDDEN);\n" +
+                "    }"+
                 "}";
     }
 
-    public static String getSecretsManagerClassContent(String packageName) {
+    public static String getSecretsManagerClassContent(String packageName,String drivenAdapterPackage) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ";\n" +
+        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
                 "\n" +
-                "import app.demo.domain.common.gateways.SecretsManagerConsumer;\n" +
+                "import "+packageName  + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
@@ -579,10 +538,10 @@ public class Constants {
                 "\n" +
                 "\n" +
                 "@Repository\n" +
-                "public class SecretsManager implements SecretsManagerConsumer {\n" +
+                "public class " + SECRET_MANAGER_CLASS + " implements "+ SECRET_MANAGER_CONSUMER_CLASS +" {\n" +
                 "\n" +
                 "\n" +
-                "    public SecretsManager() {\n" +
+                "    public " + SECRET_MANAGER_CLASS + "() {\n" +
                 "    }\n" +
                 "\n" +
                 "    @Override\n" +
@@ -597,7 +556,7 @@ public class Constants {
     public static String getMongoRepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".mongo-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
@@ -612,27 +571,17 @@ public class Constants {
                 "\n" +
                 "    @Autowired\n" +
                 "    public " + MONGO_REPOSITORY_CLASS + "("+MONGO_REPOSITORY_INTERFACE +" repository, ObjectMapper mapper) {\n" +
-                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
                 "    }\n" +
                 "\n" +
-                "    @Override\n" +
-                "    public void saveAll(List<Object> objects) {\n" +
-                "        super.saveAllEntities(objects);\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public List<Object> findMoviesByValue(String value) {\n" +
-                "        return null;\n" +
-                "    }\n" +
                 "}";
     }
 
     public static String getJPARepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
-                "import " + packageName + "." + "jpa-repository-commons." + JPA_HELPER_CLASS + ";\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.beans.factory.annotation.Autowired;\n" +
                 "import org.springframework.stereotype.Repository;\n" +
@@ -646,25 +595,16 @@ public class Constants {
                 "\n" +
                 "    @Autowired\n" +
                 "    public " + JPA_REPOSITORY_CLASS + "(" + JPA_REPOSITORY_INTERFACE + " repository, ObjectMapper mapper) {\n" +
-                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.builder.class).build());\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
                 "    }\n" +
                 "\n" +
-                "    @Override\n" +
-                "    public void saveAll(List<Object> objects) {\n" +
-                "        super.saveAllEntities(objects);\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public List<Object> findObjectByValue(String value) {\n" +
-                "        return super.toList(repository.findObjectByValue(value));\n" +
-                "    }\n" +
                 "}";
     }
 
     public static String getJPARepositoryInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.data.jpa.repository.Query;\n" +
                 "import org.springframework.data.repository.CrudRepository;\n" +
@@ -680,7 +620,7 @@ public class Constants {
     public static String getMongoRepositoryInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".mongo-repository;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.data.mongodb.repository.MongoRepository;\n" +
                 "import org.springframework.data.repository.query.QueryByExampleExecutor;\n" +
@@ -692,7 +632,7 @@ public class Constants {
     public static String getHelperJPARepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + ".jpa-repository-commons;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.data.domain.Example;\n" +
@@ -714,7 +654,7 @@ public class Constants {
                 "    protected ObjectMapper mapper;\n" +
                 "    private Function<D, E> toEntityFn;\n" +
                 "\n" +
-                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "    public " + JPA_HELPER_CLASS + "(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
                 "        this.repository = repository;\n" +
                 "        this.mapper = mapper;\n" +
                 "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
@@ -769,7 +709,7 @@ public class Constants {
 
     public static String getHelperMongoRepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
-        return "package " + packageName + ".mongo-repository-commons;\n" +
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.reactivecommons.utils.ObjectMapper;\n" +
                 "import org.springframework.data.domain.Example;\n" +
@@ -783,14 +723,14 @@ public class Constants {
                 "\n" +
                 "import static java.util.stream.StreamSupport.stream;\n" +
                 "\n" +
-                "public abstract class AdapterOperations<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
+                "public abstract class " + MONGO_HELPER_CLASS + "<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {\n" +
                 "\n" +
                 "    protected R repository;\n" +
                 "    private Class<D> dataClass;\n" +
                 "    protected ObjectMapper mapper;\n" +
                 "    private Function<D, E> toEntityFn;\n" +
                 "\n" +
-                "    public AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
+                "    public " + MONGO_HELPER_CLASS + "(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {\n" +
                 "        this.repository = repository;\n" +
                 "        this.mapper = mapper;\n" +
                 "        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();\n" +
@@ -843,4 +783,13 @@ public class Constants {
     }
 
 
+    public static String getSecretsManagerInterfaceContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "public interface " + SECRET_MANAGER_CONSUMER_CLASS + "<T> {\n" +
+                "    T getSecrets(Class<T> cls, String secretRegion, String secretName) throws Exception;\n" +
+                "}";
+    }
 }

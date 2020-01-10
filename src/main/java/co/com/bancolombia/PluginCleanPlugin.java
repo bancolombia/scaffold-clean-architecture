@@ -23,6 +23,7 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         Task generateStructure = tasks.create("cleanArchitecture", GenerateStructureTask.class);
         tasks.create("ca", GenerateStructureTask.class);
+
         generateStructure.setGroup(taskGroup);
         generateStructure.setDescription("Scaffolding clean architecture project");
 
@@ -39,12 +40,12 @@ public class PluginCleanPlugin implements Plugin<Project> {
         Task generateEntryPoint = tasks.create("generateEntryPoint", GenerateEntryPointTask.class);
         tasks.create("gep", GenerateEntryPointTask.class);
         generateEntryPoint.setGroup(taskGroup);
-        generateEntryPoint.setDescription("Generate entry point in infraestructure layer");
+        generateEntryPoint.setDescription("Generate entry point in infrastructure layer");
 
         Task generateDrivenAdapter = tasks.create("generateDrivenAdapter", GenerateDrivenAdapterTask.class);
         tasks.create("gda", GenerateDrivenAdapterTask.class);
         generateDrivenAdapter.setGroup(taskGroup);
-        generateDrivenAdapter.setDescription("Generate driven adapter in infraestructure layer");
+        generateDrivenAdapter.setDescription("Generate driven adapter in infrastructure layer");
 
         Task validateStructure = tasks.create("validateStructure", ValidateStructureTask.class);
         tasks.create("vs", ValidateStructureTask.class);

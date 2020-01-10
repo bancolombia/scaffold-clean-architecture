@@ -17,26 +17,17 @@ public class GenerateStructureTask extends DefaultTask {
     private String projectName = "cleanArchitecture";
 
     @Option(option = "package", description = "Set the principal package to use in the project")
-    public void setPackage(String packageName) {
-        if (!packageName.isEmpty()) {
-            this.packageName = packageName;
-        }
-    }
+    public void setPackage(String packageName) { this.packageName = packageName; }
 
     @Option(option = "type", description = "Set project type, the options are  (reactive | imperative) ")
     public void setType(String type) {
-        if (!type.isEmpty()) {
             this.type = type;
-        }
     }
 
     @Option(option = "name", description = "Set the project name, by default is cleanArchitecture ")
     public void setProjectName(String projectName) {
-        if (!projectName.isEmpty()) {
             this.projectName = projectName;
-        }
     }
-
 
     @TaskAction
     public void generateStructure() throws IOException {
@@ -47,8 +38,8 @@ public class GenerateStructureTask extends DefaultTask {
         logger.lifecycle("Project Type: {}", type);
         logger.lifecycle("Project Name: {}", projectName);
         logger.lifecycle("Generating base directories");
-        getProject().mkdir(Constants.INFRAESTUCTURE);
-        logger.lifecycle(directoryCreated, Constants.INFRAESTUCTURE);
+        getProject().mkdir(Constants.INFRASTRUCTURE);
+        logger.lifecycle(directoryCreated, Constants.INFRASTRUCTURE);
         getProject().mkdir(Constants.DOMAIN);
         logger.lifecycle(directoryCreated,Constants.DOMAIN);
         getProject().mkdir(Constants.APPLICATION);
@@ -62,9 +53,9 @@ public class GenerateStructureTask extends DefaultTask {
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES));
 
-        getProject().mkdir(Constants.INFRAESTUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS));
-        getProject().mkdir(Constants.INFRAESTUCTURE.concat("/").concat(Constants.ENTRY_POINTS));
-        getProject().mkdir(Constants.INFRAESTUCTURE.concat("/").concat(Constants.HELPERS));
+        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS));
+        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS));
+        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS));
 
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));

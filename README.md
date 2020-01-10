@@ -12,7 +12,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.0"
+ id "co.com.bancolombia.cleanArchitecture" version "1.3"
 }
 ```
 
@@ -46,7 +46,7 @@ gradle gm --name [modelName]
 gradle generateUseCase --name=[useCaseName]
 gradle guc --name [useCaseName]
  ```
-4 The ```generateDrivenAdapter | gda``` task will generate a class in Infraestucture layer, this task have one required parameter ```value```.
+4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
 ```sh
 gradle generateDrivenAdapter --value=[referenceNumberDrivenAdapter]
 gradle gda --value [referenceNumberDrivenAdapter]
@@ -58,7 +58,7 @@ gradle gda --value [referenceNumberDrivenAdapter]
 | 2|Mongo Repository |
 | 3|Secrets Manager Consumer |
 
-5 The ```generateEntryPoint | gep``` task will generate a class in Infraestructure layer, this task have one required parameter ```value```.
+5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
 ```sh
 gradle generateEntryPoint --value=referenceNumberEntryPoint
 gradle gs --value referenceNumberEntryPoint

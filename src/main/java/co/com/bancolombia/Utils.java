@@ -1,9 +1,6 @@
 package co.com.bancolombia;
 
 import org.gradle.api.Project;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,14 +20,10 @@ public class Utils {
         FileWriter fileWriter ;
         project.getLogger().debug(project.file(nameFile).getAbsolutePath());
 
-        try {
-            file = new File((project.file(nameFile).getAbsolutePath()));
-            fileWriter = new FileWriter(file);
-            fileWriter.write(data);
-            fileWriter.close();
-        } catch (IOException e) {
-            project.getLogger().error(e.getMessage());
-        }
+        file = new File((project.file(nameFile).getAbsolutePath()));
+        fileWriter = new FileWriter(file);
+        fileWriter.write(data);
+        fileWriter.close();
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
@@ -57,6 +50,7 @@ public class Utils {
 
         return new String(c);
     }
+
     public static String readProperties(String variable) throws  IOException {
         properties.load(new FileReader("gradle.properties"));
         if (properties.getProperty(variable) != null)
@@ -66,9 +60,11 @@ public class Utils {
 
         }
     }
+
     public static String  getVersionPlugin(){
         return Constants.VERSION_PLUGIN;
     }
+
     public static Integer tryParse(String number) {
         try {
             return Integer.parseInt(number);
@@ -76,19 +72,14 @@ public class Utils {
             throw new NumberFormatException ("The value is invalid");
         }
     }
+
     public static List<File> finderSubProjects(String dirPath){
         File[] directories = new File(dirPath).listFiles(File::isDirectory);
+        FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
         List<File> textFiles = new ArrayList<>();
         for (File dir : directories) {
-            textFiles.addAll(Arrays.asList(dir.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String filename) {
-                    return filename.endsWith("build.gradle");
-                }
-            })));
+            textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
         }
-
         return textFiles;
     }
-
-
 }

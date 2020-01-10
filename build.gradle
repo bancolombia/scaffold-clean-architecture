@@ -32,6 +32,8 @@ group 'co.com.bancolombia.cleanArchitecture'
 
 version System.getProperty( 'version' )
 
+
+
 repositories {
 	// Use jcenter for resolving dependencies.
 	// You can declare any Maven/Ivy/file repository here.
@@ -42,8 +44,6 @@ dependencies {
 	// Use JUnit test framework for unit tests
 	testImplementation 'junit:junit:4.12'
 	testCompile "org.mockito:mockito-core:2.9.0"
-
-
 	compile gradleApi()
 }
 
@@ -79,8 +79,6 @@ check {
 	dependsOn(tasks.functionalTest)
 }
 
-
-
 pluginBundle {
 	website = 'https://github.com/bancolombia/scaffold-clean-architecture'
 	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
@@ -104,27 +102,5 @@ FileTree buildFiles = fileTree(rootDir) {
 	}
 }
 
-buildFiles.each { File buildFile ->
-
-	boolean isDefaultName = 'build.gradle'.equals(buildFile.name)
-	if(isDefaultName) {
-		String projectName = buildFile.parentFile.name
-		String projectPath = ':' + projectName
-		include projectPath
-		def project = findProject("${projectPath}")
-		project.name = buildFile.parentFile.parentFile.name + '-' + projectName
-		project.projectDir = buildFile.parentFile
-		project.buildFileName = buildFile.name
-
-	} else {
-		String projectName = buildFile.name.replace('.gradle', '')
-		String projectPath = ':' + projectName
-		include projectPath
-		def project = findProject("${projectPath}")
-		project.name = projectName
-		project.projectDir = buildFile.parentFile
-		project.buildFileName = buildFile.name
-	}
-}
 
 
