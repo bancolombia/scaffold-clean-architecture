@@ -152,7 +152,7 @@ public class PluginCleanPluginFunctionalTest {
         runner.withArguments(task, "--value=" + valueEntryPoint);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api-rest/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/apiW/ApiRest.java").exists());
         assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -168,7 +168,7 @@ public class PluginCleanPluginFunctionalTest {
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/build.gradle").exists());
-        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets-manager-consumer/SecretsManager.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets/SecretsManager.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
