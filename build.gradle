@@ -32,6 +32,8 @@ group 'co.com.bancolombia.cleanArchitecture'
 
 version System.getProperty( 'version' )
 
+
+
 repositories {
 	// Use jcenter for resolving dependencies.
 	// You can declare any Maven/Ivy/file repository here.

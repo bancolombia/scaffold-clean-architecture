@@ -352,7 +352,6 @@ public class Constants {
                 "\t\tmavenCentral()\n" +
                 "\t\tmaven { url \"https://repo.spring.io/snapshot\" }\n" +
                 "\t\tmaven { url \"https://repo.spring.io/milestone\" }\n" +
-                "\t\t//maven { url \"https://artifactory.apps.bancolombia.com:443/maven-bancolombia\" }\n" +
                 "\t}\n" +
                 "\tdependencies {\n" +
                 "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
@@ -442,7 +441,7 @@ public class Constants {
         return "dependencies {\n" +
                 "    implementation project(':model')\n" +
                 "    implementation 'org.springframework:spring-context:2.0.5'\n" +
-                "    implementation 'co.com.bancolombia:secretsmanager:2.0.1'\n" +
+                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
                 "}";
 
     }
