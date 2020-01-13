@@ -6,7 +6,6 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-
 import java.io.IOException;
 
 
@@ -64,26 +63,6 @@ public class GenerateStructureTask extends DefaultTask {
 
         logger.lifecycle("Generated Childs Dirs");
 
-        logger.lifecycle("Generating Base Files");
-        getProject().file(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-
-        getProject().file(Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE)).createNewFile();
-
-        getProject().file(Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES)).createNewFile();
-        getProject().file(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J)).createNewFile();
-        getProject().file(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MAIN_APPLICATION)).createNewFile();
-
-        getProject().file(Constants.MAIN_GRADLE).createNewFile();
-        getProject().file(Constants.LOMBOK_CONFIG).createNewFile();
-        getProject().file(Constants.SETTINGS_GRADLE).createNewFile();
-        getProject().file(Constants.GITIGNORE).createNewFile();
-        getProject().file(Constants.READ_ME).createNewFile();
-        getProject().file(Constants.GRADLE_PROPERTIES).createNewFile();
-
-
-        logger.lifecycle("Generated Base Files");
         logger.lifecycle("Writing in Files");
 
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
@@ -103,6 +82,4 @@ public class GenerateStructureTask extends DefaultTask {
         logger.lifecycle("Writed in Files");
 
     }
-
-
 }

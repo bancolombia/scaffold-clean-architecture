@@ -2,12 +2,10 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
-import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
-
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -17,8 +15,6 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private static String drivenAdapters =  "(1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer )";
     private static String gChildDirs = "Generating Childs Dirs";
     private static String generatedChildDirs = "Generated Childs Dirs";
-    private static String gBaseFiles = "Generating Base Files";
-    private static String generatedBaseFiles = "Generated Base Files";
     private static String wFiles = "Writing in Files";
     private static String writedFiles = "Writed in Files";
 
@@ -71,16 +67,6 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
         logger.lifecycle(generatedChildDirs);
 
-        logger.lifecycle(gBaseFiles);
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
-
-        getProject().file(helperDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
-
-        logger.lifecycle(generatedBaseFiles);
-
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleJPARepository());
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.JPA_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getJPARepositoryClassContent(packageName.concat(".").concat(drivenAdapterPackage)));
@@ -110,16 +96,6 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
         logger.lifecycle(generatedChildDirs);
 
-        logger.lifecycle(gBaseFiles);
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION));
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_INTERFACE).concat(Constants.JAVA_EXTENSION));
-
-        getProject().file(helperDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage).concat("/").concat(Constants.MONGO_HELPER_CLASS).concat(Constants.JAVA_EXTENSION));
-
-        logger.lifecycle(generatedBaseFiles);
-
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleMongoRepository());
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.MONGO_REPOSITORY_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getMongoRepositoryClassContent(packageName.concat(".").concat(drivenAdapterPackage)));
@@ -145,12 +121,6 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         getProject().mkdir(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS));
 
         logger.lifecycle(generatedChildDirs);
-
-        logger.lifecycle(gBaseFiles);
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage).concat("/").concat(Constants.SECRET_MANAGER_CLASS).concat(Constants.JAVA_EXTENSION));
-        getProject().file(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION));
-        logger.lifecycle(generatedBaseFiles);
 
         logger.lifecycle(wFiles);
         Utils.writeString(getProject(),drivenAdapterDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleSecretsManager());

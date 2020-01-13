@@ -2,7 +2,6 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
-import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -38,7 +37,6 @@ public class GenerateEntryPointTask extends DefaultTask {
         packageName = packageName.replaceAll("\\.", "\\/");
         logger.lifecycle("Entry Point: {} - {}", numberEntryPoint, nameEntryPoint);
 
-
         switch (numberEntryPoint){
             case 1:
                 generateApiRest(packageName);
@@ -54,11 +52,6 @@ public class GenerateEntryPointTask extends DefaultTask {
         getProject().mkdir(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPointPackage));
 
         logger.lifecycle("Generated Childs Dirs");
-
-        logger.lifecycle("Generating Base Files");
-        getProject().file(entryPointDir.concat("/").concat(Constants.BUILD_GRADLE)).createNewFile();
-        getProject().file(entryPointDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(entryPointPackage).concat("/").concat(Constants.API_REST_CLASS).concat(Constants.JAVA_EXTENSION)).createNewFile();
-        logger.lifecycle("Generated Base Files");
 
         logger.lifecycle("Writing in Files");
         Utils.writeString(getProject(),entryPointDir.concat("/").concat(Constants.BUILD_GRADLE), Constants.getBuildGradleApiRest());
