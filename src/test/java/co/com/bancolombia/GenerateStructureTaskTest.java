@@ -19,7 +19,7 @@ public class GenerateStructureTaskTest {
 
         task.setPackage("test");
         task.setProjectName("projectTest");
-        task.setType("imperative");
+        task.setType("reactive");
     }
 
     @Test

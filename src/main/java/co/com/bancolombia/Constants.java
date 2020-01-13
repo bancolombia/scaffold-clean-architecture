@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Constants {
 
-    public static final String COMMON ="common" ;
+    public static final String COMMON = "common";
     public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
 
     private Constants() {
@@ -176,57 +176,73 @@ public class Constants {
             "## Entry Points\n" +
             "Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.";
 
-    public static final String MAIN_GRADLE_CONTENT = "subprojects {\n" +
-            "    apply plugin: \"java\"\n" +
-            "    apply plugin: \"jacoco\"\n" +
-            "    apply plugin: 'io.spring.dependency-management'\n" +
-            "\n" +
-            "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
-            "\n" +
-            "    repositories {\n" +
-            "  \t\t mavenCentral()\n" +
-            "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
-            "         maven { url \"https://repo.spring.io/milestone\" }\n" +
-            "    }\n" +
-            "\n" +
-            "    dependencies {\n" +
-            "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n" +
-            "\n" +
-            "        compileOnly 'org.projectlombok:lombok'\n" +
-            "        annotationProcessor 'org.projectlombok:lombok'\n" +
-            "        testAnnotationProcessor 'org.projectlombok:lombok'\n" +
-            "        testCompileOnly 'org.projectlombok:lombok'\n" +
-            "    }\n" +
-            "\n" +
-            "\n" +
-            "    jacoco {\n" +
-            "        toolVersion = '0.8.2'\n" +
-            "    }\n" +
-            "\n" +
-            "    dependencyManagement {\n" +
-            "        imports {\n" +
-            "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n" +
-            "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
-            "        }\n" +
-            "    }\n" +
-            "}";
+    public static String mainGradleContent(String type) {
+        String value = "subprojects {\n" +
+                "    apply plugin: \"java\"\n" +
+                "    apply plugin: \"jacoco\"\n" +
+                "    apply plugin: 'io.spring.dependency-management'\n" +
+                "\n" +
+                "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
+                "\n" +
+                "    repositories {\n" +
+                "  \t\t mavenCentral()\n" +
+                "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
+                "         maven { url \"https://repo.spring.io/milestone\" }\n" +
+                "    }\n" +
+                "\n" +
+                "    dependencies {\n" +
+                "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n";
+        if (!type.equals("imperative")) {
+            value = value.concat("\n        testImplementation 'io.projectreactor:reactor-test'\n" +
+                    "        implementation 'io.projectreactor:reactor-core'\n" +
+                    "        implementation 'io.projectreactor.addons:reactor-extra'\n");
+        }
+        value = value.concat("\n" +
+                "        compileOnly 'org.projectlombok:lombok'\n" +
+                "        annotationProcessor 'org.projectlombok:lombok'\n" +
+                "        testAnnotationProcessor 'org.projectlombok:lombok'\n" +
+                "        testCompileOnly 'org.projectlombok:lombok'\n" +
+                "    }\n" +
+                "\n" +
+                "\n" +
+                "    jacoco {\n" +
+                "        toolVersion = '0.8.2'\n" +
+                "    }\n" +
+                "\n" +
+                "    dependencyManagement {\n" +
+                "        imports {\n" +
+                "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n" +
+                "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}");
+        return value;
 
 
-    public static final String BUILD_GRADLE_APPLICATION_CONTENT = "apply plugin: 'org.springframework.boot'\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "dependencies {\n" +
-            "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-            "implementation project(':model')\n" +
-            "implementation project(':usecase')\n" +
-            "\n" +
-            "runtime('org.springframework.boot:spring-boot-devtools')\n" +
-            "}\n" +
-            "jar {\n" +
-            "    archivesBaseName = rootProject.name\n" +
-            "    libsDirName = project(\":\").getBuildDir()\n" +
-            "}";
+    }
+
+    public static  String buildGradleApplicationContent(String type) {
+        String value = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "dependencies {\n" +
+                "    compile 'org.springframework.boot:spring-boot-starter'\n" +
+                "implementation project(':model')\n" +
+                "implementation project(':usecase')\n" +
+                "\n" ;
+        if (type.equals("reactive")){
+            value = value.concat("\tcompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n");
+        }
+        value = value.concat( "runtime('org.springframework.boot:spring-boot-devtools')\n" +
+                "}\n" +
+                "jar {\n" +
+                "    archivesBaseName = rootProject.name\n" +
+                "    libsDirName = project(\":\").getBuildDir()\n" +
+                "}");
+        return value;
+
+    }
 
 
     public static final String LOG_4_J_CONTENT = "name=PropertiesConfig\n" +
@@ -506,7 +522,7 @@ public class Constants {
                 "@RestController\n" +
                 "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
                 "@RequiredArgsConstructor\n" +
-                "public class "+ API_REST_CLASS +" {\n" +
+                "public class " + API_REST_CLASS + " {\n" +
                 "\n" +
                 "    private final Object useCase;\n" +
                 "\n" +
@@ -520,16 +536,16 @@ public class Constants {
                 "            Exception ex, WebRequest request) {\n" +
                 "        return new ResponseEntity<Object>(\n" +
                 "                \"Access denied message here\", new HttpHeaders(), HttpStatus.FORBIDDEN);\n" +
-                "    }"+
+                "    }" +
                 "}";
     }
 
-    public static String getSecretsManagerClassContent(String packageName,String drivenAdapterPackage) {
+    public static String getSecretsManagerClassContent(String packageName, String drivenAdapterPackage) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
         return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
                 "\n" +
-                "import "+packageName  + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
+                "import " + packageName + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
                 "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
@@ -538,7 +554,7 @@ public class Constants {
                 "\n" +
                 "\n" +
                 "@Repository\n" +
-                "public class " + SECRET_MANAGER_CLASS + " implements "+ SECRET_MANAGER_CONSUMER_CLASS +" {\n" +
+                "public class " + SECRET_MANAGER_CLASS + " implements " + SECRET_MANAGER_CONSUMER_CLASS + " {\n" +
                 "\n" +
                 "\n" +
                 "    public " + SECRET_MANAGER_CLASS + "() {\n" +
@@ -570,7 +586,7 @@ public class Constants {
                 "\n{\n" +
                 "\n" +
                 "    @Autowired\n" +
-                "    public " + MONGO_REPOSITORY_CLASS + "("+MONGO_REPOSITORY_INTERFACE +" repository, ObjectMapper mapper) {\n" +
+                "    public " + MONGO_REPOSITORY_CLASS + "(" + MONGO_REPOSITORY_INTERFACE + " repository, ObjectMapper mapper) {\n" +
                 "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
                 "    }\n" +
                 "\n" +

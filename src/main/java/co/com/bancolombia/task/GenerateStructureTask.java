@@ -72,11 +72,11 @@ public class GenerateStructureTask extends DefaultTask {
         Utils.writeString(getProject(), Constants.READ_ME, Constants.README_CONTENT);
         Utils.writeString(getProject(), Constants.GRADLE_PROPERTIES, Constants.getGradlePropertiesContent(packageName));
         Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, Constants.getSettingsGradleContent(this.projectName));
-        Utils.writeString(getProject(), Constants.MAIN_GRADLE, Constants.MAIN_GRADLE_CONTENT);
         Utils.writeString(getProject(), Constants.BUILD_GRADLE, Constants.getBuildGradleContent());
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_APPLICATION_CONTENT);
         Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES), Constants.getApplicationPropertiesContent(this.projectName));
         Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J), Constants.LOG_4_J_CONTENT);
+        Utils.writeString(getProject(), Constants.MAIN_GRADLE, Constants.mainGradleContent(type));
+        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE), Constants.buildGradleApplicationContent(type));
         Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MAIN_APPLICATION), Constants.getMainApplicationContent(this.projectName));
 
         logger.lifecycle("Writed in Files");
