@@ -52,7 +52,7 @@ public class GenerateEntryPointTaskTest {
 
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
-        task.setEntryPoint("1");
+        task.setEntryPoint("2");
         task.generateEntryPoint();
     }
 

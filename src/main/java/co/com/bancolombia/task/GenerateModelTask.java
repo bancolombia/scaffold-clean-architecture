@@ -29,6 +29,8 @@ public class GenerateModelTask extends DefaultTask {
         logger.lifecycle("Model Name: {}", modelName);
         logger.lifecycle("Generating Childs Dirs");
         getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS));
+        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)));
+
         logger.lifecycle("Generated Childs Dirs");
 
         logger.lifecycle("Writing in Files");

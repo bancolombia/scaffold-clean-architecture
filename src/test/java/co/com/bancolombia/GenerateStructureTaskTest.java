@@ -33,7 +33,7 @@ public class GenerateStructureTaskTest {
 
         task.setPackage("test");
         task.setProjectName("projectTest");
-        task.setType("imperative");
+        task.setType("reacitve");
         task.generateStructure();
     }
 

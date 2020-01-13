@@ -26,7 +26,7 @@ The Scaffolding Clean Architecture plugin will allow you create 6 task  :
 
  ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
 
-- ```type = <imperative>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
+- ```type = <imperative | reactive>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
 
 -  ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
 
@@ -66,6 +66,7 @@ gradle gs --value referenceNumberEntryPoint
 |      Reference number entry point      | Name       |
 | ------------------ | ------------ |
 | 1|API REST (Spring Boot Starter Web) |
+| 2|API REST (Spring Boot Starter WebFlux) |
 
 
 

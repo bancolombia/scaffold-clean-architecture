@@ -62,8 +62,10 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
         String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
 
         getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
+        getProject().mkdir(helperDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
 
         logger.lifecycle(generatedChildDirs);
 
@@ -91,8 +93,10 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
         String helperDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS).concat("/").concat(helperDrivenAdapter);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
 
         getProject().mkdir(helperDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
+        getProject().mkdir(helperDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(helperDrivenAdapterPackage));
 
         logger.lifecycle(generatedChildDirs);
 
@@ -118,6 +122,8 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         String drivenAdapterDir = Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS).concat("/").concat(drivenAdapter);
         String modelDir = Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName);
         getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+        getProject().mkdir(drivenAdapterDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(drivenAdapterPackage));
+
         getProject().mkdir(modelDir.concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS));
 
         logger.lifecycle(generatedChildDirs);

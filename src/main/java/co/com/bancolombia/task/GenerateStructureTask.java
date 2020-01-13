@@ -66,6 +66,7 @@ public class GenerateStructureTask extends DefaultTask {
         logger.lifecycle("Writing in Files");
 
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
+        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE),"");
         Utils.writeString(getProject(), Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE), Constants.DOCKER_FILE_CONTENT);
         Utils.writeString(getProject(), Constants.LOMBOK_CONFIG, Constants.LOMBOK_CONFIG_CONTENT);
         Utils.writeString(getProject(), Constants.GITIGNORE, Constants.GIT_IGNORE_CONTENT);

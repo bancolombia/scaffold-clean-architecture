@@ -28,6 +28,7 @@ public class Constants {
      **/
     public static final String MAIN_JAVA = "src/main/java";
     public static final String MAIN_RESOURCES = "src/main/resources";
+    public static final String TEST_JAVA = "src/test/java";
     public static final String CONFIG = "config";
 
     /**
@@ -259,7 +260,6 @@ public class Constants {
             "rootLogger.appenderRefs = stdout\n" +
             "rootLogger.appenderRef.stdout.ref = STDOUT";
 
-    public static final String TEST_JAVA = "src/test/java";
 
     public static final String API_REST_CLASS = "ApiRest";
     public static final String SECRET_MANAGER_CLASS = "SecretsManager";
@@ -318,6 +318,10 @@ public class Constants {
     public static String getSettingsApiRestContent() {
         return "\ninclude \":api-rest\"\n" +
                 "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n";
+    }
+    public static String getSettingsReactiveWebContent() {
+        return "\ninclude \":reactive-web\"\n" +
+                "project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')\n";
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {
@@ -426,6 +430,7 @@ public class Constants {
 
         if (ENTRY_POINTS_AVAILABLE.isEmpty()) {
             ENTRY_POINTS_AVAILABLE.put(1, "API REST IMPERATIVE");
+            ENTRY_POINTS_AVAILABLE.put(2, "API REST REACTIVE");
         }
         return ENTRY_POINTS_AVAILABLE.get(numberEntryPoint);
     }
@@ -446,8 +451,17 @@ public class Constants {
         return "dependencies {\n" +
                 "    implementation project(':usecase')\n" +
                 "    implementation project(':model')\n" +
-                "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
                 "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
+                "}";
+
+    }
+
+    public static String getBuildGradleReactiveWeb() {
+
+        return "dependencies {\n" +
+                "    implementation project(':usecase')\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-webflux'\n" +
                 "}";
 
     }
@@ -537,6 +551,32 @@ public class Constants {
                 "        return new ResponseEntity<Object>(\n" +
                 "                \"Access denied message here\", new HttpHeaders(), HttpStatus.FORBIDDEN);\n" +
                 "    }" +
+                "}";
+    }
+
+    public static String getReactiveWebClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import org.springframework.http.MediaType;\n" +
+                "import org.springframework.web.bind.annotation.*;\n" +
+                "import reactor.core.publisher.Mono;\n"+
+                "\n" +
+                "\n" +
+                "@RestController\n" +
+                "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class " + API_REST_CLASS + " {\n" +
+                "\n" +
+                "    private final Object useCase;\n" +
+                "\n" +
+                "    @GetMapping (path = \"/health\")\n" +
+                "    public Mono<Object> health() {\n" +
+                "        return Mono.empty();\n" +
+                "    }\n" +
+                "\n"+
                 "}";
     }
 
