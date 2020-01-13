@@ -37,20 +37,16 @@ public class GenerateEntryPointTask extends DefaultTask {
         logger.lifecycle("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         logger.lifecycle("Entry Point: {} - {}", numberEntryPoint, nameEntryPoint);
-        String entryPoint;
-        String entryPointPackage;
-        switch (numberEntryPoint){
-            case 1:
-                entryPoint = "api-rest";
-                entryPointPackage = "api";
-                break;
-            case 2:
-                entryPoint = "reactive-web";
-                entryPointPackage = "api";
-                break;
-            default:
-                throw new CleanException("The Entry Point is disabled");
+        String entryPoint = null;
+        String entryPointPackage = null;
+        if (numberEntryPoint == 1){
+            entryPoint = "api-rest";
+            entryPointPackage = "api";
+        }else if (numberEntryPoint == 2){
+            entryPoint = "reactive-web";
+            entryPointPackage = "api";
         }
+
         generateEntryPoint(packageName, numberEntryPoint, entryPoint, entryPointPackage);
 
     }
@@ -74,35 +70,23 @@ public class GenerateEntryPointTask extends DefaultTask {
     }
 
     private String getBuildGradleEntryPointContent(int numberEntryPoint){
-        switch (numberEntryPoint){
-            case 1:
-                return Constants.getBuildGradleApiRest();
-            case 2:
-                return Constants.getBuildGradleReactiveWeb();
-            default:
-                return null;
-        }
+        String value = null;
+        if (numberEntryPoint == 1) value = Constants.getBuildGradleApiRest();
+        else if (numberEntryPoint == 2) value = Constants.getBuildGradleReactiveWeb();
+        return value;
     }
 
     private String getContentClassEntryPoint(int numberEntryPoint, String packageName){
-        switch (numberEntryPoint){
-            case 1:
-                return Constants.getApiRestClassContent(packageName);
-            case 2:
-                return Constants.getReactiveWebClassContent(packageName);
-            default:
-                return null;
-        }
+        String value = null;
+        if (numberEntryPoint == 1) value = Constants.getApiRestClassContent(packageName);
+        else if (numberEntryPoint == 2) value = Constants.getReactiveWebClassContent(packageName);
+        return value;
     }
 
     private String getSettingsGradleEntryPoint(int numberEntryPoint){
-        switch (numberEntryPoint){
-            case 1:
-                return Constants.getSettingsApiRestContent();
-            case 2:
-                return Constants.getSettingsReactiveWebContent();
-            default:
-                return null;
-        }
+        String value = null;
+        if (numberEntryPoint == 1) value = Constants.getSettingsApiRestContent();
+        else if (numberEntryPoint == 2) value = Constants.getSettingsReactiveWebContent();
+        return value;
     }
 }

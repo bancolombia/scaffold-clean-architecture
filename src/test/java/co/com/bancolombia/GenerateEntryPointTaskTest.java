@@ -46,7 +46,17 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
-    public void generateEntryPoint() throws IOException, CleanException {
+    public void generateEntryPointApiRest() throws IOException, CleanException {
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        project.getTasks().create("test", GenerateEntryPointTask.class);
+
+        GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
+
+        task.setEntryPoint("1");
+        task.generateEntryPoint();
+    }
+    @Test
+    public void generateEntryPointReactiveWeb() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateEntryPointTask.class);
 
