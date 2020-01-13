@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.GenerateModelTask;
 import org.gradle.api.Project;

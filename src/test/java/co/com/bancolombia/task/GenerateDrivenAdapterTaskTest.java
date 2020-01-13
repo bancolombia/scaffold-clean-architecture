@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateDrivenAdapterTask;
