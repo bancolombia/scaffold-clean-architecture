@@ -33,7 +33,7 @@ public class GenerateStructureTaskTest {
 
         task.setPackage("test");
         task.setProjectName("projectTest");
-        task.generateStructure();
+        task.generateStructureTask();
     }
 
     @Test
@@ -48,7 +48,7 @@ public class GenerateStructureTaskTest {
         task.setPackage("test");
         task.setProjectName("projectTest");
         task.setType("reactive");
-        task.generateStructure();
+        task.generateStructureTask();
     }
 
 }

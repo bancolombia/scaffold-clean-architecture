@@ -27,7 +27,7 @@ public class GenerateModelTaskTest {
 
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
-        task.generateModel();
+        task.generateModelTask();
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GenerateModelTaskTest {
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
         task.setNameProject("nameModel");
-        task.generateModel();
+        task.generateModelTask();
     }
 
 }

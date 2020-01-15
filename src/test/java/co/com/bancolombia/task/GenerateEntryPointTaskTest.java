@@ -31,7 +31,7 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("-8");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -42,7 +42,7 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("100");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
     @Test
@@ -53,7 +53,7 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("1");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
     @Test
     public void generateEntryPointReactiveWeb() throws IOException, CleanException {
@@ -63,7 +63,7 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("2");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
 }

@@ -37,7 +37,7 @@ public class ValidateStructureTaskTest {
     @Test
     public void validateStructure() throws IOException, CleanException {
         // Act
-        task.validateStructure();
+        task.validateStructureTask();
         // Assert
     }
 

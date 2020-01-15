@@ -38,13 +38,13 @@ public class GenerateUseCaseTaskTest {
     @Test(expected = IllegalArgumentException.class)
     public void generateUseCaseException() throws IOException {
 
-        task.generateUseCase();
+        task.generateUseCaseTask();
     }
 
     @Test
     public void generateUseCase() throws IOException {
         task.setNameProject("useCaseTest");
-        task.generateUseCase();
+        task.generateUseCaseTask();
     }
 
     private void writeString(File file, String string) throws IOException {
