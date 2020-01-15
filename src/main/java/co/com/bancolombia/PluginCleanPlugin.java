@@ -9,9 +9,6 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
 
-/**
- * A simple 'hello world' plugin.
- */
 public class PluginCleanPlugin implements Plugin<Project> {
 
     private static String taskGroup = "Clean Architecture";
@@ -20,6 +17,7 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         // Register a task
         TaskContainer tasks = project.getTasks();
+
 
         Task generateStructure = tasks.create("cleanArchitecture", GenerateStructureTask.class);
         tasks.create("ca", GenerateStructureTask.class);
@@ -51,7 +49,5 @@ public class PluginCleanPlugin implements Plugin<Project> {
         tasks.create("vs", ValidateStructureTask.class);
         validateStructure.setGroup(taskGroup);
         validateStructure.setDescription("Validate that project references are not violated");
-
-
     }
 }

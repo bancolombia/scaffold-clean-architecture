@@ -11,16 +11,15 @@ import java.io.IOException;
 public class GenerateUseCaseTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
     private String useCaseName = "";
+    private String packageName;
+
 
     @Option(option = "name", description = "Set the UseCase name")
     public void setNameProject(String useCaseName) { this.useCaseName = useCaseName; }
 
     @TaskAction
-    public void generateUseCase() throws IOException {
-        String packageName;
-        if (useCaseName.isEmpty()) {
-            throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
-        }
+    public void generateUseCaseTask() throws IOException {
+        throwUseCase();
         packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}" , Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
@@ -35,8 +34,12 @@ public class GenerateUseCaseTask extends DefaultTask {
         logger.lifecycle("Writing in Files");
         Utils.writeString(getProject(), useCaseDir.concat("/").concat(Utils.capitalize(useCaseName) + Constants.JAVA_EXTENSION), Constants.getUseCase(useCaseName, packageName));
         logger.lifecycle("Writed in Files");
+    }
 
-
+    private void throwUseCase(){
+        if (useCaseName.isEmpty()) {
+            throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
+        }
     }
 }
 

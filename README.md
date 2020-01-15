@@ -61,7 +61,7 @@ gradle gda --value [referenceNumberDrivenAdapter]
 5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
 ```sh
 gradle generateEntryPoint --value=referenceNumberEntryPoint
-gradle gs --value referenceNumberEntryPoint
+gradle gep --value referenceNumberEntryPoint
  ```
 |      Reference number entry point      | Name       |
 | ------------------ | ------------ |
