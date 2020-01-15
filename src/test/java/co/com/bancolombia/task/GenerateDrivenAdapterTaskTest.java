@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateDrivenAdapterTask;
@@ -30,7 +30,7 @@ public class GenerateDrivenAdapterTaskTest {
         GenerateDrivenAdapterTask task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
 
         task.setDrivenAdapter("-8");
-        task.generateDrivenAdapter();
+        task.generateDrivenAdapterTask();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -41,7 +41,7 @@ public class GenerateDrivenAdapterTaskTest {
         GenerateDrivenAdapterTask task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
 
         task.setDrivenAdapter("100");
-        task.generateDrivenAdapter();
+        task.generateDrivenAdapterTask();
     }
 
     @Test
@@ -60,13 +60,13 @@ public class GenerateDrivenAdapterTaskTest {
         GenerateDrivenAdapterTask task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
 
         task.setDrivenAdapter("1");
-        task.generateDrivenAdapter();
+        task.generateDrivenAdapterTask();
 
         task.setDrivenAdapter("2");
-        task.generateDrivenAdapter();
+        task.generateDrivenAdapterTask();
 
         task.setDrivenAdapter("3");
-        task.generateDrivenAdapter();
+        task.generateDrivenAdapterTask();
     }
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {

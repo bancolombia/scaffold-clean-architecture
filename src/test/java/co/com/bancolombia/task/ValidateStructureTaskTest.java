@@ -1,10 +1,12 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
-import co.com.bancolombia.task.GenerateUseCaseTask;
+import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.ValidateStructureTask;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,8 +14,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
-public class GenerateUseCaseTaskTest {
-    private GenerateUseCaseTask task;
+public class ValidateStructureTaskTest {
+
+    ValidateStructureTask task;
 
     @Before
     public void init() throws IOException {
@@ -24,28 +27,20 @@ public class GenerateUseCaseTaskTest {
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
+
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("test", GenerateUseCaseTask.class);
+        project.getTasks().create("test", ValidateStructureTask.class);
 
-        task = (GenerateUseCaseTask) project.getTasks().getByName("test");
+        task = (ValidateStructureTask) project.getTasks().getByName("test");
     }
 
     @Test
-    public void settersTask() {
-        task.setNameProject("testName");
+    public void validateStructure() throws IOException, CleanException {
+        // Act
+        task.validateStructureTask();
+        // Assert
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void generateUseCaseException() throws IOException {
-
-        task.generateUseCase();
-    }
-
-    @Test
-    public void generateUseCase() throws IOException {
-        task.setNameProject("useCaseTest");
-        task.generateUseCase();
-    }
 
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {

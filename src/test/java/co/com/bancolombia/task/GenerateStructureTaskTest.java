@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.GenerateStructureTask;
 import org.gradle.api.Project;
@@ -33,8 +33,22 @@ public class GenerateStructureTaskTest {
 
         task.setPackage("test");
         task.setProjectName("projectTest");
-        task.setType("reacitve");
-        task.generateStructure();
+        task.generateStructureTask();
+    }
+
+    @Test
+    public void generateStructureReactive() throws IOException {
+
+
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        project.getTasks().create("test", GenerateStructureTask.class);
+
+        GenerateStructureTask task = (GenerateStructureTask) project.getTasks().getByName("test");
+
+        task.setPackage("test");
+        task.setProjectName("projectTest");
+        task.setType("reactive");
+        task.generateStructureTask();
     }
 
 }

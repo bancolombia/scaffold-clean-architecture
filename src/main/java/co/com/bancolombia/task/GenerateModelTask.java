@@ -17,7 +17,7 @@ public class GenerateModelTask extends DefaultTask {
     public void setNameProject(String modelName) { this.modelName = modelName; }
 
     @TaskAction
-    public void generateModel() throws IOException {
+    public void generateModelTask() throws IOException {
         String packageName;
         if (modelName.isEmpty()) {
             throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");

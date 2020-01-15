@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.GenerateModelTask;
 import org.gradle.api.Project;
@@ -27,7 +27,7 @@ public class GenerateModelTaskTest {
 
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
-        task.generateModel();
+        task.generateModelTask();
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GenerateModelTaskTest {
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
         task.setNameProject("nameModel");
-        task.generateModel();
+        task.generateModelTask();
     }
 
 }

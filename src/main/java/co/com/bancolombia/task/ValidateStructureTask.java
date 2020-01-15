@@ -18,7 +18,7 @@ public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
 
     @TaskAction
-    public void validateStructure() throws IOException, CleanException {
+    public void validateStructureTask() throws IOException, CleanException {
 
         String packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());

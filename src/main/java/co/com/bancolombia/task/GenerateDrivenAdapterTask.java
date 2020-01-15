@@ -22,7 +22,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     public void setDrivenAdapter(String number) { this.numberDrivenAdapter = Utils.tryParse(number); }
 
     @TaskAction
-    public void generateDrivenAdapter() throws IOException {
+    public void generateDrivenAdapterTask() throws IOException {
         String packageName;
         String nameDrivenAdapter;
         if (numberDrivenAdapter < 0) {

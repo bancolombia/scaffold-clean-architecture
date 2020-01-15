@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateEntryPointTask;
@@ -31,7 +31,7 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("-8");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -42,18 +42,28 @@ public class GenerateEntryPointTaskTest {
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("100");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
     @Test
-    public void generateEntryPoint() throws IOException, CleanException {
+    public void generateEntryPointApiRest() throws IOException, CleanException {
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        project.getTasks().create("test", GenerateEntryPointTask.class);
+
+        GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
+
+        task.setEntryPoint("1");
+        task.generateEntryPointTask();
+    }
+    @Test
+    public void generateEntryPointReactiveWeb() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateEntryPointTask.class);
 
         GenerateEntryPointTask task = (GenerateEntryPointTask) project.getTasks().getByName("test");
 
         task.setEntryPoint("2");
-        task.generateEntryPoint();
+        task.generateEntryPointTask();
     }
 
 }
