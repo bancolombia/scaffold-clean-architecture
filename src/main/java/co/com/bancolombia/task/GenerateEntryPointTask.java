@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class GenerateEntryPointTask extends DefaultTask {
 
     private String entryPoints =  "(1 -> API REST, 2 -> API REACTIVE)";
-    private int numberEntryPoint = -1;
+    private int codeEntryPoint = -1;
     private Logger logger = getProject().getLogger();
     private String packageName;
     private String nameEntryPoint;
@@ -21,7 +21,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private String entryPointPackage = null;
 
     @Option(option = "value", description = "Set the number of the entry point (1 -> API REST, 2 -> API REACTIVE)")
-    public void setEntryPoint(String number) { this.numberEntryPoint = Utils.tryParse(number); }
+    public void setCodeEntryPoint(String number) { this.codeEntryPoint = Utils.tryParse(number); }
 
     @TaskAction
     public void generateEntryPointTask() throws IOException {
@@ -31,18 +31,18 @@ public class GenerateEntryPointTask extends DefaultTask {
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
-        logger.lifecycle("Entry Point: {} - {}", numberEntryPoint, nameEntryPoint);
+        logger.lifecycle("Entry Point: {} - {}", codeEntryPoint, nameEntryPoint);
 
         setEntryPointPackage();
         generateEntryPoint();
     }
 
     private void throwEntryPointTask() throws IOException {
-        if (numberEntryPoint < 0) {
+        if (codeEntryPoint < 0) {
             throw new IllegalArgumentException("No Entry Point is set, usege: gradle generateEntryPoint --value numberEntryPoint");
         }
 
-        nameEntryPoint = Constants.getNameEntryPoint(numberEntryPoint);
+        nameEntryPoint = Constants.getNameEntryPoint(codeEntryPoint);
         if (nameEntryPoint == null) {
             throw new IllegalArgumentException("Entry Point not is available ".concat(entryPoints));
         }
@@ -50,10 +50,10 @@ public class GenerateEntryPointTask extends DefaultTask {
     }
 
     private void setEntryPointPackage(){
-        if (numberEntryPoint == 1){
+        if (codeEntryPoint == 1){
             entryPoint = "api-rest";
             entryPointPackage = "api";
-        }else if (numberEntryPoint == 2){
+        }else if (codeEntryPoint == 2){
             entryPoint = "reactive-web";
             entryPointPackage = "api";
         }
@@ -77,22 +77,22 @@ public class GenerateEntryPointTask extends DefaultTask {
 
     private String getBuildGradleEntryPointContent(){
         String value = null;
-        if (numberEntryPoint == 1) value = Constants.getBuildGradleApiRest();
-        else if (numberEntryPoint == 2) value = Constants.getBuildGradleReactiveWeb();
+        if (codeEntryPoint == 1) value = Constants.getBuildGradleApiRest();
+        else if (codeEntryPoint == 2) value = Constants.getBuildGradleReactiveWeb();
         return value;
     }
 
     private String getContentClassEntryPoint(){
         String value = null;
-        if (numberEntryPoint == 1) value = Constants.getApiRestClassContent(packageName.concat(".").concat(entryPointPackage));
-        else if (numberEntryPoint == 2) value = Constants.getReactiveWebClassContent(packageName.concat(".").concat(entryPointPackage));
+        if (codeEntryPoint == 1) value = Constants.getApiRestClassContent(packageName.concat(".").concat(entryPointPackage));
+        else if (codeEntryPoint == 2) value = Constants.getReactiveWebClassContent(packageName.concat(".").concat(entryPointPackage));
         return value;
     }
 
     private String getSettingsGradleEntryPoint(){
         String value = null;
-        if (numberEntryPoint == 1) value = Constants.getSettingsApiRestContent();
-        else if (numberEntryPoint == 2) value = Constants.getSettingsReactiveWebContent();
+        if (codeEntryPoint == 1) value = Constants.getSettingsApiRestContent();
+        else if (codeEntryPoint == 2) value = Constants.getSettingsReactiveWebContent();
         return value;
     }
 

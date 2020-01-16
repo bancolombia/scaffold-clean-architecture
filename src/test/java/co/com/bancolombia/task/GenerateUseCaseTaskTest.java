@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
+import static org.junit.Assert.assertTrue;
+
 public class GenerateUseCaseTaskTest {
     private GenerateUseCaseTask task;
 
@@ -30,10 +32,6 @@ public class GenerateUseCaseTaskTest {
         task = (GenerateUseCaseTask) project.getTasks().getByName("test");
     }
 
-    @Test
-    public void settersTask() {
-        task.setNameProject("testName");
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void generateUseCaseException() throws IOException {
@@ -45,6 +43,8 @@ public class GenerateUseCaseTaskTest {
     public void generateUseCase() throws IOException {
         task.setNameProject("useCaseTest");
         task.generateUseCaseTask();
+        assertTrue(new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/useCaseTest/UseCaseTest.java").exists());
+
     }
 
     private void writeString(File file, String string) throws IOException {

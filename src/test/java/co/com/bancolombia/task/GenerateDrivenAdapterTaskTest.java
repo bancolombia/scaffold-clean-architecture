@@ -12,15 +12,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
-public class GenerateDrivenAdapterTaskTest {
-    @Test
-    public void settersTask() {
-        Project project = ProjectBuilder.builder().build();
-        project.getTasks().create("test", GenerateDrivenAdapterTask.class);
-        GenerateDrivenAdapterTask task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
+import static org.junit.Assert.assertTrue;
 
-        task.setDrivenAdapter("1");
-    }
+public class GenerateDrivenAdapterTaskTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void generateDrivenAdapterValueNegative() throws IOException, CleanException {
@@ -67,6 +61,9 @@ public class GenerateDrivenAdapterTaskTest {
 
         task.setDrivenAdapter("3");
         task.generateDrivenAdapterTask();
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/secrets-manager-consumer/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets/SecretsManager.java").exists());
+
     }
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {

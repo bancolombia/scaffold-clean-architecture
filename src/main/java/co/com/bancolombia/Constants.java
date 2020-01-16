@@ -10,6 +10,10 @@ public class Constants {
 
     private Constants() {
     }
+    public static final String GENERATING_CHILDS_DIRS = "Generating Childs Dirs";
+    public static final String GENERATED_CHILDS_DIRS = "Generated Childs Dirs";
+    public static final String WRITING_IN_FILES = "Writing in Files";
+    public static final String WRITED_IN_FILES = "Writed in Files";
 
     public static final String VERSION_PLUGIN = "1.3";
     public static final String JAVA_EXTENSION = ".java";
@@ -289,7 +293,7 @@ public class Constants {
 
     }
 
-    public static String getSettingsGradleSecretsManagerContent() {
+    public static String getSettingsSecretsManagerContent() {
         return "\ninclude \":secrets-manager\"\n" +
                 "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
     }

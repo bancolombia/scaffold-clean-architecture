@@ -44,6 +44,8 @@ dependencies {
 	// Use JUnit test framework for unit tests
 	testImplementation 'junit:junit:4.12'
 	testCompile "org.mockito:mockito-core:2.9.0"
+	compileOnly 'org.projectlombok:lombok:1.18.10'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
 	compile gradleApi()
 }
 
