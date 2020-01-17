@@ -1,18 +1,19 @@
-package co.com.bancolombia.models.drivenAdapters;
+package co.com.bancolombia.models.entrypoints;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
 
-public class SecretManagerDrivenAdapter extends Module {
+public class ApiReactive extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.SECRET_MANAGER_CLASS;
+        return Constants.API_REST_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getSecretsManagerClassContent(super.getPackageName(), super.getModulePackage());
+        return Constants.getReactiveWebClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
     }
+
     @Override
     public String getInterfaceNameModule() {
         return null;
@@ -22,9 +23,10 @@ public class SecretManagerDrivenAdapter extends Module {
     public String getModuleInterfaceContent() {
         return null;
     }
+
     @Override
     public String getBuildGradleModule() {
-        return  null;
+        return null;
     }
 
     @Override
@@ -34,11 +36,16 @@ public class SecretManagerDrivenAdapter extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleSecretsManager();
+        return Constants.getBuildGradleReactiveWeb();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsSecretsManagerContent();
+        return Constants.getSettingsReactiveWebContent();
+    }
+
+    @Override
+    public String getInterfaceModule() {
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.DrivenAdapterFactoryImpl;
 import co.com.bancolombia.models.Module;
@@ -19,13 +20,13 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactoryImpl();
     private Module drivenAdapter;
 
-    @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer )")
+    @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer, 4 -> Async Event Bus )")
     public void setDrivenAdapter(String number) {
         this.numberDrivenAdapter = Utils.tryParse(number);
     }
 
     @TaskAction
-    public void generateDrivenAdapterTask() throws IOException {
+    public void generateDrivenAdapterTask() throws IOException, CleanException {
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         throwDrivenAdapterTask();
 
@@ -85,7 +86,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
 
         if (drivenAdapter.modelDirExist()) {
-            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Constants.SECRET_MANAGER_CONSUMER_CLASS).concat(Constants.JAVA_EXTENSION), Constants.getSecretsManagerInterfaceContent(drivenAdapter.getPackageName().concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS)));
+            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION),drivenAdapter.getInterfaceModule());
         }
     }
 

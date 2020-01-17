@@ -2,6 +2,7 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.EntryPointFactoryImpl;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.models.Module;
@@ -27,7 +28,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     }
 
     @TaskAction
-    public void generateEntryPointTask() throws IOException {
+    public void generateEntryPointTask() throws IOException, CleanException {
 
         throwEntryPointTask();
 

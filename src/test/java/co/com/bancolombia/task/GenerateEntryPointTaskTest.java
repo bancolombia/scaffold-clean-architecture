@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 public class GenerateEntryPointTaskTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void generateEntryPointValueNegative() throws IOException {
+    public void generateEntryPointValueNegative() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().build();
         project.getTasks().create("test", GenerateEntryPointTask.class);
 
@@ -36,7 +36,7 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
-    public void generateEntryPointApiRest() throws IOException {
+    public void generateEntryPointApiRest() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateEntryPointTask.class);
 
@@ -50,7 +50,7 @@ public class GenerateEntryPointTaskTest {
 
     }
     @Test
-    public void generateEntryPointReactiveWeb() throws IOException {
+    public void generateEntryPointReactiveWeb() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateEntryPointTask.class);
 

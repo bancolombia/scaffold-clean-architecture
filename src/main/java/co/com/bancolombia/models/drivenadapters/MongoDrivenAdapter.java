@@ -1,4 +1,4 @@
-package co.com.bancolombia.models.drivenAdapters;
+package co.com.bancolombia.models.drivenadapters;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
@@ -42,5 +42,10 @@ public class MongoDrivenAdapter extends Module {
     @Override
     public String getSettingsGradleModule() {
         return Constants.getSettingsMongoRepositoryContent().concat(Constants.getSettingsHelperMongoContent());
+    }
+
+    @Override
+    public String getInterfaceModule() {
+        return null;
     }
 }

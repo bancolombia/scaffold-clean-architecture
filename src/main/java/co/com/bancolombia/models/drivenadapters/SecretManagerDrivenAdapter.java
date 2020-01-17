@@ -1,19 +1,18 @@
-package co.com.bancolombia.models.entryPoints;
+package co.com.bancolombia.models.drivenadapters;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
 
-public class ApiRest extends Module {
+public class SecretManagerDrivenAdapter extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.API_REST_CLASS;
+        return Constants.SECRET_MANAGER_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return Constants.getSecretsManagerClassContent(super.getPackageName(), super.getModulePackage());
     }
-
     @Override
     public String getInterfaceNameModule() {
         return null;
@@ -23,10 +22,9 @@ public class ApiRest extends Module {
     public String getModuleInterfaceContent() {
         return null;
     }
-
     @Override
     public String getBuildGradleModule() {
-        return null;
+        return  null;
     }
 
     @Override
@@ -36,11 +34,16 @@ public class ApiRest extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleApiRest();
+        return Constants.getBuildGradleSecretsManager();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsApiRestContent();
+        return Constants.getSettingsSecretsManagerContent();
+    }
+
+    @Override
+    public String getInterfaceModule() {
+        return  Constants.getSecretsManagerInterfaceContent(super.getPackageName().concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS));
     }
 }

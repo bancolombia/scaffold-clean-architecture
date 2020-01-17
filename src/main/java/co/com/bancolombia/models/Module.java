@@ -13,6 +13,7 @@ public abstract class Module {
     private String helperPackage;
     private String moduleDir;
     private String helperDir;
+    private String modelName;
     private String modelDir;
 
     public abstract String getClassNameModule();
@@ -30,6 +31,8 @@ public abstract class Module {
     public abstract String getBuildGradleContentModule();
 
     public abstract String getSettingsGradleModule();
+
+    public abstract String getInterfaceModule();
 
     public boolean modelDirExist() {
         return modelDir != null;

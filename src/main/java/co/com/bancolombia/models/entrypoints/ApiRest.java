@@ -1,9 +1,9 @@
-package co.com.bancolombia.models.entryPoints;
+package co.com.bancolombia.models.entrypoints;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
 
-public class ApiReactive extends Module {
+public class ApiRest extends Module {
     @Override
     public String getClassNameModule() {
         return Constants.API_REST_CLASS;
@@ -11,7 +11,7 @@ public class ApiReactive extends Module {
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getReactiveWebClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return Constants.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
     }
 
     @Override
@@ -36,11 +36,16 @@ public class ApiReactive extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleReactiveWeb();
+        return Constants.getBuildGradleApiRest();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsReactiveWebContent();
+        return Constants.getSettingsApiRestContent();
+    }
+
+    @Override
+    public String getInterfaceModule() {
+        return null;
     }
 }

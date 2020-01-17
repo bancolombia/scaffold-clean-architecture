@@ -3,19 +3,17 @@ package co.com.bancolombia.factory;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.Module;
-import co.com.bancolombia.models.drivenAdapters.JPADrivenAdapter;
-import co.com.bancolombia.models.drivenAdapters.MongoDrivenAdapter;
-import co.com.bancolombia.models.drivenAdapters.SecretManagerDrivenAdapter;
-import co.com.bancolombia.models.entryPoints.ApiReactive;
-import co.com.bancolombia.models.entryPoints.ApiRest;
+import co.com.bancolombia.models.entrypoints.ApiReactive;
+import co.com.bancolombia.models.entrypoints.ApiRest;
 
 import java.io.IOException;
 
 public class EntryPointFactoryImpl implements ModuleFactory {
 
     @Override
-    public Module makeDrivenAdapter(int codeEntryPoint) throws IOException {
+    public Module makeDrivenAdapter(int codeEntryPoint) throws IOException, CleanException {
         Module entryPoint = null;
         if (Constants.getNameEntryPoint(codeEntryPoint) == null) {
             throw new IllegalArgumentException("Entry Point not is available (1 -> API REST, 2 -> API REACTIVE)");
@@ -32,9 +30,9 @@ public class EntryPointFactoryImpl implements ModuleFactory {
                 entryPoint.setName("reactive-web");
                 entryPoint.setModulePackage("api");
                 break;
-
             default:
-                break;
+                throw new CleanException("Entry Point invalid");
+
         }
 
         entryPoint.setPackageName(Utils.readProperties("package"));

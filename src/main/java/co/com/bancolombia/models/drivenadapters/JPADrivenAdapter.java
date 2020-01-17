@@ -1,4 +1,4 @@
-package co.com.bancolombia.models.drivenAdapters;
+package co.com.bancolombia.models.drivenadapters;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
@@ -44,5 +44,8 @@ public class JPADrivenAdapter extends Module {
         return Constants.getSettingsJPARepositoryContent().concat(Constants.getSettingsHelperJPAContent());
     }
 
-
+    @Override
+    public String getInterfaceModule() {
+        return null;
+    }
 }

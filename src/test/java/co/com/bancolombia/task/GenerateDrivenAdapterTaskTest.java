@@ -41,7 +41,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void generateDrivenAdapterValueUnExistent() throws IOException {
+    public void generateDrivenAdapterValueUnExistent() throws IOException, CleanException {
 
 
         task.setDrivenAdapter("100");
@@ -49,7 +49,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
-    public void generateDrivenAdapterJPARepository() throws IOException {
+    public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
 
         task.setDrivenAdapter("1");
         task.generateDrivenAdapterTask();
@@ -63,7 +63,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
-    public void generateDrivenAdapterMongoRepository() throws IOException {
+    public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
 
         task.setDrivenAdapter("2");
         task.generateDrivenAdapterTask();
@@ -78,7 +78,7 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
-    public void generateDrivenAdapterSecretsManager() throws IOException {
+    public void generateDrivenAdapterSecretsManager() throws IOException, CleanException {
 
         task.setDrivenAdapter("3");
         task.generateDrivenAdapterTask();
@@ -87,6 +87,18 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/common/gateways/SecretsManagerConsumer.java").exists());
 
     }
+
+    @Test
+    public void generateDrivenAdapterEventBus() throws IOException, CleanException {
+
+        task.setDrivenAdapter("4");
+        task.generateDrivenAdapterTask();
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/common/gateways/EventsGateway.java").exists());
+
+    }
+
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {
             writer.write(string);
