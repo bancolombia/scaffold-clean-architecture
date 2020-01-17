@@ -16,7 +16,7 @@ public class Constants {
     public static final String WRITING_IN_FILES = "Writing in Files";
     public static final String WRITED_IN_FILES = "Writed in Files";
 
-    public static final String VERSION_PLUGIN = "1.3";
+    public static final String VERSION_PLUGIN = "1.5";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -70,7 +70,7 @@ public class Constants {
 
 
     public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
-            "    implementation project(':model')\n" +
+            "    compile project(':model')\n" +
             "}";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
@@ -484,17 +484,6 @@ public class Constants {
                 "}";
 
     }
-
-    public static String getBuildGradleSecretsManager() {
-
-        return "dependencies {\n" +
-                "    implementation project(':model')\n" +
-                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
-                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
-                "}";
-
-    }
-
     public static String getBuildGradleJPARepository() {
 
         return "dependencies {\n" +
@@ -518,10 +507,20 @@ public class Constants {
                 "}";
     }
 
+    public static String getBuildGradleSecretsManager() {
+
+        return "dependencies {\n" +
+                "    implementation project(':model')\n" +
+                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
+                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
+                "}";
+
+    }
+
     public static String getBuildGradleEventBus() {
 
         return "dependencies {\n" +
-                "    compile project(':usecase')\n" +
+                "    compile project(':model')\n" +
                 "    compile group: 'org.reactivecommons', name: 'async-commons-starter', version: '0.0.7-beta1'\n" +
                 "    compile('org.springframework:spring-context')\n" +
                 "}";
@@ -872,7 +871,7 @@ public class Constants {
 
         return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
                 "\n" +
-                "import " + packageName + "." + COMMON + "." + GATEWAYS + "." + EVENT_BUS_GATEWAY_CLASS + ";\n" +
+                "import co.com.bancolombia.common.gateways.EventsGateway;\n" +
                 "import lombok.RequiredArgsConstructor;\n" +
                 "import lombok.extern.java.Log;\n" +
                 "import org.reactivecommons.api.domain.DomainEvent;\n" +
@@ -882,22 +881,25 @@ public class Constants {
                 "import reactor.core.publisher.Mono;\n" +
                 "import java.util.UUID;\n" +
                 "import java.util.logging.Level;\n" +
-                "import static reactor.core.publisher.Mono.from;\n"+
+                "import static reactor.core.publisher.Mono.from;\n" +
                 "\n" +
                 "@Log\n" +
                 "@Component\n" +
                 "@EnableDomainEventBus\n" +
                 "@RequiredArgsConstructor\n" +
-                "**/Permite personalizar la emisión de eventos, enriquecerla o interceptarla.\n" +
-                "Por defecto delega el proceso en reactive-commons.**/\n" +
+                "/**Permite personalizar la emisión de eventos, enriquecerla o interceptarla.\n" +
+                "Por defecto delega el proceso en reactive-commons.\n" +
+                " \n" +
+                " Remplazar el tipo del objeto  event por le modelo correspondiente\n" +
+                " **/\n" +
                 "public class ReactiveEventsGateway implements EventsGateway {\n" +
                 "\n" +
                 "    private final DomainEventBus domainEventBus;\n" +
                 "\n" +
                 "    @Override\n" +
                 "    public Mono<Void> emit(Object event) {\n" +
-                "        log.log(Level.INFO, \"Emitiendo evento de dominio: {0}: {1}\", new String[]{event.name(), event.toString()});\n" +
-                "        return from(domainEventBus.emit(new DomainEvent<>(event, UUID.randomUUID().toString(), event)));\n" +
+                "        log.log(Level.INFO, \"Emitiendo evento de dominio: {0}: {1}\", new String[]{(String) event, event.toString()});\n" +
+                "        return from(domainEventBus.emit(new DomainEvent<>((String) event, UUID.randomUUID().toString(), event)));\n" +
                 "    }\n" +
                 "}";
 
