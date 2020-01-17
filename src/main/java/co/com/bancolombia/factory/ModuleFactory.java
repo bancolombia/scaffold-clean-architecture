@@ -4,6 +4,6 @@ import co.com.bancolombia.models.DrivenAdapter;
 
 import java.io.IOException;
 
-public interface DrivenAdapterFactory {
+public interface ModuleFactory {
     DrivenAdapter makeDrivenAdapter(int codeDrivenAdapter) throws IOException;
 }

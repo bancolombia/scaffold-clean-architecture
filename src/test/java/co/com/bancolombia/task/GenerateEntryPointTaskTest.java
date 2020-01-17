@@ -44,6 +44,7 @@ public class GenerateEntryPointTaskTest {
 
         task.setCodeEntryPoint("1");
         task.generateEntryPointTask();
+        //TODO: add more asserts
         assertTrue(new File("build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
 
@@ -57,6 +58,7 @@ public class GenerateEntryPointTaskTest {
 
         task.setCodeEntryPoint("2");
         task.generateEntryPointTask();
+        //TODO: add more asserts
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
 

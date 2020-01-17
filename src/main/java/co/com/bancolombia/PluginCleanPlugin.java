@@ -3,11 +3,15 @@
  */
 package co.com.bancolombia;
 
+import co.com.bancolombia.models.TaskModel;
 import co.com.bancolombia.task.*;
 import org.gradle.api.Project;
 import org.gradle.api.Plugin;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PluginCleanPlugin implements Plugin<Project> {
 
@@ -17,37 +21,19 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
         // Register a task
         TaskContainer tasks = project.getTasks();
+        List<TaskModel> tasksModels = new ArrayList<>();
+        tasksModels.add(new TaskModel("cleanArchitecture","ca", "Scaffolding clean architecture project",taskGroup , GenerateStructureTask.class ));
+        tasksModels.add(new TaskModel("generateModel","gm", "Generate model in domain layer",taskGroup , GenerateModelTask.class ));
+        tasksModels.add(new TaskModel("generateUseCase","guc", "Generate use case in domain layer",taskGroup , GenerateUseCaseTask.class ));
+        tasksModels.add(new TaskModel("generateEntryPoint","gep", "Generate entry point in infrastructure layer",taskGroup , GenerateEntryPointTask.class ));
+        tasksModels.add(new TaskModel("generateDrivenAdapter","gda", "Generate driven adapter in infrastructure layer",taskGroup , GenerateDrivenAdapterTask.class ));
+        tasksModels.add(new TaskModel("validateStructure","vs", "Validate that project references are not violated", taskGroup , ValidateStructureTask.class ));
 
-
-        Task generateStructure = tasks.create("cleanArchitecture", GenerateStructureTask.class);
-        tasks.create("ca", GenerateStructureTask.class);
-
-        generateStructure.setGroup(taskGroup);
-        generateStructure.setDescription("Scaffolding clean architecture project");
-
-        Task generateModel = tasks.create("generateModel", GenerateModelTask.class);
-        tasks.create("gm", GenerateModelTask.class);
-        generateModel.setGroup(taskGroup);
-        generateModel.setDescription("Generate model in domain layer");
-
-        Task generateUseCase = tasks.create("generateUseCase", GenerateUseCaseTask.class);
-        tasks.create("guc", GenerateUseCaseTask.class);
-        generateUseCase.setGroup(taskGroup);
-        generateUseCase.setDescription("Generate use case in domain layer");
-
-        Task generateEntryPoint = tasks.create("generateEntryPoint", GenerateEntryPointTask.class);
-        tasks.create("gep", GenerateEntryPointTask.class);
-        generateEntryPoint.setGroup(taskGroup);
-        generateEntryPoint.setDescription("Generate entry point in infrastructure layer");
-
-        Task generateDrivenAdapter = tasks.create("generateDrivenAdapter", GenerateDrivenAdapterTask.class);
-        tasks.create("gda", GenerateDrivenAdapterTask.class);
-        generateDrivenAdapter.setGroup(taskGroup);
-        generateDrivenAdapter.setDescription("Generate driven adapter in infrastructure layer");
-
-        Task validateStructure = tasks.create("validateStructure", ValidateStructureTask.class);
-        tasks.create("vs", ValidateStructureTask.class);
-        validateStructure.setGroup(taskGroup);
-        validateStructure.setDescription("Validate that project references are not violated");
+        for (TaskModel t:tasksModels) {
+            Task temp = tasks.create(t.getName(),t.getTaskAction());
+            tasks.create(t.getShortcut(), t.getTaskAction());
+            temp.setGroup(t.getGroup());
+            temp.setDescription(t.getDescription());
+        }
     }
 }
