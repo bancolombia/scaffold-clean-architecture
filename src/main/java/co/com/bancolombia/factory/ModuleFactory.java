@@ -1,9 +1,9 @@
 package co.com.bancolombia.factory;
 
-import co.com.bancolombia.models.DrivenAdapter;
+import co.com.bancolombia.models.Module;
 
 import java.io.IOException;
 
 public interface ModuleFactory {
-    DrivenAdapter makeDrivenAdapter(int codeDrivenAdapter) throws IOException;
+    Module makeDrivenAdapter(int codeDrivenAdapter) throws IOException;
 }

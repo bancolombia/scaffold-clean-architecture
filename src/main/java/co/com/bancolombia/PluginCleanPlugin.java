@@ -19,18 +19,17 @@ public class PluginCleanPlugin implements Plugin<Project> {
 
     public void apply(Project project) {
 
-        // Register a task
         TaskContainer tasks = project.getTasks();
         List<TaskModel> tasksModels = new ArrayList<>();
-        tasksModels.add(new TaskModel("cleanArchitecture","ca", "Scaffolding clean architecture project",taskGroup , GenerateStructureTask.class ));
-        tasksModels.add(new TaskModel("generateModel","gm", "Generate model in domain layer",taskGroup , GenerateModelTask.class ));
-        tasksModels.add(new TaskModel("generateUseCase","guc", "Generate use case in domain layer",taskGroup , GenerateUseCaseTask.class ));
-        tasksModels.add(new TaskModel("generateEntryPoint","gep", "Generate entry point in infrastructure layer",taskGroup , GenerateEntryPointTask.class ));
-        tasksModels.add(new TaskModel("generateDrivenAdapter","gda", "Generate driven adapter in infrastructure layer",taskGroup , GenerateDrivenAdapterTask.class ));
-        tasksModels.add(new TaskModel("validateStructure","vs", "Validate that project references are not violated", taskGroup , ValidateStructureTask.class ));
+        tasksModels.add(new TaskModel("cleanArchitecture", "ca", "Scaffolding clean architecture project", taskGroup, GenerateStructureTask.class));
+        tasksModels.add(new TaskModel("generateModel", "gm", "Generate model in domain layer", taskGroup, GenerateModelTask.class));
+        tasksModels.add(new TaskModel("generateUseCase", "guc", "Generate use case in domain layer", taskGroup, GenerateUseCaseTask.class));
+        tasksModels.add(new TaskModel("generateEntryPoint", "gep", "Generate entry point in infrastructure layer", taskGroup, GenerateEntryPointTask.class));
+        tasksModels.add(new TaskModel("generateDrivenAdapter", "gda", "Generate driven adapter in infrastructure layer", taskGroup, GenerateDrivenAdapterTask.class));
+        tasksModels.add(new TaskModel("validateStructure", "vs", "Validate that project references are not violated", taskGroup, ValidateStructureTask.class));
 
-        for (TaskModel t:tasksModels) {
-            Task temp = tasks.create(t.getName(),t.getTaskAction());
+        for (TaskModel t : tasksModels) {
+            Task temp = tasks.create(t.getName(), t.getTaskAction());
             tasks.create(t.getShortcut(), t.getTaskAction());
             temp.setGroup(t.getGroup());
             temp.setDescription(t.getDescription());

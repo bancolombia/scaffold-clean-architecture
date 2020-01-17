@@ -4,7 +4,7 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.DrivenAdapterFactoryImpl;
-import co.com.bancolombia.models.DrivenAdapter;
+import co.com.bancolombia.models.Module;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -17,7 +17,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private int numberDrivenAdapter = -1;
     private Logger logger = getProject().getLogger();
     private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactoryImpl();
-    private DrivenAdapter drivenAdapter;
+    private Module drivenAdapter;
 
     @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer )")
     public void setDrivenAdapter(String number) {
@@ -32,7 +32,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         drivenAdapter = drivenAdapterFactory.makeDrivenAdapter(numberDrivenAdapter);
 
         logger.lifecycle("Project  Package: {}", drivenAdapter.getPackageName());
-        logger.lifecycle("Driven Adapter: {} - {}", drivenAdapter.getNumberDrivenAdapter(), drivenAdapter.getNameDrivenAdapter());
+        logger.lifecycle("Driven Adapter: {} - {}", drivenAdapter.getCode(), drivenAdapter.getName());
 
         generateDrivenAdapter();
     }
@@ -58,12 +58,12 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     }
 
     private void generateDirs() {
-        getProject().mkdir(drivenAdapter.getDrivenAdapterDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getDrivenAdapterPackage()));
-        getProject().mkdir(drivenAdapter.getDrivenAdapterDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getDrivenAdapterPackage()));
+        getProject().mkdir(drivenAdapter.getModuleDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getModulePackage()));
+        getProject().mkdir(drivenAdapter.getModuleDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getModulePackage()));
 
-        if (drivenAdapter.helperDrivenAdapterExist()) {
-            getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperDrivenAdapterPackage()));
-            getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperDrivenAdapterPackage()));
+        if (drivenAdapter.helperModuleExist()) {
+            getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()));
+            getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()));
         }
 
         if (drivenAdapter.modelDirExist()) {
@@ -72,16 +72,16 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     }
 
     private void writedFiles() throws IOException {
-        Utils.writeString(getProject(), drivenAdapter.getDrivenAdapterDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleContentDrivenAdapter());
-        Utils.writeString(getProject(), drivenAdapter.getDrivenAdapterDirSrc().concat("/").concat(drivenAdapter.getClassNameEntryPoint()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getDrivenAdapterClassContent());
+        Utils.writeString(getProject(), drivenAdapter.getModuleDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleContentModule());
+        Utils.writeString(getProject(), drivenAdapter.getModuleDirSrc().concat("/").concat(drivenAdapter.getClassNameModule()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getModuleClassContent());
 
-        if (drivenAdapter.getInterfaceNameEntryPoint() != null) {
-            Utils.writeString(getProject(), drivenAdapter.getDrivenAdapterDirSrc().concat("/").concat(drivenAdapter.getInterfaceNameEntryPoint()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getDrivenAdapterInterfaceContent());
+        if (drivenAdapter.getInterfaceNameModule() != null) {
+            Utils.writeString(getProject(), drivenAdapter.getModuleDirSrc().concat("/").concat(drivenAdapter.getInterfaceNameModule()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getModuleInterfaceContent());
         }
 
-        if (drivenAdapter.helperDrivenAdapterExist()) {
-            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleDrivenAdapter());
-            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperDrivenAdapterPackage()).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), drivenAdapter.getHelperDrivenAdapterClassContent());
+        if (drivenAdapter.helperModuleExist()) {
+            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleModule());
+            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), drivenAdapter.getHelperModuleClassContent());
         }
 
         if (drivenAdapter.modelDirExist()) {
@@ -91,7 +91,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
     private void rewriteSettingsGradle() throws IOException {
         String settings = Utils.readFile(getProject(), Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
-        settings += drivenAdapter.getSettingsGradleDrivenAdapter();
+        settings += drivenAdapter.getSettingsGradleModule();
         Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, settings);
     }
 }
