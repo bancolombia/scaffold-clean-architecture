@@ -11,7 +11,6 @@ import java.io.IOException;
 public class GenerateUseCaseTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
     private String useCaseName = "";
-    private String packageName;
 
 
     @Option(option = "name", description = "Set the UseCase name")
@@ -19,6 +18,7 @@ public class GenerateUseCaseTask extends DefaultTask {
 
     @TaskAction
     public void generateUseCaseTask() throws IOException {
+        String packageName;
         throwUseCase();
         packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}" , Utils.getVersionPlugin());
