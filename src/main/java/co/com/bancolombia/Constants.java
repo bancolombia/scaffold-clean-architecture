@@ -5,13 +5,18 @@ import java.util.Map;
 
 public class Constants {
 
-    public static final String COMMON ="common" ;
+    public static final String COMMON = "common";
     public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
+    public static final String EVENT_BUS_GATEWAY_CLASS = "EventsGateway";
 
     private Constants() {
     }
+    public static final String GENERATING_CHILDS_DIRS = "Generating Childs Dirs";
+    public static final String GENERATED_CHILDS_DIRS = "Generated Childs Dirs";
+    public static final String WRITING_IN_FILES = "Writing in Files";
+    public static final String WRITED_IN_FILES = "Writed in Files";
 
-    public static final String VERSION_PLUGIN = "1.3";
+    public static final String VERSION_PLUGIN = "1.5";
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -28,6 +33,7 @@ public class Constants {
      **/
     public static final String MAIN_JAVA = "src/main/java";
     public static final String MAIN_RESOURCES = "src/main/resources";
+    public static final String TEST_JAVA = "src/test/java";
     public static final String CONFIG = "config";
 
     /**
@@ -64,7 +70,7 @@ public class Constants {
 
 
     public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
-            "    implementation project(':model')\n" +
+            "    compile project(':model')\n" +
             "}";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
@@ -176,57 +182,73 @@ public class Constants {
             "## Entry Points\n" +
             "Los entry points representan los puntos de entrada de la aplicación o el inicio de los flujos de negocio.";
 
-    public static final String MAIN_GRADLE_CONTENT = "subprojects {\n" +
-            "    apply plugin: \"java\"\n" +
-            "    apply plugin: \"jacoco\"\n" +
-            "    apply plugin: 'io.spring.dependency-management'\n" +
-            "\n" +
-            "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
-            "\n" +
-            "    repositories {\n" +
-            "  \t\t mavenCentral()\n" +
-            "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
-            "         maven { url \"https://repo.spring.io/milestone\" }\n" +
-            "    }\n" +
-            "\n" +
-            "    dependencies {\n" +
-            "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n" +
-            "\n" +
-            "        compileOnly 'org.projectlombok:lombok'\n" +
-            "        annotationProcessor 'org.projectlombok:lombok'\n" +
-            "        testAnnotationProcessor 'org.projectlombok:lombok'\n" +
-            "        testCompileOnly 'org.projectlombok:lombok'\n" +
-            "    }\n" +
-            "\n" +
-            "\n" +
-            "    jacoco {\n" +
-            "        toolVersion = '0.8.2'\n" +
-            "    }\n" +
-            "\n" +
-            "    dependencyManagement {\n" +
-            "        imports {\n" +
-            "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n" +
-            "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
-            "        }\n" +
-            "    }\n" +
-            "}";
+    public static String mainGradleContent(String type) {
+        String value = "subprojects {\n" +
+                "    apply plugin: \"java\"\n" +
+                "    apply plugin: \"jacoco\"\n" +
+                "    apply plugin: 'io.spring.dependency-management'\n" +
+                "\n" +
+                "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
+                "\n" +
+                "    repositories {\n" +
+                "  \t\t mavenCentral()\n" +
+                "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
+                "         maven { url \"https://repo.spring.io/milestone\" }\n" +
+                "    }\n" +
+                "\n" +
+                "    dependencies {\n" +
+                "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n";
+        if (!type.equals("imperative")) {
+            value = value.concat("\n        testImplementation 'io.projectreactor:reactor-test'\n" +
+                    "        implementation 'io.projectreactor:reactor-core'\n" +
+                    "        implementation 'io.projectreactor.addons:reactor-extra'\n");
+        }
+        value = value.concat("\n" +
+                "        compileOnly 'org.projectlombok:lombok'\n" +
+                "        annotationProcessor 'org.projectlombok:lombok'\n" +
+                "        testAnnotationProcessor 'org.projectlombok:lombok'\n" +
+                "        testCompileOnly 'org.projectlombok:lombok'\n" +
+                "    }\n" +
+                "\n" +
+                "\n" +
+                "    jacoco {\n" +
+                "        toolVersion = '0.8.2'\n" +
+                "    }\n" +
+                "\n" +
+                "    dependencyManagement {\n" +
+                "        imports {\n" +
+                "            mavenBom \"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\"\n" +
+                "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}");
+        return value;
 
 
-    public static final String BUILD_GRADLE_APPLICATION_CONTENT = "apply plugin: 'org.springframework.boot'\n" +
-            "\n" +
-            "\n" +
-            "\n" +
-            "dependencies {\n" +
-            "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-            "implementation project(':model')\n" +
-            "implementation project(':usecase')\n" +
-            "\n" +
-            "runtime('org.springframework.boot:spring-boot-devtools')\n" +
-            "}\n" +
-            "jar {\n" +
-            "    archivesBaseName = rootProject.name\n" +
-            "    libsDirName = project(\":\").getBuildDir()\n" +
-            "}";
+    }
+
+    public static  String buildGradleApplicationContent(String type) {
+        String value = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "dependencies {\n" +
+                "    compile 'org.springframework.boot:spring-boot-starter'\n" +
+                "implementation project(':model')\n" +
+                "implementation project(':usecase')\n" +
+                "\n" ;
+        if (type.equals("reactive")){
+            value = value.concat("\tcompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n");
+        }
+        value = value.concat( "runtime('org.springframework.boot:spring-boot-devtools')\n" +
+                "}\n" +
+                "jar {\n" +
+                "    archivesBaseName = rootProject.name\n" +
+                "    libsDirName = project(\":\").getBuildDir()\n" +
+                "}");
+        return value;
+
+    }
 
 
     public static final String LOG_4_J_CONTENT = "name=PropertiesConfig\n" +
@@ -243,16 +265,23 @@ public class Constants {
             "rootLogger.appenderRefs = stdout\n" +
             "rootLogger.appenderRef.stdout.ref = STDOUT";
 
-    public static final String TEST_JAVA = "src/test/java";
 
     public static final String API_REST_CLASS = "ApiRest";
-    public static final String SECRET_MANAGER_CLASS = "SecretsManager";
-    public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
-    public static final String MONGO_REPOSITORY_INTERFACE = "IMongoRepository";
+
+
     public static final String JPA_REPOSITORY_CLASS = "JPARepositoryAdapter";
     public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
+
+    public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
+    public static final String MONGO_REPOSITORY_INTERFACE = "IMongoRepository";
+
+    public static final String SECRET_MANAGER_CLASS = "SecretsManager";
+    public static final String EVENT_BUS_CLASS = "ReactiveEventsGateway";
+
+
     public static final String MONGO_HELPER_CLASS = "AdapterOperations";
     public static final String JPA_HELPER_CLASS = "AdapterOperations";
+
     public static final String DOCKER_FILE_CONTENT = "FROM adoptopenjdk/openjdk8-openj9:alpine-slim\n" +
             "VOLUME /tmp\n" +
             "COPY *.jar app.jar\n" +
@@ -273,24 +302,29 @@ public class Constants {
 
     }
 
-    public static String getSettingsGradleSecretsManagerContent() {
-        return "\ninclude \":secrets-manager\"\n" +
-                "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
-    }
-
     public static String getSettingsJPARepositoryContent() {
         return "\ninclude \":jpa-repository\"\n" +
                 "project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')\n";
     }
 
-    public static String getSettingsHelperJPAContent() {
-        return "\ninclude \":jpa-repository-commons\"\n" +
-                "project(':jpa-repository-commons').projectDir = file('./infrastructure/helpers/jpa-repository-commons')\n";
-    }
-
     public static String getSettingsMongoRepositoryContent() {
         return "\ninclude \":mongo-repository\"\n" +
                 "project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')\n";
+    }
+
+    public static String getSettingsSecretsManagerContent() {
+        return "\ninclude \":secrets-manager\"\n" +
+                "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
+    }
+
+    public static String getSettingsEventBusContent() {
+        return "\ninclude \":async-event-bus\"\n" +
+                "project(':async-event-bus').projectDir = file('./infrastructure/driven-adapters/async-event-bus')\n";
+    }
+
+    public static String getSettingsHelperJPAContent() {
+        return "\ninclude \":jpa-repository-commons\"\n" +
+                "project(':jpa-repository-commons').projectDir = file('./infrastructure/helpers/jpa-repository-commons')\n";
     }
 
     public static String getSettingsHelperMongoContent() {
@@ -302,6 +336,10 @@ public class Constants {
     public static String getSettingsApiRestContent() {
         return "\ninclude \":api-rest\"\n" +
                 "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n";
+    }
+    public static String getSettingsReactiveWebContent() {
+        return "\ninclude \":reactive-web\"\n" +
+                "project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')\n";
     }
 
     public static String getApplicationPropertiesContent(String nameProject) {
@@ -410,6 +448,7 @@ public class Constants {
 
         if (ENTRY_POINTS_AVAILABLE.isEmpty()) {
             ENTRY_POINTS_AVAILABLE.put(1, "API REST IMPERATIVE");
+            ENTRY_POINTS_AVAILABLE.put(2, "API REST REACTIVE");
         }
         return ENTRY_POINTS_AVAILABLE.get(numberEntryPoint);
     }
@@ -420,6 +459,7 @@ public class Constants {
             DRIVEN_ADAPTERS_AVAILABLE.put(1, "JPA REPOSITORY");
             DRIVEN_ADAPTERS_AVAILABLE.put(2, "MONGO REPOSITORY");
             DRIVEN_ADAPTERS_AVAILABLE.put(3, "SECRETS MANAGER CONSUMER");
+            DRIVEN_ADAPTERS_AVAILABLE.put(4, "ASYNC EVENT BUS");
         }
         return DRIVEN_ADAPTERS_AVAILABLE.get(numberDriverAdapter);
     }
@@ -430,18 +470,28 @@ public class Constants {
         return "dependencies {\n" +
                 "    implementation project(':usecase')\n" +
                 "    implementation project(':model')\n" +
-                "   implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
                 "    implementation 'org.springframework.boot:spring-boot-starter-security'\n" +
                 "}";
 
     }
 
-    public static String getBuildGradleSecretsManager() {
+    public static String getBuildGradleReactiveWeb() {
 
         return "dependencies {\n" +
-                "    implementation project(':model')\n" +
-                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
-                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
+                "    implementation project(':usecase')\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-webflux'\n" +
+                "}";
+
+    }
+    public static String getBuildGradleJPARepository() {
+
+        return "dependencies {\n" +
+                "    compile 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
+                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
+                "    compile 'org.apache.commons:commons-dbcp2:2.2.0'\n" +
+                "\n" +
+                "    testCompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n" +
                 "}";
 
     }
@@ -457,14 +507,22 @@ public class Constants {
                 "}";
     }
 
-    public static String getBuildGradleJPARepository() {
+    public static String getBuildGradleSecretsManager() {
 
         return "dependencies {\n" +
-                "    compile 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
-                "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
-                "    compile 'org.apache.commons:commons-dbcp2:2.2.0'\n" +
-                "\n" +
-                "    testCompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n" +
+                "    implementation project(':model')\n" +
+                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
+                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
+                "}";
+
+    }
+
+    public static String getBuildGradleEventBus() {
+
+        return "dependencies {\n" +
+                "    compile project(':model')\n" +
+                "    compile group: 'org.reactivecommons', name: 'async-commons-starter', version: '0.0.7-beta1'\n" +
+                "    compile('org.springframework:spring-context')\n" +
                 "}";
 
     }
@@ -506,7 +564,7 @@ public class Constants {
                 "@RestController\n" +
                 "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
                 "@RequiredArgsConstructor\n" +
-                "public class "+ API_REST_CLASS +" {\n" +
+                "public class " + API_REST_CLASS + " {\n" +
                 "\n" +
                 "    private final Object useCase;\n" +
                 "\n" +
@@ -520,60 +578,33 @@ public class Constants {
                 "            Exception ex, WebRequest request) {\n" +
                 "        return new ResponseEntity<Object>(\n" +
                 "                \"Access denied message here\", new HttpHeaders(), HttpStatus.FORBIDDEN);\n" +
-                "    }"+
+                "    }" +
                 "}";
     }
 
-    public static String getSecretsManagerClassContent(String packageName,String drivenAdapterPackage) {
-        packageName = packageName.replaceAll("\\/", "\\.");
-
-        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
-                "\n" +
-                "import "+packageName  + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
-                "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;\n" +
-                "import org.springframework.stereotype.Repository;\n" +
-                "\n" +
-                "\n" +
-                "@Repository\n" +
-                "public class " + SECRET_MANAGER_CLASS + " implements "+ SECRET_MANAGER_CONSUMER_CLASS +" {\n" +
-                "\n" +
-                "\n" +
-                "    public " + SECRET_MANAGER_CLASS + "() {\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public Object getSecrets(Class cls, String secretRegion, String secretName) throws SecretException {\n" +
-                "        AbstractConnector connector = new AWSSecretManagerConnector(secretRegion);\n" +
-                "        GenericManager manager = new GenericManager(connector);\n" +
-                "        return manager.getSecretModel(secretName, cls);\n" +
-                "    }\n" +
-                "}";
-    }
-
-    public static String getMongoRepositoryClassContent(String packageName) {
+    public static String getReactiveWebClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
         return "package " + packageName + ";\n" +
                 "\n" +
-                "import org.reactivecommons.utils.ObjectMapper;\n" +
-                "import org.springframework.beans.factory.annotation.Autowired;\n" +
-                "import org.springframework.stereotype.Repository;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import org.springframework.http.MediaType;\n" +
+                "import org.springframework.web.bind.annotation.*;\n" +
+                "import reactor.core.publisher.Mono;\n"+
                 "\n" +
-                "import java.util.List;\n" +
                 "\n" +
-                "@Repository\n" +
-                "public class " + MONGO_REPOSITORY_CLASS + " extends AdapterOperations<Object, Object, String, " + MONGO_REPOSITORY_INTERFACE + "> " +
-                "/**        implements <INTERFACE DOMAIN> **/" +
-                "\n{\n" +
+                "@RestController\n" +
+                "@RequestMapping(value = \"/api\", produces = MediaType.APPLICATION_JSON_VALUE)\n" +
+                "@RequiredArgsConstructor\n" +
+                "public class " + API_REST_CLASS + " {\n" +
                 "\n" +
-                "    @Autowired\n" +
-                "    public " + MONGO_REPOSITORY_CLASS + "("+MONGO_REPOSITORY_INTERFACE +" repository, ObjectMapper mapper) {\n" +
-                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
+                "    private final Object useCase;\n" +
+                "\n" +
+                "    @GetMapping (path = \"/health\")\n" +
+                "    public Mono<Object> health() {\n" +
+                "        return Mono.empty();\n" +
                 "    }\n" +
-                "\n" +
+                "\n"+
                 "}";
     }
 
@@ -614,6 +645,30 @@ public class Constants {
                 "import java.util.List;\n" +
                 "\n" +
                 "public interface " + JPA_REPOSITORY_INTERFACE + " extends CrudRepository<Object, String>, QueryByExampleExecutor<Object> {\n" +
+                "}";
+    }
+
+    public static String getMongoRepositoryClassContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "import org.reactivecommons.utils.ObjectMapper;\n" +
+                "import org.springframework.beans.factory.annotation.Autowired;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "import java.util.List;\n" +
+                "\n" +
+                "@Repository\n" +
+                "public class " + MONGO_REPOSITORY_CLASS + " extends AdapterOperations<Object, Object, String, " + MONGO_REPOSITORY_INTERFACE + "> " +
+                "/**        implements <INTERFACE DOMAIN> **/" +
+                "\n{\n" +
+                "\n" +
+                "    @Autowired\n" +
+                "    public " + MONGO_REPOSITORY_CLASS + "(" + MONGO_REPOSITORY_INTERFACE + " repository, ObjectMapper mapper) {\n" +
+                "        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));\n" +
+                "    }\n" +
+                "\n" +
                 "}";
     }
 
@@ -782,6 +837,73 @@ public class Constants {
                 "}";
     }
 
+    public static String getSecretsManagerClassContent(String packageName, String drivenAdapterPackage) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
+                "\n" +
+                "import " + packageName + "." + COMMON + "." + GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
+                "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
+                "import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;\n" +
+                "import org.springframework.stereotype.Repository;\n" +
+                "\n" +
+                "\n" +
+                "@Repository\n" +
+                "public class " + SECRET_MANAGER_CLASS + " implements " + SECRET_MANAGER_CONSUMER_CLASS + " {\n" +
+                "\n" +
+                "\n" +
+                "    public " + SECRET_MANAGER_CLASS + "() {\n" +
+                "    }\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public Object getSecrets(Class cls, String secretRegion, String secretName) throws SecretException {\n" +
+                "        AbstractConnector connector = new AWSSecretManagerConnector(secretRegion);\n" +
+                "        GenericManager manager = new GenericManager(connector);\n" +
+                "        return manager.getSecretModel(secretName, cls);\n" +
+                "    }\n" +
+                "}";
+    }
+
+    public static String getEventBusClassContent(String packageName, String drivenAdapterPackage) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
+                "\n" +
+                "import co.com.bancolombia.common.gateways.EventsGateway;\n" +
+                "import lombok.RequiredArgsConstructor;\n" +
+                "import lombok.extern.java.Log;\n" +
+                "import org.reactivecommons.api.domain.DomainEvent;\n" +
+                "import org.reactivecommons.api.domain.DomainEventBus;\n" +
+                "import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;\n" +
+                "import org.springframework.stereotype.Component;\n" +
+                "import reactor.core.publisher.Mono;\n" +
+                "import java.util.UUID;\n" +
+                "import java.util.logging.Level;\n" +
+                "import static reactor.core.publisher.Mono.from;\n" +
+                "\n" +
+                "@Log\n" +
+                "@Component\n" +
+                "@EnableDomainEventBus\n" +
+                "@RequiredArgsConstructor\n" +
+                "/**Permite personalizar la emisión de eventos, enriquecerla o interceptarla.\n" +
+                "Por defecto delega el proceso en reactive-commons.\n" +
+                " \n" +
+                " Remplazar el tipo del objeto  event por le modelo correspondiente\n" +
+                " **/\n" +
+                "public class ReactiveEventsGateway implements EventsGateway {\n" +
+                "\n" +
+                "    private final DomainEventBus domainEventBus;\n" +
+                "\n" +
+                "    @Override\n" +
+                "    public Mono<Void> emit(Object event) {\n" +
+                "        log.log(Level.INFO, \"Emitiendo evento de dominio: {0}: {1}\", new String[]{(String) event, event.toString()});\n" +
+                "        return from(domainEventBus.emit(new DomainEvent<>((String) event, UUID.randomUUID().toString(), event)));\n" +
+                "    }\n" +
+                "}";
+
+    }
 
     public static String getSecretsManagerInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
@@ -790,6 +912,17 @@ public class Constants {
                 "\n" +
                 "public interface " + SECRET_MANAGER_CONSUMER_CLASS + "<T> {\n" +
                 "    T getSecrets(Class<T> cls, String secretRegion, String secretName) throws Exception;\n" +
+                "}";
+    }
+
+    public static String getEventBusInterfaceContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+
+        return "package " + packageName + ";\n" +
+                "\n" +
+                "import reactor.core.publisher.Mono;\n" +
+                "public interface " + EVENT_BUS_GATEWAY_CLASS + "<T> {\n" +
+                "       Mono<Void> emit(Object event);\n" +
                 "}";
     }
 }

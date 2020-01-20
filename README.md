@@ -12,7 +12,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.3"
+ id "co.com.bancolombia.cleanArchitecture" version "1.5"
 }
 ```
 
@@ -26,7 +26,7 @@ The Scaffolding Clean Architecture plugin will allow you create 6 task  :
 
  ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
 
-- ```type = <imperative>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
+- ```type = <imperative | reactive>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
 
 -  ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
 
@@ -57,15 +57,17 @@ gradle gda --value [referenceNumberDrivenAdapter]
 | 1|JPA Repository |
 | 2|Mongo Repository |
 | 3|Secrets Manager Consumer |
+| 4|Async Event Bus |
 
 5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
 ```sh
 gradle generateEntryPoint --value=referenceNumberEntryPoint
-gradle gs --value referenceNumberEntryPoint
+gradle gep --value referenceNumberEntryPoint
  ```
 |      Reference number entry point      | Name       |
 | ------------------ | ------------ |
 | 1|API REST (Spring Boot Starter Web) |
+| 2|API REST (Spring Boot Starter WebFlux) |
 
 
 

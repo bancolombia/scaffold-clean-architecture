@@ -1,4 +1,4 @@
-package co.com.bancolombia;
+package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.ValidateStructureTask;
@@ -37,7 +37,7 @@ public class ValidateStructureTaskTest {
     @Test
     public void validateStructure() throws IOException, CleanException {
         // Act
-        task.validateStructure();
+        task.validateStructureTask();
         // Assert
     }
 
