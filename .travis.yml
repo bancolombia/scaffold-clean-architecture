@@ -12,4 +12,4 @@ script:
   - gradle build --refresh-dependencies --no-daemon --continue
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - gradle publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
+  - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && gradle publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
