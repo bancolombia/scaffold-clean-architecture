@@ -5,7 +5,8 @@ jdk:
 
 os:
   - linux
-
+before_script:
+  - chmod +x gradlew
 script:
   - gradle test jacocoTestReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
   - gradle build --refresh-dependencies --no-daemon --continue
