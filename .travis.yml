@@ -10,5 +10,5 @@ script:
   - gradle test jacocoTestReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
   - gradle build --refresh-dependencies --no-daemon --continue
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash gradle assemble <(curl -s https://codecov.io/bash)
   - gradle publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
