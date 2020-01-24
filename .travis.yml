@@ -8,8 +8,8 @@ os:
 before_script:
   - chmod +x gradlew
 script:
-  - gradle test jacocoTestReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
-  - gradle build --refresh-dependencies --no-daemon --continue
+  - ./gradlew test jacocoTestReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
+  - ./gradlew build --refresh-dependencies --no-daemon --continue
 after_success:
-  - bash gradle assemble <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
   - gradle publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
