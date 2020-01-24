@@ -1,5 +1,6 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ public class UtilsTest {
 
     @Test
     public void getVersionPlugin() {
-        Assert.assertEquals(Constants.VERSION_PLUGIN, Utils.getVersionPlugin());
+        Assert.assertEquals(PluginTemplate.VERSION_PLUGIN, Utils.getVersionPlugin());
     }
 
     @Test

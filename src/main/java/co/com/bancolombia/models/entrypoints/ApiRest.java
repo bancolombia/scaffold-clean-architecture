@@ -1,17 +1,17 @@
 package co.com.bancolombia.models.entrypoints;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.EntryPointTemplate;
 
 public class ApiRest extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.API_REST_CLASS;
+        return EntryPointTemplate.API_REST_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return EntryPointTemplate.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class ApiRest extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleApiRest();
+        return EntryPointTemplate.getBuildGradleApiRest();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsApiRestContent();
+        return EntryPointTemplate.getSettingsApiRestContent();
     }
 
     @Override

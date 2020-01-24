@@ -1,5 +1,6 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
 import java.io.*;
 import java.nio.file.Files;
@@ -16,14 +17,12 @@ public class Utils {
     private static Properties properties = new Properties();
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
-        File file;
-        FileWriter fileWriter ;
         project.getLogger().debug(project.file(nameFile).getAbsolutePath());
+        File file = new File((project.file(nameFile).getAbsolutePath()));
 
-        file = new File((project.file(nameFile).getAbsolutePath()));
-        fileWriter = new FileWriter(file);
-        fileWriter.write(data);
-        fileWriter.close();
+        try(FileWriter fileWriter = new FileWriter(file)) {
+            fileWriter.write(data);
+        }
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
@@ -45,7 +44,7 @@ public class Utils {
             return string;
         }
 
-        char c[] = string.toCharArray();
+        char[] c = string.toCharArray();
         c[0] = Character.toLowerCase(c[0]);
 
         return new String(c);
@@ -62,7 +61,7 @@ public class Utils {
     }
 
     public static String  getVersionPlugin(){
-        return Constants.VERSION_PLUGIN;
+        return PluginTemplate.VERSION_PLUGIN;
     }
 
     public static Integer tryParse(String number) {

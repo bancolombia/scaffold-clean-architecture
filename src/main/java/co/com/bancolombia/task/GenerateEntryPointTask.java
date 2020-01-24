@@ -1,11 +1,12 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.EntryPointFactoryImpl;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -48,17 +49,17 @@ public class GenerateEntryPointTask extends DefaultTask {
     }
 
     private void generateEntryPoint() throws IOException {
-        logger.lifecycle(Constants.GENERATING_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
 
         makeDirs();
 
-        logger.lifecycle(Constants.GENERATED_CHILDS_DIRS);
-        logger.lifecycle(Constants.WRITING_IN_FILES);
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
 
         writedFiles();
         rewriteSettingsGradle();
 
-        logger.lifecycle(Constants.WRITED_IN_FILES);
+        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
     private void makeDirs() {

@@ -1,6 +1,6 @@
 package co.com.bancolombia.models;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import lombok.Data;
 
 @Data

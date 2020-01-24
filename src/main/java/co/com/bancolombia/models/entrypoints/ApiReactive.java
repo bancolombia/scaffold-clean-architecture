@@ -1,17 +1,17 @@
 package co.com.bancolombia.models.entrypoints;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.EntryPointTemplate;
 
 public class ApiReactive extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.API_REST_CLASS;
+        return EntryPointTemplate.API_REST_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getReactiveWebClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return EntryPointTemplate.getReactiveWebClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class ApiReactive extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleReactiveWeb();
+        return EntryPointTemplate.getBuildGradleReactiveWeb();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsReactiveWebContent();
+        return EntryPointTemplate.getSettingsReactiveWebContent();
     }
 
     @Override

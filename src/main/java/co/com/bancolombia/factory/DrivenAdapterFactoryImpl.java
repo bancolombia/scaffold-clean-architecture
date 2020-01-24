@@ -1,6 +1,6 @@
 package co.com.bancolombia.factory;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.Module;
@@ -8,6 +8,7 @@ import co.com.bancolombia.models.drivenadapters.AsyncEventBusDrivenAdapter;
 import co.com.bancolombia.models.drivenadapters.JPADrivenAdapter;
 import co.com.bancolombia.models.drivenadapters.MongoDrivenAdapter;
 import co.com.bancolombia.models.drivenadapters.SecretManagerDrivenAdapter;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 import java.io.IOException;
 
@@ -16,10 +17,9 @@ public class DrivenAdapterFactoryImpl implements ModuleFactory {
     @Override
     public Module makeDrivenAdapter(int codeDrivenAdapter) throws IOException, CleanException {
         Module drivenAdapter = null;
-        if (Constants.getNameDrivenAdapter(codeDrivenAdapter) == null) {
+        if (DrivenAdapterTemplate.getNameDrivenAdapter(codeDrivenAdapter) == null) {
             throw new IllegalArgumentException("Entry Point not is available (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer, 4 -> Async Event Bus )");
         }
-
 
         switch (codeDrivenAdapter) {
             case 1:
@@ -40,14 +40,13 @@ public class DrivenAdapterFactoryImpl implements ModuleFactory {
                 drivenAdapter = new SecretManagerDrivenAdapter();
                 drivenAdapter.setName("secrets-manager-consumer");
                 drivenAdapter.setModulePackage("secrets");
-                drivenAdapter.setModelName(Constants.SECRET_MANAGER_CONSUMER_CLASS);
+                drivenAdapter.setModelName(DrivenAdapterTemplate.SECRET_MANAGER_CONSUMER_CLASS);
                 break;
             case 4:
                 drivenAdapter = new AsyncEventBusDrivenAdapter();
                 drivenAdapter.setName("async-event-bus");
                 drivenAdapter.setModulePackage("events");
-                drivenAdapter.setModelName(Constants.EVENT_BUS_GATEWAY_CLASS);
-
+                drivenAdapter.setModelName(DrivenAdapterTemplate.EVENT_BUS_GATEWAY_CLASS);
                 break;
             default:
                 throw new CleanException("Driven Adapter invalid");

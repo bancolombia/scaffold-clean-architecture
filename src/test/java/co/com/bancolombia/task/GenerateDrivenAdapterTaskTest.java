@@ -69,7 +69,7 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
 
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/IMongoRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
 
         assertTrue(new File("build/unitTest/infrastructure//helpers/mongo-repository-commons/build.gradle").exists());

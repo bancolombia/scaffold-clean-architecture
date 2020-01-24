@@ -1,11 +1,14 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.DrivenAdapterFactoryImpl;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
+import co.com.bancolombia.templates.HelperTemplate;
+import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -45,17 +48,17 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     }
 
     private void generateDrivenAdapter() throws IOException {
-        logger.info(Constants.GENERATING_CHILDS_DIRS);
+        logger.info(PluginTemplate.GENERATING_CHILDS_DIRS);
 
         generateDirs();
 
-        logger.lifecycle(Constants.GENERATED_CHILDS_DIRS);
-        logger.lifecycle(Constants.WRITING_IN_FILES);
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
 
         writedFiles();
         rewriteSettingsGradle();
 
-        logger.lifecycle(Constants.WRITED_IN_FILES);
+        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
     private void generateDirs() {
@@ -68,7 +71,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
 
         if (drivenAdapter.modelDirExist()) {
-            getProject().mkdir(drivenAdapter.getModelDir().concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS));
+            getProject().mkdir(drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS));
         }
     }
 
@@ -82,11 +85,11 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
         if (drivenAdapter.helperModuleExist()) {
             Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleModule());
-            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()).concat("/").concat(Constants.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), drivenAdapter.getHelperModuleClassContent());
+            Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()).concat("/").concat(HelperTemplate.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), drivenAdapter.getHelperModuleClassContent());
         }
 
         if (drivenAdapter.modelDirExist()) {
-            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(Constants.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION),drivenAdapter.getInterfaceModule());
+            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION),drivenAdapter.getInterfaceModule());
         }
     }
 

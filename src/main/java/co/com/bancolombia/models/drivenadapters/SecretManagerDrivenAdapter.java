@@ -1,17 +1,18 @@
 package co.com.bancolombia.models.drivenadapters;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 public class SecretManagerDrivenAdapter extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.SECRET_MANAGER_CLASS;
+        return DrivenAdapterTemplate.SECRET_MANAGER_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getSecretsManagerClassContent(super.getPackageName(), super.getModulePackage());
+        return DrivenAdapterTemplate.getSecretsManagerClassContent(super.getPackageName(), super.getModulePackage());
     }
     @Override
     public String getInterfaceNameModule() {
@@ -34,16 +35,16 @@ public class SecretManagerDrivenAdapter extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleSecretsManager();
+        return DrivenAdapterTemplate.getBuildGradleSecretsManager();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsSecretsManagerContent();
+        return DrivenAdapterTemplate.getSettingsSecretsManagerContent();
     }
 
     @Override
     public String getInterfaceModule() {
-        return  Constants.getSecretsManagerInterfaceContent(super.getPackageName().concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS));
+        return  DrivenAdapterTemplate.getSecretsManagerInterfaceContent(super.getPackageName().concat(".").concat(DrivenAdapterTemplate.COMMON).concat(".").concat(Constants.GATEWAYS));
     }
 }

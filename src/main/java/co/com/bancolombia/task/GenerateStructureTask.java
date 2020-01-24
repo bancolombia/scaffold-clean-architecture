@@ -1,7 +1,10 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.templates.ScaffoldTemplate;
+import co.com.bancolombia.templates.UseCaseTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -35,16 +38,16 @@ public class GenerateStructureTask extends DefaultTask {
         packageName = packageName.replaceAll("\\.", "\\/");
         logger.lifecycle("Project Type: {}", type);
         logger.lifecycle("Project Name: {}", projectName);
-        logger.lifecycle("Generating Dirs");
+        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
         createDirs();
-        logger.lifecycle("Generated Dirs");
-        logger.lifecycle("Writing in Files");
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
         writeFiles();
-        logger.lifecycle("Writed in Files");
+        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
     private void createDirs()  {
-        getProject().mkdir(Constants.DEPLOYMENT);
+        getProject().mkdir(ScaffoldTemplate.DEPLOYMENT);
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.CONFIG));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES));
@@ -61,19 +64,19 @@ public class GenerateStructureTask extends DefaultTask {
     }
 
     private void writeFiles() throws IOException {
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
+        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), UseCaseTemplate.BUILD_GRADLE_USE_CASE_CONTENT);
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE),"");
-        Utils.writeString(getProject(), Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE), Constants.DOCKER_FILE_CONTENT);
-        Utils.writeString(getProject(), Constants.LOMBOK_CONFIG, Constants.LOMBOK_CONFIG_CONTENT);
-        Utils.writeString(getProject(), Constants.GITIGNORE, Constants.GIT_IGNORE_CONTENT);
-        Utils.writeString(getProject(), Constants.READ_ME, Constants.README_CONTENT);
-        Utils.writeString(getProject(), Constants.GRADLE_PROPERTIES, Constants.getGradlePropertiesContent(packageName));
-        Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, Constants.getSettingsGradleContent(this.projectName));
-        Utils.writeString(getProject(), Constants.BUILD_GRADLE, Constants.getBuildGradleContent());
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES), Constants.getApplicationPropertiesContent(this.projectName));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J), Constants.LOG_4_J_CONTENT);
-        Utils.writeString(getProject(), Constants.MAIN_GRADLE, Constants.mainGradleContent(type));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE), Constants.buildGradleApplicationContent(type));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MAIN_APPLICATION), Constants.getMainApplicationContent(this.projectName));
+        Utils.writeString(getProject(), ScaffoldTemplate.DEPLOYMENT.concat("/").concat(ScaffoldTemplate.DOCKERFILE), ScaffoldTemplate.DOCKER_FILE_CONTENT);
+        Utils.writeString(getProject(), ScaffoldTemplate.LOMBOK_CONFIG, ScaffoldTemplate.LOMBOK_CONFIG_CONTENT);
+        Utils.writeString(getProject(), ScaffoldTemplate.GITIGNORE, ScaffoldTemplate.GIT_IGNORE_CONTENT);
+        Utils.writeString(getProject(), ScaffoldTemplate.READ_ME, ScaffoldTemplate.README_CONTENT);
+        Utils.writeString(getProject(), ScaffoldTemplate.GRADLE_PROPERTIES, ScaffoldTemplate.getGradlePropertiesContent(packageName));
+        Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, ScaffoldTemplate.getSettingsGradleContent(this.projectName));
+        Utils.writeString(getProject(), Constants.BUILD_GRADLE, ScaffoldTemplate.getBuildGradleContent());
+        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(ScaffoldTemplate.APPLICATION_PROPERTIES), ScaffoldTemplate.getApplicationPropertiesContent(this.projectName));
+        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(ScaffoldTemplate.LOG_4_J), ScaffoldTemplate.LOG_4_J_CONTENT);
+        Utils.writeString(getProject(), Constants.MAIN_GRADLE, ScaffoldTemplate.getMainGradleContent(type));
+        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE), ScaffoldTemplate.getBuildGradleApplicationContent(type));
+        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(ScaffoldTemplate.MAIN_APPLICATION), ScaffoldTemplate.getMainApplicationContent(this.projectName));
     }
 }

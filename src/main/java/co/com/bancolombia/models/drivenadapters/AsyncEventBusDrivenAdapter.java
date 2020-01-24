@@ -1,17 +1,18 @@
 package co.com.bancolombia.models.drivenadapters;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.models.Module;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 public class AsyncEventBusDrivenAdapter extends Module {
     @Override
     public String getClassNameModule() {
-        return Constants.EVENT_BUS_CLASS;
+        return DrivenAdapterTemplate.EVENT_BUS_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getEventBusClassContent(super.getPackageName(), super.getModulePackage());
+        return DrivenAdapterTemplate.getEventBusClassContent(super.getPackageName(), super.getModulePackage());
     }
 
     @Override
@@ -30,16 +31,16 @@ public class AsyncEventBusDrivenAdapter extends Module {
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleEventBus();
+        return DrivenAdapterTemplate.getBuildGradleEventBus();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsEventBusContent();
+        return DrivenAdapterTemplate.getSettingsEventBusContent();
     }
 
     @Override
     public String getInterfaceModule() {
-        return  Constants.getEventBusInterfaceContent(super.getPackageName().concat(".").concat(Constants.COMMON).concat(".").concat(Constants.GATEWAYS));
+        return  DrivenAdapterTemplate.getEventBusInterfaceContent(super.getPackageName().concat(".").concat(DrivenAdapterTemplate.COMMON).concat(".").concat(Constants.GATEWAYS));
     }
 }
