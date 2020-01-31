@@ -8,6 +8,7 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+
 import java.io.IOException;
 
 public class GenerateUseCaseTask extends DefaultTask {
@@ -16,14 +17,16 @@ public class GenerateUseCaseTask extends DefaultTask {
 
 
     @Option(option = "name", description = "Set the UseCase name")
-    public void setNameProject(String useCaseName) { this.useCaseName = useCaseName; }
+    public void setNameProject(String useCaseName) {
+        this.useCaseName = useCaseName;
+    }
 
     @TaskAction
     public void generateUseCaseTask() throws IOException {
         String packageName;
         throwUseCase();
         packageName = Utils.readProperties("package");
-        logger.lifecycle("Clean Architecture plugin version: {}" , Utils.getVersionPlugin());
+        logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         String useCaseDir = Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE).concat("/").concat(Utils.decapitalize(useCaseName));
@@ -38,7 +41,7 @@ public class GenerateUseCaseTask extends DefaultTask {
         logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
-    private void throwUseCase(){
+    private void throwUseCase() {
         if (useCaseName.isEmpty()) {
             throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
         }

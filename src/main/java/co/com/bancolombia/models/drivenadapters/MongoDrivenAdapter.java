@@ -1,10 +1,30 @@
 package co.com.bancolombia.models.drivenadapters;
 
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 import co.com.bancolombia.templates.HelperTemplate;
 
-public class MongoDrivenAdapter extends Module {
+import java.io.IOException;
+
+public class MongoDrivenAdapter extends AbstractModule {
+
+    public MongoDrivenAdapter() throws IOException {
+        super();
+        super.setName("mongo-repository");
+        super.setNameHelper("mongo-repository-commons");
+        super.setModulePackage("mongo");
+        super.setHelperPackage("mongo");
+        super.setModuleDir(Constants.INFRASTRUCTURE
+                .concat("/").concat(Constants.DRIVEN_ADAPTERS)
+                .concat("/").concat(super.getName()));
+        if (super.helperModuleExist()) {
+            super.setHelperDir(Constants.INFRASTRUCTURE
+                    .concat("/").concat(Constants.HELPERS)
+                    .concat("/").concat(super.getNameHelper()));
+        }
+    }
+
     @Override
     public String getClassNameModule() {
         return DrivenAdapterTemplate.MONGO_REPOSITORY_CLASS;
@@ -12,7 +32,9 @@ public class MongoDrivenAdapter extends Module {
 
     @Override
     public String getModuleClassContent() {
-        return DrivenAdapterTemplate.getMongoRepositoryClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return DrivenAdapterTemplate
+                .getMongoRepositoryClassContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
@@ -22,17 +44,21 @@ public class MongoDrivenAdapter extends Module {
 
     @Override
     public String getModuleInterfaceContent() {
-        return DrivenAdapterTemplate.getMongoRepositoryInterfaceContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return DrivenAdapterTemplate
+                .getMongoRepositoryInterfaceContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
     public String getBuildGradleModule() {
-        return  HelperTemplate.getBuildGradleHelperMongoRepository();
+        return HelperTemplate.getBuildGradleHelperMongoRepository();
     }
 
     @Override
     public String getHelperModuleClassContent() {
-        return  HelperTemplate.getHelperMongoRepositoryClassContent(super.getPackageName().concat(".").concat(super.getHelperPackage()));
+        return HelperTemplate
+                .getHelperMongoRepositoryClassContent(super.getPackageName()
+                        .concat(".").concat(super.getHelperPackage()));
     }
 
     @Override
@@ -42,7 +68,9 @@ public class MongoDrivenAdapter extends Module {
 
     @Override
     public String getSettingsGradleModule() {
-        return DrivenAdapterTemplate.getSettingsMongoRepositoryContent().concat(HelperTemplate.getSettingsHelperMongoContent());
+        return DrivenAdapterTemplate
+                .getSettingsMongoRepositoryContent().
+                        concat(HelperTemplate.getSettingsHelperMongoContent());
     }
 
     @Override

@@ -7,9 +7,10 @@ public class EntryPointTemplate {
 
     public static final String API_REST_CLASS = "ApiRest";
 
+    private static final Map<Integer, String> ENTRY_POINTS_AVAILABLE = new HashMap<>();
+
     private EntryPointTemplate(){}
 
-    private static final Map<Integer, String> ENTRY_POINTS_AVAILABLE = new HashMap<>();
 
     public static String getBuildGradleApiRest() {
 

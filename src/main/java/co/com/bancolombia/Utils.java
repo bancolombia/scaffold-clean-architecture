@@ -2,6 +2,8 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
+import org.gradle.internal.impldep.org.apache.commons.io.FilenameUtils;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,22 +14,27 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 public class Utils {
-    private Utils(){}
-
     private static Properties properties = new Properties();
+
+    private Utils() {
+    }
 
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         project.getLogger().debug(project.file(nameFile).getAbsolutePath());
-        File file = new File((project.file(nameFile).getAbsolutePath()));
+        File file = project
+                .file(FilenameUtils.getFullPath(nameFile) + FilenameUtils.getName(nameFile))
+                .getAbsoluteFile();
 
-        try(FileWriter fileWriter = new FileWriter(file)) {
+        try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(data);
         }
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
-        project.getLogger().debug(project.file(nameFile).getAbsolutePath());
-        return Files.lines(Paths.get(project.file(nameFile).getAbsolutePath())) ;
+        File file = project.file(FilenameUtils.getFullPath(nameFile) + FilenameUtils.getName(nameFile))
+                .getAbsoluteFile();
+        project.getLogger().debug(file.getAbsolutePath());
+        return Files.lines(Paths.get(file.toURI()));
 
     }
 
@@ -50,30 +57,32 @@ public class Utils {
         return new String(c);
     }
 
-    public static String readProperties(String variable) throws  IOException {
+    public static String readProperties(String variable) throws IOException {
         properties.load(new FileReader("gradle.properties"));
-        if (properties.getProperty(variable) != null)
+        if (properties.getProperty(variable) != null) {
             return properties.getProperty(variable);
-        else {
+        } else {
             throw new IOException("No parameter" + variable + " in build.properties file");
 
         }
     }
 
-    public static String  getVersionPlugin(){
+    public static String getVersionPlugin() {
         return PluginTemplate.VERSION_PLUGIN;
     }
 
     public static Integer tryParse(String number) {
         try {
             return Integer.parseInt(number);
-        } catch (NumberFormatException  e) {
-            throw new NumberFormatException ("The value is invalid");
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("The value is invalid");
         }
     }
 
-    public static List<File> finderSubProjects(String dirPath){
-        File[] directories = new File(dirPath).listFiles(File::isDirectory);
+    public static List<File> finderSubProjects(String dirPath) {
+        File[] directories = new File(FilenameUtils.getFullPath(dirPath), FilenameUtils.getName(dirPath))
+                .getAbsoluteFile()
+                .listFiles(File::isDirectory);
         FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
         List<File> textFiles = new ArrayList<>();
         for (File dir : directories) {
@@ -81,4 +90,5 @@ public class Utils {
         }
         return textFiles;
     }
+
 }

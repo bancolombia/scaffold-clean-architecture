@@ -10,20 +10,22 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import java.io.IOException;
 
-
 public class GenerateModelTask extends DefaultTask {
     private String modelName = "";
     private Logger logger = getProject().getLogger();
 
     @Option(option = "name", description = "Set the model name")
-    public void setNameProject(String modelName) { this.modelName = modelName; }
+    public void setNameProject(String modelName) {
+        this.modelName = modelName;
+    }
 
     @TaskAction
     public void generateModelTask() throws IOException {
-        String packageName;
         if (modelName.isEmpty()) {
             throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");
         }
+
+        String packageName;
         packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);

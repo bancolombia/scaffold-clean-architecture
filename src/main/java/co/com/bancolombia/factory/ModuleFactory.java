@@ -1,10 +1,10 @@
 package co.com.bancolombia.factory;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
 
 import java.io.IOException;
 
 public interface ModuleFactory {
-    Module makeDrivenAdapter(int codeDrivenAdapter) throws IOException, CleanException;
+    AbstractModule makeDrivenAdapter(int codeDrivenAdapter) throws IOException, CleanException;
 }

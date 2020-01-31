@@ -9,6 +9,7 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+
 import java.io.IOException;
 
 
@@ -19,7 +20,9 @@ public class GenerateStructureTask extends DefaultTask {
     private String projectName = "cleanArchitecture";
 
     @Option(option = "package", description = "Set the principal package to use in the project")
-    public void setPackage(String packageName) { this.packageName = packageName; }
+    public void setPackage(String packageName) {
+        this.packageName = packageName;
+    }
 
     @Option(option = "type", description = "Set project type, the options are  (reactive | imperative) ")
     public void setType(String type) {
@@ -46,7 +49,7 @@ public class GenerateStructureTask extends DefaultTask {
         logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
-    private void createDirs()  {
+    private void createDirs() {
         getProject().mkdir(ScaffoldTemplate.DEPLOYMENT);
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.CONFIG));
         getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
@@ -65,7 +68,7 @@ public class GenerateStructureTask extends DefaultTask {
 
     private void writeFiles() throws IOException {
         Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), UseCaseTemplate.BUILD_GRADLE_USE_CASE_CONTENT);
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE),"");
+        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE), "");
         Utils.writeString(getProject(), ScaffoldTemplate.DEPLOYMENT.concat("/").concat(ScaffoldTemplate.DOCKERFILE), ScaffoldTemplate.DOCKER_FILE_CONTENT);
         Utils.writeString(getProject(), ScaffoldTemplate.LOMBOK_CONFIG, ScaffoldTemplate.LOMBOK_CONFIG_CONTENT);
         Utils.writeString(getProject(), ScaffoldTemplate.GITIGNORE, ScaffoldTemplate.GIT_IGNORE_CONTENT);

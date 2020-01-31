@@ -38,6 +38,7 @@ public class ValidateStructureTask extends DefaultTask {
         logger.lifecycle("The project is valid");
 
     }
+
     //TODO: Complete
     public boolean validateEntryPointLayer() throws IOException {
         List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
@@ -68,9 +69,6 @@ public class ValidateStructureTask extends DefaultTask {
 
 
     private boolean validateUseCaseLayer() {
-        String modelDependency1 = "implementationproject(':model')";
-        String modelDependency2 = "compileproject(':model')";
-
         Supplier<Stream<String>> stream = () -> {
             try {
                 return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE));
@@ -79,6 +77,9 @@ public class ValidateStructureTask extends DefaultTask {
                 return null;
             }
         };
+
+        String modelDependency1 = "implementationproject(':model')";
+        String modelDependency2 = "compileproject(':model')";
         boolean isvalid = stream.get().filter(line -> !line.startsWith("//")).map(line -> line.replaceAll("\\s", ""))
                 .anyMatch(str -> str.equals(modelDependency1) || str.equals(modelDependency2));
         long countImplementationproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("implementationproject")).count();

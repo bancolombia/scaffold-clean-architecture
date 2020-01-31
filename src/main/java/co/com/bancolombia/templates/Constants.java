@@ -2,8 +2,6 @@ package co.com.bancolombia.templates;
 
 public class Constants {
 
-    private Constants() {}
-
     public static final String JAVA_EXTENSION = ".java";
 
     /**
@@ -42,4 +40,7 @@ public class Constants {
 
     public static final String MAIN_GRADLE = "main.gradle";
     public static final String SETTINGS_GRADLE = "settings.gradle";
+
+    private Constants() {
+    }
 }

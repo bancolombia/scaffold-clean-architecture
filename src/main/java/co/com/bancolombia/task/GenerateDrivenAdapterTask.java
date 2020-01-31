@@ -5,7 +5,7 @@ import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.DrivenAdapterFactoryImpl;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 import co.com.bancolombia.templates.HelperTemplate;
 import co.com.bancolombia.templates.PluginTemplate;
@@ -21,7 +21,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private int numberDrivenAdapter = -1;
     private Logger logger = getProject().getLogger();
     private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactoryImpl();
-    private Module drivenAdapter;
+    private AbstractModule drivenAdapter;
 
     @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer, 4 -> Async Event Bus )")
     public void setDrivenAdapter(String number) {

@@ -3,11 +3,12 @@ package co.com.bancolombia.templates;
 import co.com.bancolombia.Utils;
 
 public class UseCaseTemplate {
-    private UseCaseTemplate(){}
 
     public static final String BUILD_GRADLE_USE_CASE_CONTENT = "dependencies {\n" +
             "    compile project(':model')\n" +
             "}";
+
+    private UseCaseTemplate(){}
 
     public static String getUseCase(String useCaseName, String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");

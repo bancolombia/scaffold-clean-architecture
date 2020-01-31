@@ -7,8 +7,6 @@ public class DrivenAdapterTemplate {
 
     public static final String COMMON = "common";
 
-    private DrivenAdapterTemplate(){}
-
     private static final Map<Integer, String> DRIVEN_ADAPTERS_AVAILABLE = new HashMap<>();
     public static final String EVENT_BUS_GATEWAY_CLASS = "EventsGateway";
     public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
@@ -18,6 +16,9 @@ public class DrivenAdapterTemplate {
     public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
     public static final String SECRET_MANAGER_CLASS = "SecretsManager";
     public static final String EVENT_BUS_CLASS = "ReactiveEventsGateway";
+
+    private DrivenAdapterTemplate(){}
+
 
     public static String getNameDrivenAdapter(int numberDriverAdapter) {
 

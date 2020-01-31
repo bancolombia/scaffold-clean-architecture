@@ -2,10 +2,10 @@ package co.com.bancolombia.templates;
 
 public class HelperTemplate {
 
-    private HelperTemplate(){}
-
     public static final String MONGO_HELPER_CLASS = "AdapterOperations";
     public static final String JPA_HELPER_CLASS = "AdapterOperations";
+
+    private HelperTemplate(){}
 
     public static String getHelperJPARepositoryClassContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");

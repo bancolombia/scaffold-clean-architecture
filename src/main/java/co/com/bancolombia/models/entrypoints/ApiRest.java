@@ -1,9 +1,14 @@
 package co.com.bancolombia.models.entrypoints;
 
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.templates.EntryPointTemplate;
 
-public class ApiRest extends Module {
+import java.io.IOException;
+
+public class ApiRest extends AbstractModule {
+    public ApiRest() throws IOException {
+    }
+
     @Override
     public String getClassNameModule() {
         return EntryPointTemplate.API_REST_CLASS;
@@ -11,7 +16,9 @@ public class ApiRest extends Module {
 
     @Override
     public String getModuleClassContent() {
-        return EntryPointTemplate.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return EntryPointTemplate
+                .getApiRestClassContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override

@@ -2,8 +2,6 @@ package co.com.bancolombia.templates;
 
 public class ScaffoldTemplate {
 
-    private ScaffoldTemplate(){}
-
     public static final String APPLICATION_PROPERTIES = "application.yaml";
     public static final String LOMBOK_CONFIG = "lombok.config";
     public static final String GRADLE_PROPERTIES = "gradle.properties";
@@ -144,6 +142,9 @@ public class ScaffoldTemplate {
             "ENV JAVA_OPTS=\" -Xshareclasses:name=cacheapp,cacheDir=/cache,nonfatal -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom\"\n" +
             "ENTRYPOINT [ \"sh\", \"-c\", \"java $JAVA_OPTS  -jar /app.jar\" ]";
 
+    private ScaffoldTemplate() {
+    }
+
     public static String getMainGradleContent(String type) {
         String value = "subprojects {\n" +
                 "    apply plugin: \"java\"\n" +
@@ -198,11 +199,11 @@ public class ScaffoldTemplate {
                 "    compile 'org.springframework.boot:spring-boot-starter'\n" +
                 "implementation project(':model')\n" +
                 "implementation project(':usecase')\n" +
-                "\n" ;
-        if (type.equals("reactive")){
+                "\n";
+        if (type.equals("reactive")) {
             value = value.concat("\tcompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n");
         }
-        value = value.concat( "runtime('org.springframework.boot:spring-boot-devtools')\n" +
+        value = value.concat("runtime('org.springframework.boot:spring-boot-devtools')\n" +
                 "}\n" +
                 "jar {\n" +
                 "    archivesBaseName = rootProject.name\n" +

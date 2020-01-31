@@ -5,7 +5,7 @@ import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.EntryPointFactoryImpl;
 import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
@@ -21,7 +21,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
 
     private ModuleFactory entryPointFactory = new EntryPointFactoryImpl();
-    private Module entryPoint;
+    private AbstractModule entryPoint;
 
     @Option(option = "value", description = "Set the number of the entry point (1 -> API REST, 2 -> API REACTIVE)")
     public void setCodeEntryPoint(String number) {
