@@ -18,7 +18,7 @@ public class MongoDrivenAdapter extends AbstractModule {
         super.setModuleDir(Constants.INFRASTRUCTURE
                 .concat("/").concat(Constants.DRIVEN_ADAPTERS)
                 .concat("/").concat(super.getName()));
-        if (super.helperModuleExist()) {
+        if (super.hasHelperModule()) {
             super.setHelperDir(Constants.INFRASTRUCTURE
                     .concat("/").concat(Constants.HELPERS)
                     .concat("/").concat(super.getNameHelper()));
@@ -73,8 +73,4 @@ public class MongoDrivenAdapter extends AbstractModule {
                         concat(HelperTemplate.getSettingsHelperMongoContent());
     }
 
-    @Override
-    public String getInterfaceModule() {
-        return null;
-    }
 }

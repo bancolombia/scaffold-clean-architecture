@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
  */
 
-public class PluginCleanPluginFunctionalTest {
+public class PluginCleanFunctionalTest {
     File projectDir = new File("build/functionalTest");
     GradleRunner runner;
 

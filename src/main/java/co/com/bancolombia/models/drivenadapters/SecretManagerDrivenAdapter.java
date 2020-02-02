@@ -19,7 +19,7 @@ public class SecretManagerDrivenAdapter extends AbstractModule {
         super.setModuleDir(Constants.INFRASTRUCTURE
                 .concat("/").concat(Constants.DRIVEN_ADAPTERS)
                 .concat("/").concat(super.getName()));
-        if (super.helperModuleExist()) {
+        if (super.hasHelperModule()) {
             super.setHelperDir(Constants.INFRASTRUCTURE
                     .concat("/").concat(Constants.HELPERS)
                     .concat("/").concat(super.getNameHelper()));
@@ -35,26 +35,6 @@ public class SecretManagerDrivenAdapter extends AbstractModule {
     public String getModuleClassContent() {
         return DrivenAdapterTemplate
                 .getSecretsManagerClassContent(super.getPackageName(), super.getModulePackage());
-    }
-
-    @Override
-    public String getInterfaceNameModule() {
-        return null;
-    }
-
-    @Override
-    public String getModuleInterfaceContent() {
-        return null;
-    }
-
-    @Override
-    public String getBuildGradleModule() {
-        return null;
-    }
-
-    @Override
-    public String getHelperModuleClassContent() {
-        return null;
     }
 
     @Override

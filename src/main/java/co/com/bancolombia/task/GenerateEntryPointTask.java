@@ -3,7 +3,7 @@ package co.com.bancolombia.task;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.EntryPointFactoryImpl;
+import co.com.bancolombia.factory.EntryPointFactory;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.templates.PluginTemplate;
@@ -20,7 +20,7 @@ public class GenerateEntryPointTask extends DefaultTask {
     private int codeEntryPoint = -1;
     private Logger logger = getProject().getLogger();
 
-    private ModuleFactory entryPointFactory = new EntryPointFactoryImpl();
+    private ModuleFactory entryPointFactory = new EntryPointFactory();
     private AbstractModule entryPoint;
 
     @Option(option = "value", description = "Set the number of the entry point (1 -> API REST, 2 -> API REACTIVE)")

@@ -4,7 +4,7 @@ import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.factory.DrivenAdapterFactoryImpl;
+import co.com.bancolombia.factory.DrivenAdapterFactory;
 import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 import co.com.bancolombia.templates.HelperTemplate;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class GenerateDrivenAdapterTask extends DefaultTask {
     private int numberDrivenAdapter = -1;
     private Logger logger = getProject().getLogger();
-    private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactoryImpl();
+    private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactory();
     private AbstractModule drivenAdapter;
 
     @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer, 4 -> Async Event Bus )")
@@ -65,12 +65,12 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         getProject().mkdir(drivenAdapter.getModuleDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getModulePackage()));
         getProject().mkdir(drivenAdapter.getModuleDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getModulePackage()));
 
-        if (drivenAdapter.helperModuleExist()) {
+        if (drivenAdapter.hasHelperModule()) {
             getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()));
             getProject().mkdir(drivenAdapter.getHelperDir().concat("/").concat(Constants.TEST_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()));
         }
 
-        if (drivenAdapter.modelDirExist()) {
+        if (drivenAdapter.hasModelDir()) {
             getProject().mkdir(drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS));
         }
     }
@@ -83,13 +83,13 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
             Utils.writeString(getProject(), drivenAdapter.getModuleDirSrc().concat("/").concat(drivenAdapter.getInterfaceNameModule()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getModuleInterfaceContent());
         }
 
-        if (drivenAdapter.helperModuleExist()) {
+        if (drivenAdapter.hasHelperModule()) {
             Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.BUILD_GRADLE), drivenAdapter.getBuildGradleModule());
             Utils.writeString(getProject(), drivenAdapter.getHelperDir().concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(drivenAdapter.getHelperPackage()).concat("/").concat(HelperTemplate.JPA_HELPER_CLASS).concat(Constants.JAVA_EXTENSION), drivenAdapter.getHelperModuleClassContent());
         }
 
-        if (drivenAdapter.modelDirExist()) {
-            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION),drivenAdapter.getInterfaceModule());
+        if (drivenAdapter.hasModelDir()) {
+            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getInterfaceModule());
         }
     }
 

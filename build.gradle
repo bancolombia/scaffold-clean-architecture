@@ -57,7 +57,7 @@ gradlePlugin {
 			id = 'co.com.bancolombia.cleanArchitecture'
 			displayName = 'Scaffold Clean Architecture Bancolombia'
 			description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
-			implementationClass = 'co.com.bancolombia.PluginCleanPlugin'
+			implementationClass = 'co.com.bancolombia.PluginClean'
 		}
 	}
 }

@@ -1,10 +1,10 @@
 package co.com.bancolombia.models;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@Builder
 public class TaskModel {
     private String name;
     private String shortcut;

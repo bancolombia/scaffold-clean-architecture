@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * A simple unit test for the 'co.com.bancolombia.greeting' plugin.
  */
-public class PluginCleanPluginTest {
+public class PluginCleanTest {
 
     @Test
     public void pluginRegistersATask() {

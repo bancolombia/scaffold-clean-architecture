@@ -3,11 +3,13 @@ package co.com.bancolombia.models;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.templates.Constants;
 import lombok.Data;
+import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
 
 @Data
 public abstract class AbstractModule {
+
     private int code;
     private String packageName;
     private String name;
@@ -20,34 +22,43 @@ public abstract class AbstractModule {
     private String modelDir;
 
     public AbstractModule() throws IOException {
+        setPackageName(Utils.readProperties("package").replaceAll("\\.", "\\/"));
 
-        setPackageName(Utils.readProperties("package"));
-        setPackageName(getPackageName().replaceAll("\\.", "\\/"));
     }
 
     public abstract String getClassNameModule();
-
-    public abstract String getModuleClassContent();
-
-    public abstract String getInterfaceNameModule();
-
-    public abstract String getModuleInterfaceContent();
-
-    public abstract String getBuildGradleModule();
-
-    public abstract String getHelperModuleClassContent();
 
     public abstract String getBuildGradleContentModule();
 
     public abstract String getSettingsGradleModule();
 
-    public abstract String getInterfaceModule();
+    public abstract String getModuleClassContent();
 
-    public boolean modelDirExist() {
+    public String getInterfaceNameModule() {
+        return null;
+    }
+
+    public String getModuleInterfaceContent() {
+        return null;
+    }
+
+    public String getBuildGradleModule() {
+        return null;
+    }
+
+    public String getHelperModuleClassContent() {
+        return null;
+    }
+
+    public String getInterfaceModule() {
+        return null;
+    }
+
+    public boolean hasModelDir() {
         return modelDir != null;
     }
 
-    public boolean helperModuleExist() {
+    public boolean hasHelperModule() {
         return nameHelper != null;
     }
 

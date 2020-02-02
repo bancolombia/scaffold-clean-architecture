@@ -2,7 +2,6 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
-import org.gradle.internal.impldep.org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -22,7 +21,7 @@ public class Utils {
     public static void writeString(Project project, String nameFile, String data) throws IOException {
         project.getLogger().debug(project.file(nameFile).getAbsolutePath());
         File file = project
-                .file(FilenameUtils.getFullPath(nameFile) + FilenameUtils.getName(nameFile))
+                .file(validatePath(nameFile))
                 .getAbsoluteFile();
 
         try (FileWriter fileWriter = new FileWriter(file)) {
@@ -31,29 +30,33 @@ public class Utils {
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
-        File file = project.file(FilenameUtils.getFullPath(nameFile) + FilenameUtils.getName(nameFile))
+        File file = project.file(validatePath(nameFile))
                 .getAbsoluteFile();
         project.getLogger().debug(file.getAbsolutePath());
         return Files.lines(Paths.get(file.toURI()));
 
     }
 
-    public static String capitalize(String str) {
-        if (str == null || str.isEmpty()) {
-            return str;
-        }
+    public static List<File> finderSubProjects(String dirPath) {
+        File[] directories = new File(validatePath(dirPath))
+                .getAbsoluteFile()
+                .listFiles(File::isDirectory);
+        FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
+        List<File> textFiles = new ArrayList<>();
 
+        for (File dir : directories) {
+            textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
+        }
+        return textFiles;
+    }
+
+    public static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     public static String decapitalize(String string) {
-        if (string == null || string.length() == 0) {
-            return string;
-        }
-
         char[] c = string.toCharArray();
         c[0] = Character.toLowerCase(c[0]);
-
         return new String(c);
     }
 
@@ -79,16 +82,8 @@ public class Utils {
         }
     }
 
-    public static List<File> finderSubProjects(String dirPath) {
-        File[] directories = new File(FilenameUtils.getFullPath(dirPath), FilenameUtils.getName(dirPath))
-                .getAbsoluteFile()
-                .listFiles(File::isDirectory);
-        FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
-        List<File> textFiles = new ArrayList<>();
-        for (File dir : directories) {
-            textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
-        }
-        return textFiles;
+    private static String validatePath(String name) {
+        return name;
     }
 
 }
