@@ -88,81 +88,97 @@ public class GenerateStructureTask extends DefaultTask {
 
     private List<FileModel> getFilesToCreate() {
         List<FileModel> files = new ArrayList<>();
+
         files.add(FileModel
                 .builder()
                 .path(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/")
                         .concat(Constants.BUILD_GRADLE))
                 .content(UseCaseTemplate.BUILD_GRADLE_USE_CASE_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/")
                         .concat(Constants.BUILD_GRADLE))
                 .content("")
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(ScaffoldTemplate.DEPLOYMENT.concat("/").concat(ScaffoldTemplate.DOCKERFILE))
                 .content(ScaffoldTemplate.DOCKER_FILE_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(ScaffoldTemplate.LOMBOK_CONFIG)
                 .content(ScaffoldTemplate.LOMBOK_CONFIG_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(ScaffoldTemplate.GITIGNORE)
                 .content(ScaffoldTemplate.GIT_IGNORE_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(ScaffoldTemplate.READ_ME)
                 .content(ScaffoldTemplate.README_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(ScaffoldTemplate.GRADLE_PROPERTIES)
                 .content(ScaffoldTemplate.getGradlePropertiesContent(packageName))
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.SETTINGS_GRADLE)
                 .content(ScaffoldTemplate.getSettingsGradleContent(this.projectName))
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.BUILD_GRADLE)
                 .content(ScaffoldTemplate.getBuildGradleContent())
                 .build());
+
+        final String MAIN_RESOURCES = Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES)
+                .concat("/");
+
         files.add(FileModel
                 .builder()
-                .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES)
-                        .concat("/").concat(ScaffoldTemplate.APPLICATION_PROPERTIES))
+                .path(MAIN_RESOURCES.concat(ScaffoldTemplate.APPLICATION_PROPERTIES))
                 .content(ScaffoldTemplate.getApplicationPropertiesContent(this.projectName))
                 .build());
+
         files.add(FileModel
                 .builder()
-                .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES)
-                        .concat("/").concat(ScaffoldTemplate.LOG_4_J))
+                .path(MAIN_RESOURCES.concat(ScaffoldTemplate.LOG_4_J))
                 .content(ScaffoldTemplate.LOG_4_J_CONTENT)
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.MAIN_GRADLE)
                 .content(ScaffoldTemplate.getMainGradleContent(type))
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE))
                 .content(ScaffoldTemplate.getBuildGradleApplicationContent(type))
                 .build());
+
         files.add(FileModel
                 .builder()
                 .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/")
                         .concat(packageName).concat("/").concat(ScaffoldTemplate.MAIN_APPLICATION))
                 .content(ScaffoldTemplate.getMainApplicationContent(this.projectName))
                 .build());
+        
         return files;
 
     }

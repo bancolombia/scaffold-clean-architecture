@@ -1,13 +1,12 @@
 package co.com.bancolombia.templates;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class DrivenAdapterTemplate {
 
     public static final String COMMON = "common";
 
-    private static final Map<Integer, String> DRIVEN_ADAPTERS_AVAILABLE = new HashMap<>();
     public static final String EVENT_BUS_GATEWAY_CLASS = "EventsGateway";
     public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
     public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
@@ -19,17 +18,25 @@ public class DrivenAdapterTemplate {
 
     private DrivenAdapterTemplate(){}
 
+    public enum DrivenAdapters{
+        NO_AVAILABLE(-1),
+        JPA_REPOSITORY(1),
+        MONGO_REPOSITORY(2),
+        SECRETS_MANAGER_CONSUMER(3),
+        ASYNC_EVENT_BUS(4);
 
-    public static String getNameDrivenAdapter(int numberDriverAdapter) {
+        private int value;
 
-        if (DRIVEN_ADAPTERS_AVAILABLE.isEmpty()) {
-            DRIVEN_ADAPTERS_AVAILABLE.put(1, "JPA REPOSITORY");
-            DRIVEN_ADAPTERS_AVAILABLE.put(2, "MONGO REPOSITORY");
-            DRIVEN_ADAPTERS_AVAILABLE.put(3, "SECRETS MANAGER CONSUMER");
-            DRIVEN_ADAPTERS_AVAILABLE.put(4, "ASYNC EVENT BUS");
+        private DrivenAdapters(int value) {
+            this.value = value;
         }
-        return DRIVEN_ADAPTERS_AVAILABLE.get(numberDriverAdapter);
+        public static DrivenAdapters valueOf(int value, Supplier<? extends DrivenAdapters> byDef) {
+            return  Arrays.asList(values()).stream()
+                    .filter(legNo -> legNo.value == value)
+                    .findFirst().orElseGet(byDef);
+        }
     }
+
 
     public static String getBuildGradleJPARepository() {
 

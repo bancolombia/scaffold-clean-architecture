@@ -1,7 +1,5 @@
 package co.com.bancolombia.factory;
 
-import co.com.bancolombia.Utils;
-import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.models.entrypoints.ApiReactive;
@@ -10,6 +8,8 @@ import co.com.bancolombia.templates.EntryPointTemplate;
 
 import java.io.IOException;
 
+import static co.com.bancolombia.templates.EntryPointTemplate.EntryPoints.*;
+
 public class EntryPointFactory implements ModuleFactory {
 
     @Override
@@ -17,11 +17,11 @@ public class EntryPointFactory implements ModuleFactory {
         throwFactory(codeEntryPoint);
 
         AbstractModule entryPoint = null;
-        switch (codeEntryPoint) {
-            case 1:
+        switch (throwFactory(codeEntryPoint)) {
+            case API_REST_IMPERATIVE:
                 entryPoint = new ApiRest();
                 break;
-            case 2:
+            case API_REST_REACTIVE:
                 entryPoint = new ApiReactive();
                 break;
             default:
@@ -33,11 +33,10 @@ public class EntryPointFactory implements ModuleFactory {
         return entryPoint;
     }
 
-    private void throwFactory(int codeEntryPoint) {
-        if (EntryPointTemplate.getNameEntryPoint(codeEntryPoint) == null) {
-            String entryPointsAvailables = "Entry Point not is available " +
-                    "(1 -> API REST, 2 -> API REACTIVE)";
-            throw new IllegalArgumentException(entryPointsAvailables);
-        }
+    private EntryPointTemplate.EntryPoints throwFactory(int codeEntryPoint) {
+
+        return EntryPointTemplate.EntryPoints.valueOf(codeEntryPoint, () -> NO_AVAILABLE);
+
     }
+
 }

@@ -1,13 +1,28 @@
 package co.com.bancolombia.templates;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class EntryPointTemplate {
 
     public static final String API_REST_CLASS = "ApiRest";
 
-    private static final Map<Integer, String> ENTRY_POINTS_AVAILABLE = new HashMap<>();
+    public enum EntryPoints{
+        NO_AVAILABLE(-1),
+        API_REST_IMPERATIVE(1),
+        API_REST_REACTIVE(2);
+
+        private int value;
+
+        private EntryPoints(int value) {
+            this.value = value;
+        }
+        public static EntryPoints valueOf(int value, Supplier<? extends EntryPoints> byDef) {
+            return  Arrays.asList(values()).stream()
+                    .filter(legNo -> legNo.value == value)
+                    .findFirst().orElseGet(byDef);
+        }
+    }
 
     private EntryPointTemplate(){}
 
@@ -93,15 +108,6 @@ public class EntryPointTemplate {
                 "    }\n" +
                 "\n"+
                 "}";
-    }
-
-    public static String getNameEntryPoint(int numberEntryPoint) {
-
-        if (ENTRY_POINTS_AVAILABLE.isEmpty()) {
-            ENTRY_POINTS_AVAILABLE.put(1, "API REST IMPERATIVE");
-            ENTRY_POINTS_AVAILABLE.put(2, "API REST REACTIVE");
-        }
-        return ENTRY_POINTS_AVAILABLE.get(numberEntryPoint);
     }
 
     public static String getSettingsApiRestContent() {

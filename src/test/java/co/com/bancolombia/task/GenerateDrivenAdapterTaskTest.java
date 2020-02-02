@@ -40,7 +40,7 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = CleanException.class)
     public void generateDrivenAdapterValueUnExistent() throws IOException, CleanException {
 
 

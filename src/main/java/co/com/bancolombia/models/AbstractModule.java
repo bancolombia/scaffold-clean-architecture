@@ -3,11 +3,13 @@ package co.com.bancolombia.models;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.templates.Constants;
 import lombok.Data;
-import org.gradle.api.logging.Logger;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 
-@Data
+@Getter
+@Setter
 public abstract class AbstractModule {
 
     private int code;
