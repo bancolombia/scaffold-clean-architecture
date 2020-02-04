@@ -1,6 +1,6 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
@@ -38,6 +38,7 @@ public class ValidateStructureTask extends DefaultTask {
         logger.lifecycle("The project is valid");
 
     }
+
     //TODO: Complete
     public boolean validateEntryPointLayer() throws IOException {
         List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
@@ -60,7 +61,7 @@ public class ValidateStructureTask extends DefaultTask {
         Stream<String> stream = Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
 
         long countImplementationproject = stream
-                .map(line -> line.replaceAll(" ", ""))
+                .map(line -> line.replaceAll("\\s", ""))
                 .filter(line -> !line.startsWith("//") && line.contains("implementationproject"))
                 .count();
         return countImplementationproject == 0;
@@ -68,9 +69,6 @@ public class ValidateStructureTask extends DefaultTask {
 
 
     private boolean validateUseCaseLayer() {
-        String modelDependency1 = "implementationproject(':model')";
-        String modelDependency2 = "compileproject(':model')";
-
         Supplier<Stream<String>> stream = () -> {
             try {
                 return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE));
@@ -79,10 +77,13 @@ public class ValidateStructureTask extends DefaultTask {
                 return null;
             }
         };
-        boolean isvalid = stream.get().filter(line -> !line.startsWith("//")).map(line -> line.replaceAll(" ", ""))
+
+        String modelDependency1 = "implementationproject(':model')";
+        String modelDependency2 = "compileproject(':model')";
+        boolean isvalid = stream.get().filter(line -> !line.startsWith("//")).map(line -> line.replaceAll("\\s", ""))
                 .anyMatch(str -> str.equals(modelDependency1) || str.equals(modelDependency2));
-        long countImplementationproject = stream.get().map(line -> line.replaceAll(" ", "")).filter(line -> !line.startsWith("//") && line.contains("implementationproject")).count();
-        long countCompileproject = stream.get().map(line -> line.replaceAll(" ", "")).filter(line -> !line.startsWith("//") && line.contains("compileproject")).count();
+        long countImplementationproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("implementationproject")).count();
+        long countCompileproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("compileproject")).count();
 
         return isvalid && ((countImplementationproject == 1 && countCompileproject == 0) || (countImplementationproject == 0 && countCompileproject == 1));
     }

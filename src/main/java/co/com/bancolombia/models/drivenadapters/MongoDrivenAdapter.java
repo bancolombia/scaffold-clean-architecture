@@ -1,51 +1,76 @@
 package co.com.bancolombia.models.drivenadapters;
 
-import co.com.bancolombia.Constants;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
+import co.com.bancolombia.templates.HelperTemplate;
 
-public class MongoDrivenAdapter extends Module {
+import java.io.IOException;
+
+public class MongoDrivenAdapter extends AbstractModule {
+
+    public MongoDrivenAdapter() throws IOException {
+        super();
+        super.setName("mongo-repository");
+        super.setNameHelper("mongo-repository-commons");
+        super.setModulePackage("mongo");
+        super.setHelperPackage("mongo");
+        super.setModuleDir(Constants.INFRASTRUCTURE
+                .concat("/").concat(Constants.DRIVEN_ADAPTERS)
+                .concat("/").concat(super.getName()));
+        if (super.hasHelperModule()) {
+            super.setHelperDir(Constants.INFRASTRUCTURE
+                    .concat("/").concat(Constants.HELPERS)
+                    .concat("/").concat(super.getNameHelper()));
+        }
+    }
+
     @Override
     public String getClassNameModule() {
-        return Constants.MONGO_REPOSITORY_CLASS;
+        return DrivenAdapterTemplate.MONGO_REPOSITORY_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getMongoRepositoryClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return DrivenAdapterTemplate
+                .getMongoRepositoryClassContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
     public String getInterfaceNameModule() {
-        return Constants.MONGO_REPOSITORY_INTERFACE;
+        return DrivenAdapterTemplate.MONGO_REPOSITORY_INTERFACE;
     }
 
     @Override
     public String getModuleInterfaceContent() {
-        return Constants.getMongoRepositoryInterfaceContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
+        return DrivenAdapterTemplate
+                .getMongoRepositoryInterfaceContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
     public String getBuildGradleModule() {
-        return  Constants.getBuildGradleHelperMongoRepository();
+        return HelperTemplate.getBuildGradleHelperMongoRepository();
     }
 
     @Override
     public String getHelperModuleClassContent() {
-        return  Constants.getHelperMongoRepositoryClassContent(super.getPackageName().concat(".").concat(super.getHelperPackage()));
+        return HelperTemplate
+                .getHelperMongoRepositoryClassContent(super.getPackageName()
+                        .concat(".").concat(super.getHelperPackage()));
     }
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleMongoRepository();
+        return DrivenAdapterTemplate.getBuildGradleMongoRepository();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsMongoRepositoryContent().concat(Constants.getSettingsHelperMongoContent());
+        return DrivenAdapterTemplate
+                .getSettingsMongoRepositoryContent().
+                        concat(HelperTemplate.getSettingsHelperMongoContent());
     }
 
-    @Override
-    public String getInterfaceModule() {
-        return null;
-    }
 }

@@ -1,51 +1,43 @@
 package co.com.bancolombia.models.entrypoints;
 
-import co.com.bancolombia.Constants;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.templates.EntryPointTemplate;
 
-public class ApiReactive extends Module {
+import java.io.IOException;
+
+public class ApiReactive extends AbstractModule {
+
+    public ApiReactive() throws IOException {
+        super();
+        super.setName("reactive-web");
+        super.setModulePackage("api");
+        super.setModuleDir(Constants.INFRASTRUCTURE
+                .concat("/").concat(Constants.ENTRY_POINTS)
+                .concat("/").concat(getName()));
+
+    }
+
     @Override
     public String getClassNameModule() {
-        return Constants.API_REST_CLASS;
+        return EntryPointTemplate.API_REST_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getReactiveWebClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
-    }
-
-    @Override
-    public String getInterfaceNameModule() {
-        return null;
-    }
-
-    @Override
-    public String getModuleInterfaceContent() {
-        return null;
-    }
-
-    @Override
-    public String getBuildGradleModule() {
-        return null;
-    }
-
-    @Override
-    public String getHelperModuleClassContent() {
-        return null;
+        return EntryPointTemplate
+                .getReactiveWebClassContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleReactiveWeb();
+        return EntryPointTemplate.getBuildGradleReactiveWeb();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsReactiveWebContent();
+        return EntryPointTemplate.getSettingsReactiveWebContent();
     }
 
-    @Override
-    public String getInterfaceModule() {
-        return null;
-    }
 }

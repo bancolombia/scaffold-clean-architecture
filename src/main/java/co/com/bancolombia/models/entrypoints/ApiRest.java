@@ -1,51 +1,42 @@
 package co.com.bancolombia.models.entrypoints;
 
-import co.com.bancolombia.Constants;
-import co.com.bancolombia.models.Module;
+import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.templates.EntryPointTemplate;
 
-public class ApiRest extends Module {
+import java.io.IOException;
+
+public class ApiRest extends AbstractModule {
+
+    public ApiRest() throws IOException {
+        super();
+        super.setName("api-rest");
+        super.setModulePackage("api");
+        super.setModuleDir(Constants.INFRASTRUCTURE
+                .concat("/").concat(Constants.ENTRY_POINTS)
+                .concat("/").concat(getName()));
+    }
+
     @Override
     public String getClassNameModule() {
-        return Constants.API_REST_CLASS;
+        return EntryPointTemplate.API_REST_CLASS;
     }
 
     @Override
     public String getModuleClassContent() {
-        return Constants.getApiRestClassContent(super.getPackageName().concat(".").concat(super.getModulePackage()));
-    }
-
-    @Override
-    public String getInterfaceNameModule() {
-        return null;
-    }
-
-    @Override
-    public String getModuleInterfaceContent() {
-        return null;
-    }
-
-    @Override
-    public String getBuildGradleModule() {
-        return null;
-    }
-
-    @Override
-    public String getHelperModuleClassContent() {
-        return null;
+        return EntryPointTemplate
+                .getApiRestClassContent(super.getPackageName()
+                        .concat(".").concat(super.getModulePackage()));
     }
 
     @Override
     public String getBuildGradleContentModule() {
-        return Constants.getBuildGradleApiRest();
+        return EntryPointTemplate.getBuildGradleApiRest();
     }
 
     @Override
     public String getSettingsGradleModule() {
-        return Constants.getSettingsApiRestContent();
+        return EntryPointTemplate.getSettingsApiRestContent();
     }
 
-    @Override
-    public String getInterfaceModule() {
-        return null;
-    }
 }

@@ -24,7 +24,7 @@ public class GenerateEntryPointTaskTest {
         task.generateEntryPointTask();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = CleanException.class)
     public void generateEntryPointValueUnExistent() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().build();
         project.getTasks().create("test", GenerateEntryPointTask.class);

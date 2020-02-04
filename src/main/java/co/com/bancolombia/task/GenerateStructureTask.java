@@ -1,12 +1,19 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.models.FileModel;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
+import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.templates.ScaffoldTemplate;
+import co.com.bancolombia.templates.UseCaseTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GenerateStructureTask extends DefaultTask {
@@ -16,7 +23,9 @@ public class GenerateStructureTask extends DefaultTask {
     private String projectName = "cleanArchitecture";
 
     @Option(option = "package", description = "Set the principal package to use in the project")
-    public void setPackage(String packageName) { this.packageName = packageName; }
+    public void setPackage(String packageName) {
+        this.packageName = packageName;
+    }
 
     @Option(option = "type", description = "Set project type, the options are  (reactive | imperative) ")
     public void setType(String type) {
@@ -35,45 +44,142 @@ public class GenerateStructureTask extends DefaultTask {
         packageName = packageName.replaceAll("\\.", "\\/");
         logger.lifecycle("Project Type: {}", type);
         logger.lifecycle("Project Name: {}", projectName);
-        logger.lifecycle("Generating Dirs");
+        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
         createDirs();
-        logger.lifecycle("Generated Dirs");
-        logger.lifecycle("Writing in Files");
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
         writeFiles();
-        logger.lifecycle("Writed in Files");
+        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
-    private void createDirs()  {
-        getProject().mkdir(Constants.DEPLOYMENT);
-        getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.CONFIG));
-        getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
-        getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES));
+    private void createDirs() {
+        List<String> dirs = getDirsToCreate();
+        dirs.forEach(getProject()::mkdir);
+    }
 
-        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS));
-        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS));
-        getProject().mkdir(Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS));
+    private List<String> getDirsToCreate() {
+        List<String> dirs = new ArrayList<>();
 
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
+        dirs.add(ScaffoldTemplate.DEPLOYMENT);
+
+        dirs.add(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.CONFIG));
+        dirs.add(Constants.APPLICATION.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName));
+        dirs.add(Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES));
+
+        dirs.add(Constants.INFRASTRUCTURE.concat("/").concat(Constants.DRIVEN_ADAPTERS));
+        dirs.add(Constants.INFRASTRUCTURE.concat("/").concat(Constants.ENTRY_POINTS));
+        dirs.add(Constants.INFRASTRUCTURE.concat("/").concat(Constants.HELPERS));
+
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
+
+        return dirs;
 
     }
 
     private void writeFiles() throws IOException {
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE), Constants.BUILD_GRADLE_USE_CASE_CONTENT);
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE),"");
-        Utils.writeString(getProject(), Constants.DEPLOYMENT.concat("/").concat(Constants.DOCKERFILE), Constants.DOCKER_FILE_CONTENT);
-        Utils.writeString(getProject(), Constants.LOMBOK_CONFIG, Constants.LOMBOK_CONFIG_CONTENT);
-        Utils.writeString(getProject(), Constants.GITIGNORE, Constants.GIT_IGNORE_CONTENT);
-        Utils.writeString(getProject(), Constants.READ_ME, Constants.README_CONTENT);
-        Utils.writeString(getProject(), Constants.GRADLE_PROPERTIES, Constants.getGradlePropertiesContent(packageName));
-        Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, Constants.getSettingsGradleContent(this.projectName));
-        Utils.writeString(getProject(), Constants.BUILD_GRADLE, Constants.getBuildGradleContent());
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES), Constants.getApplicationPropertiesContent(this.projectName));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.LOG_4_J), Constants.LOG_4_J_CONTENT);
-        Utils.writeString(getProject(), Constants.MAIN_GRADLE, Constants.mainGradleContent(type));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE), Constants.buildGradleApplicationContent(type));
-        Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MAIN_APPLICATION), Constants.getMainApplicationContent(this.projectName));
+        List<FileModel> files = getFilesToCreate();
+        for (FileModel file : files) {
+            Utils.writeString(getProject(), file.getPath(), file.getContent());
+        }
+    }
+
+    private List<FileModel> getFilesToCreate() {
+        List<FileModel> files = new ArrayList<>();
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/")
+                        .concat(Constants.BUILD_GRADLE))
+                .content(UseCaseTemplate.BUILD_GRADLE_USE_CASE_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/")
+                        .concat(Constants.BUILD_GRADLE))
+                .content("")
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(ScaffoldTemplate.DEPLOYMENT.concat("/").concat(ScaffoldTemplate.DOCKERFILE))
+                .content(ScaffoldTemplate.DOCKER_FILE_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(ScaffoldTemplate.LOMBOK_CONFIG)
+                .content(ScaffoldTemplate.LOMBOK_CONFIG_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(ScaffoldTemplate.GITIGNORE)
+                .content(ScaffoldTemplate.GIT_IGNORE_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(ScaffoldTemplate.READ_ME)
+                .content(ScaffoldTemplate.README_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(ScaffoldTemplate.GRADLE_PROPERTIES)
+                .content(ScaffoldTemplate.getGradlePropertiesContent(packageName))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.SETTINGS_GRADLE)
+                .content(ScaffoldTemplate.getSettingsGradleContent(this.projectName))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.BUILD_GRADLE)
+                .content(ScaffoldTemplate.getBuildGradleContent())
+                .build());
+
+        final String MAIN_RESOURCES = Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES)
+                .concat("/");
+
+        files.add(FileModel
+                .builder()
+                .path(MAIN_RESOURCES.concat(ScaffoldTemplate.APPLICATION_PROPERTIES))
+                .content(ScaffoldTemplate.getApplicationPropertiesContent(this.projectName))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(MAIN_RESOURCES.concat(ScaffoldTemplate.LOG_4_J))
+                .content(ScaffoldTemplate.LOG_4_J_CONTENT)
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.MAIN_GRADLE)
+                .content(ScaffoldTemplate.getMainGradleContent(type))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE))
+                .content(ScaffoldTemplate.getBuildGradleApplicationContent(type))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/")
+                        .concat(packageName).concat("/").concat(ScaffoldTemplate.MAIN_APPLICATION))
+                .content(ScaffoldTemplate.getMainApplicationContent(this.projectName))
+                .build());
+        
+        return files;
+
     }
 }

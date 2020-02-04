@@ -1,14 +1,14 @@
 package co.com.bancolombia.models;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@Builder
 public class TaskModel {
-    String name;
-    String shortcut;
-    String description;
-    String group;
-    Class taskAction;
+    private String name;
+    private String shortcut;
+    private String description;
+    private String group;
+    private Class taskAction;
 }
