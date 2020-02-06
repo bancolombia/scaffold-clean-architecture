@@ -93,7 +93,5 @@ public class GenerateUseCaseTask extends DefaultTask {
             throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
         }
     }
-
-
 }
 

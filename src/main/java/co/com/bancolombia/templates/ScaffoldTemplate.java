@@ -232,8 +232,9 @@ public class ScaffoldTemplate {
                 "spring.application.name=" + nameProject;
     }
 
-    public static String getMainApplicationContent(String nameProject) {
-        return "package " + nameProject + ";\n" +
+    public static String getMainApplicationContent(String packageName) {
+        packageName = packageName.replaceAll("\\/", "\\.");
+        return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.boot.SpringApplication;\n" +
                 "import org.springframework.boot.autoconfigure.EnableAutoConfiguration;\n" +

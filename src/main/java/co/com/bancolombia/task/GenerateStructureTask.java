@@ -176,7 +176,7 @@ public class GenerateStructureTask extends DefaultTask {
                 .builder()
                 .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/")
                         .concat(packageName).concat("/").concat(ScaffoldTemplate.MAIN_APPLICATION))
-                .content(ScaffoldTemplate.getMainApplicationContent(this.projectName))
+                .content(ScaffoldTemplate.getMainApplicationContent(this.packageName))
                 .build());
         
         return files;
