@@ -71,7 +71,7 @@ public class ValidateStructureTask extends DefaultTask {
     private boolean validateUseCaseLayer() {
         Supplier<Stream<String>> stream = () -> {
             try {
-                return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.BUILD_GRADLE));
+                return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.BUILD_GRADLE));
             } catch (IOException e) {
                 logger.error(e.getMessage());
                 return null;
