@@ -138,7 +138,7 @@ public class PluginCleanFunctionalTest {
         runner.withArguments(task, "--name=" + useCaseName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/businessUseCase.java").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
