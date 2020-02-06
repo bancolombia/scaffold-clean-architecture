@@ -89,8 +89,8 @@ public class Utils {
     }
 
     public static String concatSeparator( List<String> args){
-        String result = args.stream().reduce("",(i, acum) ->i.concat(Constants.SEPARATOR).concat(acum)) ;
-
+        String result = args.stream().reduce("",(i, acum) ->i + Constants.SEPARATOR +acum) .replaceFirst("/","");
+        System.out.println(result);
         return  result;
     }
 
