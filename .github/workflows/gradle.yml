@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-
+        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +23,6 @@ jobs:
       run: ./gradlew build --refresh-dependencies --no-daemon --continue
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'master' }}
     needs: build
     steps:
     - name: Push codeCoverage to Codecov
