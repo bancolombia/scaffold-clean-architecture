@@ -72,8 +72,8 @@ public class GenerateStructureTask extends DefaultTask {
 
         dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
         dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL));
-        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
-        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE));
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE_FOLDER));
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.USECASE_FOLDER));
 
         return dirs;
 
@@ -91,7 +91,7 @@ public class GenerateStructureTask extends DefaultTask {
 
         files.add(FileModel
                 .builder()
-                .path(Constants.DOMAIN.concat("/").concat(Constants.USECASE).concat("/")
+                .path(Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/")
                         .concat(Constants.BUILD_GRADLE))
                 .content(UseCaseTemplate.BUILD_GRADLE_USE_CASE_CONTENT)
                 .build());
@@ -176,7 +176,7 @@ public class GenerateStructureTask extends DefaultTask {
                 .builder()
                 .path(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/")
                         .concat(packageName).concat("/").concat(ScaffoldTemplate.MAIN_APPLICATION))
-                .content(ScaffoldTemplate.getMainApplicationContent(this.projectName))
+                .content(ScaffoldTemplate.getMainApplicationContent(this.packageName))
                 .build());
         
         return files;

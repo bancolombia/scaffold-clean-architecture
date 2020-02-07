@@ -96,14 +96,7 @@ jacocoTestReport{
 		csv.enabled false
 	}
 }
-FileTree buildFiles = fileTree(rootDir) {
-	List excludes = gradle.startParameter.projectProperties.get("excludeProjects")?.split(",")
-	include '**/*.gradle'
-	exclude 'applications/admin-server', 'main.gradle','build', '**/gradle', 'settings.gradle', 'buildSrc', '/build.gradle', '.*', 'out'
-	if(excludes) {
-		exclude excludes
-	}
-}
+
 
 
 

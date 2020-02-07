@@ -132,13 +132,13 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateUseCaseWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateUseCase";
-        String useCaseName = "testUseCase";
+        String useCaseName = "business";
 
         // Setup the test build
         runner.withArguments(task, "--name=" + useCaseName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/testUseCase/TestUseCase.java").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }

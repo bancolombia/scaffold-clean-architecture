@@ -3,6 +3,7 @@ package co.com.bancolombia.templates;
 public class Constants {
 
     public static final String JAVA_EXTENSION = ".java";
+    public static final String SEPARATOR = "/";
 
     /**
      * Base Dirs
@@ -34,7 +35,8 @@ public class Constants {
     public static final String MODEL = "model";
     public static final String GATEWAYS = "gateways";
     public static final String REPOSITORY = "Repository";
-    public static final String USECASE = "usecase";
+    public static final String USECASE_FOLDER = "usecase";
+    public static final String USECASE_CLASS_NAME = "UseCase";
 
     public static final String BUILD_GRADLE = "build.gradle";
 

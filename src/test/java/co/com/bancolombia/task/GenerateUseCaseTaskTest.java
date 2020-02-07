@@ -41,9 +41,9 @@ public class GenerateUseCaseTaskTest {
 
     @Test
     public void generateUseCase() throws IOException {
-        task.setNameProject("useCaseTest");
+        task.setNameProject("business");
         task.generateUseCaseTask();
-        assertTrue(new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/useCaseTest/UseCaseTest.java").exists());
+        assertTrue(new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
 
     }
 
