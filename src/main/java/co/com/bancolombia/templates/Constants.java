@@ -42,6 +42,7 @@ public class Constants {
 
     public static final String MAIN_GRADLE = "main.gradle";
     public static final String SETTINGS_GRADLE = "settings.gradle";
+    private final String infrastructure = "infrastructure";
 
     private Constants() {
     }
