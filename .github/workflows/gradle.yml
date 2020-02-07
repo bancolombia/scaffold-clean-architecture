@@ -24,7 +24,7 @@ jobs:
     - name: Push codeCoverage to Codecov
       run: bash <(curl -s https://codecov.io/bash)
     - name: Publish plugin
-      run: ./gradlew publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
+      run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
       
   #release:
    # runs-on: ubuntu-latest
