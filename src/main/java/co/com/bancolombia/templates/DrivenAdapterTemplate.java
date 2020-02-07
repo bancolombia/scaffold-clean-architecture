@@ -20,6 +20,7 @@ public class DrivenAdapterTemplate {
 
     public enum DrivenAdapters{
         NO_AVAILABLE(-1),
+        EMPTY(0),
         JPA_REPOSITORY(1),
         MONGO_REPOSITORY(2),
         SECRETS_MANAGER_CONSUMER(3),
@@ -41,11 +42,15 @@ public class DrivenAdapterTemplate {
     public static String getBuildGradleJPARepository() {
 
         return "dependencies {\n" +
+                "    implementation project(':model')\n"+
+                "    implementation project(':jpa-repository-commons')\n"+
+                "\n" +
                 "    compile 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
                 "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
                 "    compile 'org.apache.commons:commons-dbcp2:2.2.0'\n" +
                 "\n" +
                 "    testCompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n" +
+
                 "}";
 
     }

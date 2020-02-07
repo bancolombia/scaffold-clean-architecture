@@ -18,7 +18,7 @@ public class UseCaseTemplate {
                 "import lombok.RequiredArgsConstructor;\n" +
                 "\n" +
                 "@RequiredArgsConstructor\n" +
-                "public class " + Utils.capitalize(useCaseName) + " {\n" +
+                "public class " + Utils.capitalize(useCaseName) + Constants.USECASE_CLASS_NAME + " {\n" +
                 "\n" +
                 "}\n";
     }
