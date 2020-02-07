@@ -27,6 +27,8 @@ jobs:
     steps:
     - name: Push codeCoverage to Codecov
       run: bash <(curl -s https://codecov.io/bash)
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
     - name: Publish plugin
       run: ./gradlew publishPlugins -Pgradle.publish.key=$KEY_GRADLE -Pgradle.publish.secret=$SECRET_GRADLE
   
