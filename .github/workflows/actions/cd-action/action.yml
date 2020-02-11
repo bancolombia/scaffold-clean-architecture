@@ -1,0 +1,8 @@
+name: 'Greet Everyone'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish plugin
+        run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
