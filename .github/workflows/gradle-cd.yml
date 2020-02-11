@@ -1,4 +1,4 @@
-name: 'Gradle Action'
+name: 'Plugin CD'
 
 on:
   push:
