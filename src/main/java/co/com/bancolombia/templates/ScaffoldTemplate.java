@@ -11,6 +11,7 @@ public class ScaffoldTemplate {
     public static final String LOG_4_J = "log4j2.properties";
     public static final String GITIGNORE = ".gitignore";
     public static final String READ_ME = "Readme.md";
+    public static final String IMPERATIVE_PROJECT = "imperative";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
 
@@ -161,7 +162,7 @@ public class ScaffoldTemplate {
                 "\n" +
                 "    dependencies {\n" +
                 "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n";
-        if (!type.equals("imperative")) {
+        if (!type.equals(IMPERATIVE_PROJECT)) {
             value = value.concat("\n        testImplementation 'io.projectreactor:reactor-test'\n" +
                     "        implementation 'io.projectreactor:reactor-core'\n" +
                     "        implementation 'io.projectreactor.addons:reactor-extra'\n");
@@ -200,14 +201,14 @@ public class ScaffoldTemplate {
                 "implementation project(':model')\n" +
                 "implementation project(':usecase')\n" +
                 "\n";
-        if (type.equals("reactive")) {
+        if (!type.equals(IMPERATIVE_PROJECT)) {
             value = value.concat("\tcompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n");
         }
         value = value.concat("runtime('org.springframework.boot:spring-boot-devtools')\n" +
                 "}\n" +
-                "jar {\n" +
-                "    archivesBaseName = rootProject.name\n" +
-                "    libsDirName = project(\":\").getBuildDir()\n" +
+                "task explodedJar(type: Copy) {\n" +
+                "with jar\n" +
+                "into \"${buildDir}/exploded\"\n" +
                 "}");
         return value;
 
@@ -228,8 +229,11 @@ public class ScaffoldTemplate {
 
     public static String getApplicationPropertiesContent(String nameProject) {
         return "##Spring Configuration\n" +
-                "server.port=8080\n" +
-                "spring.application.name=" + nameProject;
+                "server:\n" +
+                "  port: 8080\n" +
+                "spring:\n" +
+                "  application:\n" +
+                "    name: " + nameProject;
     }
 
     public static String getMainApplicationContent(String packageName) {

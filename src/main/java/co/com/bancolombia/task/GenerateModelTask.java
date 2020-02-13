@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.templates.ModelTemplate;
@@ -8,10 +9,14 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GenerateModelTask extends DefaultTask {
     private String modelName = "";
+    private String packageName;
     private Logger logger = getProject().getLogger();
 
     @Option(option = "name", description = "Set the model name")
@@ -25,22 +30,76 @@ public class GenerateModelTask extends DefaultTask {
             throw new IllegalArgumentException("No model name, usege: gradle generateModel --name modelName");
         }
 
-        String packageName;
         packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
         packageName = packageName.replaceAll("\\.", "\\/");
         logger.lifecycle("Model Name: {}", modelName);
         logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS));
-        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)));
-
+        createDirs();
         logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
-
         logger.lifecycle(PluginTemplate.GENERATING_FILES);
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Constants.GATEWAYS).concat("/").concat(Utils.capitalize(modelName) + Constants.REPOSITORY + Constants.JAVA_EXTENSION), ModelTemplate.getInterfaceModel(modelName, packageName));
-        Utils.writeString(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName).concat("/").concat(Constants.MODEL).concat("/").concat(Utils.decapitalize(modelName)).concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION), ModelTemplate.getModel(modelName, packageName));
+        writeFiles();
         logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
 
+    }
+
+    private void createDirs() {
+        List<String> dirs = getDirsToCreate();
+        dirs.forEach(getProject()::mkdir);
+    }
+
+    private List<String> getDirsToCreate() {
+        List<String> dirs = new ArrayList<>();
+
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Constants.MAIN_JAVA).concat("/")
+                .concat(packageName).concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Utils.decapitalize(modelName)).concat("/")
+                .concat(Constants.GATEWAYS));
+
+        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Constants.TEST_JAVA).concat("/")
+                .concat(packageName).concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Utils.decapitalize(modelName)));
+
+        return dirs;
+
+    }
+
+    private void writeFiles() throws IOException {
+        List<FileModel> files = getFilesToCreate();
+        for (FileModel file : files) {
+            Utils.writeString(getProject(), file.getPath(), file.getContent());
+        }
+    }
+
+    private List<FileModel> getFilesToCreate() {
+        List<FileModel> files = new ArrayList<>();
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                        .concat("/").concat(Constants.MAIN_JAVA).concat("/")
+                        .concat(packageName).concat("/").concat(Constants.MODEL)
+                        .concat("/").concat(Utils.decapitalize(modelName)).concat("/")
+                        .concat(Constants.GATEWAYS).concat("/")
+                        .concat(Utils.capitalize(modelName) + Constants.REPOSITORY
+                                + Constants.JAVA_EXTENSION))
+                .content(ModelTemplate.getInterfaceModel(modelName, packageName))
+                .build());
+
+        files.add(FileModel
+                .builder()
+                .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                        .concat("/").concat(Constants.MAIN_JAVA).concat("/")
+                        .concat(packageName).concat("/").concat(Constants.MODEL)
+                        .concat("/").concat(Utils.decapitalize(modelName))
+                        .concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION))
+                .content(ModelTemplate.getModel(modelName, packageName))
+                .build());
+
+
+        return files;
     }
 }
