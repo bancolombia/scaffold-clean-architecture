@@ -15,91 +15,337 @@ public class ScaffoldTemplate {
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
 
-    public static final String GIT_IGNORE_CONTENT = "##############################\n" +
-            "## Java\n" +
-            "##############################\n" +
-            ".mtj.tmp/\n" +
-            "*.class\n" +
-            "*.jar\n" +
-            "*.war\n" +
-            "*.ear\n" +
-            "*.nar\n" +
-            "hs_err_pid*\n" +
+    public static final String GIT_IGNORE_CONTENT = "# Created by https://www.gitignore.io/api/java,linux,macos,sonar,gradle,windows,eclipse,sonarqube,sublimetext,intellij+all,visualstudiocode\n" +
+            "# Edit at https://www.gitignore.io/?templates=java,linux,macos,sonar,gradle,windows,eclipse,sonarqube,sublimetext,intellij+all,visualstudiocode\n" +
             "\n" +
-            "### Code-Java ###\n" +
-            ".project\n" +
-            ".classpath\n" +
-            "factoryConfiguration.json\n" +
-            "##############################\n" +
-            "## Maven\n" +
-            "##############################\n" +
-            "target/\n" +
-            "pom.xml.tag\n" +
-            "pom.xml.releaseBackup\n" +
-            "pom.xml.versionsBackup\n" +
-            "pom.xml.next\n" +
-            "release.properties\n" +
-            "dependency-reduced-pom.xml\n" +
-            "buildNumber.properties\n" +
-            ".mvn/timing.properties\n" +
-            ".mvn/wrapper/maven-wrapper.jar\n" +
-            "\n" +
-            "##############################\n" +
-            "## Gradle\n" +
-            "##############################\n" +
-            "bin/\n" +
-            "build/\n" +
-            ".gradle\n" +
-            ".gradletasknamecache\n" +
-            "gradle-app.setting\n" +
-            "!gradle-wrapper.jar\n" +
-            "\n" +
-            "##############################\n" +
-            "## IntelliJ\n" +
-            "##############################\n" +
-            "out/\n" +
-            ".idea/\n" +
-            ".idea_modules/\n" +
-            "*.iml\n" +
-            "*.ipr\n" +
-            "*.iws\n" +
-            "\n" +
-            "##############################\n" +
-            "## Eclipse\n" +
-            "##############################\n" +
-            ".settings/\n" +
+            "### Eclipse ###\n" +
+            ".metadata\n" +
             "bin/\n" +
             "tmp/\n" +
-            ".metadata\n" +
-            ".classpath\n" +
-            ".project\n" +
             "*.tmp\n" +
             "*.bak\n" +
             "*.swp\n" +
             "*~.nib\n" +
             "local.properties\n" +
+            ".settings/\n" +
             ".loadpath\n" +
+            ".recommenders\n" +
             "\n" +
-            "##############################\n" +
-            "## NetBeans\n" +
-            "##############################\n" +
-            "nbproject/private/\n" +
+            "# External tool builders\n" +
+            ".externalToolBuilders/\n" +
+            "\n" +
+            "# Locally stored \"Eclipse launch configurations\"\n" +
+            "*.launch\n" +
+            "\n" +
+            "# PyDev specific (Python IDE for Eclipse)\n" +
+            "*.pydevproject\n" +
+            "\n" +
+            "# CDT-specific (C/C++ Development Tooling)\n" +
+            ".cproject\n" +
+            "\n" +
+            "# CDT- autotools\n" +
+            ".autotools\n" +
+            "\n" +
+            "# Java annotation processor (APT)\n" +
+            ".factorypath\n" +
+            "\n" +
+            "# PDT-specific (PHP Development Tools)\n" +
+            ".buildpath\n" +
+            "\n" +
+            "# sbteclipse plugin\n" +
+            ".target\n" +
+            "\n" +
+            "# Tern plugin\n" +
+            ".tern-project\n" +
+            "\n" +
+            "# TeXlipse plugin\n" +
+            ".texlipse\n" +
+            "\n" +
+            "# STS (Spring Tool Suite)\n" +
+            ".springBeans\n" +
+            "\n" +
+            "# Code Recommenders\n" +
+            ".recommenders/\n" +
+            "\n" +
+            "# Annotation Processing\n" +
+            ".apt_generated/\n" +
+            "\n" +
+            "# Scala IDE specific (Scala & Java development for Eclipse)\n" +
+            ".cache-main\n" +
+            ".scala_dependencies\n" +
+            ".worksheet\n" +
+            "\n" +
+            "### Eclipse Patch ###\n" +
+            "# Eclipse Core\n" +
+            ".project\n" +
+            "\n" +
+            "# JDT-specific (Eclipse Java Development Tools)\n" +
+            ".classpath\n" +
+            "\n" +
+            "# Annotation Processing\n" +
+            ".apt_generated\n" +
+            "\n" +
+            ".sts4-cache/\n" +
+            "\n" +
+            "### Intellij+all ###\n" +
+            "# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm\n" +
+            "# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839\n" +
+            "\n" +
+            "# User-specific stuff\n" +
+            ".idea/**/workspace.xml\n" +
+            ".idea/**/tasks.xml\n" +
+            ".idea/**/usage.statistics.xml\n" +
+            ".idea/**/dictionaries\n" +
+            ".idea/**/shelf\n" +
+            "\n" +
+            "# Generated files\n" +
+            ".idea/**/contentModel.xml\n" +
+            "\n" +
+            "# Sensitive or high-churn files\n" +
+            ".idea/**/dataSources/\n" +
+            ".idea/**/dataSources.ids\n" +
+            ".idea/**/dataSources.local.xml\n" +
+            ".idea/**/sqlDataSources.xml\n" +
+            ".idea/**/dynamic.xml\n" +
+            ".idea/**/uiDesigner.xml\n" +
+            ".idea/**/dbnavigator.xml\n" +
+            "\n" +
+            "# Gradle\n" +
+            ".idea/**/gradle.xml\n" +
+            ".idea/**/libraries\n" +
+            "\n" +
+            "# Gradle and Maven with auto-import\n" +
+            "# When using Gradle or Maven with auto-import, you should exclude module files,\n" +
+            "# since they will be recreated, and may cause churn.  Uncomment if using\n" +
+            "# auto-import.\n" +
+            "# .idea/modules.xml\n" +
+            "# .idea/*.iml\n" +
+            "# .idea/modules\n" +
+            "# *.iml\n" +
+            "# *.ipr\n" +
+            "\n" +
+            "# CMake\n" +
+            "cmake-build-*/\n" +
+            "\n" +
+            "# Mongo Explorer plugin\n" +
+            ".idea/**/mongoSettings.xml\n" +
+            "\n" +
+            "# File-based project format\n" +
+            "*.iws\n" +
+            "\n" +
+            "# IntelliJ\n" +
+            "out/\n" +
+            "\n" +
+            "# mpeltonen/sbt-idea plugin\n" +
+            ".idea_modules/\n" +
+            "\n" +
+            "# JIRA plugin\n" +
+            "atlassian-ide-plugin.xml\n" +
+            "\n" +
+            "# Cursive Clojure plugin\n" +
+            ".idea/replstate.xml\n" +
+            "\n" +
+            "# Crashlytics plugin (for Android Studio and IntelliJ)\n" +
+            "com_crashlytics_export_strings.xml\n" +
+            "crashlytics.properties\n" +
+            "crashlytics-build.properties\n" +
+            "fabric.properties\n" +
+            "\n" +
+            "# Editor-based Rest Client\n" +
+            ".idea/httpRequests\n" +
+            "\n" +
+            "# Android studio 3.1+ serialized cache file\n" +
+            ".idea/caches/build_file_checksums.ser\n" +
+            "\n" +
+            "### Intellij+all Patch ###\n" +
+            "# Ignores the whole .idea folder and all .iml files\n" +
+            "# See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360\n" +
+            "\n" +
+            ".idea/\n" +
+            "\n" +
+            "# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023\n" +
+            "\n" +
+            "*.iml\n" +
+            "modules.xml\n" +
+            ".idea/misc.xml\n" +
+            "*.ipr\n" +
+            "\n" +
+            "# Sonarlint plugin\n" +
+            ".idea/sonarlint\n" +
+            "\n" +
+            "### Java ###\n" +
+            "# Compiled class file\n" +
+            "*.class\n" +
+            "\n" +
+            "# Log file\n" +
+            "*.log\n" +
+            "\n" +
+            "# BlueJ files\n" +
+            "*.ctxt\n" +
+            "\n" +
+            "# Mobile Tools for Java (J2ME)\n" +
+            ".mtj.tmp/\n" +
+            "\n" +
+            "# Package Files #\n" +
+            "*.jar\n" +
+            "*.war\n" +
+            "*.nar\n" +
+            "*.ear\n" +
+            "*.zip\n" +
+            "*.tar.gz\n" +
+            "*.rar\n" +
+            "\n" +
+            "# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml\n" +
+            "hs_err_pid*\n" +
+            "\n" +
+            "### Linux ###\n" +
+            "*~\n" +
+            "\n" +
+            "# temporary files which can be created if a process still has a handle open of a deleted file\n" +
+            ".fuse_hidden*\n" +
+            "\n" +
+            "# KDE directory preferences\n" +
+            ".directory\n" +
+            "\n" +
+            "# Linux trash folder which might appear on any partition or disk\n" +
+            ".Trash-*\n" +
+            "\n" +
+            "# .nfs files are created when an open file is removed but is still being accessed\n" +
+            ".nfs*\n" +
+            "\n" +
+            "### macOS ###\n" +
+            "# General\n" +
+            ".DS_Store\n" +
+            ".AppleDouble\n" +
+            ".LSOverride\n" +
+            "\n" +
+            "# Icon must end with two \\r\n" +
+            "Icon\n" +
+            "\n" +
+            "# Thumbnails\n" +
+            "._*\n" +
+            "\n" +
+            "# Files that might appear in the root of a volume\n" +
+            ".DocumentRevisions-V100\n" +
+            ".fseventsd\n" +
+            ".Spotlight-V100\n" +
+            ".TemporaryItems\n" +
+            ".Trashes\n" +
+            ".VolumeIcon.icns\n" +
+            ".com.apple.timemachine.donotpresent\n" +
+            "\n" +
+            "# Directories potentially created on remote AFP share\n" +
+            ".AppleDB\n" +
+            ".AppleDesktop\n" +
+            "Network Trash Folder\n" +
+            "Temporary Items\n" +
+            ".apdisk\n" +
+            "\n" +
+            "### Sonar ###\n" +
+            "#Sonar generated dir\n" +
+            "/.sonar/\n" +
+            "\n" +
+            "### SonarQube ###\n" +
+            "# SonarQube ignore files.\n" +
+            "#\n" +
+            "# https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner\n" +
+            "# Sonar Scanner working directories\n" +
+            ".sonar/\n" +
+            ".scannerwork/\n" +
+            "\n" +
+            "# http://www.sonarlint.org/commandline/\n" +
+            "# SonarLint working directories, configuration files (including credentials)\n" +
+            ".sonarlint/\n" +
+            "\n" +
+            "### SublimeText ###\n" +
+            "# Cache files for Sublime Text\n" +
+            "*.tmlanguage.cache\n" +
+            "*.tmPreferences.cache\n" +
+            "*.stTheme.cache\n" +
+            "\n" +
+            "# Workspace files are user-specific\n" +
+            "*.sublime-workspace\n" +
+            "\n" +
+            "# Project files should be checked into the repository, unless a significant\n" +
+            "# proportion of contributors will probably not be using Sublime Text\n" +
+            "# *.sublime-project\n" +
+            "\n" +
+            "# SFTP configuration file\n" +
+            "sftp-config.json\n" +
+            "\n" +
+            "# Package control specific files\n" +
+            "Package Control.last-run\n" +
+            "Package Control.ca-list\n" +
+            "Package Control.ca-bundle\n" +
+            "Package Control.system-ca-bundle\n" +
+            "Package Control.cache/\n" +
+            "Package Control.ca-certs/\n" +
+            "Package Control.merged-ca-bundle\n" +
+            "Package Control.user-ca-bundle\n" +
+            "oscrypto-ca-bundle.crt\n" +
+            "bh_unicode_properties.cache\n" +
+            "\n" +
+            "# Sublime-github package stores a github token in this file\n" +
+            "# https://packagecontrol.io/packages/sublime-github\n" +
+            "GitHub.sublime-settings\n" +
+            "\n" +
+            "### VisualStudioCode ###\n" +
+            ".vscode/*\n" +
+            "!.vscode/settings.json\n" +
+            "!.vscode/tasks.json\n" +
+            "!.vscode/launch.json\n" +
+            "!.vscode/extensions.json\n" +
+            "\n" +
+            "### VisualStudioCode Patch ###\n" +
+            "# Ignore all local history of files\n" +
+            ".history\n" +
+            "\n" +
+            "### Windows ###\n" +
+            "# Windows thumbnail cache files\n" +
+            "Thumbs.db\n" +
+            "Thumbs.db:encryptable\n" +
+            "ehthumbs.db\n" +
+            "ehthumbs_vista.db\n" +
+            "\n" +
+            "# Dump file\n" +
+            "*.stackdump\n" +
+            "\n" +
+            "# Folder config file\n" +
+            "[Dd]esktop.ini\n" +
+            "\n" +
+            "# Recycle Bin used on file shares\n" +
+            "$RECYCLE.BIN/\n" +
+            "\n" +
+            "# Windows Installer files\n" +
+            "*.cab\n" +
+            "*.msi\n" +
+            "*.msix\n" +
+            "*.msm\n" +
+            "*.msp\n" +
+            "\n" +
+            "# Windows shortcuts\n" +
+            "*.lnk\n" +
+            "\n" +
+            "### Gradle ###\n" +
+            ".gradle\n" +
             "build/\n" +
-            "nbbuild/\n" +
-            "dist/\n" +
-            "nbdist/\n" +
-            "nbactions.xml\n" +
-            "nb-configuration.xml\n" +
             "\n" +
-            "##############################\n" +
-            "## VS Code\n" +
-            "##############################\n" +
-            ".vscode/\n" +
+            "# Ignore Gradle GUI config\n" +
+            "gradle-app.setting\n" +
             "\n" +
-            "##############################\n" +
-            "## OS X\n" +
-            "##############################\n" +
-            ".DS_Store";
+            "# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)\n" +
+            "!gradle-wrapper.jar\n" +
+            "\n" +
+            "# Cache of project\n" +
+            ".gradletasknamecache\n" +
+            "\n" +
+            "# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898\n" +
+            "# gradle/wrapper/gradle-wrapper.properties\n" +
+            "\n" +
+            "### Gradle Patch ###\n" +
+            "**/build/\n" +
+            "\n" +
+            "# End of https://www.gitignore.io/api/java,linux,macos,sonar,gradle,windows,eclipse,sonarqube,sublimetext,intellij+all,visualstudiocode";
 
     public static final String README_CONTENT = "# Proyecto Base Implementando Clean Architecture\n" +
             "\n" +
