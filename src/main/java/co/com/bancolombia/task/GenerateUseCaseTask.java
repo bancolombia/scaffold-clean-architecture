@@ -4,7 +4,6 @@ import co.com.bancolombia.Utils;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
-import co.com.bancolombia.templates.ScaffoldTemplate;
 import co.com.bancolombia.templates.UseCaseTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
@@ -62,7 +61,7 @@ public class GenerateUseCaseTask extends DefaultTask {
         pathUseCase.add(packageName);
         pathUseCase.add(Constants.USECASE_FOLDER);
         pathUseCase.add(Utils.decapitalize(useCaseName));
-        useCaseDir = Utils.concatSeparator( pathUseCase);
+        useCaseDir = Utils.concatSeparator(pathUseCase);
         dirs.add(useCaseDir);
 
         return dirs;
@@ -75,6 +74,7 @@ public class GenerateUseCaseTask extends DefaultTask {
             Utils.writeString(getProject(), file.getPath(), file.getContent());
         }
     }
+
     private List<FileModel> getFilesToCreate() {
         List<FileModel> files = new ArrayList<>();
         files.add(FileModel
@@ -90,7 +90,8 @@ public class GenerateUseCaseTask extends DefaultTask {
 
     private void throwUseCase() {
         if (useCaseName.isEmpty()) {
-            throw new IllegalArgumentException("No use case name, usege: gradle generateUseCase --name useCaseName");
+            throw new IllegalArgumentException(
+                    "No use case name, usege: gradle generateUseCase --name useCaseName");
         }
     }
 }

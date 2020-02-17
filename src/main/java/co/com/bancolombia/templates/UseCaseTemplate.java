@@ -13,7 +13,8 @@ public class UseCaseTemplate {
     public static String getUseCase(String useCaseName, String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
-        return "package " + packageName + "." + Constants.USECASE_FOLDER + "." + Utils.decapitalize(useCaseName) + ";\n" +
+        return "package " + packageName + "." + Constants.USECASE_FOLDER + "." +
+                Utils.decapitalize(useCaseName) + ";\n" +
                 "\n" +
                 "import lombok.RequiredArgsConstructor;\n" +
                 "\n" +

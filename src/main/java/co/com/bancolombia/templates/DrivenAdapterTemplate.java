@@ -15,10 +15,13 @@ public class DrivenAdapterTemplate {
     public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
     public static final String SECRET_MANAGER_CLASS = "SecretsManager";
     public static final String EVENT_BUS_CLASS = "ReactiveEventsGateway";
+    private static final String DEPENDENCIES = "dependencies {\n";
+    private static final String MODEL_PROJECT = "    implementation project(':model')\n";
 
-    private DrivenAdapterTemplate(){}
+    private DrivenAdapterTemplate() {
+    }
 
-    public enum DrivenAdapters{
+    public enum DrivenAdapters {
         NO_AVAILABLE(-1),
         EMPTY(0),
         JPA_REPOSITORY(1),
@@ -31,8 +34,9 @@ public class DrivenAdapterTemplate {
         private DrivenAdapters(int value) {
             this.value = value;
         }
+
         public static DrivenAdapters valueOf(int value, Supplier<? extends DrivenAdapters> byDef) {
-            return  Arrays.asList(values()).stream()
+            return Arrays.asList(values()).stream()
                     .filter(legNo -> legNo.value == value)
                     .findFirst().orElseGet(byDef);
         }
@@ -41,9 +45,9 @@ public class DrivenAdapterTemplate {
 
     public static String getBuildGradleJPARepository() {
 
-        return "dependencies {\n" +
-                "    implementation project(':model')\n"+
-                "    implementation project(':jpa-repository-commons')\n"+
+        return DEPENDENCIES +
+                MODEL_PROJECT +
+                "    implementation project(':jpa-repository-commons')\n" +
                 "\n" +
                 "    compile 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
                 "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
@@ -57,8 +61,8 @@ public class DrivenAdapterTemplate {
 
     public static String getBuildGradleMongoRepository() {
 
-        return "dependencies {\n" +
-                "    implementation project(':model')\n" +
+        return DEPENDENCIES +
+                MODEL_PROJECT +
                 "    implementation project(':mongo-repository-commons')\n" +
                 "    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
                 "    implementation 'org.springframework:spring-context:5.2.0.RELEASE'\n" +
@@ -68,8 +72,8 @@ public class DrivenAdapterTemplate {
 
     public static String getBuildGradleSecretsManager() {
 
-        return "dependencies {\n" +
-                "    implementation project(':model')\n" +
+        return DEPENDENCIES +
+                MODEL_PROJECT +
                 "    implementation 'org.springframework:spring-context:2.0.5'\n" +
                 "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
                 "}";
@@ -78,7 +82,7 @@ public class DrivenAdapterTemplate {
 
     public static String getBuildGradleEventBus() {
 
-        return "dependencies {\n" +
+        return DEPENDENCIES +
                 "    compile project(':model')\n" +
                 "    compile group: 'org.reactivecommons', name: 'async-commons-starter', version: '0.0.7-beta1'\n" +
                 "    compile('org.springframework:spring-context')\n" +

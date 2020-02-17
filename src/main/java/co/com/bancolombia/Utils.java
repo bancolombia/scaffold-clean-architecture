@@ -5,7 +5,6 @@ import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -89,9 +88,9 @@ public class Utils {
     }
 
     public static String concatSeparator( List<String> args){
-        String result = args.stream().reduce("",(i, acum) ->i + Constants.SEPARATOR +acum) .replaceFirst("/","");
-        System.out.println(result);
-        return  result;
+        return args.stream()
+                .reduce("",(i, acum) ->i + Constants.SEPARATOR + acum)
+                .replaceFirst("/","");
     }
 
 }
