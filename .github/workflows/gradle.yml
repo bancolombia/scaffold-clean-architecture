@@ -26,11 +26,16 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+      - name: Setup sonarqube
+        uses: warchant/setup-sonar-scanner@v1
+      - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: sonar-scanner
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.organization=1corp
+            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.projectKey=sonar-scanner-action
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -50,10 +55,15 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
+      - name: Setup sonarqube
+        uses: warchant/setup-sonar-scanner@v1
+      - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: sonar-scanner
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.organization=1corp
+            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.projectKey=sonar-scanner-action
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
