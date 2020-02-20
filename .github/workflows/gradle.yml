@@ -33,9 +33,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-            -Dsonar.organization=1corp
-            -Dsonar.host.url=https://sonarcloud.io/
-            -Dsonar.projectKey=sonar-scanner-action
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -62,8 +59,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-            -Dsonar.organization=1corp
-            -Dsonar.host.url=https://sonarcloud.io/
-            -Dsonar.projectKey=sonar-scanner-action
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
