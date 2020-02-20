@@ -1,4 +1,4 @@
-![](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/.github/workflows/gradle.yml/badge.svg)
+![](https://github.com/bancolombia/scaffold-clean-architecture/workflows/gradle-actions/badge.svg)
 [![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
 # Scaffolding of Clean Architecture

@@ -1,4 +1,4 @@
-name: 'Gradle Actions'
+name: 'gradle-actions'
 
 on:
   push:
