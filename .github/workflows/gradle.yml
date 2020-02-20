@@ -31,7 +31,7 @@ jobs:
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: sonar-scanner
+        run: ./gradlew sonarqube
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
             -Dsonar.organization=grupo-bancolombia
             -Dsonar.host.url=https://sonarcloud.io/
