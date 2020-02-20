@@ -33,6 +33,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.organization=grupo-bancolombia
+            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.projectKey=bancolombia_scaffold-clean-architecture
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -59,5 +62,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.organization=grupo-bancolombia
+            -Dsonar.host.url=https://sonarcloud.io/
+            -Dsonar.projectKey=bancolombia_scaffold-clean-architecture
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
