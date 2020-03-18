@@ -28,8 +28,10 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
+      - name: Echo event_name
+        run: echo github.event_name
       - name: Run sonarqube
-        if: github.event_name == 'pull_request'
+        if: 1==1
         run: ./gradlew sonarqube --stacktrace
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
