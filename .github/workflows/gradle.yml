@@ -35,6 +35,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew sonarqube
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: show the names
+        run: echo ${{ secrets.SONAR_TOKEN }} && echo ${{ secrets.GITHUB_TOKEN }}
   release:
     if: github.event_name == 'release' 
     runs-on: ubuntu-latest
