@@ -29,12 +29,11 @@ jobs:
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Run sonarqube
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube
+        if: github.event.pull_request.head.repo.fork == false
+        run: ./gradlew sonarqube --stacktrace
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-      - name: show the names
-        run: echo ${{ secrets.SONAR_TOKEN }} && echo ${{ secrets.GITHUB_TOKEN }} && echo ${{ secrets.EMPTY }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
   release:
     if: github.event_name == 'release' 
     runs-on: ubuntu-latest

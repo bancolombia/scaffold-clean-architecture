@@ -173,7 +173,7 @@ public class HelperTemplate {
     public static String getBuildGradleHelperJPARepository() {
 
         return "dependencies {\n" +
-                "    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'\n" +
+                "    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'\n" +
                 "    compile 'org.reactivecommons.utils:object-mapper-api:0.1.0'\n" +
                 "}";
 
