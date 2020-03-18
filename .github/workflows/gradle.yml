@@ -28,12 +28,14 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
+      - name: show the names
+        run: echo ${{ secrets.SONAR_TOKEN }} && echo ${{ secrets.GITHUB_TOKEN }} && echo ${{ secrets.EMPTY }}
       - name: Run sonarqube
         if: github.event.pull_request.head.repo.fork == false
         run: ./gradlew sonarqube --stacktrace
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
     if: github.event_name == 'release' 
     runs-on: ubuntu-latest
