@@ -28,13 +28,13 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: Setup sonarqube
-        uses: warchant/setup-sonar-scanner@v1
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew sonarqube
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: show the names
+        run: echo ${{ secrets.SONAR_TOKEN }} && echo ${{ secrets.GITHUB_TOKEN }} && echo ${{ secrets.EMPTY }}
   release:
     if: github.event_name == 'release' 
     runs-on: ubuntu-latest
@@ -53,12 +53,10 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: Setup sonarqube
-        uses: warchant/setup-sonar-scanner@v1
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube
+        run: ./gradlew sonarqube- --stacktrace 
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}

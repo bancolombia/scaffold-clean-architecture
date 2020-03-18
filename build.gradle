@@ -112,6 +112,10 @@ sonarqube {
 		property "sonar.test", "src/test/java"
 		property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**"
 
+		property "sonar.pullrequest.key", "40"
+		property "sonar.pullrequest.base", "master"
+		property "sonar.pullrequest.branch", "feature/my-new-feature"
+		
 		property "sonar.sourceEncoding", "UTF-8"
 	}
 }
