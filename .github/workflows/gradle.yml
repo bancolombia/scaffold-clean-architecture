@@ -58,7 +58,7 @@ jobs:
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube
+        run: ./gradlew sonarqube- --stacktrace 
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
