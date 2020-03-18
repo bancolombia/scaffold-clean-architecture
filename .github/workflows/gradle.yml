@@ -31,7 +31,7 @@ jobs:
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube
+        run: ./gradlew sonarqube --stacktrace
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: show the names
         run: echo ${{ secrets.SONAR_TOKEN }} && echo ${{ secrets.GITHUB_TOKEN }} && echo ${{ secrets.EMPTY }}
