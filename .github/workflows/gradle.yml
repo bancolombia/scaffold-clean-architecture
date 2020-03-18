@@ -55,8 +55,6 @@ jobs:
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: Setup sonarqube
-        uses: warchant/setup-sonar-scanner@v1
       - name: Run sonarqube
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
