@@ -19,10 +19,10 @@ public class Utils {
     private Utils() {
     }
 
-    public static void writeString(Project project, String nameFile, String data) throws IOException {
-        project.getLogger().debug(project.file(nameFile).getAbsolutePath());
+    public static void writeString(Project project, String filePath, String data) throws IOException {
+        project.getLogger().debug(project.file(filePath).getAbsolutePath());
         File file = project
-                .file(validatePath(nameFile))
+                .file(validatePath(filePath))
                 .getAbsoluteFile();
 
         try (FileWriter fileWriter = new FileWriter(file)) {
