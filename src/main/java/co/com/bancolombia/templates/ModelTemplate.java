@@ -24,11 +24,7 @@ public class ModelTemplate {
 
     public static String getInterfaceModel(String modelName, String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
-        return "package " + packageName + "." + Constants.MODEL + "." + Utils.decapitalize(modelName) +
-                "." + Constants.GATEWAYS + ";\n" +
-                "\n" +
-                "import " + packageName + "." + Constants.MODEL + "." + Utils.decapitalize(modelName) + "." +
-                Utils.capitalize(modelName) + ";\n" +
+        return "package " + packageName + "." + Constants.MODEL + "." + Utils.decapitalize(modelName)+"."+Constants.GATEWAYS+";\n" +
                 "\n" +
                 "public interface " + Utils.capitalize(modelName) + "Repository " + "{\n" +
                 "\n" +
