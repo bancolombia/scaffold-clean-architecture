@@ -12,9 +12,14 @@ public class AsyncEventBusDrivenAdapter extends AbstractModule {
         super.setName("async-event-bus");
         super.setModulePackage("events");
         super.setModelName(DrivenAdapterTemplate.EVENT_BUS_GATEWAY_CLASS);
-        super.setModelDir(Constants.DOMAIN.concat("/")
-                .concat(Constants.MODEL).concat("/").concat(Constants.MAIN_JAVA)
-                .concat("/").concat(super.getPackageName()));
+        super.setGatewayName("Event");
+        super.setGatewayDir(Constants.DOMAIN.concat("/")
+                .concat(Constants.MODEL).concat("/")
+                .concat(Constants.MAIN_JAVA).concat("/")
+                .concat(super.getPackageName()).concat("/")
+                .concat(Constants.MODEL).concat("/")
+                .concat(DrivenAdapterTemplate.EVENT_BUS_MODEL_NAME).concat("/")
+                .concat(Constants.GATEWAYS));
         super.setModuleDir(Constants.INFRASTRUCTURE
                 .concat("/").concat(Constants.DRIVEN_ADAPTERS)
                 .concat("/").concat(super.getName()));
@@ -52,5 +57,15 @@ public class AsyncEventBusDrivenAdapter extends AbstractModule {
                 .getEventBusInterfaceContent(super.getPackageName()
                         .concat(".").concat(DrivenAdapterTemplate.COMMON)
                         .concat(".").concat(Constants.GATEWAYS));
+    }
+
+    @Override
+    public String getAppServiceImports() {
+        return "";
+    }
+
+    @Override
+    public String getPropertiesFileContent() {
+        return null;
     }
 }
