@@ -5,7 +5,6 @@ import co.com.bancolombia.models.AbstractModule;
 import co.com.bancolombia.models.drivenadapters.AsyncEventBusDrivenAdapter;
 import co.com.bancolombia.models.drivenadapters.JPADrivenAdapter;
 import co.com.bancolombia.models.drivenadapters.MongoDrivenAdapter;
-import co.com.bancolombia.models.drivenadapters.SecretManagerDrivenAdapter;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 import java.io.IOException;
@@ -24,9 +23,6 @@ public class DrivenAdapterFactory implements ModuleFactory {
                 break;
             case MONGO_REPOSITORY:
                 drivenAdapter = new MongoDrivenAdapter();
-                break;
-            case SECRETS_MANAGER_CONSUMER:
-                drivenAdapter = new SecretManagerDrivenAdapter();
                 break;
             case ASYNC_EVENT_BUS:
                 drivenAdapter = new AsyncEventBusDrivenAdapter();
