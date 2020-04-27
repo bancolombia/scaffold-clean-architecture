@@ -1,14 +1,13 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.templates.*;
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.DrivenAdapterFactory;
 import co.com.bancolombia.models.AbstractModule;
-import co.com.bancolombia.templates.DrivenAdapterTemplate;
-import co.com.bancolombia.templates.HelperTemplate;
-import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.templates.config.JpaConfigTemplate;
+import co.com.bancolombia.templates.properties.PropertiesTemplate;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -23,7 +22,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private ModuleFactory drivenAdapterFactory = new DrivenAdapterFactory();
     private AbstractModule drivenAdapter;
 
-    @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Secrets Manager Consumer, 4 -> Async Event Bus )")
+    @Option(option = "value", description = "Set the number of the driven adapter  (1 -> JPA Repository, 2 -> Mongo Repository, 3 -> Async Event Bus )")
     public void setDrivenAdapter(String number) {
         this.numberDrivenAdapter = Utils.tryParse(number);
     }
@@ -43,7 +42,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
     private void throwDrivenAdapterTask() {
         if (numberDrivenAdapter < 0) {
-            throw new IllegalArgumentException("No Driven Adapter is set, usege: gradle generateDrivenAdapter --value numberDrivenAdapter");
+            throw new IllegalArgumentException("No Driven Adapter is set, usage: gradle generateDrivenAdapter --value numberDrivenAdapter");
         }
     }
 
@@ -57,7 +56,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
         writedFiles();
         rewriteSettingsGradle();
-
+        rewriteAppServiceBuildGradle();
         logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
     }
 
@@ -71,7 +70,15 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
 
         if (drivenAdapter.hasModelDir()) {
-            getProject().mkdir(drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS));
+            getProject().mkdir(drivenAdapter.getModelDir().concat("/").concat(Constants.GATEWAYS));
+        }
+
+        if (drivenAdapter.hasGateway()) {
+            getProject().mkdir(drivenAdapter.getGatewayDir());
+        }
+
+        if(drivenAdapter.hasConfigFile()) {
+            getProject().mkdir(Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(Constants.CONFIG).concat("/").concat(drivenAdapter.getModulePackage()));
         }
     }
 
@@ -89,13 +96,42 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
 
         if (drivenAdapter.hasModelDir()) {
-            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(DrivenAdapterTemplate.COMMON).concat("/").concat(Constants.GATEWAYS).concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION), drivenAdapter.getInterfaceModule());
+            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION), ModelTemplate.getModel(drivenAdapter.getModelName(), drivenAdapter.getPackageName()));
+        }
+
+        if (drivenAdapter.hasGateway()){
+            Utils.writeString(getProject(), drivenAdapter.getGatewayDir().concat("/").concat(drivenAdapter.getGatewayName()).concat("Repository").concat(Constants.JAVA_EXTENSION), ModelTemplate.getInterfaceModel(drivenAdapter.getGatewayName(), drivenAdapter.getPackageName()));
+
+        }
+
+        if(drivenAdapter.hasConfigFile()) {
+            Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(drivenAdapter.getPackageName()).concat("/").concat(Constants.CONFIG).concat("/").concat(drivenAdapter.getModulePackage()).concat("/").concat(drivenAdapter.getConfigFileName().concat(Constants.JAVA_EXTENSION)), JpaConfigTemplate.getJpaConfigFileContent(drivenAdapter.getPackageName()));
+        }
+
+        if(drivenAdapter.hasPropertiesFile()) {
+            Utils.writeString(getProject(), Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat("application-").concat(drivenAdapter.getPropertiesFileName().concat(".yaml")), drivenAdapter.getPropertiesFileContent());
+            rewriteApplicationProperties(drivenAdapter.getPropertiesFileName());
         }
     }
+
 
     private void rewriteSettingsGradle() throws IOException {
         String settings = Utils.readFile(getProject(), Constants.SETTINGS_GRADLE).collect(Collectors.joining("\n"));
         settings += drivenAdapter.getSettingsGradleModule();
         Utils.writeString(getProject(), Constants.SETTINGS_GRADLE, settings);
+    }
+
+    private void rewriteAppServiceBuildGradle() throws IOException {
+        String buildGradlePath = Constants.APPLICATION.concat("/").concat(Constants.BUILD_GRADLE);
+        String dependencies = Utils.readFile(getProject(), buildGradlePath).collect(Collectors.joining("\n"));
+        dependencies = dependencies.replace("dependencies {", drivenAdapter.getAppServiceImports());
+        Utils.writeString(getProject(), buildGradlePath, dependencies);
+    }
+
+    private void rewriteApplicationProperties(String propertieFileToInclude) throws IOException {
+        String propertiesPath = Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(ScaffoldTemplate.APPLICATION_PROPERTIES);
+        String propertiesContent = Utils.readFile(getProject(), propertiesPath).collect(Collectors.joining("\n"));
+        propertiesContent += "\n      - "+propertieFileToInclude +"\n";
+        Utils.writeString(getProject(), propertiesPath, propertiesContent);
     }
 }
