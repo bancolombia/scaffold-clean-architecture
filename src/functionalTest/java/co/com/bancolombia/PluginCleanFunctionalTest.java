@@ -162,13 +162,40 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateDrivenAdapterWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "1";
+
+        runner.withArguments(task, "--value=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java").exists());
+
+        assertTrue(new File("build/functionalTest/infrastructure//helpers/jpa-repository-commons/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/helpers/jpa-repository-commons/src/main/java/co/com/bancolombia/jpa/AdapterOperations.java").exists());
+
+
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/jpa/JpaConfig.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/application-jpaAdapter.yaml").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/secret/Secret.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateDrivenAdapterEventBusTest() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateDrivenAdapter";
         String valueDrivenAdapter = "3";
 
         runner.withArguments(task, "--value=" + valueDrivenAdapter);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/build.gradle").exists());
-        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets/SecretsManager.java").exists());
+
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
