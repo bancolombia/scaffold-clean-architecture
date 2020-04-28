@@ -62,6 +62,16 @@ public class MongoDrivenAdapter extends AbstractModule {
     }
 
     @Override
+    public String getAppServiceImports() {
+        return "";
+    }
+
+    @Override
+    public String getPropertiesFileContent() {
+        return null;
+    }
+
+    @Override
     public String getBuildGradleContentModule() {
         return DrivenAdapterTemplate.getBuildGradleMongoRepository();
     }

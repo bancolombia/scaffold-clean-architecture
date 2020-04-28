@@ -60,6 +60,10 @@ public class GenerateDrivenAdapterTaskTest {
 
         assertTrue(new File("build/unitTest/infrastructure//helpers/jpa-repository-commons/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/helpers/jpa-repository-commons/src/main/java/co/com/bancolombia/jpa/AdapterOperations.java").exists());
+
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/jpa/JpaConfig.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/application-jpaAdapter.yaml").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/secret/Secret.java").exists());
     }
 
     @Test
@@ -78,24 +82,13 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
-    public void generateDrivenAdapterSecretsManager() throws IOException, CleanException {
+    public void generateDrivenAdapterEventBus() throws IOException, CleanException {
 
         task.setDrivenAdapter("3");
         task.generateDrivenAdapterTask();
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/secrets-manager-consumer/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/secrets-manager-consumer/src/main/java/co/com/bancolombia/secrets/SecretsManager.java").exists());
-        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/common/gateways/SecretsManagerConsumer.java").exists());
-
-    }
-
-    @Test
-    public void generateDrivenAdapterEventBus() throws IOException, CleanException {
-
-        task.setDrivenAdapter("4");
-        task.generateDrivenAdapterTask();
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
-        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/common/gateways/EventsGateway.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
 
     }
 

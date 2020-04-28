@@ -22,6 +22,10 @@ public abstract class AbstractModule {
     private String helperDir;
     private String modelName;
     private String modelDir;
+    private String configFileName;
+    private String propertiesFileName;
+    private String gatewayDir;
+    private String gatewayName;
 
     public AbstractModule() throws IOException {
         setPackageName(Utils.readProperties("package").replaceAll("\\.", "\\/"));
@@ -64,6 +68,18 @@ public abstract class AbstractModule {
         return nameHelper != null;
     }
 
+    public boolean hasConfigFile() {
+        return configFileName != null;
+    }
+
+    public boolean hasPropertiesFile() {
+        return configFileName != null;
+    }
+
+    public boolean hasGateway() {
+        return gatewayName != null;
+    }
+
     public String getModuleDirSrc() {
         return moduleDir.concat("/").concat(Constants.MAIN_JAVA).concat("/").concat(packageName)
                 .concat("/").concat(modulePackage);
@@ -73,4 +89,9 @@ public abstract class AbstractModule {
         return moduleDir.concat("/").concat(Constants.TEST_JAVA).concat("/").concat(packageName)
                 .concat("/").concat(modulePackage);
     }
+
+    public abstract String getAppServiceImports();
+
+    public abstract String getPropertiesFileContent();
+
 }

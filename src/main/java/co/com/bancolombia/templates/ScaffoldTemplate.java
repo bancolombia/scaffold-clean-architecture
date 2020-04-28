@@ -444,8 +444,8 @@ public class ScaffoldTemplate {
                 "\n" +
                 "dependencies {\n" +
                 "    compile 'org.springframework.boot:spring-boot-starter'\n" +
-                "implementation project(':model')\n" +
-                "implementation project(':usecase')\n" +
+                "    implementation project(':model')\n" +
+                "    implementation project(':usecase')\n" +
                 "\n";
         if (!type.equals(IMPERATIVE_PROJECT)) {
             value = value.concat("\tcompile 'org.reactivecommons.utils:object-mapper:0.1.0'\n");
@@ -479,7 +479,15 @@ public class ScaffoldTemplate {
                 "  port: 8080\n" +
                 "spring:\n" +
                 "  application:\n" +
-                "    name: " + nameProject;
+                "    name: " + nameProject + "\n" +
+                "  devtools:\n" +
+                "    add-properties: false\n" +
+                "  h2:\n" +
+                "    console:\n" +
+                "      enabled: true\n" +
+                "      path:/h2\n" +
+                "  profiles:\n" +
+                "    include:\n";
     }
 
     public static String getMainApplicationContent(String packageName) {

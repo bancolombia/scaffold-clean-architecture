@@ -58,8 +58,7 @@ gradle gda --value [referenceNumberDrivenAdapter]
 | ------------------ | ------------ |
 | 1|JPA Repository |
 | 2|Mongo Repository |
-| 3|Secrets Manager Consumer |
-| 4|Async Event Bus |
+| 3|Async Event Bus |
 
 5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
 ```sh

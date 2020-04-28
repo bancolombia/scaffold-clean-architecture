@@ -8,15 +8,15 @@ public class DrivenAdapterTemplate {
     public static final String COMMON = "common";
 
     public static final String EVENT_BUS_GATEWAY_CLASS = "EventsGateway";
-    public static final String SECRET_MANAGER_CONSUMER_CLASS = "SecretsManagerConsumer";
     public static final String JPA_REPOSITORY_INTERFACE = "JPARepository";
     public static final String JPA_REPOSITORY_CLASS = "JPARepositoryAdapter";
     public static final String MONGO_REPOSITORY_CLASS = "MongoRepositoryAdapter";
     public static final String MONGO_REPOSITORY_INTERFACE = "MongoRepository";
-    public static final String SECRET_MANAGER_CLASS = "SecretsManager";
     public static final String EVENT_BUS_CLASS = "ReactiveEventsGateway";
     private static final String DEPENDENCIES = "dependencies {\n";
     private static final String MODEL_PROJECT = "    implementation project(':model')\n";
+    public static final String SECRET_MODEL_NAME = "secret";
+    public static final String EVENT_BUS_MODEL_NAME = "event";
 
     private DrivenAdapterTemplate() {
     }
@@ -26,8 +26,7 @@ public class DrivenAdapterTemplate {
         EMPTY(0),
         JPA_REPOSITORY(1),
         MONGO_REPOSITORY(2),
-        SECRETS_MANAGER_CONSUMER(3),
-        ASYNC_EVENT_BUS(4);
+        ASYNC_EVENT_BUS(3);
 
         private int value;
 
@@ -70,15 +69,7 @@ public class DrivenAdapterTemplate {
                 "}";
     }
 
-    public static String getBuildGradleSecretsManager() {
 
-        return DEPENDENCIES +
-                MODEL_PROJECT +
-                "    implementation 'org.springframework:spring-context:2.0.5'\n" +
-                "    implementation 'co.bia:secretsmanager:2.0.1'\n" +
-                "}";
-
-    }
 
     public static String getBuildGradleEventBus() {
 
@@ -166,35 +157,6 @@ public class DrivenAdapterTemplate {
                 "}";
     }
 
-    public static String getSecretsManagerClassContent(String packageName, String drivenAdapterPackage) {
-        packageName = packageName.replaceAll("\\/", "\\.");
-
-        return "package " + packageName + "." + drivenAdapterPackage + ";\n" +
-                "\n" +
-                "import " + packageName + "." + COMMON + "." + Constants.GATEWAYS + "." + SECRET_MANAGER_CONSUMER_CLASS + ";\n" +
-                "import co.com.bancolombia.commons.secretsmanager.connector.AbstractConnector;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.connector.clients.AWSSecretManagerConnector;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;\n" +
-                "import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;\n" +
-                "import org.springframework.stereotype.Repository;\n" +
-                "\n" +
-                "\n" +
-                "@Repository\n" +
-                "public class " + SECRET_MANAGER_CLASS + " implements " + SECRET_MANAGER_CONSUMER_CLASS + " {\n" +
-                "\n" +
-                "\n" +
-                "    public " + SECRET_MANAGER_CLASS + "() {\n" +
-                "    }\n" +
-                "\n" +
-                "    @Override\n" +
-                "    public Object getSecrets(Class cls, String secretRegion, String secretName) throws SecretException {\n" +
-                "        AbstractConnector connector = new AWSSecretManagerConnector(secretRegion);\n" +
-                "        GenericManager manager = new GenericManager(connector);\n" +
-                "        return manager.getSecretModel(secretName, cls);\n" +
-                "    }\n" +
-                "}";
-    }
-
     public static String getEventBusClassContent(String packageName, String drivenAdapterPackage) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
@@ -234,16 +196,6 @@ public class DrivenAdapterTemplate {
 
     }
 
-    public static String getSecretsManagerInterfaceContent(String packageName) {
-        packageName = packageName.replaceAll("\\/", "\\.");
-
-        return "package " + packageName + ";\n" +
-                "\n" +
-                "public interface " + SECRET_MANAGER_CONSUMER_CLASS + "<T> {\n" +
-                "    T getSecrets(Class<T> cls, String secretRegion, String secretName) throws Exception;\n" +
-                "}";
-    }
-
     public static String getEventBusInterfaceContent(String packageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
 
@@ -255,6 +207,12 @@ public class DrivenAdapterTemplate {
                 "}";
     }
 
+    public static String getJPAImportContent() {
+        return "\n" +
+                "    compile 'org.apache.commons:commons-dbcp2:2.2.0'\n" +
+                "    compile group: 'co.com.bancolombia', name: 'secretsmanager', version: '2.0.1'\n";
+    }
+
     public static String getSettingsJPARepositoryContent() {
         return "\ninclude \":jpa-repository\"\n" +
                 "project(':jpa-repository').projectDir = file('./infrastructure/driven-adapters/jpa-repository')\n";
@@ -263,11 +221,6 @@ public class DrivenAdapterTemplate {
     public static String getSettingsMongoRepositoryContent() {
         return "\ninclude \":mongo-repository\"\n" +
                 "project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')\n";
-    }
-
-    public static String getSettingsSecretsManagerContent() {
-        return "\ninclude \":secrets-manager\"\n" +
-                "project(':secrets-manager').projectDir = file('./infrastructure/driven-adapters/secrets-manager-consumer')\n";
     }
 
     public static String getSettingsEventBusContent() {

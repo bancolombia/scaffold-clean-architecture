@@ -136,13 +136,6 @@ public class ConstantsTest {
     }
 
     @Test
-    public void getBuildGradleSecretsManager(){
-        String act =  DrivenAdapterTemplate.getBuildGradleSecretsManager();
-
-        Assert.assertTrue(act instanceof  String);
-    }
-
-    @Test
     public void getBuildGradleApiRest(){
         String act =  EntryPointTemplate.getBuildGradleApiRest();
 

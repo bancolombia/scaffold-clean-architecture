@@ -19,6 +19,8 @@ public class Constants {
     public static final String MAIN_RESOURCES = "src/main/resources";
     public static final String TEST_JAVA = "src/test/java";
     public static final String CONFIG = "config";
+    public static final String CONFIG_JPA = "jpa";
+    public static final String CONFIG_USECASE= "usecase";
 
     /**
      * Child Dirs Infrastructure
