@@ -7,8 +7,14 @@ public class TaskModelTest {
 
     @Test
     public void taskModelToString() {
-        String model = TaskModel.builder().build().toString();
-        Assert.assertNotNull(model);
+        TaskModel model = TaskModel.builder()
+                .name("")
+                .group("")
+                .shortcut("")
+                .build();
+
+
+        Assert.assertNotNull(model.toString());
     }
 
 }

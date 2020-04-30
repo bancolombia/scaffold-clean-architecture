@@ -40,12 +40,26 @@ public class GeneratePipelineTaskTest {
     }
 
     @Test
-    public void generateAzureDevOpsPipeline() throws IOException, CleanException {
+    public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
         task.setPipelineValueProject("1");
         task.generatePipelineTask();
 
         assertTrue(new File("build/unitTest/deployment/cleanArchitecture_Build.yaml").exists());
+    }
+
+    @Test(expected = CleanException.class)
+    public void generateAzureDevOpsPipelineErrorValueTest() throws IOException, CleanException {
+
+        task.setPipelineValueProject("10");
+        task.generatePipelineTask();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void generateAzureDevOpsPipelineErrorTest() throws IOException, CleanException {
+
+        task.setPipelineValueProject("-1");
+        task.generatePipelineTask();
     }
 
     private void writeString(File file, String string) throws IOException {
