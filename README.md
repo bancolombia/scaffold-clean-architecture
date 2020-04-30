@@ -54,7 +54,7 @@ gradle generateDrivenAdapter --value=[referenceNumberDrivenAdapter]
 gradle gda --value [referenceNumberDrivenAdapter]
  ```
 
-|      Reference number driven adapter        | Name       |
+|      Reference driven adapter value        | Name       |
 | ------------------ | ------------ |
 | 1|JPA Repository |
 | 2|Mongo Repository |
@@ -65,7 +65,7 @@ gradle gda --value [referenceNumberDrivenAdapter]
 gradle generateEntryPoint --value=referenceNumberEntryPoint
 gradle gep --value referenceNumberEntryPoint
  ```
-|      Reference number entry point      | Name       |
+|      Reference entry point value      | Name       |
 | ------------------ | ------------ |
 | 1|API REST (Spring Boot Starter Web) |
 | 2|API REST (Spring Boot Starter WebFlux) |
@@ -78,6 +78,14 @@ gradle validateStructure
 gradle vs
 ```
 
+7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task have one required parameter ```value```.
+```sh
+gradle generatePipeline --value=referenceNumberPipeline
+gradle gpl --value referenceNumberPipeline
+````
+|      Reference pipeline value      | Name       |
+| ------------------ | ------------ |
+| 1|Azure DevOps |
 
 
 How I can help?
