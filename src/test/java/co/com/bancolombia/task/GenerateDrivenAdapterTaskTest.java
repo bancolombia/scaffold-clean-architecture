@@ -28,8 +28,12 @@ public class GenerateDrivenAdapterTaskTest {
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("test", GenerateDrivenAdapterTask.class);
 
+        project.getTasks().create("testStructure", GenerateStructureTask.class);
+        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
+        taskStructure.generateStructureTask();
+
+        project.getTasks().create("test", GenerateDrivenAdapterTask.class);
         task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
     }
 
