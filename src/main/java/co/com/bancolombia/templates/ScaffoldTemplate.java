@@ -12,6 +12,8 @@ public class ScaffoldTemplate {
     public static final String GITIGNORE = ".gitignore";
     public static final String READ_ME = "Readme.md";
     public static final String IMPERATIVE_PROJECT = "imperative";
+    public static final String SONAR_PLUGIN_VERSION = "2.7";
+    public static final String NET_SALIMAN_COBERTURA_VERSION = "3.0.0";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
 
@@ -393,9 +395,18 @@ public class ScaffoldTemplate {
     }
 
     public static String getMainGradleContent(String type) {
-        String value = "subprojects {\n" +
+        String value = "allprojects {\n" +
+                "    apply plugin: 'net.saliman.cobertura'\n" +
+                "    repositories {\n" +
+                "       mavenCentral()\n" +
+                "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
+                "         maven { url \"https://repo.spring.io/milestone\" }\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "subprojects {\n" +
                 "    apply plugin: \"java\"\n" +
-                "    apply plugin: \"jacoco\"\n" +
+                "    apply plugin: 'net.saliman.cobertura' \n" +
                 "    apply plugin: 'io.spring.dependency-management'\n" +
                 "\n" +
                 "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
@@ -421,9 +432,11 @@ public class ScaffoldTemplate {
                 "    }\n" +
                 "\n" +
                 "\n" +
-                "    jacoco {\n" +
-                "        toolVersion = '0.8.2'\n" +
+                "   cobertura {\n" +
+                "        coverageFormats = [ 'xml', 'html' ]\n" +
                 "    }\n" +
+                "\n" +
+                "    test.finalizedBy(project.tasks.cobertura)" +
                 "\n" +
                 "    dependencyManagement {\n" +
                 "        imports {\n" +
@@ -431,6 +444,26 @@ public class ScaffoldTemplate {
                 "            mavenBom \"org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}\"\n" +
                 "        }\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "def files = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }\n" +
+                "\n" +
+                "cobertura {\n" +
+                "    coverageFormats = ['xml', 'html']\n" +
+                "    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()\n" +
+                "    coverageMergeDatafiles = files\n" +
+                "}\n" +
+                "\n" +
+                "test.finalizedBy(project.tasks.cobertura)\n" +
+                "\n" +
+                "subprojects.each { project ->\n" +
+                "    test.dependsOn(\":\" + project.name + \":test\")\n" +
+                "}\n" +
+                "\n" +
+                "tasks.withType(JavaCompile) {\n" +
+                "    options.compilerArgs = [\n" +
+                "            '-Amapstruct.suppressGeneratorTimestamp=true'\n" +
+                "    ]\n" +
                 "}");
         return value;
 
@@ -513,6 +546,8 @@ public class ScaffoldTemplate {
                 "\text {\n" +
                 "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
                 "\t\tspringCloudVersion = 'Greenwich.M1'\n" +
+                "\t\tsonarVersion = '"+SONAR_PLUGIN_VERSION+"'\n" +
+                "\t\tnetSalimanVersion = '"+NET_SALIMAN_COBERTURA_VERSION+"'\n" +
                 "\t}\n" +
                 "\trepositories {\n" +
                 "\t\tmavenCentral()\n" +
@@ -521,20 +556,21 @@ public class ScaffoldTemplate {
                 "\t}\n" +
                 "\tdependencies {\n" +
                 "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
+                "\t\tclasspath(\"org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarVersion}\")\n" +
+                "\t\tclasspath(\"net.saliman:gradle-cobertura-plugin:${netSalimanVersion}\")\n" +
                 "\t}\n" +
                 "}\n" +
                 "\n" +
                 "plugins {\n" +
-                "\tid \"org.sonarqube\" version \"2.6\"\n" +
+                "\tid \"org.sonarqube\" version \""+SONAR_PLUGIN_VERSION+"\"\n" +
                 "\tid \"co.com.bancolombia.cleanArchitecture\" version \"" + PluginTemplate.VERSION_PLUGIN + "\"\n" +
+                "\tid \"net.saliman.cobertura\" version \""+NET_SALIMAN_COBERTURA_VERSION+"\" \n" +
                 "}\n" +
-                "subprojects {\n" +
-                "  apply plugin: \"java\"\n" +
-                "  apply plugin: \"jacoco\"\n" +
-                "    // Disable the test report for the individual test task\n" +
-                "    test {\n" +
-                "      reports.html.enabled = false\n" +
-                "    }\n" +
+                "\n" +
+                "sonarqube {\n" +
+                "\tproperties {\n" +
+                "\t\tproperty \"sonar.sourceEnconding\", \"UTF-8\"\n" +
+                "\t}\n" +
                 "}" +
                 "\n" +
                 "apply from: './main.gradle'";

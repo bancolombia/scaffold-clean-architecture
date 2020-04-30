@@ -28,8 +28,12 @@ public class GenerateDrivenAdapterTaskTest {
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("test", GenerateDrivenAdapterTask.class);
 
+        project.getTasks().create("testStructure", GenerateStructureTask.class);
+        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
+        taskStructure.generateStructureTask();
+
+        project.getTasks().create("test", GenerateDrivenAdapterTask.class);
         task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
     }
 
@@ -88,7 +92,7 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
-        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
 
     }
 

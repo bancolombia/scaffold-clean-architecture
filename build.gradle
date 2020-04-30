@@ -108,13 +108,13 @@ sonarqube {
 		property "sonar.junit.reportPaths", "build/test-results/test"
 		property "sonar.java-coveragePlugin", "jacoco"
 		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
-		property "sonar.jacoco.reportPaths", "build/reports/jacoco/report.xml"
+		//property "sonar.jacoco.reportPaths", "build/reports/jacoco/report.xml"
 		property "sonar.test", "src/test/java"
 		property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**"
 
-		property "sonar.pullrequest.key", "40"
-		property "sonar.pullrequest.base", "master"
-		property "sonar.pullrequest.branch", "feature/my-new-feature"
+		//property "sonar.pullrequest.key", "40"
+		//property "sonar.pullrequest.base", "master"
+		//property "sonar.pullrequest.branch", "feature/my-new-feature"
 		
 		property "sonar.sourceEncoding", "UTF-8"
 	}
