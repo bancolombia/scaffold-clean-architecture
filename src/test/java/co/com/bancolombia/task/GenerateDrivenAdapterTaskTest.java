@@ -88,7 +88,7 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
-        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventRepository.java").exists());
 
     }
 
