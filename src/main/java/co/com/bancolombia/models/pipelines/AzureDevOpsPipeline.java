@@ -18,14 +18,14 @@ public class AzureDevOpsPipeline extends AbstractModule {
         String binaries = super.getModulesPaths().stream()
                 .map(x -> new String().concat(AzureDevOpsPipelineTemplate.BUILD_SOURCE_DIRECTORY)
                         .concat(x)
-                        .concat(AzureDevOpsPipelineTemplate.BUIL_BINARIES_PATH))
+                        .concat(AzureDevOpsPipelineTemplate.BUILD_BINARIES_PATH))
                 .collect(Collectors.joining(","));
 
         String test = super.getModulesPaths().stream()
                 .filter(x -> !x.contains("app-service"))
                 .map(x-> new String().concat(AzureDevOpsPipelineTemplate.BUILD_SOURCE_DIRECTORY
                         .concat(x)
-                        .concat(AzureDevOpsPipelineTemplate.BUIL_TEST_PATH)))
+                        .concat(AzureDevOpsPipelineTemplate.BUILD_TEST_PATH)))
                 .collect(Collectors.joining(","));
 
         return pipelineContent.replace("[ProjectName]", super.getProjectName())

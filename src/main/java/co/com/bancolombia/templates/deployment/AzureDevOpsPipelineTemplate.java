@@ -3,8 +3,8 @@ package co.com.bancolombia.templates.deployment;
 public class AzureDevOpsPipelineTemplate {
 
     public static String BUILD_SOURCE_DIRECTORY = "$(Build.SourcesDirectory)";
-    public static String BUIL_BINARIES_PATH = "$(Build.SourcesDirectory)";
-    public static String BUIL_TEST_PATH = "/build/test-results/test";
+    public static String BUILD_BINARIES_PATH = "$(Build.SourcesDirectory)";
+    public static String BUILD_TEST_PATH = "/build/test-results/test";
 
     public static String generateAzureDevOpsPipelineTemplateContent() {
         return "# Gradle\n" +
