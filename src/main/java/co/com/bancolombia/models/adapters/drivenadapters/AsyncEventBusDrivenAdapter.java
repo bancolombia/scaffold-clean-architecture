@@ -1,7 +1,7 @@
-package co.com.bancolombia.models.drivenadapters;
+package co.com.bancolombia.models.adapters.drivenadapters;
 
 import co.com.bancolombia.templates.Constants;
-import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.models.adapters.AbstractModule;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 import java.io.IOException;

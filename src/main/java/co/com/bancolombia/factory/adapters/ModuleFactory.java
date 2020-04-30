@@ -1,7 +1,7 @@
-package co.com.bancolombia.factory;
+package co.com.bancolombia.factory.adapters;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.models.adapters.AbstractModule;
 
 import java.io.IOException;
 

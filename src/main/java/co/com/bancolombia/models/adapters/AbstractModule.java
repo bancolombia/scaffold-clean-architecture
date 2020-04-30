@@ -1,4 +1,4 @@
-package co.com.bancolombia.models;
+package co.com.bancolombia.models.adapters;
 
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.templates.Constants;

@@ -201,6 +201,21 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGeneratePipelineAzureDevOpsTest() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generatePipeline";
+        String valuePipeline = "1";
+
+        runner.withArguments(task, "--value=" + valuePipeline);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/deployment/cleanArchitecture_Build.yaml").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskvalidateStructureWithOutParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "validateStructure";

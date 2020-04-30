@@ -1,5 +1,6 @@
 package co.com.bancolombia.models.entrypoints;
 
+import co.com.bancolombia.models.adapters.entrypoints.ApiRest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,5 +1,6 @@
 package co.com.bancolombia.models.drivenadapters;
 
+import co.com.bancolombia.models.adapters.drivenadapters.AsyncEventBusDrivenAdapter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

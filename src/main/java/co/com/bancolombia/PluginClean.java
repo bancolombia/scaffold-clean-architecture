@@ -48,6 +48,10 @@ public class PluginClean implements Plugin<Project> {
                 .description("Validate that project references are not violated").group(taskGroup)
                 .taskAction(ValidateStructureTask.class).build());
 
+        tasksModels.add(TaskModel.builder().name("generatePipeline").shortcut("gpl")
+                .description("Generate CI pipeline as a code in deployment layer").group(taskGroup)
+                .taskAction(GeneratePipelineTask.class).build());
+
         return tasksModels;
     }
 

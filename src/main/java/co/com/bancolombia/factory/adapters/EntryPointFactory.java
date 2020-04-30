@@ -1,9 +1,9 @@
-package co.com.bancolombia.factory;
+package co.com.bancolombia.factory.adapters;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.models.AbstractModule;
-import co.com.bancolombia.models.entrypoints.ApiReactive;
-import co.com.bancolombia.models.entrypoints.ApiRest;
+import co.com.bancolombia.models.adapters.AbstractModule;
+import co.com.bancolombia.models.adapters.entrypoints.ApiReactive;
+import co.com.bancolombia.models.adapters.entrypoints.ApiRest;
 import co.com.bancolombia.templates.EntryPointTemplate;
 
 import java.io.IOException;
