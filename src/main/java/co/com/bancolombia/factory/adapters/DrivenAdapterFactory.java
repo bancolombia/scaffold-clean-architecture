@@ -1,10 +1,10 @@
-package co.com.bancolombia.factory;
+package co.com.bancolombia.factory.adapters;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.models.AbstractModule;
-import co.com.bancolombia.models.drivenadapters.AsyncEventBusDrivenAdapter;
-import co.com.bancolombia.models.drivenadapters.JPADrivenAdapter;
-import co.com.bancolombia.models.drivenadapters.MongoDrivenAdapter;
+import co.com.bancolombia.models.adapters.AbstractModule;
+import co.com.bancolombia.models.adapters.drivenadapters.AsyncEventBusDrivenAdapter;
+import co.com.bancolombia.models.adapters.drivenadapters.JPADrivenAdapter;
+import co.com.bancolombia.models.adapters.drivenadapters.MongoDrivenAdapter;
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
 
 import java.io.IOException;

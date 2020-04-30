@@ -1,6 +1,6 @@
-package co.com.bancolombia.models.entrypoints;
+package co.com.bancolombia.models.adapters.entrypoints;
 
-import co.com.bancolombia.models.AbstractModule;
+import co.com.bancolombia.models.adapters.AbstractModule;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.EntryPointTemplate;
 
