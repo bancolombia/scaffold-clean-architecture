@@ -28,9 +28,14 @@ public class GeneratePipelineTaskTest {
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("test", GeneratePipelineTask.class);
 
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+
+        project.getTasks().create("testStructure", GenerateStructureTask.class);
+        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
+        taskStructure.generateStructureTask();
+
+        project.getTasks().create("test", GeneratePipelineTask.class);
         task = (GeneratePipelineTask) project.getTasks().getByName("test");
     }
 
