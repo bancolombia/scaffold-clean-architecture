@@ -47,6 +47,10 @@ public class GenerateUnitTestModelTask extends DefaultTask {
         packageName = packageName.replaceAll("\\.", "\\/");
         modelSubPackage = modelSubPackage.replaceAll("\\.", "\\/");
         logger.lifecycle("Model Name: {}", modelName);
+        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
+        createDirs();
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
         writeFiles();
         logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
 
@@ -132,5 +136,12 @@ public class GenerateUnitTestModelTask extends DefaultTask {
 
         Utils.writeString(getProject(), file.getPath(), file.getContent());
 
+    }
+
+    private void createDirs(){
+        getProject().mkdir(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Constants.TEST_JAVA).concat("/")
+                .concat(packageName).concat("/").concat(Constants.MODEL)
+                .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage));
     }
 }

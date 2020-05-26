@@ -66,11 +66,6 @@ public class GenerateModelTask extends DefaultTask {
                 .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage).concat("/")
                 .concat(Constants.GATEWAYS));
 
-        dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
-                .concat("/").concat(Constants.TEST_JAVA).concat("/")
-                .concat(packageName).concat("/").concat(Constants.MODEL)
-                .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage));
-
         return dirs;
 
     }
