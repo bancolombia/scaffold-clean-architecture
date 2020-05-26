@@ -25,7 +25,7 @@ public class GenerateModelTaskTest {
     }
 
     @Test
-    public void generateEntryPoint() throws IOException {
+    public void generateModelBasic() throws IOException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateModelTask.class);
 
@@ -35,6 +35,21 @@ public class GenerateModelTaskTest {
         task.generateModelTask();
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());
+
+    }
+
+    @Test
+    public void generateModelWithPackage() throws IOException {
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        project.getTasks().create("test", GenerateModelTask.class);
+
+        GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
+
+        task.setNameProject("testModel");
+        task.setPackageProject("portfolio.details");
+        task.generateModelTask();
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/portfolio/details/gateways/TestModelRepository.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/portfolio/details/TestModel.java").exists());
 
     }
 

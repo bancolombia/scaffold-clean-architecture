@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,29 @@ public class UtilsTest {
         List<File> files2 = Utils.finderSubProjects("src/test/resources/finderSubProjects/");
 
         Assert.assertEquals(2, files2.size());
+    }
+
+    @Test
+    public void getValuesByClass(){
+        Assert.assertEquals(Utils.getValuesByClass("String"), "\"String\"");
+        Assert.assertEquals(Utils.getValuesByClass("int"), 1234);
+        Assert.assertEquals(Utils.getValuesByClass("short"), 1234);
+        Assert.assertEquals(Utils.getValuesByClass("char"), "\'c\'");
+        Assert.assertEquals(Utils.getValuesByClass("double"), 12345.0d);
+        Assert.assertEquals(Utils.getValuesByClass("Date"), "new Date()");
+        Assert.assertEquals(Utils.getValuesByClass("boolean"), false);
+        Assert.assertEquals(Utils.getValuesByClass("float"), 0.0f);
+        Assert.assertEquals(Utils.getValuesByClass("long"), 0L);
+        Assert.assertEquals(Utils.getValuesByClass("byte"), 0);
+        Assert.assertEquals(Utils.getValuesByClass("List<T>"), "new LinkedList<>()");
+        Assert.assertNull(Utils.getValuesByClass("Object"));
+    }
+
+    @Test
+    public void getDelta(){
+        Assert.assertEquals(Utils.getDelta("String"), "");
+        Assert.assertEquals(Utils.getDelta("double"), ", 0");
+        Assert.assertEquals(Utils.getDelta("float"), ", 0");
     }
 
 }

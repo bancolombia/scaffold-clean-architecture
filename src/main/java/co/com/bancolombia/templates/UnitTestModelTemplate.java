@@ -64,6 +64,10 @@ public class UnitTestModelTemplate {
                 }
                 unitTest += params.substring(0, params.length()-2);
                 unitTest += ");\n\n";
+                for(AttributeClassModel attr : classModel.getAttributes()) {
+                    unitTest += "     "+variable+".set" + Utils.capitalize(attr.getName())+"("+Utils.getValuesByClass(attr.getAClass())+");\n";
+                }
+                unitTest += "\n";
                 unitTest += getAsserts(classModel.getAttributes(), variable);
                 unitTest += "   }\n\n";
             }
