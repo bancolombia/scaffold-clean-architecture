@@ -129,6 +129,51 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateModelWithParametersSubPackage() {
+        String task = "generateModel";
+        String modelName = "testModel";
+        String subPackage = "portfolio.details";
+
+        // Run the build
+        runner.withArguments(task, "--name=" + modelName, "--package=" + subPackage);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/portfolio/details/gateways/TestModelRepository.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/portfolio/details/TestModel.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateModelUnitTestWithParameters() {
+        String task = "generateUnitTestModel";
+        String modelName = "TestModel";
+
+        // Run the build
+        runner.withArguments(task, "--name=" + modelName);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model/testModel/TestModelTest.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateModelUnitTestWithParametersSubPackage() {
+        String task = "generateUnitTestModel";
+        String modelName = "TestModel";
+        String subPackage = "portfolio.details";
+
+        // Run the build
+        runner.withArguments(task, "--name=" + modelName, "--package=" + subPackage);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model/portfolio/details/TestModelTest.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateUseCaseWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateUseCase";

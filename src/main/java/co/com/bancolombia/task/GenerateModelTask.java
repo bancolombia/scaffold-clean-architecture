@@ -16,12 +16,18 @@ import java.util.List;
 
 public class GenerateModelTask extends DefaultTask {
     private String modelName = "";
+    private String modelSubPackage = "";
     private String packageName;
     private Logger logger = getProject().getLogger();
 
     @Option(option = "name", description = "Set the model name")
     public void setNameProject(String modelName) {
         this.modelName = modelName;
+    }
+
+    @Option(option = "package", description = "Set the model sub package")
+    public void setPackageProject(String modelSubPackage) {
+        this.modelSubPackage = modelSubPackage;
     }
 
     @TaskAction
@@ -33,7 +39,9 @@ public class GenerateModelTask extends DefaultTask {
         packageName = Utils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
+        logger.lifecycle("Project  Sub Package: {}", modelSubPackage);
         packageName = packageName.replaceAll("\\.", "\\/");
+        modelSubPackage = modelSubPackage.replaceAll("\\.", "\\/");
         logger.lifecycle("Model Name: {}", modelName);
         logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
         createDirs();
@@ -55,13 +63,13 @@ public class GenerateModelTask extends DefaultTask {
         dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
                 .concat("/").concat(Constants.MAIN_JAVA).concat("/")
                 .concat(packageName).concat("/").concat(Constants.MODEL)
-                .concat("/").concat(Utils.decapitalize(modelName)).concat("/")
+                .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage).concat("/")
                 .concat(Constants.GATEWAYS));
 
         dirs.add(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
                 .concat("/").concat(Constants.TEST_JAVA).concat("/")
                 .concat(packageName).concat("/").concat(Constants.MODEL)
-                .concat("/").concat(Utils.decapitalize(modelName)));
+                .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage));
 
         return dirs;
 
@@ -82,7 +90,7 @@ public class GenerateModelTask extends DefaultTask {
                 .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
                         .concat("/").concat(Constants.MAIN_JAVA).concat("/")
                         .concat(packageName).concat("/").concat(Constants.MODEL)
-                        .concat("/").concat(Utils.decapitalize(modelName)).concat("/")
+                        .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage).concat("/")
                         .concat(Constants.GATEWAYS).concat("/")
                         .concat(Utils.capitalize(modelName) + Constants.REPOSITORY
                                 + Constants.JAVA_EXTENSION))
@@ -94,7 +102,7 @@ public class GenerateModelTask extends DefaultTask {
                 .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
                         .concat("/").concat(Constants.MAIN_JAVA).concat("/")
                         .concat(packageName).concat("/").concat(Constants.MODEL)
-                        .concat("/").concat(Utils.decapitalize(modelName))
+                        .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage)
                         .concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION))
                 .content(ModelTemplate.getModel(modelName, packageName))
                 .build());

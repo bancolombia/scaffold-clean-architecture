@@ -1,5 +1,7 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.models.AttributeClassModel;
+import co.com.bancolombia.models.StructureClassModel;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
@@ -7,10 +9,8 @@ import org.gradle.api.Project;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 public class Utils {
@@ -91,6 +91,42 @@ public class Utils {
         return args.stream()
                 .reduce("",(i, acum) ->i + Constants.SEPARATOR + acum)
                 .replaceFirst("/","");
+    }
+
+    public static Object getValuesByClass(String type){
+        switch (type) {
+            case "String":
+                return "\"String\"";
+            case "int":
+            case "short":
+                return 1234;
+            case  "char":
+                return "\'c\'";
+            case "double":
+                return 12345.0d;
+            case "Date":
+                return "new Date()";
+            case "boolean":
+                return  false;
+            case "float":
+                return 0.0f;
+            case "long":
+                return 0L;
+            case "byte":
+                return 0;
+        }
+
+        if(type.contains("List"))
+            return "new LinkedList<>()";
+
+        return null;
+    }
+
+    public static String getDelta(String type){
+        if(type.equals("double") || type.equals("float"))
+            return ", 0";
+        else
+            return "";
     }
 
 }

@@ -3,6 +3,7 @@ package co.com.bancolombia.templates;
 public class Constants {
 
     public static final String JAVA_EXTENSION = ".java";
+    public static final String JAVA_UNITTEST_EXTENSION = "Test.java";
     public static final String SEPARATOR = "/";
 
     /**

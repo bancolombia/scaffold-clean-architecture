@@ -32,6 +32,10 @@ public class PluginClean implements Plugin<Project> {
                 .description("Generate model in domain layer").group(taskGroup)
                 .taskAction(GenerateModelTask.class).build());
 
+        tasksModels.add(TaskModel.builder().name("generateUnitTestModel").shortcut("gutm")
+                .description("Generate unit test model in domain layer").group(taskGroup)
+                .taskAction(GenerateUnitTestModelTask.class).build());
+
         tasksModels.add(TaskModel.builder().name("generateUseCase").shortcut("guc")
                 .description("Generate use case in domain layer").group(taskGroup)
                 .taskAction(GenerateUseCaseTask.class).build());
