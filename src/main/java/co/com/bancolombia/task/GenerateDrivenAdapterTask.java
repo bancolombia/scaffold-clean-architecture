@@ -95,11 +95,11 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         }
 
         if (drivenAdapter.hasModelDir()) {
-            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION), ModelTemplate.getModel(drivenAdapter.getModelName(), drivenAdapter.getPackageName()));
+            Utils.writeString(getProject(), drivenAdapter.getModelDir().concat("/").concat(drivenAdapter.getModelName()).concat(Constants.JAVA_EXTENSION), ModelTemplate.getModel(drivenAdapter.getModelName(), drivenAdapter.getPackageName(), ""));
         }
 
         if (drivenAdapter.hasGateway()){
-            Utils.writeString(getProject(), drivenAdapter.getGatewayDir().concat("/").concat(drivenAdapter.getGatewayName()).concat("Repository").concat(Constants.JAVA_EXTENSION), ModelTemplate.getInterfaceModel(drivenAdapter.getGatewayName(), drivenAdapter.getPackageName()));
+            Utils.writeString(getProject(), drivenAdapter.getGatewayDir().concat("/").concat(drivenAdapter.getGatewayName()).concat("Repository").concat(Constants.JAVA_EXTENSION), ModelTemplate.getInterfaceModel(drivenAdapter.getGatewayName(), drivenAdapter.getPackageName(), ""));
 
         }
 

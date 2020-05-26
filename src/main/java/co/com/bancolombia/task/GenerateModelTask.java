@@ -94,7 +94,7 @@ public class GenerateModelTask extends DefaultTask {
                         .concat(Constants.GATEWAYS).concat("/")
                         .concat(Utils.capitalize(modelName) + Constants.REPOSITORY
                                 + Constants.JAVA_EXTENSION))
-                .content(ModelTemplate.getInterfaceModel(modelName, packageName))
+                .content(ModelTemplate.getInterfaceModel(modelName, packageName, modelSubPackage))
                 .build());
 
         files.add(FileModel
@@ -104,7 +104,7 @@ public class GenerateModelTask extends DefaultTask {
                         .concat(packageName).concat("/").concat(Constants.MODEL)
                         .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage)
                         .concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION))
-                .content(ModelTemplate.getModel(modelName, packageName))
+                .content(ModelTemplate.getModel(modelName, packageName, modelSubPackage))
                 .build());
 
 

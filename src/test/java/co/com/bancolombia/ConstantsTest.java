@@ -54,7 +54,7 @@ public class ConstantsTest {
         String modelName = "testProjectName";
         String packageName = "demo.package";
 
-        String act = ModelTemplate.getModel(modelName, packageName);
+        String act = ModelTemplate.getModel(modelName, packageName, "");
 
         Assert.assertTrue(act.contains(modelName));
         Assert.assertTrue(act.contains(packageName));
@@ -74,7 +74,7 @@ public class ConstantsTest {
         String modelName = "testProjectName";
         String packageName = "demo.package";
 
-        String act =  ModelTemplate.getInterfaceModel(modelName, packageName);
+        String act =  ModelTemplate.getInterfaceModel(modelName, packageName, "");
 
         Assert.assertTrue(act.contains(modelName));
         Assert.assertTrue(act.contains(packageName));

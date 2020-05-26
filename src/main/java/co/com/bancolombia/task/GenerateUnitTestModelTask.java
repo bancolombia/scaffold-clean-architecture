@@ -101,6 +101,12 @@ public class GenerateUnitTestModelTask extends DefaultTask {
         classModel.setTags(tags);
         classModel.setImports(imports);
 
+        logger.lifecycle("content {}", Constants.DOMAIN.concat("/").concat(Constants.MODEL)
+                .concat("/").concat(Constants.TEST_JAVA).concat("/")
+                .concat(packageName).concat("/").concat(Constants.MODEL)
+                .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage)
+                .concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_UNITTEST_EXTENSION));
+
         FileModel unitTest = FileModel
                 .builder()
                 .path(Constants.DOMAIN.concat("/").concat(Constants.MODEL)
@@ -115,12 +121,13 @@ public class GenerateUnitTestModelTask extends DefaultTask {
     }
 
     private void writeFiles() throws IOException {
+        logger.lifecycle("path {}", "entro");
         String pathClass = Constants.DOMAIN.concat("/").concat(Constants.MODEL)
                 .concat("/").concat(Constants.MAIN_JAVA).concat("/")
                 .concat(packageName).concat("/").concat(Constants.MODEL)
                 .concat("/").concat((modelSubPackage.isEmpty())?Utils.decapitalize(modelName):modelSubPackage)
                 .concat("/").concat(Utils.capitalize(modelName) + Constants.JAVA_EXTENSION);
-        
+        logger.lifecycle("path {}", pathClass);
         FileModel file = getClassOriginal(getProject(), pathClass);
 
         Utils.writeString(getProject(), file.getPath(), file.getContent());

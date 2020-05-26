@@ -6,10 +6,11 @@ public class ModelTemplate {
 
     private ModelTemplate(){}
 
-    public static String getModel(String modelName, String packageName) {
+    public static String getModel(String modelName, String packageName, String subPackageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
+        subPackageName = subPackageName.replaceAll("\\/", "\\.");
         return "package " + packageName + "." + Constants.MODEL + "." +
-                Utils.decapitalize(modelName) + ";\n" +
+                (!subPackageName.equals("")? subPackageName : Utils.decapitalize(modelName)) + ";\n" +
                 "\n" +
                 "import lombok.Builder;\n" +
                 "import lombok.Data;\n" +
@@ -22,9 +23,10 @@ public class ModelTemplate {
                 "}\n";
     }
 
-    public static String getInterfaceModel(String modelName, String packageName) {
+    public static String getInterfaceModel(String modelName, String packageName, String subPackageName) {
         packageName = packageName.replaceAll("\\/", "\\.");
-        return "package " + packageName + "." + Constants.MODEL + "." + Utils.decapitalize(modelName)+"."+Constants.GATEWAYS+";\n" +
+        subPackageName = subPackageName.replaceAll("\\/", "\\.");
+        return "package " + packageName + "." + Constants.MODEL + "." + (!subPackageName.equals("")? subPackageName : Utils.decapitalize(modelName)) +"."+Constants.GATEWAYS+";\n" +
                 "\n" +
                 "public interface " + Utils.capitalize(modelName) + "Repository " + "{\n" +
                 "\n" +
