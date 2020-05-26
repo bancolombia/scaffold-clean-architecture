@@ -19,8 +19,8 @@ public class UnitTestModelTemplate {
             unitTest += "import org.junit.Before;\n";
 
         unitTest += "import org.junit.Test;\n\n";
-        unitTest += (!classModel.getAttributes().stream().parallel().filter(d -> d.getAClass().equals("Date")).findFirst().isEmpty()) ? "import java.util.Date;\n\n" : "";
-        unitTest += (!classModel.getAttributes().stream().parallel().filter(d -> d.getAClass().contains("List")).findFirst().isEmpty()) ? "import java.util.LinkedList;\n\n" : "";
+        unitTest += (classModel.getAttributes().stream().parallel().filter(d -> d.getAClass().equals("Date")).findFirst().orElse(null) != null) ? "import java.util.Date;\n\n" : "";
+        unitTest += (classModel.getAttributes().stream().parallel().filter(d -> d.getAClass().contains("List")).findFirst().orElse(null) != null) ? "import java.util.LinkedList;\n\n" : "";
         unitTest += "public class " + classModel.getName_test_class() + "{\n\n";
         String variable = Utils.decapitalize(classModel.getName_class());
 
