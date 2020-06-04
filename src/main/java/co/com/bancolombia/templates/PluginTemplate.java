@@ -6,7 +6,7 @@ public class PluginTemplate {
     public static final String GENERATING_CHILDS_DIRS = "Generating Childs Dirs";
     public static final String GENERATED_CHILDS_DIRS = "Childs Dirs Generated";
     public static final String WRITED_IN_FILES = "Files Generated ";
-    public static final String VERSION_PLUGIN = "1.5.4";
+    public static final String VERSION_PLUGIN = "1.5.5";
 
     private PluginTemplate() {
     }
