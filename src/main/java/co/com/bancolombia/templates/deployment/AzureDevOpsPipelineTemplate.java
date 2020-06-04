@@ -58,7 +58,7 @@ public class AzureDevOpsPipelineTemplate {
                 "              \n" +
                 "              sonar.java.binaries=[Binaries]\n" +
                 "              \n" +
-                "              sonar.cobertura.reportPath=$(Build.SourcesDirectory)/build/reports/cobertura/coverage.xml\n" +
+                "              sonar.coverage.jacoco.xmlReportPaths=$(Build.SourcesDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml\n" +
                 "\n" +
                 "              sonar.coverage.exclusions=**/*Test.java,**/*.js,**/*.html,**/*.xml,**/*.css,**/app.demo/MainAplication.java,**/config/usecase/UseCaseConfig.java,**/config/jpa/JpaConfig.java,**/config/mongo/MongoConfig.java\n" +
                 "              sonar.exclusions=**/aplications/app-service/src/**\n" +
@@ -70,7 +70,7 @@ public class AzureDevOpsPipelineTemplate {
                 "          displayName: 'Gradle -> Build / Ejecutar Pruebas Unitarias'\n" +
                 "          inputs:\n" +
                 "            gradleWrapperFile: gradlew\n" +
-                "            tasks: 'clean build --stacktrace'\n" +
+                "            tasks: 'clean build jacocoMergedReport --stacktrace'\n" +
                 "            publishJUnitResults: true\n" +
                 "            workingDirectory: .\n" +
                 "            testResultsFiles: '**/build/test-results/test/TEST-*.xml'\n" +
