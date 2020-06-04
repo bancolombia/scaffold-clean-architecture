@@ -13,7 +13,7 @@ public class ScaffoldTemplate {
     public static final String READ_ME = "Readme.md";
     public static final String IMPERATIVE_PROJECT = "imperative";
     public static final String SONAR_PLUGIN_VERSION = "2.7";
-    public static final String NET_SALIMAN_COBERTURA_VERSION = "3.0.0";
+    public static final String JACOCO_TOOL_VERSION = "0.8.5";
 
     public static final String LOMBOK_CONFIG_CONTENT = "lombok.addLombokGeneratedAnnotation = true";
 
@@ -396,7 +396,6 @@ public class ScaffoldTemplate {
 
     public static String getMainGradleContent(String type) {
         String value = "allprojects {\n" +
-                "    apply plugin: 'net.saliman.cobertura'\n" +
                 "    repositories {\n" +
                 "       mavenCentral()\n" +
                 "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
@@ -405,17 +404,11 @@ public class ScaffoldTemplate {
                 "}\n" +
                 "\n" +
                 "subprojects {\n" +
-                "    apply plugin: \"java\"\n" +
-                "    apply plugin: 'net.saliman.cobertura' \n" +
+                "    apply plugin: 'java'\n" +
+                "    apply plugin: 'jacoco' \n" +
                 "    apply plugin: 'io.spring.dependency-management'\n" +
                 "\n" +
                 "    sourceCompatibility = JavaVersion.VERSION_1_8\n" +
-                "\n" +
-                "    repositories {\n" +
-                "  \t\t mavenCentral()\n" +
-                "         maven { url \"https://repo.spring.io/snapshot\" }\n" +
-                "         maven { url \"https://repo.spring.io/milestone\" }\n" +
-                "    }\n" +
                 "\n" +
                 "    dependencies {\n" +
                 "        testImplementation 'org.springframework.boot:spring-boot-starter-test'\n";
@@ -431,12 +424,17 @@ public class ScaffoldTemplate {
                 "        testCompileOnly 'org.projectlombok:lombok'\n" +
                 "    }\n" +
                 "\n" +
+                "    test.finalizedBy(project.tasks.jacocoTestReport)" +
                 "\n" +
-                "   cobertura {\n" +
-                "        coverageFormats = [ 'xml', 'html' ]\n" +
-                "    }\n" +
-                "\n" +
-                "    test.finalizedBy(project.tasks.cobertura)" +
+                "    jacocoTestReport {\n" +
+                "        dependsOn test\n" +
+                "        reports {\n" +
+                "            xml.enabled true\n" +
+                "            xml.destination file('${buildDir}/reports/jacoco.xml')\n" +
+                "            csv.enabled false\n" +
+                "            html.destination file('${buildDir}/reports/jacocoHtml')\n" +
+                "        }\n" +
+                "    }"+
                 "\n" +
                 "    dependencyManagement {\n" +
                 "        imports {\n" +
@@ -446,19 +444,23 @@ public class ScaffoldTemplate {
                 "    }\n" +
                 "}\n" +
                 "\n" +
-                "def files = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }\n" +
+                "jacoco {\n" +
+                "    toolVersion = \"${jacocoVersion}\"\n" +
+                "    reportsDir = file(\"$buildDir/reports\")\n" +
+                "}" +
                 "\n" +
-                "cobertura {\n" +
-                "    coverageFormats = ['xml', 'html']\n" +
-                "    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()\n" +
-                "    coverageMergeDatafiles = files\n" +
-                "}\n" +
-                "\n" +
-                "test.finalizedBy(project.tasks.cobertura)\n" +
-                "\n" +
-                "subprojects.each { project ->\n" +
-                "    test.dependsOn(\":\" + project.name + \":test\")\n" +
-                "}\n" +
+                "task jacocoMergedReport(type: JacocoReport) {\n" +
+                "    dependsOn = subprojects.jacocoTestReport\n" +
+                "    additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)\n" +
+                "    sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)\n" +
+                "    classDirectories.setFrom files(subprojects.sourceSets.main.output)\n" +
+                "    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')\n" +
+                "    reports {\n" +
+                "        xml.enabled true\n" +
+                "        csv.enabled false\n" +
+                "        html.enabled true\n" +
+                "    }\n" +
+                "}" +
                 "\n" +
                 "tasks.withType(JavaCompile) {\n" +
                 "    options.compilerArgs = [\n" +
@@ -518,7 +520,7 @@ public class ScaffoldTemplate {
                 "  h2:\n" +
                 "    console:\n" +
                 "      enabled: true\n" +
-                "      path:/h2\n" +
+                "      path: /h2\n" +
                 "  profiles:\n" +
                 "    include:\n";
     }
@@ -528,11 +530,9 @@ public class ScaffoldTemplate {
         return "package " + packageName + ";\n" +
                 "\n" +
                 "import org.springframework.boot.SpringApplication;\n" +
-                "import org.springframework.boot.autoconfigure.EnableAutoConfiguration;\n" +
                 "import org.springframework.boot.autoconfigure.SpringBootApplication;\n" +
                 "\n" +
                 "@SpringBootApplication\n" +
-                "@EnableAutoConfiguration()\n" +
                 "public class MainApplication {\n" +
                 "\n" +
                 "    public static void main(String[] args) {\n" +
@@ -544,27 +544,19 @@ public class ScaffoldTemplate {
     public static String getBuildGradleContent() {
         return "buildscript {\n" +
                 "\text {\n" +
+                "\t\tcleanArchitectureVersion = '" + PluginTemplate.VERSION_PLUGIN + "'\n" +
                 "\t\tspringBootVersion = '2.1.1.RELEASE'\n" +
                 "\t\tspringCloudVersion = 'Greenwich.M1'\n" +
                 "\t\tsonarVersion = '"+SONAR_PLUGIN_VERSION+"'\n" +
-                "\t\tnetSalimanVersion = '"+NET_SALIMAN_COBERTURA_VERSION+"'\n" +
-                "\t}\n" +
-                "\trepositories {\n" +
-                "\t\tmavenCentral()\n" +
-                "\t\tmaven { url \"https://repo.spring.io/snapshot\" }\n" +
-                "\t\tmaven { url \"https://repo.spring.io/milestone\" }\n" +
-                "\t}\n" +
-                "\tdependencies {\n" +
-                "\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n" +
-                "\t\tclasspath(\"org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarVersion}\")\n" +
-                "\t\tclasspath(\"net.saliman:gradle-cobertura-plugin:${netSalimanVersion}\")\n" +
+                "\t\tjacocoVersion = '" + JACOCO_TOOL_VERSION + "'\n" +
                 "\t}\n" +
                 "}\n" +
                 "\n" +
                 "plugins {\n" +
-                "\tid \"org.sonarqube\" version \""+SONAR_PLUGIN_VERSION+"\"\n" +
-                "\tid \"co.com.bancolombia.cleanArchitecture\" version \"" + PluginTemplate.VERSION_PLUGIN + "\"\n" +
-                "\tid \"net.saliman.cobertura\" version \""+NET_SALIMAN_COBERTURA_VERSION+"\" \n" +
+                "\tid 'co.com.bancolombia.cleanArchitecture' version \"${cleanArchitectureVersion}\"\n" +
+                "\tid 'org.springframework.boot' version \"${springBootVersion}\"\n" +
+                "\tid 'org.sonarqube' version \"${sonarVersion}\"\n" +
+                "\tid 'jacoco'\n" +
                 "}\n" +
                 "\n" +
                 "sonarqube {\n" +
