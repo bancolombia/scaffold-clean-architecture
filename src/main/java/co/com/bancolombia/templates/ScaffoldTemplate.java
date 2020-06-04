@@ -430,9 +430,9 @@ public class ScaffoldTemplate {
                 "        dependsOn test\n" +
                 "        reports {\n" +
                 "            xml.enabled true\n" +
-                "            xml.destination file('${buildDir}/reports/jacoco.xml')\n" +
+                "            xml.destination file(\"${buildDir}/reports/jacoco.xml\")\n" +
                 "            csv.enabled false\n" +
-                "            html.destination file('${buildDir}/reports/jacocoHtml')\n" +
+                "            html.destination file(\"${buildDir}/reports/jacocoHtml\")\n" +
                 "        }\n" +
                 "    }"+
                 "\n" +
