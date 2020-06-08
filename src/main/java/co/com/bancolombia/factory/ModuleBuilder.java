@@ -1,4 +1,4 @@
-package co.com.bancolombia.task;
+package co.com.bancolombia.factory;
 
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -10,8 +10,9 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
+import lombok.Getter;
 import org.apache.commons.io.IOUtils;
-import org.gradle.api.DefaultTask;
+import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
@@ -22,18 +23,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GenerateBaseTask extends DefaultTask {
+public class ModuleBuilder {
     private static final String DEFINITION_FILES = "definition.json";
-    protected final Logger logger = getProject().getLogger();
     private final DefaultResolver resolver = new DefaultResolver();
     private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
     private final List<FileModel> files = new ArrayList<>();
     private final List<String> dirs = new ArrayList<>();
     private final Map<String, Object> params = new HashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final Logger logger;
+    @Getter
+    private final Project project;
 
-    public GenerateBaseTask() {
-        super();
+    public ModuleBuilder(Project project) {
+        this.project = project;
+        this.logger = getProject().getLogger();
+        params.put("projectName", getProject().getName());
+        params.put("projectNameLower", getProject().getName().toLowerCase());
         params.put("pluginVersion", PluginTemplate.VERSION_PLUGIN);
         params.put("springBootVersion", PluginTemplate.SPRING_BOOT_VERSION);
         params.put("springCloudVersion", PluginTemplate.SPRING_CLOUD_VERSION);
@@ -41,7 +47,7 @@ public class GenerateBaseTask extends DefaultTask {
         params.put("jacocoVersion", PluginTemplate.JACOCO_VERSION);
     }
 
-    protected void executeTask() throws IOException {
+    public void persist() throws IOException {
         logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
         dirs.forEach(getProject()::mkdir);
         logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
@@ -53,7 +59,7 @@ public class GenerateBaseTask extends DefaultTask {
     }
 
     @SuppressWarnings("unchecked")
-    protected void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
+    public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
         TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
         for (String folder : definition.getFolders()) {
             addDir(Utils.fillPath(folder, params));
@@ -66,37 +72,37 @@ public class GenerateBaseTask extends DefaultTask {
         }
     }
 
-    protected void addParam(String key, Object value) {
+    public void addParam(String key, Object value) {
         this.params.put(key, value);
     }
 
-    protected void addParamPackage(String packageName) {
+    public void addParamPackage(String packageName) {
         this.params.put("package", packageName.toLowerCase());
         this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
     }
 
-    protected void addFile(String path, String content) {
+    public void addFile(String path, String content) {
         this.files.add(FileModel.builder()
                 .path(path)
                 .content(content)
                 .build());
     }
 
-    protected void addDir(String path) {
+    public void addDir(String path) {
         if (path != null) {
             this.dirs.add(path);
         }
     }
 
-    protected void addDir(String... path) {
+    public void addDir(String... path) {
         this.dirs.add(Utils.joinPath(path));
     }
 
-    protected String getPackage() {
+    public String getPackage() {
         return (String) params.get("package");
     }
 
-    protected String getPackagePath() {
+    public String getPackagePath() {
         return (String) params.get("packagePath");
     }
 

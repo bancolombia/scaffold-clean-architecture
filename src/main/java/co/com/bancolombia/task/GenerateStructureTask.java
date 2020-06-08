@@ -2,6 +2,9 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.ModuleBuilder;
+import org.gradle.api.DefaultTask;
+import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
@@ -11,7 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerateStructureTask extends GenerateBaseTask {
+public class GenerateStructureTask extends DefaultTask {
+    private final ModuleBuilder builder = new ModuleBuilder(getProject());
+    private final Logger logger = getProject().getLogger();
+
     private String packageName = "co.com.bancolombia";
     private ProjectType type = ProjectType.IMPERATIVE;
     private String projectName = "cleanArchitecture";
@@ -42,11 +48,11 @@ public class GenerateStructureTask extends GenerateBaseTask {
         logger.lifecycle("Package: {}", packageName);
         logger.lifecycle("Project Type: {}", type);
         logger.lifecycle("Project Name: {}", projectName);
-        addParamPackage(packageName);
-        addParam("projectName", projectName);
-        addParam("reactive", type == ProjectType.REACTIVE);
-        setupFromTemplate("structure");
-        executeTask();
+        builder.addParamPackage(packageName);
+        builder.addParam("projectName", projectName);
+        builder.addParam("reactive", type == ProjectType.REACTIVE);
+        builder.setupFromTemplate("structure");
+        builder.persist();
     }
 
     public enum ProjectType {

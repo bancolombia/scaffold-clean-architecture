@@ -1,0 +1,88 @@
+# Gradle
+# Build your Java project and run tests with Gradle using a Gradle wrapper script.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+variables:
+  - group: 'devsecops_BREFA'
+  - name: 'artifactory.Repository'
+    value: 'build-{{projectName}}'
+  - name: 'proyecto'
+    value: '{{projectName}}'
+
+resources:
+- repo: self
+
+trigger:
+  branches:
+    include:
+      - trunk
+  paths:
+    include:
+      - '*'
+
+jobs:
+    - job: BuildJob
+      displayName: 'Compilacion BackEnd'
+      pool:
+        name: Build
+        demands:
+            - Agent.OS -equals linux
+            - java
+
+      steps:
+        - task: SonarQubePrepare@4
+          displayName: 'Preparar Analisis -> Prepare analysis on SonarQube'
+          inputs:
+            SonarQube: SonarQube
+            scannerMode: Other
+            configMode: manual
+            cliProjectKey: '$(Build.Repository.Name)'
+            cliProjectName: '$(Build.Repository.Name)'
+            cliProjectVersion: '$(Build.BuildNumber)'
+            extraProperties: |
+              sonar.projectVersion=$(Build.BuildNumber)
+              sonar.projectKey=$(Build.Repository.Name)
+              sonar.branch.name=$(Build.SourceBranchName)
+              sonar.java.binaries={{sonar.java.binaries}}
+              sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml
+              sonar.junit.reportsPaths={{sonar.junit.reportsPaths}}
+
+
+        - task: Gradle@1
+          displayName: 'Gradle -> Build / Ejecutar Pruebas Unitarias'
+          inputs:
+            gradleWrapperFile: gradlew
+            tasks: 'clean build jacocoMergedReport --stacktrace'
+            publishJUnitResults: true
+            workingDirectory: .
+            testResultsFiles: '**/build/test-results/test/TEST-*.xml'
+            sonarQubeRunAnalysis: true
+            sonarQubeServiceEndpoint: SonarqubeGradle
+            sonarQubeProjectName: '$(Build.Repository.Name)'
+            sonarQubeProjectKey: '$(Build.Repository.Name)'
+            sonarQubeProjectVersion: '$(Build.BuildNumber)'
+            sonarQubeGradlePluginVersion: 2.7
+            sonarQubeFailWhenQualityGateFails: false
+
+        - task: PublishCodeCoverageResults@1
+          displayName: 'Publica -> Publicar cobertura'
+          inputs:
+            summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+
+        - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+          displayName: 'Analisis -> Run Code Analysis'
+
+        - task: SonarQubePublish@4
+          displayName: 'SonarQube -> Resultado Quality Gate'
+          inputs:
+            pollingTimeoutSec: 600
+
+        - task: sonar-buildbreaker@8
+          displayName: ' SonarQube -> Validar Quality Gate'
+          inputs:
+            SonarQube: SonarQube
+          enabled: true
+

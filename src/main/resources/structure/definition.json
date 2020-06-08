@@ -11,19 +11,19 @@
     "domain/usecase/src/test/java/{{packagePath}}/usecase"
   ],
   "files": {
-    "default/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
-    "default/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
-    "default/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
-    "default/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
-    "default/deployment/dockerfile.mustache": "deployment/Dockerfile",
-    "default/domain/model/build.gradle.mustache": "domain/model/build.gradle",
-    "default/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
-    "default/root/.gitignore.mustache": ".gitignore",
-    "default/root/build.gradle.mustache": "build.gradle",
-    "default/root/gradle.properties.mustache": "gradle.properties",
-    "default/root/lombok.config.mustache": "lombok.config",
-    "default/root/main.gradle.mustache": "main.gradle",
-    "default/root/readme.md.mustache": "README.md",
-    "default/root/settings.gradle.mustache": "settings.gradle"
+    "structure/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
+    "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
+    "structure/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
+    "structure/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
+    "structure/deployment/dockerfile.mustache": "deployment/Dockerfile",
+    "structure/domain/model/build.gradle.mustache": "domain/model/build.gradle",
+    "structure/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
+    "structure/root/.gitignore.mustache": ".gitignore",
+    "structure/root/build.gradle.mustache": "build.gradle",
+    "structure/root/gradle.properties.mustache": "gradle.properties",
+    "structure/root/lombok.config.mustache": "lombok.config",
+    "structure/root/main.gradle.mustache": "main.gradle",
+    "structure/root/readme.md.mustache": "README.md",
+    "structure/root/settings.gradle.mustache": "settings.gradle"
   }
 }

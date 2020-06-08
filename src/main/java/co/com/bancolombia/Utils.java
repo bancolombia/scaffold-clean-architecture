@@ -3,6 +3,8 @@ package co.com.bancolombia;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.gradle.api.Project;
 
 import java.io.*;
@@ -11,14 +13,12 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
     private static final Properties properties = new Properties();
     private static final String PARAM_START = "{{";
     private static final String PARAM_END = "}}";
     private static final int PARAM_LENGTH = 2;
-
-    private Utils() {
-    }
 
     public static void writeString(Project project, String filePath, String data) throws IOException {
         project.getLogger().debug(project.file(filePath).getAbsolutePath());
@@ -32,11 +32,9 @@ public class Utils {
     }
 
     public static Stream<String> readFile(Project project, String nameFile) throws IOException {
-        File file = project.file(validatePath(nameFile))
-                .getAbsoluteFile();
+        File file = project.file(validatePath(nameFile)).getAbsoluteFile();
         project.getLogger().debug(file.getAbsolutePath());
         return Files.lines(Paths.get(file.toURI()));
-
     }
 
     public static List<File> finderSubProjects(String dirPath) {

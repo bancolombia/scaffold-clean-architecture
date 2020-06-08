@@ -204,13 +204,13 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGeneratePipelineAzureDevOpsTest() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generatePipeline";
-        String valuePipeline = "1";
+        String valuePipeline = "AZURE";
 
-        runner.withArguments(task, "--value=" + valuePipeline);
+        runner.withArguments(task, "--type=" + valuePipeline);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
 
-        assertTrue(new File("build/functionalTest/deployment/cleanArchitecture_Build.yaml").exists());
+        assertTrue(new File("build/functionalTest/deployment/cleanarchitecture_azure_build.yaml").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
