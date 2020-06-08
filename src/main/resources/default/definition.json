@@ -1,8 +1,6 @@
 {
   "folders": [
-    "deployment",
     "applications/app-service/src/main/java/{{packagePath}}/config",
-    "applications/app-service/src/main/resources",
     "applications/app-service/src/test/java/{{packagePath}}",
     "infrastructure/driven-adapters",
     "infrastructure/entry-points",
