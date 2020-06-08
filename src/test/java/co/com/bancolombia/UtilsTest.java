@@ -98,4 +98,11 @@ public class UtilsTest {
         Assert.assertEquals(2, files2.size());
     }
 
+    @Test
+    public void shouldJoinPath() {
+        String expected = "a/b/c/d";
+        String result = Utils.joinPath("a", "b", "c", "d");
+        Assert.assertEquals(expected, result);
+    }
+
 }

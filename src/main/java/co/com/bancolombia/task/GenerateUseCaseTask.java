@@ -53,15 +53,13 @@ public class GenerateUseCaseTask extends DefaultTask {
     private List<String> getDirsToCreate() {
         List<String> dirs = new ArrayList<>();
 
-        List<String> pathUseCase = new ArrayList<>();
+        useCaseDir = Utils.joinPath(Constants.DOMAIN,
+                Constants.USECASE_FOLDER,
+                Constants.MAIN_JAVA,
+                packageName,
+                Constants.USECASE_FOLDER,
+                Utils.decapitalize(useCaseName));
 
-        pathUseCase.add(Constants.DOMAIN);
-        pathUseCase.add(Constants.USECASE_FOLDER);
-        pathUseCase.add(Constants.MAIN_JAVA);
-        pathUseCase.add(packageName);
-        pathUseCase.add(Constants.USECASE_FOLDER);
-        pathUseCase.add(Utils.decapitalize(useCaseName));
-        useCaseDir = Utils.concatSeparator(pathUseCase);
         dirs.add(useCaseDir);
 
         return dirs;

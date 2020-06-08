@@ -45,7 +45,7 @@ public class PluginCleanFunctionalTest {
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         // Verify the result
-        assertTrue(new File("build/functionalTest/Readme.md").exists());
+        assertTrue(new File("build/functionalTest/README.md").exists());
         assertTrue(new File("build/functionalTest/.gitignore").exists());
         assertTrue(new File("build/functionalTest/build.gradle").exists());
         assertTrue(new File("build/functionalTest/lombok.config").exists());
@@ -85,7 +85,7 @@ public class PluginCleanFunctionalTest {
         BuildResult result = runner.build();
         // Verify the result
 
-        assertTrue(new File("build/functionalTest/Readme.md").exists());
+        assertTrue(new File("build/functionalTest/README.md").exists());
         assertTrue(new File("build/functionalTest/.gitignore").exists());
         assertTrue(new File("build/functionalTest/build.gradle").exists());
         assertTrue(new File("build/functionalTest/lombok.config").exists());

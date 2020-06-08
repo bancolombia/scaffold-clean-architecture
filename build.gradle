@@ -8,64 +8,67 @@
 
 buildscript {
 
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-	}
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
 }
 
 
-
 plugins {
-	// Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
-	id 'java-gradle-plugin'
-	id 'jacoco'
-	id 'idea'
-	id 'com.gradle.plugin-publish' version '0.11.0'
-	id "org.sonarqube" version "2.7"
+    // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
+    id 'java-gradle-plugin'
+    id 'jacoco'
+    id 'idea'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id "org.sonarqube" version "2.7"
+    id 'maven-publish'
 }
 
 group 'co.com.bancolombia.cleanArchitecture'
 
-version System.getProperty( 'version' )
-
+version System.getProperty('version')
 
 
 repositories {
-	// Use jcenter for resolving dependencies.
-	// You can declare any Maven/Ivy/file repository here.
-	jcenter()
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+    jcenter()
 }
 
 dependencies {
-	// Use JUnit test framework for unit tests
-	testImplementation 'junit:junit:4.12'
-	testCompile "org.mockito:mockito-core:2.9.0"
-	compileOnly 'org.projectlombok:lombok:1.18.10'
-	annotationProcessor 'org.projectlombok:lombok:1.18.10'
-	compile gradleApi()
+    compile 'com.github.spullara.mustache.java:compiler:0.9.6'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    compile 'commons-io:commons-io:2.7'
+    // Use JUnit test framework for unit tests
+    testImplementation 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:2.9.0"
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compile gradleApi()
 }
 
 gradlePlugin {
-	// Define the plugin
-	plugins {
-		cleanArchitecture  {
-			id = 'co.com.bancolombia.cleanArchitecture'
-			displayName = 'Scaffold Clean Architecture Bancolombia'
-			description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
-			implementationClass = 'co.com.bancolombia.PluginClean'
-		}
-	}
+    // Define the plugin
+    plugins {
+        cleanArchitecture {
+            id = 'co.com.bancolombia.cleanArchitecture'
+            displayName = 'Scaffold Clean Architecture Bancolombia'
+            description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
+            implementationClass = 'co.com.bancolombia.PluginClean'
+        }
+    }
 }
 
 // Add a source set for the functional test suite
 sourceSets {
-	functionalTest {
-	}
+    functionalTest {
+    }
 }
 
 gradlePlugin.testSourceSets(sourceSets.functionalTest)
@@ -73,49 +76,49 @@ configurations.functionalTestImplementation.extendsFrom(configurations.testImple
 
 // Add a task to run the functional tests
 task functionalTest(type: Test) {
-	testClassesDirs = sourceSets.functionalTest.output.classesDirs
-	classpath = sourceSets.functionalTest.runtimeClasspath
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
 }
 
 check {
-	// Run the functional tests as part of `check`
-	dependsOn(tasks.functionalTest)
+    // Run the functional tests as part of `check`
+    dependsOn(tasks.functionalTest)
 }
 
 pluginBundle {
-	website = 'https://github.com/bancolombia/scaffold-clean-architecture'
-	vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
-	tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
+    website = 'https://github.com/bancolombia/scaffold-clean-architecture'
+    vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
+    tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
 }
 
-jacocoTestReport{
-	reports {
-		xml.enabled true
-		xml.destination file("${buildDir}/reports/jacoco/report.xml")
-		html.enabled true
-		csv.enabled false
-	}
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.enabled true
+        csv.enabled false
+    }
 }
 
 sonarqube {
-	properties {
+    properties {
 		property "sonar.organization", "grupo-bancolombia"
-		property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
+        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
 		property "sonar.host.url", "https://sonarcloud.io/"
 
-		property "sonar.sources", "."
-		property "sonar.java.binaries", "build/classes"
-		property "sonar.junit.reportPaths", "build/test-results/test"
-		property "sonar.java-coveragePlugin", "jacoco"
-		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
-		//property "sonar.jacoco.reportPaths", "build/reports/jacoco/report.xml"
-		property "sonar.test", "src/test/java"
-		property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**"
+        property "sonar.sources", "."
+        property "sonar.java.binaries", "build/classes"
+        property "sonar.junit.reportPaths", "build/test-results/test"
+        property "sonar.java-coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
+        //property "sonar.jacoco.reportPaths", "build/reports/jacoco/report.xml"
+        property "sonar.test", "src/test/java"
+        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**"
 
-		//property "sonar.pullrequest.key", "40"
-		//property "sonar.pullrequest.base", "master"
-		//property "sonar.pullrequest.branch", "feature/my-new-feature"
-		
-		property "sonar.sourceEncoding", "UTF-8"
-	}
+        //property "sonar.pullrequest.key", "40"
+        //property "sonar.pullrequest.base", "master"
+        //property "sonar.pullrequest.branch", "feature/my-new-feature"
+
+        property "sonar.sourceEncoding", "UTF-8"
+    }
 }

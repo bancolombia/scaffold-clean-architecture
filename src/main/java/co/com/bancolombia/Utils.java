@@ -87,10 +87,8 @@ public class Utils {
         return name;
     }
 
-    public static String concatSeparator( List<String> args){
-        return args.stream()
-                .reduce("",(i, acum) ->i + Constants.SEPARATOR + acum)
-                .replaceFirst("/","");
+    public static String joinPath(String... args) {
+        return String.join(Constants.SEPARATOR, args);
     }
 
 }

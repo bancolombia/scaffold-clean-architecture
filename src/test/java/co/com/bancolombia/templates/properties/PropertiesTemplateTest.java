@@ -7,7 +7,7 @@ public class PropertiesTemplateTest {
 
     @Test
     public void propertiesTemplateNotNull() {
-        PropertiesTemplate template = new PropertiesTemplate();
+        String template = PropertiesTemplate.getJpaPropertiesContent();
         Assert.assertNotNull(template);
     }
 

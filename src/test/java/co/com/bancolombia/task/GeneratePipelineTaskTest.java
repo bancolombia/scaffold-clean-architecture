@@ -1,7 +1,6 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.templates.ScaffoldTemplate;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -20,10 +19,10 @@ public class GeneratePipelineTaskTest {
     GeneratePipelineTask task;
 
     @Before
-    public void init() throws IOException {
+    public void init() throws IOException, CleanException {
         File projectDir = new File("build/unitTest");
         Files.createDirectories(projectDir.toPath());
-        writeString(new File(projectDir, "settings.gradle"), ScaffoldTemplate.getSettingsGradleContent("cleanArchitecture"));
+//        writeString(new File(projectDir, "settings.gradle"), ScaffoldTemplate.getSettingsGradleContent("cleanArchitecture"));
         writeString(new File(projectDir, "build.gradle"),
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +

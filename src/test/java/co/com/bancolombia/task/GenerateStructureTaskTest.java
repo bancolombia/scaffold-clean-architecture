@@ -1,6 +1,6 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.task.GenerateStructureTask;
+import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
@@ -13,19 +13,18 @@ import static org.junit.Assert.assertTrue;
 public class GenerateStructureTaskTest {
 
 
-
     @Test
-    public void generateStructure() throws IOException {
+    public void generateStructure() throws IOException, CleanException {
 
 
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateStructureTask.class);
 
         GenerateStructureTask task = (GenerateStructureTask) project.getTasks().getByName("test");
-        
+
         task.generateStructureTask();
         // Verify the result
-        assertTrue(new File("build/unitTest/Readme.md").exists());
+        assertTrue(new File("build/unitTest/README.md").exists());
         assertTrue(new File("build/unitTest/.gitignore").exists());
         assertTrue(new File("build/unitTest/build.gradle").exists());
         assertTrue(new File("build/unitTest/lombok.config").exists());
@@ -53,7 +52,7 @@ public class GenerateStructureTaskTest {
     }
 
     @Test
-    public void generateStructureReactive() throws IOException {
+    public void generateStructureReactive() throws IOException, CleanException {
 
 
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
@@ -63,10 +62,10 @@ public class GenerateStructureTaskTest {
 
         task.setPackage("test");
         task.setProjectName("projectTest");
-        task.setType("reactive");
+        task.setType(GenerateStructureTask.ProjectType.REACTIVE);
         task.generateStructureTask();
 
-        assertTrue(new File("build/unitTest/Readme.md").exists());
+        assertTrue(new File("build/unitTest/README.md").exists());
         assertTrue(new File("build/unitTest/.gitignore").exists());
         assertTrue(new File("build/unitTest/build.gradle").exists());
         assertTrue(new File("build/unitTest/lombok.config").exists());

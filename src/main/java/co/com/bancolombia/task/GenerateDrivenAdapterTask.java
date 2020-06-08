@@ -128,7 +128,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     }
 
     private void rewriteApplicationProperties(String propertieFileToInclude) throws IOException {
-        String propertiesPath = Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(ScaffoldTemplate.APPLICATION_PROPERTIES);
+        String propertiesPath = Constants.APPLICATION.concat("/").concat(Constants.MAIN_RESOURCES).concat("/").concat(Constants.APPLICATION_PROPERTIES);
         String propertiesContent = Utils.readFile(getProject(), propertiesPath).collect(Collectors.joining("\n"));
         propertiesContent += "\n      - "+propertieFileToInclude +"\n";
         Utils.writeString(getProject(), propertiesPath, propertiesContent);

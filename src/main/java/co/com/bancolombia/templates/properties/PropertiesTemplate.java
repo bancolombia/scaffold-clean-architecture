@@ -1,5 +1,9 @@
 package co.com.bancolombia.templates.properties;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PropertiesTemplate {
 
     public static String getJpaPropertiesContent() {

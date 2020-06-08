@@ -1,5 +1,9 @@
 package co.com.bancolombia.templates;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
 
     public static final String JAVA_EXTENSION = ".java";
@@ -8,6 +12,7 @@ public class Constants {
     /**
      * Base Dirs
      **/
+    public static final String DEPLOYMENT = "deployment";
     public static final String INFRASTRUCTURE = "infrastructure";
     public static final String DOMAIN = "domain";
     public static final String APPLICATION = "applications/app-service";
@@ -20,7 +25,7 @@ public class Constants {
     public static final String TEST_JAVA = "src/test/java";
     public static final String CONFIG = "config";
     public static final String CONFIG_JPA = "jpa";
-    public static final String CONFIG_USECASE= "usecase";
+    public static final String CONFIG_USECASE = "usecase";
 
     /**
      * Child Dirs Infrastructure
@@ -45,6 +50,5 @@ public class Constants {
     public static final String MAIN_GRADLE = "main.gradle";
     public static final String SETTINGS_GRADLE = "settings.gradle";
 
-    private Constants() {
-    }
+    public static final String APPLICATION_PROPERTIES = "application.yaml";
 }

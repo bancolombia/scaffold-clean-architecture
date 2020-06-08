@@ -33,7 +33,7 @@ public class ValidateStructureTask extends DefaultTask {
             throw new CleanException("the entry point layer is invalid");
         }
         if (!validateDrivenAdapterLayer()) {
-            throw new CleanException("the entry point layer is invalid");
+            throw new CleanException("the driven adapter layer is invalid");
         }
         logger.lifecycle("The project is valid");
 

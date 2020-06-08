@@ -6,48 +6,7 @@ import org.junit.Test;
 
 public class ConstantsTest {
 
-    @Test
-    public void getSettingsGradleContent() {
-        String nameProject = "testProjectName";
 
-        String act = ScaffoldTemplate.getSettingsGradleContent(nameProject);
-
-        Assert.assertTrue(act.contains(nameProject));
-        Assert.assertTrue(act instanceof  String);
-
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void getSettingsGradleContentException() {
-        String nameProject = null;
-
-        String act = ScaffoldTemplate.getSettingsGradleContent(nameProject);
-
-        Assert.assertTrue(act.contains(nameProject));
-        Assert.assertTrue(act instanceof  String);
-
-    }
-
-    @Test
-    public void getApplicationPropertiesContent() {
-        String nameProject = "testProjectName";
-
-        String act = ScaffoldTemplate.getApplicationPropertiesContent(nameProject);
-
-        Assert.assertTrue(act.contains(nameProject));
-        Assert.assertTrue(act instanceof  String);
-    }
-
-    @Test
-    public void getMainApplicationContent() {
-        String nameProject = "testProjectName";
-
-        String act = ScaffoldTemplate.getMainApplicationContent(nameProject);
-
-        Assert.assertTrue(act.contains(nameProject));
-        Assert.assertTrue(act instanceof  String);
-
-    }
 
     @Test
     public void getModel() {
@@ -62,12 +21,7 @@ public class ConstantsTest {
 
     }
 
-    @Test
-    public void getBuildGradleContent() {
-        String act =  ScaffoldTemplate.getBuildGradleContent();
 
-        Assert.assertTrue(act instanceof  String);
-    }
 
     @Test
     public void getInterfaceModel() {
@@ -81,15 +35,7 @@ public class ConstantsTest {
         Assert.assertTrue(act instanceof  String);
     }
 
-    @Test
-    public void getGradlePropertiesContent() {
-        String packageName = "demo.package";
 
-        String act =  ScaffoldTemplate.getGradlePropertiesContent(packageName);
-
-        Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
-    }
 
     @Test
     public void getUseCase() {
