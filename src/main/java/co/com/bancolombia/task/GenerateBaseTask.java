@@ -61,6 +61,7 @@ public class GenerateBaseTask extends DefaultTask {
         for (Map.Entry<String, String> fileEntry : definition.getFiles().entrySet()) {
             String path = Utils.fillPath(fileEntry.getValue(), params);
             String content = buildFromTemplate(fileEntry.getKey());
+            addDir(Utils.extractDir(path));
             addFile(path, content);
         }
     }
@@ -82,7 +83,9 @@ public class GenerateBaseTask extends DefaultTask {
     }
 
     protected void addDir(String path) {
-        this.dirs.add(path);
+        if (path != null) {
+            this.dirs.add(path);
+        }
     }
 
     protected void addDir(String... path) {

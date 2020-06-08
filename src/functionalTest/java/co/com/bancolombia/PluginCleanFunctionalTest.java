@@ -122,8 +122,8 @@ public class PluginCleanFunctionalTest {
         runner.withArguments(task, "--name=" + modelName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
-        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
-        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }

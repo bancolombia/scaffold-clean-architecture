@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class UtilsTest {
 
@@ -125,15 +126,35 @@ public class UtilsTest {
         assertEquals("default/driven-adapters/redis/src/main/Redis.java", result);
     }
 
+    // Assert
     @Test(expected = ParamNotFoundException.class)
     public void shouldHandleErrorWhenNotParamReplacePlaceholders() throws CleanException {
         // Arrange
         String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
-        // Act
         Map<String, Object> params = new HashMap<>();
         params.put("className", "Redis.java");
-        String result = Utils.fillPath(fillablePath, params);
+        // Act
+        Utils.fillPath(fillablePath, params);
+    }
+
+    @Test
+    public void shouldExtractDir() throws CleanException {
+        // Arrange
+        String classPath = "default/driven-adapters/package/src/main/Model.java";
+        // Act
+        String result = Utils.extractDir(classPath);
         // Assert
+        assertEquals("default/driven-adapters/package/src/main", result);
+    }
+
+    @Test
+    public void shouldExtractDirWhenNoPath() throws CleanException {
+        // Arrange
+        String classPath = "Model.java";
+        // Act
+        String result = Utils.extractDir(classPath);
+        // Assert
+        assertNull(result);
     }
 
 }

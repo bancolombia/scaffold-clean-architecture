@@ -104,4 +104,13 @@ public class Utils {
         return path;
     }
 
+    public static String extractDir(String path) throws ParamNotFoundException {
+        int index = path.lastIndexOf(Constants.SEPARATOR);
+        if (index != -1) {
+            return path.substring(0, index);
+        } else {
+            return null;
+        }
+    }
+
 }
