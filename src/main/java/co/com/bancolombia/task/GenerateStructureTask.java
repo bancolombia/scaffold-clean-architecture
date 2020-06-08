@@ -45,7 +45,7 @@ public class GenerateStructureTask extends GenerateBaseTask {
         addParamPackage(packageName);
         addParam("projectName", projectName);
         addParam("reactive", type == ProjectType.REACTIVE);
-        setupFromTemplate("default");
+        setupFromTemplate("structure");
         executeTask();
     }
 
