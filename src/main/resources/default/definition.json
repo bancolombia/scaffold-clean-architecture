@@ -1,16 +1,31 @@
 {
-  "default/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
-  "default/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
-  "default/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
-  "default/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
-  "default/deployment/dockerfile.mustache": "deployment/Dockerfile",
-  "default/domain/model/build.gradle.mustache": "domain/model/build.gradle",
-  "default/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
-  "default/root/.gitignore.mustache": ".gitignore",
-  "default/root/build.gradle.mustache": "build.gradle",
-  "default/root/gradle.properties.mustache": "gradle.properties",
-  "default/root/lombok.config.mustache": "lombok.config",
-  "default/root/main.gradle.mustache": "main.gradle",
-  "default/root/readme.md.mustache": "README.md",
-  "default/root/settings.gradle.mustache": "settings.gradle"
+  "folders": [
+    "deployment",
+    "applications/app-service/src/main/java/{{packagePath}}/config",
+    "applications/app-service/src/main/resources",
+    "applications/app-service/src/test/java/{{packagePath}}",
+    "infrastructure/driven-adapters",
+    "infrastructure/entry-points",
+    "infrastructure/helpers",
+    "domain/model/src/main/java/{{packagePath}}/model",
+    "domain/model/src/test/java/{{packagePath}}/model",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase"
+  ],
+  "files": {
+    "default/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
+    "default/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
+    "default/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
+    "default/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
+    "default/deployment/dockerfile.mustache": "deployment/Dockerfile",
+    "default/domain/model/build.gradle.mustache": "domain/model/build.gradle",
+    "default/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
+    "default/root/.gitignore.mustache": ".gitignore",
+    "default/root/build.gradle.mustache": "build.gradle",
+    "default/root/gradle.properties.mustache": "gradle.properties",
+    "default/root/lombok.config.mustache": "lombok.config",
+    "default/root/main.gradle.mustache": "main.gradle",
+    "default/root/readme.md.mustache": "README.md",
+    "default/root/settings.gradle.mustache": "settings.gradle"
+  }
 }

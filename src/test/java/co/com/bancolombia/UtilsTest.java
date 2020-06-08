@@ -1,5 +1,7 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -8,8 +10,12 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
 
@@ -103,6 +109,31 @@ public class UtilsTest {
         String expected = "a/b/c/d";
         String result = Utils.joinPath("a", "b", "c", "d");
         Assert.assertEquals(expected, result);
+    }
+
+
+    @Test
+    public void shouldReplacePlaceholders() throws CleanException {
+        // Arrange
+        String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
+        // Act
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", "redis");
+        params.put("className", "Redis.java");
+        String result = Utils.fillPath(fillablePath, params);
+        // Assert
+        assertEquals("default/driven-adapters/redis/src/main/Redis.java", result);
+    }
+
+    @Test(expected = ParamNotFoundException.class)
+    public void shouldHandleErrorWhenNotParamReplacePlaceholders() throws CleanException {
+        // Arrange
+        String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
+        // Act
+        Map<String, Object> params = new HashMap<>();
+        params.put("className", "Redis.java");
+        String result = Utils.fillPath(fillablePath, params);
+        // Assert
     }
 
 }

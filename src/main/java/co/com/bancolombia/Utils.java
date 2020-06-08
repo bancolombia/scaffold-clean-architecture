@@ -1,5 +1,6 @@
 package co.com.bancolombia;
 
+import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
 import org.gradle.api.Project;
@@ -7,14 +8,14 @@ import org.gradle.api.Project;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Utils {
-    private static Properties properties = new Properties();
+    private static final Properties properties = new Properties();
+    private static final String PARAM_START = "{{";
+    private static final String PARAM_END = "}}";
+    private static final int PARAM_LENGTH = 2;
 
     private Utils() {
     }
@@ -89,6 +90,18 @@ public class Utils {
 
     public static String joinPath(String... args) {
         return String.join(Constants.SEPARATOR, args);
+    }
+
+    public static String fillPath(String path, Map<String, Object> params) throws ParamNotFoundException {
+        while (path.contains(PARAM_START)) {
+            String key = path.substring(path.indexOf(PARAM_START) + PARAM_LENGTH, path.indexOf(PARAM_END));
+            if (params.containsKey(key)) {
+                path = path.replace(PARAM_START + key + PARAM_END, params.get(key).toString());
+            } else {
+                throw new ParamNotFoundException(key);
+            }
+        }
+        return path;
     }
 
 }

@@ -1,9 +1,9 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.Utils;
-import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.models.FileModel;
+import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.templates.PluginTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -12,6 +12,7 @@ import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -21,16 +22,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GenerateBaseTask extends DefaultTask {
-    private static final String DEFINITION_FILE = "definition.json";
-    private static final String PARAM_START = "{{";
-    private static final String PARAM_END = "}}";
-    private static final int PARAM_LENGTH = 2;
+public class GenerateBaseTask extends DefaultTask {
+    private static final String DEFINITION_FILES = "definition.json";
+    protected final Logger logger = getProject().getLogger();
     private final DefaultResolver resolver = new DefaultResolver();
     private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
     private final List<FileModel> files = new ArrayList<>();
     private final List<String> dirs = new ArrayList<>();
     private final Map<String, Object> params = new HashMap<>();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public GenerateBaseTask() {
         super();
@@ -41,9 +41,29 @@ public abstract class GenerateBaseTask extends DefaultTask {
         params.put("jacocoVersion", PluginTemplate.JACOCO_VERSION);
     }
 
-    protected abstract void setupDirs();
+    protected void executeTask() throws IOException {
+        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
+        dirs.forEach(getProject()::mkdir);
+        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
+        logger.lifecycle(PluginTemplate.GENERATING_FILES);
+        for (FileModel file : files) {
+            Utils.writeString(getProject(), file.getPath(), file.getContent());
+        }
+        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
+    }
 
-    protected abstract void setupFiles() throws CleanException, IOException;
+    @SuppressWarnings("unchecked")
+    protected void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
+        TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
+        for (String folder : definition.getFolders()) {
+            addDir(Utils.fillPath(folder, params));
+        }
+        for (Map.Entry<String, String> fileEntry : definition.getFiles().entrySet()) {
+            String path = Utils.fillPath(fileEntry.getValue(), params);
+            String content = buildFromTemplate(fileEntry.getKey());
+            addFile(path, content);
+        }
+    }
 
     protected void addParam(String key, Object value) {
         this.params.put(key, value);
@@ -54,45 +74,11 @@ public abstract class GenerateBaseTask extends DefaultTask {
         this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
     }
 
-    protected String getPackage() {
-        return (String) params.get("package");
-    }
-
-    protected String getPackagePath() {
-        return (String) params.get("packagePath");
-    }
-
     protected void addFile(String path, String content) {
         this.files.add(FileModel.builder()
                 .path(path)
                 .content(content)
                 .build());
-    }
-
-    @SuppressWarnings("unchecked")
-    protected void addFileTemplates(String resourceGroup) throws IOException, ParamNotFoundException {
-        Reader reader = resolver.getReader(Utils.joinPath(resourceGroup, DEFINITION_FILE));
-        String targetString = IOUtils.toString(reader);
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, String> data = mapper.readValue(targetString, Map.class);
-        for (Map.Entry<String, String> entry : data.entrySet()) {
-            this.files.add(FileModel.builder()
-                    .path(fillPath(entry.getValue()))
-                    .content(buildFromTemplate(entry.getKey()))
-                    .build());
-        }
-    }
-
-    protected String fillPath(String path) throws ParamNotFoundException {
-        while (path.contains(PARAM_START)) {
-            String key = path.substring(path.indexOf(PARAM_START) + PARAM_LENGTH, path.indexOf(PARAM_END));
-            if (params.containsKey(key)) {
-                path = path.replace(PARAM_START + key + PARAM_END, params.get(key).toString());
-            } else {
-                throw new ParamNotFoundException(key);
-            }
-        }
-        return path;
     }
 
     protected void addDir(String path) {
@@ -103,16 +89,12 @@ public abstract class GenerateBaseTask extends DefaultTask {
         this.dirs.add(Utils.joinPath(path));
     }
 
-    protected void createDirs() {
-        setupDirs();
-        dirs.forEach(getProject()::mkdir);
+    protected String getPackage() {
+        return (String) params.get("package");
     }
 
-    protected void createFiles() throws IOException, CleanException {
-        setupFiles();
-        for (FileModel file : files) {
-            Utils.writeString(getProject(), file.getPath(), file.getContent());
-        }
+    protected String getPackagePath() {
+        return (String) params.get("packagePath");
     }
 
     private String buildFromTemplate(String resource) {
@@ -120,5 +102,11 @@ public abstract class GenerateBaseTask extends DefaultTask {
         StringWriter stringWriter = new StringWriter();
         mustache.execute(stringWriter, params);
         return stringWriter.toString();
+    }
+
+    private TemplateDefinition loadTemplateDefinition(String resourceGroup) throws IOException {
+        Reader reader = resolver.getReader(Utils.joinPath(resourceGroup, DEFINITION_FILES));
+        String targetString = IOUtils.toString(reader);
+        return mapper.readValue(targetString, TemplateDefinition.class);
     }
 }
