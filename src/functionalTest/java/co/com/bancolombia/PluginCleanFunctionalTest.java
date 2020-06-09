@@ -134,7 +134,7 @@ public class PluginCleanFunctionalTest {
         String task = "generateUseCase";
         String useCaseName = "business";
 
-        // Setup the test build
+        // Setup the test buildº
         runner.withArguments(task, "--name=" + useCaseName);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();

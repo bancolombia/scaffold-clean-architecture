@@ -1,6 +1,6 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.task.GenerateUseCaseTask;
+import co.com.bancolombia.exceptions.ParamNotFoundException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -34,17 +34,15 @@ public class GenerateUseCaseTaskTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void generateUseCaseException() throws IOException {
-
+    public void generateUseCaseException() throws IOException, ParamNotFoundException {
         task.generateUseCaseTask();
     }
 
     @Test
-    public void generateUseCase() throws IOException {
+    public void generateUseCase() throws IOException, ParamNotFoundException {
         task.setNameProject("business");
         task.generateUseCaseTask();
         assertTrue(new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
-
     }
 
     private void writeString(File file, String string) throws IOException {
