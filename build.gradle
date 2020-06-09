@@ -102,9 +102,9 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-		property "sonar.organization", "grupo-bancolombia"
+//		property "sonar.organization", "grupo-bancolombia"
         property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
-		property "sonar.host.url", "https://sonarcloud.io/"
+//		property "sonar.host.url", "https://sonarcloud.io/"
 
         property "sonar.sources", "."
         property "sonar.java.binaries", "build/classes"

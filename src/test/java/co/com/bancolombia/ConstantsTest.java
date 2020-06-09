@@ -1,11 +1,13 @@
 package co.com.bancolombia;
 
-import co.com.bancolombia.templates.*;
+import co.com.bancolombia.templates.DrivenAdapterTemplate;
+import co.com.bancolombia.templates.EntryPointTemplate;
+import co.com.bancolombia.templates.HelperTemplate;
+import co.com.bancolombia.templates.ModelTemplate;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ConstantsTest {
-
 
 
     @Test
@@ -17,10 +19,9 @@ public class ConstantsTest {
 
         Assert.assertTrue(act.contains(modelName));
         Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
 
     }
-
 
 
     @Test
@@ -28,64 +29,49 @@ public class ConstantsTest {
         String modelName = "testProjectName";
         String packageName = "demo.package";
 
-        String act =  ModelTemplate.getInterfaceModel(modelName, packageName);
+        String act = ModelTemplate.getInterfaceModel(modelName, packageName);
 
         Assert.assertTrue(act.contains(modelName));
         Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
     }
 
-
-
     @Test
-    public void getUseCase() {
-        String useCaseName = "testProjectName";
+    public void getApiRestClassContent() {
         String packageName = "demo.package";
 
-        String act =  UseCaseTemplate.getUseCase(useCaseName, packageName);
-
-        Assert.assertTrue(act.contains(useCaseName));
-        Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
-
-    }
-
-    @Test
-    public void getApiRestClassContent(){
-        String packageName = "demo.package";
-
-        String act =  EntryPointTemplate.getApiRestClassContent(packageName);
+        String act = EntryPointTemplate.getApiRestClassContent(packageName);
 
         Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof  String);
-
-    }
-    @Test
-    public void getBuildGradleHelperMongoRepository(){
-        String act =  HelperTemplate.getBuildGradleHelperMongoRepository();
-
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
     }
 
     @Test
-    public void getBuildGradleHelperJPARepository(){
-        String act =  HelperTemplate.getBuildGradleHelperJPARepository();
+    public void getBuildGradleHelperMongoRepository() {
+        String act = HelperTemplate.getBuildGradleHelperMongoRepository();
 
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
     }
 
     @Test
-    public void getBuildGradleMongoRepository(){
-        String act =  DrivenAdapterTemplate.getBuildGradleMongoRepository();
+    public void getBuildGradleHelperJPARepository() {
+        String act = HelperTemplate.getBuildGradleHelperJPARepository();
 
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
     }
 
     @Test
-    public void getBuildGradleApiRest(){
-        String act =  EntryPointTemplate.getBuildGradleApiRest();
+    public void getBuildGradleMongoRepository() {
+        String act = DrivenAdapterTemplate.getBuildGradleMongoRepository();
 
-        Assert.assertTrue(act instanceof  String);
+        Assert.assertTrue(act instanceof String);
+    }
+
+    @Test
+    public void getBuildGradleApiRest() {
+        String act = EntryPointTemplate.getBuildGradleApiRest();
+
+        Assert.assertTrue(act instanceof String);
     }
 
 }

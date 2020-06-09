@@ -43,6 +43,7 @@ public class GenerateUseCaseTaskTest {
         task.setNameProject("business");
         task.generateUseCaseTask();
         assertTrue(new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
+        assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
     }
 
     private void writeString(File file, String string) throws IOException {

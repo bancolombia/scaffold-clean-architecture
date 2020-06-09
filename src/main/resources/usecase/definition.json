@@ -3,6 +3,7 @@
     "domain/usecase/src/test/java/{{packagePath}}/usecase/{{useCaseName}}"
   ],
   "files": {
-    "usecase/usecase.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/{{useCaseName}}/{{useCaseClassName}}.java"
+    "usecase/usecase.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/{{useCaseName}}/{{useCaseClassName}}.java",
+    "usecase/build.gradle.mustache": "domain/usecase/build.gradle"
   }
 }
