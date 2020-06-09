@@ -77,8 +77,8 @@ public class ModuleBuilder {
     public void appendSettings(String module, String baseDir) throws IOException {
         String settings = Utils.readFile(getProject(), Constants.SETTINGS_GRADLE)
                 .collect(Collectors.joining("\n"));
-        settings += "include ':" + module + "'\n" +
-                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')\n";
+        settings += "\ninclude ':" + module + "'\n" +
+                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')";
         addFile(Constants.SETTINGS_GRADLE, settings);
     }
 
