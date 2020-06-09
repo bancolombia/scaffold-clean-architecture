@@ -6,7 +6,7 @@ public class PluginTemplate {
     public static final String GENERATING_CHILDS_DIRS = "Generating Childs Dirs";
     public static final String GENERATED_CHILDS_DIRS = "Childs Dirs Generated";
     public static final String WRITED_IN_FILES = "Files Generated ";
-    public static final String VERSION_PLUGIN = "0.0.5";
+    public static final String VERSION_PLUGIN = "0.0.6";
     public static final String SPRING_BOOT_VERSION = "2.1.1.RELEASE";
     public static final String SPRING_CLOUD_VERSION = "Greenwich.M1";
     public static final String SONAR_VERSION = "2.7";

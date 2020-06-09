@@ -22,7 +22,7 @@ public class GeneratePipelineTask extends DefaultTask {
 
     private PipelineModuleFactory.PipelineType type;
 
-    @Option(option = "type", description = "Set the value to generate the pipeline")
+    @Option(option = "type", description = "Set the type of pipeline")
     public void setPipelineValueProject(PipelineModuleFactory.PipelineType type) {
         this.type = type;
     }
@@ -39,7 +39,7 @@ public class GeneratePipelineTask extends DefaultTask {
         }
         ModuleFactory pipelineFactory = PipelineModuleFactory.getPipelineFactory(type);
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-        logger.lifecycle("Value set: {}", type);
+        logger.lifecycle("Pipeline type: {}", type);
         pipelineFactory.buildModule(builder);
         builder.persist();
     }

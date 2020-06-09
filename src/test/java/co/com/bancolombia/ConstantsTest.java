@@ -1,7 +1,6 @@
 package co.com.bancolombia;
 
 import co.com.bancolombia.templates.DrivenAdapterTemplate;
-import co.com.bancolombia.templates.EntryPointTemplate;
 import co.com.bancolombia.templates.HelperTemplate;
 import co.com.bancolombia.templates.ModelTemplate;
 import org.junit.Assert;
@@ -37,16 +36,6 @@ public class ConstantsTest {
     }
 
     @Test
-    public void getApiRestClassContent() {
-        String packageName = "demo.package";
-
-        String act = EntryPointTemplate.getApiRestClassContent(packageName);
-
-        Assert.assertTrue(act.contains(packageName));
-        Assert.assertTrue(act instanceof String);
-    }
-
-    @Test
     public void getBuildGradleHelperMongoRepository() {
         String act = HelperTemplate.getBuildGradleHelperMongoRepository();
 
@@ -63,13 +52,6 @@ public class ConstantsTest {
     @Test
     public void getBuildGradleMongoRepository() {
         String act = DrivenAdapterTemplate.getBuildGradleMongoRepository();
-
-        Assert.assertTrue(act instanceof String);
-    }
-
-    @Test
-    public void getBuildGradleApiRest() {
-        String act = EntryPointTemplate.getBuildGradleApiRest();
 
         Assert.assertTrue(act instanceof String);
     }

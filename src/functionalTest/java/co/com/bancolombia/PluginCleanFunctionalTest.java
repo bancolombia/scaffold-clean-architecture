@@ -147,9 +147,9 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateEntryPointCaseWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateEntryPoint";
-        String valueEntryPoint = "1";
+        String valueEntryPoint = "restmvc";
 
-        runner.withArguments(task, "--value=" + valueEntryPoint);
+        runner.withArguments(task, "--type=" + valueEntryPoint);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());

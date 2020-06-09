@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api"
+  ],
+  "files": {
+    "entrypoint/rest-mvc/api.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/ApiRest.java",
+    "entrypoint/rest-mvc/build.gradle.mustache": "infrastructure/entry-points/api-rest/build.gradle"
+  }
+}

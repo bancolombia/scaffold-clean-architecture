@@ -66,7 +66,6 @@ public class Utils {
             return properties.getProperty(variable);
         } else {
             throw new IOException("No parameter" + variable + " in build.properties file");
-
         }
     }
 

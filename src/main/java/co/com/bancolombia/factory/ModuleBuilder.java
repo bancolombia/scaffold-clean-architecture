@@ -4,6 +4,7 @@ import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.TemplateDefinition;
+import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModuleBuilder {
     private static final String DEFINITION_FILES = "definition.json";
@@ -70,6 +72,14 @@ public class ModuleBuilder {
             addDir(Utils.extractDir(path));
             addFile(path, content);
         }
+    }
+
+    public void appendSettings(String module, String baseDir) throws IOException {
+        String settings = Utils.readFile(getProject(), Constants.SETTINGS_GRADLE)
+                .collect(Collectors.joining("\n"));
+        settings += "include ':" + module + "'\n" +
+                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')\n";
+        addFile(Constants.SETTINGS_GRADLE, settings);
     }
 
     public void addParam(String key, Object value) {
