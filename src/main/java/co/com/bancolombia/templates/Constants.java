@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
+    public static final String APPLICATION_PROPERTIES = "applications/app-service/src/main/resources/application.yaml";
 
     public static final String JAVA_EXTENSION = ".java";
     public static final String SEPARATOR = "/";
@@ -50,5 +51,4 @@ public class Constants {
     public static final String MAIN_GRADLE = "main.gradle";
     public static final String SETTINGS_GRADLE = "settings.gradle";
 
-    public static final String APPLICATION_PROPERTIES = "application.yaml";
 }

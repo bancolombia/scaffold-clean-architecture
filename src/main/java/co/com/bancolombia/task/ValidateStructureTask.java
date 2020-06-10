@@ -1,7 +1,8 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.templates.Constants;
-import co.com.bancolombia.Utils;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
@@ -20,7 +21,7 @@ public class ValidateStructureTask extends DefaultTask {
     @TaskAction
     public void validateStructureTask() throws IOException, CleanException {
 
-        String packageName = Utils.readProperties("package");
+        String packageName = FileUtils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project Package: {}", packageName);
         if (!validateModelLayer()) {
@@ -41,7 +42,7 @@ public class ValidateStructureTask extends DefaultTask {
 
     //TODO: Complete
     public boolean validateEntryPointLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
+        List<File> files = FileUtils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
         for (File file : files) {
             logger.lifecycle(file.getCanonicalPath());
         }
@@ -50,7 +51,7 @@ public class ValidateStructureTask extends DefaultTask {
 
     //TODO: Complete
     private boolean validateDrivenAdapterLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/driven-adapters"));
+        List<File> files = FileUtils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/driven-adapters"));
         for (File file : files) {
             logger.lifecycle(file.getCanonicalPath());
         }
@@ -58,7 +59,7 @@ public class ValidateStructureTask extends DefaultTask {
     }
 
     private boolean validateModelLayer() throws IOException {
-        Stream<String> stream = Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
+        Stream<String> stream = FileUtils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
 
         long countImplementationproject = stream
                 .map(line -> line.replaceAll("\\s", ""))
@@ -71,7 +72,7 @@ public class ValidateStructureTask extends DefaultTask {
     private boolean validateUseCaseLayer() {
         Supplier<Stream<String>> stream = () -> {
             try {
-                return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.BUILD_GRADLE));
+                return FileUtils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.BUILD_GRADLE));
             } catch (IOException e) {
                 logger.error(e.getMessage());
                 return null;

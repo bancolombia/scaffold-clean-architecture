@@ -44,6 +44,7 @@ repositories {
 dependencies {
     compile 'com.github.spullara.mustache.java:compiler:0.9.6'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     compile 'commons-io:commons-io:2.7'
     // Use JUnit test framework for unit tests
     testImplementation 'junit:junit:4.12'

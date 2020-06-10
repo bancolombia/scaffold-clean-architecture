@@ -1,0 +1,16 @@
+package {{package}}.jpa;
+
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class JPARepositoryAdapter extends AdapterOperations<Object, Object, String, JPARepository>
+/**        implements <INTERFACE DOMAIN> **/
+{
+
+    @Autowired
+    public JPARepositoryAdapter(JPARepository repository, ObjectMapper mapper) {
+        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));
+    }
+}

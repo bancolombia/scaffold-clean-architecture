@@ -1,7 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.pipelines.PipelineModuleFactory;
+import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class GeneratePipelineTaskTest {
     @Test
     public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
-        task.setPipelineValueProject(PipelineModuleFactory.PipelineType.AZURE);
+        task.setPipelineValueProject(ModuleFactoryPipeline.PipelineType.AZURE);
         task.generatePipelineTask();
 
         assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());

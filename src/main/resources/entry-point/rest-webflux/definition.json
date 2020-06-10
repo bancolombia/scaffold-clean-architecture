@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api"
+  ],
+  "files": {
+    "entry-point/rest-webflux/api.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/ApiRest.java",
+    "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
+  }
+}

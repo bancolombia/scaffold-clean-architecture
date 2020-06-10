@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Utils;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.templates.Constants;
@@ -27,7 +28,7 @@ public class GenerateUseCaseTask extends DefaultTask {
             throw new IllegalArgumentException(
                     "No use case name, usege: gradle generateUseCase --name useCaseName");
         }
-        String packageName = Utils.readProperties("package");
+        String packageName = FileUtils.readProperties("package");
         useCaseName = Utils.capitalize(useCaseName);
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);

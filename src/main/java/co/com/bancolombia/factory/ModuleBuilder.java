@@ -1,12 +1,14 @@
 package co.com.bancolombia.factory;
 
-import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.templates.Constants;
 import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -23,19 +25,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class ModuleBuilder {
     private static final String DEFINITION_FILES = "definition.json";
     private final DefaultResolver resolver = new DefaultResolver();
     private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-    private final List<FileModel> files = new ArrayList<>();
+    private final Map<String, FileModel> files = new ConcurrentHashMap<>();
     private final List<String> dirs = new ArrayList<>();
     private final Map<String, Object> params = new HashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
     private final Logger logger;
     @Getter
     private final Project project;
+    private ObjectNode properties;
 
     public ModuleBuilder(Project project) {
         this.project = project;
@@ -54,13 +58,17 @@ public class ModuleBuilder {
         dirs.forEach(getProject()::mkdir);
         logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
         logger.lifecycle(PluginTemplate.GENERATING_FILES);
-        for (FileModel file : files) {
-            Utils.writeString(getProject(), file.getPath(), file.getContent());
+        if (properties != null) {
+            addFile(Constants.APPLICATION_PROPERTIES, FileUtils.parseApplicationYaml(properties));
         }
-        logger.lifecycle(PluginTemplate.WRITED_IN_FILES);
+        for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
+            FileModel file = fileEntry.getValue();
+            FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+            logger.debug("file {} written", file.getPath());
+        }
+        logger.lifecycle(PluginTemplate.WRITTEN_FILES);
     }
 
-    @SuppressWarnings("unchecked")
     public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
         TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
         for (String folder : definition.getFolders()) {
@@ -74,12 +82,29 @@ public class ModuleBuilder {
         }
     }
 
-    public void appendSettings(String module, String baseDir) throws IOException {
-        String settings = Utils.readFile(getProject(), Constants.SETTINGS_GRADLE)
-                .collect(Collectors.joining("\n"));
+    public void appendToSettings(String module, String baseDir) throws IOException {
+        FileModel current = files.get(Constants.SETTINGS_GRADLE);
+        String settings;
+        if (current == null) {
+            settings = FileUtils.readFile(getProject(), Constants.SETTINGS_GRADLE)
+                    .collect(Collectors.joining("\n"));
+        } else {
+            settings = current.getContent();
+        }
         settings += "\ninclude ':" + module + "'\n" +
                 "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')";
         addFile(Constants.SETTINGS_GRADLE, settings);
+    }
+
+    public ObjectNode appendToProperties(String path) throws IOException {
+        if (properties == null) {
+            properties = FileUtils.getApplicationYaml(getProject());
+        }
+        if (path.isEmpty()) {
+            return properties;
+        }
+        List<String> attributes = new ArrayList<>(List.of(path.split("\\.")));
+        return getNode(properties, attributes);
     }
 
     public void addParam(String key, Object value) {
@@ -92,7 +117,7 @@ public class ModuleBuilder {
     }
 
     public void addFile(String path, String content) {
-        this.files.add(FileModel.builder()
+        this.files.put(path, FileModel.builder()
                 .path(path)
                 .content(content)
                 .build());
@@ -104,16 +129,22 @@ public class ModuleBuilder {
         }
     }
 
-    public void addDir(String... path) {
-        this.dirs.add(Utils.joinPath(path));
-    }
-
     public String getPackage() {
         return (String) params.get("package");
     }
 
     public String getPackagePath() {
         return (String) params.get("packagePath");
+    }
+
+    private ObjectNode getNode(ObjectNode node, List<String> attributes) {
+        if (attributes.isEmpty()) {
+            return node;
+        } else {
+            String attribute = attributes.remove(0);
+            ObjectNode current = node.has(attribute) ? (ObjectNode) node.get(attribute) : node.putObject(attribute);
+            return getNode(current, attributes);
+        }
     }
 
     private String buildFromTemplate(String resource) {

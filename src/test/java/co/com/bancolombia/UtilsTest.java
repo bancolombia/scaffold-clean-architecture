@@ -3,6 +3,8 @@ package co.com.bancolombia;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Assert;
@@ -48,37 +50,21 @@ public class UtilsTest {
     @Test
     public void readPropertiesExist() throws Exception {
         String test1 = "package";
-        Assert.assertEquals("co.com.bancolombia", Utils.readProperties(test1));
+        Assert.assertEquals("co.com.bancolombia", FileUtils.readProperties(test1));
 
     }
 
     @Test(expected = Exception.class)
     public void readPropertiesUnExist() throws Exception {
         String test1 = "package2";
-        Utils.readProperties(test1);
-
-    }
-
-    @Test
-    public void tryParse() {
-        String test = "1";
-
-        int act = Utils.tryParse(test);
-
-        Assert.assertEquals(1, act);
-    }
-
-    @Test(expected = NumberFormatException.class)
-    public void tryParseUnParse() {
-        String test = "test";
-        Utils.tryParse(test);
+        FileUtils.readProperties(test1);
 
     }
 
     @Test
     public void readFile() throws IOException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-        String response = Utils.readFile(project, "temp.txt").collect(Collectors.joining());
+        String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
 
         Assert.assertTrue(response instanceof String);
         Assert.assertEquals("hello", response);
@@ -87,8 +73,8 @@ public class UtilsTest {
     @Test
     public void writeString() throws IOException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/tmp")).build();
-        Utils.writeString(project, "temp.txt", "hello");
-        String response = Utils.readFile(project, "temp.txt").collect(Collectors.joining());
+        FileUtils.writeString(project, "temp.txt", "hello");
+        String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
 
         Assert.assertTrue(response instanceof String);
         Assert.assertEquals("hello", response);
@@ -96,11 +82,11 @@ public class UtilsTest {
 
     @Test
     public void finderSubProjects() {
-        List<File> files = Utils.finderSubProjects("src/test/resources");
+        List<File> files = FileUtils.finderSubProjects("src/test/resources");
 
         Assert.assertEquals(0, files.size());
 
-        List<File> files2 = Utils.finderSubProjects("src/test/resources/finderSubProjects/");
+        List<File> files2 = FileUtils.finderSubProjects("src/test/resources/finderSubProjects/");
 
         Assert.assertEquals(2, files2.size());
     }

@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Utils;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import org.gradle.api.DefaultTask;
@@ -26,7 +27,7 @@ public class GenerateModelTask extends DefaultTask {
         if (modelName.isEmpty()) {
             throw new IllegalArgumentException("No model name, usage: gradle generateModel --name modelName");
         }
-        String packageName = Utils.readProperties("package");
+        String packageName = FileUtils.readProperties("package");
         modelName = Utils.capitalize(modelName);
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);

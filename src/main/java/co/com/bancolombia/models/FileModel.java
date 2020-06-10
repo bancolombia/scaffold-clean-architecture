@@ -6,6 +6,6 @@ import lombok.Getter;
 @Builder
 @Getter
 public class FileModel {
-    private String path;
-    private  String content;
+    private final String path;
+    private final String content;
 }

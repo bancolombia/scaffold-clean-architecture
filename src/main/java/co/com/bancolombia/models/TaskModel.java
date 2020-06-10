@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class TaskModel {
-    private String name;
-    private String shortcut;
-    private String description;
-    private String group;
-    private Class taskAction;
+    private final String name;
+    private final String shortcut;
+    private final String description;
+    private final String group;
+    private final Class taskAction;
 }

@@ -1,6 +1,6 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Utils;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import org.gradle.api.DefaultTask;
