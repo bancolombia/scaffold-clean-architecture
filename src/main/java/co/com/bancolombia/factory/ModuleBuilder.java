@@ -1,10 +1,10 @@
 package co.com.bancolombia.factory;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.TemplateDefinition;
-import co.com.bancolombia.templates.Constants;
-import co.com.bancolombia.templates.PluginTemplate;
+import co.com.bancolombia.utils.FileAppender;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,12 +14,10 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,27 +44,27 @@ public class ModuleBuilder {
         this.logger = getProject().getLogger();
         params.put("projectName", getProject().getName());
         params.put("projectNameLower", getProject().getName().toLowerCase());
-        params.put("pluginVersion", PluginTemplate.VERSION_PLUGIN);
-        params.put("springBootVersion", PluginTemplate.SPRING_BOOT_VERSION);
-        params.put("springCloudVersion", PluginTemplate.SPRING_CLOUD_VERSION);
-        params.put("sonarVersion", PluginTemplate.SONAR_VERSION);
-        params.put("jacocoVersion", PluginTemplate.JACOCO_VERSION);
+        params.put("pluginVersion", Constants.PLUGIN_VERSION);
+        params.put("springBootVersion", Constants.SPRING_BOOT_VERSION);
+        params.put("springCloudVersion", Constants.SPRING_CLOUD_VERSION);
+        params.put("sonarVersion", Constants.SONAR_VERSION);
+        params.put("jacocoVersion", Constants.JACOCO_VERSION);
     }
 
     public void persist() throws IOException {
-        logger.lifecycle(PluginTemplate.GENERATING_CHILDS_DIRS);
+        logger.lifecycle("Generating dirs");
         dirs.forEach(getProject()::mkdir);
-        logger.lifecycle(PluginTemplate.GENERATED_CHILDS_DIRS);
-        logger.lifecycle(PluginTemplate.GENERATING_FILES);
+        logger.lifecycle("Dirs generated");
+        logger.lifecycle("Generating files");
         if (properties != null) {
-            addFile(Constants.APPLICATION_PROPERTIES, FileUtils.parseApplicationYaml(properties));
+            addFile(FileUtils.APPLICATION_PROPERTIES, FileUtils.parseToApplicationYaml(properties));
         }
         for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
             FileModel file = fileEntry.getValue();
             FileUtils.writeString(getProject(), file.getPath(), file.getContent());
             logger.debug("file {} written", file.getPath());
         }
-        logger.lifecycle(PluginTemplate.WRITTEN_FILES);
+        logger.lifecycle("Files written");
     }
 
     public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
@@ -83,17 +81,13 @@ public class ModuleBuilder {
     }
 
     public void appendToSettings(String module, String baseDir) throws IOException {
-        FileModel current = files.get(Constants.SETTINGS_GRADLE);
-        String settings;
-        if (current == null) {
-            settings = FileUtils.readFile(getProject(), Constants.SETTINGS_GRADLE)
-                    .collect(Collectors.joining("\n"));
-        } else {
-            settings = current.getContent();
-        }
-        settings += "\ninclude ':" + module + "'\n" +
-                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')";
-        addFile(Constants.SETTINGS_GRADLE, settings);
+        appendToFile("settings.gradle", settings -> settings + ("\ninclude ':" + module + "'\n" +
+                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')"));
+    }
+
+    public void appendDependencyToModule(String module, String dependency) throws IOException {
+        String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+        appendToFile(buildFilePath, current -> Utils.addDependency(current, dependency));
     }
 
     public ObjectNode appendToProperties(String path) throws IOException {
@@ -137,6 +131,18 @@ public class ModuleBuilder {
         return (String) params.get("packagePath");
     }
 
+    private void appendToFile(String path, FileAppender appender) throws IOException {
+        FileModel current = files.get(path);
+        String content;
+        if (current == null) {
+            content = FileUtils.readFile(getProject(), path)
+                    .collect(Collectors.joining("\n"));
+        } else {
+            content = current.getContent();
+        }
+        addFile(path, appender.append(content));
+    }
+
     private ObjectNode getNode(ObjectNode node, List<String> attributes) {
         if (attributes.isEmpty()) {
             return node;
@@ -155,8 +161,7 @@ public class ModuleBuilder {
     }
 
     private TemplateDefinition loadTemplateDefinition(String resourceGroup) throws IOException {
-        Reader reader = resolver.getReader(Utils.joinPath(resourceGroup, DEFINITION_FILES));
-        String targetString = IOUtils.toString(reader);
+        String targetString = FileUtils.getResourceAsString(resolver, Utils.joinPath(resourceGroup, DEFINITION_FILES));
         return mapper.readValue(targetString, TemplateDefinition.class);
     }
 }

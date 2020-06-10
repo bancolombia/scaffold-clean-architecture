@@ -27,7 +27,16 @@ public class GenerateDrivenAdapterTaskTest {
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        Project project = ProjectBuilder.builder()
+                .withName("cleanArchitecture")
+                .withProjectDir(new File("build/unitTest"))
+                .build();
+
+        ProjectBuilder.builder()
+                .withName("app-service")
+                .withProjectDir(new File("build/unitTest/applications/app-service"))
+                .withParent(project)
+                .build();
 
         project.getTasks().create("testStructure", GenerateStructureTask.class);
         GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");

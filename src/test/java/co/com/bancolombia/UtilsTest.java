@@ -2,7 +2,6 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
-import co.com.bancolombia.templates.PluginTemplate;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import org.gradle.api.Project;
@@ -25,7 +24,7 @@ public class UtilsTest {
 
     @Test
     public void getVersionPlugin() {
-        Assert.assertEquals(PluginTemplate.VERSION_PLUGIN, Utils.getVersionPlugin());
+        Assert.assertEquals(Constants.PLUGIN_VERSION, Utils.getVersionPlugin());
     }
 
     @Test
@@ -141,6 +140,30 @@ public class UtilsTest {
         String result = Utils.extractDir(classPath);
         // Assert
         assertNull(result);
+    }
+
+    @Test
+    public void shouldAddDependency() {
+        // Arrange
+        String build = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}";
+        String expected = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':my-module')\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}";
+        // Act
+        String result = Utils.addDependency(build, "implementation project(':my-module')");
+        // Assert
+        assertEquals(expected, result);
     }
 
 }

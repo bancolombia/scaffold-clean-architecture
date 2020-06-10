@@ -1,8 +1,7 @@
 package co.com.bancolombia.utils;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
-import co.com.bancolombia.templates.Constants;
-import co.com.bancolombia.templates.PluginTemplate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +11,7 @@ import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
+    private static final String SEPARATOR = "/";
     private static final String PARAM_START = "{{";
     private static final String PARAM_END = "}}";
     private static final int PARAM_LENGTH = 2;
@@ -29,11 +29,11 @@ public class Utils {
     }
 
     public static String getVersionPlugin() {
-        return PluginTemplate.VERSION_PLUGIN;
+        return Constants.PLUGIN_VERSION;
     }
 
     public static String joinPath(String... args) {
-        return String.join(Constants.SEPARATOR, args);
+        return String.join(SEPARATOR, args);
     }
 
     public static String fillPath(String path, Map<String, Object> params) throws ParamNotFoundException {
@@ -49,7 +49,7 @@ public class Utils {
     }
 
     public static String extractDir(String path) {
-        int index = path.lastIndexOf(Constants.SEPARATOR);
+        int index = path.lastIndexOf(SEPARATOR);
         if (index != -1) {
             return path.substring(0, index);
         } else {
@@ -63,6 +63,12 @@ public class Utils {
             items.add(type.toString());
         }
         return "[" + String.join("|", items) + "]";
+    }
+
+    public static String addDependency(String build, String dependency) {
+        int start = build.indexOf("dependencies");
+        int realStart = build.indexOf('{', start);
+        return build.substring(0, realStart + 1) + "\n\t" + dependency + build.substring(realStart + 1);
     }
 
 }

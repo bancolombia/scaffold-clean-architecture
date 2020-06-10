@@ -10,7 +10,6 @@ public class PipelineAzure implements ModuleFactory {
 
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-        // TODO: Review this params
         builder.addParam("sonar.java.binaries", "**/build/classes/java/main");
         builder.addParam("sonar.junit.reportsPaths", "**/build/test-results/test");
         builder.setupFromTemplate("pipeline/azure");

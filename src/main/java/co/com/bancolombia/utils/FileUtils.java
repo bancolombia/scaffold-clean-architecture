@@ -1,12 +1,13 @@
 package co.com.bancolombia.utils;
 
-import co.com.bancolombia.templates.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import com.github.mustachejava.resolver.DefaultResolver;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
 
 import java.io.*;
@@ -16,11 +17,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
+    public static final String APPLICATION_PROPERTIES = "applications/app-service/src/main/resources/application.yaml";
 
     public static void writeString(Project project, String filePath, String content) throws IOException {
         project.getLogger().debug(project.file(filePath).getAbsolutePath());
@@ -60,16 +61,18 @@ public class FileUtils {
         }
     }
 
+    public static String getResourceAsString(DefaultResolver resolver, String path) throws IOException {
+        Reader reader = resolver.getReader(path);
+        return IOUtils.toString(reader);
+    }
+
     public static ObjectNode getApplicationYaml(Project project) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
-        String yamlString = readFile(project, Constants.APPLICATION_PROPERTIES)
-                .collect(Collectors.joining());
-        System.out.println(yamlString);
-        Object object = mapper.readTree(project.file(Constants.APPLICATION_PROPERTIES));
+        Object object = mapper.readTree(project.file(APPLICATION_PROPERTIES));
         return (ObjectNode) object;
     }
 
-    public static String parseApplicationYaml(ObjectNode node) throws IOException {
+    public static String parseToApplicationYaml(ObjectNode node) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
         return mapper.writeValueAsString(node);
     }

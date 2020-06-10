@@ -46,12 +46,14 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
     compile 'commons-io:commons-io:2.7'
+    compile gradleApi()
     // Use JUnit test framework for unit tests
-    testImplementation 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.9.0"
+    testImplementation 'junit:junit:4.12'
+    testImplementation gradleTestKit()
+
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
-    compile gradleApi()
 }
 
 gradlePlugin {
@@ -103,9 +105,9 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-		property "sonar.organization", "grupo-bancolombia"
+//		property "sonar.organization", "grupo-bancolombia"
         property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
-		property "sonar.host.url", "https://sonarcloud.io/"
+//		property "sonar.host.url", "https://sonarcloud.io/"
 
         property "sonar.sources", "."
         property "sonar.java.binaries", "build/classes"

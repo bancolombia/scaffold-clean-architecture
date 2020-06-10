@@ -17,6 +17,7 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
         builder.appendToSettings("mongo-repository-commons", "infrastructure/helpers");
         builder.appendToProperties("spring.data.mongodb")
                 .put("uri", "mongodb://user:pass@hostname/db");
-        // TODO: Add app-service dependency
+        builder.appendDependencyToModule("app-service",
+                "implementation project(':mongo-repository')");
     }
 }

@@ -1,10 +1,9 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.utils.FileUtils;
-import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.ModuleBuilder;
-import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -13,6 +12,7 @@ import org.gradle.api.tasks.options.Option;
 import java.io.IOException;
 
 public class GenerateUseCaseTask extends DefaultTask {
+    private static final String USECASE_CLASS_NAME = "UseCase";
     private final ModuleBuilder builder = new ModuleBuilder(getProject());
     private final Logger logger = getProject().getLogger();
     private String useCaseName = "";
@@ -41,10 +41,10 @@ public class GenerateUseCaseTask extends DefaultTask {
     }
 
     private String refactorName(String useCaseName) {
-        if (useCaseName.endsWith(Constants.USECASE_CLASS_NAME)) {
+        if (useCaseName.endsWith(USECASE_CLASS_NAME)) {
             return useCaseName;
         }
-        return useCaseName + Constants.USECASE_CLASS_NAME;
+        return useCaseName + USECASE_CLASS_NAME;
     }
 }
 

@@ -1,9 +1,8 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.templates.Constants;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
-import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -16,6 +15,10 @@ import java.util.stream.Stream;
 
 
 public class ValidateStructureTask extends DefaultTask {
+    private static final String DOMAIN = "domain";
+    private static final String MODEL = "model";
+    private static final String USECASE_FOLDER = "usecase";
+    private static final String BUILD_GRADLE = "build.gradle";
     private Logger logger = getProject().getLogger();
 
     @TaskAction
@@ -59,7 +62,7 @@ public class ValidateStructureTask extends DefaultTask {
     }
 
     private boolean validateModelLayer() throws IOException {
-        Stream<String> stream = FileUtils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
+        Stream<String> stream = FileUtils.readFile(getProject(), DOMAIN.concat("/").concat(MODEL).concat("/").concat(BUILD_GRADLE));
 
         long countImplementationproject = stream
                 .map(line -> line.replaceAll("\\s", ""))
@@ -72,7 +75,7 @@ public class ValidateStructureTask extends DefaultTask {
     private boolean validateUseCaseLayer() {
         Supplier<Stream<String>> stream = () -> {
             try {
-                return FileUtils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.BUILD_GRADLE));
+                return FileUtils.readFile(getProject(), DOMAIN.concat("/").concat(USECASE_FOLDER).concat("/").concat(BUILD_GRADLE));
             } catch (IOException e) {
                 logger.error(e.getMessage());
                 return null;

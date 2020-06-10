@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PluginClean implements Plugin<Project> {
-    private static final String TASK_GROUP = "Clean Architecture";
     private TaskContainer taskContainer;
 
     public void apply(Project project) {
@@ -24,32 +23,36 @@ public class PluginClean implements Plugin<Project> {
     private List<TaskModel> initTasks() {
         List<TaskModel> tasksModels = new ArrayList<>();
 
+        tasksModels.add(TaskModel.builder().name("generalTask").shortcut("gt")
+                .description("Testing").group(Constants.PLUGIN_TASK_GROUP)
+                .taskAction(GeneralTask.class).build());
+
         tasksModels.add(TaskModel.builder().name("cleanArchitecture").shortcut("ca")
-                .description("Scaffolding clean architecture project").group(TASK_GROUP)
+                .description("Scaffolding clean architecture project").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateStructureTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("generateModel").shortcut("gm")
-                .description("Generate model in domain layer").group(TASK_GROUP)
+                .description("Generate model in domain layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateModelTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("generateUseCase").shortcut("guc")
-                .description("Generate use case in domain layer").group(TASK_GROUP)
+                .description("Generate use case in domain layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateUseCaseTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("generateEntryPoint").shortcut("gep")
-                .description("Generate entry point in infrastructure layer").group(TASK_GROUP)
+                .description("Generate entry point in infrastructure layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateEntryPointTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("generateDrivenAdapter").shortcut("gda")
-                .description("Generate driven adapter in infrastructure layer").group(TASK_GROUP)
+                .description("Generate driven adapter in infrastructure layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateDrivenAdapterTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("validateStructure").shortcut("vs")
-                .description("Validate that project references are not violated").group(TASK_GROUP)
+                .description("Validate that project references are not violated").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(ValidateStructureTask.class).build());
 
         tasksModels.add(TaskModel.builder().name("generatePipeline").shortcut("gpl")
-                .description("Generate CI pipeline as a code in deployment layer").group(TASK_GROUP)
+                .description("Generate CI pipeline as a code in deployment layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GeneratePipelineTask.class).build());
 
         return tasksModels;
