@@ -23,10 +23,6 @@ public class PluginClean implements Plugin<Project> {
     private List<TaskModel> initTasks() {
         List<TaskModel> tasksModels = new ArrayList<>();
 
-        tasksModels.add(TaskModel.builder().name("generalTask").shortcut("gt")
-                .description("Testing").group(Constants.PLUGIN_TASK_GROUP)
-                .taskAction(GeneralTask.class).build());
-
         tasksModels.add(TaskModel.builder().name("cleanArchitecture").shortcut("ca")
                 .description("Scaffolding clean architecture project").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GenerateStructureTask.class).build());

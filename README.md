@@ -14,7 +14,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.5.5"
+ id "co.com.bancolombia.cleanArchitecture" version "2.0.0-alpha"
 }
 ```
 
@@ -48,27 +48,27 @@ gradle gm --name [modelName]
 gradle generateUseCase --name=[useCaseName]
 gradle guc --name [useCaseName]
  ```
-4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
+4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task have one required parameter ```type```.
 ```sh
-gradle generateDrivenAdapter --value=[referenceNumberDrivenAdapter]
-gradle gda --value [referenceNumberDrivenAdapter]
+gradle generateDrivenAdapter --type=[drivenAdapterType]
+gradle gda --type [drivenAdapterType]
  ```
 
 |      Reference driven adapter value        | Name       |
 | ------------------ | ------------ |
-| 1|JPA Repository |
-| 2|Mongo Repository |
-| 3|Async Event Bus |
+| JPA|JPA Repository |
+| MONGODB|Mongo Repository |
+| ASYNCEVENTBUS|Async Event Bus |
 
-5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```value```.
+5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```type```.
 ```sh
-gradle generateEntryPoint --value=referenceNumberEntryPoint
-gradle gep --value referenceNumberEntryPoint
+gradle generateEntryPoint --type=[entryPointType]
+gradle gep --type [entryPointType]
  ```
 |      Reference entry point value      | Name       |
 | ------------------ | ------------ |
-| 1|API REST (Spring Boot Starter Web) |
-| 2|API REST (Spring Boot Starter WebFlux) |
+| RESTMVC|API REST (Spring Boot Starter Web) |
+| WEBFLUX|API REST (Spring Boot Starter WebFlux) |
 
 
 
@@ -78,14 +78,14 @@ gradle validateStructure
 gradle vs
 ```
 
-7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task have one required parameter ```value```.
+7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task have one required parameter ```type```.
 ```sh
-gradle generatePipeline --value=referenceNumberPipeline
-gradle gpl --value referenceNumberPipeline
+gradle generatePipeline --type=[pipelineType]
+gradle gpl --type=[pipelineType]
 ````
 |      Reference pipeline value      | Name       |
 | ------------------ | ------------ |
-| 1|Azure DevOps |
+| AZURE|Azure Pipeline |
 
 
 How I can help?
