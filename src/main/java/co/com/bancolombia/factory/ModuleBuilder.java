@@ -134,6 +134,10 @@ public class ModuleBuilder {
         return (String) params.get("packagePath");
     }
 
+    public String getStringParam(String key) {
+        return (String) params.get(key);
+    }
+
     private void appendToFile(String path, FileAppender appender) throws IOException {
         FileModel current = files.get(path);
         String content;

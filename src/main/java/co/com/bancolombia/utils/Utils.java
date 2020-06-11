@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
@@ -69,6 +71,18 @@ public class Utils {
         int start = build.indexOf("dependencies");
         int realStart = build.indexOf('{', start);
         return build.substring(0, realStart + 1) + "\n\t" + dependency + build.substring(realStart + 1);
+    }
+
+    public static String toDashName(String name) {
+        String regex = "(?=[A-Z][a-z])";
+        String subst = "-";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(name);
+        String res = matcher.replaceAll(subst).toLowerCase();
+        if (res.startsWith("-")) {
+            return res.substring(1);
+        }
+        return res;
     }
 
 }

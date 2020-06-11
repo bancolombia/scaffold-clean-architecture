@@ -13,5 +13,6 @@ public class EntryPointRestWebflux implements ModuleFactory {
         builder.addParamPackage(FileUtils.readProperties("package"));
         builder.setupFromTemplate("entry-point/rest-webflux");
         builder.appendToSettings("reactive-web", "infrastructure/entry-points");
+        builder.appendDependencyToModule("app-service", "implementation project(':reactive-web')");
     }
 }

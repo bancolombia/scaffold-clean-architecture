@@ -15,8 +15,13 @@ public class DrivenAdapterJPA implements ModuleFactory {
         builder.setupFromTemplate("driven-adapter/jpa-repository");
         builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
         builder.appendToSettings("jpa-repository-commons", "infrastructure/helpers");
-        builder.appendToProperties("spring.datasource").put("url", "jdbc:h2:mem:testdb");
-        builder.appendToProperties("spring.datasource").put("driver-class-name", "org.h2.Driver");
+        builder.appendToProperties("spring.datasource")
+                .put("url", "jdbc:h2:mem:test")
+                .put("username", "sa")
+                .put("password", "pass")
+                .put("driverClassName", "org.h2.Driver");
+        builder.appendToProperties("spring.jpa")
+                .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
         builder.appendDependencyToModule("app-service", "implementation project(':jpa-repository')");
         // TODO: Generate JPA Config validate secrets manager usage
     }

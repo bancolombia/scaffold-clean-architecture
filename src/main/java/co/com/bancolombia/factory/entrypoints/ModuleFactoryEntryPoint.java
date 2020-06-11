@@ -13,6 +13,9 @@ public class ModuleFactoryEntryPoint {
             case WEBFLUX: {
                 return new EntryPointRestWebflux();
             }
+            case GENERIC: {
+                return new EntryPointGeneric();
+            }
             default: {
                 throw new InvalidTaskOptionException("Entry Point type invalid");
             }
@@ -20,6 +23,6 @@ public class ModuleFactoryEntryPoint {
     }
 
     public enum EntryPointType {
-        RESTMVC, WEBFLUX
+        RESTMVC, WEBFLUX, GENERIC
     }
 }

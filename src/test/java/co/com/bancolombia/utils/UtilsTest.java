@@ -134,6 +134,12 @@ public class UtilsTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    public void shouldGenerateDashName() {
+        String res = Utils.toDashName("MyCamelCase");
+        assertEquals("my-camel-case", res);
+    }
+
     private enum Options {
         A, BC, D
     }

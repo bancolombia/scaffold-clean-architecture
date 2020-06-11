@@ -16,6 +16,9 @@ public class ModuleFactoryDrivenAdapter {
             case ASYNCEVENTBUS: {
                 return new DrivenAdapterAsyncEventBus();
             }
+            case GENERIC: {
+                return new DrivenAdapterGeneric();
+            }
             default: {
                 throw new InvalidTaskOptionException("Driven Adapter type invalid");
             }
@@ -23,6 +26,6 @@ public class ModuleFactoryDrivenAdapter {
     }
 
     public enum DrivenAdapterType {
-        JPA, MONGODB, ASYNCEVENTBUS
+        JPA, MONGODB, ASYNCEVENTBUS, GENERIC
     }
 }

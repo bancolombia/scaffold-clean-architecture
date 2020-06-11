@@ -12,6 +12,7 @@ public class DrivenAdapterAsyncEventBus implements ModuleFactory {
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         builder.addParamPackage(FileUtils.readProperties("package"));
         builder.setupFromTemplate("driven-adapter/async-event-bus");
-        builder.appendToSettings("async-event-bus", "infrastructure/driven-adapter");
+        builder.appendToSettings("async-event-bus", "infrastructure/driven-adapters");
+        builder.appendDependencyToModule("app-service", "implementation project(':async-event-bus')");
     }
 }
