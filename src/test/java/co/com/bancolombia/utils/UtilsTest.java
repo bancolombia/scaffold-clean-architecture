@@ -1,26 +1,19 @@
-package co.com.bancolombia;
+package co.com.bancolombia.utils;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
-import co.com.bancolombia.utils.FileUtils;
-import co.com.bancolombia.utils.Utils;
-import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class UtilsTest {
-
 
     @Test
     public void getVersionPlugin() {
@@ -47,56 +40,11 @@ public class UtilsTest {
     }
 
     @Test
-    public void readPropertiesExist() throws Exception {
-        String test1 = "package";
-        Assert.assertEquals("co.com.bancolombia", FileUtils.readProperties(test1));
-
-    }
-
-    @Test(expected = Exception.class)
-    public void readPropertiesUnExist() throws Exception {
-        String test1 = "package2";
-        FileUtils.readProperties(test1);
-
-    }
-
-    @Test
-    public void readFile() throws IOException {
-        Project project = ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-        String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
-
-        Assert.assertTrue(response instanceof String);
-        Assert.assertEquals("hello", response);
-    }
-
-    @Test
-    public void writeString() throws IOException {
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/tmp")).build();
-        FileUtils.writeString(project, "temp.txt", "hello");
-        String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
-
-        Assert.assertTrue(response instanceof String);
-        Assert.assertEquals("hello", response);
-    }
-
-    @Test
-    public void finderSubProjects() {
-        List<File> files = FileUtils.finderSubProjects("src/test/resources");
-
-        Assert.assertEquals(0, files.size());
-
-        List<File> files2 = FileUtils.finderSubProjects("src/test/resources/finderSubProjects/");
-
-        Assert.assertEquals(2, files2.size());
-    }
-
-    @Test
     public void shouldJoinPath() {
         String expected = "a/b/c/d";
         String result = Utils.joinPath("a", "b", "c", "d");
         Assert.assertEquals(expected, result);
     }
-
 
     @Test
     public void shouldReplacePlaceholders() throws CleanException {
@@ -123,7 +71,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void shouldExtractDir() throws CleanException {
+    public void shouldExtractDir() {
         // Arrange
         String classPath = "default/driven-adapters/package/src/main/Model.java";
         // Act
@@ -133,13 +81,33 @@ public class UtilsTest {
     }
 
     @Test
-    public void shouldExtractDirWhenNoPath() throws CleanException {
+    public void shouldExtractDirWhenNoPath() {
         // Arrange
         String classPath = "Model.java";
         // Act
         String result = Utils.extractDir(classPath);
         // Assert
         assertNull(result);
+    }
+
+    @Test
+    public void shouldFormatTaskOptions() {
+        // Arrange
+        List<?> options = List.of(Options.values());
+        // Act
+        String result = Utils.formatTaskOptions(options);
+        // Assert
+        assertEquals("[A|BC|D]", result);
+    }
+
+    @Test
+    public void shouldFormatTaskOptionsSingle() {
+        // Arrange
+        List<?> options = List.of("A");
+        // Act
+        String result = Utils.formatTaskOptions(options);
+        // Assert
+        assertEquals("[A]", result);
     }
 
     @Test
@@ -164,6 +132,10 @@ public class UtilsTest {
         String result = Utils.addDependency(build, "implementation project(':my-module')");
         // Assert
         assertEquals(expected, result);
+    }
+
+    private enum Options {
+        A, BC, D
     }
 
 }

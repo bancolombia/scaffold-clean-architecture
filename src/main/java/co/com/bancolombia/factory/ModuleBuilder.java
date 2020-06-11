@@ -17,6 +17,7 @@ import lombok.Getter;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class ModuleBuilder {
+    private static final String APPLICATION_PROPERTIES = "applications/app-service/src/main/resources/application.yaml";
     private static final String DEFINITION_FILES = "definition.json";
     private final DefaultResolver resolver = new DefaultResolver();
     private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
@@ -57,7 +59,7 @@ public class ModuleBuilder {
         logger.lifecycle("Dirs generated");
         logger.lifecycle("Generating files");
         if (properties != null) {
-            addFile(FileUtils.APPLICATION_PROPERTIES, FileUtils.parseToApplicationYaml(properties));
+            addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
         }
         for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
             FileModel file = fileEntry.getValue();
@@ -92,7 +94,8 @@ public class ModuleBuilder {
 
     public ObjectNode appendToProperties(String path) throws IOException {
         if (properties == null) {
-            properties = FileUtils.getApplicationYaml(getProject());
+            File yamlFile = project.file(APPLICATION_PROPERTIES);
+            properties = FileUtils.getFromYaml(yamlFile);
         }
         if (path.isEmpty()) {
             return properties;

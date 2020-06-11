@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
-    public static final String APPLICATION_PROPERTIES = "applications/app-service/src/main/resources/application.yaml";
 
     public static void writeString(Project project, String filePath, String content) throws IOException {
         project.getLogger().debug(project.file(filePath).getAbsolutePath());
@@ -66,13 +65,13 @@ public class FileUtils {
         return IOUtils.toString(reader);
     }
 
-    public static ObjectNode getApplicationYaml(Project project) throws IOException {
+    public static ObjectNode getFromYaml(File file) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
-        Object object = mapper.readTree(project.file(APPLICATION_PROPERTIES));
+        Object object = mapper.readTree(file);
         return (ObjectNode) object;
     }
 
-    public static String parseToApplicationYaml(ObjectNode node) throws IOException {
+    public static String parseToYaml(ObjectNode node) throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
         return mapper.writeValueAsString(node);
     }
