@@ -10,5 +10,5 @@ public class Constants {
     public static final String SPRING_CLOUD_VERSION = "Greenwich.M1";
     public static final String SONAR_VERSION = "2.7";
     public static final String JACOCO_VERSION = "0.8.5";
-    public static final String PLUGIN_VERSION = "0.0.9";
+    public static final String PLUGIN_VERSION = "1.6.0";
 }

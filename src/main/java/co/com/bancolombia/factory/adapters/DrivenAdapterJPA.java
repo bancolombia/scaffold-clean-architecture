@@ -11,7 +11,7 @@ public class DrivenAdapterJPA implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         builder.addParamPackage(FileUtils.readProperties("package"));
-        builder.setupFromTemplate("helper/jpa-repository-commons");
+        builder.setupFromTemplate("helper/jpa-repository-commons"); // TODO: include in driven adapter
         builder.setupFromTemplate("driven-adapter/jpa-repository");
         builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
         builder.appendToSettings("jpa-repository-commons", "infrastructure/helpers");

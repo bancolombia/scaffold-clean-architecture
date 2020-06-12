@@ -34,6 +34,8 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         this.name = name;
     }
 
+    // TODO: Enable autogeneration of secrets manager boolean
+
     @OptionValues("type")
     public List<DrivenAdapterType> getTypes() {
         return new ArrayList<>(Arrays.asList(DrivenAdapterType.values()));
@@ -45,11 +47,11 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
             throw new IllegalArgumentException("No Driven Adapter type is set, usage: gradle generateDrivenAdapter " +
                     "--type " + Utils.formatTaskOptions(getTypes()));
         }
-        ModuleFactory entryPointFactory = ModuleFactoryDrivenAdapter.getDrivenAdapterFactory(type);
+        ModuleFactory moduleFactory = ModuleFactoryDrivenAdapter.getDrivenAdapterFactory(type);
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Driven Adapter type: {}", type);
         builder.addParam("task-param-name", name);
-        entryPointFactory.buildModule(builder);
+        moduleFactory.buildModule(builder);
         builder.persist();
     }
 }

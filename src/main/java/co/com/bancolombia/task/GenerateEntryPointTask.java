@@ -45,11 +45,11 @@ public class GenerateEntryPointTask extends DefaultTask {
             throw new IllegalArgumentException("No Entry Point is set, usage: gradle generateEntryPoint --type "
                     + Utils.formatTaskOptions(getTypes()));
         }
-        ModuleFactory entryPointFactory = ModuleFactoryEntryPoint.getEntryPointFactory(type);
+        ModuleFactory moduleFactory = ModuleFactoryEntryPoint.getEntryPointFactory(type);
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Entry Point type: {}", type);
         builder.addParam("task-param-name", name);
-        entryPointFactory.buildModule(builder);
+        moduleFactory.buildModule(builder);
         builder.persist();
     }
 }

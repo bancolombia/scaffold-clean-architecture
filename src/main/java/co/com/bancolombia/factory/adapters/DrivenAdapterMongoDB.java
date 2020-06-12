@@ -11,7 +11,7 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         builder.addParamPackage(FileUtils.readProperties("package"));
-        builder.setupFromTemplate("helper/mongo-repository-commons");
+        builder.setupFromTemplate("helper/mongo-repository-commons"); // TODO: include in driven adapter
         builder.setupFromTemplate("driven-adapter/mongo-repository");
         builder.appendToSettings("mongo-repository", "infrastructure/driven-adapters");
         builder.appendToSettings("mongo-repository-commons", "infrastructure/helpers");

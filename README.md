@@ -14,7 +14,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "2.0.0-alpha"
+ id "co.com.bancolombia.cleanArchitecture" version "1.6.0"
 }
 ```
 
@@ -56,6 +56,7 @@ gradle gda --type [drivenAdapterType]
 
 |      Reference driven adapter value        | Name       |
 | ------------------ | ------------ |
+| GENERIC|Empty Driven Adapter |
 | JPA|JPA Repository |
 | MONGODB|Mongo Repository |
 | ASYNCEVENTBUS|Async Event Bus |
@@ -67,6 +68,7 @@ gradle gep --type [entryPointType]
  ```
 |      Reference entry point value      | Name       |
 | ------------------ | ------------ |
+| GENERIC|Empty Entry Point |
 | RESTMVC|API REST (Spring Boot Starter Web) |
 | WEBFLUX|API REST (Spring Boot Starter WebFlux) |
 

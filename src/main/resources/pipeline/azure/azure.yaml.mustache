@@ -6,10 +6,9 @@
 name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
 
 variables:
-  - group: 'devsecops_BREFA'
   - name: 'artifactory.Repository'
     value: 'build-{{projectName}}'
-  - name: 'proyecto'
+  - name: 'projectName'
     value: '{{projectName}}'
 
 resources:
@@ -19,13 +18,14 @@ trigger:
   branches:
     include:
       - trunk
+      - feature/*
   paths:
     include:
       - '*'
 
 jobs:
     - job: BuildJob
-      displayName: 'Compilacion BackEnd'
+      displayName: 'Build'
       pool:
         name: Build
         demands:
@@ -34,7 +34,7 @@ jobs:
 
       steps:
         - task: SonarQubePrepare@4
-          displayName: 'Preparar Analisis -> Prepare analysis on SonarQube'
+          displayName: 'Prepare analysis on SonarQube'
           inputs:
             SonarQube: SonarQube
             scannerMode: Other
@@ -52,10 +52,10 @@ jobs:
 
 
         - task: Gradle@1
-          displayName: 'Gradle -> Build / Ejecutar Pruebas Unitarias'
+          displayName: 'Gradle build and test'
           inputs:
             gradleWrapperFile: gradlew
-            tasks: 'clean build jacocoMergedReport --stacktrace'
+            tasks: 'clean build jacocoMergedReport'
             publishJUnitResults: true
             workingDirectory: .
             testResultsFiles: '**/build/test-results/test/TEST-*.xml'
@@ -68,20 +68,20 @@ jobs:
             sonarQubeFailWhenQualityGateFails: false
 
         - task: PublishCodeCoverageResults@1
-          displayName: 'Publica -> Publicar cobertura'
+          displayName: 'Publish code coverage'
           inputs:
             summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
 
         - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
-          displayName: 'Analisis -> Run Code Analysis'
+          displayName: 'Run Code Analysis'
 
         - task: SonarQubePublish@4
-          displayName: 'SonarQube -> Resultado Quality Gate'
+          displayName: 'SonarQube Publish Code Analysis'
           inputs:
             pollingTimeoutSec: 600
 
         - task: sonar-buildbreaker@8
-          displayName: ' SonarQube -> Validar Quality Gate'
+          displayName: 'Quality Gate Breaker'
           inputs:
             SonarQube: SonarQube
           enabled: true
