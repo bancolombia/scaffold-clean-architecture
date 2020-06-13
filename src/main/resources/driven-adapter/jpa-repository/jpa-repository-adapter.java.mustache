@@ -1,16 +1,17 @@
 package {{package}}.jpa;
 
+import {{package}}.jpa.helper.AdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class JPARepositoryAdapter extends AdapterOperations<Object, Object, String, JPARepository>
-/**        implements <INTERFACE DOMAIN> **/
+public class JPARepositoryAdapter extends AdapterOperations<Object/* change for domain model */, Object/* change for adapter model */, String, JPARepository>
+// implements ModelRepository from domain
 {
 
     @Autowired
     public JPARepositoryAdapter(JPARepository repository, ObjectMapper mapper) {
-        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class));
+        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class/* change for domain model */)); // could be mapper.map
     }
 }
