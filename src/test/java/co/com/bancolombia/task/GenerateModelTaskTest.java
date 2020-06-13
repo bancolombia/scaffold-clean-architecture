@@ -33,8 +33,8 @@ public class GenerateModelTaskTest {
 
         task.setName("testModel");
         task.generateModelTask();
-        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
-        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java").exists());
 
     }
 

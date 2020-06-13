@@ -31,7 +31,7 @@ public class GenerateUseCaseTask extends DefaultTask {
         String packageName = FileUtils.readProperties("package");
         name = Utils.capitalize(name);
         String className = refactorName(name);
-        String useCaseName = className.replace(USECASE_CLASS_NAME, "");
+        String useCaseName = className.replace(USECASE_CLASS_NAME, "").toLowerCase();
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
         logger.lifecycle("Use Case Name: {}", name);
