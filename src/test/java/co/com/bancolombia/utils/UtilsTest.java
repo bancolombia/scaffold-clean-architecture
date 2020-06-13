@@ -6,9 +6,7 @@ import co.com.bancolombia.exceptions.ParamNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -93,7 +91,7 @@ public class UtilsTest {
     @Test
     public void shouldFormatTaskOptions() {
         // Arrange
-        List<?> options = List.of(Options.values());
+        List<?> options = Arrays.asList(Options.values());
         // Act
         String result = Utils.formatTaskOptions(options);
         // Assert
@@ -103,7 +101,7 @@ public class UtilsTest {
     @Test
     public void shouldFormatTaskOptionsSingle() {
         // Arrange
-        List<?> options = List.of("A");
+        List<?> options = Collections.singletonList("A");
         // Act
         String result = Utils.formatTaskOptions(options);
         // Assert

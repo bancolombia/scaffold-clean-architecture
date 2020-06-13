@@ -10,9 +10,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -122,7 +120,7 @@ public class FileUtilsTest {
     @Test
     public void shouldFormatTaskOptions() {
         // Arrange
-        List<?> options = List.of(Options.values());
+        List<?> options = Arrays.asList(Options.values());
         // Act
         String result = Utils.formatTaskOptions(options);
         // Assert
@@ -132,7 +130,7 @@ public class FileUtilsTest {
     @Test
     public void shouldFormatTaskOptionsSingle() {
         // Arrange
-        List<?> options = List.of("A");
+        List<?> options = Collections.singletonList("A");
         // Act
         String result = Utils.formatTaskOptions(options);
         // Assert

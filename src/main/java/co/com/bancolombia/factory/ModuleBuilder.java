@@ -20,10 +20,7 @@ import org.gradle.api.logging.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -100,7 +97,7 @@ public class ModuleBuilder {
         if (path.isEmpty()) {
             return properties;
         }
-        List<String> attributes = new ArrayList<>(List.of(path.split("\\.")));
+        List<String> attributes = new ArrayList<>(Arrays.asList(path.split("\\.")));
         return getNode(properties, attributes);
     }
 
