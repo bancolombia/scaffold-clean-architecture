@@ -126,14 +126,6 @@ public class ModuleBuilder {
         }
     }
 
-    public String getPackage() {
-        return (String) params.get("package");
-    }
-
-    public String getPackagePath() {
-        return (String) params.get("packagePath");
-    }
-
     public String getStringParam(String key) {
         return (String) params.get(key);
     }

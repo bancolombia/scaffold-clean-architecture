@@ -31,7 +31,7 @@ public class GenerateModelTaskTest {
 
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
-        task.setNameProject("testModel");
+        task.setName("testModel");
         task.generateModelTask();
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/gateways/TestModelRepository.java").exists());
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testModel/TestModel.java").exists());

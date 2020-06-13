@@ -15,27 +15,29 @@ public class GenerateUseCaseTask extends DefaultTask {
     private static final String USECASE_CLASS_NAME = "UseCase";
     private final ModuleBuilder builder = new ModuleBuilder(getProject());
     private final Logger logger = getProject().getLogger();
-    private String useCaseName = "";
+    private String name = "";
 
-    @Option(option = "name", description = "Set the UseCase name")
-    public void setNameProject(String useCaseName) {
-        this.useCaseName = useCaseName;
+    @Option(option = "name", description = "Set UseCase name")
+    public void setName(String useCaseName) {
+        this.name = useCaseName;
     }
 
     @TaskAction
     public void generateUseCaseTask() throws IOException, ParamNotFoundException {
-        if (useCaseName.isEmpty()) {
+        if (name.isEmpty()) {
             throw new IllegalArgumentException(
-                    "No use case name, usege: gradle generateUseCase --name useCaseName");
+                    "No use case name, usage: gradle generateUseCase --name [name]");
         }
         String packageName = FileUtils.readProperties("package");
-        useCaseName = Utils.capitalize(useCaseName);
+        name = Utils.capitalize(name);
+        String className = refactorName(name);
+        String useCaseName = className.replace(USECASE_CLASS_NAME, "");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Project  Package: {}", packageName);
-        logger.lifecycle("Use Case Name: {}", useCaseName);
+        logger.lifecycle("Use Case Name: {}", name);
         builder.addParamPackage(packageName);
-        builder.addParam("useCaseName", useCaseName.toLowerCase());
-        builder.addParam("useCaseClassName", refactorName(useCaseName));
+        builder.addParam("useCaseName", useCaseName);
+        builder.addParam("useCaseClassName", className);
         builder.setupFromTemplate("usecase");
         builder.persist();
     }

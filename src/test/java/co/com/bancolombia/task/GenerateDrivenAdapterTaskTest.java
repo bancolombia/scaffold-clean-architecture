@@ -8,29 +8,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.file.Files;
 
 import static org.junit.Assert.assertTrue;
 
 public class GenerateDrivenAdapterTaskTest {
-    GenerateDrivenAdapterTask task;
+    private GenerateDrivenAdapterTask task;
 
     @Before
     public void init() throws IOException, CleanException {
-        File projectDir = new File("build/unitTest");
-        Files.createDirectories(projectDir.toPath());
-        writeString(new File(projectDir, "settings.gradle"), "");
-        writeString(new File(projectDir, "build.gradle"),
-                "plugins {" +
-                        "  id('co.com.bancolombia.cleanArchitecture')" +
-                        "}");
-        Project project = ProjectBuilder.builder()
-                .withName("cleanArchitecture")
-                .withProjectDir(new File("build/unitTest"))
-                .build();
+        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
         ProjectBuilder.builder()
                 .withName("app-service")
@@ -38,26 +25,62 @@ public class GenerateDrivenAdapterTaskTest {
                 .withParent(project)
                 .build();
 
-        project.getTasks().create("testStructure", GenerateStructureTask.class);
-        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
+        project.getTasks().create("ca", GenerateStructureTask.class);
+        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("ca");
         taskStructure.generateStructureTask();
 
         project.getTasks().create("test", GenerateDrivenAdapterTask.class);
         task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
     }
 
+    // Assert
     @Test(expected = IllegalArgumentException.class)
-    public void generateDrivenAdapterValueNegative() throws IOException, CleanException {
-        task.setDrivenAdapter(null);
+    public void shouldHandleErrorWhenNoType() throws IOException, CleanException {
+        // Arrange
+        task.setType(null);
+        // Act
+        task.generateDrivenAdapterTask();
+    }
+
+    // Assert
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldHandleErrorWhenNoName() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+        // Act
+        task.generateDrivenAdapterTask();
+    }
+
+    // Assert
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldHandleErrorWhenEmptyName() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+        task.setName("");
+        // Act
         task.generateDrivenAdapterTask();
     }
 
     @Test
-    public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
-
-        task.setDrivenAdapter(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);
+    public void generateEntryPointGeneric() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+        task.setName("MyDrivenAdapter");
+        // Act
         task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/main/java/co/com/bancolombia/mydrivenadapter").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/test/java/co/com/bancolombia/mydrivenadapter").exists());
+    }
 
+    @Test
+    public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java").exists());
@@ -73,31 +96,28 @@ public class GenerateDrivenAdapterTaskTest {
 
     @Test
     public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
-
-        task.setDrivenAdapter(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        // Act
         task.generateDrivenAdapterTask();
-
+        // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
 
         assertTrue(new File("build/unitTest/infrastructure//helpers/mongo-repository-commons/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/helpers/mongo-repository-commons/src/main/java/co/com/bancolombia/mongo/AdapterOperations.java").exists());
-
     }
 
     @Test
     public void generateDrivenAdapterEventBus() throws IOException, CleanException {
-        task.setDrivenAdapter(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
+        // Act
         task.generateDrivenAdapterTask();
+        // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/event/ReactiveEventsGateway.java").exists());
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventsGateway.java").exists());
-    }
-
-    private void writeString(File file, String string) throws IOException {
-        try (Writer writer = new FileWriter(file)) {
-            writer.write(string);
-        }
     }
 }

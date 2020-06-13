@@ -25,12 +25,12 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     private String name;
 
     @Option(option = "type", description = "Set type of driven adapter to be generated")
-    public void setDrivenAdapter(DrivenAdapterType type) {
+    public void setType(DrivenAdapterType type) {
         this.type = type;
     }
 
     @Option(option = "name", description = "Set driven adapter name when GENERIC type")
-    public void setDrivenAdapterName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 

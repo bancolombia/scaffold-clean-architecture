@@ -42,7 +42,7 @@ public class GeneratePipelineTaskTest {
     @Test
     public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
-        task.setPipelineValueProject(ModuleFactoryPipeline.PipelineType.AZURE);
+        task.setType(ModuleFactoryPipeline.PipelineType.AZURE);
         task.generatePipelineTask();
 
         assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
@@ -50,7 +50,7 @@ public class GeneratePipelineTaskTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void generateAzureDevOpsPipelineErrorTest() throws IOException, CleanException {
-        task.setPipelineValueProject(null);
+        task.setType(null);
         task.generatePipelineTask();
     }
 

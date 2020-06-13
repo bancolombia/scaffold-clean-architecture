@@ -3,27 +3,43 @@ package co.com.bancolombia.task;
 import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GenerateStructureTaskTest {
+    private GenerateStructureTask task;
 
-
-    @Test
-    public void generateStructure() throws IOException, CleanException {
-
-
+    @Before
+    public void setup() {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         project.getTasks().create("test", GenerateStructureTask.class);
 
-        GenerateStructureTask task = (GenerateStructureTask) project.getTasks().getByName("test");
+        task = (GenerateStructureTask) project.getTasks().getByName("test");
+    }
 
+    @Test
+    public void shouldReturnProjectTypes() {
+        // Arrange
+        // Act
+        List<GenerateStructureTask.ProjectType> types = task.getAvailableProjectTypes();
+        // Assert
+        assertEquals(Arrays.asList(GenerateStructureTask.ProjectType.values()), types);
+    }
+
+    @Test
+    public void generateStructure() throws IOException, CleanException {
+        // Arrange
+        // Act
         task.generateStructureTask();
-        // Verify the result
+        // Assert
         assertTrue(new File("build/unitTest/README.md").exists());
         assertTrue(new File("build/unitTest/.gitignore").exists());
         assertTrue(new File("build/unitTest/build.gradle").exists());
@@ -48,23 +64,17 @@ public class GenerateStructureTaskTest {
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/application.yaml").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
-
     }
 
     @Test
     public void generateStructureReactive() throws IOException, CleanException {
-
-
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("test", GenerateStructureTask.class);
-
-        GenerateStructureTask task = (GenerateStructureTask) project.getTasks().getByName("test");
-
+        // Arrange
         task.setPackage("test");
-        task.setProjectName("projectTest");
+        task.setName("projectTest");
         task.setType(GenerateStructureTask.ProjectType.REACTIVE);
+        // Act
         task.generateStructureTask();
-
+        // Assert
         assertTrue(new File("build/unitTest/README.md").exists());
         assertTrue(new File("build/unitTest/.gitignore").exists());
         assertTrue(new File("build/unitTest/build.gradle").exists());
@@ -89,8 +99,6 @@ public class GenerateStructureTaskTest {
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/application.yaml").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/test/java/test").exists());
-
-
     }
 
 }

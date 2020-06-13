@@ -24,7 +24,7 @@ public class GeneratePipelineTask extends DefaultTask {
     private PipelineType type;
 
     @Option(option = "type", description = "Set type of pipeline to be generated")
-    public void setPipelineValueProject(PipelineType type) {
+    public void setType(PipelineType type) {
         this.type = type;
     }
 

@@ -140,6 +140,12 @@ public class UtilsTest {
         assertEquals("my-camel-case", res);
     }
 
+    @Test
+    public void shouldGenerateDashNameNonStartsWithUpper() {
+        String res = Utils.toDashName("myCamelCase");
+        assertEquals("my-camel-case", res);
+    }
+
     private enum Options {
         A, BC, D
     }

@@ -1,8 +1,8 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.utils.Utils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
@@ -20,21 +20,21 @@ public class GenerateStructureTask extends DefaultTask {
 
     private String packageName = "co.com.bancolombia";
     private ProjectType type = ProjectType.IMPERATIVE;
-    private String projectName = "cleanArchitecture";
+    private String name = "cleanArchitecture";
 
-    @Option(option = "package", description = "Set the principal package to use in the project")
+    @Option(option = "package", description = "Set principal package to use in the project")
     public void setPackage(String packageName) {
         this.packageName = packageName;
     }
 
-    @Option(option = "type", description = "Set project type, the options are  (reactive | imperative) ")
+    @Option(option = "type", description = "Set project type")
     public void setType(ProjectType type) {
         this.type = type;
     }
 
-    @Option(option = "name", description = "Set the project name, by default is cleanArchitecture ")
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    @Option(option = "name", description = "Set project name, by default is cleanArchitecture ")
+    public void setName(String projectName) {
+        this.name = projectName;
     }
 
     @OptionValues("type")
@@ -47,9 +47,9 @@ public class GenerateStructureTask extends DefaultTask {
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Package: {}", packageName);
         logger.lifecycle("Project Type: {}", type);
-        logger.lifecycle("Project Name: {}", projectName);
+        logger.lifecycle("Project Name: {}", name);
         builder.addParamPackage(packageName);
-        builder.addParam("projectName", projectName);
+        builder.addParam("projectName", name);
         builder.addParam("reactive", type == ProjectType.REACTIVE);
         builder.setupFromTemplate("structure");
         builder.persist();

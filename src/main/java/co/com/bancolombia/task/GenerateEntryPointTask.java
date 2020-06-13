@@ -25,12 +25,12 @@ public class GenerateEntryPointTask extends DefaultTask {
     private String name;
 
     @Option(option = "type", description = "Set type of entry point to be generated")
-    public void setCodeEntryPoint(EntryPointType type) {
+    public void setType(EntryPointType type) {
         this.type = type;
     }
 
     @Option(option = "name", description = "Set entry point name when GENERIC type")
-    public void setEntryPointName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
