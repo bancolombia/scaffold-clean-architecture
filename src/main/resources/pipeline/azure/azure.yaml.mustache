@@ -1,0 +1,88 @@
+# Gradle
+# Build your Java project and run tests with Gradle using a Gradle wrapper script.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
+
+variables:
+  - name: 'artifactory.Repository'
+    value: 'build-{{projectName}}'
+  - name: 'projectName'
+    value: '{{projectName}}'
+
+resources:
+- repo: self
+
+trigger:
+  branches:
+    include:
+      - trunk
+      - feature/*
+  paths:
+    include:
+      - '*'
+
+jobs:
+    - job: BuildJob
+      displayName: 'Build'
+      pool:
+        name: Build
+        demands:
+            - Agent.OS -equals linux
+            - java
+
+      steps:
+        - task: SonarQubePrepare@4
+          displayName: 'Prepare analysis on SonarQube'
+          inputs:
+            SonarQube: SonarQube
+            scannerMode: Other
+            configMode: manual
+            cliProjectKey: '$(Build.Repository.Name)'
+            cliProjectName: '$(Build.Repository.Name)'
+            cliProjectVersion: '$(Build.BuildNumber)'
+            extraProperties: |
+              sonar.projectVersion=$(Build.BuildNumber)
+              sonar.projectKey=$(Build.Repository.Name)
+              sonar.branch.name=$(Build.SourceBranchName)
+              sonar.java.binaries={{sonar.java.binaries}}
+              sonar.coverage.jacoco.xmlReportPaths=$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml
+              sonar.junit.reportsPaths={{sonar.junit.reportsPaths}}
+
+
+        - task: Gradle@1
+          displayName: 'Gradle build and test'
+          inputs:
+            gradleWrapperFile: gradlew
+            tasks: 'clean build jacocoMergedReport'
+            publishJUnitResults: true
+            workingDirectory: .
+            testResultsFiles: '**/build/test-results/test/TEST-*.xml'
+            sonarQubeRunAnalysis: true
+            sonarQubeServiceEndpoint: SonarqubeGradle
+            sonarQubeProjectName: '$(Build.Repository.Name)'
+            sonarQubeProjectKey: '$(Build.Repository.Name)'
+            sonarQubeProjectVersion: '$(Build.BuildNumber)'
+            sonarQubeGradlePluginVersion: 2.7
+            sonarQubeFailWhenQualityGateFails: false
+
+        - task: PublishCodeCoverageResults@1
+          displayName: 'Publish code coverage'
+          inputs:
+            summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+
+        - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+          displayName: 'Run Code Analysis'
+
+        - task: SonarQubePublish@4
+          displayName: 'SonarQube Publish Code Analysis'
+          inputs:
+            pollingTimeoutSec: 600
+
+        - task: sonar-buildbreaker@8
+          displayName: 'Quality Gate Breaker'
+          inputs:
+            SonarQube: SonarQube
+          enabled: true
+

@@ -1,0 +1,23 @@
+buildscript {
+	ext {
+		cleanArchitectureVersion = '{{pluginVersion}}'
+		springBootVersion = '{{springBootVersion}}'
+		springCloudVersion = '{{springCloudVersion}}'
+		sonarVersion = '{{sonarVersion}}'
+		jacocoVersion = '{{jacocoVersion}}'
+	}
+}
+
+plugins {
+	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'org.sonarqube' version "${sonarVersion}"
+	id 'jacoco'
+}
+
+sonarqube {
+	properties {
+		property "sonar.sourceEnconding", "UTF-8"
+	}
+}
+apply from: './main.gradle'

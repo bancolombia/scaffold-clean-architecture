@@ -1,0 +1,14 @@
+package co.com.bancolombia;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class Constants {
+    public static final String PLUGIN_TASK_GROUP = "Clean Architecture";
+    public static final String SPRING_BOOT_VERSION = "2.1.1.RELEASE";
+    public static final String SPRING_CLOUD_VERSION = "Greenwich.M1";
+    public static final String SONAR_VERSION = "2.7";
+    public static final String JACOCO_VERSION = "0.8.5";
+    public static final String PLUGIN_VERSION = "1.6.0";
+}

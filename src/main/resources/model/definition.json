@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "domain/model/src/test/java/{{packagePath}}/model/{{modelName}}"
+  ],
+  "files": {
+    "model/model.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/{{modelName}}/{{modelClassName}}.java",
+    "model/gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/{{modelName}}/gateways/{{modelClassName}}Repository.java"
+  }
+}

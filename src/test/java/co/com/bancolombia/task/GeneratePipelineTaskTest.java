@@ -1,7 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.templates.ScaffoldTemplate;
+import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -20,16 +20,16 @@ public class GeneratePipelineTaskTest {
     GeneratePipelineTask task;
 
     @Before
-    public void init() throws IOException {
+    public void init() throws IOException, CleanException {
         File projectDir = new File("build/unitTest");
         Files.createDirectories(projectDir.toPath());
-        writeString(new File(projectDir, "settings.gradle"), ScaffoldTemplate.getSettingsGradleContent("cleanArchitecture"));
         writeString(new File(projectDir, "build.gradle"),
                 "plugins {" +
                         "  id('co.com.bancolombia.cleanArchitecture')" +
                         "}");
 
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+        Project project = ProjectBuilder.builder().withName("cleanArchitecture")
+                .withProjectDir(new File("build/unitTest")).build();
 
         project.getTasks().create("testStructure", GenerateStructureTask.class);
         GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
@@ -42,23 +42,15 @@ public class GeneratePipelineTaskTest {
     @Test
     public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
-        task.setPipelineValueProject("1");
+        task.setType(ModuleFactoryPipeline.PipelineType.AZURE);
         task.generatePipelineTask();
 
-        assertTrue(new File("build/unitTest/deployment/cleanArchitecture_Build.yaml").exists());
-    }
-
-    @Test(expected = CleanException.class)
-    public void generateAzureDevOpsPipelineErrorValueTest() throws IOException, CleanException {
-
-        task.setPipelineValueProject("10");
-        task.generatePipelineTask();
+        assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void generateAzureDevOpsPipelineErrorTest() throws IOException, CleanException {
-
-        task.setPipelineValueProject("-1");
+        task.setType(null);
         task.generatePipelineTask();
     }
 

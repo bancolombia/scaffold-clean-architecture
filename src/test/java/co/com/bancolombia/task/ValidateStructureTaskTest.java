@@ -19,7 +19,7 @@ public class ValidateStructureTaskTest {
     ValidateStructureTask task;
 
     @Before
-    public void init() throws IOException {
+    public void init() throws IOException, CleanException {
         File projectDir = new File("build/unitTest");
         Files.createDirectories(projectDir.toPath());
         writeString(new File(projectDir, "settings.gradle"), "");
