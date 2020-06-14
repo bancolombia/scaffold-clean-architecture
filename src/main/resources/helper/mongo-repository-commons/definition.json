@@ -1,9 +1,0 @@
-{
-  "folders": [
-    "infrastructure/helpers/mongo-repository-commons/src/test/java/{{packagePath}}/mongo"
-  ],
-  "files": {
-    "helper/mongo-repository-commons/adapter-operations.java.mustache": "infrastructure/helpers/mongo-repository-commons/src/main/java/{{packagePath}}/mongo/AdapterOperations.java",
-    "helper/mongo-repository-commons/build.gradle.mustache": "infrastructure/helpers/mongo-repository-commons/build.gradle"
-  }
-}
