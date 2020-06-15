@@ -85,6 +85,7 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/DBSecret.java").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java").exists());
     }
 
@@ -99,6 +100,8 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
     }
 
     @Test
