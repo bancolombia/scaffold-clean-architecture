@@ -1,0 +1,26 @@
+package {{package}}.config;
+
+import {{package}}.mongo.config.MongoDBSecret;
+import org.springframework.boot.autoconfigure.mongo.MongoClientFactory;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+
+@Configuration
+public class MongoConfig {
+
+    @Bean
+    public MongoDBSecret dbSecret(Environment env) {
+        return MongoDBSecret.builder()
+                .uri(env.getProperty("spring.data.mongo.uri"))
+                .build();
+    }
+
+    @Bean
+    public MongoClientFactory mongoProperties(MongoDBSecret secret, Environment env) {
+        MongoProperties properties = new MongoProperties();
+        properties.setUri(secret.getUri());
+        return new MongoClientFactory(properties, env);
+    }
+}
