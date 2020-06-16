@@ -54,25 +54,24 @@ gradle generateDrivenAdapter --type=[drivenAdapterType]
 gradle gda --type [drivenAdapterType]
  ```
 
-|      Reference driven adapter value        | Name       |
-| ------------------ | ------------ |
-| GENERIC|Empty Driven Adapter |
-| JPA|JPA Repository |
-| MONGODB|Mongo Repository |
-| ASYNCEVENTBUS|Async Event Bus |
+|Reference for drivenAdapterType|Name                |Additional Options   |
+|-------------------------------|--------------------|---------------------|
+|GENERIC                        |Empty Driven Adapter|--name [name]        |
+|JPA                            |JPA Repository      |--secret [true-false]|
+|MONGODB                        |Mongo Repository    |--secret [true-false]|
+|ASYNCEVENTBUS                  |Async Event Bus     |                     |
 
 5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```type```.
 ```sh
 gradle generateEntryPoint --type=[entryPointType]
 gradle gep --type [entryPointType]
  ```
-|      Reference entry point value      | Name       |
-| ------------------ | ------------ |
-| GENERIC|Empty Entry Point |
-| RESTMVC|API REST (Spring Boot Starter Web) |
-| WEBFLUX|API REST (Spring Boot Starter WebFlux) |
 
-
+|Reference for entryPointType|Name                                  |Additional Options|
+|----------------------------|--------------------------------------|------------------|
+|GENERIC                     |Empty Entry Point                     |--name [name]     |
+|RESTMVC                     |API REST (Spring Boot Starter Web)    |                  |
+|WEBFLUX                     |API REST (Spring Boot Starter WebFlux)|                  |
 
 6 The ```validateStructure | vs``` Validate that project references aren't violated.
 ```sh
@@ -85,9 +84,10 @@ gradle vs
 gradle generatePipeline --type=[pipelineType]
 gradle gpl --type=[pipelineType]
 ````
-|      Reference pipeline value      | Name       |
-| ------------------ | ------------ |
-| AZURE|Azure Pipeline |
+
+|Reference for pipelineType|Name          |
+|--------------------------|--------------|
+|AZURE                     |Azure Pipeline|
 
 
 How I can help?
