@@ -127,6 +127,10 @@ public class ModuleBuilder {
         return (String) params.get(key);
     }
 
+    public Boolean getBooleanParam(String key) {
+        return (Boolean) params.get(key);
+    }
+
     private void appendToFile(String path, FileAppender appender) throws IOException {
         FileModel current = files.get(path);
         String content;

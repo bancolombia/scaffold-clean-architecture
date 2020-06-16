@@ -1,12 +1,18 @@
 package {{package}}.config;
 
+{{#include-secret}}
+import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;
+import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;
+{{/include-secret}}
 import {{package}}.jpa.config.DBSecret;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+{{^include-secret}}
 import org.springframework.core.env.Environment;
+{{/include-secret}}
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -17,6 +23,14 @@ import java.util.Properties;
 @Configuration
 public class JpaConfig {
 
+    {{#include-secret}}
+    @Bean
+    public DBSecret dbSecret(@Value("${aws.secretName}") String secret, GenericManager manager)
+            throws SecretException {
+        return manager.getSecretModel(secret, DBSecret.class);
+    }
+    {{/include-secret}}
+    {{^include-secret}}
     @Bean
     public DBSecret dbSecret(Environment env) {
         return DBSecret.builder()
@@ -25,6 +39,7 @@ public class JpaConfig {
                 .password(env.getProperty("spring.datasource.password"))
                 .build();
     }
+    {{/include-secret}}
 
     @Bean
     public DataSource datasource(DBSecret secret, @Value("${spring.datasource.driverClassName}") String driverClass) {
