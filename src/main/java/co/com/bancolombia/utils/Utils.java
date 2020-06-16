@@ -68,6 +68,9 @@ public class Utils {
     }
 
     public static String addDependency(String build, String dependency) {
+        if (build.contains(dependency)) {
+            return build;
+        }
         int start = build.indexOf("dependencies");
         int realStart = build.indexOf('{', start);
         return build.substring(0, realStart + 1) + "\n\t" + dependency + build.substring(realStart + 1);

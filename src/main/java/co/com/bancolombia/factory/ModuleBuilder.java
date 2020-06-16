@@ -80,8 +80,14 @@ public class ModuleBuilder {
     }
 
     public void appendToSettings(String module, String baseDir) throws IOException {
-        appendToFile("settings.gradle", settings -> settings + ("\ninclude ':" + module + "'\n" +
-                "project(':" + module + "').projectDir = file('./" + baseDir + "/" + module + "')"));
+        appendToFile("settings.gradle", settings -> {
+            String toAppend = "\ninclude ':" + module + "'\nproject(':" + module + "').projectDir = file('./" + baseDir
+                    + "/" + module + "')";
+            if (settings.contains(toAppend)) {
+                return settings;
+            }
+            return settings + toAppend;
+        });
     }
 
     public void appendDependencyToModule(String module, String dependency) throws IOException {

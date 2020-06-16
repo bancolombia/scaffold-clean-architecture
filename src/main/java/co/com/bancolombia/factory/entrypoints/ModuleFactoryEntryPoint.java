@@ -7,18 +7,14 @@ public class ModuleFactoryEntryPoint {
 
     public static ModuleFactory getEntryPointFactory(EntryPointType type) throws InvalidTaskOptionException {
         switch (type) {
-            case RESTMVC: {
+            case RESTMVC:
                 return new EntryPointRestMvc();
-            }
-            case WEBFLUX: {
+            case WEBFLUX:
                 return new EntryPointRestWebflux();
-            }
-            case GENERIC: {
+            case GENERIC:
                 return new EntryPointGeneric();
-            }
-            default: {
+            default:
                 throw new InvalidTaskOptionException("Entry Point type invalid");
-            }
         }
     }
 

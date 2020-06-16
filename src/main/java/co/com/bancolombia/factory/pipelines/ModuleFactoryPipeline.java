@@ -8,12 +8,10 @@ public class ModuleFactoryPipeline {
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     public static ModuleFactory getPipelineFactory(PipelineType type) throws InvalidTaskOptionException {
         switch (type) {
-            case AZURE: {
+            case AZURE:
                 return new PipelineAzure();
-            }
-            default: {
+            default:
                 throw new InvalidTaskOptionException("Pipeline value invalid");
-            }
         }
     }
 
