@@ -6,10 +6,12 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
@@ -88,4 +90,18 @@ public class Utils {
         return res;
     }
 
+    public static String addModule(String settings, String module, String baseDir) {
+        String toAppend = "\ninclude ':" + module + "'\nproject(':" + module + "').projectDir = file('./" + baseDir
+                + "/" + module + "')";
+        if (settings.contains(toAppend)) {
+            return settings;
+        }
+        return settings + toAppend;
+    }
+
+    public static String removeLinesIncludes(String content, String key) {
+        return Arrays.stream(content.split("\\n"))
+                .filter(line -> !line.contains(key))
+                .collect(Collectors.joining("\n"));
+    }
 }

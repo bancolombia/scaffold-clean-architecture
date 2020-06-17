@@ -169,6 +169,89 @@ public class UtilsTest {
         assertEquals("my-camel-case", res);
     }
 
+    @Test
+    public void shouldAddModule() {
+        // Arrange
+        String settings = "rootProject.name = 'cleanArchitecture'\n" +
+                "\n" +
+                "include ':app-service'\n" +
+                "include ':model'\n" +
+                "include ':usecase'\n" +
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')\n" +
+                "include ':api-rest'\n" +
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')";
+        String settingsNew = "rootProject.name = 'cleanArchitecture'\n" +
+                "\n" +
+                "include ':app-service'\n" +
+                "include ':model'\n" +
+                "include ':usecase'\n" +
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')\n" +
+                "include ':api-rest'\n" +
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n" +
+                "include ':my-module'\n" +
+                "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
+        // Act
+        String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+        // Assert
+        assertEquals(settingsNew, result);
+    }
+
+    @Test
+    public void shouldNotAddRepeatedModule() {
+        // Arrange
+        String settings = "rootProject.name = 'cleanArchitecture'\n" +
+                "\n" +
+                "include ':app-service'\n" +
+                "include ':model'\n" +
+                "include ':usecase'\n" +
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')\n" +
+                "include ':api-rest'\n" +
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n" +
+                "include ':my-module'\n" +
+                "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
+        // Act
+        String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+        // Assert
+        assertEquals(settings, result);
+    }
+
+    @Test
+    public void shouldRemoveModule() {
+        // Arrange
+        String settings = "rootProject.name = 'cleanArchitecture'\n" +
+                "\n" +
+                "include ':app-service'\n" +
+                "include ':model'\n" +
+                "include ':usecase'\n" +
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')\n" +
+                "include ':api-rest'\n" +
+                "project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')\n" +
+                "include ':my-module'\n" +
+                "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
+        String settingsExpected = "rootProject.name = 'cleanArchitecture'\n" +
+                "\n" +
+                "include ':app-service'\n" +
+                "include ':model'\n" +
+                "include ':usecase'\n" +
+                "project(':app-service').projectDir = file('./applications/app-service')\n" +
+                "project(':model').projectDir = file('./domain/model')\n" +
+                "project(':usecase').projectDir = file('./domain/usecase')\n" +
+                "include ':my-module'\n" +
+                "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
+        // Act
+        String result = Utils.removeLinesIncludes(settings, "api-rest");
+        // Assert
+        assertEquals(settingsExpected, result);
+    }
+
     private enum Options {
         A, BC, D
     }
