@@ -13,7 +13,6 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
         builder.addParamPackage(FileUtils.readProperties("package"));
         builder.setupFromTemplate("driven-adapter/mongo-repository");
         builder.appendToSettings("mongo-repository", "infrastructure/driven-adapters");
-        builder.appendToSettings("mongo-repository-commons", "infrastructure/helpers");
         builder.appendToProperties("spring.data.mongodb")
                 .put("uri", "mongodb://localhost:27017/test");
         builder.appendDependencyToModule("app-service",
