@@ -1,9 +1,0 @@
-{
-  "folders": [
-    "infrastructure/helpers/jpa-repository-commons/src/test/java/{{packagePath}}/jpa"
-  ],
-  "files": {
-    "helper/jpa-repository-commons/adapter-operations.java.mustache": "infrastructure/helpers/jpa-repository-commons/src/main/java/{{packagePath}}/jpa/AdapterOperations.java",
-    "helper/jpa-repository-commons/build.gradle.mustache": "infrastructure/helpers/jpa-repository-commons/build.gradle"
-  }
-}

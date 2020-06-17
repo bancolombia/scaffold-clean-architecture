@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import org.gradle.api.Project;
@@ -9,7 +10,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class GenerateDrivenAdapterTaskTest {
@@ -84,14 +87,9 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java").exists());
-
-        assertTrue(new File("build/unitTest/infrastructure//helpers/jpa-repository-commons/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/helpers/jpa-repository-commons/src/main/java/co/com/bancolombia/jpa/AdapterOperations.java").exists());
-
-        // TODO: Enable this tests
-//        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/jpa/JpaConfig.java").exists());
-//        assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/application-jpaAdapter.yaml").exists());
-//        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/secret/Secret.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/DBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java").exists());
     }
 
     @Test
@@ -102,11 +100,28 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
+    }
 
-        assertTrue(new File("build/unitTest/infrastructure//helpers/mongo-repository-commons/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/helpers/mongo-repository-commons/src/main/java/co/com/bancolombia/mongo/AdapterOperations.java").exists());
+    @Test
+    public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        task.setSecret(Constants.BooleanOption.TRUE);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/SecretsConfig.java").exists());
     }
 
     @Test
@@ -119,5 +134,14 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/event/ReactiveEventsGateway.java").exists());
         assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventsGateway.java").exists());
+    }
+
+    @Test
+    public void shouldGetSecretOptions() {
+        // Arrange
+        // Act
+        List<Constants.BooleanOption> options = task.getSecretOptions();
+        // Assert
+        assertEquals(2, options.size());
     }
 }

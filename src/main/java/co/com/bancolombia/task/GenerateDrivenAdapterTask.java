@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -23,6 +24,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
 
     private DrivenAdapterType type;
     private String name;
+    private BooleanOption secret = BooleanOption.FALSE;
 
     @Option(option = "type", description = "Set type of driven adapter to be generated")
     public void setType(DrivenAdapterType type) {
@@ -34,11 +36,19 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         this.name = name;
     }
 
-    // TODO: Enable autogeneration of secrets manager boolean
+    @Option(option = "secret", description = "Enable secrets for this driven adapter")
+    public void setSecret(BooleanOption secret) {
+        this.secret = secret;
+    }
 
     @OptionValues("type")
     public List<DrivenAdapterType> getTypes() {
         return new ArrayList<>(Arrays.asList(DrivenAdapterType.values()));
+    }
+
+    @OptionValues("secret")
+    public List<BooleanOption> getSecretOptions() {
+        return new ArrayList<>(Arrays.asList(BooleanOption.values()));
     }
 
     @TaskAction
@@ -51,6 +61,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Driven Adapter type: {}", type);
         builder.addParam("task-param-name", name);
+        builder.addParam("include-secret", secret == BooleanOption.TRUE);
         moduleFactory.buildModule(builder);
         builder.persist();
     }

@@ -11,7 +11,6 @@ public class DrivenAdapterJPA implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         builder.addParamPackage(FileUtils.readProperties("package"));
-        builder.setupFromTemplate("helper/jpa-repository-commons"); // TODO: include in driven adapter
         builder.setupFromTemplate("driven-adapter/jpa-repository");
         builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
         builder.appendToSettings("jpa-repository-commons", "infrastructure/helpers");
@@ -23,6 +22,6 @@ public class DrivenAdapterJPA implements ModuleFactory {
         builder.appendToProperties("spring.jpa")
                 .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
         builder.appendDependencyToModule("app-service", "implementation project(':jpa-repository')");
-        // TODO: Generate JPA Config validate secrets manager usage
+        new DrivenAdapterSecrets().buildModule(builder);
     }
 }

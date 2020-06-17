@@ -133,6 +133,31 @@ public class UtilsTest {
     }
 
     @Test
+    public void shouldNotAddDependencyWhenExists() {
+        // Arrange
+        String build = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':my-module')\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}";
+        String expected = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':my-module')\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}";
+        // Act
+        String result = Utils.addDependency(build, "implementation project(':my-module')");
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
     public void shouldGenerateDashName() {
         String res = Utils.toDashName("MyCamelCase");
         assertEquals("my-camel-case", res);

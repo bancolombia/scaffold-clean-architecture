@@ -7,21 +7,16 @@ public class ModuleFactoryDrivenAdapter {
 
     public static ModuleFactory getDrivenAdapterFactory(DrivenAdapterType type) throws InvalidTaskOptionException {
         switch (type) {
-            case JPA: {
+            case JPA:
                 return new DrivenAdapterJPA();
-            }
-            case MONGODB: {
+            case MONGODB:
                 return new DrivenAdapterMongoDB();
-            }
-            case ASYNCEVENTBUS: {
+            case ASYNCEVENTBUS:
                 return new DrivenAdapterAsyncEventBus();
-            }
-            case GENERIC: {
+            case GENERIC:
                 return new DrivenAdapterGeneric();
-            }
-            default: {
+            default:
                 throw new InvalidTaskOptionException("Driven Adapter type invalid");
-            }
         }
     }
 
