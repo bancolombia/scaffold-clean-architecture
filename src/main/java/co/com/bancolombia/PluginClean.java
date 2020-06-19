@@ -51,6 +51,10 @@ public class PluginClean implements Plugin<Project> {
                 .description("Generate CI pipeline as a code in deployment layer").group(Constants.PLUGIN_TASK_GROUP)
                 .taskAction(GeneratePipelineTask.class).build());
 
+        tasksModels.add(TaskModel.builder().name("deleteModule").shortcut("dm")
+                .description("Delete gradle module").group(Constants.PLUGIN_TASK_GROUP)
+                .taskAction(DeleteModuleTask.class).build());
+
         return tasksModels;
     }
 

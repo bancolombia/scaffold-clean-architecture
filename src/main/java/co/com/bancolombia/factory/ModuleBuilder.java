@@ -4,7 +4,7 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.TemplateDefinition;
-import co.com.bancolombia.utils.FileAppender;
+import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +31,7 @@ public class ModuleBuilder {
     private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
     private final Map<String, FileModel> files = new ConcurrentHashMap<>();
     private final List<String> dirs = new ArrayList<>();
+    private final List<String> dirsToDelete = new ArrayList<>();
     private final Map<String, Object> params = new HashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
     private final Logger logger;
@@ -51,11 +52,13 @@ public class ModuleBuilder {
     }
 
     public void persist() throws IOException {
-        logger.lifecycle("Generating dirs");
-        dirs.forEach(getProject()::mkdir);
-        logger.lifecycle("Dirs generated");
-        logger.lifecycle("Generating files");
+        logger.lifecycle("Applying changes");
+        dirs.forEach(dir -> {
+            getProject().mkdir(dir);
+            logger.debug("creating dir {}", dir);
+        });
         if (properties != null) {
+            logger.lifecycle("Updating application properties");
             addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
         }
         for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
@@ -63,7 +66,11 @@ public class ModuleBuilder {
             FileUtils.writeString(getProject(), file.getPath(), file.getContent());
             logger.debug("file {} written", file.getPath());
         }
-        logger.lifecycle("Files written");
+        dirsToDelete.forEach(dir -> {
+            getProject().delete(dir);
+            logger.debug("deleting dir {}", dir);
+        });
+        logger.lifecycle("Changes successfully applied");
     }
 
     public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
@@ -80,19 +87,35 @@ public class ModuleBuilder {
     }
 
     public void appendToSettings(String module, String baseDir) throws IOException {
-        appendToFile("settings.gradle", settings -> {
-            String toAppend = "\ninclude ':" + module + "'\nproject(':" + module + "').projectDir = file('./" + baseDir
-                    + "/" + module + "')";
-            if (settings.contains(toAppend)) {
-                return settings;
-            }
-            return settings + toAppend;
+        logger.lifecycle("adding module {} to settings.gradle", module);
+        updateFile("settings.gradle", settings -> Utils.addModule(settings, module, baseDir));
+    }
+
+    public void removeFromSettings(String module) throws IOException {
+        logger.lifecycle("removing {} from settings.gradle", module);
+        updateFile("settings.gradle", settings -> {
+            String moduleKey = "':" + module + "'";
+            return Utils.removeLinesIncludes(settings, moduleKey);
         });
     }
 
     public void appendDependencyToModule(String module, String dependency) throws IOException {
+        logger.lifecycle("adding dependency {} to module {}", dependency, module);
         String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
-        appendToFile(buildFilePath, current -> Utils.addDependency(current, dependency));
+        updateFile(buildFilePath, current -> Utils.addDependency(current, dependency));
+    }
+
+    public void removeDependencyFromModule(String module, String dependency) throws IOException {
+        logger.lifecycle("removing dependency {} from module {}", dependency, module);
+        String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+        updateFile(buildFilePath, current -> Utils.removeLinesIncludes(current, dependency));
+    }
+
+    public void deleteModule(String module) {
+        String projectDir = project.getChildProjects().get(module).getProjectDir().getPath();
+        logger.lifecycle("deleting module {} from dir {}", module,
+                projectDir.replace(project.getProjectDir().getPath(), ""));
+        removeDir(projectDir);
     }
 
     public ObjectNode appendToProperties(String path) throws IOException {
@@ -129,6 +152,12 @@ public class ModuleBuilder {
         }
     }
 
+    public void removeDir(String path) {
+        if (path != null) {
+            this.dirsToDelete.add(path);
+        }
+    }
+
     public String getStringParam(String key) {
         return (String) params.get(key);
     }
@@ -137,7 +166,7 @@ public class ModuleBuilder {
         return (Boolean) params.get(key);
     }
 
-    private void appendToFile(String path, FileAppender appender) throws IOException {
+    private void updateFile(String path, FileUpdater updater) throws IOException {
         FileModel current = files.get(path);
         String content;
         if (current == null) {
@@ -146,7 +175,7 @@ public class ModuleBuilder {
         } else {
             content = current.getContent();
         }
-        addFile(path, appender.append(content));
+        addFile(path, updater.update(content));
     }
 
     private ObjectNode getNode(ObjectNode node, List<String> attributes) {

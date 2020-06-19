@@ -14,7 +14,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.6.1"
+ id "co.com.bancolombia.cleanArchitecture" version "1.6.2"
 }
 ```
 
@@ -89,6 +89,12 @@ gradle gpl --type=[pipelineType]
 |--------------------------|--------------|
 |AZURE                     |Azure Pipeline|
 
+
+8 The ```deleteModule | dm``` task will delete a sub project, this task have one required parameter ```module```.
+```sh
+gradle deleteModule --module=[name]
+gradle dm --module=[name]
+````
 
 How I can help?
 =============

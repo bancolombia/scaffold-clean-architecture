@@ -3,8 +3,6 @@
  */
 package co.com.bancolombia;
 
-import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -17,8 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
@@ -247,6 +244,19 @@ public class PluginCleanFunctionalTest {
         assertTrue(result.getOutput().contains("validateStructure"));
 
         assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canDeleteModule() {
+        // Arrange
+        canRunTaskGenerateDrivenAdapterWithParameters();
+        // Act
+        runner.withArguments("deleteModule", "--module=jpa-repository");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        // Assert
+        assertFalse(new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository").exists());
+        assertEquals(result.task(":deleteModule").getOutcome(), TaskOutcome.SUCCESS);
     }
 
     private void writeString(File file, String string) throws IOException {
