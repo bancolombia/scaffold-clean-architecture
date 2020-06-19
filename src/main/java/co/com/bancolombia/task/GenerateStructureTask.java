@@ -20,6 +20,7 @@ public class GenerateStructureTask extends DefaultTask {
 
     private String packageName = "co.com.bancolombia";
     private ProjectType type = ProjectType.IMPERATIVE;
+    private CoveragePlugin coverage = CoveragePlugin.JACOCO;
     private String name = "cleanArchitecture";
 
     @Option(option = "package", description = "Set principal package to use in the project")
@@ -37,9 +38,19 @@ public class GenerateStructureTask extends DefaultTask {
         this.name = projectName;
     }
 
+    @Option(option = "coverage", description = "Set project coverage plugin")
+    public void setCoveragePlugin(CoveragePlugin coverage) {
+        this.coverage = coverage;
+    }
+
     @OptionValues("type")
     public List<ProjectType> getAvailableProjectTypes() {
         return new ArrayList<>(Arrays.asList(ProjectType.values()));
+    }
+
+    @OptionValues("coverage")
+    public List<CoveragePlugin> getCoveragePlugins() {
+        return new ArrayList<>(Arrays.asList(CoveragePlugin.values()));
     }
 
     @TaskAction
@@ -51,11 +62,17 @@ public class GenerateStructureTask extends DefaultTask {
         builder.addParamPackage(packageName);
         builder.addParam("projectName", name);
         builder.addParam("reactive", type == ProjectType.REACTIVE);
+        builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
+        builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
         builder.setupFromTemplate("structure");
         builder.persist();
     }
 
     public enum ProjectType {
         REACTIVE, IMPERATIVE
+    }
+
+    public enum CoveragePlugin {
+        JACOCO, COBERTURA
     }
 }

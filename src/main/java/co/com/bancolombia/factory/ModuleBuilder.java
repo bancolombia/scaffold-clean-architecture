@@ -49,6 +49,7 @@ public class ModuleBuilder {
         params.put("springCloudVersion", Constants.SPRING_CLOUD_VERSION);
         params.put("sonarVersion", Constants.SONAR_VERSION);
         params.put("jacocoVersion", Constants.JACOCO_VERSION);
+        params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     }
 
     public void persist() throws IOException {

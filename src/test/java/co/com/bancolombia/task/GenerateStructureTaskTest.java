@@ -35,6 +35,15 @@ public class GenerateStructureTaskTest {
     }
 
     @Test
+    public void shouldReturnCoveragePluginTypes() {
+        // Arrange
+        // Act
+        List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
+        // Assert
+        assertEquals(Arrays.asList(GenerateStructureTask.CoveragePlugin.values()), types);
+    }
+
+    @Test
     public void generateStructure() throws IOException, CleanException {
         // Arrange
         // Act
@@ -67,11 +76,12 @@ public class GenerateStructureTaskTest {
     }
 
     @Test
-    public void generateStructureReactive() throws IOException, CleanException {
+    public void generateStructureReactiveWithCobertura() throws IOException, CleanException {
         // Arrange
         task.setPackage("test");
         task.setName("projectTest");
         task.setType(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setCoveragePlugin(GenerateStructureTask.CoveragePlugin.COBERTURA);
         // Act
         task.generateStructureTask();
         // Assert

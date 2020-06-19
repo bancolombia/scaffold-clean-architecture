@@ -8,7 +8,12 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    {{#jacoco}}
     apply plugin: 'jacoco'
+    {{/jacoco}}
+    {{#cobertura}}
+    apply plugin: 'net.saliman.cobertura'
+    {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -28,6 +33,7 @@ subprojects {
         testCompileOnly 'org.projectlombok:lombok'
     }
 
+    {{#jacoco}}
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     jacocoTestReport {
@@ -39,6 +45,14 @@ subprojects {
             html.destination file("${buildDir}/reports/jacocoHtml")
         }
     }
+    {{/jacoco}}
+    {{#cobertura}}
+    test.finalizedBy(project.tasks.cobertura)
+
+    cobertura {
+        coverageFormats = [ 'xml', 'html' ]
+    }
+    {{/cobertura}}
 
     dependencyManagement {
         imports {
@@ -48,6 +62,7 @@ subprojects {
     }
 }
 
+{{#jacoco}}
 jacoco {
     toolVersion = "${jacocoVersion}"
     reportsDir = file("$buildDir/reports")
@@ -65,6 +80,18 @@ task jacocoMergedReport(type: JacocoReport) {
         html.enabled true
     }
 }
+{{/jacoco}}
+{{#cobertura}}
+def files = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
+
+cobertura {
+    coverageFormats = ['xml', 'html']
+    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
+    coverageMergeDatafiles = files
+}
+
+test.finalizedBy(project.tasks.cobertura)
+{{/cobertura}}
 
 tasks.withType(JavaCompile) {
     options.compilerArgs = [
