@@ -40,6 +40,7 @@ public class ModuleBuilderTest {
         builder.appendToProperties("spring.datasource").put("url", "mydburl");
         builder.appendToProperties("").put("test", "myUnitTes");
         builder.appendToProperties("server").put("port", 8000);
+        builder.removeDir(null);
         builder.persist();
     }
 
