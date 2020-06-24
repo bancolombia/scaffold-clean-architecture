@@ -50,7 +50,8 @@ gradle gm --name [modelName]
 gradle generateUseCase --name=[useCaseName]
 gradle guc --name [useCaseName]
  ```
-4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```.
+4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```. 
+Whether you'll use generic one also parameter ```name``` is required.
 ```sh
 gradle generateDrivenAdapter --type=[drivenAdapterType]
 gradle gda --type [drivenAdapterType]
@@ -64,6 +65,7 @@ gradle gda --type [drivenAdapterType]
 |ASYNCEVENTBUS                  |Async Event Bus     |                     |
 
 5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```.
+Whether you'll use generic one also parameter ```name``` is required.
 ```sh
 gradle generateEntryPoint --type=[entryPointType]
 gradle gep --type [entryPointType]
