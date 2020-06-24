@@ -14,7 +14,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.6.2"
+ id "co.com.bancolombia.cleanArchitecture" version "1.6.3"
 }
 ```
 
@@ -22,9 +22,9 @@ plugins {
 
 Tasks
 =====
-The Scaffolding Clean Architecture plugin will allow you create 6 task  :
+The Scaffolding Clean Architecture plugin will allow you run 8 tasks  :
 
-1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task have three optional parameters; ```package``` , ```type``` and ```name```.
+1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task has three optional parameters; ```package``` , ```type``` and ```name```.
 
  ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
 
@@ -32,23 +32,25 @@ The Scaffolding Clean Architecture plugin will allow you create 6 task  :
 
 -  ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
 
+-  ```coverage = <jacoco | cobertura>```: This parameter is going to specify the coverage tool for the project. ```Default Value = jacoco```
+
 
 ```sh
-gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject
-gradle ca 
+gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=JACOCO
+gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=JACOCO
 ```
 
-2 The ```generateModel | gm``` task will generate a class and interface in model layer, this task have one required parameter ```name```.
+2 The ```generateModel | gm``` task will generate a class and interface in model layer, this task has one required parameter ```name```.
 ```sh
 gradle generateModel --name=[modelName]
 gradle gm --name [modelName]
 ```
-3 The ```generateUseCase | guc``` task will generate a class in model layer, this task have one required parameter ```name```.
+3 The ```generateUseCase | guc``` task will generate a class in model layer, this task has one required parameter ```name```.
 ```sh
 gradle generateUseCase --name=[useCaseName]
 gradle guc --name [useCaseName]
  ```
-4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task have one required parameter ```type```.
+4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```.
 ```sh
 gradle generateDrivenAdapter --type=[drivenAdapterType]
 gradle gda --type [drivenAdapterType]
@@ -61,7 +63,7 @@ gradle gda --type [drivenAdapterType]
 |MONGODB                        |Mongo Repository    |--secret [true-false]|
 |ASYNCEVENTBUS                  |Async Event Bus     |                     |
 
-5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task have one required parameter ```type```.
+5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```.
 ```sh
 gradle generateEntryPoint --type=[entryPointType]
 gradle gep --type [entryPointType]
@@ -79,7 +81,7 @@ gradle validateStructure
 gradle vs
 ```
 
-7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task have one required parameter ```type```.
+7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter ```type```.
 ```sh
 gradle generatePipeline --type=[pipelineType]
 gradle gpl --type=[pipelineType]
@@ -90,7 +92,7 @@ gradle gpl --type=[pipelineType]
 |AZURE                     |Azure Pipeline|
 
 
-8 The ```deleteModule | dm``` task will delete a sub project, this task have one required parameter ```module```.
+8 The ```deleteModule | dm``` task will delete a sub project, this task has one required parameter ```module```.
 ```sh
 gradle deleteModule --module=[name]
 gradle dm --module=[name]
