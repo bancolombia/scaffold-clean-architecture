@@ -18,8 +18,6 @@ plugins {
 }
 ```
 
-
-
 Tasks
 =====
 The Scaffolding Clean Architecture plugin will allow you run 8 tasks  :
@@ -100,7 +98,13 @@ gradle deleteModule --module=[name]
 gradle dm --module=[name]
 ````
 
+
+
 How I can help?
 =============
 Review the issues, we hear new ideas.
+
+Whats Next?
+=============
+Read more [About Clean Architecure](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
 
