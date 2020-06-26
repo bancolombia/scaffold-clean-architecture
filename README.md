@@ -14,7 +14,7 @@ To use the plugin you need Gradle version 5 or later, to start add the following
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.6.3"
+ id "co.com.bancolombia.cleanArchitecture" version "1.6.4"
 }
 ```
 
@@ -151,6 +151,19 @@ Whether you'll use generic one also parameter ```name``` is required.
 gradle generateDrivenAdapter --type=[drivenAdapterType]
 gradle gda --type [drivenAdapterType]
  ```
+
+When use ```MONGODB``` type please be sure that property 'reactive' is set correctly in gradle.properties
+- For reactive projects should be:
+
+```
+reactive=true
+```
+
+- For imperative projects should be:
+
+```
+reactive=false
+```
 
 |Reference for drivenAdapterType|Name                |Additional Options   |
 |-------------------------------|--------------------|---------------------|
