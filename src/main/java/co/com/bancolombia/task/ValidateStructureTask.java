@@ -4,22 +4,24 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 
 public class ValidateStructureTask extends DefaultTask {
-    private static final String DOMAIN = "domain";
-    private static final String MODEL = "model";
-    private static final String USECASE_FOLDER = "usecase";
-    private static final String BUILD_GRADLE = "build.gradle";
     private Logger logger = getProject().getLogger();
+    private final String ConfigurationDependenciesName ="implementation";
+    private final String modelModule = "model";
+    private final String useCaseModule = "usecase";
+
 
     @TaskAction
     public void validateStructureTask() throws IOException, CleanException {
@@ -33,63 +35,77 @@ public class ValidateStructureTask extends DefaultTask {
         if (!validateUseCaseLayer()) {
             throw new CleanException("the use case layer is invalid");
         }
-        if (!validateEntryPointLayer()) {
-            throw new CleanException("the entry point layer is invalid");
+        if (!validateInfrastructureLayer()) {
+            throw new CleanException("the infrastructure layer is invalid");
         }
-        if (!validateDrivenAdapterLayer()) {
-            throw new CleanException("the driven adapter layer is invalid");
-        }
+
         logger.lifecycle("The project is valid");
 
     }
 
-    //TODO: Complete
-    public boolean validateEntryPointLayer() throws IOException {
-        List<File> files = FileUtils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
-        for (File file : files) {
-            logger.lifecycle(file.getCanonicalPath());
-        }
-        return true;
+    private boolean validateInfrastructureLayer() {
+        List<String> modulesExcludes = Arrays.asList(modelModule, "app-service", useCaseModule);
+        AtomicBoolean valid = new AtomicBoolean(true);
+        Set<Map.Entry<String, Project>> modules = getModules();
+        List<String> dependencies = new LinkedList<>();
+        modules.forEach(stringProjectEntry -> dependencies.add(stringProjectEntry.getKey()));
+
+        modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
+                .forEach(module -> {
+                            if (getConfiguration(module.getKey(), ConfigurationDependenciesName)
+                                    .getDependencies().stream().anyMatch(filterDependenciesInfrastructure(dependencies))) {
+                                valid.set(false);
+                            }
+                        }
+                );
+
+        return valid.get();
     }
 
-    //TODO: Complete
-    private boolean validateDrivenAdapterLayer() throws IOException {
-        List<File> files = FileUtils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/driven-adapters"));
-        for (File file : files) {
-            logger.lifecycle(file.getCanonicalPath());
-        }
-        return true;
+    private Predicate<Dependency> filterDependenciesInfrastructure(List<String> dependencies) {
+        return dependency -> dependencies
+                .contains(dependency.getName()) && !Arrays.asList(modelModule, useCaseModule)
+                .contains(dependency.getName());
     }
 
-    private boolean validateModelLayer() throws IOException {
-        Stream<String> stream = FileUtils.readFile(getProject(), DOMAIN.concat("/").concat(MODEL).concat("/").concat(BUILD_GRADLE));
 
-        long countImplementationproject = stream
-                .map(line -> line.replaceAll("\\s", ""))
-                .filter(line -> !line.startsWith("//") && line.contains("implementationproject"))
-                .count();
-        return countImplementationproject == 0;
+    private Set<Map.Entry<String, Project>> getModules() {
+        return getProject().getChildProjects().entrySet();
+
+    }
+
+
+    private Configuration getConfiguration(String moduleName, String configurationName) {
+
+        return getProject().getChildProjects()
+                .get(moduleName)
+                .getConfigurations()
+                .getByName(configurationName);
+
+
+    }
+
+    private void validateExistingModule(String module) {
+        if (!getProject().getChildProjects().containsKey(module)) {
+            throw new IllegalArgumentException(module + " module don't exist ");
+        }
+
+    }
+
+    private boolean validateModelLayer() {
+
+        validateExistingModule(modelModule);
+        Configuration configuration = getConfiguration(modelModule, ConfigurationDependenciesName);
+
+        return configuration.getAllDependencies().size() == 0;
     }
 
 
     private boolean validateUseCaseLayer() {
-        Supplier<Stream<String>> stream = () -> {
-            try {
-                return FileUtils.readFile(getProject(), DOMAIN.concat("/").concat(USECASE_FOLDER).concat("/").concat(BUILD_GRADLE));
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-                return null;
-            }
-        };
-
-        String modelDependency1 = "implementationproject(':model')";
-        String modelDependency2 = "compileproject(':model')";
-        boolean isvalid = stream.get().filter(line -> !line.startsWith("//")).map(line -> line.replaceAll("\\s", ""))
-                .anyMatch(str -> str.equals(modelDependency1) || str.equals(modelDependency2));
-        long countImplementationproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("implementationproject")).count();
-        long countCompileproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("compileproject")).count();
-
-        return isvalid && ((countImplementationproject == 1 && countCompileproject == 0) || (countImplementationproject == 0 && countCompileproject == 1));
+        validateExistingModule(useCaseModule);
+        Configuration configuration = getConfiguration(useCaseModule, ConfigurationDependenciesName);
+        return configuration.getAllDependencies().size() == 1
+                && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
     }
 
 }
