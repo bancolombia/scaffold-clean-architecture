@@ -3,7 +3,6 @@ package co.com.bancolombia.factory.entrypoints;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.io.IOException;
 public class EntryPointGeneric implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-        builder.addParamPackage(FileUtils.readProperties("package"));
+        builder.loadPackage();
         String name = builder.getStringParam("task-param-name");
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("No name is set for GENERIC type, usage: gradle generateEntryPoint " +

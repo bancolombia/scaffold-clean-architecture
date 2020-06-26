@@ -25,7 +25,7 @@ public class ValidateStructureTask extends DefaultTask {
     @TaskAction
     public void validateStructureTask() throws IOException, CleanException {
 
-        String packageName = FileUtils.readProperties("package");
+        String packageName = FileUtils.readProperties(getProject().getProjectDir().getPath(), "package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
         logger.lifecycle("Project Package: {}", packageName);

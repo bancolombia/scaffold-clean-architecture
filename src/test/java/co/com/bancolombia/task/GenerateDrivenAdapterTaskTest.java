@@ -9,7 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,6 +22,10 @@ public class GenerateDrivenAdapterTaskTest {
 
     @Before
     public void init() throws IOException, CleanException {
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    }
+
+    private void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
         ProjectBuilder.builder()
@@ -30,6 +36,7 @@ public class GenerateDrivenAdapterTaskTest {
 
         project.getTasks().create("ca", GenerateStructureTask.class);
         GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("ca");
+        taskStructure.setType(type);
         taskStructure.generateStructureTask();
 
         project.getTasks().create("test", GenerateDrivenAdapterTask.class);
@@ -125,6 +132,38 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
+    public void generateDrivenAdapterMongoRepositoryForNoProjectType() throws IOException, CleanException {
+        // Arrange
+        writeString(new File("build/unitTest/gradle.properties"), "package=co.com.bancolombia\nsystemProp.version=" + Constants.PLUGIN_VERSION + "\n");
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
+    }
+
+    @Test
+    public void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
+    }
+
+    @Test
     public void generateDrivenAdapterEventBus() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
@@ -143,5 +182,11 @@ public class GenerateDrivenAdapterTaskTest {
         List<Constants.BooleanOption> options = task.getSecretOptions();
         // Assert
         assertEquals(2, options.size());
+    }
+
+    private void writeString(File file, String string) throws IOException {
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(string);
+        }
     }
 }

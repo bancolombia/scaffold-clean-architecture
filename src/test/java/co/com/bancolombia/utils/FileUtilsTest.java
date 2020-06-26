@@ -21,13 +21,13 @@ public class FileUtilsTest {
     @Test
     public void readPropertiesExist() throws Exception {
         String property = "package";
-        assertEquals("co.com.bancolombia", FileUtils.readProperties(property));
+        assertEquals("co.com.bancolombia", FileUtils.readProperties(".", property));
     }
 
     @Test(expected = IOException.class)
     public void readPropertiesNonExists() throws Exception {
         String property = "packageName";
-        FileUtils.readProperties(property);
+        FileUtils.readProperties("build/unitTest", property);
     }
 
     @Test

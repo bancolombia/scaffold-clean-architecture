@@ -137,7 +137,12 @@ public class ModuleBuilder {
         this.params.put(key, value);
     }
 
+    public void loadPackage() throws IOException {
+        addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
+    }
+
     public void addParamPackage(String packageName) {
+        logger.lifecycle("Project Package: {}", packageName.toLowerCase());
         this.params.put("package", packageName.toLowerCase());
         this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
     }
@@ -167,6 +172,18 @@ public class ModuleBuilder {
 
     public Boolean getBooleanParam(String key) {
         return (Boolean) params.get(key);
+    }
+
+    public Boolean isReactive() {
+        try {
+            String reactive = FileUtils.readProperties(project.getProjectDir().getPath(), "reactive");
+            return "true".equals(reactive);
+        } catch (IOException e) {
+            logger.warn(e.getMessage());
+            logger.lifecycle("WARN: variable reactive not present, if your project is reactive please add" +
+                    " reactive=true to gradle.properties and relaunch this task");
+            return false;
+        }
     }
 
     private void updateFile(String path, FileUpdater updater) throws IOException {
