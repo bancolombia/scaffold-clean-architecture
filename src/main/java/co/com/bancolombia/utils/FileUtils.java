@@ -50,13 +50,13 @@ public class FileUtils {
         return textFiles;
     }
 
-    public static String readProperties(String variable) throws IOException {
+    public static String readProperties(String projectPath, String variable) throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileReader("gradle.properties"));
+        properties.load(new FileReader(projectPath + "/gradle.properties"));
         if (properties.getProperty(variable) != null) {
             return properties.getProperty(variable);
         } else {
-            throw new IOException("No parameter" + variable + " in build.properties file");
+            throw new IOException("No parameter " + variable + " in gradle.properties file");
         }
     }
 

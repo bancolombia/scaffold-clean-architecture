@@ -3,14 +3,13 @@ package co.com.bancolombia.factory.adapters;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.utils.FileUtils;
 
 import java.io.IOException;
 
 public class DrivenAdapterJPA implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-        builder.addParamPackage(FileUtils.readProperties("package"));
+        builder.loadPackage();
         builder.setupFromTemplate("driven-adapter/jpa-repository");
         builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
         builder.appendToSettings("jpa-repository-commons", "infrastructure/helpers");

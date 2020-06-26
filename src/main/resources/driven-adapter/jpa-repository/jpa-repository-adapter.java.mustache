@@ -12,6 +12,6 @@ public class JPARepositoryAdapter extends AdapterOperations<Object/* change for 
 
     @Autowired
     public JPARepositoryAdapter(JPARepository repository, ObjectMapper mapper) {
-        super(repository, mapper, d -> mapper.mapBuilder(d, Object.class/* change for domain model */)); // could be mapper.map
+        super(repository, mapper, d -> mapper.map(d, Object.class/* change for domain model */)); // could be mapper.mapBuilder
     }
 }
