@@ -38,6 +38,89 @@ gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=N
 gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=JACOCO
 ```
 
+
+The structure will look like this:
+```bash
+📦NameProject
+ ┣ 📂applications
+ ┃ ┗ 📂app-service
+ ┃ ┃ ┣ 📂src
+ ┃ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┃ ┣ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜[configs and beans]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MainApplication.java
+ ┃ ┃ ┃ ┃ ┗ 📂resources
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜[properties]
+ ┃ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┗ 📜build.gradle
+ ┣ 📂deployment
+ ┃ ┣ 📜[Dockerfile, Pipelines as a code]
+ ┣ 📂domain
+ ┃ ┣ 📂model
+ ┃ ┃ ┣ 📂src
+ ┃ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂event
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂gateways
+ ┃ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┗ 📜build.gradle
+ ┃ ┗ 📂usecase
+ ┃ ┃ ┣ 📂src
+ ┃ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
+ ┃ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
+ ┃ ┃ ┗ 📜build.gradle
+ ┣ 📂infrastructure
+ ┃ ┣ 📂driven-adapters
+ ┃ ┃ ┗ 📂jpa-repository
+ ┃ ┃ ┃ ┣ 📂src
+ ┃ ┃ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂jpa
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂helper
+ ┃ ┃ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂jpa
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂helper
+ ┃ ┃ ┃ ┗ 📜build.gradle
+ ┃ ┣ 📂entry-points
+ ┃ ┃ ┗ 📂api-rest
+ ┃ ┃ ┃ ┣ 📂src
+ ┃ ┃ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂api
+ ┃ ┃ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂api
+ ┃ ┃ ┃ ┗ 📜build.gradle
+ ┃ ┗ 📂helpers
+ ┣ 📜.gitignore
+ ┣ 📜build.gradle
+ ┣ 📜gradle.properties
+ ┣ 📜lombok.config
+ ┣ 📜main.gradle
+ ┣ 📜README.md
+ ┗ 📜settings.gradle
+```
+
 2 The ```generateModel | gm``` task will generate a class and interface in model layer, this task has one required parameter ```name```.
 ```sh
 gradle generateModel --name=[modelName]
