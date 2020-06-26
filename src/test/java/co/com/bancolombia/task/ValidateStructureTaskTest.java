@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import co.com.bancolombia.task.ValidateStructureTask;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -14,29 +15,46 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 
+import static org.junit.Assert.assertTrue;
+
 public class ValidateStructureTaskTest {
 
     ValidateStructureTask task;
 
     @Before
-    public void init() throws IOException, CleanException {
-        File projectDir = new File("build/unitTest");
-        Files.createDirectories(projectDir.toPath());
-        writeString(new File(projectDir, "settings.gradle"), "");
-        writeString(new File(projectDir, "build.gradle"),
-                "plugins {" +
-                        "  id('co.com.bancolombia.cleanArchitecture')" +
-                        "}");
+    public void setup() throws IOException, CleanException {
+        Project project = ProjectBuilder.builder()
+                .withName("cleanArchitecture")
+                .withProjectDir(new File("build/unitTest"))
+                .build();
 
-        Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-        project.getTasks().create("testStructure", GenerateStructureTask.class);
+        project.getTasks().create("ca", GenerateStructureTask.class);
+        GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
+        generateStructureTask.generateStructureTask();
 
-        GenerateStructureTask taskStructure = (GenerateStructureTask) project.getTasks().getByName("testStructure");
-        taskStructure.generateStructureTask();
+        ProjectBuilder.builder()
+                .withName("app-service")
+                .withProjectDir(new File("build/unitTest/applications/app-service"))
+                .withParent(project)
+                .build();
+
+        project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
+        GenerateDrivenAdapterTask generateDriven = (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
+        generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        generateDriven.generateDrivenAdapterTask();
+
+        ProjectBuilder.builder()
+                .withName("mongo-repository")
+                .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
+                .withParent(project)
+                .build();
+
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
 
         project.getTasks().create("test", ValidateStructureTask.class);
         task = (ValidateStructureTask) project.getTasks().getByName("test");
     }
+
 
     @Test
     public void validateStructure() throws IOException, CleanException {
@@ -46,9 +64,6 @@ public class ValidateStructureTaskTest {
     }
 
 
-    private void writeString(File file, String string) throws IOException {
-        try (Writer writer = new FileWriter(file)) {
-            writer.write(string);
-        }
-    }
+
+
 }

@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
-    private final String ConfigurationDependenciesName ="implementation";
+    private final String ConfigurationDependenciesName = "implementation";
     private final String modelModule = "model";
     private final String useCaseModule = "usecase";
 
@@ -28,15 +28,17 @@ public class ValidateStructureTask extends DefaultTask {
 
         String packageName = FileUtils.readProperties("package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
         logger.lifecycle("Project Package: {}", packageName);
+
         if (!validateModelLayer()) {
-            throw new CleanException("the model layer is invalid");
+            throw new CleanException("The model layer is invalid");
         }
         if (!validateUseCaseLayer()) {
-            throw new CleanException("the use case layer is invalid");
+            throw new CleanException("The use case layer is invalid");
         }
         if (!validateInfrastructureLayer()) {
-            throw new CleanException("the infrastructure layer is invalid");
+            throw new CleanException("The infrastructure layer is invalid");
         }
 
         logger.lifecycle("The project is valid");
@@ -52,7 +54,8 @@ public class ValidateStructureTask extends DefaultTask {
 
         modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
                 .forEach(module -> {
-                            if (getConfiguration(module.getKey(), ConfigurationDependenciesName)
+                            Configuration configuration = getConfiguration(module.getKey());
+                            if (configuration
                                     .getDependencies().stream().anyMatch(filterDependenciesInfrastructure(dependencies))) {
                                 valid.set(false);
                             }
@@ -75,38 +78,42 @@ public class ValidateStructureTask extends DefaultTask {
     }
 
 
-    private Configuration getConfiguration(String moduleName, String configurationName) {
+    private Configuration getConfiguration(String moduleName) {
 
         return getProject().getChildProjects()
                 .get(moduleName)
                 .getConfigurations()
-                .getByName(configurationName);
+                .getByName(ConfigurationDependenciesName);
 
 
     }
 
-    private void validateExistingModule(String module) {
-        if (!getProject().getChildProjects().containsKey(module)) {
-            throw new IllegalArgumentException(module + " module don't exist ");
-        }
+    private boolean validateExistingModule(String module) {
+        return (getProject().getChildProjects().containsKey(module));
+
 
     }
 
     private boolean validateModelLayer() {
 
-        validateExistingModule(modelModule);
-        Configuration configuration = getConfiguration(modelModule, ConfigurationDependenciesName);
+        if (validateExistingModule(modelModule)) {
+            Configuration configuration = getConfiguration(modelModule);
+            return configuration.getAllDependencies().size() == 0;
+        }
+        return true;
 
-        return configuration.getAllDependencies().size() == 0;
     }
 
 
     private boolean validateUseCaseLayer() {
-        validateExistingModule(useCaseModule);
-        Configuration configuration = getConfiguration(useCaseModule, ConfigurationDependenciesName);
-        return configuration.getAllDependencies().size() == 1
-                && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
+        if (validateExistingModule(useCaseModule)) {
+            Configuration configuration = getConfiguration(useCaseModule);
+            return configuration.getAllDependencies().size() == 1
+                    && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
+        }
+        return true;
     }
-
 }
+
+
 
