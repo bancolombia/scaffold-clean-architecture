@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-
 public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
     private final String ConfigurationDependenciesName = "implementation";
@@ -40,33 +39,32 @@ public class ValidateStructureTask extends DefaultTask {
         if (!validateInfrastructureLayer()) {
             throw new CleanException("The infrastructure layer is invalid");
         }
-
         logger.lifecycle("The project is valid");
-
     }
 
     private boolean validateInfrastructureLayer() {
         List<String> modulesExcludes = Arrays.asList(modelModule, "app-service", useCaseModule);
         AtomicBoolean valid = new AtomicBoolean(true);
         Set<Map.Entry<String, Project>> modules = getModules();
-        List<String> dependencies = new LinkedList<>();
-        modules.forEach(stringProjectEntry -> dependencies.add(stringProjectEntry.getKey()));
 
         modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
-                .forEach(module -> {
-                            Configuration configuration = getConfiguration(module.getKey());
-                            if (configuration
-                                    .getDependencies().stream().anyMatch(filterDependenciesInfrastructure(dependencies))) {
-                                valid.set(false);
-                            }
-                        }
-                );
+                .forEach(dependency -> {
+                    validateDependencies(valid, dependency);
+                });
 
         return valid.get();
     }
 
-    private Predicate<Dependency> filterDependenciesInfrastructure(List<String> dependencies) {
-        return dependency -> dependencies
+    private void validateDependencies(AtomicBoolean valid,  Map.Entry<String, Project> dependency) {
+        Configuration configuration = getConfiguration(dependency.getKey());
+        if (configuration
+                .getDependencies().stream().anyMatch(filterDependenciesInfrastructure())) {
+            valid.set(false);
+        }
+    }
+
+    private Predicate<Dependency> filterDependenciesInfrastructure() {
+        return dependency -> "app-service"
                 .contains(dependency.getName()) && !Arrays.asList(modelModule, useCaseModule)
                 .contains(dependency.getName());
     }
@@ -77,21 +75,16 @@ public class ValidateStructureTask extends DefaultTask {
 
     }
 
-
     private Configuration getConfiguration(String moduleName) {
 
         return getProject().getChildProjects()
                 .get(moduleName)
                 .getConfigurations()
                 .getByName(ConfigurationDependenciesName);
-
-
     }
 
     private boolean validateExistingModule(String module) {
         return (getProject().getChildProjects().containsKey(module));
-
-
     }
 
     private boolean validateModelLayer() {
@@ -104,7 +97,6 @@ public class ValidateStructureTask extends DefaultTask {
 
     }
 
-
     private boolean validateUseCaseLayer() {
         if (validateExistingModule(useCaseModule)) {
             Configuration configuration = getConfiguration(useCaseModule);
@@ -114,6 +106,3 @@ public class ValidateStructureTask extends DefaultTask {
         return true;
     }
 }
-
-
-

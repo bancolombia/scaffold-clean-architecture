@@ -49,6 +49,12 @@ public class ValidateStructureTaskTest {
                 .withParent(project)
                 .build();
 
+        ProjectBuilder.builder()
+                .withName("model")
+                .withProjectDir(new File("build/unitTest/domain/model"))
+                .withParent(project)
+                .build();
+
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
 
         project.getTasks().create("test", ValidateStructureTask.class);
