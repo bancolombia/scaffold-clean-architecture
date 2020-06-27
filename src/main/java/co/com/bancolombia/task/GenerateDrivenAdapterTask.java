@@ -2,13 +2,10 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter.DrivenAdapterType;
 import co.com.bancolombia.utils.Utils;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
@@ -18,10 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerateDrivenAdapterTask extends DefaultTask {
-    private final ModuleBuilder builder = new ModuleBuilder(getProject());
-    private final Logger logger = getProject().getLogger();
-
+public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     private DrivenAdapterType type;
     private String name;
     private BooleanOption secret = BooleanOption.FALSE;
@@ -54,6 +48,7 @@ public class GenerateDrivenAdapterTask extends DefaultTask {
     @TaskAction
     public void generateDrivenAdapterTask() throws IOException, CleanException {
         if (type == null) {
+            printHelp();
             throw new IllegalArgumentException("No Driven Adapter type is set, usage: gradle generateDrivenAdapter " +
                     "--type " + Utils.formatTaskOptions(getTypes()));
         }

@@ -1,19 +1,14 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
-import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.Utils;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
 import java.io.IOException;
 
-public class GenerateUseCaseTask extends DefaultTask {
+public class GenerateUseCaseTask extends CleanArchitectureDefaultTask {
     private static final String USECASE_CLASS_NAME = "UseCase";
-    private final ModuleBuilder builder = new ModuleBuilder(getProject());
-    private final Logger logger = getProject().getLogger();
     private String name = "";
 
     @Option(option = "name", description = "Set UseCase name")
@@ -24,6 +19,7 @@ public class GenerateUseCaseTask extends DefaultTask {
     @TaskAction
     public void generateUseCaseTask() throws IOException, ParamNotFoundException {
         if (name.isEmpty()) {
+            printHelp();
             throw new IllegalArgumentException(
                     "No use case name, usage: gradle generateUseCase --name [name]");
         }
