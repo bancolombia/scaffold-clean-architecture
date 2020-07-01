@@ -19,8 +19,7 @@ public class ValidateStructureTaskTest {
 
     ValidateStructureTask task;
 
-    @Before
-    public void setup() throws IOException, CleanException {
+    public void setupException() throws IOException, CleanException {
         Project project = ProjectBuilder.builder()
                 .withName("cleanArchitecture")
 
@@ -39,13 +38,8 @@ public class ValidateStructureTaskTest {
                 .withParent(project)
                 .build();
 
-        project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
-        GenerateDrivenAdapterTask generateDriven = (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-        generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-        generateDriven.generateDrivenAdapterTask();
 
-        // TODO: review the unit test
-/*        project.getTasks().create("guc", GenerateUseCaseTask.class);
+        project.getTasks().create("guc", GenerateUseCaseTask.class);
         GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
         generateUseCase.setName("business");
         generateUseCase.generateUseCaseTask();
@@ -57,9 +51,65 @@ public class ValidateStructureTaskTest {
                 .build();
                       useCaseProject.getPluginManager().apply(JavaPlugin.class);
 
-                */
 
-       Project mongoProject = ProjectBuilder.builder()
+        Project modelProject = ProjectBuilder.builder()
+                .withName("model")
+                .withProjectDir(new File("build/unitTest/domain/model"))
+                .withParent(project)
+                .build();
+
+        modelProject.getPluginManager().apply(JavaPlugin.class);
+        Task task2 =  modelProject.getTasks().getByName("clean");
+        task2.getActions().get(0).execute(task2);
+
+
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
+
+        project.getTasks().create("validate", ValidateStructureTask.class);
+        task = (ValidateStructureTask) project.getTasks().getByName("validate");
+    }
+
+
+    @Test(expected = CleanException.class)
+    public void validateStructureException() throws IOException, CleanException {
+        // Act
+        this.setupException();
+        task.validateStructureTask();
+        // Assert
+    }
+
+    private void prepare() throws IOException, CleanException{
+        Project project = ProjectBuilder.builder()
+                .withName("cleanArchitecture")
+
+                .withProjectDir(new File("build/unitTest"))
+                .build();
+
+        project.getPluginManager().apply(JavaPlugin.class);
+
+        project.getTasks().create("ca", GenerateStructureTask.class);
+        GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
+        generateStructureTask.generateStructureTask();
+
+        ProjectBuilder.builder()
+                .withName("app-service")
+                .withProjectDir(new File("build/unitTest/applications/app-service"))
+                .withParent(project)
+                .build();
+
+        project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
+        GenerateDrivenAdapterTask generateDriven = (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
+        generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+        generateDriven.generateDrivenAdapterTask();
+
+        project.getTasks().create("guc", GenerateUseCaseTask.class);
+        GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
+        generateUseCase.setName("business");
+        generateUseCase.generateUseCaseTask();
+
+
+
+        Project mongoProject = ProjectBuilder.builder()
                 .withName("mongo-repository")
                 .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
                 .withParent(project)
@@ -86,13 +136,14 @@ public class ValidateStructureTaskTest {
         task = (ValidateStructureTask) project.getTasks().getByName("validate");
     }
 
-
     @Test
-    public void validateStructure() throws IOException, CleanException {
+    public void validateStructure()  throws IOException, CleanException {
         // Act
+        this.prepare();
         task.validateStructureTask();
         // Assert
     }
+
 
 
 

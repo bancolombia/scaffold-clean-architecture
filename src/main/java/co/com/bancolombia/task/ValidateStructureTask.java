@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
-    private static final String modelModule = "model";
-    private static final String useCaseModule = "usecase";
+    private static final String MODEL_MODULE = "model";
+    private static final String USE_CASE_MODULE = "usecase";
 
 
     @TaskAction
@@ -44,9 +44,9 @@ public class ValidateStructureTask extends DefaultTask {
 
     private boolean validateModelLayer() {
 
-        if (validateExistingModule(modelModule)) {
+        if (validateExistingModule(MODEL_MODULE)) {
             logger.lifecycle("Validating Model Module");
-            Configuration configuration = getConfiguration(modelModule);
+            Configuration configuration = getConfiguration(MODEL_MODULE);
             return configuration.getAllDependencies().isEmpty();
         }
         logger.warn("Model module not found");
@@ -55,18 +55,18 @@ public class ValidateStructureTask extends DefaultTask {
     }
 
     private boolean validateUseCaseLayer() {
-        if (validateExistingModule(useCaseModule)) {
+        if (validateExistingModule(USE_CASE_MODULE)) {
             logger.lifecycle("Validating Use Case Module");
-            Configuration configuration = getConfiguration(useCaseModule);
+            Configuration configuration = getConfiguration(USE_CASE_MODULE);
             return configuration.getAllDependencies().size() == 1
-                    && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
+                    && configuration.getAllDependencies().iterator().next().getName().contains((MODEL_MODULE));
         }
         logger.warn("Use case module not found");
         return true;
     }
 
     private boolean validateInfrastructureLayer() {
-        List<String> modulesExcludes = Arrays.asList(modelModule, "app-service", useCaseModule);
+        List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, "app-service", USE_CASE_MODULE);
         AtomicBoolean valid = new AtomicBoolean(true);
         Set<Map.Entry<String, Project>> modules = getModules();
 
@@ -110,7 +110,7 @@ public class ValidateStructureTask extends DefaultTask {
 
     private Predicate<Dependency> filterDependenciesInfrastructure() {
         return dependency -> "app-service"
-                .contains(dependency.getName()) && !Arrays.asList(modelModule, useCaseModule)
+                .contains(dependency.getName()) && !Arrays.asList(MODEL_MODULE, USE_CASE_MODULE)
                 .contains(dependency.getName());
     }
 
