@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
-    private final String modelModule = "model";
-    private final String useCaseModule = "usecase";
+    private static final String modelModule = "model";
+    private static final String useCaseModule = "usecase";
 
 
     @TaskAction
@@ -47,7 +47,7 @@ public class ValidateStructureTask extends DefaultTask {
         if (validateExistingModule(modelModule)) {
             logger.lifecycle("Validating Model Module");
             Configuration configuration = getConfiguration(modelModule);
-            return configuration.getAllDependencies().size() == 0;
+            return configuration.getAllDependencies().isEmpty();
         }
         logger.warn("Model module not found");
         return true;
@@ -58,8 +58,6 @@ public class ValidateStructureTask extends DefaultTask {
         if (validateExistingModule(useCaseModule)) {
             logger.lifecycle("Validating Use Case Module");
             Configuration configuration = getConfiguration(useCaseModule);
-            System.out.println(configuration.getAllDependencies().size());
-
             return configuration.getAllDependencies().size() == 1
                     && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
         }
