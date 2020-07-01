@@ -8,6 +8,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
 
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
     private Logger logger = getProject().getLogger();
-    private final String ConfigurationDependenciesName = "implementation";
     private final String modelModule = "model";
     private final String useCaseModule = "usecase";
 
@@ -31,15 +31,40 @@ public class ValidateStructureTask extends DefaultTask {
         logger.lifecycle("Project Package: {}", packageName);
 
         if (!validateModelLayer()) {
-            throw new CleanException("The model layer is invalid");
+            throw new CleanException("Model module is invalid");
         }
         if (!validateUseCaseLayer()) {
-            throw new CleanException("The use case layer is invalid");
+            throw new CleanException("Use case module is invalid");
         }
         if (!validateInfrastructureLayer()) {
-            throw new CleanException("The infrastructure layer is invalid");
+            throw new CleanException("Infrastructure layer is invalid");
         }
         logger.lifecycle("The project is valid");
+    }
+
+    private boolean validateModelLayer() {
+
+        if (validateExistingModule(modelModule)) {
+            logger.lifecycle("Validating Model Module");
+            Configuration configuration = getConfiguration(modelModule);
+            return configuration.getAllDependencies().size() == 0;
+        }
+        logger.warn("Model module not found");
+        return true;
+
+    }
+
+    private boolean validateUseCaseLayer() {
+        if (validateExistingModule(useCaseModule)) {
+            logger.lifecycle("Validating Use Case Module");
+            Configuration configuration = getConfiguration(useCaseModule);
+            System.out.println(configuration.getAllDependencies().size());
+
+            return configuration.getAllDependencies().size() == 1
+                    && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
+        }
+        logger.warn("Use case module not found");
+        return true;
     }
 
     private boolean validateInfrastructureLayer() {
@@ -48,14 +73,36 @@ public class ValidateStructureTask extends DefaultTask {
         Set<Map.Entry<String, Project>> modules = getModules();
 
         modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
-                .forEach(dependency -> {
-                    validateDependencies(valid, dependency);
+                .forEach(moduleFiltered -> {
+                    logger.lifecycle(String.format("Validating %s Module", moduleFiltered.getKey()));
+                    validateDependencies(valid, moduleFiltered);
                 });
 
         return valid.get();
     }
 
-    private void validateDependencies(AtomicBoolean valid,  Map.Entry<String, Project> dependency) {
+    private boolean validateExistingModule(String module) {
+        return (getProject().getChildProjects().containsKey(module));
+    }
+
+    public Configuration getConfiguration(String moduleName) {
+        printDependenciesByModule(moduleName);
+
+        return getProject()
+                .getChildProjects()
+                .get(moduleName)
+                .getConfigurations()
+                .getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME);
+    }
+
+    private void printDependenciesByModule(String moduleName) {
+        getProject()
+                .getChildProjects()
+                .get(moduleName)
+                .getConfigurations().getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME).getDependencies().forEach(dependency -> logger.lifecycle("--- Dependency: " + dependency.getName()));
+    }
+
+    private void validateDependencies(AtomicBoolean valid, Map.Entry<String, Project> dependency) {
         Configuration configuration = getConfiguration(dependency.getKey());
         if (configuration
                 .getDependencies().stream().anyMatch(filterDependenciesInfrastructure())) {
@@ -72,37 +119,5 @@ public class ValidateStructureTask extends DefaultTask {
 
     private Set<Map.Entry<String, Project>> getModules() {
         return getProject().getChildProjects().entrySet();
-
-    }
-
-    private Configuration getConfiguration(String moduleName) {
-
-        return getProject().getChildProjects()
-                .get(moduleName)
-                .getConfigurations()
-                .getByName(ConfigurationDependenciesName);
-    }
-
-    private boolean validateExistingModule(String module) {
-        return (getProject().getChildProjects().containsKey(module));
-    }
-
-    private boolean validateModelLayer() {
-
-        if (validateExistingModule(modelModule)) {
-            Configuration configuration = getConfiguration(modelModule);
-            return configuration.getAllDependencies().size() == 0;
-        }
-        return true;
-
-    }
-
-    private boolean validateUseCaseLayer() {
-        if (validateExistingModule(useCaseModule)) {
-            Configuration configuration = getConfiguration(useCaseModule);
-            return configuration.getAllDependencies().size() == 1
-                    && configuration.getAllDependencies().iterator().next().getName().contains((modelModule));
-        }
-        return true;
     }
 }
