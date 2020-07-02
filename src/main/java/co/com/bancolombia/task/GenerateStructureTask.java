@@ -1,10 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.Utils;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.logging.Logger;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
@@ -14,10 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenerateStructureTask extends DefaultTask {
-    private final ModuleBuilder builder = new ModuleBuilder(getProject());
-    private final Logger logger = getProject().getLogger();
-
+public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     private String packageName = "co.com.bancolombia";
     private ProjectType type = ProjectType.IMPERATIVE;
     private CoveragePlugin coverage = CoveragePlugin.JACOCO;
