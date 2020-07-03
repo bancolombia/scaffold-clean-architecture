@@ -76,6 +76,25 @@ public class PluginCleanFunctionalTest {
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
+    public void canRunTaskGenerateStructureWithOutParametersValidator() {
+
+
+        runner.withArguments("ca");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+
+        runner.withArguments("generateDrivenAdapter", "--type=" + "jpa");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+        runner.withArguments("generateDrivenAdapter", "--type=" + "ASYNCEVENTBUS");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+    }
+
+
 
     @Test
     public void canRunTaskGenerateStructureWithParameters() {
@@ -214,7 +233,9 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskvalidateStructureWithOutParameters() {
-        canRunTaskGenerateStructureWithOutParameters();
+        canRunTaskGenerateStructureWithOutParametersValidator();
+
+
         String task = "validateStructure";
 
         runner.withArguments(task);
