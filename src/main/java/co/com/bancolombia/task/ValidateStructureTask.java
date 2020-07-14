@@ -47,7 +47,7 @@ public class ValidateStructureTask extends DefaultTask {
         if (validateExistingModule(MODEL_MODULE)) {
             logger.lifecycle("Validating Model Module");
             Configuration configuration = getConfiguration(MODEL_MODULE);
-            return configuration.getAllDependencies().isEmpty();
+            return configuration.getDependencies().isEmpty();
         }
         logger.warn("Model module not found");
         return true;
@@ -58,8 +58,8 @@ public class ValidateStructureTask extends DefaultTask {
         if (validateExistingModule(USE_CASE_MODULE)) {
             logger.lifecycle("Validating Use Case Module");
             Configuration configuration = getConfiguration(USE_CASE_MODULE);
-            return configuration.getAllDependencies().size() == 1
-                    && configuration.getAllDependencies().iterator().next().getName().contains((MODEL_MODULE));
+            return configuration.getDependencies().size() == 1
+                    && configuration.getDependencies().iterator().next().getName().contains((MODEL_MODULE));
         }
         logger.warn("Use case module not found");
         return true;
