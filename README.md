@@ -254,7 +254,7 @@ gradle dm --module=[name]
 
 
 
-How I can help?
+How can I help?
 =============
 Review the issues, we hear new ideas.
 
