@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -15,9 +16,12 @@ public class GenerateModelTaskTest {
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void generateEntryPointValueUnExistent() throws IOException, ParamNotFoundException {
+    public void generateEntryPointValueUnExistent() throws IOException, CleanException {
         Project project = ProjectBuilder.builder().build();
         project.getTasks().create("test", GenerateModelTask.class);
+        project.getTasks().create("ca", GenerateStructureTask.class);
+        GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
+        caTask.generateStructureTask();
 
         GenerateModelTask task = (GenerateModelTask) project.getTasks().getByName("test");
 
