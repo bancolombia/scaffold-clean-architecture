@@ -256,7 +256,7 @@ gradle dm --module=[name]
 
 How can I help?
 =============
-Review the issues, we hear new ideas.
+Review the issues, we hear new ideas. Read more [Contributing](https://github.com/bancolombia/scaffold-clean-architecture/wiki/Contributing)
 
 Whats Next?
 =============
