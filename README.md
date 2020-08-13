@@ -9,7 +9,7 @@ Gradle plugin to create a java application based on Clean Architecture following
 
 Plugin Implementation  
 ===================
-To use the plugin you need Gradle version 5 or later, to start add the following section into your 
+To use the plugin you need Gradle version 5.6 or later, to start add the following section into your 
 **build.gradle** file.
 
 ```groovy
