@@ -9,7 +9,7 @@ Gradle plugin to create a java application based on Clean Architecture following
 
 Plugin Implementation  
 ===================
-To use the plugin you need Gradle version 5 or later, to start add the following section into your 
+To use the plugin you need Gradle version 5.6 or later, to start add the following section into your 
 **build.gradle** file.
 
 ```groovy
@@ -22,15 +22,15 @@ Tasks
 =====
 The Scaffolding Clean Architecture plugin will allow you run 8 tasks  :
 
-1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task has three optional parameters; ```package``` , ```type``` and ```name```.
+1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task has four optional parameters; ```package``` , ```type```, ```name``` and ```coverage```.
 
- ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
+- ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
 
 - ```type = <imperative | reactive>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
 
--  ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
+- ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
 
--  ```coverage = <jacoco | cobertura>```: This parameter is going to specify the coverage tool for the project. ```Default Value = jacoco```
+- ```coverage = <jacoco | cobertura>```: This parameter is going to specify the coverage tool for the project. ```Default Value = jacoco```
 
 
 ```sh
