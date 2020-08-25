@@ -14,7 +14,7 @@ public class Constants {
     public static final String SECRETS_VERSION = "2.1.0";
     public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "0.4.7";
     public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
-    public static final String PLUGIN_VERSION = "1.6.7";
+    public static final String PLUGIN_VERSION = "1.6.8";
 
     public enum BooleanOption {
         TRUE, FALSE
