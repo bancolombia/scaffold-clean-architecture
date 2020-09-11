@@ -165,15 +165,15 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
    - For _**reactive**_ projects should be:
 
-   ```shell
-   reactive=true
-   ```
+     ```shell
+     reactive=true
+     ```
 
    - For _**imperative**_ projects should be:
 
-   ```shell
-   reactive=false
-   ```
+     ```shell
+     reactive=false
+     ```
 
    | Reference for **drivenAdapterType** | Name                 | Additional Options    |
    | ----------------------------------- | -------------------- | --------------------- |
