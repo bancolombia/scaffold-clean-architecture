@@ -3,43 +3,43 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bancolombia_scaffold-clean-architecture&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bancolombia_scaffold-clean-architecture)
 [![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
+
 # Scaffolding of Clean Architecture
+
 Gradle plugin to create a java application based on Clean Architecture following our best practices!
 
+# Plugin Implementation
 
-Plugin Implementation  
-===================
-To use the plugin you need Gradle version 5.6 or later, to start add the following section into your 
+To use the plugin you need Gradle version 5.6 or later, to start add the following section into your
 **build.gradle** file.
 
 ```groovy
 plugins {
- id "co.com.bancolombia.cleanArchitecture" version "1.6.8"
+  id "co.com.bancolombia.cleanArchitecture" version "1.6.9"
 }
 ```
 
-Tasks
-=====
-The Scaffolding Clean Architecture plugin will allow you run 8 tasks  :
+# Tasks
 
-1 The ```cleanArchitecture | ca``` task will generate a clean architecture structure in your project, this task has four optional parameters; ```package``` , ```type```, ```name``` and ```coverage```.
+The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
 
-- ```package = <package.we.need>```: You can specify the main or default package of your project. ```Default Value = co.com.bancolombia```
+1. The `cleanArchitecture | ca` task will generate a clean architecture structure in your project, this task has four optional parameters; `package` , `type`, `name` and `coverage`.
 
-- ```type = <imperative | reactive>```: With this parameter the task will generate a POO project. ```Default Value = imperative```
+   - **`package`** `= <package.we.need>`: You can specify the main or default package of your project. `Default Value = co.com.bancolombia`
 
-- ```name = NameProject```: This parameter is going to specify the name of the project. ```Default Value = cleanArchitecture```
+   - **`type`** `= <imperative | reactive>`: With this parameter the task will generate a POO project. `Default Value = imperative`
 
-- ```coverage = <jacoco | cobertura>```: This parameter is going to specify the coverage tool for the project. ```Default Value = jacoco```
+   - **`name`** `= NameProject`: This parameter is going to specify the name of the project. `Default Value = cleanArchitecture`
 
+   - **`coverage`** `= <jacoco | cobertura>`: This parameter is going to specify the coverage tool for the project. `Default Value = jacoco`
 
-```sh
-gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=JACOCO
-gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=JACOCO
+```shell
+$ gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco
+$ gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco
 ```
 
-
 The structure will look like this:
+
 ```bash
 📦NameProject
  ┣ 📂applications
@@ -92,13 +92,15 @@ The structure will look like this:
  ┗ 📜settings.gradle
 ```
 
-2 The ```generateModel | gm``` task will generate a class and interface in model layer, this task has one required parameter ```name```.
+2 The `generateModel | gm` task will generate a class and interface in model layer, this task has one required parameter `name`.
+
 ```sh
 gradle generateModel --name=[modelName]
 gradle gm --name [modelName]
 ```
 
 This task will generate something like that:
+
 ```bash
 📦domain
  ┣ 📂model
@@ -117,12 +119,12 @@ This task will generate something like that:
  ┃ ┗ 📜build.gradle
 ```
 
+3 The `generateUseCase | guc` task will generate a class in model layer, this task has one required parameter `name`.
 
-3 The ```generateUseCase | guc``` task will generate a class in model layer, this task has one required parameter ```name```.
 ```sh
 gradle generateUseCase --name=[useCaseName]
 gradle guc --name [useCaseName]
- ```
+```
 
 This task will generate something like that:
 
@@ -144,15 +146,16 @@ This task will generate something like that:
  ┃ ┗ 📜build.gradle
 ```
 
+4 The `generateDrivenAdapter | gda` task will generate a class in Infrastructure layer, this task has one required parameter `type`.
+Whether you'll use generic one also parameter `name` is required.
 
-4 The ```generateDrivenAdapter | gda``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```. 
-Whether you'll use generic one also parameter ```name``` is required.
 ```sh
 gradle generateDrivenAdapter --type=[drivenAdapterType]
 gradle gda --type [drivenAdapterType]
- ```
+```
 
-When use ```MONGODB``` type please be sure that property 'reactive' is set correctly in gradle.properties
+When use `MONGODB` type please be sure that property 'reactive' is set correctly in gradle.properties
+
 - For reactive projects should be:
 
 ```
@@ -165,12 +168,12 @@ reactive=true
 reactive=false
 ```
 
-|Reference for drivenAdapterType|Name                |Additional Options   |
-|-------------------------------|--------------------|---------------------|
-|GENERIC                        |Empty Driven Adapter|--name [name]        |
-|JPA                            |JPA Repository      |--secret [true-false]|
-|MONGODB                        |Mongo Repository    |--secret [true-false]|
-|ASYNCEVENTBUS                  |Async Event Bus     |                     |
+| Reference for drivenAdapterType | Name                 | Additional Options    |
+| ------------------------------- | -------------------- | --------------------- |
+| GENERIC                         | Empty Driven Adapter | --name [name]         |
+| JPA                             | JPA Repository       | --secret [true-false] |
+| MONGODB                         | Mongo Repository     | --secret [true-false] |
+| ASYNCEVENTBUS                   | Async Event Bus      |                       |
 
 This task will generate something like that:
 
@@ -197,19 +200,19 @@ This task will generate something like that:
  ┃ ┃ ┗ 📜build.gradle
 ```
 
-5 The ```generateEntryPoint | gep``` task will generate a class in Infrastructure layer, this task has one required parameter ```type```.
-Whether you'll use generic one also parameter ```name``` is required.
+5 The `generateEntryPoint | gep` task will generate a class in Infrastructure layer, this task has one required parameter `type`.
+Whether you'll use generic one also parameter `name` is required.
+
 ```sh
 gradle generateEntryPoint --type=[entryPointType]
 gradle gep --type [entryPointType]
- ```
+```
 
-|Reference for entryPointType|Name                                  |Additional Options|
-|----------------------------|--------------------------------------|------------------|
-|GENERIC                     |Empty Entry Point                     |--name [name]     |
-|RESTMVC                     |API REST (Spring Boot Starter Web)    |                  |
-|WEBFLUX                     |API REST (Spring Boot Starter WebFlux)|                  |
-
+| Reference for entryPointType | Name                                   | Additional Options |
+| ---------------------------- | -------------------------------------- | ------------------ |
+| GENERIC                      | Empty Entry Point                      | --name [name]      |
+| RESTMVC                      | API REST (Spring Boot Starter Web)     |                    |
+| WEBFLUX                      | API REST (Spring Boot Starter WebFlux) |                    |
 
 This task will generate something like that:
 
@@ -229,36 +232,35 @@ This task will generate something like that:
  ┃ ┃ ┗ 📜build.gradle
 ```
 
-6 The ```validateStructure | vs``` Validate that project references aren't violated.
+6 The `validateStructure | vs` Validate that project references aren't violated.
+
 ```sh
-gradle validateStructure  
+gradle validateStructure
 gradle vs
 ```
 
-7 The ```generatePipeline | gpl``` task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter ```type```.
+7 The `generatePipeline | gpl` task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter `type`.
+
 ```sh
 gradle generatePipeline --type=[pipelineType]
 gradle gpl --type=[pipelineType]
-````
+```
 
-|Reference for pipelineType|Name          |
-|--------------------------|--------------|
-|AZURE                     |Azure Pipeline|
+| Reference for pipelineType | Name           |
+| -------------------------- | -------------- |
+| AZURE                      | Azure Pipeline |
 
+8 The `deleteModule | dm` task will delete a sub project, this task has one required parameter `module`.
 
-8 The ```deleteModule | dm``` task will delete a sub project, this task has one required parameter ```module```.
 ```sh
 gradle deleteModule --module=[name]
 gradle dm --module=[name]
-````
+```
 
+# How can I help?
 
-
-How can I help?
-=============
 Review the issues, we hear new ideas. Read more [Contributing](https://github.com/bancolombia/scaffold-clean-architecture/wiki/Contributing)
 
-Whats Next?
-=============
-Read more [About Clean Architecure](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+# Whats Next?
 
+Read more [About Clean Architecure](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
