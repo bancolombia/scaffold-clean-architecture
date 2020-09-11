@@ -10,8 +10,7 @@ Gradle plugin to create a java application based on Clean Architecture following
 
 # Plugin Implementation
 
-To use the plugin you need Gradle version 5.6 or later, to start add the following section into your
-**build.gradle** file.
+To use the plugin you need Gradle version 5.6 or later, to start add the following section into your **build.gradle** file.
 
 ```groovy
 plugins {
@@ -21,7 +20,9 @@ plugins {
 
 # Tasks
 
-The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
+The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
+
+## Generate Project
 
 1. The **`cleanArchitecture | ca`** task will generate a clean architecture structure in your project, this task has four optional parameters; `package` , `type`, `name` and `coverage`.
 
@@ -92,6 +93,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    ┗ 📜settings.gradle
    ```
 
+## Generate Model
+
 2. The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
 
    ```shell
@@ -119,6 +122,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    ┃ ┗ 📜build.gradle
    ```
 
+## Generate Use Case
+
 3. The **`generateUseCase | guc`** task will generate a class in model layer, this task has one required parameter `name`.
 
    ```shell
@@ -145,6 +150,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
    ┃ ┗ 📜build.gradle
    ```
+
+## Generate Driven Adapter
 
 4. The **`generateDrivenAdapter | gda`** task will generate a class in Infrastructure layer, this task has one required parameter `type`. <br>
    Whether you'll use generic one also parameter `name` is required.
@@ -175,8 +182,6 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    | mongodb                             | Mongo Repository     | --secret [true-false] |
    | asynceventbus                       | Async Event Bus      |                       |
 
-   <br>
-
    ### This task will generate something like that:
 
    ```bash
@@ -202,6 +207,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    ┃ ┃ ┗ 📜build.gradle
    ```
 
+## Generate Entry Point
+
 5. The **`generateEntryPoint | gep`** task will generate a class in Infrastructure layer, this task has one required parameter `type`. <br>
    Whether you'll use generic one also parameter `name` is required.
 
@@ -215,8 +222,6 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    | generic                          | Empty Entry Point                      | --name [name]      |
    | restmvc                          | API REST (Spring Boot Starter Web)     |                    |
    | webflux                          | API REST (Spring Boot Starter WebFlux) |                    |
-
-   <br>
 
    ### This task will generate something like that:
 
@@ -236,12 +241,16 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    ┃ ┃ ┗ 📜build.gradle
    ```
 
+## Validate Structure
+
 6. The **`validateStructure | vs`** Validate that project references aren't violated.
 
    ```shell
    gradle validateStructure
    gradle vs
    ```
+
+## Generate Pipeline
 
 7. The **`generatePipeline | gpl`** task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter `type`.
 
@@ -253,6 +262,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks :
    | Reference for **pipelineType** | Name           |
    | ------------------------------ | -------------- |
    | azure                          | Azure Pipeline |
+
+## Delete Module
 
 8. The **`deleteModule | dm`** task will delete a sub project, this task has one required parameter `module`.
 
