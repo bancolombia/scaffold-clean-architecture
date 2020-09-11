@@ -26,8 +26,17 @@ plugins {
 }
 
 sonarqube {
-	properties {
-		property "sonar.sourceEnconding", "UTF-8"
-	}
+    properties {
+        property "sonar.sourceEnconding", "UTF-8"
+        property "sonar.modules", "applications/app-service," +
+                "domain/model, domain/usecase," +
+                "infraestructure/driven-adapters/*, infraestructure/entry-points/*"
+        property "sonar.sources", "src/main, build.gradle"
+        property "sonar.test", "src/test"
+        property "sonar.java.binaries", "{{sonar.java.binaries}}"
+        property "sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
 apply from: './main.gradle'
