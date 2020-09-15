@@ -19,8 +19,9 @@ resources:
 trigger:
   branches:
     include:
-      - trunk
+      - master
       - feature/*
+      # TODO: Update the main {master/trunk} branch in the list to include it in the branch trigger
 
 jobs:
   - job: BuildJob
@@ -68,4 +69,6 @@ jobs:
           PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
           ArtifactName: '$(artifactName)'
           publishLocation: 'Container'
-        condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/trunk'))
+          condition: false
+        # condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/master'))
+        # TODO: Replace the line with 'condition: false' renaming the main branch in 'refs/heads/{master/trunk}' to work properly the source branch condition
