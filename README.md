@@ -8,6 +8,20 @@
 
 Gradle plugin to create a java application based on Clean Architecture following our best practices!
 
+- [Scaffolding of Clean Architecture](#scaffolding-of-clean-architecture)
+- [Plugin Implementation](#plugin-implementation)
+- [Tasks](#tasks)
+  - [Generate Project](#generate-project)
+  - [Generate Model](#generate-model)
+  - [Generate Use Case](#generate-use-case)
+  - [Generate Driven Adapter](#generate-driven-adapter)
+  - [Generate Entry Point](#generate-entry-point)
+  - [Validate Structure](#validate-structure)
+  - [Generate Pipeline](#generate-pipeline)
+  - [Delete Module](#delete-module)
+- [How can I help?](#how-can-i-help)
+- [Whats Next?](#whats-next)
+
 # Plugin Implementation
 
 To use the plugin you need Gradle version 5.6 or later, to start add the following section into your **build.gradle** file.
@@ -39,7 +53,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco
    ```
 
-   ### The structure will look like this:
+   **_The structure will look like this:_**
 
    ```bash
    📦NameProject
@@ -102,7 +116,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gm --name [modelName]
    ```
 
-   ### This task will generate something like that:
+   **_This task will generate something like that:_**
 
    ```bash
    📦domain
@@ -131,7 +145,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle guc --name [useCaseName]
    ```
 
-   ### This task will generate something like that:
+   **_This task will generate something like that:_**
 
    ```bash
    📦domain
@@ -182,7 +196,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | mongodb                             | Mongo Repository     | --secret [true-false] |
    | asynceventbus                       | Async Event Bus      |                       |
 
-   ### This task will generate something like that:
+   _**This task will generate something like that:**_
 
    ```bash
    📦infrastructure
@@ -223,7 +237,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | restmvc                          | API REST (Spring Boot Starter Web)     |                    |
    | webflux                          | API REST (Spring Boot Starter WebFlux) |                    |
 
-   ### This task will generate something like that:
+   _**This task will generate something like that:**_
 
    ```bash
    📦infrastructure
