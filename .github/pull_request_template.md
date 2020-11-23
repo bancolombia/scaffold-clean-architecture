@@ -6,7 +6,7 @@
 - [ ] Fix
 
 ## Checklist
-- [ ] The pull request is complete according to the [guide of contributing](https://github.com/bancolombia/async-dataflow-channel-sender/wiki/Contributing)
+- [ ] The pull request is complete according to the [guide of contributing](https://github.com/bancolombia/scaffold-clean-architecture/wiki/Contributing)
 - [ ] Automated tests are written
 - [ ] The documentation is up-to-date
 - [ ] the version of the build.gradle, readme.md and gradle.properties was increased
