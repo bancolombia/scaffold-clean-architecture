@@ -19,14 +19,14 @@ public class EntryPointRestMvcServer implements ModuleFactory {
                         "compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', " +
                                 "version: '" + Constants.UNDERTOW_VERSION + "'");
                 builder.appendConfigurationToModule("app-service",
-                        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"");
+                        Constants.TOMCAT_EXCLUSION);
                 return;
             case JETTY:
                 builder.appendDependencyToModule("app-service",
                         "compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', " +
                                 "version: '" + Constants.JETTY_VERSION + "'");
                 builder.appendConfigurationToModule("app-service",
-                        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"");
+                        Constants.TOMCAT_EXCLUSION);
                 return;
             case TOMCAT:
                 return;

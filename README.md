@@ -240,8 +240,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
     ```shell
-   gradle generateEntryPoint --type=[entryPointType] --server=[serverOption]
-   gradle gep --type [entryPointType] --server=[serverOption]
+   gradle generateEntryPoint --type=restmvc --server=[serverOption]
+   gradle gep --type=restmvc --server=[serverOption]
    ```
 
    | Reference for **serverOption** | Name                      |

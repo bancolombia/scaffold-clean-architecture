@@ -17,6 +17,7 @@ public class Constants {
     public static final String PLUGIN_VERSION = "1.7.0";
     public static final String UNDERTOW_VERSION = "2.3.8.RELEASE";
     public static final String JETTY_VERSION = "2.3.8.RELEASE";
+    public static final String TOMCAT_EXCLUSION = "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
 
     public enum BooleanOption {
         TRUE, FALSE

@@ -34,7 +34,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     public void setServer(Server server) { this.server = server; }
 
     @OptionValues("server")
-    public List<Server> getServerOptions() { return new ArrayList<>(Arrays.asList(Server.values())); }
+    public List<Server> getServerOptions() { return Arrays.asList(Server.values()); }
 
     @OptionValues("type")
     public List<EntryPointType> getTypes() {
