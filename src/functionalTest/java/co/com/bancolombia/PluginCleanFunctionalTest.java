@@ -3,6 +3,7 @@
  */
 package co.com.bancolombia;
 
+import org.apache.commons.io.FileUtils;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import static org.junit.Assert.*;
@@ -176,6 +178,67 @@ public class PluginCleanFunctionalTest {
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateRestMvcEntryPointCaseWithUndertowServer() throws IOException {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "restmvc";
+        String server = "undertow";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--server=" + server);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+
+        assertTrue(FileUtils.readFileToString(new File("build/functionalTest/applications/app-service/build.gradle"), StandardCharsets.UTF_8)
+                .contains("spring-boot-starter-undertow"));
+        assertTrue(FileUtils.readFileToString(new File("build/functionalTest/applications/app-service/build.gradle"), StandardCharsets.UTF_8)
+                .contains("compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateRestMvcEntryPointCaseWithJettyServer() throws IOException {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "restmvc";
+        String server = "jetty";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--server=" + server);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+
+        assertTrue(FileUtils.readFileToString(new File("build/functionalTest/applications/app-service/build.gradle"), StandardCharsets.UTF_8)
+                .contains("spring-boot-starter-jetty"));
+        assertTrue(FileUtils.readFileToString(new File("build/functionalTest/applications/app-service/build.gradle"), StandardCharsets.UTF_8)
+                .contains("compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateEntryPointCaseWithTomcatServer() throws IOException {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "restmvc";
+        String server = "tomcat";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--server=" + server);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+
+        assertFalse(FileUtils.readFileToString(new File("build/functionalTest/applications/app-service/build.gradle"), StandardCharsets.UTF_8)
+                .contains("compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
