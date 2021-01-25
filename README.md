@@ -289,6 +289,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | Reference for **pipelineType** | Name           |
    | ------------------------------ | -------------- |
    | azure                          | Azure Pipeline |
+   | github                          | GitHub Action |
 
 ## Delete Module
 

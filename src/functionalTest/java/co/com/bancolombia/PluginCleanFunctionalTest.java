@@ -311,6 +311,21 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateGithubActionTest() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generatePipeline";
+        String valuePipeline = "GITHUB";
+
+        runner.withArguments(task, "--type=" + valuePipeline);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskValidateStructureWithOutParameters() {
         canRunTaskGenerateStructureWithOutParametersValidator();
         String task = "validateStructure";
