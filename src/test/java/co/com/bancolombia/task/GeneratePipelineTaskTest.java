@@ -48,8 +48,17 @@ public class GeneratePipelineTaskTest {
         assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
     }
 
+    @Test
+    public void generateGithubActionTest() throws IOException, CleanException {
+
+        task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
+        task.generatePipelineTask();
+
+        assertTrue(new File("build/unitTest/deployment/cleanarchitecture_github_action_gradle.yaml").exists());
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void generateAzureDevOpsPipelineErrorTest() throws IOException, CleanException {
+    public void generatePipelineWithoutType() throws IOException, CleanException {
         task.setType(null);
         task.generatePipelineTask();
     }

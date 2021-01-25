@@ -10,12 +10,14 @@ public class ModuleFactoryPipeline {
         switch (type) {
             case AZURE:
                 return new PipelineAzure();
+            case GITHUB:
+                return new GitHubAction();
             default:
                 throw new InvalidTaskOptionException("Pipeline value invalid");
         }
     }
 
     public enum PipelineType {
-        AZURE
+        AZURE, GITHUB
     }
 }
