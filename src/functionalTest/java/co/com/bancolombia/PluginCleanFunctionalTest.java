@@ -94,6 +94,22 @@ public class PluginCleanFunctionalTest {
 
     }
 
+    public void canRunTaskGenerateStructureReactiveProject() {
+        runner.withArguments("ca","--type=reactive");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+
+        runner.withArguments("generateDrivenAdapter", "--type=" + "jpa");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+        runner.withArguments("generateDrivenAdapter", "--type=" + "ASYNCEVENTBUS");
+        runner.withProjectDir(projectDir);
+        runner.build();
+
+    }
+
 
 
     @Test
@@ -232,10 +248,8 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
-    public void canRunTaskvalidateStructureWithOutParameters() {
+    public void canRunTaskValidateStructureWithOutParameters() {
         canRunTaskGenerateStructureWithOutParametersValidator();
-
-
         String task = "validateStructure";
 
         runner.withArguments(task);
@@ -279,6 +293,29 @@ public class PluginCleanFunctionalTest {
         assertFalse(new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository").exists());
         assertEquals(result.task(":deleteModule").getOutcome(), TaskOutcome.SUCCESS);
     }
+
+    @Test
+    public void canValidateImperativeProject() {
+        canRunTaskGenerateStructureWithOutParametersValidator();
+        // Act
+        runner.withArguments("validateStructure");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        // Assert
+        assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canValidateReactiveProject() {
+        canRunTaskGenerateStructureReactiveProject();
+        // Act
+        runner.withArguments("validateStructure");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        // Assert
+        assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
+    }
+
 
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {

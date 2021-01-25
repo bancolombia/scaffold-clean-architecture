@@ -11,7 +11,6 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,12 +36,12 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
 
     @OptionValues("type")
     public List<DrivenAdapterType> getTypes() {
-        return new ArrayList<>(Arrays.asList(DrivenAdapterType.values()));
+        return Arrays.asList(DrivenAdapterType.values());
     }
 
     @OptionValues("secret")
     public List<BooleanOption> getSecretOptions() {
-        return new ArrayList<>(Arrays.asList(BooleanOption.values()));
+        return Arrays.asList(BooleanOption.values());
     }
 
     @TaskAction

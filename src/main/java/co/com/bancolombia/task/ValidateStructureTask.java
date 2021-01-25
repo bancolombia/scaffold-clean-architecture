@@ -7,6 +7,7 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
@@ -17,9 +18,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
-    private Logger logger = getProject().getLogger();
+    private final Logger logger = getProject().getLogger();
     private static final String MODEL_MODULE = "model";
     private static final String USE_CASE_MODULE = "usecase";
+    private static final String REACTOR_CORE ="reactor-core";
+    private static final String REACTOR_EXTRA ="reactor-extra";
 
 
     @TaskAction
@@ -43,26 +46,34 @@ public class ValidateStructureTask extends DefaultTask {
     }
 
     private boolean validateModelLayer() {
-
         if (validateExistingModule(MODEL_MODULE)) {
             logger.lifecycle("Validating Model Module");
             Configuration configuration = getConfiguration(MODEL_MODULE);
-            return configuration.getAllDependencies().isEmpty();
+            return configuration.getAllDependencies()
+                    .stream().noneMatch(this::filterReactorDependencies);
         }
         logger.warn("Model module not found");
         return true;
-
     }
 
     private boolean validateUseCaseLayer() {
         if (validateExistingModule(USE_CASE_MODULE)) {
+
             logger.lifecycle("Validating Use Case Module");
             Configuration configuration = getConfiguration(USE_CASE_MODULE);
-            return configuration.getAllDependencies().size() == 1
-                    && configuration.getAllDependencies().iterator().next().getName().contains((MODEL_MODULE));
+            DependencySet dependencies= configuration.getAllDependencies();
+            return  dependencies.stream()
+                    .filter(this::filterReactorDependencies)
+                    .count() == 1
+                    && dependencies.stream()
+                    .filter(this::filterReactorDependencies).iterator().next().getName().contains((MODEL_MODULE));
         }
         logger.warn("Use case module not found");
         return true;
+    }
+
+    private boolean filterReactorDependencies(Dependency dependency) {
+        return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE).contains(dependency.getName());
     }
 
     private boolean validateInfrastructureLayer() {
@@ -71,19 +82,21 @@ public class ValidateStructureTask extends DefaultTask {
         Set<Map.Entry<String, Project>> modules = getModules();
 
         modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
-                .forEach(moduleFiltered -> {
-                    logger.lifecycle(String.format("Validating %s Module", moduleFiltered.getKey()));
-                    validateDependencies(valid, moduleFiltered);
-                });
+                .forEach(moduleFiltered -> validateModule(valid, moduleFiltered));
 
         return valid.get();
+    }
+
+    private void validateModule(AtomicBoolean valid, Map.Entry<String, Project> moduleFiltered) {
+        logger.lifecycle(String.format("Validating %s Module", moduleFiltered.getKey()));
+        validateDependencies(valid, moduleFiltered);
     }
 
     private boolean validateExistingModule(String module) {
         return (getProject().getChildProjects().containsKey(module));
     }
 
-    public Configuration getConfiguration(String moduleName) {
+    private Configuration getConfiguration(String moduleName) {
         printDependenciesByModule(moduleName);
 
         return getProject()
@@ -113,7 +126,6 @@ public class ValidateStructureTask extends DefaultTask {
                 .contains(dependency.getName()) && !Arrays.asList(MODEL_MODULE, USE_CASE_MODULE)
                 .contains(dependency.getName());
     }
-
 
     private Set<Map.Entry<String, Project>> getModules() {
         return getProject().getChildProjects().entrySet();
