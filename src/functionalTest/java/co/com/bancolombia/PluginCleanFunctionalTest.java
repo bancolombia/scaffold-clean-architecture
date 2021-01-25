@@ -320,7 +320,7 @@ public class PluginCleanFunctionalTest {
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
 
-        assertTrue(new File("build/functionalTest/deployment/cleanarchitecture_github_action_gradle.yaml").exists());
+        assertTrue(new File("build/functionalTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }

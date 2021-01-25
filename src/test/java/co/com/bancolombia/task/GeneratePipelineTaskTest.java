@@ -54,7 +54,7 @@ public class GeneratePipelineTaskTest {
         task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
         task.generatePipelineTask();
 
-        assertTrue(new File("build/unitTest/deployment/cleanarchitecture_github_action_gradle.yaml").exists());
+        assertTrue(new File("build/unitTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml").exists());
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -1,6 +1,6 @@
 {
   "folders": [],
   "files": {
-    "pipeline/github/github.yaml.mustache": "deployment/{{projectNameLower}}_github_action_gradle.yaml"
+    "pipeline/github/github.yaml.mustache": ".github/workflows/{{projectNameLower}}_github_action_gradle.yaml"
   }
 }
