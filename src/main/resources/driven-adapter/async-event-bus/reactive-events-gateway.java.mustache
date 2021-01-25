@@ -1,8 +1,10 @@
 package {{package}}.event;
 
 import {{package}}.model.event.gateways.EventsGateway;
+{{#lombok}}
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+{{/lombok}}
 import org.reactivecommons.api.domain.DomainEvent;
 import org.reactivecommons.api.domain.DomainEventBus;
 import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;
@@ -14,10 +16,12 @@ import java.util.logging.Level;
 
 import static reactor.core.publisher.Mono.from;
 
-@Log
 @Component
 @EnableDomainEventBus
+{{#lombok}}
+@Log
 @RequiredArgsConstructor
+{{/lombok}}
 /**Permite personalizar la emisión de eventos, enriquecerla o interceptarla.
  Por defecto delega el proceso en reactive-commons.
 
@@ -26,6 +30,12 @@ import static reactor.core.publisher.Mono.from;
 public class ReactiveEventsGateway implements EventsGateway {
 
     private final DomainEventBus domainEventBus;
+
+    {{^lombok}}
+    public ReactiveEventsGateway(DomainEventBus domainEventBus) {
+    this.domainEventBus = domainEventBus;
+    }
+    {{/lombok}}
 
     @Override
     public Mono<Void> emit(Object event) {

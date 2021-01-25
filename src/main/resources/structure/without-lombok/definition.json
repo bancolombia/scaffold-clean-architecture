@@ -1,0 +1,28 @@
+{
+  "folders": [
+    "applications/app-service/src/main/java/{{packagePath}}/config",
+    "applications/app-service/src/test/java/{{packagePath}}",
+    "infrastructure/driven-adapters",
+    "infrastructure/entry-points",
+    "infrastructure/helpers",
+    "domain/model/src/main/java/{{packagePath}}/model",
+    "domain/model/src/test/java/{{packagePath}}/model",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase"
+  ],
+  "files": {
+    "structure/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
+    "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
+    "structure/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
+    "structure/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
+    "structure/deployment/dockerfile.mustache": "deployment/Dockerfile",
+    "structure/domain/model/build.gradle.mustache": "domain/model/build.gradle",
+    "structure/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
+    "structure/root/.gitignore.mustache": ".gitignore",
+    "structure/root/build.gradle.mustache": "build.gradle",
+    "structure/root/gradle.properties.mustache": "gradle.properties",
+    "structure/root/main.gradle.mustache": "main.gradle",
+    "structure/root/readme.md.mustache": "README.md",
+    "structure/root/settings.gradle.mustache": "settings.gradle"
+  }
+}

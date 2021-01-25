@@ -47,10 +47,12 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    - **`name`** `= NameProject`: This parameter is going to specify the name of the project. `Default Value = cleanArchitecture`
 
    - **`coverage`** `= <jacoco | cobertura>`: This parameter is going to specify the coverage tool for the project. `Default Value = jacoco`
+   
+   - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
    ```shell
-   gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco
-   gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco
+   gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
+   gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
    ```
 
    **_The structure will look like this:_**

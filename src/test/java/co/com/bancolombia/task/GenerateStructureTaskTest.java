@@ -43,6 +43,7 @@ public class GenerateStructureTaskTest {
         assertEquals(Arrays.asList(GenerateStructureTask.CoveragePlugin.values()), types);
     }
 
+
     @Test
     public void generateStructure() throws IOException, CleanException {
         // Arrange
