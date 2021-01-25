@@ -11,7 +11,6 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
 
     @OptionValues("type")
     public List<EntryPointType> getTypes() {
-        return new ArrayList<>(Arrays.asList(EntryPointType.values()));
+        return Arrays.asList(EntryPointType.values());
     }
 
     @TaskAction

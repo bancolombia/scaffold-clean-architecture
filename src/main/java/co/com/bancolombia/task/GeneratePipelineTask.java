@@ -10,7 +10,6 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
 
     @OptionValues("type")
     public List<PipelineType> getTypes() {
-        return new ArrayList<>(Arrays.asList(PipelineType.values()));
+        return Arrays.asList(PipelineType.values());
     }
 
     @TaskAction

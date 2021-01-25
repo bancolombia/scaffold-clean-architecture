@@ -7,7 +7,6 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,12 +38,12 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
     @OptionValues("type")
     public List<ProjectType> getAvailableProjectTypes() {
-        return new ArrayList<>(Arrays.asList(ProjectType.values()));
+        return Arrays.asList(ProjectType.values());
     }
 
     @OptionValues("coverage")
     public List<CoveragePlugin> getCoveragePlugins() {
-        return new ArrayList<>(Arrays.asList(CoveragePlugin.values()));
+        return Arrays.asList(CoveragePlugin.values());
     }
 
     @TaskAction
