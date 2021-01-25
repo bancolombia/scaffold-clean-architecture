@@ -78,6 +78,18 @@ public class Utils {
         return build.substring(0, realStart + 1) + "\n\t" + dependency + build.substring(realStart + 1);
     }
 
+    public static String addConfiguration(String build, String configuration) {
+        if(!build.contains("configurations")) {
+            build += "\n\nconfigurations{\n}";
+        }
+        if(build.contains(configuration)) {
+            return build;
+        }
+        int start = build.indexOf("configurations");
+        int realStart = build.indexOf('{', start);
+        return build.substring(0, realStart + 1) + "\n\t" + configuration + build.substring(realStart + 1);
+    }
+
     public static String toDashName(String name) {
         String regex = "(?=[A-Z][a-z])";
         String subst = "-";

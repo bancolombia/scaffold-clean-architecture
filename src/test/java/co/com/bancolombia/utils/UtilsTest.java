@@ -158,6 +158,96 @@ public class UtilsTest {
     }
 
     @Test
+    public void shouldAddConfigurationAndConfigurationsBlock() {
+        // Arrange
+        String build = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}";
+        String expected = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}\n" +
+                "\n" +
+                "configurations{\n" +
+                "\tcompile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"\n" +
+                "}";
+        // Act
+        String result = Utils.addConfiguration(build, "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"");
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void shouldAddConfiguration() {
+        // Arrange
+        String build = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}\n" +
+                "\n" +
+                "configurations{\n" +
+                "\tcompile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"\n" +
+                "}";
+        String expected = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}\n" +
+                "\n" +
+                "configurations{\n" +
+                "\tcompile.exclude group: \"co.com.bancolombia\", module:\"excluded-module\"\n" +
+                "\tcompile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"\n" +
+                "}";
+        // Act
+        String result = Utils.addConfiguration(build, "compile.exclude group: \"co.com.bancolombia\", module:\"excluded-module\"");
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void shouldNotAddConfigurationWhenExists() {
+        // Arrange
+        String build = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}\n" +
+                "\n" +
+                "configurations{\n" +
+                "\tcompile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"\n" +
+                "}";
+        String expected = "apply plugin: 'org.springframework.boot'\n" +
+                "\n" +
+                "dependencies {\n" +
+                "\timplementation project(':model')\n" +
+                "\timplementation project(':usecase')\n" +
+                "\tcompile 'org.springframework.boot:spring-boot-starter'\n" +
+                "}\n" +
+                "\n" +
+                "configurations{\n" +
+                "\tcompile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"\n" +
+                "}";
+        // Act
+        String result = Utils.addConfiguration(build, "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"");
+        // Assert
+        assertEquals(expected, result);
+    }
+
+    @Test
     public void shouldGenerateDashName() {
         String res = Utils.toDashName("MyCamelCase");
         assertEquals("my-camel-case", res);

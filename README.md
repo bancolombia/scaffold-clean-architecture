@@ -231,11 +231,24 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gep --type [entryPointType]
    ```
 
-   | Reference for **entryPointType** | Name                                   | Additional Options |
-   | -------------------------------- | -------------------------------------- | ------------------ |
-   | generic                          | Empty Entry Point                      | --name [name]      |
-   | restmvc                          | API REST (Spring Boot Starter Web)     |                    |
-   | webflux                          | API REST (Spring Boot Starter WebFlux) |                    |
+   | Reference for **entryPointType** | Name                                   | Additional Options         |
+   | -------------------------------- | -------------------------------------- | -------------------------- |
+   | generic                          | Empty Entry Point                      | --name [name]              |
+   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption]    |
+   | webflux                          | API REST (Spring Boot Starter WebFlux) |                            |
+
+   Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
+
+    ```shell
+   gradle generateEntryPoint --type=restmvc --server=[serverOption]
+   gradle gep --type=restmvc --server=[serverOption]
+   ```
+
+   | Reference for **serverOption** | Name                      |
+      | ------------------------------ | ------------------------- |
+   | undertow                       | Undertow server (default) |
+   | tomcat                         | Tomcat server             |
+   | jetty                          | Jetty server              |
 
    _**This task will generate something like that:**_
 

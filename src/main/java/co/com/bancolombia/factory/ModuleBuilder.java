@@ -108,6 +108,12 @@ public class ModuleBuilder {
         updateFile(buildFilePath, current -> Utils.addDependency(current, dependency));
     }
 
+    public void appendConfigurationToModule(String module, String configuration) throws IOException {
+        logger.lifecycle("adding configuration {} to module {}", configuration, module);
+        String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+        updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
+    }
+
     public void removeDependencyFromModule(String module, String dependency) throws IOException {
         logger.lifecycle("removing dependency {} from module {}", dependency, module);
         String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
@@ -169,6 +175,8 @@ public class ModuleBuilder {
     public String getStringParam(String key) {
         return (String) params.get(key);
     }
+
+    public Object getParam(String key) { return params.get(key); }
 
     public Boolean getBooleanParam(String key) {
         return (Boolean) params.get(key);
