@@ -1,5 +1,7 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.Constants;
+import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.utils.Utils;
 import org.gradle.api.tasks.TaskAction;
@@ -15,7 +17,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     private ProjectType type = ProjectType.IMPERATIVE;
     private CoveragePlugin coverage = CoveragePlugin.JACOCO;
     private String name = "cleanArchitecture";
-    private LombokStatus lombok = LombokStatus.TRUE;
+    private BooleanOption lombok = BooleanOption.TRUE;
 
     @Option(option = "package", description = "Set principal package to use in the project")
     public void setPackage(String packageName) {
@@ -38,7 +40,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     @Option(option = "lombok", description = "Switch the satus of lombok in this project")
-    public void setStatusLombok(LombokStatus lombok) {
+    public void setStatusLombok(BooleanOption lombok) {
         this.lombok = lombok;
     }
 
@@ -53,8 +55,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     @OptionValues("lombok")
-    public List<LombokStatus> getStatusLombok() { return  Arrays.asList(LombokStatus.values()); }
-
+    public List<BooleanOption> getLombokOptions() { return  Arrays.asList(BooleanOption.values()); }
 
 
     @TaskAction
@@ -68,8 +69,8 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
         builder.addParam("reactive", type == ProjectType.REACTIVE);
         builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
         builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
-        builder.addParam("lombok", lombok == LombokStatus.TRUE);
-        if (lombok == LombokStatus.TRUE) {
+        builder.addParam("lombok", lombok == BooleanOption.TRUE);
+        if (lombok == BooleanOption.TRUE) {
             builder.setupFromTemplate("structure");
         } else {
             builder.setupFromTemplate("structure/without-lombok");
@@ -85,7 +86,4 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
         JACOCO, COBERTURA
     }
 
-    public enum LombokStatus {
-        TRUE, FALSE
-    }
 }

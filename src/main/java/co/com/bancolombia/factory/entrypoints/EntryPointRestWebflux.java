@@ -10,7 +10,11 @@ public class EntryPointRestWebflux implements ModuleFactory {
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         builder.loadPackage();
-        builder.setupFromTemplate("entry-point/rest-webflux");
+        if (builder.getBooleanParam("task-param-router")) {
+            builder.setupFromTemplate("entry-point/rest-webflux/router-functions");
+        } else {
+            builder.setupFromTemplate("entry-point/rest-webflux");
+        }
         builder.appendToSettings("reactive-web", "infrastructure/entry-points");
         builder.appendDependencyToModule("app-service", "implementation project(':reactive-web')");
     }

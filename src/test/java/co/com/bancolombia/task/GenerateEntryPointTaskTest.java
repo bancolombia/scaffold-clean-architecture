@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
 import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint;
@@ -12,9 +13,9 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class GenerateEntryPointTaskTest {
@@ -143,14 +144,49 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
-    public void generateEntryPointReactiveWeb() throws IOException, CleanException {
+    public void generateEntryPointReactiveWebWithoutRouterFunctions() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
+        task.setRouter(Constants.BooleanOption.FALSE);
         // Act
         task.generateEntryPointTask();
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api").exists());
+    }
+
+    @Test
+    public void generateEntryPointReactiveWebWithRouterFunctions() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
+        task.setRouter(Constants.BooleanOption.TRUE);
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/router.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/handler.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api").exists());
+    }
+
+
+
+    @Test
+    public void shouldGetServerOptions() {
+        // Arrange
+        // Act
+        List<EntryPointRestMvcServer.Server> options = task.getServerOptions();
+        // Assert
+        assertEquals(3, options.size());
+    }
+
+    @Test
+    public void shouldGetRouterOptions() {
+        // Arrange
+        // Act
+        List<Constants.BooleanOption> options = task.getRoutersOptions();
+        // Assert
+        assertEquals(2, options.size());
     }
 }
