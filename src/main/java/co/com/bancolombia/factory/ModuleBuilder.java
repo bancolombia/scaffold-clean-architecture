@@ -52,6 +52,7 @@ public class ModuleBuilder {
         params.put("asyncCommonsStarterVersion", Constants.RCOMMONS_ASYNC_COMMONS_STARTER_VERSION);
         params.put("objectMapperVersion", Constants.RCOMMONS_OBJECT_MAPPER_VERSION);
         params.put("coberturaVersion", Constants.COBERTURA_VERSION);
+        params.put("lombokVersion", Constants.LOMBOK_VERSION);
     }
 
     public void persist() throws IOException {
