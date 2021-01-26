@@ -180,18 +180,37 @@ public class GenerateEntryPointTaskTest {
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
+        assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
+        assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
     }
 
     @Test
     public void generateEntryPointReactiveWebWithRouterFunctions() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
+        task.setRouter(Constants.BooleanOption.TRUE);
+
         // Act
         task.generateEntryPointTask();
         // Assert
+        assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/router.java").exists());
-        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/handler.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
+    }
+
+    @Test
+    public void generateEntryPointReactiveWebWithDefaultOptionFunctions() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
+
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
     }
 
 
