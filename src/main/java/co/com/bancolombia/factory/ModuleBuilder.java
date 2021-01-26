@@ -176,7 +176,9 @@ public class ModuleBuilder {
         return (String) params.get(key);
     }
 
-    public Object getParam(String key) { return params.get(key); }
+    public Object getParam(String key) {
+        return params.get(key);
+    }
 
     public Boolean getBooleanParam(String key) {
         return (Boolean) params.get(key);
@@ -185,6 +187,7 @@ public class ModuleBuilder {
     public Boolean isReactive() {
         return getABooleanProperty("reactive");
     }
+
     public Boolean isEnableLombok() {
         return getABooleanProperty("lombok");
     }
@@ -195,8 +198,8 @@ public class ModuleBuilder {
             return "true".equals(value);
         } catch (IOException e) {
             logger.warn(e.getMessage());
-            logger.lifecycle("WARN: variable "+ property +" not present, if your project use "+ property +" please add " +
-                    property +"=true to gradle.properties and relaunch this task");
+            logger.lifecycle("WARN: variable " + property + " not present, if your project use " + property + " please add " +
+                    property + "=true to gradle.properties and relaunch this task");
             return false;
         }
     }

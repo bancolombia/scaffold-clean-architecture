@@ -79,10 +79,10 @@ public class Utils {
     }
 
     public static String addConfiguration(String build, String configuration) {
-        if(!build.contains("configurations")) {
+        if (!build.contains("configurations")) {
             build += "\n\nconfigurations{\n}";
         }
-        if(build.contains(configuration)) {
+        if (build.contains(configuration)) {
             return build;
         }
         int start = build.indexOf("configurations");

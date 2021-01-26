@@ -9,8 +9,10 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import java.io.File;
 import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,7 +29,7 @@ public class ValidateStructureTaskTest {
 
         project.getPluginManager().apply(JavaPlugin.class);
 
-         project.getTasks().create("ca", GenerateStructureTask.class);
+        project.getTasks().create("ca", GenerateStructureTask.class);
         GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
         generateStructureTask.generateStructureTask();
 
@@ -48,7 +50,7 @@ public class ValidateStructureTaskTest {
                 .withProjectDir(new File("build/unitTest/domain/usecase"))
                 .withParent(project)
                 .build();
-                      useCaseProject.getPluginManager().apply(JavaPlugin.class);
+        useCaseProject.getPluginManager().apply(JavaPlugin.class);
 
 
         Project modelProject = ProjectBuilder.builder()
@@ -58,7 +60,7 @@ public class ValidateStructureTaskTest {
                 .build();
 
         modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 =  modelProject.getTasks().getByName("clean");
+        Task task2 = modelProject.getTasks().getByName("clean");
         task2.getActions().get(0).execute(task2);
 
 
@@ -77,7 +79,7 @@ public class ValidateStructureTaskTest {
         // Assert
     }
 
-    private void prepareImperativeProject() throws IOException, CleanException{
+    private void prepareImperativeProject() throws IOException, CleanException {
         Project project = ProjectBuilder.builder()
                 .withName("cleanArchitecture")
 
@@ -107,7 +109,6 @@ public class ValidateStructureTaskTest {
         generateUseCase.generateUseCaseTask();
 
 
-
         Project mongoProject = ProjectBuilder.builder()
                 .withName("mongo-repository")
                 .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
@@ -125,7 +126,7 @@ public class ValidateStructureTaskTest {
         mongoProject.getPluginManager().apply(JavaPlugin.class);
 
         modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 =  modelProject.getTasks().getByName("clean");
+        Task task2 = modelProject.getTasks().getByName("clean");
         task2.getActions().get(0).execute(task2);
 
 
@@ -134,7 +135,8 @@ public class ValidateStructureTaskTest {
         project.getTasks().create("validate", ValidateStructureTask.class);
         task = (ValidateStructureTask) project.getTasks().getByName("validate");
     }
-    private void prepareReactiveProject() throws IOException, CleanException{
+
+    private void prepareReactiveProject() throws IOException, CleanException {
         Project project = ProjectBuilder.builder()
                 .withName("cleanArchitecture")
 
@@ -165,7 +167,6 @@ public class ValidateStructureTaskTest {
         generateUseCase.generateUseCaseTask();
 
 
-
         Project mongoProject = ProjectBuilder.builder()
                 .withName("mongo-repository")
                 .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
@@ -183,7 +184,7 @@ public class ValidateStructureTaskTest {
         mongoProject.getPluginManager().apply(JavaPlugin.class);
 
         modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 =  modelProject.getTasks().getByName("clean");
+        Task task2 = modelProject.getTasks().getByName("clean");
         task2.getActions().get(0).execute(task2);
 
 
@@ -194,7 +195,7 @@ public class ValidateStructureTaskTest {
     }
 
     @Test
-    public void validateStructureImperativeProject()  throws IOException, CleanException {
+    public void validateStructureImperativeProject() throws IOException, CleanException {
         // Act
         this.prepareImperativeProject();
         task.validateStructureTask();
@@ -202,15 +203,12 @@ public class ValidateStructureTaskTest {
     }
 
     @Test
-    public void validateStructureReactiveProject()  throws IOException, CleanException {
+    public void validateStructureReactiveProject() throws IOException, CleanException {
         // Act
         this.prepareReactiveProject();
         task.validateStructureTask();
         // Assert
     }
-
-
-
 
 
 }

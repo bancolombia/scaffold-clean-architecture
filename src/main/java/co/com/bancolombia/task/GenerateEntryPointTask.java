@@ -33,14 +33,20 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     }
 
     @Option(option = "server", description = "Set server on which the application will run when RESTMVC type")
-    public void setServer(Server server) { this.server = server; }
+    public void setServer(Server server) {
+        this.server = server;
+    }
 
     @Option(option = "router", description = "Set router function for webflux ")
-    public void setRouter(BooleanOption router) { this.router = router; }
+    public void setRouter(BooleanOption router) {
+        this.router = router;
+    }
 
 
     @OptionValues("server")
-    public List<Server> getServerOptions() { return Arrays.asList(Server.values()); }
+    public List<Server> getServerOptions() {
+        return Arrays.asList(Server.values());
+    }
 
     @OptionValues("type")
     public List<EntryPointType> getTypes() {

@@ -21,8 +21,8 @@ public class ValidateStructureTask extends DefaultTask {
     private final Logger logger = getProject().getLogger();
     private static final String MODEL_MODULE = "model";
     private static final String USE_CASE_MODULE = "usecase";
-    private static final String REACTOR_CORE ="reactor-core";
-    private static final String REACTOR_EXTRA ="reactor-extra";
+    private static final String REACTOR_CORE = "reactor-core";
+    private static final String REACTOR_EXTRA = "reactor-extra";
 
 
     @TaskAction
@@ -61,8 +61,8 @@ public class ValidateStructureTask extends DefaultTask {
 
             logger.lifecycle("Validating Use Case Module");
             Configuration configuration = getConfiguration(USE_CASE_MODULE);
-            DependencySet dependencies= configuration.getAllDependencies();
-            return  dependencies.stream()
+            DependencySet dependencies = configuration.getAllDependencies();
+            return dependencies.stream()
                     .filter(this::filterReactorDependencies)
                     .count() == 1
                     && dependencies.stream()

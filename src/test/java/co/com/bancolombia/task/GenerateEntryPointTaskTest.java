@@ -171,7 +171,6 @@ public class GenerateEntryPointTaskTest {
     }
 
 
-
     @Test
     public void shouldGetServerOptions() {
         // Arrange

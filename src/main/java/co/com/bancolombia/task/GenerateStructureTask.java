@@ -55,7 +55,9 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     @OptionValues("lombok")
-    public List<BooleanOption> getLombokOptions() { return  Arrays.asList(BooleanOption.values()); }
+    public List<BooleanOption> getLombokOptions() {
+        return Arrays.asList(BooleanOption.values());
+    }
 
 
     @TaskAction
