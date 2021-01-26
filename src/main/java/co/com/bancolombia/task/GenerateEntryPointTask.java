@@ -52,6 +52,8 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
         logger.lifecycle("Entry Point type: {}", type);
         builder.addParam("task-param-name", name);
         builder.addParam("task-param-server", server);
+        builder.addParam("lombok", builder.isEnableLombok());
+
         moduleFactory.buildModule(builder);
         builder.persist();
     }

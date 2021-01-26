@@ -4,6 +4,7 @@
 package co.com.bancolombia;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
@@ -15,7 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import static org.junit.Assert.*;
 
@@ -30,6 +32,7 @@ public class PluginCleanFunctionalTest {
     @Before
     public void init() throws IOException {
         // Setup the test build
+        deleteStructure(projectDir.toPath());
         Files.createDirectories(projectDir.toPath());
         writeString(new File(projectDir, "settings.gradle"), "");
         writeString(new File(projectDir, "build.gradle"),
@@ -39,6 +42,63 @@ public class PluginCleanFunctionalTest {
         runner = GradleRunner.create();
         runner.forwardOutput();
         runner.withPluginClasspath();
+    }
+
+    private void deleteStructure(Path sourcePath)  {
+
+        try {
+            Files.walkFileTree(sourcePath, new SimplePathVisitor() {
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+                @Override
+                public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException{
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+                });
+        } catch (IOException e) {
+            System.out.println("error delete Structure "+ e.getMessage() );
+        }
+    }
+
+    @Test
+    public void canRunTaskGenerateStructureWithOutLombok() {
+
+        String task = "ca";
+
+        runner.withArguments(task, "--lombok=" + "false");
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        // Verify the result
+        assertTrue(new File("build/functionalTest/README.md").exists());
+        assertTrue(new File("build/functionalTest/.gitignore").exists());
+        assertTrue(new File("build/functionalTest/build.gradle").exists());
+        assertFalse(new File("build/functionalTest/lombok.config").exists());
+        assertTrue(new File("build/functionalTest/main.gradle").exists());
+        assertTrue(new File("build/functionalTest/settings.gradle").exists());
+
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
+
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model").exists());
+        assertTrue(new File("build/functionalTest/domain/model/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/src/test/java/co/com/bancolombia/usecase").exists());
+        assertTrue(new File("build/functionalTest/domain/usecase/build.gradle").exists());
+
+        assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/application.yaml").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/resources/log4j2.properties").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
     @Test
@@ -81,7 +141,7 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateStructureWithOutParametersValidator() {
 
 
-        runner.withArguments("ca");
+        runner.withArguments("ca","--lombok=" + "false");
         runner.withProjectDir(projectDir);
         runner.build();
 
@@ -157,6 +217,7 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateModelWithParameters() {
         String task = "generateModel";
         String modelName = "testModel";
+        canRunTaskGenerateStructureWithOutParameters();
 
         // Run the build
         runner.withArguments(task, "--name=" + modelName);
@@ -327,7 +388,7 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskValidateStructureWithOutParameters() {
-        canRunTaskGenerateStructureWithOutParametersValidator();
+         canRunTaskGenerateStructureWithOutParametersValidator();
         String task = "validateStructure";
 
         runner.withArguments(task);

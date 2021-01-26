@@ -56,6 +56,8 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         logger.lifecycle("Driven Adapter type: {}", type);
         builder.addParam("task-param-name", name);
         builder.addParam("include-secret", secret == BooleanOption.TRUE);
+        builder.addParam("lombok", builder.isEnableLombok());
+
         moduleFactory.buildModule(builder);
         builder.persist();
     }

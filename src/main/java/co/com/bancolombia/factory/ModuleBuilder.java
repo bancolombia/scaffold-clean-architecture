@@ -183,13 +183,20 @@ public class ModuleBuilder {
     }
 
     public Boolean isReactive() {
+        return getABooleanProperty("reactive");
+    }
+    public Boolean isEnableLombok() {
+        return getABooleanProperty("lombok");
+    }
+
+    private Boolean getABooleanProperty(String property) {
         try {
-            String reactive = FileUtils.readProperties(project.getProjectDir().getPath(), "reactive");
-            return "true".equals(reactive);
+            String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
+            return "true".equals(value);
         } catch (IOException e) {
             logger.warn(e.getMessage());
-            logger.lifecycle("WARN: variable reactive not present, if your project is reactive please add" +
-                    " reactive=true to gradle.properties and relaunch this task");
+            logger.lifecycle("WARN: variable "+ property +" not present, if your project use "+ property +" please add " +
+                    property +"=true to gradle.properties and relaunch this task");
             return false;
         }
     }

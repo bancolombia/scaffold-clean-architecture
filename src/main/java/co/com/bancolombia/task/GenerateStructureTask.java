@@ -15,6 +15,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     private ProjectType type = ProjectType.IMPERATIVE;
     private CoveragePlugin coverage = CoveragePlugin.JACOCO;
     private String name = "cleanArchitecture";
+    private LombokStatus lombok = LombokStatus.TRUE;
 
     @Option(option = "package", description = "Set principal package to use in the project")
     public void setPackage(String packageName) {
@@ -36,6 +37,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
         this.coverage = coverage;
     }
 
+    @Option(option = "lombok", description = "Switch the satus of lombok in this project")
+    public void setStatusLombok(LombokStatus lombok) {
+        this.lombok = lombok;
+    }
+
     @OptionValues("type")
     public List<ProjectType> getAvailableProjectTypes() {
         return Arrays.asList(ProjectType.values());
@@ -45,6 +51,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     public List<CoveragePlugin> getCoveragePlugins() {
         return Arrays.asList(CoveragePlugin.values());
     }
+
+    @OptionValues("lombok")
+    public List<LombokStatus> getStatusLombok() { return  Arrays.asList(LombokStatus.values()); }
+
+
 
     @TaskAction
     public void generateStructureTask() throws IOException, CleanException {
@@ -57,7 +68,12 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
         builder.addParam("reactive", type == ProjectType.REACTIVE);
         builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
         builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
-        builder.setupFromTemplate("structure");
+        builder.addParam("lombok", lombok == LombokStatus.TRUE);
+        if (lombok == LombokStatus.TRUE) {
+            builder.setupFromTemplate("structure");
+        } else {
+            builder.setupFromTemplate("structure/without-lombok");
+        }
         builder.persist();
     }
 
@@ -67,5 +83,9 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
     public enum CoveragePlugin {
         JACOCO, COBERTURA
+    }
+
+    public enum LombokStatus {
+        TRUE, FALSE
     }
 }

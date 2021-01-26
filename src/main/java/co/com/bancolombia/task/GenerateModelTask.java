@@ -27,6 +27,8 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
         builder.loadPackage();
         builder.addParam("modelName", name.toLowerCase());
         builder.addParam("modelClassName", name);
+        builder.addParam("lombok", builder.isEnableLombok());
+
         builder.setupFromTemplate("model");
         builder.persist();
     }
