@@ -1,0 +1,36 @@
+package {{package}}.api;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+@Component
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class Handler {
+//private  final UseCase useCase;
+//private  final UseCase2 useCase2;
+{{^lombok}}
+    public Handler() {
+    }
+{{/lombok}}
+    public Mono<ServerResponse> listenGETUseCase(ServerRequest serverRequest) {
+        // usecase.logic();
+        return ServerResponse.ok().body("", String.class);
+    }
+
+    public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
+        // useCase2.logic();
+        return ServerResponse.ok().body("", String.class);
+    }
+
+    public Mono<ServerResponse> listenPOSTUseCase(ServerRequest serverRequest) {
+        // usecase.logic();
+        return ServerResponse.ok().body("", String.class);
+    }
+}

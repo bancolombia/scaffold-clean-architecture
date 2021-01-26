@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -110,6 +111,15 @@ public class GenerateStructureTaskTest {
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/application.yaml").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/main/resources/log4j2.properties").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/test/java/test").exists());
+    }
+
+    @Test
+    public void shouldGetLombokOptions() {
+        // Arrange
+        // Act
+        List<Constants.BooleanOption> options = task.getLombokOptions();
+        // Assert
+        assertEquals(2, options.size());
     }
 
 }

@@ -44,7 +44,7 @@ public class PluginCleanFunctionalTest {
         runner.withPluginClasspath();
     }
 
-    private void deleteStructure(Path sourcePath)  {
+    private void deleteStructure(Path sourcePath) {
 
         try {
             Files.walkFileTree(sourcePath, new SimplePathVisitor() {
@@ -53,14 +53,15 @@ public class PluginCleanFunctionalTest {
                     Files.delete(dir);
                     return FileVisitResult.CONTINUE;
                 }
+
                 @Override
-                public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException{
+                public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
                     Files.delete(file);
                     return FileVisitResult.CONTINUE;
                 }
-                });
+            });
         } catch (IOException e) {
-            System.out.println("error delete Structure "+ e.getMessage() );
+            System.out.println("error delete Structure " + e.getMessage());
         }
     }
 
@@ -141,7 +142,7 @@ public class PluginCleanFunctionalTest {
     public void canRunTaskGenerateStructureWithOutParametersValidator() {
 
 
-        runner.withArguments("ca","--lombok=" + "false");
+        runner.withArguments("ca", "--lombok=" + "false");
         runner.withProjectDir(projectDir);
         runner.build();
 
@@ -157,7 +158,7 @@ public class PluginCleanFunctionalTest {
     }
 
     public void canRunTaskGenerateStructureReactiveProject() {
-        runner.withArguments("ca","--type=reactive");
+        runner.withArguments("ca", "--type=reactive");
         runner.withProjectDir(projectDir);
         runner.build();
 
@@ -171,7 +172,6 @@ public class PluginCleanFunctionalTest {
         runner.build();
 
     }
-
 
 
     @Test
@@ -388,7 +388,7 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskValidateStructureWithOutParameters() {
-         canRunTaskGenerateStructureWithOutParametersValidator();
+        canRunTaskGenerateStructureWithOutParametersValidator();
         String task = "validateStructure";
 
         runner.withArguments(task);
