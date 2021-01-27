@@ -11,9 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 
 import static org.junit.Assert.*;
 
@@ -211,10 +209,4 @@ public class ValidateStructureTaskTest {
         task.validateStructureTask();
         // Assert
     }
-
-
-
-
-
-
 }
