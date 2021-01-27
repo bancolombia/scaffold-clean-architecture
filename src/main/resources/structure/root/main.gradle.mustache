@@ -27,11 +27,12 @@ subprojects {
         {{/reactive}}
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         {{#lombok}}
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
-        testAnnotationProcessor 'org.projectlombok:lombok'
-        testCompileOnly 'org.projectlombok:lombok'
+        compileOnly 'org.projectlombok:lombok:{{lombokVersion}}'
+        annotationProcessor 'org.projectlombok:lombok:{{lombokVersion}}'
+        testAnnotationProcessor 'org.projectlombok:lombok:{{lombokVersion}}'
+        testCompileOnly 'org.projectlombok:lombok:{{lombokVersion}}'
         {{/lombok}}
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
     {{#jacoco}}
@@ -55,12 +56,6 @@ subprojects {
     }
     {{/cobertura}}
 
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-        }
-    }
 }
 
 {{#jacoco}}
