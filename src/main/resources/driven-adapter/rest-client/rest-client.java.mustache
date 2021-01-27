@@ -1,0 +1,57 @@
+package {{package}}.client;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.RequestBody;
+import okhttp3.MediaType;
+
+import org.springframework.stereotype.Service;
+import java.io.IOException;
+
+@Service
+public class RestClient // implements Gate from domain
+{
+    OkHttpClient client = new OkHttpClient();
+
+    // these  method is an example that illustrates the implementation of OKHTTP Client.
+    // You should use the methods that you implement from the Gateway from the domain.
+
+    public void testGet() throws IOException {
+
+        Request request = new Request.Builder()
+            .url("https://run.mocky.io/v3/27f6acd9-6257-4909-bdda-9466bc65e256")
+            .get()
+            .addHeader("my-header-example","val-my-herder-example")
+            .build();
+
+        Response response = client.newCall(request).execute();
+
+        System.out.println(response.body().string());
+
+    }
+
+    public void testPost() throws IOException {
+
+        String json = new StringBuilder()
+            .append("{")
+            .append("\"val1\":\"example1\",")
+            .append("\"val2\":\"example2\"")
+            .append("}").toString();
+
+        RequestBody requestBody = RequestBody
+            .create(MediaType.parse("application/json; charset=utf-8"), json);
+
+        Request request = new Request.Builder()
+            .url("https://run.mocky.io/v3/27f6acd9-6257-4909-bdda-9466bc65e256")
+            .post(requestBody)
+            .addHeader("my-header-example","val-my-herder-example")
+            .build();
+
+        Response response = client.newCall(request).execute();
+
+        System.out.println(response.body().string());
+
+    }
+
+}
