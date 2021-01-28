@@ -3,7 +3,6 @@ package co.com.bancolombia.factory.adapters;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.utils.Utils;
 import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
@@ -15,14 +14,17 @@ public class DrivenAdapterRestClient implements ModuleFactory {
         Logger logger = builder.getProject().getLogger();
         builder.loadPackage();
         if (builder.isReactive()) {
-            logger.lifecycle("Generating for reactive project");
-            builder.setupFromTemplate("driven-adapter/reactive-rest-client");
+            logger.lifecycle("Generating rest-consumer for reactive project");
+            builder.setupFromTemplate("driven-adapter/reactive-rest-consumer");
         } else {
-            logger.lifecycle("Generating for imperative project");
-            builder.setupFromTemplate("driven-adapter/rest-client");
+            logger.lifecycle("Generating rest-consumer for imperative project");
+            builder.setupFromTemplate("driven-adapter/rest-consumer");
+            builder.appendDependencyToModule("app-service", "compile 'com.fasterxml.jackson.core:jackson-databind'");
         }
-        builder.appendToSettings("rest-client", "infrastructure/driven-adapters");
-        builder.appendDependencyToModule("app-service", "implementation project(':rest-client')");
+        builder.appendToProperties("adapter.restconsumer")
+                .put("url", builder.getStringParam("task-param-url"));
+        builder.appendToSettings("rest-consumer", "infrastructure/driven-adapters");
+        builder.appendDependencyToModule("app-service", "implementation project(':rest-consumer')");
 
     }
 

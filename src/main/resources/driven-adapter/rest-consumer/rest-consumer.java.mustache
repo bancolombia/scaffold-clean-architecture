@@ -1,0 +1,63 @@
+package {{package}}.consumer;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.MediaType;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import java.io.IOException;
+
+@Service
+@RequiredArgsConstructor
+public class RestConsumer // implements Gate from domain
+{
+
+    @Value("${adapter.restconsumer.url}")
+    private String url;
+
+    private final OkHttpClient client;
+    private final ObjectMapper mapper;
+
+    // these  method is an example that illustrates the implementation of OKHTTP Client.
+    // You should use the methods that you implement from the Gateway from the domain.
+
+    public void testGet() throws IOException {
+
+        Request request = new Request.Builder()
+            .url(url)
+            .get()
+            .addHeader("Content-Type","application/json")
+            .build();
+
+        ObjectResponse response = mapper
+            .readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
+
+    }
+
+    public void testPost() throws IOException {
+
+        String json = mapper.writeValueAsString(ObjectRequest.builder()
+            .val1("exampleval1")
+            .val2("exampleval1")
+            .build()
+        );
+
+        RequestBody requestBody = RequestBody
+            .create(MediaType.parse("application/json; charset=utf-8"), json);
+
+        Request request = new Request.Builder()
+            .url("{{task-param-url}}")
+            .post(requestBody)
+            .addHeader("Content-Type","application/json")
+            .build();
+
+        ObjectResponse response = mapper
+            .readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
+
+    }
+
+}
