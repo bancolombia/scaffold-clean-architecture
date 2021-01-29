@@ -30,7 +30,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         this.name = name;
     }
 
-    @Option(option = "url", description = "Set driven adapter url when RESTCLIENT type")
+    @Option(option = "url", description = "Set driven adapter url when RESTCONSUMER type")
     public void setUrl(String url) {
         this.url = url;
     }
@@ -61,7 +61,6 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
         logger.lifecycle("Driven Adapter type: {}", type);
         builder.addParam("task-param-name", name);
-        logger.lifecycle("Driven Adapter url: {}", url);
         builder.addParam("include-secret", secret == BooleanOption.TRUE);
         builder.addParam("lombok", builder.isEnableLombok());
         builder.addParam("task-param-url", url);

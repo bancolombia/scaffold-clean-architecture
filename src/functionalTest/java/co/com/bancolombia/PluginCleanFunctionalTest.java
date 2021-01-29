@@ -245,6 +245,23 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateDrivenAdapterRestConsumerCaseWithParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "restconsumer";
+        String valueurlDrivenAdapter = "http://localhost";
+
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withArguments(task, "--url=" + valueurlDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/build.gradle").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateEntryPointCaseWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateEntryPoint";

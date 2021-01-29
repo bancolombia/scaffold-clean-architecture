@@ -7,7 +7,7 @@ import org.gradle.api.logging.Logger;
 
 import java.io.IOException;
 
-public class DrivenAdapterRestClient implements ModuleFactory {
+public class DrivenAdapterRestConsumer implements ModuleFactory {
 
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
@@ -16,6 +16,7 @@ public class DrivenAdapterRestClient implements ModuleFactory {
         if (builder.isReactive()) {
             logger.lifecycle("Generating rest-consumer for reactive project");
             builder.setupFromTemplate("driven-adapter/reactive-rest-consumer");
+            builder.appendDependencyToModule("app-service","compile 'org.springframework.boot:spring-boot-starter-webflux'");
         } else {
             logger.lifecycle("Generating rest-consumer for imperative project");
             builder.setupFromTemplate("driven-adapter/rest-consumer");
