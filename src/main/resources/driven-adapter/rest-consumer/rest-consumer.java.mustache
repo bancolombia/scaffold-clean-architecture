@@ -16,13 +16,13 @@ import java.io.IOException;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class RestConsumer // implements Gate from domain
+public class RestConsumer // implements Gateway from domain
 {
 
     @Value("${adapter.restconsumer.url}")
     private String url;
     private final OkHttpClient client;
-    private final ObjectMapper mapper;
+    private final ObjectMapper mapper; //
 
     {{^lombok}}
     public RestConsumer(OkHttpClient client, ObjectMapper mapper) {
@@ -31,7 +31,7 @@ public class RestConsumer // implements Gate from domain
     }
     {{/lombok}}
 
-    // these  method is an example that illustrates the implementation of OKHTTP Client.
+    // these methods are an example that illustrates the implementation of OKHTTP Client.
     // You should use the methods that you implement from the Gateway from the domain.
 
     public void testGet() throws IOException { // remember return in terms of the domain

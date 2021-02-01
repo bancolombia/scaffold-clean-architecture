@@ -177,7 +177,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
-   When use `mongodb` type please be sure that property 'reactive' is set correctly in gradle.properties
+   When use `mongodb` or `restconsumer` type please be sure that property 'reactive' is set correctly in gradle.properties
 
    - For _**reactive**_ projects should be:
 
@@ -197,6 +197,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | jpa                                 | JPA Repository       | --secret [true-false] |
    | mongodb                             | Mongo Repository     | --secret [true-false] |
    | asynceventbus                       | Async Event Bus      |                       |
+   | restconsumer                        | Rest Client Consumer | --url [url]           |
 
    _**This task will generate something like that:**_
 

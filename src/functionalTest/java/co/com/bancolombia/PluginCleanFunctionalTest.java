@@ -249,10 +249,9 @@ public class PluginCleanFunctionalTest {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateDrivenAdapter";
         String valueDrivenAdapter = "restconsumer";
-        String valueurlDrivenAdapter = "http://localhost";
+        String valueurlDrivenAdapter = "http://localhost:8080";
 
-        runner.withArguments(task, "--type=" + valueDrivenAdapter);
-        runner.withArguments(task, "--url=" + valueurlDrivenAdapter);
+        runner.withArguments(task, "--type=" + valueDrivenAdapter, "--url=" + valueurlDrivenAdapter);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java").exists());

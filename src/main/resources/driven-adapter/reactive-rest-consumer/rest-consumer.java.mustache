@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class RestConsumer // implements Gate from domain
+public class RestConsumer // implements Gateway from domain
 {
 
     private final WebClient client;
@@ -22,7 +22,7 @@ public class RestConsumer // implements Gate from domain
     }
 {{/lombok}}
 
-    // these  method is an example that illustrates the implementation of WebClient.
+    // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
 
     public void testGet() { // remember return in terms of the domain
