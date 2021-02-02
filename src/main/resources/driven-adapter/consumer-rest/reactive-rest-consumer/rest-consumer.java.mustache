@@ -25,16 +25,16 @@ public class RestConsumer // implements Gateway from domain
     // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
 
-    public void testGet() { // remember return in terms of the domain
+    public Mono<ObjectResponse> testGet() {
 
-        Mono<ObjectResponse> response = client
+        return client
             .get()
             .retrieve()
             .bodyToMono(ObjectResponse.class);
 
     }
 
-    public void testPost() { // remember return in terms of the domain
+    public Mono<ObjectResponse> testPost() {
 
     {{#lombok}}
         ObjectRequest request = ObjectRequest.builder()
@@ -48,7 +48,7 @@ public class RestConsumer // implements Gateway from domain
         request.setVal2("exampleval2");
     {{/lombok}}
 
-        Mono<ObjectResponse> response = client
+        return client
             .post()
             .body(Mono.just(request), ObjectRequest.class)
             .retrieve()

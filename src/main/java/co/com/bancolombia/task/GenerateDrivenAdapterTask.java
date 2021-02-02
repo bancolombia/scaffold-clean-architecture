@@ -17,7 +17,7 @@ import java.util.List;
 public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     private DrivenAdapterType type;
     private String name;
-    private String url = "https://run.mocky.io/v3/27f6acd9-6257-4909-bdda-9466bc65e256";
+    private String url = "http://localhost:8080";
     private BooleanOption secret = BooleanOption.FALSE;
 
     @Option(option = "type", description = "Set type of driven adapter to be generated")

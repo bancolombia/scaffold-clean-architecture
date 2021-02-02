@@ -22,7 +22,7 @@ public class RestConsumer // implements Gateway from domain
     @Value("${adapter.restconsumer.url}")
     private String url;
     private final OkHttpClient client;
-    private final ObjectMapper mapper; //
+    private final ObjectMapper mapper;
 
     {{^lombok}}
     public RestConsumer(OkHttpClient client, ObjectMapper mapper) {
@@ -34,7 +34,7 @@ public class RestConsumer // implements Gateway from domain
     // these methods are an example that illustrates the implementation of OKHTTP Client.
     // You should use the methods that you implement from the Gateway from the domain.
 
-    public void testGet() throws IOException { // remember return in terms of the domain
+    public ObjectResponse testGet() throws IOException {
 
         Request request = new Request.Builder()
             .url(url)
@@ -42,12 +42,10 @@ public class RestConsumer // implements Gateway from domain
             .addHeader("Content-Type","application/json")
             .build();
 
-        ObjectResponse response = mapper
-            .readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
-
+        return mapper.readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
     }
 
-    public void testPost() throws IOException { // remember return in terms of the domain
+    public ObjectResponse testPost() throws IOException {
         {{#lombok}}
         String json = mapper.writeValueAsString(ObjectRequest.builder()
             .val1("exampleval1")
@@ -72,8 +70,7 @@ public class RestConsumer // implements Gateway from domain
             .addHeader("Content-Type","application/json")
             .build();
 
-        ObjectResponse response = mapper
-            .readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
+        return mapper.readValue(client.newCall(request).execute().body().string(), ObjectResponse.class);
 
     }
 

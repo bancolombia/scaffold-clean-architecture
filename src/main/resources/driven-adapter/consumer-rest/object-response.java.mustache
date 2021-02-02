@@ -5,8 +5,7 @@ package {{package}}.consumer;
     import lombok.Builder;
     import lombok.Data;
     import lombok.NoArgsConstructor;
-{{/lombok}}
-{{#lombok}}
+
     @Data
     @Builder(toBuilder = true)
     @NoArgsConstructor
@@ -20,11 +19,11 @@ private String state;
     public ObjectResponse() {}
 
     public String getState() {
-    return state;
+        return state;
     }
 
     public void setState(String state) {
-    this.state = state;
+        this.state = state;
     }
 {{/lombok}}
 }

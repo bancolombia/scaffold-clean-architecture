@@ -177,20 +177,6 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
-   When use `mongodb` or `restconsumer` type please be sure that property 'reactive' is set correctly in gradle.properties
-
-   - For _**reactive**_ projects should be:
-
-     ```shell
-     reactive=true
-     ```
-
-   - For _**imperative**_ projects should be:
-
-     ```shell
-     reactive=false
-     ```
-
    | Reference for **drivenAdapterType** | Name                 | Additional Options    |
    | ----------------------------------- | -------------------- | --------------------- |
    | generic                             | Empty Driven Adapter | --name [name]         |

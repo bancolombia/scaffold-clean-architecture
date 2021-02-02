@@ -1,19 +1,18 @@
 package {{package}}.consumer;
 
 {{#lombok}}
-import lombok.Builder;
-import lombok.Data;
-{{/lombok}}
-{{#lombok}}
-@Data
-@Builder(toBuilder = true)
+    import lombok.Builder;
+    import lombok.Data;
+
+    @Data
+    @Builder(toBuilder = true)
 {{/lombok}}
 public class ObjectRequest {
 
-    private String val1;
-    private String val2;
+private String val1;
+private String val2;
 
-    {{^lombok}}
+{{^lombok}}
     public ObjectRequest() {
     }
 
@@ -32,5 +31,5 @@ public class ObjectRequest {
     public void setVal2(String val2) {
         this.val2 = val2;
     }
-    {{/lombok}}
+{{/lombok}}
 }
