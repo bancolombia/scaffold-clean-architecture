@@ -85,6 +85,21 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
+    public void generateRestConsumer() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+        task.setUrl("http://localhost:8080");
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectResponse.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectRequest.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java").exists());
+    }
+
+    @Test
     public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);
@@ -161,6 +176,22 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java").exists());
         assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java").exists());
+    }
+
+    @Test
+    public void generateReactiveRestConsumer() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setUrl("http://localhost:8080");
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectResponse.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectRequest.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java").exists());
     }
 
     @Test

@@ -17,6 +17,7 @@ import java.util.List;
 public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     private DrivenAdapterType type;
     private String name;
+    private String url = "http://localhost:8080";
     private BooleanOption secret = BooleanOption.FALSE;
 
     @Option(option = "type", description = "Set type of driven adapter to be generated")
@@ -27,6 +28,11 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     @Option(option = "name", description = "Set driven adapter name when GENERIC type")
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Option(option = "url", description = "Set driven adapter url when RESTCONSUMER type")
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Option(option = "secret", description = "Enable secrets for this driven adapter")
@@ -57,7 +63,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         builder.addParam("task-param-name", name);
         builder.addParam("include-secret", secret == BooleanOption.TRUE);
         builder.addParam("lombok", builder.isEnableLombok());
-
+        builder.addParam("task-param-url", url);
         moduleFactory.buildModule(builder);
         builder.persist();
     }

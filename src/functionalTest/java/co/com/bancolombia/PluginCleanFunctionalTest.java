@@ -77,7 +77,6 @@ public class PluginCleanFunctionalTest {
         assertTrue(new File("build/functionalTest/README.md").exists());
         assertTrue(new File("build/functionalTest/.gitignore").exists());
         assertTrue(new File("build/functionalTest/build.gradle").exists());
-        assertFalse(new File("build/functionalTest/lombok.config").exists());
         assertTrue(new File("build/functionalTest/main.gradle").exists());
         assertTrue(new File("build/functionalTest/settings.gradle").exists());
 
@@ -240,6 +239,22 @@ public class PluginCleanFunctionalTest {
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();
         assertTrue(new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateDrivenAdapterRestConsumerCaseWithParameters() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "restconsumer";
+        String valueurlDrivenAdapter = "http://localhost:8080";
+
+        runner.withArguments(task, "--type=" + valueDrivenAdapter, "--url=" + valueurlDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/build.gradle").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }

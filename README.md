@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.7.1"
+    id "co.com.bancolombia.cleanArchitecture" version "1.8.0"
 }
 ```
 
@@ -177,26 +177,13 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
-   When use `mongodb` type please be sure that property 'reactive' is set correctly in gradle.properties
-
-   - For _**reactive**_ projects should be:
-
-     ```shell
-     reactive=true
-     ```
-
-   - For _**imperative**_ projects should be:
-
-     ```shell
-     reactive=false
-     ```
-
    | Reference for **drivenAdapterType** | Name                 | Additional Options    |
    | ----------------------------------- | -------------------- | --------------------- |
    | generic                             | Empty Driven Adapter | --name [name]         |
    | jpa                                 | JPA Repository       | --secret [true-false] |
    | mongodb                             | Mongo Repository     | --secret [true-false] |
    | asynceventbus                       | Async Event Bus      |                       |
+   | restconsumer                        | Rest Client Consumer | --url [url]           |
 
    _**This task will generate something like that:**_
 
