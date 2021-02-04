@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up JDK 1.11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 1.11
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Execute jacocoTestReport
@@ -42,22 +42,11 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up JDK 1.11
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 1.11
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Execute jacocoTestReport
-        run: ./gradlew test jacocoTestReport && cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
-      - name: Build with Gradle
-        run: ./gradlew build --refresh-dependencies --no-daemon --continue
-      - name: Push codeCoverage to Codecov
-        run: bash <(curl -s https://codecov.io/bash)
-      - name: Run sonarqube
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew sonarqube --stacktrace 
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
