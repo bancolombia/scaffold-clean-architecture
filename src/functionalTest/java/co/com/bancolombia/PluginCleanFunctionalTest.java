@@ -470,6 +470,30 @@ public class PluginCleanFunctionalTest {
         assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
     }
 
+    @Test(expected = Exception.class)
+    public void validateStructureReactiveWithInvalidModel() throws IOException {
+        canRunTaskGenerateStructureReactiveProject();
+        writeString(new File("build/functionalTest/domain/model/build.gradle"),"compile 'org.springframework.boot:spring-boot-starter'");
+
+        // Act
+        runner.withArguments("validateStructure");
+        runner.withProjectDir(projectDir);
+        runner.build();
+    }
+
+    @Test(expected = Exception.class)
+    public void validateStructureReactiveWithInvalidUseCase() throws IOException {
+        canRunTaskGenerateStructureReactiveProject();
+        writeString(new File("build/functionalTest/domain/usecase/build.gradle"),"compile 'org.springframework.boot:spring-boot-starter'");
+
+        // Act
+        runner.withArguments("validateStructure");
+        runner.withProjectDir(projectDir);
+        runner.build();
+    }
+
+
+
 
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {
