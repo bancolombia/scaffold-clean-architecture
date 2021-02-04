@@ -77,7 +77,6 @@ public class PluginCleanFunctionalTest {
         assertTrue(new File("build/functionalTest/README.md").exists());
         assertTrue(new File("build/functionalTest/.gitignore").exists());
         assertTrue(new File("build/functionalTest/build.gradle").exists());
-        //assertFalse(new File("build/functionalTest/lombok.config").exists());
         assertTrue(new File("build/functionalTest/main.gradle").exists());
         assertTrue(new File("build/functionalTest/settings.gradle").exists());
 

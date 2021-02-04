@@ -193,7 +193,6 @@ public class GenerateEntryPointTaskTest {
         // Act
         task.generateEntryPointTask();
         // Assert
-        //assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
@@ -207,7 +206,6 @@ public class GenerateEntryPointTaskTest {
         // Act
         task.generateEntryPointTask();
         // Assert
-        //assertFalse(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
