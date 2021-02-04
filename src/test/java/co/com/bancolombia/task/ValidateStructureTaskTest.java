@@ -209,6 +209,4 @@ public class ValidateStructureTaskTest {
         task.validateStructureTask();
         // Assert
     }
-
-
 }

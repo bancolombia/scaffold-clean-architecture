@@ -46,12 +46,12 @@ public class ModuleBuilder {
         params.put("projectNameLower", getProject().getName().toLowerCase());
         params.put("pluginVersion", Constants.PLUGIN_VERSION);
         params.put("springBootVersion", Constants.SPRING_BOOT_VERSION);
-        params.put("springCloudVersion", Constants.SPRING_CLOUD_VERSION);
         params.put("sonarVersion", Constants.SONAR_VERSION);
         params.put("jacocoVersion", Constants.JACOCO_VERSION);
         params.put("asyncCommonsStarterVersion", Constants.RCOMMONS_ASYNC_COMMONS_STARTER_VERSION);
         params.put("objectMapperVersion", Constants.RCOMMONS_OBJECT_MAPPER_VERSION);
         params.put("coberturaVersion", Constants.COBERTURA_VERSION);
+        params.put("lombokVersion", Constants.LOMBOK_VERSION);
     }
 
     public void persist() throws IOException {

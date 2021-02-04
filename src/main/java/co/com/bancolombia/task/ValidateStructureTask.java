@@ -23,6 +23,7 @@ public class ValidateStructureTask extends DefaultTask {
     private static final String USE_CASE_MODULE = "usecase";
     private static final String REACTOR_CORE = "reactor-core";
     private static final String REACTOR_EXTRA = "reactor-extra";
+    private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
 
 
     @TaskAction
@@ -50,7 +51,7 @@ public class ValidateStructureTask extends DefaultTask {
             logger.lifecycle("Validating Model Module");
             Configuration configuration = getConfiguration(MODEL_MODULE);
             return configuration.getAllDependencies()
-                    .stream().noneMatch(this::filterReactorDependencies);
+                    .stream().noneMatch(this::filterExcludedDependencies);
         }
         logger.warn("Model module not found");
         return true;
@@ -63,17 +64,17 @@ public class ValidateStructureTask extends DefaultTask {
             Configuration configuration = getConfiguration(USE_CASE_MODULE);
             DependencySet dependencies = configuration.getAllDependencies();
             return dependencies.stream()
-                    .filter(this::filterReactorDependencies)
+                    .filter(this::filterExcludedDependencies)
                     .count() == 1
                     && dependencies.stream()
-                    .filter(this::filterReactorDependencies).iterator().next().getName().contains((MODEL_MODULE));
+                    .filter(this::filterExcludedDependencies).iterator().next().getName().contains((MODEL_MODULE));
         }
         logger.warn("Use case module not found");
         return true;
     }
 
-    private boolean filterReactorDependencies(Dependency dependency) {
-        return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE).contains(dependency.getName());
+    private boolean filterExcludedDependencies(Dependency dependency) {
+        return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE, SPRING_DEPENDENCIES).contains(dependency.getName());
     }
 
     private boolean validateInfrastructureLayer() {
