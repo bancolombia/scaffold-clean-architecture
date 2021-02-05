@@ -12,7 +12,6 @@ public class DrivenAdapterJPA implements ModuleFactory {
         builder.loadPackage();
         builder.setupFromTemplate("driven-adapter/jpa-repository");
         builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
-        builder.appendToSettings("jpa-repository-commons", "infrastructure/helpers");
         builder.appendToProperties("spring.datasource")
                 .put("url", "jdbc:h2:mem:test")
                 .put("username", "sa")
