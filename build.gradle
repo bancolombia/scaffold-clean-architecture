@@ -18,7 +18,6 @@ buildscript {
     }
 }
 
-
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id 'java-gradle-plugin'
@@ -33,6 +32,10 @@ group 'co.com.bancolombia.cleanArchitecture'
 
 version System.getProperty('version')
 
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     // Use jcenter for resolving dependencies.
