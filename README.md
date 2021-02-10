@@ -184,6 +184,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | mongodb                             | Mongo Repository     | --secret [true-false] |
    | asynceventbus                       | Async Event Bus      |                       |
    | restconsumer                        | Rest Client Consumer | --url [url]           |
+   | redis                               | Redis Template       | --secret [true-false] |
+   | redisrepository                     | Redis Repository     | --secret [true-false] |
 
    _**This task will generate something like that:**_
 
