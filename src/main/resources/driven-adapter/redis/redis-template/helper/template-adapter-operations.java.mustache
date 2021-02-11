@@ -1,0 +1,53 @@
+package {{package}}.redis.template.helper;
+
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.function.Function;
+
+public abstract class TemplateAdapterOperations<E, K, V> {
+    private final RedisTemplate<K, V> template;
+    private final Class<V> dataClass;
+    protected ObjectMapper mapper;
+    private final Function<V, E> toEntityFn;
+
+    @SuppressWarnings("unchecked")
+    public TemplateAdapterOperations(RedisConnectionFactory connectionFactory, ObjectMapper mapper, Function<V, E> toEntityFn) {
+        this.mapper = mapper;
+        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+        this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];
+        this.toEntityFn = toEntityFn;
+
+        template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setDefaultSerializer(new Jackson2JsonRedisSerializer<>(dataClass));
+        template.afterPropertiesSet();
+    }
+
+    public E save(K key, E entity) {
+        template.opsForValue().set(key, toValue(entity));
+        return entity;
+    }
+
+    public E save(K key, E entity, long expirationMillis) {
+        E result = save(key, entity);
+        template.expire(key, Duration.ofMillis(expirationMillis));
+        return result;
+    }
+
+    public E findById(K key) {
+        return toEntity(template.opsForValue().get(key));
+    }
+
+    protected V toValue(E entity) {
+        return mapper.map(entity, dataClass);
+    }
+
+    protected E toEntity(V data) {
+        return data != null ? toEntityFn.apply(data) : null;
+    }
+
+}
