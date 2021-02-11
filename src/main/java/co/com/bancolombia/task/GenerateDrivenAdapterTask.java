@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter.DrivenAdapterType;
 import co.com.bancolombia.utils.Utils;
@@ -18,6 +19,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     private DrivenAdapterType type;
     private String name;
     private String url = "http://localhost:8080";
+    private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
     private BooleanOption secret = BooleanOption.FALSE;
 
     @Option(option = "type", description = "Set type of driven adapter to be generated")
@@ -33,6 +35,11 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     @Option(option = "url", description = "Set driven adapter url when RESTCONSUMER type")
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Option(option = "mode", description = "Set template or reposiroty mode when REDIS type")
+    public void setMode(DrivenAdapterRedis.Mode mode) {
+        this.mode = mode;
     }
 
     @Option(option = "secret", description = "Enable secrets for this driven adapter")
@@ -62,6 +69,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         logger.lifecycle("Driven Adapter type: {}", type);
         builder.addParam("task-param-name", name);
         builder.addParam("include-secret", secret == BooleanOption.TRUE);
+        builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
         builder.addParam("lombok", builder.isEnableLombok());
         builder.addParam("task-param-url", url);
         moduleFactory.buildModule(builder);

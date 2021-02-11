@@ -2,6 +2,7 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -219,7 +220,8 @@ public class GenerateDrivenAdapterTaskTest {
     public void generateDrivenAdapterRedisRepositoryForImperative() throws IOException, CleanException {
         // Arrange
         setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDISREPOSITORY);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
         // Act
         task.generateDrivenAdapterTask();
         // Assert
@@ -233,7 +235,8 @@ public class GenerateDrivenAdapterTaskTest {
     public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret() throws IOException, CleanException {
         // Arrange
         setup(GenerateStructureTask.ProjectType.REACTIVE);
-        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDISREPOSITORY);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
         task.setSecret(Constants.BooleanOption.TRUE);
         // Act
         task.generateDrivenAdapterTask();

@@ -10,14 +10,14 @@ import java.io.IOException;
 
 @AllArgsConstructor
 public class DrivenAdapterRedis implements ModuleFactory {
-    private final Mode mode;
+    public static final String PARAM_MODE = "task-param-mode";
 
     @Override
     public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
         Logger logger = builder.getProject().getLogger();
         builder.loadPackage();
         String typePath = getPathType(builder.isReactive());
-        String modePath = getPathMode();
+        String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
         logger.lifecycle("Generating {} in {} mode", typePath, modePath);
         builder.setupFromTemplate("driven-adapter/" + typePath + "/" + modePath);
         builder.appendToSettings("redis", "infrastructure/driven-adapters");
@@ -32,7 +32,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
         new DrivenAdapterSecrets().buildModule(builder);
     }
 
-    protected String getPathMode() {
+    protected String getPathMode(Mode mode) {
         return mode == Mode.REPOSITORY ? "redis-repository" : "redis-template";
     }
 
