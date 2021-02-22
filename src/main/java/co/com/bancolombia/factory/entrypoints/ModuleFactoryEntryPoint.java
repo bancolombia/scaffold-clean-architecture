@@ -13,12 +13,14 @@ public class ModuleFactoryEntryPoint {
                 return new EntryPointRestWebflux();
             case GENERIC:
                 return new EntryPointGeneric();
+            case RSOCKET:
+                return new EntryPointRsocketResponder();
             default:
                 throw new InvalidTaskOptionException("Entry Point type invalid");
         }
     }
 
     public enum EntryPointType {
-        RESTMVC, WEBFLUX, GENERIC
+        RESTMVC, WEBFLUX, GENERIC, RSOCKET
     }
 }
