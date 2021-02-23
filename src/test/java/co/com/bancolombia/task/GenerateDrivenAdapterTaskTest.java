@@ -2,6 +2,7 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -213,6 +214,66 @@ public class GenerateDrivenAdapterTaskTest {
         List<Constants.BooleanOption> options = task.getSecretOptions();
         // Assert
         assertEquals(2, options.size());
+    }
+
+    @Test
+    public void generateDrivenAdapterRedisRepositoryForImperative() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/RepositoryAdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepositoryAdapter.java").exists());
+    }
+
+    @Test
+    public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
+        task.setSecret(Constants.BooleanOption.TRUE);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/ReactiveRepositoryAdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepository.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepositoryAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java").exists());
+    }
+
+    @Test
+    public void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/helper/TemplateAdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/RedisTemplateAdapter.java").exists());
+    }
+
+    @Test
+    public void generateDrivenAdapterRedisTemplateForReactiveWithSecret() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+        task.setSecret(Constants.BooleanOption.TRUE);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/helper/ReactiveTemplateAdapterOperations.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java").exists());
     }
 
     private void writeString(File file, String string) throws IOException {

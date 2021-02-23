@@ -177,13 +177,14 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
-   | Reference for **drivenAdapterType** | Name                 | Additional Options    |
-   | ----------------------------------- | -------------------- | --------------------- |
-   | generic                             | Empty Driven Adapter | --name [name]         |
-   | jpa                                 | JPA Repository       | --secret [true-false] |
-   | mongodb                             | Mongo Repository     | --secret [true-false] |
-   | asynceventbus                       | Async Event Bus      |                       |
-   | restconsumer                        | Rest Client Consumer | --url [url]           |
+   | Reference for **drivenAdapterType** | Name                 | Additional Options                                 |
+   | ----------------------------------- | -------------------- | -------------------------------------------------- |
+   | generic                             | Empty Driven Adapter | --name [name]                                      |
+   | jpa                                 | JPA Repository       | --secret [true-false]                              |
+   | mongodb                             | Mongo Repository     | --secret [true-false]                              |
+   | asynceventbus                       | Async Event Bus      |                                                    |
+   | restconsumer                        | Rest Client Consumer | --url [url]                                        |
+   | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
 
    _**This task will generate something like that:**_
 
