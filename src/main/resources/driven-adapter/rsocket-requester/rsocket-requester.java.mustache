@@ -1,0 +1,64 @@
+package {{package}}.service;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import org.springframework.messaging.rsocket.RSocketRequester;
+
+@Service
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class RsocketAdapter // implements Gateway from domain
+{
+    {{#lombok}}
+    private final RSocketRequester rSocketRequester;
+    {{/lombok}}
+
+    {{^lombok}}
+    private final RSocketRequester rSocketRequester;
+
+    public BlogRequester(RSocketRequester rSocketRequester) {
+        this.rSocketRequester = rSocketRequester;
+    }
+    {{/lombok}}
+
+    // interaction model Request/Response
+    public Mono<Object/* change for object response */> callRouteRequest(Object objRequest/* change for object request */) {
+        return this.rSocketRequester
+            .route("route.request.response")
+            .data(objRequest)
+            .retrieveMono(Object.class)
+            .log();
+    }
+
+    // interaction model Fire-and-Forget
+    public void callRouteFireForget(Object objRequest/* change for object request */) {
+        this.rSocketRequester
+            .route("route.fire.forget")
+            .data(objRequest)
+            .send()
+            .log()
+            .subscribe();
+    }
+
+    // interaction model Request/Stream
+    public Flux<Object/* change for object response */> callRouteRequestStream() {
+        return this.rSocketRequester
+            .route("route.request.stream")
+            .retrieveFlux(Object.class)
+            .log();
+    }
+
+    // interaction model Channel
+    public Flux<Object/* change for object response */> callRouteChannel(Flux<Object/* change for object request */> objRequest) {
+        return this.rSocketRequester
+            .route("route.channel")
+            .data(objRequest)
+            .retrieveFlux(Object.class)
+            .log();
+    }
+}

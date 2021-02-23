@@ -101,6 +101,19 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
+    public void generateRsocketRequester() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RSOCKET);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rsocket-requester/build.gradle").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service").exists());
+    }
+
+    @Test
     public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);

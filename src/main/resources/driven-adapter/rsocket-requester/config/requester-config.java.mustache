@@ -1,0 +1,27 @@
+package {{package}}.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.cbor.Jackson2CborDecoder;
+import org.springframework.http.codec.cbor.Jackson2CborEncoder;
+import org.springframework.messaging.rsocket.RSocketRequester;
+import org.springframework.messaging.rsocket.RSocketStrategies;
+
+@Configuration
+public class RequesterConfig {
+
+    @Bean
+    public RSocketRequester rSocketRequester(RSocketStrategies rSocketStrategies) {
+        RSocketStrategies strategies = RSocketStrategies.builder()
+            .encoders(encoders -> encoders.add(new Jackson2CborEncoder()))
+            .decoders(decoders -> decoders.add(new Jackson2CborDecoder()))
+            .build();
+        return RSocketRequester.builder()
+            .rsocketStrategies(strategies)
+            .dataMimeType(MediaType.APPLICATION_CBOR)
+            .connectTcp("localhost",7000) // server IP or DNS, and port
+            .block();
+    }
+
+}

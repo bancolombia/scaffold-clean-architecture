@@ -107,6 +107,18 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
+    public void generateEntryPointRsocketResponder() throws IOException, CleanException {
+        // Arrange
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.RSOCKET);
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/rsocket-responder/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/rsocket-responder/src/main/java/co/com/bancolombia/controller/RsocketController.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller").exists());
+    }
+
+    @Test
     public void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryEntryPoint.EntryPointType.RESTMVC);
