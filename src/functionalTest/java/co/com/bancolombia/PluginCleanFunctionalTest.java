@@ -376,7 +376,7 @@ public class PluginCleanFunctionalTest {
         canRunTaskGenerateStructureReactiveProject();
 
         String task = "generateDrivenAdapter";
-        String valueDrivenAdapter = "R2DBCPOSTGRESQL";
+        String valueDrivenAdapter = "R2DBC";
         runner.withArguments(task, "--type=" + valueDrivenAdapter);
         runner.withProjectDir(projectDir);
         BuildResult result = runner.build();

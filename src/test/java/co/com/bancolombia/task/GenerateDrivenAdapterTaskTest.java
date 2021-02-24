@@ -265,7 +265,7 @@ public class GenerateDrivenAdapterTaskTest {
     public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
         // Arrange
         setup(GenerateStructureTask.ProjectType.REACTIVE);
-        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.R2DBCPOSTGRESQL);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.R2DBC);
         // Act
         task.generateDrivenAdapterTask();
         // Assert

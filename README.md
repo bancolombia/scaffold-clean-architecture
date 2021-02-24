@@ -185,7 +185,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | asynceventbus                       | Async Event Bus      |                                                    |
    | restconsumer                        | Rest Client Consumer | --url [url]                                        |
    | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
-   | r2dbcpostgresql                     | R2dbc Postgresql Client |                                                 |
+   | r2dbc                               | R2dbc Postgresql Client |                                                 |
    _**This task will generate something like that:**_
 
    ```bash
