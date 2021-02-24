@@ -103,6 +103,7 @@ public class GenerateDrivenAdapterTaskTest {
     @Test
     public void generateRsocketRequester() throws IOException, CleanException {
         // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
         task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RSOCKET);
         // Act
         task.generateDrivenAdapterTask();

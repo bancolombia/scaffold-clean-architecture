@@ -27,11 +27,16 @@ public class GenerateEntryPointTaskTest {
     private GenerateEntryPointTask task;
 
     @Before
-    public void setup() throws IOException, CleanException {
+    public void init() throws IOException, CleanException {
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    }
+
+    public void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
         Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
         deleteStructure(project.getProjectDir().toPath());
         project.getTasks().create("ca", GenerateStructureTask.class);
         GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
+        caTask.setType(type);
         caTask.generateStructureTask();
 
         ProjectBuilder.builder()
@@ -109,6 +114,7 @@ public class GenerateEntryPointTaskTest {
     @Test
     public void generateEntryPointRsocketResponder() throws IOException, CleanException {
         // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
         task.setType(ModuleFactoryEntryPoint.EntryPointType.RSOCKET);
         // Act
         task.generateEntryPointTask();
@@ -185,6 +191,7 @@ public class GenerateEntryPointTaskTest {
     @Test
     public void generateEntryPointReactiveWebWithoutRouterFunctions() throws IOException, CleanException {
         // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
         task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
         task.setRouter(Constants.BooleanOption.FALSE);
         // Act
@@ -199,6 +206,7 @@ public class GenerateEntryPointTaskTest {
     @Test
     public void generateEntryPointReactiveWebWithRouterFunctions() throws IOException, CleanException {
         // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
         task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
         task.setRouter(Constants.BooleanOption.TRUE);
 
@@ -213,6 +221,7 @@ public class GenerateEntryPointTaskTest {
     @Test
     public void generateEntryPointReactiveWebWithDefaultOptionFunctions() throws IOException, CleanException {
         // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
         task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
 
         // Act
