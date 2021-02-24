@@ -261,7 +261,7 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
-        canRunTaskGenerateStructureWithOutParameters();
+        canRunTaskGenerateStructureReactiveProject();
         String task = "generateDrivenAdapter";
         String valueDrivenAdapter = "rsocket";
 
@@ -277,7 +277,7 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskGenerateEntryPointrRsocketResponderCase() {
-        canRunTaskGenerateStructureWithOutParameters();
+        canRunTaskGenerateStructureReactiveProject();
         String task = "generateEntryPoint";
         String valueDrivenAdapter = "rsocket";
 
