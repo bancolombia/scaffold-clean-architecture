@@ -14,14 +14,11 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 {{/lombok}}
 public class RsocketAdapter // implements Gateway from domain
 {
-    {{#lombok}}
-    private final RSocketRequester rSocketRequester;
-    {{/lombok}}
 
+    private final RSocketRequester rSocketRequester;
     {{^lombok}}
-    private final RSocketRequester rSocketRequester;
 
-    public BlogRequester(RSocketRequester rSocketRequester) {
+    public RsocketAdapter(RSocketRequester rSocketRequester) {
         this.rSocketRequester = rSocketRequester;
     }
     {{/lombok}}
