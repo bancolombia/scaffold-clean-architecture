@@ -186,6 +186,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | restconsumer                        | Rest Client Consumer | --url [url]                                        |
    | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
    | rsocket                             | Rsocket Requester    |                                                    |
+   | r2dbc                               | R2dbc Postgresql Client |                                                 |
 
    _**This task will generate something like that:**_
 
