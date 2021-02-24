@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.8.2"
+    id "co.com.bancolombia.cleanArchitecture" version "1.8.3"
 }
 ```
 
@@ -185,7 +185,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | asynceventbus                       | Async Event Bus      |                                                    |
    | restconsumer                        | Rest Client Consumer | --url [url]                                        |
    | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
-
+   | r2dbcpostgresql                     | R2dbc Postgresql Client |                                                 |
    _**This task will generate something like that:**_
 
    ```bash
