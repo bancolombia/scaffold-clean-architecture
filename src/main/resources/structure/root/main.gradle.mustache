@@ -15,6 +15,7 @@ subprojects {
     apply plugin: 'net.saliman.cobertura'
     {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -27,12 +28,11 @@ subprojects {
         {{/reactive}}
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         {{#lombok}}
-        compileOnly 'org.projectlombok:lombok:{{lombokVersion}}'
-        annotationProcessor 'org.projectlombok:lombok:{{lombokVersion}}'
-        testAnnotationProcessor 'org.projectlombok:lombok:{{lombokVersion}}'
-        testCompileOnly 'org.projectlombok:lombok:{{lombokVersion}}'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
         {{/lombok}}
-        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
     {{#jacoco}}

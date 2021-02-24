@@ -185,6 +185,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | asynceventbus                       | Async Event Bus      |                                                    |
    | restconsumer                        | Rest Client Consumer | --url [url]                                        |
    | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
+   | rsocket                             | Rsocket Requester    |                                                    |
 
    _**This task will generate something like that:**_
 
@@ -226,6 +227,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | generic                          | Empty Entry Point                      | --name [name]              |
    | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow    |
    | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |
+   | rsocket                          | Rsocket Controller Entry Point         |                            |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
