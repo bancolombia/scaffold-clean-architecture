@@ -36,13 +36,12 @@ public class RsocketAdapter // implements Gateway from domain
     }
 
     // interaction model Fire-and-Forget
-    public void callRouteFireForget(Object objRequest/* change for object request */) {
-        this.rSocketRequester
+    public Mono<Void> callRouteFireForget(Object objRequest/* change for object request */) {
+        return this.rSocketRequester
             .route("route.fire.forget")
             .data(objRequest)
             .send()
-            .log()
-            .subscribe();
+            .log();
     }
 
     // interaction model Request/Stream

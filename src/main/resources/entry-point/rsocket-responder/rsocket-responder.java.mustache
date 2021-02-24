@@ -24,6 +24,7 @@ public class RsocketController {
         this.useCase = useCase;
     }*/
 {{/lombok}}
+
     // interaction model Request/Response
     @MessageMapping(value = "route.request.response")
     public Mono<Object/* change for object response */> getRequestResponse(Object objRequest/* change for object request */) {
@@ -40,8 +41,9 @@ public class RsocketController {
 
     // interaction model Fire-and-Forget
     @MessageMapping(value = "route.fire.forget")
-    public void getRequetsFireForget(Object objRequest/* change for object request */) {
+    public Mono<Void> getRequetsFireForget(Object objRequest/* change for object request */) {
         // return useCase.doAction(objRequest);
+        return Mono.empty();
     }
 
     // interaction model Channel

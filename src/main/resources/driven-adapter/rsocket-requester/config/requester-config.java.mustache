@@ -20,8 +20,7 @@ public class RequesterConfig {
         return RSocketRequester.builder()
             .rsocketStrategies(strategies)
             .dataMimeType(MediaType.APPLICATION_CBOR)
-            .connectTcp("localhost",7000) // server IP or DNS, and port
-            .block();
+            .tcp("localhost",7000); // server IP or DNS, and port
     }
 
 }
