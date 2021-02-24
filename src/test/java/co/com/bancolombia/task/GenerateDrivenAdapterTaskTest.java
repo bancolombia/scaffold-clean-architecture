@@ -262,6 +262,20 @@ public class GenerateDrivenAdapterTaskTest {
     }
 
     @Test
+    public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.R2DBC);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java").exists());
+    }
+
+    @Test
     public void generateDrivenAdapterRedisTemplateForReactiveWithSecret() throws IOException, CleanException {
         // Arrange
         setup(GenerateStructureTask.ProjectType.REACTIVE);

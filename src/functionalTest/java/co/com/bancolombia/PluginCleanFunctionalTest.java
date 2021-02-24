@@ -372,6 +372,23 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateDrivenAdapterR2dbcPostgreSQLTest(){
+        canRunTaskGenerateStructureReactiveProject();
+
+        String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "R2DBC";
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java").exists());
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGeneratePipelineAzureDevOpsTest() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generatePipeline";

@@ -37,7 +37,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
         this.url = url;
     }
 
-    @Option(option = "mode", description = "Set template or reposiroty mode when REDIS type")
+    @Option(option = "mode", description = "Set template or repository mode when REDIS type")
     public void setMode(DrivenAdapterRedis.Mode mode) {
         this.mode = mode;
     }
