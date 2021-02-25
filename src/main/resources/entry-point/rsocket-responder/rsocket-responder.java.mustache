@@ -1,0 +1,53 @@
+package {{package}}.controller;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@Controller
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class RsocketController {
+
+    // private final MyUseCase useCase;
+{{^lombok}}
+
+    /*public RsocketController(MyUseCase useCase) {
+        this.useCase = useCase;
+    }*/
+{{/lombok}}
+
+    // interaction model Request/Response
+    @MessageMapping(value = "route.request.response")
+    public Mono<Object/* change for object response */> getRequestResponse(Object objRequest/* change for object request */) {
+        // return useCase.doAction();
+        return Mono.empty();
+    }
+
+    // interaction model Request/Stream
+    @MessageMapping(value = "route.request.stream")
+    public Flux<Object/* change for object response */> getRequestStream() {
+        // return useCase.doAction();
+        return Flux.empty();
+    }
+
+    // interaction model Fire-and-Forget
+    @MessageMapping(value = "route.fire.forget")
+    public Mono<Void> getRequetsFireForget(Object objRequest/* change for object request */) {
+        // return useCase.doAction(objRequest);
+        return Mono.empty();
+    }
+
+    // interaction model Channel
+    @MessageMapping(value = "route.channel")
+    public Flux<Object/* change for object response */> getChannel(Flux<Object/* change for object request */> objRequest) {
+        // return useCase.doAction(objRequest);
+        return Flux.empty();
+    }
+
+}

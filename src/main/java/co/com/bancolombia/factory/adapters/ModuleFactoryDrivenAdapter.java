@@ -19,6 +19,8 @@ public class ModuleFactoryDrivenAdapter {
                 return new DrivenAdapterRestConsumer();
             case REDIS:
                 return new DrivenAdapterRedis();
+            case RSOCKET:
+                return new DrivenAdapterRsocketRequester();
             case R2DBC:
                 return new DrivenAdapterR2dbcPostgreSQL();
             default:
@@ -27,6 +29,6 @@ public class ModuleFactoryDrivenAdapter {
     }
 
     public enum DrivenAdapterType {
-        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, R2DBC
+        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, RSOCKET, R2DBC
     }
 }

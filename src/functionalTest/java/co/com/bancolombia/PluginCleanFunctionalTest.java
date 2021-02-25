@@ -260,6 +260,37 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
+        canRunTaskGenerateStructureReactiveProject();
+        String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "rsocket";
+
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rsocket-requester/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service").exists());
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateEntryPointrRsocketResponderCase() {
+        canRunTaskGenerateStructureReactiveProject();
+        String task = "generateEntryPoint";
+        String valueDrivenAdapter = "rsocket";
+
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/rsocket-responder/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/rsocket-responder/src/main/java/co/com/bancolombia/controller/RsocketController.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller").exists());
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateEntryPointCaseWithParameters() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generateEntryPoint";
