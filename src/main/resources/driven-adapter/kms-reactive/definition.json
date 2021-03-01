@@ -1,7 +1,8 @@
 {
   "folders": [
     "infrastructure/driven-adapters/kms-repository/src/main/java/{{packagePath}}/kms",
-    "infrastructure/driven-adapters/kms-repository/src/test/java/{{packagePath}}/kms"
+    "infrastructure/driven-adapters/kms-repository/src/test/java/{{packagePath}}/kms",
+    "applications/app-service/src/main/java/{{packagePath}}/config/model"
   ],
   "files": {
     "driven-adapter/kms/build.gradle.mustache": "infrastructure/driven-adapters/kms-repository/build.gradle",

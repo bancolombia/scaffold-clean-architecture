@@ -314,8 +314,8 @@ public class GenerateDrivenAdapterTaskTest {
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
-        assertTrue(new File("applications/app-service/src/main/java/{{packagePath}}/config/KmsConfig.java").exists());
-        assertTrue(new File("applications/app-service/src/main/java/{{packagePath}}/config/model/KmsConnectionProperties.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java").exists());
     }
 
     @Test
@@ -327,8 +327,10 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle").exists());
-        assertTrue(new File("applications/app-service/src/main/java/{{packagePath}}/config/KmsConfig.java").exists());
-        assertTrue(new File("applications/app-service/src/main/java/{{packagePath}}/config/model/KmsConnectionProperties.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/KmsConnectionProperties.java").exists());
+
     }
 
     private void writeString(File file, String string) throws IOException {
