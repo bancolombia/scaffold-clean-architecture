@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 {{/lombok}}
 @Configuration
+@ConfigurationProperties(prefix = "adapters.aws.kms")
 public class KmsConnectionProperties {
 
     String host;

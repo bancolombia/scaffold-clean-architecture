@@ -1,36 +1,42 @@
-package {{package}}.kms;
+package co.com.bancolombia.kms;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.kms.KmsAsyncClient;
 import software.amazon.awssdk.services.kms.model.*;
 
+import java.util.concurrent.ExecutionException;
+
 @Component
+{{#lombok}}
 @RequiredArgsConstructor
+{{/lombok}}
 public class KmsAdapter // implements ModelRepository from domain
 {
     @Value("${adapters.aws.kms.keyId}")
     private String keyId;
     private final KmsAsyncClient kmsAsyncClient;
 
-    public Mono<byte[]> decrypt(String secretKey, String keyId) {
-        return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
-        .map(DecryptResponse::plaintext)
-        .map(SdkBytes::asByteArray)
-        .switchIfEmpty(Mono.error(new Throwable("Error decrypt secret")));
+{{^lombok}}
+    public KmsAdapter(KmsAsyncClient kmsAsyncClient ) {
+    this.kmsAsyncClient = kmsAsyncClient;
+    }
+{{/lombok}}
+    public byte[] decrypt(String secretKey, String keyId) throws ExecutionException, InterruptedException {
+        return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
+                .get()
+                .plaintext()
+                .asByteArray();
     }
 
-    public Mono<String> encrypt(byte[] secretKey) {
-        return Mono.fromFuture(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId)))
-        .map(EncryptResponse::ciphertextBlob)
-        .map(SdkBytes::asByteArray)
-        .map(Base64Utils::encodeToString)
-        .switchIfEmpty(Mono.error(new Throwable("Error encrypt secret")));
+    public String encrypt(byte[] secretKey) throws ExecutionException, InterruptedException {
+        return Base64Utils.encodeToString(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId))
+                        .get()
+                        .ciphertextBlob().asByteArray());
     }
 
     private DecryptRequest getDecryptRequest(String secretKey, String keyId) {

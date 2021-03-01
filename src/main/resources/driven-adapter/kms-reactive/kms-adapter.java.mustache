@@ -11,13 +11,20 @@ import software.amazon.awssdk.services.kms.KmsAsyncClient;
 import software.amazon.awssdk.services.kms.model.*;
 
 @Component
-@RequiredArgsConstructor
+{{#lombok}}
+    @RequiredArgsConstructor
+{{/lombok}}
 public class KmsAdapter // implements ModelRepository from domain
 {
     @Value("${adapters.aws.kms.keyId}")
     private String keyId;
     private final KmsAsyncClient kmsAsyncClient;
 
+{{^lombok}}
+    public KmsAdapter(KmsAsyncClient kmsAsyncClient ) {
+    this.kmsAsyncClient = kmsAsyncClient;
+    }
+{{/lombok}}
     public Mono<byte[]> decrypt(String secretKey, String keyId) {
         return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
         .map(DecryptResponse::plaintext)
