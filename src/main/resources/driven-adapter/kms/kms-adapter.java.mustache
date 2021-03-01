@@ -1,0 +1,43 @@
+package {{package}}.kms-adapter;
+
+import java.io.IOException;
+import java.util.Base64;
+import java.util.StringTokenizer;
+
+import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import co.com.bancolombia.securityfilters.authorization.exception.DecryptTokenException;
+import co.com.bancolombia.securityfilters.authorization.gateway.AuthorizationToken;
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.kms.KmsAsyncClient;
+import software.amazon.awssdk.services.kms.model.DecryptRequest;
+import software.amazon.awssdk.services.kms.model.DecryptResponse;
+
+@Component
+@RequiredArgsConstructor
+public class KmsAdapter // implements ModelRepository from domain
+   {
+
+    private final KmsAsyncClient kmsAsyncClient;
+
+    public Mono<byte[]> decrypt(String secretKey, String keyId) {
+        return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
+        .map(DecryptResponse::plaintext)
+        .map(SdkBytes::asByteArray)
+        .switchIfEmpty(Mono.error(DecryptTokenException::new));
+    }
+
+    public Mono<String> encrypt(byte[] secretKey) {
+        return Mono.fromFuture(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId)))
+        .map(EncryptResponse::ciphertextBlob)
+        .map(SdkBytes::asByteArray)
+        .map(Base64Utils::encodeToString)
+        .switchIfEmpty(Mono.error(EncryptTokenException::new));
+        }
+
+}
