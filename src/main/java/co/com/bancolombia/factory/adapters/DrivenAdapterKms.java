@@ -18,10 +18,9 @@ public class DrivenAdapterKms implements ModuleFactory {
         String typePath = getPathType(builder.isReactive());
         logger.lifecycle("Generating {}", typePath);
         builder.setupFromTemplate("driven-adapter/" + typePath);
-        builder.appendToSettings("kms", "infrastructure/driven-adapters");
-        builder.setupFromTemplate("driven-adapter/" + typePath + "/secret");
+        builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
 
-        builder.appendDependencyToModule("app-service", "implementation project(':kms')");
+        builder.appendDependencyToModule("app-service", "implementation project(':kms-repository')");
         new DrivenAdapterSecrets().buildModule(builder);
     }
 

@@ -304,6 +304,32 @@ public class GenerateDrivenAdapterTaskTest {
         assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java").exists());
     }
 
+    @Test
+    public void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+    }
+
+    @Test
+    public void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+        task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+        // Act
+        task.generateDrivenAdapterTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+    }
+
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {
             writer.write(string);
