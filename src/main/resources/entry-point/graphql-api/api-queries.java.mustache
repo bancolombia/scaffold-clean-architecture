@@ -1,0 +1,27 @@
+package {{package}}.graphqlapi;
+
+import graphql.kickstart.tools.GraphQLQueryResolver;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Controller;
+
+{{#lombok}}
+    @RequiredArgsConstructor
+{{/lombok}}
+@Controller
+public class ApiQueries implements GraphQLQueryResolver {
+
+//  private final MyUseCase useCase;
+
+{{^lombok}}
+    public ApiQueries(MyUseCase useCase){
+    this.useCase = useCase;
+    }
+{{/lombok}}
+
+    public String getSomething(String objRequest/* change for object request */) {
+//      return useCase.doAction(objRequest);
+        return "Hello world from graphql-api queries " + objRequest;
+    }
+}
