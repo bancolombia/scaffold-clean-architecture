@@ -229,7 +229,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow    |
    | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |
    | rsocket                          | Rsocket Controller Entry Point         |                            |
-   | graphql                          | API GraphQL (Default path /graphql)    | --pathgql [name path]                       |
+   | graphql                          | API GraphQL    | --pathgql [name path] default /graphql                      |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
