@@ -312,9 +312,9 @@ public class GenerateDrivenAdapterTaskTest {
         // Act
         task.generateDrivenAdapterTask();
         // Assert
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
-        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/KmsConfig.java").exists());
     }
 
     @Test
@@ -325,9 +325,9 @@ public class GenerateDrivenAdapterTaskTest {
         // Act
         task.generateDrivenAdapterTask();
         // Assert
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
-        assertTrue(new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/KmsConfig.java").exists());
     }
 
     private void writeString(File file, String string) throws IOException {
