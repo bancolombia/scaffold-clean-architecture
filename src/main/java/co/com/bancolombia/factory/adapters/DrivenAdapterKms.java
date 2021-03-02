@@ -19,7 +19,12 @@ public class DrivenAdapterKms implements ModuleFactory {
         logger.lifecycle("Generating {}", typePath);
         builder.setupFromTemplate("driven-adapter/" + typePath);
         builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
-
+        builder.appendToProperties("adapter.aws.kms")
+                .put("region", "us-east-1")
+                .put("host", "localhost")
+                .put("protocol", "http")
+                .put("port", "4566")
+                .put("keyId", "add-your-key-here");
         builder.appendDependencyToModule("app-service", "implementation project(':kms-repository')");
         new DrivenAdapterSecrets().buildModule(builder);
     }
