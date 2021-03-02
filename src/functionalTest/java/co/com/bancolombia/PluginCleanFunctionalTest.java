@@ -260,6 +260,23 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateEntryPointGrahpqlApiCase() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "graphql";
+        String valuePathgqlEntryPoint = "/graphqlpath";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--pathgql=" + valuePathgqlEntryPoint);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
         canRunTaskGenerateStructureReactiveProject();
         String task = "generateDrivenAdapter";

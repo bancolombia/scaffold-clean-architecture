@@ -125,6 +125,19 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
+    public void generateEntryPointApiGraphql() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.GRAPHQL);
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java").exists());
+    }
+
+    @Test
     public void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryEntryPoint.EntryPointType.RESTMVC);
