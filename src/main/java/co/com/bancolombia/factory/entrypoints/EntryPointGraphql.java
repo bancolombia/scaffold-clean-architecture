@@ -6,6 +6,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class EntryPointGraphql implements ModuleFactory {
 
@@ -23,7 +24,8 @@ public class EntryPointGraphql implements ModuleFactory {
                     .put("mapping", name);
             builder.appendToProperties("graphql.playground")
                     .put("mapping", "/playground")
-                    .put("endpoint", name);
+                    .put("endpoint", name)
+                    .put("enabled", true);
             builder.appendDependencyToModule("app-service",
                     "implementation project(':graphql-api')");
             builder.setupFromTemplate("entry-point/graphql-api");

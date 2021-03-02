@@ -10,6 +10,10 @@ import org.springframework.stereotype.Controller;
     @RequiredArgsConstructor
 {{/lombok}}
 @Controller
+/**
+* To interact with the API make use of Playground in the "/playground" path, but remember,
+* Playground ONLY must be used in dev or qa environments, not in production.
+*/
 public class ApiQueries implements GraphQLQueryResolver {
 
 //  private final MyUseCase useCase;
