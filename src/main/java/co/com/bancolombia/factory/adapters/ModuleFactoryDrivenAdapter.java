@@ -25,12 +25,14 @@ public class ModuleFactoryDrivenAdapter {
                 return new DrivenAdapterR2dbcPostgreSQL();
             case KMS:
                 return new DrivenAdapterKms();
+            case SECRETS:
+                return new DrivenAdapterSecrets();
             default:
                 throw new InvalidTaskOptionException("Driven Adapter type invalid");
         }
     }
 
     public enum DrivenAdapterType {
-        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, RSOCKET, R2DBC, KMS
+        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, RSOCKET, R2DBC, KMS, SECRETS
     }
 }

@@ -20,6 +20,8 @@ public class DrivenAdapterJPA implements ModuleFactory {
         builder.appendToProperties("spring.jpa")
                 .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
         builder.appendDependencyToModule("app-service", "implementation project(':jpa-repository')");
-        new DrivenAdapterSecrets().buildModule(builder);
+        if (builder.getBooleanParam("include-secret")) {
+            new DrivenAdapterSecrets().buildModule(builder);
+        }
     }
 }

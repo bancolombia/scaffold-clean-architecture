@@ -24,6 +24,8 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
                 .put("uri", "mongodb://localhost:27017/test");
         builder.appendDependencyToModule("app-service",
                 "implementation project(':mongo-repository')");
-        new DrivenAdapterSecrets().buildModule(builder);
+        if (builder.getBooleanParam("include-secret")) {
+            new DrivenAdapterSecrets().buildModule(builder);
+        }
     }
 }

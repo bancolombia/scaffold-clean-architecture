@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.8.6"
+    id "co.com.bancolombia.cleanArchitecture" version "1.8.7"
 }
 ```
 
@@ -188,6 +188,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | rsocket                             | Rsocket Requester    |                                                    |
    | r2dbc                               | R2dbc Postgresql Client |                                                 |
    | kms                               | AWS Key Management Service  |                                                 |
+   | secrets                               | Secrets Manager Bancolombia  |                                                 |
 
    _**This task will generate something like that:**_
 

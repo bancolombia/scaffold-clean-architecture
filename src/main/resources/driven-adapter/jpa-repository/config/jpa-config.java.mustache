@@ -1,8 +1,8 @@
 package {{package}}.config;
 
 {{#include-secret}}
-import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;
-import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;
+import co.com.bancolombia.secretsmanager.api.GenericManager;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
 {{/include-secret}}
 import {{package}}.jpa.config.DBSecret;
 import com.zaxxer.hikari.HikariConfig;
@@ -27,7 +27,7 @@ public class JpaConfig {
     @Bean
     public DBSecret dbSecret(@Value("${aws.secretName}") String secret, GenericManager manager)
             throws SecretException {
-        return manager.getSecretModel(secret, DBSecret.class);
+        return manager.getSecret(secret, DBSecret.class);
     }
     {{/include-secret}}
     {{^include-secret}}
