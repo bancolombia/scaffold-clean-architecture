@@ -7,10 +7,15 @@ import org.springframework.beans.factory.annotation.Value;
 {{/include-secret}}
 import {{package}}.mongo.config.MongoDBSecret;
 import org.springframework.boot.autoconfigure.mongo.MongoClientFactory;
+import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class MongoConfig {
@@ -26,7 +31,7 @@ public class MongoConfig {
     @Bean
     public MongoDBSecret dbSecret(Environment env) {
         return MongoDBSecret.builder()
-                .uri(env.getProperty("spring.data.mongo.uri"))
+                .uri(env.getProperty("spring.data.mongodb.uri"))
                 .build();
     }
     {{/include-secret}}
@@ -35,6 +40,9 @@ public class MongoConfig {
     public MongoClientFactory mongoProperties(MongoDBSecret secret, Environment env) {
         MongoProperties properties = new MongoProperties();
         properties.setUri(secret.getUri());
-        return new MongoClientFactory(properties, env);
+
+        List<MongoClientSettingsBuilderCustomizer> list = new ArrayList<>();
+        list.add(new MongoPropertiesClientSettingsBuilderCustomizer(properties, env));
+        return new MongoClientFactory(list);
     }
 }
