@@ -13,7 +13,7 @@ public class Constants {
     public static final String LOMBOK_VERSION = "1.18.16";
     public static final String JACOCO_VERSION = "0.8.5";
     public static final String COBERTURA_VERSION = "3.0.0";
-    public static final String SECRETS_VERSION = "2.1.0";
+    public static final String SECRETS_VERSION = "3.0.0";
     public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "0.4.7";
     public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
     public static final String PLUGIN_VERSION = "1.8.5";

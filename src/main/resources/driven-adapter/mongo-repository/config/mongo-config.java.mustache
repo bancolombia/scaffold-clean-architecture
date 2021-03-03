@@ -1,8 +1,8 @@
 package {{package}}.config;
 
 {{#include-secret}}
-import co.com.bancolombia.commons.secretsmanager.exceptions.SecretException;
-import co.com.bancolombia.commons.secretsmanager.manager.GenericManager;
+import co.com.bancolombia.secretsmanager.api.GenericManager;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
 import org.springframework.beans.factory.annotation.Value;
 {{/include-secret}}
 import {{package}}.mongo.config.MongoDBSecret;
@@ -19,7 +19,7 @@ public class MongoConfig {
     @Bean
     public MongoDBSecret dbSecret(@Value("${aws.secretName}") String secret, GenericManager manager)
             throws SecretException {
-        return manager.getSecretModel(secret, MongoDBSecret.class);
+        return manager.getSecret(secret, MongoDBSecret.class);
     }
     {{/include-secret}}
     {{^include-secret}}

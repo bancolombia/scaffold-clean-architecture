@@ -29,7 +29,10 @@ public class DrivenAdapterRedis implements ModuleFactory {
                     .put("port", 6379);
         }
         builder.appendDependencyToModule("app-service", "implementation project(':redis')");
-        new DrivenAdapterSecrets().buildModule(builder);
+        if (builder.getBooleanParam("include-secret")) {
+            new DrivenAdapterSecrets().buildModule(builder);
+        }
+
     }
 
     protected String getPathMode(Mode mode) {
