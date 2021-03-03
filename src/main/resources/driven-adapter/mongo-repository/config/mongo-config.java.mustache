@@ -6,7 +6,10 @@ import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
 import org.springframework.beans.factory.annotation.Value;
 {{/include-secret}}
 import {{package}}.mongo.config.MongoDBSecret;
-import org.springframework.boot.autoconfigure.mongo.*;
+import org.springframework.boot.autoconfigure.mongo.MongoClientFactory;
+import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
