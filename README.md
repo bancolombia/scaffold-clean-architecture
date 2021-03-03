@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.8.5"
+    id "co.com.bancolombia.cleanArchitecture" version "1.8.6"
 }
 ```
 
@@ -187,6 +187,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
    | rsocket                             | Rsocket Requester    |                                                    |
    | r2dbc                               | R2dbc Postgresql Client |                                                 |
+   | kms                               | AWS Key Management Service  |                                                 |
 
    _**This task will generate something like that:**_
 
@@ -229,6 +230,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow    |
    | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |
    | rsocket                          | Rsocket Controller Entry Point         |                            |
+   | graphql                          | API GraphQL    | --pathgql [name path] default /graphql                      |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 

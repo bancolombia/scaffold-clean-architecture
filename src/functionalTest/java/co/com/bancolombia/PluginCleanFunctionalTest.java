@@ -260,6 +260,23 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateEntryPointGrahpqlApiCase() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "graphql";
+        String valuePathgqlEntryPoint = "/graphqlpath";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--pathgql=" + valuePathgqlEntryPoint);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
         canRunTaskGenerateStructureReactiveProject();
         String task = "generateDrivenAdapter";
@@ -420,6 +437,24 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateDrivenAdapterKmsTest(){
+        canRunTaskGenerateStructureReactiveProject();
+
+        String task = "generateDrivenAdapter";
+        String valueDrivenAdapter = "KMS";
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/kms-repository/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java").exists());
+        assertTrue(new File("build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/KmsConnectionProperties.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGeneratePipelineAzureDevOpsTest() {
         canRunTaskGenerateStructureWithOutParameters();
         String task = "generatePipeline";
@@ -539,9 +574,6 @@ public class PluginCleanFunctionalTest {
         runner.withProjectDir(projectDir);
         runner.build();
     }
-
-
-
 
     private void writeString(File file, String string) throws IOException {
         try (Writer writer = new FileWriter(file)) {
