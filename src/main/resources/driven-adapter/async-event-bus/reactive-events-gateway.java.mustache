@@ -1,6 +1,6 @@
-package {{package}}.event;
+package {{package}}.events;
 
-import {{package}}.model.event.gateways.EventsGateway;
+import {{package}}.model.events.gateways.EventsGateway;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -8,38 +8,35 @@ import lombok.extern.java.Log;
 import org.reactivecommons.api.domain.DomainEvent;
 import org.reactivecommons.api.domain.DomainEventBus;
 import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
+{{#lombok}}
 import java.util.logging.Level;
+{{/lombok}}
 
 import static reactor.core.publisher.Mono.from;
 
-@Component
-@EnableDomainEventBus
 {{#lombok}}
 @Log
 @RequiredArgsConstructor
 {{/lombok}}
-/**Permite personalizar la emisión de eventos, enriquecerla o interceptarla.
- Por defecto delega el proceso en reactive-commons.
-
- Remplazar el tipo del objeto  event por le modelo correspondiente
- **/
+@EnableDomainEventBus
 public class ReactiveEventsGateway implements EventsGateway {
-
+    public static final String SOME_EVENT_NAME = "some.event.name";
     private final DomainEventBus domainEventBus;
 
     {{^lombok}}
     public ReactiveEventsGateway(DomainEventBus domainEventBus) {
-    this.domainEventBus = domainEventBus;
+        this.domainEventBus = domainEventBus;
     }
     {{/lombok}}
 
     @Override
     public Mono<Void> emit(Object event) {
-        log.log(Level.INFO, "Emitiendo evento de dominio: {0}: {1}", new String[]{(String) event, event.toString()});
-        return from(domainEventBus.emit(new DomainEvent<>((String) event, UUID.randomUUID().toString(), event)));
+        {{#lombok}}
+        log.log(Level.INFO, "Sending domain event: {0}: {1}", new String[]{SOME_EVENT_NAME, event.toString()});
+        {{/lombok}}
+        return from(domainEventBus.emit(new DomainEvent<>(SOME_EVENT_NAME, UUID.randomUUID().toString(), event)));
     }
 }

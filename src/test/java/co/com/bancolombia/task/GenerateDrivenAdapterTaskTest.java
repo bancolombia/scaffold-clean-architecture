@@ -217,8 +217,9 @@ public class GenerateDrivenAdapterTaskTest {
         task.generateDrivenAdapterTask();
         // Assert
         assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/event/ReactiveEventsGateway.java").exists());
-        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventsGateway.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java").exists());
+        assertTrue(new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java").exists());
     }
 
     @Test
