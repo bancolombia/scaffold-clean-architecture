@@ -1,0 +1,15 @@
+package {{package}}.events.handlers;
+
+import org.reactivecommons.async.api.handlers.QueryHandler;
+import reactor.core.publisher.Mono;
+
+
+// this registers a query with [appName].exampleConvention
+public class ExampleConventionQueryHandler implements QueryHandler<String, Integer> {
+
+    @Override
+    public Mono<String> handle(Integer message) {
+        return Mono.just("Response for " + message);
+    }
+
+}
