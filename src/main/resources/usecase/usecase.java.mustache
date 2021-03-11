@@ -1,0 +1,11 @@
+package {{package}}.usecase.{{useCaseName}};
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+@RequiredArgsConstructor
+{{/lombok}}
+public class {{useCaseClassName}} {
+    {{^lombok}}
+    public {{useCaseClassName}}(){}
+    {{/lombok}}
+}

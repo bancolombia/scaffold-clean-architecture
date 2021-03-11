@@ -1,0 +1,44 @@
+buildscript {
+	ext {
+		cleanArchitectureVersion = '{{pluginVersion}}'
+		springBootVersion = '{{springBootVersion}}'
+		sonarVersion = '{{sonarVersion}}'
+		{{#jacoco}}
+		jacocoVersion = '{{jacocoVersion}}'
+		{{/jacoco}}
+		{{#cobertura}}
+		coberturaVersion = '{{coberturaVersion}}'
+		{{/cobertura}}
+		{{#lombok}}
+        lombokVersion = '{{lombokVersion}}'
+        {{/lombok}}
+	}
+}
+
+plugins {
+	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'org.sonarqube' version "${sonarVersion}"
+	{{#jacoco}}
+	id 'jacoco'
+	{{/jacoco}}
+	{{#cobertura}}
+	id 'net.saliman.cobertura' version "${coberturaVersion}"
+	{{/cobertura}}
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEnconding", "UTF-8"
+        property "sonar.modules", "applications/app-service," +
+                "domain/model, domain/usecase," +
+                "infrastructure/driven-adapters/*, infrastructure/entry-points/*"
+        property "sonar.sources", "src, deployment, build.gradle, applications/app-service/build.gradle"
+        property "sonar.test", "src/test"
+        property "sonar.java.binaries", "{{sonar.java.binaries}}"
+        property "sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+apply from: './main.gradle'

@@ -1,0 +1,42 @@
+package {{package}}.events;
+
+import {{package}}.model.events.gateways.EventsGateway;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import org.reactivecommons.api.domain.DomainEvent;
+import org.reactivecommons.api.domain.DomainEventBus;
+import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;
+import reactor.core.publisher.Mono;
+
+import java.util.UUID;
+{{#lombok}}
+import java.util.logging.Level;
+{{/lombok}}
+
+import static reactor.core.publisher.Mono.from;
+
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+@EnableDomainEventBus
+public class ReactiveEventsGateway implements EventsGateway {
+    public static final String SOME_EVENT_NAME = "some.event.name";
+    private final DomainEventBus domainEventBus;
+
+    {{^lombok}}
+    public ReactiveEventsGateway(DomainEventBus domainEventBus) {
+        this.domainEventBus = domainEventBus;
+    }
+    {{/lombok}}
+
+    @Override
+    public Mono<Void> emit(Object event) {
+        {{#lombok}}
+        log.log(Level.INFO, "Sending domain event: {0}: {1}", new String[]{SOME_EVENT_NAME, event.toString()});
+        {{/lombok}}
+        return from(domainEventBus.emit(new DomainEvent<>(SOME_EVENT_NAME, UUID.randomUUID().toString(), event)));
+    }
+}

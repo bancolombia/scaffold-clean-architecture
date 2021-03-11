@@ -1,92 +1,134 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.templates.Constants;
-import co.com.bancolombia.Utils;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.Project;
+import org.gradle.api.artifacts.Configuration;
+import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.tasks.TaskAction;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 public class ValidateStructureTask extends DefaultTask {
-    private Logger logger = getProject().getLogger();
+    private final Logger logger = getProject().getLogger();
+    private static final String MODEL_MODULE = "model";
+    private static final String USE_CASE_MODULE = "usecase";
+    private static final String REACTOR_CORE = "reactor-core";
+    private static final String REACTOR_EXTRA = "reactor-extra";
+    private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
+
 
     @TaskAction
     public void validateStructureTask() throws IOException, CleanException {
 
-        String packageName = Utils.readProperties("package");
+        String packageName = FileUtils.readProperties(getProject().getProjectDir().getPath(), "package");
         logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+        getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
         logger.lifecycle("Project Package: {}", packageName);
+
         if (!validateModelLayer()) {
-            throw new CleanException("the model layer is invalid");
+            throw new CleanException("Model module is invalid");
         }
         if (!validateUseCaseLayer()) {
-            throw new CleanException("the use case layer is invalid");
+            throw new CleanException("Use case module is invalid");
         }
-        if (!validateEntryPointLayer()) {
-            throw new CleanException("the entry point layer is invalid");
-        }
-        if (!validateDrivenAdapterLayer()) {
-            throw new CleanException("the entry point layer is invalid");
+        if (!validateInfrastructureLayer()) {
+            throw new CleanException("Infrastructure layer is invalid");
         }
         logger.lifecycle("The project is valid");
-
     }
 
-    //TODO: Complete
-    public boolean validateEntryPointLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/entry-points"));
-        for (File file : files) {
-            logger.lifecycle(file.getCanonicalPath());
+    private boolean validateModelLayer() {
+        if (validateExistingModule(MODEL_MODULE)) {
+            logger.lifecycle("Validating Model Module");
+            Configuration configuration = getConfiguration(MODEL_MODULE);
+            return configuration.getAllDependencies()
+                    .stream().noneMatch(this::filterExcludedDependencies);
         }
+        logger.warn("Model module not found");
         return true;
     }
-
-    //TODO: Complete
-    private boolean validateDrivenAdapterLayer() throws IOException {
-        List<File> files = Utils.finderSubProjects(getProject().getProjectDir().getAbsolutePath().concat("/infrastructure/driven-adapters"));
-        for (File file : files) {
-            logger.lifecycle(file.getCanonicalPath());
-        }
-        return true;
-    }
-
-    private boolean validateModelLayer() throws IOException {
-        Stream<String> stream = Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.MODEL).concat("/").concat(Constants.BUILD_GRADLE));
-
-        long countImplementationproject = stream
-                .map(line -> line.replaceAll("\\s", ""))
-                .filter(line -> !line.startsWith("//") && line.contains("implementationproject"))
-                .count();
-        return countImplementationproject == 0;
-    }
-
 
     private boolean validateUseCaseLayer() {
-        Supplier<Stream<String>> stream = () -> {
-            try {
-                return Utils.readFile(getProject(), Constants.DOMAIN.concat("/").concat(Constants.USECASE_FOLDER).concat("/").concat(Constants.BUILD_GRADLE));
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-                return null;
-            }
-        };
+        if (validateExistingModule(USE_CASE_MODULE)) {
 
-        String modelDependency1 = "implementationproject(':model')";
-        String modelDependency2 = "compileproject(':model')";
-        boolean isvalid = stream.get().filter(line -> !line.startsWith("//")).map(line -> line.replaceAll("\\s", ""))
-                .anyMatch(str -> str.equals(modelDependency1) || str.equals(modelDependency2));
-        long countImplementationproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("implementationproject")).count();
-        long countCompileproject = stream.get().map(line -> line.replaceAll("\\s", "")).filter(line -> !line.startsWith("//") && line.contains("compileproject")).count();
-
-        return isvalid && ((countImplementationproject == 1 && countCompileproject == 0) || (countImplementationproject == 0 && countCompileproject == 1));
+            logger.lifecycle("Validating Use Case Module");
+            Configuration configuration = getConfiguration(USE_CASE_MODULE);
+            DependencySet dependencies = configuration.getAllDependencies();
+            return dependencies.stream()
+                    .filter(this::filterExcludedDependencies)
+                    .count() == 1
+                    && dependencies.stream()
+                    .filter(this::filterExcludedDependencies).iterator().next().getName().contains((MODEL_MODULE));
+        }
+        logger.warn("Use case module not found");
+        return true;
     }
 
-}
+    private boolean filterExcludedDependencies(Dependency dependency) {
+        return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE, SPRING_DEPENDENCIES).contains(dependency.getName());
+    }
 
+    private boolean validateInfrastructureLayer() {
+        List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, "app-service", USE_CASE_MODULE);
+        AtomicBoolean valid = new AtomicBoolean(true);
+        Set<Map.Entry<String, Project>> modules = getModules();
+
+        modules.stream().filter(module -> !modulesExcludes.contains(module.getKey()))
+                .forEach(moduleFiltered -> validateModule(valid, moduleFiltered));
+
+        return valid.get();
+    }
+
+    private void validateModule(AtomicBoolean valid, Map.Entry<String, Project> moduleFiltered) {
+        logger.lifecycle(String.format("Validating %s Module", moduleFiltered.getKey()));
+        validateDependencies(valid, moduleFiltered);
+    }
+
+    private boolean validateExistingModule(String module) {
+        return (getProject().getChildProjects().containsKey(module));
+    }
+
+    private Configuration getConfiguration(String moduleName) {
+        printDependenciesByModule(moduleName);
+
+        return getProject()
+                .getChildProjects()
+                .get(moduleName)
+                .getConfigurations()
+                .getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME);
+    }
+
+    private void printDependenciesByModule(String moduleName) {
+        getProject()
+                .getChildProjects()
+                .get(moduleName)
+                .getConfigurations().getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME).getDependencies().forEach(dependency -> logger.lifecycle("--- Dependency: " + dependency.getName()));
+    }
+
+    private void validateDependencies(AtomicBoolean valid, Map.Entry<String, Project> dependency) {
+        Configuration configuration = getConfiguration(dependency.getKey());
+        if (configuration
+                .getDependencies().stream().anyMatch(filterDependenciesInfrastructure())) {
+            valid.set(false);
+        }
+    }
+
+    private Predicate<Dependency> filterDependenciesInfrastructure() {
+        return dependency -> "app-service"
+                .contains(dependency.getName()) && !Arrays.asList(MODEL_MODULE, USE_CASE_MODULE)
+                .contains(dependency.getName());
+    }
+
+    private Set<Map.Entry<String, Project>> getModules() {
+        return getProject().getChildProjects().entrySet();
+    }
+}

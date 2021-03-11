@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "infrastructure/entry-points/{{name-dash}}/src/main/java/{{packagePath}}/{{name-package}}",
+    "infrastructure/entry-points/{{name-dash}}/src/test/java/{{packagePath}}/{{name-package}}"
+  ],
+  "files": {
+    "entry-point/generic/build.gradle.mustache": "infrastructure/entry-points/{{name-dash}}/build.gradle"
+  }
+}

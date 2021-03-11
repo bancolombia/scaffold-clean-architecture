@@ -1,0 +1,20 @@
+---
+server:
+  port: 8080
+spring:
+  application:
+    name: "cleanArchitecture"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+  datasource:
+    url: "jdbc:h2:mem:testdb"
+    driver-class-name: "org.h2.Driver"
+  data:
+    mongodb:
+      uri: "mongodb://user:pass@hostname/db"

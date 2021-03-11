@@ -1,0 +1,29 @@
+package {{package}}.consumer;
+
+{{#lombok}}
+    import lombok.AllArgsConstructor;
+    import lombok.Builder;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+
+    @Data
+    @Builder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+{{/lombok}}
+public class ObjectResponse {
+
+private String state;
+
+{{^lombok}}
+    public ObjectResponse() {}
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+{{/lombok}}
+}

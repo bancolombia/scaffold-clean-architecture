@@ -1,0 +1,57 @@
+package {{package}}.consumer;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Service
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class RestConsumer // implements Gateway from domain
+{
+
+    private final WebClient client;
+
+{{^lombok}}
+    public RestConsumer(WebClient client) {
+        this.client = client;
+    }
+{{/lombok}}
+
+    // these methods are an example that illustrates the implementation of WebClient.
+    // You should use the methods that you implement from the Gateway from the domain.
+
+    public Mono<ObjectResponse> testGet() {
+
+        return client
+            .get()
+            .retrieve()
+            .bodyToMono(ObjectResponse.class);
+
+    }
+
+    public Mono<ObjectResponse> testPost() {
+
+    {{#lombok}}
+        ObjectRequest request = ObjectRequest.builder()
+            .val1("exampleval1")
+            .val2("exampleval2")
+            .build();
+    {{/lombok}}
+    {{^lombok}}
+        ObjectRequest request = new ObjectRequest();
+        request.setVal1("exampleval1");
+        request.setVal2("exampleval2");
+    {{/lombok}}
+
+        return client
+            .post()
+            .body(Mono.just(request), ObjectRequest.class)
+            .retrieve()
+            .bodyToMono(ObjectResponse.class);
+    }
+}
