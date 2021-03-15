@@ -177,19 +177,6 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
-<<<<<<< HEAD
-   | Reference for **drivenAdapterType** | Name                 | Additional Options                                 |
-   | ----------------------------------- | -------------------- | -------------------------------------------------- |
-   | generic                             | Empty Driven Adapter | --name [name]                                      |
-   | jpa                                 | JPA Repository       | --secret [true-false]                              |
-   | mongodb                             | Mongo Repository     | --secret [true-false]                              |
-   | asynceventbus                       | Async Event Bus      |                                                    |
-   | restconsumer                        | Rest Client Consumer | --url [url]                                        |
-   | redis                               | Redis                | --mode [template-repository] --secret [true-false] |
-   | rsocket                             | Rsocket Requester    |                                                    |
-   | r2dbc                               | R2dbc Postgresql Client |                                                 |
-   | kms                               | AWS Key Management Service  |                                                 |
-=======
    | Reference for **drivenAdapterType** | Name                        | Additional Options                                 |
    |-------------------------------------|-----------------------------|----------------------------------------------------|
    | generic                             | Empty Driven Adapter        | --name [name]                                      |
@@ -202,7 +189,6 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | r2dbc                               | R2dbc Postgresql Client     |                                                    |
    | kms                                 | AWS Key Management Service  |                                                    |
    | secrets                             | Secrets Manager Bancolombia |                                                    |
->>>>>>> master
 
    _**This task will generate something like that:**_
 
