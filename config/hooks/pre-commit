@@ -1,6 +1,6 @@
 #!/bin/sh
 cat <<\EOF
-Error: Attempt to add a non-ASCII file name.
+Apply automatic code formatting ...
 EOF
 set -e
 
