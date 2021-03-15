@@ -20,3 +20,7 @@ if [ ! -z "${files}" ]; then
     "${REPO_ROOT_DIR}/gradlew" goJF -DgoogleJavaFormat.include="$comma_files" &>/dev/null
     git add $(echo "$files" | paste -s -d " " -)
 fi
+cat <<\EOF
+Executing unit tests...
+EOF
+"${REPO_ROOT_DIR}/gradlew" test
