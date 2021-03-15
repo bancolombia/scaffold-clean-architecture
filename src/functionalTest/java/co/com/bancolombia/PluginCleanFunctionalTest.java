@@ -16,7 +16,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import static org.junit.Assert.*;
@@ -260,6 +262,23 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
+    public void canRunTaskGenerateEntryPointGrahpqlApiCase() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueEntryPoint = "graphql";
+        String valuePathgqlEntryPoint = "/graphqlpath";
+
+        runner.withArguments(task, "--type=" + valueEntryPoint, "--pathgql=" + valuePathgqlEntryPoint);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
     public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
         canRunTaskGenerateStructureReactiveProject();
         String task = "generateDrivenAdapter";
@@ -396,14 +415,34 @@ public class PluginCleanFunctionalTest {
         BuildResult result = runner.build();
 
         assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/build.gradle").exists());
-        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/event/ReactiveEventsGateway.java").exists());
-        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/event/gateways/EventsGateway.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java").exists());
+        assertTrue(new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java").exists());
 
         assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
     }
 
     @Test
-    public void canRunTaskGenerateDrivenAdapterR2dbcPostgreSQLTest(){
+    public void canRunTaskGenerateEntryPointEventHandlerTest() {
+        canRunTaskGenerateStructureWithOutParameters();
+        String task = "generateEntryPoint";
+        String valueDrivenAdapter = "ASYNCEVENTHANDLER";
+
+        runner.withArguments(task, "--type=" + valueDrivenAdapter);
+        runner.withProjectDir(projectDir);
+        BuildResult result = runner.build();
+
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/async-event-handler/build.gradle").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java").exists());
+        assertTrue(new File("build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java").exists());
+
+        assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    }
+
+    @Test
+    public void canRunTaskGenerateDrivenAdapterR2dbcPostgreSQLTest() {
         canRunTaskGenerateStructureReactiveProject();
 
         String task = "generateDrivenAdapter";
@@ -420,7 +459,7 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
-    public void canRunTaskGenerateDrivenAdapterKmsTest(){
+    public void canRunTaskGenerateDrivenAdapterKmsTest() {
         canRunTaskGenerateStructureReactiveProject();
 
         String task = "generateDrivenAdapter";
@@ -539,7 +578,7 @@ public class PluginCleanFunctionalTest {
     @Test(expected = Exception.class)
     public void validateStructureReactiveWithInvalidModel() throws IOException {
         canRunTaskGenerateStructureReactiveProject();
-        writeString(new File("build/functionalTest/domain/model/build.gradle"),"compile 'org.springframework.boot:spring-boot-starter'");
+        writeString(new File("build/functionalTest/domain/model/build.gradle"), "compile 'org.springframework.boot:spring-boot-starter'");
 
         // Act
         runner.withArguments("validateStructure");
@@ -550,7 +589,7 @@ public class PluginCleanFunctionalTest {
     @Test(expected = Exception.class)
     public void validateStructureReactiveWithInvalidUseCase() throws IOException {
         canRunTaskGenerateStructureReactiveProject();
-        writeString(new File("build/functionalTest/domain/usecase/build.gradle"),"compile 'org.springframework.boot:spring-boot-starter'");
+        writeString(new File("build/functionalTest/domain/usecase/build.gradle"), "compile 'org.springframework.boot:spring-boot-starter'");
 
         // Act
         runner.withArguments("validateStructure");

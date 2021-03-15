@@ -15,12 +15,16 @@ public class ModuleFactoryEntryPoint {
                 return new EntryPointGeneric();
             case RSOCKET:
                 return new EntryPointRsocketResponder();
+            case GRAPHQL:
+                return new EntryPointGraphql();
+            case ASYNCEVENTHANDLER:
+                return new EntryPointAsyncEventHandler();
             default:
                 throw new InvalidTaskOptionException("Entry Point type invalid");
         }
     }
 
     public enum EntryPointType {
-        RESTMVC, WEBFLUX, GENERIC, RSOCKET
+        RESTMVC, WEBFLUX, GENERIC, RSOCKET, GRAPHQL, ASYNCEVENTHANDLER
     }
 }

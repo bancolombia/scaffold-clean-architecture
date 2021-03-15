@@ -4,9 +4,9 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
 import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
-import org.apache.commons.io.FileUtils;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -125,6 +125,19 @@ public class GenerateEntryPointTaskTest {
     }
 
     @Test
+    public void generateEntryPointApiGraphql() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.GRAPHQL);
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java").exists());
+    }
+
+    @Test
     public void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
         // Arrange
         task.setType(ModuleFactoryEntryPoint.EntryPointType.RESTMVC);
@@ -230,6 +243,21 @@ public class GenerateEntryPointTaskTest {
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java").exists());
         assertTrue(new File("build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java").exists());
+    }
+
+    @Test
+    public void generateEntryPointAsyncEventHandler() throws IOException, CleanException {
+        // Arrange
+        setup(GenerateStructureTask.ProjectType.REACTIVE);
+        task.setType(ModuleFactoryEntryPoint.EntryPointType.ASYNCEVENTHANDLER);
+        // Act
+        task.generateEntryPointTask();
+        // Assert
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/async-event-handler/build.gradle").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java").exists());
+        assertTrue(new File("build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java").exists());
     }
 
 

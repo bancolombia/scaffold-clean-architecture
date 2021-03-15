@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.8.6"
+    id "co.com.bancolombia.cleanArchitecture" version "1.8.8"
 }
 ```
 
@@ -177,6 +177,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gda --type [drivenAdapterType]
    ```
 
+<<<<<<< HEAD
    | Reference for **drivenAdapterType** | Name                 | Additional Options                                 |
    | ----------------------------------- | -------------------- | -------------------------------------------------- |
    | generic                             | Empty Driven Adapter | --name [name]                                      |
@@ -188,6 +189,20 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | rsocket                             | Rsocket Requester    |                                                    |
    | r2dbc                               | R2dbc Postgresql Client |                                                 |
    | kms                               | AWS Key Management Service  |                                                 |
+=======
+   | Reference for **drivenAdapterType** | Name                        | Additional Options                                 |
+   |-------------------------------------|-----------------------------|----------------------------------------------------|
+   | generic                             | Empty Driven Adapter        | --name [name]                                      |
+   | jpa                                 | JPA Repository              | --secret [true-false]                              |
+   | mongodb                             | Mongo Repository            | --secret [true-false]                              |
+   | asynceventbus                       | Async Event Bus             |                                                    |
+   | restconsumer                        | Rest Client Consumer        | --url [url]                                        |
+   | redis                               | Redis                       | --mode [template-repository] --secret [true-false] |
+   | rsocket                             | Rsocket Requester           |                                                    |
+   | r2dbc                               | R2dbc Postgresql Client     |                                                    |
+   | kms                                 | AWS Key Management Service  |                                                    |
+   | secrets                             | Secrets Manager Bancolombia |                                                    |
+>>>>>>> master
 
    _**This task will generate something like that:**_
 
@@ -224,12 +239,14 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    gradle gep --type [entryPointType]
    ```
 
-   | Reference for **entryPointType** | Name                                   | Additional Options         |
-   | -------------------------------- | -------------------------------------- | -------------------------- |
-   | generic                          | Empty Entry Point                      | --name [name]              |
-   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow    |
+   | Reference for **entryPointType** | Name                                   | Additional Options                       |
+   |----------------------------------|----------------------------------------|------------------------------------------|
+   | generic                          | Empty Entry Point                      | --name [name]                            |
+   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |
    | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |
-   | rsocket                          | Rsocket Controller Entry Point         |                            |
+   | rsocket                          | Rsocket Controller Entry Point         |                                          |
+   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |
+   | asynceventhandler                | Async Event Handler                    |                                          |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
@@ -239,7 +256,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    ```
 
    | Reference for **serverOption** | Name                      |
-      | ------------------------------ | ------------------------- |
+   | ------------------------------ | ------------------------- |
    | undertow                       | Undertow server (default) |
    | tomcat                         | Tomcat server             |
    | jetty                          | Jetty server              |

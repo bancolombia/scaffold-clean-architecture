@@ -19,6 +19,7 @@ import java.util.List;
 public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     private EntryPointType type;
     private String name;
+    private String pathGraphql = "/graphql";
     private Server server = Server.UNDERTOW;
     private BooleanOption router = BooleanOption.TRUE;
 
@@ -42,6 +43,11 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
         this.router = router;
     }
 
+    @Option(option = "pathgql", description = "set API GraphQL path")
+    public void setPathGraphql(String pathgql) {
+        this.pathGraphql = pathgql;
+    }
+
 
     @OptionValues("server")
     public List<Server> getServerOptions() {
@@ -58,6 +64,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
         return Arrays.asList(BooleanOption.values());
     }
 
+
     @TaskAction
     public void generateEntryPointTask() throws IOException, CleanException {
         if (type == null) {
@@ -70,6 +77,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
         logger.lifecycle("Entry Point type: {}", type);
         builder.addParam("task-param-name", name);
         builder.addParam("task-param-server", server);
+        builder.addParam("task-param-pathgql", pathGraphql);
         builder.addParam("task-param-router", router == BooleanOption.TRUE);
         builder.addParam("lombok", builder.isEnableLombok());
         moduleFactory.buildModule(builder);
