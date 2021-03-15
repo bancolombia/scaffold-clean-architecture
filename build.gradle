@@ -132,7 +132,7 @@ googleJavaFormat {
 //
 
 tasks.register('installGitHooks', Copy) {
-    from(file('config/hooks/pre-commit-stub')) {
+    from(file('config/hooks/pre-commit')) {
         rename 'pre-commit', 'pre-commit'
     }
     into file('.git/hooks')
