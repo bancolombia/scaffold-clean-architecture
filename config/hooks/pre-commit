@@ -1,6 +1,7 @@
 #!/bin/sh
 cat <<\EOF
 Error: Attempt to add a non-ASCII file name.
+EOF
 set -e
 
 REPO_ROOT_DIR="$(git rev-parse --show-toplevel)"
