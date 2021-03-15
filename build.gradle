@@ -135,7 +135,6 @@ tasks.register('installGitHooks', Copy) {
     from(file('config/hooks/pre-commit-stub')) {
         rename 'pre-commit-stub', 'pre-commit'
     }
-
     into file('.git/hooks')
     fileMode 0777
 }
