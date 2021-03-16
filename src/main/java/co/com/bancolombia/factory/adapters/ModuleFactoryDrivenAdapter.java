@@ -23,6 +23,8 @@ public class ModuleFactoryDrivenAdapter {
                 return new DrivenAdapterRsocketRequester();
             case R2DBC:
                 return new DrivenAdapterR2dbcPostgreSQL();
+            case S3:
+                return new DrivenAdaptetS3();
             case KMS:
                 return new DrivenAdapterKms();
             case SECRETS:
@@ -33,6 +35,6 @@ public class ModuleFactoryDrivenAdapter {
     }
 
     public enum DrivenAdapterType {
-        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, RSOCKET, R2DBC, KMS, SECRETS
+        JPA, MONGODB, ASYNCEVENTBUS, GENERIC, RESTCONSUMER, REDIS, RSOCKET, R2DBC, KMS, SECRETS, S3
     }
 }

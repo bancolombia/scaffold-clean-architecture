@@ -1,0 +1,17 @@
+package {{package}}.config.model;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+{{#lombok}}
+@Data
+{{/lombok}}
+@Configuration
+@ConfigurationProperties(prefix = "adapter.aws.s3")
+public class S3ConnectionProperties {
+
+    private String bucketName;
+    private String region;
+    private String endpoint;
+}
