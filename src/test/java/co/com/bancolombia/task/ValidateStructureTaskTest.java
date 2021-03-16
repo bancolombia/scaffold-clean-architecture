@@ -1,7 +1,11 @@
 package co.com.bancolombia.task;
 
+import static org.junit.Assert.*;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
+import java.io.File;
+import java.io.IOException;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;
@@ -10,203 +14,219 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ValidateStructureTaskTest {
 
-    ValidateStructureTask task;
+  ValidateStructureTask task;
 
-    public void setupException() throws IOException, CleanException {
-        Project project = ProjectBuilder.builder()
-                .withName("cleanArchitecture")
-
-                .withProjectDir(new File("build/unitTest"))
-                .build();
-
-        project.getPluginManager().apply(JavaPlugin.class);
-
-        project.getTasks().create("ca", GenerateStructureTask.class);
-        GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-        generateStructureTask.generateStructureTask();
-
+  public void setupException() throws IOException, CleanException {
+    Project project =
         ProjectBuilder.builder()
-                .withName("app-service")
-                .withProjectDir(new File("build/unitTest/applications/app-service"))
-                .withParent(project)
-                .build();
+            .withName("cleanArchitecture")
+            .withProjectDir(new File("build/unitTest"))
+            .build();
 
+    project.getPluginManager().apply(JavaPlugin.class);
 
-        project.getTasks().create("guc", GenerateUseCaseTask.class);
-        GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
-        generateUseCase.setName("business");
-        generateUseCase.generateUseCaseTask();
+    project.getTasks().create("ca", GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask =
+        (GenerateStructureTask) project.getTasks().getByName("ca");
+    generateStructureTask.generateStructureTask();
 
-        Project useCaseProject = ProjectBuilder.builder()
-                .withName("usecase")
-                .withProjectDir(new File("build/unitTest/domain/usecase"))
-                .withParent(project)
-                .build();
-        useCaseProject.getPluginManager().apply(JavaPlugin.class);
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withParent(project)
+        .build();
 
+    project.getTasks().create("guc", GenerateUseCaseTask.class);
+    GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
+    generateUseCase.setName("business");
+    generateUseCase.generateUseCaseTask();
 
-        Project modelProject = ProjectBuilder.builder()
-                .withName("model")
-                .withProjectDir(new File("build/unitTest/domain/model"))
-                .withParent(project)
-                .build();
-
-        modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 = modelProject.getTasks().getByName("clean");
-        task2.getActions().get(0).execute(task2);
-
-
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
-
-        project.getTasks().create("validate", ValidateStructureTask.class);
-        task = (ValidateStructureTask) project.getTasks().getByName("validate");
-    }
-
-
-    @Test(expected = CleanException.class)
-    public void validateStructureException() throws IOException, CleanException {
-        // Act
-        this.setupException();
-        task.validateStructureTask();
-        // Assert
-    }
-
-    private void prepareImperativeProject() throws IOException, CleanException {
-        Project project = ProjectBuilder.builder()
-                .withName("cleanArchitecture")
-
-                .withProjectDir(new File("build/unitTest"))
-                .build();
-
-        project.getPluginManager().apply(JavaPlugin.class);
-
-        project.getTasks().create("ca", GenerateStructureTask.class);
-        GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-        generateStructureTask.generateStructureTask();
-
+    Project useCaseProject =
         ProjectBuilder.builder()
-                .withName("app-service")
-                .withProjectDir(new File("build/unitTest/applications/app-service"))
-                .withParent(project)
-                .build();
+            .withName("usecase")
+            .withProjectDir(new File("build/unitTest/domain/usecase"))
+            .withParent(project)
+            .build();
+    useCaseProject.getPluginManager().apply(JavaPlugin.class);
 
-        project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
-        GenerateDrivenAdapterTask generateDriven = (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-        generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-        generateDriven.generateDrivenAdapterTask();
-
-        project.getTasks().create("guc", GenerateUseCaseTask.class);
-        GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
-        generateUseCase.setName("business");
-        generateUseCase.generateUseCaseTask();
-
-
-        Project mongoProject = ProjectBuilder.builder()
-                .withName("mongo-repository")
-                .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
-                .withParent(project)
-                .build();
-
-        Project modelProject = ProjectBuilder.builder()
-                .withName("model")
-                .withProjectDir(new File("build/unitTest/domain/model"))
-                .withParent(project)
-                .build();
-        mongoProject.getConfigurations().create("capsule").defaultDependencies(dependencySet -> {
-            dependencySet.add(project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
-        });
-        mongoProject.getPluginManager().apply(JavaPlugin.class);
-
-        modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 = modelProject.getTasks().getByName("clean");
-        task2.getActions().get(0).execute(task2);
-
-
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
-
-        project.getTasks().create("validate", ValidateStructureTask.class);
-        task = (ValidateStructureTask) project.getTasks().getByName("validate");
-    }
-
-    private void prepareReactiveProject() throws IOException, CleanException {
-        Project project = ProjectBuilder.builder()
-                .withName("cleanArchitecture")
-
-                .withProjectDir(new File("build/unitTest"))
-                .build();
-
-        project.getPluginManager().apply(JavaPlugin.class);
-
-        project.getTasks().create("ca", GenerateStructureTask.class);
-        GenerateStructureTask generateStructureTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-        generateStructureTask.setType(GenerateStructureTask.ProjectType.REACTIVE);
-        generateStructureTask.generateStructureTask();
-
+    Project modelProject =
         ProjectBuilder.builder()
-                .withName("app-service")
-                .withProjectDir(new File("build/unitTest/applications/app-service"))
-                .withParent(project)
-                .build();
+            .withName("model")
+            .withProjectDir(new File("build/unitTest/domain/model"))
+            .withParent(project)
+            .build();
 
-        project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
-        GenerateDrivenAdapterTask generateDriven = (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-        generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-        generateDriven.generateDrivenAdapterTask();
+    modelProject.getPluginManager().apply(JavaPlugin.class);
+    Task task2 = modelProject.getTasks().getByName("clean");
+    task2.getActions().get(0).execute(task2);
 
-        project.getTasks().create("guc", GenerateUseCaseTask.class);
-        GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
-        generateUseCase.setName("business");
-        generateUseCase.generateUseCaseTask();
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+            .exists());
 
+    project.getTasks().create("validate", ValidateStructureTask.class);
+    task = (ValidateStructureTask) project.getTasks().getByName("validate");
+  }
 
-        Project mongoProject = ProjectBuilder.builder()
-                .withName("mongo-repository")
-                .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
-                .withParent(project)
-                .build();
+  @Test(expected = CleanException.class)
+  public void validateStructureException() throws IOException, CleanException {
+    // Act
+    this.setupException();
+    task.validateStructureTask();
+    // Assert
+  }
 
-        Project modelProject = ProjectBuilder.builder()
-                .withName("model")
-                .withProjectDir(new File("build/unitTest/domain/model"))
-                .withParent(project)
-                .build();
-        mongoProject.getConfigurations().create("capsule").defaultDependencies(dependencySet -> {
-            dependencySet.add(project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
-        });
-        mongoProject.getPluginManager().apply(JavaPlugin.class);
+  private void prepareImperativeProject() throws IOException, CleanException {
+    Project project =
+        ProjectBuilder.builder()
+            .withName("cleanArchitecture")
+            .withProjectDir(new File("build/unitTest"))
+            .build();
 
-        modelProject.getPluginManager().apply(JavaPlugin.class);
-        Task task2 = modelProject.getTasks().getByName("clean");
-        task2.getActions().get(0).execute(task2);
+    project.getPluginManager().apply(JavaPlugin.class);
 
+    project.getTasks().create("ca", GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask =
+        (GenerateStructureTask) project.getTasks().getByName("ca");
+    generateStructureTask.generateStructureTask();
 
-        assertTrue(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle").exists());
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withParent(project)
+        .build();
 
-        project.getTasks().create("validate", ValidateStructureTask.class);
-        task = (ValidateStructureTask) project.getTasks().getByName("validate");
-    }
+    project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
+    GenerateDrivenAdapterTask generateDriven =
+        (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
+    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    generateDriven.generateDrivenAdapterTask();
 
-    @Test
-    public void validateStructureImperativeProject() throws IOException, CleanException {
-        // Act
-        this.prepareImperativeProject();
-        task.validateStructureTask();
-        // Assert
-    }
+    project.getTasks().create("guc", GenerateUseCaseTask.class);
+    GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
+    generateUseCase.setName("business");
+    generateUseCase.generateUseCaseTask();
 
-    @Test
-    public void validateStructureReactiveProject() throws IOException, CleanException {
-        // Act
-        this.prepareReactiveProject();
-        task.validateStructureTask();
-        // Assert
-    }
+    Project mongoProject =
+        ProjectBuilder.builder()
+            .withName("mongo-repository")
+            .withProjectDir(
+                new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
+            .withParent(project)
+            .build();
+
+    Project modelProject =
+        ProjectBuilder.builder()
+            .withName("model")
+            .withProjectDir(new File("build/unitTest/domain/model"))
+            .withParent(project)
+            .build();
+    mongoProject
+        .getConfigurations()
+        .create("capsule")
+        .defaultDependencies(
+            dependencySet -> {
+              dependencySet.add(
+                  project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
+            });
+    mongoProject.getPluginManager().apply(JavaPlugin.class);
+
+    modelProject.getPluginManager().apply(JavaPlugin.class);
+    Task task2 = modelProject.getTasks().getByName("clean");
+    task2.getActions().get(0).execute(task2);
+
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+            .exists());
+
+    project.getTasks().create("validate", ValidateStructureTask.class);
+    task = (ValidateStructureTask) project.getTasks().getByName("validate");
+  }
+
+  private void prepareReactiveProject() throws IOException, CleanException {
+    Project project =
+        ProjectBuilder.builder()
+            .withName("cleanArchitecture")
+            .withProjectDir(new File("build/unitTest"))
+            .build();
+
+    project.getPluginManager().apply(JavaPlugin.class);
+
+    project.getTasks().create("ca", GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask =
+        (GenerateStructureTask) project.getTasks().getByName("ca");
+    generateStructureTask.setType(GenerateStructureTask.ProjectType.REACTIVE);
+    generateStructureTask.generateStructureTask();
+
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
+    GenerateDrivenAdapterTask generateDriven =
+        (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
+    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    generateDriven.generateDrivenAdapterTask();
+
+    project.getTasks().create("guc", GenerateUseCaseTask.class);
+    GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
+    generateUseCase.setName("business");
+    generateUseCase.generateUseCaseTask();
+
+    Project mongoProject =
+        ProjectBuilder.builder()
+            .withName("mongo-repository")
+            .withProjectDir(
+                new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
+            .withParent(project)
+            .build();
+
+    Project modelProject =
+        ProjectBuilder.builder()
+            .withName("model")
+            .withProjectDir(new File("build/unitTest/domain/model"))
+            .withParent(project)
+            .build();
+    mongoProject
+        .getConfigurations()
+        .create("capsule")
+        .defaultDependencies(
+            dependencySet -> {
+              dependencySet.add(
+                  project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
+            });
+    mongoProject.getPluginManager().apply(JavaPlugin.class);
+
+    modelProject.getPluginManager().apply(JavaPlugin.class);
+    Task task2 = modelProject.getTasks().getByName("clean");
+    task2.getActions().get(0).execute(task2);
+
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+            .exists());
+
+    project.getTasks().create("validate", ValidateStructureTask.class);
+    task = (ValidateStructureTask) project.getTasks().getByName("validate");
+  }
+
+  @Test
+  public void validateStructureImperativeProject() throws IOException, CleanException {
+    // Act
+    this.prepareImperativeProject();
+    task.validateStructureTask();
+    // Assert
+  }
+
+  @Test
+  public void validateStructureReactiveProject() throws IOException, CleanException {
+    // Act
+    this.prepareReactiveProject();
+    task.validateStructureTask();
+    // Assert
+  }
 }
