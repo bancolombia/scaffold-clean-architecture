@@ -26,46 +26,39 @@ public class S3Operations {
     }
 {{/lombok}}
 
-    public void uploadObject(String objectKey, byte[] fileContent) {
+    public boolean uploadObject(String objectKey, byte[] fileContent) {
         s3Client.putObject(configurePutObject(objectKey),
-                RequestBody.fromBytes(fileContent));
+                RequestBody.fromBytes(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
-    public void uploadObject(String objectKey, String fileContent) {
+    public boolean uploadObject(String objectKey, String fileContent) {
         s3Client.putObject(configurePutObject(objectKey),
-                RequestBody.fromString(fileContent));
+                RequestBody.fromString(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
-    public void uploadObject(String objectKey, File fileContent) {
+    public boolean uploadObject(String objectKey, File fileContent) {
         s3Client.putObject(configurePutObject(objectKey),
-                RequestBody.fromFile(fileContent));
+                RequestBody.fromFile(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
     public List<S3Object> listBucketObjects(){
-        ListObjectsRequest listObjects = ListObjectsRequest
+        return s3Client.listObjects(ListObjectsRequest
                 .builder()
                 .bucket(properties.getBucketName())
-                .build();
-
-        return s3Client.listObjects(listObjects).contents();
+                .build()).contents();
     }
 
     public InputStream getObject(String objectKey) {
-
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+        return s3Client.getObjectAsBytes(GetObjectRequest.builder()
                 .key(objectKey)
                 .bucket(properties.getBucketName())
-                .build();
-
-        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(getObjectRequest);
-        return objectBytes.asInputStream();
+                .build()).asInputStream();
     }
 
-    public void deleteObject(String objectKey) {
-        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+    public boolean deleteObject(String objectKey) {
+        return s3Client.deleteObject(DeleteObjectRequest.builder()
                 .key(objectKey)
-                .bucket(properties.getBucketName()).build();
-        s3Client.deleteObject(deleteObjectRequest);
+                .bucket(properties.getBucketName()).build()).sdkHttpResponse().isSuccessful();
     }
 
     private PutObjectRequest configurePutObject(String objectKey) {

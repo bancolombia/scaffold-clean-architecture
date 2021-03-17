@@ -1,0 +1,38 @@
+package {{package}}.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import co.com.bancolombia.config.model.S3ConnectionProperties;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+
+import java.net.URI;
+
+@Configuration
+public class S3Config {
+
+    @Profile({"dev", "cer", "pdn"})
+    @Bean
+    public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties) {
+        return getBuilder(s3Properties).build();
+    }
+
+    @Profile("local")
+    @Bean
+    public S3AsyncClient s3AsyncClient(AwsBasicCredentials awsBasicCredentials, S3ConnectionProperties s3Properties) {
+        return getBuilder(s3Properties)
+                .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
+                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .build();
+    }
+
+    private S3AsyncClientBuilder getBuilder(S3ConnectionProperties s3Properties) {
+        return S3AsyncClient.builder()
+        .region(Region.of(s3Properties.getRegion()));
+    }
+
+}

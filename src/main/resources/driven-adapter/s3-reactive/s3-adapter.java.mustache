@@ -1,0 +1,21 @@
+package co.com.bancolombia.s3;
+
+import org.springframework.stereotype.Repository;
+import co.com.bancolombia.operations.S3Operations;
+import lombok.RequiredArgsConstructor;
+
+@Repository
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class S3Adapter // implements ModelRepository from domain {
+
+   private final S3Operations s3Operations;
+
+{{^lombok}}
+   public S3Adapter(S3Operations s3Operations ) {
+   this.s3Operations = s3Operations;
+   }
+{{/lombok}}
+
+}
