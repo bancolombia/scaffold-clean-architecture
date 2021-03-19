@@ -19,12 +19,12 @@ public class DrivenAdaptetS3 implements ModuleFactory {
         String typePath = getPathType(builder.isReactive());
         logger.lifecycle("Generating {}", typePath);
         builder.setupFromTemplate("driven-adapter/" + typePath);
-        builder.appendToSettings("s3-respository", "infrastructure/driven-adapters");
+        builder.appendToSettings("s3-repository", "infrastructure/driven-adapters");
         builder.appendToProperties("adapter.aws.s3")
                 .put("bucketName", "")
                 .put("region","us-east-1")
                 .put("endpoint","");
-        builder.appendDependencyToModule("app-service", "implementation project(':s3-respository')");
+        builder.appendDependencyToModule("app-service", "implementation project(':s3-repository')");
 
     }
 
