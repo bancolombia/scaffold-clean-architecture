@@ -478,7 +478,6 @@ public class PluginCleanFunctionalTest {
     }
 
     @Test
-    @Ignore
     public void canRunTaskGenerateDrivenAdapterS3Test() {
         canRunTaskGenerateStructureReactiveProject();
 
