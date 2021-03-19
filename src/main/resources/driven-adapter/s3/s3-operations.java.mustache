@@ -1,8 +1,7 @@
-package co.com.bancolombia.s3;
+package co.com.bancolombia.s3.operations;
 
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
-import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -18,7 +17,6 @@ import java.util.List;
 public class S3Operations {
 
     private final S3Client s3Client;
-    private final S3ConnectionProperties properties;
 
 {{^lombok}}
     public S3Adapter(S3Client s3Client ) {
@@ -26,44 +24,44 @@ public class S3Operations {
     }
 {{/lombok}}
 
-    public boolean uploadObject(String objectKey, byte[] fileContent) {
-        s3Client.putObject(configurePutObject(objectKey),
+    public boolean uploadObject(String bucketName, String objectKey, byte[] fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
                 RequestBody.fromBytes(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
-    public boolean uploadObject(String objectKey, String fileContent) {
-        s3Client.putObject(configurePutObject(objectKey),
+    public boolean uploadObject(String bucketName, String objectKey, String fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
                 RequestBody.fromString(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
-    public boolean uploadObject(String objectKey, File fileContent) {
-        s3Client.putObject(configurePutObject(objectKey),
+    public boolean uploadObject(String bucketName, String objectKey, File fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
                 RequestBody.fromFile(fileContent)).sdkHttpResponse().isSuccessful();
     }
 
-    public List<S3Object> listBucketObjects(){
+    public List<S3Object> listBucketObjects(String bucketName) {
         return s3Client.listObjects(ListObjectsRequest
                 .builder()
-                .bucket(properties.getBucketName())
+                .bucket(bucketName)
                 .build()).contents();
     }
 
-    public InputStream getObject(String objectKey) {
+    public InputStream getObject(String bucketName, String objectKey) {
         return s3Client.getObjectAsBytes(GetObjectRequest.builder()
                 .key(objectKey)
-                .bucket(properties.getBucketName())
+                .bucket(bucketName)
                 .build()).asInputStream();
     }
 
-    public boolean deleteObject(String objectKey) {
+    public boolean deleteObject(String bucketName, String objectKey) {
         return s3Client.deleteObject(DeleteObjectRequest.builder()
                 .key(objectKey)
-                .bucket(properties.getBucketName()).build()).sdkHttpResponse().isSuccessful();
+                .bucket(bucketName).build()).sdkHttpResponse().isSuccessful();
     }
 
-    private PutObjectRequest configurePutObject(String objectKey) {
+    private PutObjectRequest configurePutObject(String bucketName, String objectKey) {
         return PutObjectRequest.builder()
-                .bucket(properties.getBucketName())
+                .bucket(bucketName)
                 .key(objectKey)
                 .build();
     }
