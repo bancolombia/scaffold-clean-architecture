@@ -479,7 +479,7 @@ public class PluginCleanFunctionalTest {
 
     @Test
     public void canRunTaskGenerateDrivenAdapterS3Test() {
-        canRunTaskGenerateStructureReactiveProject();
+        canRunTaskGenerateStructureWithOutParameters();
 
         String task = "generateDrivenAdapter";
         String valueDrivenAdapter = "S3";
