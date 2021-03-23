@@ -23,7 +23,7 @@ public class S3Config {
 
     @Profile("local")
     @Bean
-    public S3AsyncClient s3AsyncClient(AwsBasicCredentials awsBasicCredentials, S3ConnectionProperties s3Properties) {
+    public S3AsyncClient localS3AsyncClient(AwsBasicCredentials awsBasicCredentials, S3ConnectionProperties s3Properties) {
         return getBuilder(s3Properties)
                 .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
                 .endpointOverride(URI.create(s3Properties.getEndpoint()))
