@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.gradle.api.logging.Logger;
 
 @AllArgsConstructor
-public class DrivenAdapterKms implements ModuleFactory {
+public class DrivenAdapterS3 implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
@@ -17,19 +17,16 @@ public class DrivenAdapterKms implements ModuleFactory {
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
     builder.setupFromTemplate("driven-adapter/" + typePath);
-    builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
+    builder.appendToSettings("s3-repository", "infrastructure/driven-adapters");
     builder
-        .appendToProperties("adapter.aws.kms")
+        .appendToProperties("adapter.aws.s3")
+        .put("bucketName", "")
         .put("region", "us-east-1")
-        .put("host", "localhost")
-        .put("protocol", "http")
-        .put("port", "4566")
-        .put("keyId", "add-your-key-here");
-    builder.appendDependencyToModule("app-service", "implementation project(':kms-repository')");
-    new DrivenAdapterSecrets().buildModule(builder);
+        .put("endpoint", "");
+    builder.appendDependencyToModule("app-service", "implementation project(':s3-repository')");
   }
 
   protected String getPathType(boolean isReactive) {
-    return isReactive ? "kms-reactive" : "kms";
+    return isReactive ? "s3-reactive" : "s3";
   }
 }
