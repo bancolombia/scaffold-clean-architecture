@@ -23,7 +23,7 @@ public class S3Operations {
     private final S3AsyncClient s3AsyncClient;
 
 {{^lombok}}
-    public S3Adapter(S3AsyncClient s3AsyncClient ) {
+    public S3Operations(S3AsyncClient s3AsyncClient ) {
         this.s3AsyncClient = s3AsyncClient;
     }
 {{/lombok}}
