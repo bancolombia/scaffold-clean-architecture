@@ -24,6 +24,8 @@ public class ModuleFactoryDrivenAdapter {
         return new DrivenAdapterRsocketRequester();
       case R2DBC:
         return new DrivenAdapterR2dbcPostgreSQL();
+      case S3:
+        return new DrivenAdapterS3();
       case KMS:
         return new DrivenAdapterKms();
       case SECRETS:
@@ -43,6 +45,7 @@ public class ModuleFactoryDrivenAdapter {
     RSOCKET,
     R2DBC,
     KMS,
-    SECRETS
+    SECRETS,
+    S3
   }
 }

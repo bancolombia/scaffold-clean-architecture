@@ -673,6 +673,39 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void canRunTaskGenerateDrivenAdapterS3Test() {
+    canRunTaskGenerateStructureWithOutParameters();
+
+    String task = "generateDrivenAdapter";
+    String valueDrivenAdapter = "S3";
+    runner.withArguments(task, "--type=" + valueDrivenAdapter);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
   public void canRunTaskGeneratePipelineAzureDevOpsTest() {
     canRunTaskGenerateStructureWithOutParameters();
     String task = "generatePipeline";

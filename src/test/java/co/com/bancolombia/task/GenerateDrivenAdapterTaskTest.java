@@ -558,6 +558,64 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
   }
 
+  @Test
+  public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);

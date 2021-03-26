@@ -1,0 +1,81 @@
+package co.com.bancolombia.s3.operations;
+
+import org.springframework.stereotype.Component;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.async.AsyncResponseTransformer;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+import reactor.core.publisher.Mono;
+
+@Component
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class S3Operations {
+
+    private final S3AsyncClient s3AsyncClient;
+
+{{^lombok}}
+    public S3Adapter(S3AsyncClient s3AsyncClient ) {
+        this.s3AsyncClient = s3AsyncClient;
+    }
+{{/lombok}}
+
+    public Mono<Boolean> uploadObject(String bucketName,String objectKey, byte[] fileContent) {
+        return Mono.fromFuture(
+                s3AsyncClient.putObject(configurePutObject(bucketName,objectKey),
+                        AsyncRequestBody.fromBytes(fileContent)))
+                .map(response -> response.sdkHttpResponse().isSuccessful());
+    }
+
+    public Mono<Boolean> uploadObject(String bucketName,String objectKey, String fileContent) {
+        return Mono.fromFuture(
+                s3AsyncClient.putObject(configurePutObject(bucketName,objectKey),
+                        AsyncRequestBody.fromString(fileContent)))
+                .map(response -> response.sdkHttpResponse().isSuccessful());
+    }
+
+    public Mono<Boolean> uploadObject(String bucketName,String objectKey, File fileContent) {
+        return Mono.fromFuture(
+                s3AsyncClient.putObject(configurePutObject(bucketName,objectKey),
+                        AsyncRequestBody.fromFile(fileContent)))
+                .map(response -> response.sdkHttpResponse().isSuccessful());
+    }
+
+    public Mono<List<S3Object>> listBucketObjects(String bucketName){
+        return Mono.fromFuture(s3AsyncClient.listObjects(ListObjectsRequest
+                .builder()
+                .bucket(bucketName)
+                .build())).map(response -> response.contents());
+    }
+
+    public Mono<InputStream> getObject(String bucketName,String objectKey) {
+        return Mono.fromFuture(s3AsyncClient.getObject(GetObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName)
+                .build(), AsyncResponseTransformer.toBytes()))
+                .map(response -> response.asInputStream());
+    }
+
+    public Mono<Boolean> deleteObject(String bucketName,String objectKey) {
+        return Mono.fromFuture(s3AsyncClient.deleteObject(DeleteObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName).build()))
+                .map(response -> response.sdkHttpResponse().isSuccessful());
+    }
+
+    private PutObjectRequest configurePutObject(String bucketName,String objectKey) {
+        return PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
+    }
+
+}
