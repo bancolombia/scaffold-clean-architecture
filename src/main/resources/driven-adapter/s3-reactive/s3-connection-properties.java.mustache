@@ -16,4 +16,32 @@ public class S3ConnectionProperties {
     private String bucketName;
     private String region;
     private String endpoint;
+
+{{^lombok}}
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+{{^lombok}}
+
+
 }
