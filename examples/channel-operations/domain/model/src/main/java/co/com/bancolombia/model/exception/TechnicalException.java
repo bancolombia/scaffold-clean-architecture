@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TechnicalException extends Exception {
 
-    private final TechnicalErrorMessage technicalErrorMessage;
+  private final TechnicalErrorMessage technicalErrorMessage;
 
-    public TechnicalException(Throwable cause, TechnicalErrorMessage technicalErrorMessage) {
-        super(cause);
-        this.technicalErrorMessage = technicalErrorMessage;
-    }
+  public TechnicalException(Throwable cause, TechnicalErrorMessage technicalErrorMessage) {
+    super(cause);
+    this.technicalErrorMessage = technicalErrorMessage;
+  }
 }

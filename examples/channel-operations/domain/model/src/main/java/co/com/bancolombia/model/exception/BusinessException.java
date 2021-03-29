@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BusinessException extends Exception {
 
-    private final BusinessErrorMessage businessErrorMessage;
+  private final BusinessErrorMessage businessErrorMessage;
 }

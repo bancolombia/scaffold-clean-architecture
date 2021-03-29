@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostgresqlConnectionProperties {
 
-	private String database;
-	private String schema;
-	private String username;
-	private String password;
-	private String host;
-	private Integer port;
-
+  private String database;
+  private String schema;
+  private String username;
+  private String password;
+  private String host;
+  private Integer port;
 }

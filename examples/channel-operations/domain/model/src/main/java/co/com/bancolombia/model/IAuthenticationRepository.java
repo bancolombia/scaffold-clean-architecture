@@ -4,9 +4,9 @@ import reactor.core.publisher.Mono;
 
 public interface IAuthenticationRepository {
 
-	Mono<Authentication> save(Authentication authentication);
+  Mono<Authentication> save(Authentication authentication);
 
-	Mono<Authentication> findByUserNameAndChannelId(String userName, String channel);
+  Mono<Authentication> findByUserNameAndChannelId(String userName, String channel);
 
-	Mono<Void> delete(Authentication authentication);
+  Mono<Void> delete(Authentication authentication);
 }

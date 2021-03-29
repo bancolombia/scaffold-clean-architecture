@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AuthenticationMapper {
 
-    Authentication toModel(AuthenticationData authenticationData);
-    AuthenticationData toData(Authentication authentication);
+  Authentication toModel(AuthenticationData authenticationData);
+
+  AuthenticationData toData(Authentication authentication);
 }
