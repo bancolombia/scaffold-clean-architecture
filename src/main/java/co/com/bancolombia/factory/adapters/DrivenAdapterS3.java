@@ -13,7 +13,6 @@ public class DrivenAdapterS3 implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    builder.loadPackage();
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
     builder.setupFromTemplate("driven-adapter/" + typePath);

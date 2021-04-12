@@ -192,7 +192,7 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     runner.build();
 
-    runner.withArguments("generateDrivenAdapter", "--type=" + "ASYNCEVENTBUS");
+    runner.withArguments("generateDrivenAdapter", "--type=" + "MONGODB");
     runner.withProjectDir(projectDir);
     runner.build();
   }
@@ -330,7 +330,7 @@ public class PluginCleanFunctionalTest {
 
   @Test
   public void canRunTaskGenerateEntryPointGrahpqlApiCase() {
-    canRunTaskGenerateStructureWithOutParameters();
+    canRunTaskGenerateStructureReactiveProject();
     String task = "generateEntryPoint";
     String valueEntryPoint = "graphql";
     String valuePathgqlEntryPoint = "/graphqlpath";
@@ -553,7 +553,7 @@ public class PluginCleanFunctionalTest {
 
   @Test
   public void canRunTaskGenerateDrivenAdapterEventBusTest() {
-    canRunTaskGenerateStructureWithOutParameters();
+    canRunTaskGenerateStructureReactiveProject();
     String task = "generateDrivenAdapter";
     String valueDrivenAdapter = "ASYNCEVENTBUS";
 
@@ -580,9 +580,20 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
+  @Test(expected = Exception.class)
+  public void shouldFailTaskGenerateDrivenAdapterEventBusForNonReactiveTest() {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String valueDrivenAdapter = "ASYNCEVENTBUS";
+
+    runner.withArguments(task, "--type=" + valueDrivenAdapter);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+  }
+
   @Test
   public void canRunTaskGenerateEntryPointEventHandlerTest() {
-    canRunTaskGenerateStructureWithOutParameters();
+    canRunTaskGenerateStructureReactiveProject();
     String task = "generateEntryPoint";
     String valueDrivenAdapter = "ASYNCEVENTHANDLER";
 

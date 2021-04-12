@@ -350,6 +350,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
     // Act
     task.generateDrivenAdapterTask();

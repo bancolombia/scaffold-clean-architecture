@@ -143,7 +143,7 @@ public class GenerateEntryPointTaskTest {
   @Test
   public void generateEntryPointApiGraphql() throws IOException, CleanException {
     // Arrange
-    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType(ModuleFactoryEntryPoint.EntryPointType.GRAPHQL);
     // Act
     task.generateEntryPointTask();

@@ -2,6 +2,8 @@ package co.com.bancolombia.factory;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import co.com.bancolombia.exceptions.ValidationException;
+import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.utils.FileUpdater;
@@ -16,6 +18,7 @@ import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -51,6 +54,11 @@ public class ModuleBuilder {
     params.put("objectMapperVersion", Constants.RCOMMONS_OBJECT_MAPPER_VERSION);
     params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
+    try {
+      loadPackage();
+    } catch (IOException e) {
+      logger.warn("cannot read gradle.properties");
+    }
   }
 
   public void persist() throws IOException {
@@ -192,6 +200,22 @@ public class ModuleBuilder {
 
   public Boolean isEnableLombok() {
     return getABooleanProperty("lombok");
+  }
+
+  @SafeVarargs
+  public final <T extends Validation> void runValidations(Class<T>... validations)
+      throws ValidationException {
+    for (Iterator<Class<T>> it = Arrays.stream(validations).iterator(); it.hasNext(); ) {
+      try {
+        T validation = it.next().getDeclaredConstructor().newInstance();
+        validation.validate(this);
+      } catch (InstantiationException
+          | IllegalAccessException
+          | InvocationTargetException
+          | NoSuchMethodException e) {
+        logger.warn("Error instantiating validator: {}", e.getMessage());
+      }
+    }
   }
 
   private Boolean getABooleanProperty(String property) {
