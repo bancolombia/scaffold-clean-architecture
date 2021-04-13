@@ -257,7 +257,6 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/applications/app-service/src/main/java/co/com/test/MainApplication.java")
             .exists());
-
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/main/java/co/com/test/config")
             .exists());
