@@ -94,3 +94,6 @@ tasks.withType(JavaCompile) {
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+tasks.named('wrapper') {
+  gradleVersion = '6.7' 
+ }
