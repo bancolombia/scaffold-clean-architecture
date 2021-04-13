@@ -4,7 +4,6 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     compile 'org.springframework.boot:spring-boot-starter'
-    {{#reactive}}compile 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'{{/reactive}}
     runtime('org.springframework.boot:spring-boot-devtools')
 }
 

@@ -1,0 +1,6 @@
+{
+  "folders": [],
+  "files": {
+    "commons/object-mapper/object-mapper-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/ObjectMapperConfig.java"
+  }
+}
