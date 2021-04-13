@@ -28,12 +28,8 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-<<<<<<< HEAD
-    id "co.com.bancolombia.cleanArchitecture" version "1.9.2"
-=======
     id "co.com.bancolombia.cleanArchitecture" version "1.9.1"
->>>>>>> master
-}
+
 ```
 
 # Tasks

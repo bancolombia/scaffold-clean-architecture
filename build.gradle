@@ -122,8 +122,6 @@ sonarqube {
     }
 }
 
-<<<<<<< HEAD
-=======
 googleJavaFormat {
     toolVersion = "1.7"
 }
@@ -140,6 +138,3 @@ tasks.register('installGitHooks', Copy) {
     into file('.git/hooks')
     fileMode 0777
 }
-
-
->>>>>>> master
