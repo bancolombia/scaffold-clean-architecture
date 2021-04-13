@@ -79,6 +79,10 @@ public class GenerateStructureTaskTest {
                 "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
             .exists());
     assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+            .exists());
+    assertTrue(
         new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
@@ -123,6 +127,10 @@ public class GenerateStructureTaskTest {
     assertTrue(new File("build/unitTest/applications/app-service/build.gradle").exists());
     assertTrue(
         new File("build/unitTest/applications/app-service/src/main/java/test/MainApplication.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
             .exists());
     assertTrue(
         new File("build/unitTest/applications/app-service/src/main/java/test/config").exists());
