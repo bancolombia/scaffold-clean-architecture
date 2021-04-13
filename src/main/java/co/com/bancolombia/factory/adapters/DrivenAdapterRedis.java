@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.adapters;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.gradle.api.logging.Logger;
@@ -28,6 +29,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
     if (builder.getBooleanParam("include-secret")) {
       new DrivenAdapterSecrets().buildModule(builder);
     }
+    new ObjectMapperFactory().buildModule(builder);
   }
 
   protected String getPathMode(Mode mode) {

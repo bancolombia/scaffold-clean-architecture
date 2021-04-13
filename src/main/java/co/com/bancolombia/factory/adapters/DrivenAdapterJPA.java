@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.adapters;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
 
 public class DrivenAdapterJPA implements ModuleFactory {
@@ -23,5 +24,6 @@ public class DrivenAdapterJPA implements ModuleFactory {
     if (builder.getBooleanParam("include-secret")) {
       new DrivenAdapterSecrets().buildModule(builder);
     }
+    new ObjectMapperFactory().buildModule(builder);
   }
 }
