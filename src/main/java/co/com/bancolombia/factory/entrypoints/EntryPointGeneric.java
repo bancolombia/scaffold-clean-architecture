@@ -9,7 +9,6 @@ import java.io.IOException;
 public class EntryPointGeneric implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.loadPackage();
     String name = builder.getStringParam("task-param-name");
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException(

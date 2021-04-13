@@ -15,7 +15,6 @@ public class DrivenAdapterRedis implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    builder.loadPackage();
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);

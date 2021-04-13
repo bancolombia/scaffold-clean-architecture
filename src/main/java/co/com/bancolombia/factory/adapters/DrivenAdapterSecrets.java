@@ -10,7 +10,6 @@ import org.gradle.api.logging.Logger;
 public class DrivenAdapterSecrets implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.loadPackage();
     Logger logger = builder.getProject().getLogger();
     String secretLibrary = "";
     if (builder.isReactive()) {

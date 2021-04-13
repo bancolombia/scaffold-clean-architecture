@@ -9,7 +9,6 @@ import java.io.IOException;
 public class DrivenAdapterJPA implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.loadPackage();
     builder.setupFromTemplate("driven-adapter/jpa-repository");
     builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
     builder

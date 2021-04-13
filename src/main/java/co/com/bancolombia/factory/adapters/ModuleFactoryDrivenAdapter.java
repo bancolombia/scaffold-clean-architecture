@@ -21,7 +21,7 @@ public class ModuleFactoryDrivenAdapter {
       case REDIS:
         return new DrivenAdapterRedis();
       case RSOCKET:
-        return new DrivenAdapterRsocketRequester();
+        return new DrivenAdapterRSocketRequester();
       case R2DBC:
         return new DrivenAdapterR2dbcPostgreSQL();
       case S3:

@@ -15,7 +15,7 @@ public class ModuleFactoryEntryPoint {
       case GENERIC:
         return new EntryPointGeneric();
       case RSOCKET:
-        return new EntryPointRsocketResponder();
+        return new EntryPointRSocketResponder();
       case GRAPHQL:
         return new EntryPointGraphql();
       case ASYNCEVENTHANDLER:

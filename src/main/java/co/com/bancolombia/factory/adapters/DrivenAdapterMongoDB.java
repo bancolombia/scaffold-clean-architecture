@@ -11,7 +11,6 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    builder.loadPackage();
     if (builder.isReactive()) {
       logger.lifecycle("Generating for reactive project");
       builder.setupFromTemplate("driven-adapter/mongo-reactive");
