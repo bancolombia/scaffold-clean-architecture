@@ -13,6 +13,7 @@
   "files": {
     "structure/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
     "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
+    "structure/applications/appservice/usecases.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/UseCasesConfig.java",
     "structure/applications/appservice/log4j2.properties.mustache": "applications/app-service/src/main/resources/log4j2.properties",
     "structure/applications/appservice/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml",
     "structure/deployment/dockerfile.mustache": "deployment/Dockerfile",

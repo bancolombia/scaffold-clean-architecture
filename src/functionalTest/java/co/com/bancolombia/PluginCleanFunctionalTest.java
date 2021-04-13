@@ -106,6 +106,10 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+            .exists());
+    assertTrue(
+        new File(
                 "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
@@ -162,6 +166,10 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(
                 "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
             .exists());
     assertTrue(
         new File(
