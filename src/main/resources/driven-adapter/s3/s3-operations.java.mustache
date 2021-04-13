@@ -1,0 +1,71 @@
+package co.com.bancolombia.s3.operations;
+
+import org.springframework.stereotype.Component;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+
+@Component
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class S3Operations {
+
+    private final S3Client s3Client;
+
+{{^lombok}}
+    public S3Operations(S3Client s3Client ) {
+        this.s3Client = s3Client;
+    }
+{{/lombok}}
+
+    public boolean uploadObject(String bucketName, String objectKey, byte[] fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromBytes(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    public boolean uploadObject(String bucketName, String objectKey, String fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromString(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    public boolean uploadObject(String bucketName, String objectKey, File fileContent) {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromFile(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    public List<S3Object> listBucketObjects(String bucketName) {
+        return s3Client.listObjects(ListObjectsRequest
+                .builder()
+                .bucket(bucketName)
+                .build()).contents();
+    }
+
+    public InputStream getObject(String bucketName, String objectKey) {
+        return s3Client.getObjectAsBytes(GetObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName)
+                .build()).asInputStream();
+    }
+
+    public boolean deleteObject(String bucketName, String objectKey) {
+        return s3Client.deleteObject(DeleteObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName).build()).sdkHttpResponse().isSuccessful();
+    }
+
+    private PutObjectRequest configurePutObject(String bucketName, String objectKey) {
+        return PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
+    }
+
+}
