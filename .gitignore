@@ -304,3 +304,6 @@ Temporary Items
 # HPROF
 # -----
 *.hprof
+
+#gradle wrapper
+gradle/
