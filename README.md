@@ -28,7 +28,7 @@ To use the plugin you need Gradle version 5.6 or later, to start add the followi
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.9.2"
+    id "co.com.bancolombia.cleanArchitecture" version "1.9.3"
 }
 ```
 
