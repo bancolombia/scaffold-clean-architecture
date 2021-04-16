@@ -50,7 +50,28 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Gradle Wrapper Generation
+        run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Upgrade README.md
+        run:  sed -i 's/version \".*\"/version "${GITHUB_REF/refs\/tags\//}"/g' README.md
+      - name: Upgrade Gradle.properties
+        run: sed -i 's/version=.*/version=${GITHUB_REF/refs\/tags\//}/g' gradle.properties
+      - name: Upgrade Constants.java
+        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${GITHUB_REF/refs\/tags\//}";/g' src/main/java/co/com/bancolombia/Constants.java
+      - name: Save version
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'master'
+          commit-message: 'upgrade version to ${GITHUB_REF/refs\/tags\//}'
+          force-add: 'true'
+          files: README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
+          name: Release Bot
+          email: release-bot@bancolombia.com.co
       - name: Publish plugin
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
