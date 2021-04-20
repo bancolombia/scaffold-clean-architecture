@@ -45,12 +45,12 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.spullara.mustache.java:compiler:0.9.6'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
-    compile 'commons-io:commons-io:2.7'
-    compile gradleApi()
-    testCompile "org.mockito:mockito-core:2.9.0"
+    api 'com.github.spullara.mustache.java:compiler:0.9.6'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
+    api 'commons-io:commons-io:2.7'
+    api gradleApi()
+    testImplementation "org.mockito:mockito-core:2.9.0"
     testImplementation 'junit:junit:4.12'
     testImplementation gradleTestKit()
 
