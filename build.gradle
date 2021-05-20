@@ -142,3 +142,4 @@ tasks.register('installGitHooks', Copy) {
 tasks.named('wrapper') {
     gradleVersion = '6.7'
 }
+
