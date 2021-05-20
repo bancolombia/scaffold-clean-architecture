@@ -16,6 +16,7 @@ subprojects {
     {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
 
+    compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.VERSION_1_8
 
     dependencies {
