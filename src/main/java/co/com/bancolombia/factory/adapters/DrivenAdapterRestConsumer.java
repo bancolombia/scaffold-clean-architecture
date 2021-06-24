@@ -16,6 +16,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");
       builder.appendDependencyToModule(
           "app-service", "compile 'org.springframework.boot:spring-boot-starter-webflux'");
+      builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
