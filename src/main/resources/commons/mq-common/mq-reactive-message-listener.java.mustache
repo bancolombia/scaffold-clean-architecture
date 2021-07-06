@@ -1,0 +1,46 @@
+package {{package}}.mq.common;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+{{/lombok}}
+import org.springframework.messaging.handler.invocation.reactive.InvocableHandlerMethod;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import javax.jms.Message;
+import javax.jms.MessageListener;
+
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+public final class MQReactiveMessageListener implements MessageListener {
+    {{#lombok}}
+    @Getter
+    {{/lombok}}
+    private final String name;
+    private final InvocableHandlerMethod method;
+
+    {{^lombok}}
+    public MQReactiveMessageListener(String name, InvocableHandlerMethod method) {
+        this.name = name;
+        this.method = method;
+    }
+    {{/lombok}}
+
+    @Override
+    public void onMessage(Message message) {
+        Mono.defer(() -> process(message))
+                .subscribeOn(Schedulers.boundedElastic())
+                .subscribe();
+    }
+
+    protected Mono<Object> process(Message message) {
+        return method.invoke(null, message);
+    }
+    {{^lombok}}
+    public String getName() {
+        return name;
+    }
+    {{/lombok}}
+}

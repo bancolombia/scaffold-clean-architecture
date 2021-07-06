@@ -1,0 +1,75 @@
+package {{package}}.mq.common.utils;
+
+import {{package}}.mq.common.MQReactiveMessageListener;
+import {{package}}.mq.common.api.MQTemporaryQueuesContainer;
+import {{package}}.mq.common.config.MQListenerConfig;
+import {{package}}.mq.common.connection.MQMultiConnectionListener;
+import {{package}}.mq.common.context.MQContextListener;
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+{{^lombok}}
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+{{/lombok}}
+import org.springframework.util.StringUtils;
+
+import javax.jms.ConnectionFactory;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
+
+{{#lombok}}
+@Log4j2
+{{/lombok}}
+public class MQMessageListenerUtils {
+    {{^lombok}}
+    private static final Logger log = LogManager.getLogger(MQMessageListenerUtils.class);
+    {{/lombok}}
+
+    public static void createListeners(ConnectionFactory cf,
+                                       MQReactiveMessageListener listener,
+                                       MQTemporaryQueuesContainer container,
+                                       MQListenerConfig config) {
+        if (log.isInfoEnabled()) {
+            log.info("Creating {} listeners", config.getConcurrency());
+        }
+        if (StringUtils.hasText(config.getTempQueueAlias())) {
+            createListenersTemp(cf, listener, container, config);
+        } else {
+            createListenersFixed(cf, listener, config);
+        }
+    }
+
+    public static void createListenersFixed(ConnectionFactory cf,
+                                            MQReactiveMessageListener listener,
+                                            MQListenerConfig config) {
+        ExecutorService service = Executors.newFixedThreadPool(config.getConcurrency());
+        IntStream.range(0, config.getConcurrency())
+                .mapToObj(number -> MQContextListener.builder()
+                        .name(listener.getName() + "-" + number)
+                        .connectionFactory(cf)
+                        .config(config)
+                        .listener(listener)
+                        .build())
+                .forEach(service::submit);
+        if (log.isInfoEnabled()) {
+            log.info("{} listeners created for {}", config.getConcurrency(), config.getQueue());
+        }
+    }
+
+    public static void createListenersTemp(ConnectionFactory cf,
+                                           MQReactiveMessageListener listener,
+                                           MQTemporaryQueuesContainer container,
+                                           MQListenerConfig config) {
+        MQMultiConnectionListener.builder()
+                .name(listener.getName())
+                .connectionFactory(cf)
+                .config(config)
+                .listener(listener)
+                .container(container)
+                .build()
+                .start();
+    }
+
+}

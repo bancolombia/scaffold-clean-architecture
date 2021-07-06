@@ -3,7 +3,13 @@
  */
 package co.com.bancolombia;
 
-import static org.junit.Assert.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.SimplePathVisitor;
+import org.gradle.testkit.runner.BuildResult;
+import org.gradle.testkit.runner.GradleRunner;
+import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,15 +20,12 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.file.SimplePathVisitor;
-import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.GradleRunner;
-import org.gradle.testkit.runner.TaskOutcome;
-import org.junit.Before;
-import org.junit.Test;
 
-/** A simple functional test for the 'co.com.bancolombia.greeting' plugin. */
+import static org.junit.Assert.*;
+
+/**
+ * A simple functional test for the 'co.com.bancolombia.greeting' plugin.
+ */
 public class PluginCleanFunctionalTest {
   File projectDir = new File("build/functionalTest");
   GradleRunner runner;
@@ -102,23 +105,23 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
@@ -165,23 +168,23 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
@@ -255,18 +258,18 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File("build/functionalTest/applications/app-service/build.gradle").exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/test/MainApplication.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/test/MainApplication.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/main/java/co/com/test/config")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/test")
@@ -287,11 +290,11 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java")
+            "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java")
+            "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -309,7 +312,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java")
+            "build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -327,7 +330,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java")
+            "build/functionalTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/build.gradle")
@@ -351,11 +354,11 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java")
+            "build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java")
+            "build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -372,19 +375,19 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/build.gradle")
+            "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/build.gradle")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java")
+            "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service")
+            "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -403,11 +406,11 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/rsocket-responder/src/main/java/co/com/bancolombia/controller/RsocketController.java")
+            "build/functionalTest/infrastructure/entry-points/rsocket-responder/src/main/java/co/com/bancolombia/controller/RsocketController.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller")
+            "build/functionalTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -423,7 +426,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle")
@@ -444,7 +447,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle")
@@ -452,13 +455,13 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/functionalTest/applications/app-service/build.gradle"),
-                StandardCharsets.UTF_8)
+            new File("build/functionalTest/applications/app-service/build.gradle"),
+            StandardCharsets.UTF_8)
             .contains("spring-boot-starter-undertow"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/functionalTest/applications/app-service/build.gradle"),
-                StandardCharsets.UTF_8)
+            new File("build/functionalTest/applications/app-service/build.gradle"),
+            StandardCharsets.UTF_8)
             .contains(
                 "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
 
@@ -477,7 +480,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle")
@@ -485,13 +488,13 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/functionalTest/applications/app-service/build.gradle"),
-                StandardCharsets.UTF_8)
+            new File("build/functionalTest/applications/app-service/build.gradle"),
+            StandardCharsets.UTF_8)
             .contains("spring-boot-starter-jetty"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/functionalTest/applications/app-service/build.gradle"),
-                StandardCharsets.UTF_8)
+            new File("build/functionalTest/applications/app-service/build.gradle"),
+            StandardCharsets.UTF_8)
             .contains(
                 "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
 
@@ -510,7 +513,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/entry-points/api-rest/build.gradle")
@@ -518,8 +521,8 @@ public class PluginCleanFunctionalTest {
 
     assertFalse(
         FileUtils.readFileToString(
-                new File("build/functionalTest/applications/app-service/build.gradle"),
-                StandardCharsets.UTF_8)
+            new File("build/functionalTest/applications/app-service/build.gradle"),
+            StandardCharsets.UTF_8)
             .contains(
                 "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
 
@@ -541,19 +544,19 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java")
+            "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java")
+            "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java")
+            "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -574,15 +577,15 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java")
+            "build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java")
+            "build/functionalTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
+            "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -611,23 +614,23 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/async-event-handler/build.gradle")
+            "build/functionalTest/infrastructure/entry-points/async-event-handler/build.gradle")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java")
+            "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java")
+            "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java")
+            "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
+            "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -645,19 +648,19 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle")
+            "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java")
+            "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java")
+            "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java")
+            "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -677,15 +680,15 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java")
+            "build/functionalTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/KmsConnectionProperties.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/KmsConnectionProperties.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -706,19 +709,19 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+            "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -752,7 +755,7 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         new File(
-                "build/functionalTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml")
+            "build/functionalTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -851,6 +854,62 @@ public class PluginCleanFunctionalTest {
     runner.withArguments("validateStructure");
     runner.withProjectDir(projectDir);
     runner.build();
+  }
+
+  @Test
+  public void shouldGenerateMQEntryPoint() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateEntryPoint";
+    String type = "MQ";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/entry-points/mq-listener/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+            "build/functionalTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
+            .exists());
+    validateMQCommon();
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateMQDrivenAdapter() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateDrivenAdapter";
+    String type = "MQ";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/mq-sender/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+            "build/functionalTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+            .exists());
+    validateMQCommon();
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  private void validateMQCommon() {
+    assertTrue(
+        new File("build/functionalTest/infrastructure/helpers/mq-common/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+            "build/functionalTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/MQReactiveMessageListener.java")
+            .exists());
+    assertTrue(
+        new File(
+            "build/functionalTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/api/MQMessageSender.java")
+            .exists());
   }
 
   private void writeString(File file, String string) throws IOException {

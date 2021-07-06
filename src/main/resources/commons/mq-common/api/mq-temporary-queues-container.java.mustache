@@ -1,0 +1,9 @@
+package {{package}}.mq.common.api;
+
+import javax.jms.TemporaryQueue;
+
+public interface MQTemporaryQueuesContainer {
+    void registerTemporaryQueue(String alias, TemporaryQueue queue);
+
+    TemporaryQueue get(String alias);
+}

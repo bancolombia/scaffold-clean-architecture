@@ -1,0 +1,42 @@
+package {{package}}.mq.listener;
+
+import {{package}}.mq.common.MQListener;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
+
+@Component
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+public class SampleMQMessageListener {
+    // private final SampleUseCase useCase;
+
+    {{^lombok}}
+    public SampleMQMessageListener(/*SampleUseCase useCase*/) {
+        // this.useCase = useCase;
+    }
+
+    {{/lombok}}
+    // For fixed queues
+    @MQListener(value = "${ibm.input-queue}", concurrency = "${ibm.input-concurrency}")
+    public Mono<Void> process(Message message) throws JMSException {
+        String text = ((TextMessage) message).getText();
+        // return useCase.sample(text);
+        return Mono.empty();
+    }
+
+    // For an automatic generated temporary queue
+    @MQListener(tempQueueAlias = "any-custom-value", concurrency = "${ibm.input-concurrency}")
+    public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
+        String text = ((TextMessage) message).getText();
+        // return useCase.sample(text);
+        return Mono.empty();
+    }
+}
