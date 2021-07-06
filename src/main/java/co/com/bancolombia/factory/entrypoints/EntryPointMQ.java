@@ -5,7 +5,6 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.MQCommonFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
-
 import java.io.IOException;
 
 public class EntryPointMQ implements ModuleFactory {

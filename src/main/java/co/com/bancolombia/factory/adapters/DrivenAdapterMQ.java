@@ -5,9 +5,8 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.MQCommonFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
-import lombok.AllArgsConstructor;
-
 import java.io.IOException;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class DrivenAdapterMQ implements ModuleFactory {
