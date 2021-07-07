@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':model')
+    compile 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'io.r2dbc:r2dbc-postgresql'
+    implementation 'org.mapstruct:mapstruct:1.3.1.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.3.1.Final'
+}

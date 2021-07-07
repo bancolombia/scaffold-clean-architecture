@@ -1,0 +1,65 @@
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+
+    dependencies {
+        implementation 'io.projectreactor:reactor-core'
+        implementation 'io.projectreactor.addons:reactor-extra'
+
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        compileOnly 'org.projectlombok:lombok:1.18.16'
+        annotationProcessor 'org.projectlombok:lombok:1.18.16'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+        testCompileOnly 'org.projectlombok:lombok:1.18.16'
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+    test.finalizedBy(project.tasks.jacocoTestReport)
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.enabled true
+            xml.destination file("${buildDir}/reports/jacoco.xml")
+            csv.enabled false
+            html.destination file("${buildDir}/reports/jacocoHtml")
+        }
+    }
+
+}
+
+jacoco {
+    toolVersion = "${jacocoVersion}"
+    reportsDir = file("$buildDir/reports")
+}
+
+task jacocoMergedReport(type: JacocoReport) {
+    dependsOn = subprojects.jacocoTestReport
+    additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom files(subprojects.sourceSets.main.output)
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true'
+    ]
+}

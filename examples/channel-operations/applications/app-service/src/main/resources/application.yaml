@@ -1,0 +1,14 @@
+##Spring Configuration
+server:
+  port: 8090
+spring:
+  application:
+    name: r2dbcconnection
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  profiles:
+    include:
