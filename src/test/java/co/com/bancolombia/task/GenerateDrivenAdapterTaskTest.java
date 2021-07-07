@@ -617,6 +617,31 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
   }
 
+  @Test
+  public void generateMQSender() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MQ);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+            .exists());
+    assertTrue(new File("build/unitTest/infrastructure/helpers/mq-common/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/MQReactiveMessageListener.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/api/MQMessageSender.java")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);

@@ -1,0 +1,9 @@
+package {{package}}.mq.common.api;
+
+import javax.jms.JMSContext;
+import javax.jms.JMSException;
+import javax.jms.Message;
+
+public interface MQMessageCreator {
+    Message create(JMSContext context) throws JMSException;
+}

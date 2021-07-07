@@ -20,6 +20,7 @@ public class Constants {
   public static final String GRADLE_WRAPPER_VERSION = "6.7";
   public static final String TOMCAT_EXCLUSION =
       "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
+  public static final String MQ_CLIENT_VERSION = "2.5.0";
 
   public enum BooleanOption {
     TRUE,

@@ -1,0 +1,40 @@
+package {{package}}.mq.common.utils;
+
+import {{package}}.mq.common.config.MQListenerConfig;
+import com.ibm.mq.jms.MQQueue;
+
+import javax.jms.*;
+
+import static com.ibm.msg.client.wmq.common.CommonConstants.*;
+
+public class MQQueueUtils {
+
+    public static Destination setupFixedQueue(JMSContext context, MQListenerConfig config) {
+        return setProperties((MQQueue) context.createQueue(config.getQueue()), config);
+    }
+
+    public static TemporaryQueue setupTemporaryQueue(Session session, MQListenerConfig config) {
+        try {
+            return (TemporaryQueue) setProperties((MQQueue) session.createTemporaryQueue(), config);
+        } catch (JMSException ex) {
+            throw new JMSRuntimeException(ex.getMessage(), ex.getErrorCode(), ex);
+        }
+    }
+
+    public static Destination setProperties(MQQueue queue, MQListenerConfig config) {
+        try {
+            queue.setProperty(WMQ_TARGET_CLIENT, "1");
+            if (config.isMqmd()) {
+                queue.setProperty(WMQ_MQMD_READ_ENABLED, "true");
+                queue.setProperty(WMQ_MQMD_WRITE_ENABLED, "true");
+            }
+            if (config.isAsync()) {
+                queue.setPutAsyncAllowed(WMQ_PUT_ASYNC_ALLOWED_ENABLED);
+                queue.setReadAheadAllowed(WMQ_READ_AHEAD_ALLOWED_ENABLED);
+            }
+            return queue;
+        } catch (JMSException ex) {
+            throw new JMSRuntimeException(ex.getMessage(), ex.getErrorCode(), ex);
+        }
+    }
+}

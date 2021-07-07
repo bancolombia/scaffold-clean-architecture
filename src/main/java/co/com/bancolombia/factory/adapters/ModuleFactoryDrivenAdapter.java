@@ -30,6 +30,8 @@ public class ModuleFactoryDrivenAdapter {
         return new DrivenAdapterKms();
       case SECRETS:
         return new DrivenAdapterSecrets();
+      case MQ:
+        return new DrivenAdapterMQ();
       default:
         throw new InvalidTaskOptionException("Driven Adapter type invalid");
     }
@@ -46,6 +48,7 @@ public class ModuleFactoryDrivenAdapter {
     R2DBC,
     KMS,
     SECRETS,
-    S3
+    S3,
+    MQ
   }
 }

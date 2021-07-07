@@ -853,6 +853,61 @@ public class PluginCleanFunctionalTest {
     runner.build();
   }
 
+  @Test
+  public void shouldGenerateMQEntryPoint() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateEntryPoint";
+    String type = "MQ";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/entry-points/mq-listener/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
+            .exists());
+    validateMQCommon();
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateMQDrivenAdapter() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateDrivenAdapter";
+    String type = "MQ";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/mq-sender/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+            .exists());
+    validateMQCommon();
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  private void validateMQCommon() {
+    assertTrue(
+        new File("build/functionalTest/infrastructure/helpers/mq-common/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/MQReactiveMessageListener.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/api/MQMessageSender.java")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);
