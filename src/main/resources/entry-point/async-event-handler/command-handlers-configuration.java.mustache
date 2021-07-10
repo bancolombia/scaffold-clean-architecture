@@ -1,0 +1,65 @@
+package {{package}}.events.convention;
+
+import lombok.RequiredArgsConstructor;
+import org.reactivecommons.async.api.DefaultCommandHandler;
+import org.reactivecommons.async.api.HandlerRegistry;
+import org.reactivecommons.async.api.handlers.CommandHandler;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+
+import java.util.Map;
+
+
+@Configuration
+@RequiredArgsConstructor
+@ComponentScan(
+        basePackages = "{{package}}.events.handlers",
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = CommandHandler.class)
+        })
+public class CommandHandlersConfiguration {
+
+    private static final String COMMAND_EXECUTOR_SUFFIX = CommandHandler.class.getSimpleName();
+    private static final String ILLEGAL_EXECUTOR_SUFFIX =
+            String.format("All command executors must use '%s' suffix", COMMAND_EXECUTOR_SUFFIX);
+
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private final ApplicationContext applicationContext;
+
+    @Bean
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public HandlerRegistry commandExecutorsRegistry() {
+        Map<String, CommandHandler> commandHandlers = applicationContext.getBeansOfType(CommandHandler.class);
+        HandlerRegistry handlerRegistry = HandlerRegistry.register();
+
+        commandHandlers.entrySet().stream()
+                .filter(this::isNotDefaultCommandHandler)
+                .forEach(entry ->
+                        handlerRegistry.handleCommand(getCommandName(entry.getKey()),
+                                entry.getValue()));
+
+        return handlerRegistry;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private boolean isNotDefaultCommandHandler(Map.Entry<String, CommandHandler> entry) {
+        return !(entry.getValue() instanceof DefaultCommandHandler);
+    }
+
+    public String getCommandName(String executorName) {
+        if (!executorName.endsWith(COMMAND_EXECUTOR_SUFFIX)) {
+            throw new IllegalArgumentException(ILLEGAL_EXECUTOR_SUFFIX);
+        }
+
+        String commandName = executorName.substring(0, executorName.indexOf(COMMAND_EXECUTOR_SUFFIX));
+
+        return applicationName + "." + commandName;
+    }
+
+}

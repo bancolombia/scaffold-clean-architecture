@@ -1,0 +1,65 @@
+package {{package}}.events.convention;
+
+import lombok.RequiredArgsConstructor;
+import org.reactivecommons.async.api.DefaultQueryHandler;
+import org.reactivecommons.async.api.HandlerRegistry;
+import org.reactivecommons.async.api.handlers.QueryHandler;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+
+import java.util.Map;
+
+
+@Configuration
+@RequiredArgsConstructor
+@ComponentScan(
+        basePackages = "{{package}}.events.handlers",
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = QueryHandler.class)
+        })
+public class QueryHandlersConfiguration {
+
+    private static final String QUERY_HANDLER_SUFFIX = QueryHandler.class.getSimpleName();
+    private static final String ILLEGAL_HANDLER_SUFFIX =
+            String.format("All query handlers must use '%s' suffix", QUERY_HANDLER_SUFFIX);
+
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private final ApplicationContext applicationContext;
+
+    @Bean
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public HandlerRegistry queryHandlersRegistry() {
+        Map<String, QueryHandler> queryHandlers = applicationContext.getBeansOfType(QueryHandler.class);
+        HandlerRegistry handlerRegistry = HandlerRegistry.register();
+
+        queryHandlers.entrySet().stream()
+                .filter(this::isNotDefaultQueryHandler)
+                .forEach(entry ->
+                        handlerRegistry.serveQuery(getQueryResource(entry.getKey()),
+                                entry.getValue()));
+
+        return handlerRegistry;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private boolean isNotDefaultQueryHandler(Map.Entry<String, QueryHandler> entry) {
+        return !(entry.getValue() instanceof DefaultQueryHandler);
+    }
+
+    private String getQueryResource(String handlerName) {
+        if (!handlerName.endsWith(QUERY_HANDLER_SUFFIX)) {
+            throw new IllegalArgumentException(ILLEGAL_HANDLER_SUFFIX);
+        }
+
+        String queryName = handlerName.substring(0, handlerName.indexOf(QUERY_HANDLER_SUFFIX));
+
+        return applicationName + "." + queryName;
+    }
+
+}

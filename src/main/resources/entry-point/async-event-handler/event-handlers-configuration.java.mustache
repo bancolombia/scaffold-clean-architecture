@@ -1,0 +1,60 @@
+package {{package}}.events.convention;
+
+import lombok.RequiredArgsConstructor;
+import org.reactivecommons.async.api.HandlerRegistry;
+import org.reactivecommons.async.api.handlers.EventHandler;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.core.annotation.AnnotationUtils;
+
+import java.util.Map;
+
+
+@Configuration
+@RequiredArgsConstructor
+@ComponentScan(
+        basePackages = "{{package}}.events.handlers",
+        includeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = EventHandler.class)
+        })
+public class EventHandlersConfiguration {
+
+    private static final String EVENT_LISTENER_SUFFIX = EventHandler.class.getSimpleName();
+    private static final String ILLEGAL_LISTENER_SUFFIX =
+            String.format("All event listeners must use '%s' suffix", EVENT_LISTENER_SUFFIX);
+
+    private final ApplicationContext applicationContext;
+
+    @Bean
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public HandlerRegistry eventListenersRegistry() {
+        Map<String, EventHandler> eventHandlers = applicationContext.getBeansOfType(EventHandler.class);
+        HandlerRegistry handlerRegistry = HandlerRegistry.register();
+
+        eventHandlers.forEach((eventHandlerName, eventHandler) ->
+                handlerRegistry.listenEvent(getEventName(eventHandlerName, eventHandler),
+                        eventHandler));
+
+        return handlerRegistry;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private String getEventName(String eventListenerName, EventHandler eventListener) {
+        if (!eventListenerName.endsWith(EVENT_LISTENER_SUFFIX)) {
+            throw new IllegalArgumentException(ILLEGAL_LISTENER_SUFFIX);
+        }
+
+        EventName annotation = AnnotationUtils.findAnnotation(eventListener.getClass(), EventName.class);
+
+        if (annotation == null) {
+            throw new IllegalArgumentException(eventListenerName + " is not annotated with @" +
+                    EventName.class.getSimpleName());
+        }
+
+        return annotation.value();
+    }
+
+}
