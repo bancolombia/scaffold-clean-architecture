@@ -5,10 +5,8 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
-import lombok.AllArgsConstructor;
 import org.gradle.api.logging.Logger;
 
-@AllArgsConstructor
 public class DrivenAdapterRedis implements ModuleFactory {
   public static final String PARAM_MODE = "task-param-mode";
 

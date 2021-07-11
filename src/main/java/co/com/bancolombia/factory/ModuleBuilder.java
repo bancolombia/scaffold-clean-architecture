@@ -55,7 +55,7 @@ public class ModuleBuilder {
     params.put("objectMapperVersion", Constants.RCOMMONS_OBJECT_MAPPER_VERSION);
     params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
-    params.put("mqVersion", Constants.MQ_CLIENT_VERSION);
+    params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
     try {
       loadPackage();
     } catch (IOException e) {
