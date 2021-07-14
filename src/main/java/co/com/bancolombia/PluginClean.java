@@ -92,6 +92,14 @@ public class PluginClean implements Plugin<Project> {
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(DeleteModuleTask.class)
             .build());
+    tasksModels.add(
+        TaskModel.builder()
+            .name("generateAcceptanceTest")
+            .shortcut("gat")
+            .description("Generate subproject by karate framework in deployment layer")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(GenerateAcceptanceTestTask.class)
+            .build());
 
     return tasksModels;
   }
