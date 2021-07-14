@@ -48,7 +48,10 @@ public class FileUtils {
 
   public static String readProperties(String projectPath, String variable) throws IOException {
     Properties properties = new Properties();
-    properties.load(new FileReader(projectPath + "/gradle.properties"));
+    try (BufferedReader br =
+        new BufferedReader(new FileReader(projectPath + "/gradle.properties"))) {
+      properties.load(br);
+    }
     if (properties.getProperty(variable) != null) {
       return properties.getProperty(variable);
     } else {
