@@ -8,6 +8,10 @@
     "test/acceptance-test/example/demo.runner.java.mustache": "deployment/acceptance-test/src/test/java/{{packagePath}}/demo/DemoRunner.java",
     "test/acceptance-test/resources/logback-test.xml.mustache": "deployment/acceptance-test/src/test/resources/logback-test.xml",
     "test/acceptance-test/resources/karate-config.js.mustache": "deployment/acceptance-test/src/test/resources/karate-config.js",
-    "test/acceptance-test/resources/demo.feature.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/demo.feature"
+    "test/acceptance-test/resources/demo.feature.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/demo.feature",
+    "test/acceptance-test/build.gradle.mustache": "deployment/acceptance-test/build.gradle",
+    "test/acceptance-test/settings.gradle.mustache": "deployment/acceptance-test/settings.gradle",
+    "test/acceptance-test/readme.md.mustache": "deployment/acceptance-test/README.md"
+
   }
 }

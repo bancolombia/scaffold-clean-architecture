@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+ext {
+    karateVersion = "1.0.1"
+    cucumberReportVersion = "5.5.3"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation "com.intuit.karate:karate-junit5:${karateVersion}"
+    testImplementation "net.masterthought:cucumber-reporting:${cucumberReportVersion}"
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty "karate.options", System.properties.getProperty("karate.options")
+    systemProperty "karate.env", System.properties.getProperty("karate.env")
+    outputs.upToDateWhen { false }
+}
+

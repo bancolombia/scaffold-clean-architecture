@@ -10,6 +10,5 @@ public class AcceptanceTest implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.setupFromTemplate("test/acceptance-test");
-    new AcceptanceTest().buildModule(builder);
   }
 }
