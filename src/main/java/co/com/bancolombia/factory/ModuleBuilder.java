@@ -163,7 +163,6 @@ public class ModuleBuilder {
   }
 
   public void addParamPackage(String packageName) {
-    logger.lifecycle("Project Package: {}", packageName.toLowerCase());
     this.params.put("package", packageName.toLowerCase());
     this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
   }

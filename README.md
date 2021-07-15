@@ -18,6 +18,7 @@ Gradle plugin to create a java application based on Clean Architecture following
   - [Generate Entry Point](#generate-entry-point)
   - [Validate Structure](#validate-structure)
   - [Generate Pipeline](#generate-pipeline)
+  - [Generate Acceptance Tests](#generate-acceptance-test)
   - [Delete Module](#delete-module)
 - [How can I help?](#how-can-i-help)
 - [Whats Next?](#whats-next)
@@ -290,6 +291,15 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | ------------------------------ | -------------- |
    | azure                          | Azure Pipeline |
    | github                          | GitHub Action |
+   
+ ## Generate Acceptance Test
+   7. The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/",this task does not have  required parameters.
+   
+      ```shell
+      gradle generateAcceptanceTest
+      gradle gat 
+      ```
+>   Karate is an open-source tool to combine API test-automation, mocks, performance-testing and even UI automation into a single, unified framework. The BDD syntax popularized by Cucumber is language-neutral, and easy for even non-programmers. Assertions and HTML reports are built-in, and you can run tests in parallel for speed.
 
 ## Delete Module
 
