@@ -21,7 +21,7 @@ public class TestParallel {
 
     @Test
     public void testAll() {
-        Results results = Runner.path("classpath:karate")
+        Results results = Runner.path("classpath:{{package}}")
                 .outputCucumberJson(true)
                 .tags("~@ignore")
                 .parallel(WORKERS);
