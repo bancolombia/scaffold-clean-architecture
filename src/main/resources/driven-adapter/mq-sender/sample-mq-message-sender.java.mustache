@@ -1,18 +1,23 @@
 package {{package}}.mq.sender;
 
-import {{package}}.mq.common.api.MQMessageSender;
+import co.com.bancolombia.commons.jms.api.MQMessageSender;
+import co.com.bancolombia.commons.jms.mq.EnableMQMessageSender;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import javax.jms.Message;
+
 @Component
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
+@EnableMQMessageSender
 public class SampleMQMessageSender /* implements SomeGateway */ {
     private final MQMessageSender sender;
+//    private final MQTemporaryQueuesContainer container; // Inject it to reference a temporary queue
     {{^lombok}}
 
     public MyMessageSender(MQMessageSender sender) {
@@ -21,6 +26,10 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     {{/lombok}}
 
     public Mono<String> send(String message) {
-        return sender.send(context -> context.createTextMessage(message));
+        return sender.send(context -> {
+            Message textMessage = context.createTextMessage(message);
+//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+            return textMessage;
+        });
     }
 }

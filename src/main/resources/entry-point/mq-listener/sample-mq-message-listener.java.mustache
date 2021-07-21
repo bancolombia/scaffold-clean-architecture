@@ -1,6 +1,6 @@
 package {{package}}.mq.listener;
 
-import {{package}}.mq.common.MQListener;
+import co.com.bancolombia.commons.jms.mq.MQListener;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
@@ -25,7 +25,7 @@ public class SampleMQMessageListener {
 
     {{/lombok}}
     // For fixed queues
-    @MQListener(value = "${ibm.input-queue}", concurrency = "${ibm.input-concurrency}")
+    @MQListener
     public Mono<Void> process(Message message) throws JMSException {
         String text = ((TextMessage) message).getText();
         // return useCase.sample(text);
@@ -33,10 +33,10 @@ public class SampleMQMessageListener {
     }
 
     // For an automatic generated temporary queue
-    @MQListener(tempQueueAlias = "any-custom-value", concurrency = "${ibm.input-concurrency}")
-    public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
-        String text = ((TextMessage) message).getText();
-        // return useCase.sample(text);
-        return Mono.empty();
-    }
+    // @MQListener(tempQueueAlias = "any-custom-value")
+    // public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
+    //     String text = ((TextMessage) message).getText();
+    //     // return useCase.sample(text);
+    //     return Mono.empty();
+    // }
 }

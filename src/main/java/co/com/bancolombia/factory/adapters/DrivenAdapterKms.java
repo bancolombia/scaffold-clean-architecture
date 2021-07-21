@@ -4,10 +4,8 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import java.io.IOException;
-import lombok.AllArgsConstructor;
 import org.gradle.api.logging.Logger;
 
-@AllArgsConstructor
 public class DrivenAdapterKms implements ModuleFactory {
 
   @Override

@@ -385,15 +385,6 @@ public class GenerateEntryPointTaskTest {
         new File(
                 "build/unitTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
             .exists());
-    assertTrue(new File("build/unitTest/infrastructure/helpers/mq-common/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/MQReactiveMessageListener.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/helpers/mq-common/src/main/java/co/com/bancolombia/mq/common/api/MQMessageSender.java")
-            .exists());
   }
 
   @Test
