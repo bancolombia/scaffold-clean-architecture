@@ -1,7 +1,7 @@
 dependencies {
-    compile project(':model')
-    compile 'org.springframework.boot:spring-boot-starter-data-redis'
-    compile 'com.fasterxml.jackson.core:jackson-databind'
+    implementation project(':model')
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
     testCompile 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
