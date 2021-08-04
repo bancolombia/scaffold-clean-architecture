@@ -1,9 +1,9 @@
 dependencies {
     implementation project(':model')
 
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
-    runtime 'com.h2database:h2'
-    testCompile 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
 }

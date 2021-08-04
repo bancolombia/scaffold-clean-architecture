@@ -3,8 +3,8 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
-    compile 'org.springframework.boot:spring-boot-starter'
-    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 
 task explodedJar(type: Copy) {
