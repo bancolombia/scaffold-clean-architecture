@@ -337,7 +337,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void canRunTaskGenerateEntryPointGrahpqlApiCase() {
+  public void canRunTaskGenerateEntryPointGraphqlApiCase() {
     canRunTaskGenerateStructureReactiveProject();
     String task = "generateEntryPoint";
     String valueEntryPoint = "graphql";
@@ -362,7 +362,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void canRunTaskGenerateDrivenAdapterRsocketRequesterCase() {
+  public void canRunTaskGenerateDrivenAdapterRSocketRequesterCase() {
     canRunTaskGenerateStructureReactiveProject();
     String task = "generateDrivenAdapter";
     String valueDrivenAdapter = "rsocket";
@@ -390,7 +390,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void canRunTaskGenerateEntryPointrRsocketResponderCase() {
+  public void canRunTaskGenerateEntryPointRSocketResponderCase() {
     canRunTaskGenerateStructureReactiveProject();
     String task = "generateEntryPoint";
     String valueDrivenAdapter = "rsocket";
@@ -719,6 +719,30 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(
                 "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateHelperTest() {
+    canRunTaskGenerateStructureWithOutParameters();
+
+    String task = "generateHelper";
+    String valueDrivenAdapter = "S3Helper";
+    runner.withArguments(task, "--name=" + valueDrivenAdapter);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/helpers/s3-helper/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/helpers/s3-helper/src/main/java/co/com/bancolombia/s3helper")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/helpers/s3-helper/src/test/java/co/com/bancolombia/s3helper")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);

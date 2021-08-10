@@ -73,7 +73,7 @@ public class GenerateDrivenAdapterTaskTest {
   }
 
   @Test
-  public void generateEntryPointGeneric() throws IOException, CleanException {
+  public void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
     task.setName("MyDrivenAdapter");
