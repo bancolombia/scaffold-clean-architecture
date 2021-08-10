@@ -6,7 +6,6 @@
     "driven-adapter/async-event-bus/events-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/events/gateways/EventsGateway.java",
     "driven-adapter/async-event-bus/reactive-events-gateway.java.mustache": "infrastructure/driven-adapters/async-event-bus/src/main/java/{{packagePath}}/events/ReactiveEventsGateway.java",
     "driven-adapter/async-event-bus/reactive-direct-async-gateway.java.mustache": "infrastructure/driven-adapters/async-event-bus/src/main/java/{{packagePath}}/events/ReactiveDirectAsyncGateway.java",
-    "driven-adapter/async-event-bus/build.gradle.mustache": "infrastructure/driven-adapters/async-event-bus/build.gradle",
-    "driven-adapter/async-event-bus/event-bus-config.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/EventBusConfig.java"
+    "driven-adapter/async-event-bus/build.gradle.mustache": "infrastructure/driven-adapters/async-event-bus/build.gradle"
   }
 }

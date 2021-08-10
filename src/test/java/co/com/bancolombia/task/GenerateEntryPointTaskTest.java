@@ -368,10 +368,6 @@ public class GenerateEntryPointTaskTest {
         new File(
                 "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
             .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/EventBusConfig.java")
-            .exists());
   }
 
   @Test

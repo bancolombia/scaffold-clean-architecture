@@ -7,8 +7,7 @@
     "entry-point/async-event-handler/events-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/EventsHandler.java",
     "entry-point/async-event-handler/commands-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/CommandsHandler.java",
     "entry-point/async-event-handler/queries-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/QueriesHandler.java",
-    "entry-point/async-event-handler/build.gradle.mustache": "infrastructure/entry-points/async-event-handler/build.gradle",
-    "entry-point/async-event-handler/event-bus-config.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/EventBusConfig.java"
+    "entry-point/async-event-handler/build.gradle.mustache": "infrastructure/entry-points/async-event-handler/build.gradle"
 
   }
 }
