@@ -5,6 +5,8 @@ import co.com.bancolombia.factory.adapters.*;
 
 public class ModuleFactoryHelpers {
 
+  private ModuleFactoryHelpers() {}
+
   public static ModuleFactory getDrivenAdapterFactory() {
     return new HelperGeneric();
   }
