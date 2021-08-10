@@ -16,9 +16,10 @@ Gradle plugin to create a java application based on Clean Architecture following
   - [Generate Use Case](#generate-use-case)
   - [Generate Driven Adapter](#generate-driven-adapter)
   - [Generate Entry Point](#generate-entry-point)
-  - [Validate Structure](#validate-structure)
+  - [Generate Helper](#generate-helper)
   - [Generate Pipeline](#generate-pipeline)
   - [Generate Acceptance Tests](#generate-acceptance-test)
+  - [Validate Structure](#validate-structure)
   - [Delete Module](#delete-module)
 - [How can I help?](#how-can-i-help)
 - [Whats Next?](#whats-next)
@@ -39,7 +40,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
 ## Generate Project
 
-1. The **`cleanArchitecture | ca`** task will generate a clean architecture structure in your project, this task has four optional parameters; `package` , `type`, `name` and `coverage`.
+The **`cleanArchitecture | ca`** task will generate a clean architecture structure in your project, this task has four optional parameters; `package` , `type`, `name` and `coverage`.
 
    - **`package`** `= <package.we.need>`: You can specify the main or default package of your project. `Default Value = co.com.bancolombia`
 
@@ -112,7 +113,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
 ## Generate Model
 
-2. The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
+The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
 
    ```shell
    gradle generateModel --name=[modelName]
@@ -141,7 +142,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
 ## Generate Use Case
 
-3. The **`generateUseCase | guc`** task will generate a class in model layer, this task has one required parameter `name`.
+The **`generateUseCase | guc`** task will generate a class in model layer, this task has one required parameter `name`.
 
    ```shell
    gradle generateUseCase --name=[useCaseName]
@@ -170,7 +171,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
 ## Generate Driven Adapter
 
-4. The **`generateDrivenAdapter | gda`** task will generate a class in Infrastructure layer, this task has one required parameter `type`. <br>
+The **`generateDrivenAdapter | gda`** task will generate a module in Infrastructure layer, this task has one required parameter `type`. <br>
    Whether you'll use generic one also parameter `name` is required.
 
    ```shell
@@ -220,7 +221,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 
 ## Generate Entry Point
 
-5. The **`generateEntryPoint | gep`** task will generate a class in Infrastructure layer, this task has one required parameter `type`. <br>
+The **`generateEntryPoint | gep`** task will generate a module in Infrastructure layer, this task has one required parameter `type`. <br>
    Whether you'll use generic one also parameter `name` is required.
 
    ```shell
@@ -269,18 +270,19 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    ┃ ┃ ┗ 📜build.gradle
    ```
 
-## Validate Structure
 
-6. The **`validateStructure | vs`** Validate that project references aren't violated.
+## Generate Helper
+
+The **`generateHelper | gh`** task will generate a module in Infrastructure layer, this task has one required parameter `name`. <br>
 
    ```shell
-   gradle validateStructure
-   gradle vs
+   gradle generateHelper --name=[helperName]
+   gradle gh --name=[helperName]
    ```
 
 ## Generate Pipeline
 
-7. The **`generatePipeline | gpl`** task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter `type`.
+The **`generatePipeline | gpl`** task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter `type`.
 
    ```shell
    gradle generatePipeline --type=[pipelineType]
@@ -293,7 +295,8 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
    | github                          | GitHub Action |
    
  ## Generate Acceptance Test
-   7. The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/",this task does not have  required parameters.
+ 
+The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/",this task does not have  required parameters.
    
       ```shell
       gradle generateAcceptanceTest
@@ -301,9 +304,17 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
       ```
 >   Karate is an open-source tool to combine API test-automation, mocks, performance-testing and even UI automation into a single, unified framework. The BDD syntax popularized by Cucumber is language-neutral, and easy for even non-programmers. Assertions and HTML reports are built-in, and you can run tests in parallel for speed.
 
+## Validate Structure
+
+The **`validateStructure | vs`** Validate that project references aren't violated.
+
+   ```shell
+   gradle validateStructure
+   gradle vs
+   ```
 ## Delete Module
 
-8. The **`deleteModule | dm`** task will delete a sub project, this task has one required parameter `module`.
+The **`deleteModule | dm`** task will delete a sub project, this task has one required parameter `module`.
 
    ```shell
    gradle deleteModule --module=[name]

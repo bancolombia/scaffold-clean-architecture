@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "infrastructure/helpers/{{name-dash}}/src/main/java/{{packagePath}}/{{name-package}}",
+    "infrastructure/helpers/{{name-dash}}/src/test/java/{{packagePath}}/{{name-package}}"
+  ],
+  "files": {
+    "helper/generic/build.gradle.mustache": "infrastructure/helpers/{{name-dash}}/build.gradle"
+  }
+}

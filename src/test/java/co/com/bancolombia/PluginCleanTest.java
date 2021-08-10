@@ -23,6 +23,10 @@ public class PluginCleanTest {
     String descriptionTask4 = "Generate entry point in infrastructure layer";
     String descriptionTask5 = "Generate driven adapter in infrastructure layer";
     String descriptionTask6 = "Validate that project references are not violated";
+    String descriptionTask7 = "Generate CI pipeline as a code in deployment layer";
+    String descriptionTask8 = "Delete gradle module";
+    String descriptionTask9 = "Generate subproject by karate framework in deployment layer";
+    String descriptionTask10 = "Generate helper in infrastructure layer";
     Project project = ProjectBuilder.builder().build();
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
@@ -33,6 +37,10 @@ public class PluginCleanTest {
     Task task4 = project.getTasks().findByName("generateEntryPoint");
     Task task5 = project.getTasks().findByName("generateDrivenAdapter");
     Task task6 = project.getTasks().findByName("validateStructure");
+    Task task7 = project.getTasks().findByName("generatePipeline");
+    Task task8 = project.getTasks().findByName("deleteModule");
+    Task task9 = project.getTasks().findByName("generateAcceptanceTest");
+    Task task10 = project.getTasks().findByName("generateHelper");
 
     // Assert
     assertEquals(taskGroup, task.getGroup());
@@ -52,5 +60,17 @@ public class PluginCleanTest {
 
     assertEquals(taskGroup, task6.getGroup());
     assertEquals(descriptionTask6, task6.getDescription());
+
+    assertEquals(taskGroup, task7.getGroup());
+    assertEquals(descriptionTask7, task7.getDescription());
+
+    assertEquals(taskGroup, task8.getGroup());
+    assertEquals(descriptionTask8, task8.getDescription());
+
+    assertEquals(taskGroup, task9.getGroup());
+    assertEquals(descriptionTask9, task9.getDescription());
+
+    assertEquals(taskGroup, task10.getGroup());
+    assertEquals(descriptionTask10, task10.getDescription());
   }
 }
