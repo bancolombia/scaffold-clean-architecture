@@ -106,7 +106,7 @@ public class PluginClean implements Plugin<Project> {
             .shortcut("gh")
             .description("Generate helper in infrastructure layer")
             .group(Constants.PLUGIN_TASK_GROUP)
-            .taskAction(GenerateDrivenAdapterTask.class)
+            .taskAction(GenerateHelperTask.class)
             .build());
 
     return tasksModels;
