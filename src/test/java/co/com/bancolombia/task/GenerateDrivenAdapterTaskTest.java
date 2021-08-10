@@ -370,6 +370,10 @@ public class GenerateDrivenAdapterTaskTest {
         new File(
                 "build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
             .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/EventBusConfig.java")
+            .exists());
   }
 
   @Test

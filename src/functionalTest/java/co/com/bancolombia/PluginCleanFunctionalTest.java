@@ -584,6 +584,10 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
             .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/EventBusConfig.java")
+            .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -628,6 +632,10 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(
                 "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/EventBusConfig.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
