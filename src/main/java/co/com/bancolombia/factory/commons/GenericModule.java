@@ -6,6 +6,7 @@ import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 
 public class GenericModule {
+  private GenericModule() {}
 
   public static void generateGenericModule(
       ModuleBuilder builder, String exceptionMessage, String baseDir, String template)
