@@ -288,7 +288,7 @@ public class GenerateEntryPointTaskTest {
             .exists());
     assertFalse(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertFalse(
         new File(
@@ -311,7 +311,7 @@ public class GenerateEntryPointTaskTest {
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertTrue(
         new File(
@@ -333,7 +333,7 @@ public class GenerateEntryPointTaskTest {
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertTrue(
         new File(

@@ -3,7 +3,7 @@
     "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api"
   ],
   "files": {
-    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Router.java",
+    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/RouterRest.java",
     "entry-point/rest-webflux/router-functions/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Handler.java",
     "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
   }
