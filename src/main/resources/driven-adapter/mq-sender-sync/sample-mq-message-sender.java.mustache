@@ -1,6 +1,6 @@
 package {{package}}.mq.sender;
 
-import co.com.bancolombia.commons.jms.api.MQMessageSender;
+import co.com.bancolombia.commons.jms.api.MQMessageSenderSync;
 import co.com.bancolombia.commons.jms.mq.EnableMQMessageSender;
 {{#lombok}}
 import lombok.AllArgsConstructor;
@@ -17,9 +17,9 @@ import javax.jms.Message;
 @EnableMQMessageSender
 //@EnableMQSelectorMessageListener // Enable it to retrieve a specific message by correlationId
 public class SampleMQMessageSender /* implements SomeGateway */ {
-    private final MQMessageSender sender;
+    private final MQMessageSenderSync sender;
 //    private final MQTemporaryQueuesContainer container; // Inject it to reference a temporary queue
-//    private final MQMessageSelectorListener listener; // Inject it to retrieve a specific message by correlationId
+//    private final MQMessageSelectorListenerSync listener; // Inject it to retrieve a specific message by correlationId
     {{^lombok}}
 
     public MyMessageSender(MQMessageSender sender) {
@@ -27,7 +27,7 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     }
     {{/lombok}}
 
-    public Mono<String> send(String message) {
+    public String send(String message) {
         return sender.send(context -> {
             Message textMessage = context.createTextMessage(message);
 //            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
@@ -36,9 +36,9 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     }
 
     // Enable it to retrieve a specific message by correlationId
-//    public Mono<String> getResult(String correlationId) {
-//        return listener.getMessage(correlationId)
-//                .map(this::extractResponse);
+//    public String getResult(String correlationId) {
+//        Message message = listener.getMessage(correlationId);
+//        return extractResponse(message);
 //    }
 //
 //    private String extractResponse(Message message) {

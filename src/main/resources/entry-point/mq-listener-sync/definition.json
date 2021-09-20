@@ -1,0 +1,9 @@
+{
+  "folders": [
+    "infrastructure/entry-points/mq-listener/src/test/java/{{packagePath}}/mq/listener"
+  ],
+  "files": {
+    "entry-point/mq-listener-sync/sample-mq-message-listener.java.mustache": "infrastructure/entry-points/mq-listener/src/main/java/{{packagePath}}/mq/listener/SampleMQMessageListener.java",
+    "entry-point/mq-listener-sync/build.gradle.mustache": "infrastructure/entry-points/mq-listener/build.gradle"
+  }
+}
