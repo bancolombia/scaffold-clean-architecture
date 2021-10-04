@@ -92,7 +92,13 @@ public class ModuleBuilder {
     for (String folder : definition.getFolders()) {
       addDir(Utils.fillPath(folder, params));
     }
-    for (Map.Entry<String, String> fileEntry : definition.getFiles().entrySet()) {
+    Map<String, String> projectFiles = new HashMap<>(definition.getFiles());
+    if(params.get("language").toString().equalsIgnoreCase("KOTLIN")){
+      projectFiles.putAll(definition.getKotlin());
+    }else{
+      projectFiles.putAll(definition.getJava());
+    }
+    for (Map.Entry<String, String> fileEntry : projectFiles.entrySet()) {
       String path = Utils.fillPath(fileEntry.getValue(), params);
       String content = buildFromTemplate(fileEntry.getKey());
       addDir(Utils.extractDir(path));
@@ -160,6 +166,7 @@ public class ModuleBuilder {
 
   public void loadPackage() throws IOException {
     addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
+    this.params.put("language",FileUtils.readProperties(project.getProjectDir().getPath(), "language"));
   }
 
   public void addParamPackage(String packageName) {

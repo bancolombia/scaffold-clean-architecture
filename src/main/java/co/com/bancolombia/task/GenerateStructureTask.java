@@ -76,9 +76,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("language", language.name());
-    if (language == Language.KOTLIN) {
-      builder.setupFromTemplate("kotlin");
-    } else if (lombok == BooleanOption.TRUE) {
+    if (lombok == BooleanOption.TRUE) {
       builder.setupFromTemplate("structure");
     } else {
       builder.setupFromTemplate("structure/without-lombok");
