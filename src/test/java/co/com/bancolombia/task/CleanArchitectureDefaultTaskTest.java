@@ -14,7 +14,7 @@ import org.junit.Test;
 
 public class CleanArchitectureDefaultTaskTest {
   private Project project;
- 
+
   @Before
   public void setup() {
     project =
