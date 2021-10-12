@@ -75,7 +75,8 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
-    builder.addParam("language", language.name());
+    builder.addParam("language", language.name().toLowerCase());
+    builder.addParam("kotlin", language == Language.KOTLIN );
     if (lombok == BooleanOption.TRUE) {
       builder.setupFromTemplate("structure");
     } else {

@@ -1,0 +1,80 @@
+plugins {
+  val cleanArchitectureVersion = "1.9.8"
+  val springBootVersion = "2.4.2"
+  val sonarVersion = "3.0"
+  id ("co.com.bancolombia.cleanArchitecture") version cleanArchitectureVersion
+  id ("org.springframework.boot") version springBootVersion
+  id ("org.sonarqube") version sonarVersion apply true
+  id ("jacoco") apply true
+  id ("org.jetbrains.kotlin.jvm") version "1.5.31"
+}
+
+sonarqube {
+  val modules = subprojects.map { subproject -> subproject.projectDir.toString().replace(project.projectDir.toString() + "/", "") }
+  properties {
+    property("sonar.sourceEncoding", "UTF-8")
+    property("sonar.modules", modules.joinToString(","))
+    property("sonar.sources", "src,deployment,settings.gradle.kts,build.gradle,${modules.joinToString(",") { module -> "${module}/build.gradle" }}")
+    property("sonar.test", "src/test")
+    property("sonar.java.binaries", "")
+    property("sonar.junit.reportsPath", "")
+    property("sonar.java.coveragePlugin", "jacoco")
+    property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+  }
+}
+
+allprojects {
+  repositories {
+  mavenCentral()
+    maven { url = uri("https://repo.spring.io/milestone") }
+    maven { url = uri("https://repo.spring.io/snapshot") }
+  }
+}
+
+subprojects {
+  apply(plugin="java")
+  apply(plugin="jacoco")
+  apply(plugin="io.spring.dependency-management")
+
+  val springBootVersion = "2.4.2"
+  dependencies {
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
+  }
+
+  project.tasks.test.get().finalizedBy(project.tasks.jacocoTestReport)
+
+  project.tasks.jacocoTestReport {
+    dependsOn( project.tasks.test)
+    reports {
+      xml.isEnabled = true
+      xml.destination = file("${buildDir}/reports/jacoco.xml")
+      csv.isEnabled = false
+      html.destination = file("${buildDir}/reports/jacocoHtml")
+    }
+  }
+}
+
+jacoco {
+  toolVersion = "0.8.6"
+  reportsDir = file("$buildDir/reports")
+}
+
+tasks.withType<JacocoReport> {
+  dependsOn(subprojects.map {project -> project.tasks.jacocoTestReport  })
+  additionalSourceDirs.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
+  sourceDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
+  classDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().output }))
+  executionData.setFrom(
+    project.fileTree(project.buildDir) {
+      include(
+      "**/build/jacoco/test.exec"
+      )
+    }
+  )
+  reports {
+    xml.isEnabled = true
+    csv.isEnabled = false
+    html.isEnabled = true
+  }
+}
