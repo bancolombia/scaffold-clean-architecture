@@ -15,13 +15,13 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
       logger.lifecycle("Generating rest-consumer for reactive project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");
       builder.appendDependencyToModule(
-          "app-service", "compile 'org.springframework.boot:spring-boot-starter-webflux'");
+          "app-service", "implementation 'org.springframework.boot:spring-boot-starter-webflux'");
       builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
       builder.appendDependencyToModule(
-          "app-service", "compile 'com.fasterxml.jackson.core:jackson-databind'");
+          "app-service", "implementation 'com.fasterxml.jackson.core:jackson-databind'");
     }
     builder
         .appendToProperties("adapter.restconsumer")
