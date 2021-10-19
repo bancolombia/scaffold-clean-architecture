@@ -116,7 +116,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -125,7 +125,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     // Act
     String result = Utils.addDependency(build, "implementation project(':my-module')");
@@ -143,7 +143,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -152,7 +152,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     // Act
     String result = Utils.addDependency(build, "implementation project(':my-module')");
@@ -169,7 +169,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -177,7 +177,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -201,7 +201,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -213,7 +213,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -237,7 +237,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -249,7 +249,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
