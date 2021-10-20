@@ -9,5 +9,8 @@ import lombok.NoArgsConstructor
 @Builder(toBuilder = true)
 @NoArgsConstructor
 {{/lombok}}
-data class {{modelClassName}}() {
+data class {{modelClassName}}(
+  //val anyField : Any?
+) {
+  //fun anyMethod():Any? { return null }
 }

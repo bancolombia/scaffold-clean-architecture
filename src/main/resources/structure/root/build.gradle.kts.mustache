@@ -1,7 +1,7 @@
 plugins {
-  val cleanArchitectureVersion = "1.9.8"
-  val springBootVersion = "2.4.2"
-  val sonarVersion = "3.0"
+  val cleanArchitectureVersion = "{{pluginVersion}}"
+  val springBootVersion = "{{springBootVersion}}"
+  val sonarVersion = "{{sonarVersion}}"
   id ("co.com.bancolombia.cleanArchitecture") version cleanArchitectureVersion
   id ("org.springframework.boot") version springBootVersion
   id ("org.sonarqube") version sonarVersion apply true
@@ -14,7 +14,7 @@ sonarqube {
   properties {
     property("sonar.sourceEncoding", "UTF-8")
     property("sonar.modules", modules.joinToString(","))
-    property("sonar.sources", "src,deployment,settings.gradle.kts,build.gradle,${modules.joinToString(",") { module -> "${module}/build.gradle" }}")
+    property("sonar.sources", "src,deployment,settings.gradle.kts,build.gradle.kts,${modules.joinToString(",") { module -> "${module}/build.gradle.kts" }}")
     property("sonar.test", "src/test")
     property("sonar.java.binaries", "")
     property("sonar.junit.reportsPath", "")
@@ -25,7 +25,7 @@ sonarqube {
 
 allprojects {
   repositories {
-  mavenCentral()
+    mavenLocal()
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://repo.spring.io/snapshot") }
   }
@@ -36,7 +36,7 @@ subprojects {
   apply(plugin="jacoco")
   apply(plugin="io.spring.dependency-management")
 
-  val springBootVersion = "2.4.2"
+  val springBootVersion = "{{springBootVersion}}"
   dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
@@ -56,7 +56,7 @@ subprojects {
 }
 
 jacoco {
-  toolVersion = "0.8.6"
+  toolVersion = "{{jacocoVersion}}"
   reportsDir = file("$buildDir/reports")
 }
 
