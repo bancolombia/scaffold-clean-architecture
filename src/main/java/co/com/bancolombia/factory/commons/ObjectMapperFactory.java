@@ -13,7 +13,7 @@ public class ObjectMapperFactory implements ModuleFactory {
     builder.setupFromTemplate("commons/object-mapper");
     builder.appendDependencyToModule(
         "app-service",
-        "compile 'org.reactivecommons.utils:object-mapper:"
+        "implementation 'org.reactivecommons.utils:object-mapper:"
             + Constants.RCOMMONS_OBJECT_MAPPER_VERSION
             + "'");
   }

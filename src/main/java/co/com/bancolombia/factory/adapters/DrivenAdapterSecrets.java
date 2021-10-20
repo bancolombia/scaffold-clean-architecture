@@ -22,7 +22,11 @@ public class DrivenAdapterSecrets implements ModuleFactory {
     logger.lifecycle("Generating  mode");
     builder.appendDependencyToModule(
         "app-service",
-        "compile 'com.github.bancolombia:" + secretLibrary + ":" + Constants.SECRETS_VERSION + "'");
+        "implementation 'com.github.bancolombia:"
+            + secretLibrary
+            + ":"
+            + Constants.SECRETS_VERSION
+            + "'");
     builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
   }
 }

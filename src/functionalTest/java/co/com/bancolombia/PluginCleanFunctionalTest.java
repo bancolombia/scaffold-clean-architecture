@@ -856,7 +856,7 @@ public class PluginCleanFunctionalTest {
     canRunTaskGenerateStructureReactiveProject();
     writeString(
         new File("build/functionalTest/domain/model/build.gradle"),
-        "compile 'org.springframework.boot:spring-boot-starter'");
+        "implementation 'org.springframework.boot:spring-boot-starter'");
 
     // Act
     runner.withArguments("validateStructure");
@@ -869,7 +869,7 @@ public class PluginCleanFunctionalTest {
     canRunTaskGenerateStructureReactiveProject();
     writeString(
         new File("build/functionalTest/domain/usecase/build.gradle"),
-        "compile 'org.springframework.boot:spring-boot-starter'");
+        "implementation 'org.springframework.boot:spring-boot-starter'");
 
     // Act
     runner.withArguments("validateStructure");
