@@ -1,0 +1,47 @@
+package {{package}}.config.model;
+
+{{#lombok}}
+import lombok.Data;
+{{/lombok}}
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+{{#lombok}}
+@Data
+{{/lombok}}
+@Configuration
+@ConfigurationProperties(prefix = "adapter.aws.s3")
+class S3ConnectionProperties {
+
+    val bucketName :String ;
+    val region :String ;
+    val endpoint :String ;
+
+{{^lombok}}
+    fun getBucketName(): String {
+        return bucketName;
+    }
+
+    fun setBucketName(val bucketName :String): void {
+        this.bucketName = bucketName;
+    }
+
+    fun getRegion(): String {
+        return region;
+    }
+
+    fun setRegion(val region :String): Unit {
+        this.region = region;
+    }
+
+    fun getEndpoint(): String {
+        return endpoint;
+    }
+
+    fun  setEndpoint(String endpoint): String {
+        this.endpoint = endpoint;
+    }
+{{/lombok}}
+
+
+}

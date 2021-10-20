@@ -1,0 +1,35 @@
+package {{package}}.consumer;
+
+{{#lombok}}
+    import lombok.Builder;
+    import lombok.Data;
+
+    @Data
+    @Builder(toBuilder = true)
+{{/lombok}}
+class ObjectRequest {
+
+private val val1 :String;
+private val val2 :String;
+
+{{^lombok}}
+    fun ObjectRequest() :Unit {
+    }
+
+    fun getVal1() :String {
+        return val1;
+    }
+
+    fun setVal1(val val1 :String) :Unit {
+        this.val1 = val1;
+    }
+
+    fun getVal2() :String {
+        return val2;
+    }
+
+    fun setVal2(val val2 :String) :Unit {
+        this.val2 = val2;
+    }
+{{/lombok}}
+}

@@ -2,12 +2,21 @@
   "folders": [
     "infrastructure/driven-adapters/jpa-repository/src/test/java/{{packagePath}}/jpa/helper"
   ],
-  "files": {
-    "driven-adapter/jpa-repository/config/jpa-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/JpaConfig.java",
-    "driven-adapter/jpa-repository/config/db-secret.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/java/{{packagePath}}/jpa/config/DBSecret.java",
-    "driven-adapter/jpa-repository/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/java/{{packagePath}}/jpa/helper/AdapterOperations.java",
-    "driven-adapter/jpa-repository/jpa-repository.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/java/{{packagePath}}/jpa/JPARepository.java",
+  "files": {},
+  "java": {
+    "driven-adapter/jpa-repository/config/jpa-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/JpaConfig.java",
+    "driven-adapter/jpa-repository/config/db-secret.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/config/DBSecret.java",
+    "driven-adapter/jpa-repository/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/helper/AdapterOperations.java",
+    "driven-adapter/jpa-repository/jpa-repository.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepository.java",
     "driven-adapter/jpa-repository/jpa-repository-adapter.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/java/{{packagePath}}/jpa/JPARepositoryAdapter.java",
     "driven-adapter/jpa-repository/build.gradle.mustache": "infrastructure/driven-adapters/jpa-repository/build.gradle"
+  },
+  "kotlin": {
+    "driven-adapter/jpa-repository/config/jpa-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/JpaConfig.kt",
+    "driven-adapter/jpa-repository/config/db-secret.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/config/DBSecret.kt",
+    "driven-adapter/jpa-repository/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/helper/AdapterOperations.kt",
+    "driven-adapter/jpa-repository/jpa-repository.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepository.kt",
+    "driven-adapter/jpa-repository/jpa-repository-adapter.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepositoryAdapter.kt",
+    "driven-adapter/jpa-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/jpa-repository/build.gradle"
   }
 }

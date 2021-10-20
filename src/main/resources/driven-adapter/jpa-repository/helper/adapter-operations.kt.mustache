@@ -1,0 +1,71 @@
+package {{package}}.jpa.helper;
+
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.data.domain.Example;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.QueryByExampleExecutor;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.StreamSupport.stream;
+
+abstract class AdapterOperations<E, D, I, R extends CrudRepository<D, I> & QueryByExampleExecutor<D>> {
+    protected val repository :R;
+    private val dataClass :Class<D>;
+    protected val mapper :ObjectMapper;
+    private val toEntityFn :Function<D, E>;
+
+    fun AdapterOperations(val repository :R, val mapper :ObjectMapper, val toEntityFn :Function<D, E>) {
+        this.repository = repository;
+        this.mapper = mapper;
+        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];
+        this.toEntityFn = toEntityFn;
+    }
+
+    fun toData(val entity :E) :D {
+        return mapper.map(entity, dataClass);
+    }
+
+    fun toEntity(val data :D) :E {
+        return data != null ? toEntityFn.apply(data) : null;
+
+
+    fun save(val entity :E) :E {
+        D data = toData(entity);
+        return toEntity(saveData(data));
+    }
+
+    fun saveAllEntities(val entities :List<E>) :List<E>{
+        List<D> list = entities.stream().map(this::toData).collect(Collectors.toList());
+        return toList(saveData(list));
+    }
+
+    fun toList(val iterable :Iterable<D>) :List<E> {
+        return stream(iterable.spliterator(), false).map(this::toEntity).collect(Collectors.toList());
+    }
+
+    fun saveData(val data :D) :D {
+        return repository.save(data);
+    }
+
+    fun saveData(val data :List<D>) :Iterable<D>{
+        return repository.saveAll(data);
+    }
+
+    fun findById(val id :I) :E {
+        return toEntity(repository.findById(id).orElse(null));
+    }
+
+    fun findByExample(val entity :E) :List<E> {
+        return toList(repository.findAll( Example.of(toData(entity))));
+    }
+
+
+    fun findAll() :List<E>{
+        return toList(repository.findAll());
+    }
+}

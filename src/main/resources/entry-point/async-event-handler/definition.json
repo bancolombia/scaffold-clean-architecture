@@ -2,12 +2,19 @@
   "folders": [
     "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers"
   ],
-  "files": {
+  "files": {},
+  "java": {
     "entry-point/async-event-handler/handler-registry-configuration.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/HandlerRegistryConfiguration.java",
-    "entry-point/async-event-handler/events-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/EventsHandler.java",
-    "entry-point/async-event-handler/commands-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/CommandsHandler.java",
-    "entry-point/async-event-handler/queries-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/java/{{packagePath}}/events/handlers/QueriesHandler.java",
+    "entry-point/async-event-handler/events-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/EventsHandler.java",
+    "entry-point/async-event-handler/commands-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/CommandsHandler.java",
+    "entry-point/async-event-handler/queries-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/QueriesHandler.java",
     "entry-point/async-event-handler/build.gradle.mustache": "infrastructure/entry-points/async-event-handler/build.gradle"
-
+  },
+  "kotlin": {
+    "entry-point/async-event-handler/handler-registry-configuration.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/HandlerRegistryConfiguration.kt",
+    "entry-point/async-event-handler/events-handler.kt.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/EventsHandler.kt",
+    "entry-point/async-event-handler/commands-handler.kt.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/CommandsHandler.kt",
+    "entry-point/async-event-handler/queries-handler.kt.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/QueriesHandler.kt",
+    "entry-point/async-event-handler/build.gradle.kts.mustache": "infrastructure/entry-points/async-event-handler/build.gradle"
   }
 }

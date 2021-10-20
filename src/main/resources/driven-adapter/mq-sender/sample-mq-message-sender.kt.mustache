@@ -1,0 +1,48 @@
+package {{package}}.mq.sender;
+
+import co.com.bancolombia.commons.jms.api.MQMessageSender;
+import co.com.bancolombia.commons.jms.mq.EnableMQMessageSender;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import javax.jms.Message;
+
+@Component
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+@EnableMQMessageSender
+//@EnableMQSelectorMessageListener // Enable it to retrieve a specific message by correlationId
+class SampleMQMessageSender /* implements SomeGateway */ {
+    private val sender :MQMessageSender;
+//    private final MQTemporaryQueuesContainer container; // Inject it to reference a temporary queue
+//    private final MQMessageSelectorListener listener; // Inject it to retrieve a specific message by correlationId
+    {{^lombok}}
+
+    fun MyMessageSender(val sender :MQMessageSender) {
+        this.sender = sender;
+    }
+    {{/lombok}}
+
+    fun send(val message :String) :Mono<String> {
+        return sender.send(context -> {
+            Message textMessage = context.createTextMessage(message);
+//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+            return textMessage;
+        });
+    }
+
+    // Enable it to retrieve a specific message by correlationId
+//    public Mono<String> getResult(String correlationId) {
+//        return listener.getMessage(correlationId)
+//                .map(this::extractResponse);
+//    }
+//
+//    private String extractResponse(Message message) {
+//        TextMessage textMessage = (TextMessage) message;
+//        return textMessage.getText();
+//    }
+}

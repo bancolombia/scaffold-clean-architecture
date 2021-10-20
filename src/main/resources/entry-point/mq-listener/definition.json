@@ -2,8 +2,13 @@
   "folders": [
     "infrastructure/entry-points/mq-listener/src/test/java/{{packagePath}}/mq/listener"
   ],
-  "files": {
-    "entry-point/mq-listener/sample-mq-message-listener.java.mustache": "infrastructure/entry-points/mq-listener/src/main/java/{{packagePath}}/mq/listener/SampleMQMessageListener.java",
+  "files": {},
+  "java": {
+    "entry-point/mq-listener/sample-mq-message-listener.java.mustache": "infrastructure/entry-points/mq-listener/src/main/{{language}}/{{packagePath}}/mq/listener/SampleMQMessageListener.java",
     "entry-point/mq-listener/build.gradle.mustache": "infrastructure/entry-points/mq-listener/build.gradle"
+  },
+  "kotlin": {
+    "entry-point/mq-listener/sample-mq-message-listener.kt.mustache": "infrastructure/entry-points/mq-listener/src/main/{{language}}/{{packagePath}}/mq/listener/SampleMQMessageListener.kt",
+    "entry-point/mq-listener/build.gradle.kts.mustache": "infrastructure/entry-points/mq-listener/build.gradle"
   }
 }

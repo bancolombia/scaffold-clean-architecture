@@ -1,9 +1,15 @@
 {
   "folders": [
-    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api"
+    "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api"
   ],
   "files": {
-    "entry-point/rest-webflux/api.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/ApiRest.java",
+   },
+  "java": {
+    "entry-point/rest-webflux/api.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/ApiRest.java",
     "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
+  },
+  "kotlin": {
+    "entry-point/rest-webflux/api.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/ApiRest.kt",
+    "entry-point/rest-webflux/build.gradle.kts.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
   }
 }

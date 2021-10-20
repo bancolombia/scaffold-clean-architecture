@@ -1,10 +1,16 @@
 {
   "folders": [
-    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api"
+    "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api"
   ],
-  "files": {
-    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/RouterRest.java",
-    "entry-point/rest-webflux/router-functions/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Handler.java",
+  "files": {},
+  "java": {
+    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/RouterRest.java",
+    "entry-point/rest-webflux/router-functions/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/Handler.java",
+    "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
+  },
+  "kotlin": {
+    "entry-point/rest-webflux/router-functions/router.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/RouterRest.kt",
+    "entry-point/rest-webflux/router-functions/handler.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/Handler.kt",
     "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
   }
 }

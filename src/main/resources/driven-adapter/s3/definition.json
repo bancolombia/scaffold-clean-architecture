@@ -6,11 +6,19 @@
     "infrastructure/driven-adapters/s3-repository/src/test/java/{{packagePath}}/s3/adapter",
     "applications/app-service/src/main/java/{{packagePath}}/config/model"
   ],
-  "files": {
+  "files": {},
+  "java": {
     "driven-adapter/s3/build.gradle.mustache": "infrastructure/driven-adapters/s3-repository/build.gradle",
     "driven-adapter/s3/s3-adapter.java.mustache": "infrastructure/driven-adapters/s3-repository/src/main/java/{{packagePath}}/s3/adapter/S3Adapter.java",
     "driven-adapter/s3/s3-operations.java.mustache": "infrastructure/driven-adapters/s3-repository/src/main/java/{{packagePath}}/s3/operations/S3Operations.java",
     "driven-adapter/s3/s3-connection-properties.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/model/S3ConnectionProperties.java",
     "driven-adapter/s3/s3-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/S3Config.java"
+  },
+  "kotlin": {
+    "driven-adapter/s3/build.gradle..kts.mustache": "infrastructure/driven-adapters/s3-repository/build.gradle",
+    "driven-adapter/s3/s3-adapter.kt.mustache": "infrastructure/driven-adapters/s3-repository/src/main/{{language}}/{{packagePath}}/s3/adapter/S3Adapter.kt",
+    "driven-adapter/s3/s3-operations.kt.mustache": "infrastructure/driven-adapters/s3-repository/src/main/{{language}}/{{packagePath}}/s3/operations/S3Operations.kt",
+    "driven-adapter/s3/s3-connection-properties.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/model/S3ConnectionProperties.kt",
+    "driven-adapter/s3/s3-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/S3Config.kt"
   }
 }

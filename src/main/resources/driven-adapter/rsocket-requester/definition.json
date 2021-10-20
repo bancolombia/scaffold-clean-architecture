@@ -3,9 +3,15 @@
     "infrastructure/driven-adapters/rsocket-requester/src/main/java/{{packagePath}}/service",
     "infrastructure/driven-adapters/rsocket-requester/src/test/java/{{packagePath}}/service"
   ],
-  "files": {
-    "driven-adapter/rsocket-requester/config/requester-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/RequesterConfig.java",
+  "files": {},
+  "java": {
+    "driven-adapter/rsocket-requester/config/requester-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/RequesterConfig.java",
     "driven-adapter/rsocket-requester/build.gradle.mustache": "infrastructure/driven-adapters/rsocket-requester/build.gradle",
-    "driven-adapter/rsocket-requester/rsocket-requester.java.mustache": "infrastructure/driven-adapters/rsocket-requester/src/main/java/{{packagePath}}/service/RsocketAdapter.java"
+    "driven-adapter/rsocket-requester/rsocket-requester.java.mustache": "infrastructure/driven-adapters/rsocket-requester/src/main/{{language}}/{{packagePath}}/service/RsocketAdapter.java"
+  },
+  "kotlin": {
+    "driven-adapter/rsocket-requester/config/requester-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/RequesterConfig.kt",
+    "driven-adapter/rsocket-requester/build.gradle.kts.mustache": "infrastructure/driven-adapters/rsocket-requester/build.gradle",
+    "driven-adapter/rsocket-requester/rsocket-requester.kt.mustache": "infrastructure/driven-adapters/rsocket-requester/src/main/{{language}}/{{packagePath}}/service/RsocketAdapter.kt"
   }
 }

@@ -1,0 +1,21 @@
+package {{package}}.redis.template;
+
+import {{package}}.redis.template.helper.TemplateAdapterOperations;
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.stereotype.Component;
+
+@Component
+class RedisTemplateAdapter :TemplateAdapterOperations<Object/* change for domain model */, String, Object/* change for adapter model */>
+// implements ModelRepository from domain
+{
+    fun RedisTemplateAdapter(val connectionFactory :RedisConnectionFactory, val mapper :ObjectMapper) {
+        /**
+         *  Could be use mapper.mapBuilder if your domain model implement builder pattern
+         *  super(repository, mapper, d -> mapper.mapBuilder(d,ObjectModel.ObjectModelBuilder.class).build());
+         *  Or using mapper.map with the class of the object model
+         */
+        super(connectionFactory, mapper, d -> mapper.map(d, Object.class/* change for domain model */));
+    }
+
+}

@@ -1,0 +1,28 @@
+package {{package}}.events.handlers;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.reactivecommons.api.domain.DomainEvent;
+import org.reactivecommons.async.impl.config.annotations.EnableEventListeners;
+import reactor.core.publisher.Mono;
+
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+@EnableEventListeners
+class EventsHandler constructor(sampleUseCase: SampleUseCase) {
+//    private final SampleUseCase sampleUseCase;
+
+{{^lombok}}
+    public EventsHandler(/*SampleUseCase sampleUseCase*/) {
+        //this.sampleUseCase = sampleUseCase;
+    }
+{{/lombok}}
+
+    fun handleEventA(val event :DomainEvent<Object/*change for proper model*/>):Mono<Unit> {
+        fun println("event received: " + event.getName() + " ->" + event.getData()); // TODO: Remove this line
+//        return sampleUseCase.doSomething(event.getData());
+        return Mono.empty();
+    }
+}

@@ -2,5 +2,7 @@
   "folders": [],
   "files": {
     "pipeline/github/github.yaml.mustache": ".github/workflows/{{projectNameLower}}_github_action_gradle.yaml"
-  }
+  },
+  "java": {},
+  "kotlin": {}
 }

@@ -1,0 +1,71 @@
+package co.com.bancolombia.s3.operations;
+
+import org.springframework.stereotype.Component;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.*;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
+
+@Component
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+class S3Operations {
+
+    val s3Client :S3Client ;
+
+{{^lombok}}
+    public S3Operations(val s3Client :S3Client ):Unit {
+        this.s3Client = s3Client;
+    }
+{{/lombok}}
+
+    fun uploadObject(val bucketName :String, val objectKey :String, val fileContent :byte[]) :boolean {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromBytes(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    fun uploadObject(val bucketName :String, val objectKey :String, val fileContent :String): boolean {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromString(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    fun uploadObject(val bucketName :String, val objectKey :String, val fileContent :File): boolean {
+        return s3Client.putObject(configurePutObject(bucketName, objectKey),
+                RequestBody.fromFile(fileContent)).sdkHttpResponse().isSuccessful();
+    }
+
+    fun listBucketObjects(val bucketName :String) :List<S3Object> {
+        return s3Client.listObjects(ListObjectsRequest
+                .builder()
+                .bucket(bucketName)
+                .build()).contents();
+    }
+
+    fun getObject(val bucketName :String, val objectKey :String): InputStream {
+        return s3Client.getObjectAsBytes(GetObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName)
+                .build()).asInputStream();
+    }
+
+    fun deleteObject(val bucketName :String, val objectKey :String): boolean {
+        return s3Client.deleteObject(DeleteObjectRequest.builder()
+                .key(objectKey)
+                .bucket(bucketName).build()).sdkHttpResponse().isSuccessful();
+    }
+
+    fun configurePutObject(val bucketName :String, val objectKey :String): PutObjectRequest {
+        return PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .build();
+    }
+
+}

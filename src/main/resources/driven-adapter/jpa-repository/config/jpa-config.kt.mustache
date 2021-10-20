@@ -1,0 +1,74 @@
+package {{package}}.config;
+
+{{#include-secret}}
+import co.com.bancolombia.secretsmanager.api.GenericManager;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+{{/include-secret}}
+import {{package}}.jpa.config.DBSecret;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+{{^include-secret}}
+import org.springframework.core.env.Environment;
+{{/include-secret}}
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import javax.sql.DataSource;
+import java.util.Properties;
+
+@Configuration
+class JpaConfig {
+
+    {{#include-secret}}
+    @Bean
+    @Throws(JMSException::class)
+    fun dbSecret(@Value("${aws.secretName}") val secret :String, val manager :GenericManager) :DBSecret
+    {
+        return manager.getSecret(secret, DBSecret.class);
+    throw IOException()
+    }
+    {{/include-secret}}
+    {{^include-secret}}
+    @Bean
+    fun dbSecret(val env :Environment) :DBSecret {
+        return DBSecret.builder()
+                .url(env.getProperty("spring.datasource.url"))
+                .username(env.getProperty("spring.datasource.username"))
+                .password(env.getProperty("spring.datasource.password"))
+                .build();
+    }
+    {{/include-secret}}
+
+    @Bean
+    fun datasource(val secret :DBSecret, @Value("${spring.datasource.driverClassName}") val driverClass :String) :DataSource {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(secret.getUrl());
+        config.setUsername(secret.getUsername());
+        config.setPassword(secret.getPassword());
+        config.setDriverClassName(driverClass);
+        return new HikariDataSource(config);
+    }
+
+    @Bean
+    fun entityManagerFactory(
+            val dataSource :DataSource,
+            @Value("${spring.jpa.databasePlatform}") val dialect :String) :LocalContainerEntityManagerFactoryBean {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource);
+        em.setPackagesToScan("{{package}}.jpa");
+
+        val vendorAdapter :JpaVendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+
+        val properties :Properties = new Properties();
+        properties.setProperty("hibernate.dialect", dialect);
+        properties.setProperty("hibernate.hbm2ddl.auto", "update"); // TODO: remove this for non auto create schema
+        em.setJpaProperties(properties);
+
+        return em;
+    }
+}
