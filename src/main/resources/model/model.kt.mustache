@@ -1,13 +1,13 @@
-package {{package}}.model.{{modelName}};
+package {{package}}.model.{{modelName}}
+
 {{#lombok}}
-import lombok.Builder;
-import lombok.Data;
+import lombok.Builder
+import lombok.Data
+import lombok.NoArgsConstructor
 
 @Data
 @Builder(toBuilder = true)
+@NoArgsConstructor
 {{/lombok}}
-class {{modelClassName}} {
-{{^lombok}}
-    {{modelClassName}}(){}
-{{/lombok}}
+data class {{modelClassName}}() {
 }

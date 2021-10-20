@@ -1,16 +1,14 @@
-package {{package}}.config;
+package {{package}}.config
 
-import org.reactivecommons.utils.ObjectMapper;
-import org.reactivecommons.utils.ObjectMapperImp;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.reactivecommons.utils.ObjectMapper
+import org.reactivecommons.utils.ObjectMapperImp
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 @Configuration
 class ObjectMapperConfig {
 
     @Bean
-    fun objectMapper(): ObjectMapper {
-        return new ObjectMapperImp();
-    }
+    fun objectMapper() = ObjectMapperImp();
 
 }
