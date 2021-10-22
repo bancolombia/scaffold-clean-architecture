@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.commons;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.Utils;
@@ -20,7 +22,8 @@ public class GenericModule {
     builder.addParam("name-dash", dashName);
     builder.addParam("name-package", name.toLowerCase());
     builder.appendToSettings(dashName, baseDir);
-    builder.appendDependencyToModule("app-service", "implementation project(':" + dashName + "')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + dashName);
+    builder.appendDependencyToModule("app-service", dependency);
     builder.setupFromTemplate(template);
   }
 }

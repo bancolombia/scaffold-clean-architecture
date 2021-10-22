@@ -4,9 +4,9 @@ apply(plugin = "kotlin")
 
 dependencies {
   val kotlinVersion = "1.5.31"
-  implementation (project(":model"))
-  implementation (project(":usecase"))
-  implementation ("org.springframework.boot:spring-boot-starter")
+  implementation(project(":model"))
+  implementation(project(":usecase"))
+  implementation("org.springframework.boot:spring-boot-starter")
   runtimeOnly("org.springframework.boot:spring-boot-devtools")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
 }

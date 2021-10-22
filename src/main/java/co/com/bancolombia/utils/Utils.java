@@ -18,6 +18,10 @@ public class Utils {
   private static final String PARAM_START = "{{";
   private static final String PARAM_END = "}}";
   private static final int PARAM_LENGTH = 2;
+  public static final String INCLUDE_MODULE_JAVA =
+      "\ninclude ':module'\nproject(':module').projectDir = file('./baseDir/module')";
+  public static final String INCLUDE_MODULE_KOTLIN =
+      "\ninclude(\":module\")\nproject(\":module\").projectDir = file(\"./baseDir/module\")";
 
   public static String capitalize(String data) {
     char[] c = data.toCharArray();
@@ -106,17 +110,28 @@ public class Utils {
     return res;
   }
 
-  public static String addModule(String settings, String module, String baseDir) {
-    String toAppend =
-        "\ninclude ':"
-            + module
-            + "'\nproject(':"
-            + module
-            + "').projectDir = file('./"
-            + baseDir
-            + "/"
-            + module
-            + "')";
+  private static String getStyle(boolean isKotlin) {
+    return isKotlin ? "(\"add\")" : " 'add'";
+  }
+
+  public static String buildImplementationFromProject(boolean isKotlin, String content) {
+    return buildImplementation(isKotlin, "project")
+        .replace("'", "")
+        .replace("\"", "")
+        .replace("project", buildProject(isKotlin, content));
+  }
+
+  private static String buildProject(boolean isKotlin, String content) {
+    String style = getStyle(isKotlin).replace("(", "").replace(")", "");
+    return "project(" + style.replace("add", content) + ")";
+  }
+
+  public static String buildImplementation(boolean isKotlin, String content) {
+    return "implementation" + getStyle(isKotlin).replace("add", content);
+  }
+
+  public static String addModule(String settings, String include, String module, String baseDir) {
+    String toAppend = include.replace("module", module).replace("baseDir", baseDir);
     if (settings.contains(toAppend)) {
       return settings;
     }

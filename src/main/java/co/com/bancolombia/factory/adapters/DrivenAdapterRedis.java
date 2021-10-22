@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -23,7 +25,8 @@ public class DrivenAdapterRedis implements ModuleFactory {
     } else {
       builder.appendToProperties("spring.redis").put("host", "localhost").put("port", 6379);
     }
-    builder.appendDependencyToModule("app-service", "implementation project(':redis')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":redis");
+    builder.appendDependencyToModule("app-service", dependency);
     if (builder.getBooleanParam("include-secret")) {
       new DrivenAdapterSecrets().buildModule(builder);
     }

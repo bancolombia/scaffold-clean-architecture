@@ -23,18 +23,15 @@ class MongoConfig {
     {{#include-secret}}
     @Bean
     @Throws(SecretException::class)
-    fun  dbSecret(@Value("${aws.secretName}") String secret, GenericManagerAsync manager) :MongoDBSecret
+    fun dbSecret(@Value("\${aws.secretName}") secret : String,  manager : GenericManagerAsync) :MongoDBSecret
     {
-        return manager.getSecret(secret, MongoDBSecret.class).block();
-    throw IOException()
+        return manager.getSecret(secret, MongoDBSecret::class.java).block()
     }
     {{/include-secret}}
     {{^include-secret}}
     @Bean
-    fun dbSecret(val env :Environment) :MongoDBSecret{
-        return MongoDBSecret.builder()
-                .uri(env.getProperty("spring.data.mongodb.uri"))
-                .build();
+    fun dbSecret(env :Environment) :MongoDBSecret{
+        return MongoDBSecret(uri = env.getProperty("spring.data.mongodb.uri"))
     }
     {{/include-secret}}
 
