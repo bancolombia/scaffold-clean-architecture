@@ -1,41 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 apply(plugin = "org.springframework.boot")
-apply(plugin = "kotlin")
 
 dependencies {
-  val kotlinVersion = "1.5.31"
-  implementation(project(":model"))
-  implementation(project(":usecase"))
-  implementation("org.springframework.boot:spring-boot-starter")
-  runtimeOnly("org.springframework.boot:spring-boot-devtools")
-  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-}
-
-buildscript {
-  val kotlinVersion = "1.5.31"
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-  }
-}
-repositories {
-  mavenCentral()
-}
-
-tasks.withType<KotlinCompile> {
-  kotlinOptions {
-    freeCompilerArgs = listOf("-Xjsr305=strict")
-    jvmTarget = "11"
-  }
-}
-
-tasks.withType <Test> {
-  useJUnitPlatform()
-}
-
-tasks.withType<Copy> {
-  with(project.copySpec())
-  into("${buildDir}/exploded")
+    implementation(project(":model"))
+    implementation(project(":usecase"))
+    implementation("org.springframework.boot:spring-boot-starter")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 }

@@ -1,12 +1,11 @@
 plugins {
-  val cleanArchitectureVersion = "{{pluginVersion}}"
-  val springBootVersion = "{{springBootVersion}}"
-  val sonarVersion = "{{sonarVersion}}"
-  id ("co.com.bancolombia.cleanArchitecture") version cleanArchitectureVersion
-  id ("org.springframework.boot") version springBootVersion
-  id ("org.sonarqube") version sonarVersion apply true
+  id("co.com.bancolombia.cleanArchitecture") version "{{pluginVersion}}"
+  id("org.springframework.boot") version "{{springBootVersion}}"
+  id("org.sonarqube") version "{{sonarVersion}}" apply true
+{{#jacoco}}
   id ("jacoco") apply true
-  id ("org.jetbrains.kotlin.jvm") version "1.5.31"
+{{/jacoco}}
+  kotlin("jvm") version "1.5.31"
 }
 
 sonarqube {
@@ -16,8 +15,8 @@ sonarqube {
     property("sonar.modules", modules.joinToString(","))
     property("sonar.sources", "src,deployment,settings.gradle.kts,build.gradle.kts,${modules.joinToString(",") { module -> "${module}/build.gradle.kts" }}")
     property("sonar.test", "src/test")
-    property("sonar.java.binaries", "")
-    property("sonar.junit.reportsPath", "")
+    property("sonar.java.binaries", "{{sonar.java.binaries}}")
+    property("sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}")
     property("sonar.java.coveragePlugin", "jacoco")
     property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
   }
@@ -25,25 +24,36 @@ sonarqube {
 
 allprojects {
   repositories {
-    mavenLocal()
+    mavenCentral()
     maven { url = uri("https://repo.spring.io/milestone") }
     maven { url = uri("https://repo.spring.io/snapshot") }
   }
 }
 
 subprojects {
-  apply(plugin="java")
+  apply(plugin="kotlin")
+{{#jacoco}}
   apply(plugin="jacoco")
+{{/jacoco}}
   apply(plugin="io.spring.dependency-management")
-
-  val springBootVersion = "{{springBootVersion}}"
   dependencies {
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}"))
-  }
-
+{{#reactive}}
+  implementation("io.projectreactor:reactor-core")
+  implementation("io.projectreactor.addons:reactor-extra")
+  testImplementation("io.projectreactor:reactor-test")
+{{/reactive}}
+  testImplementation("org.springframework.boot:spring-boot-starter-test")
+{{#lombok}}
+  compileOnly("org.projectlombok:lombok:{{lombokVersion}}")
+  annotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
+  testCompileOnly("org.projectlombok:lombok:{{lombokVersion}}")
+  testAnnotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
+{{/lombok}}
+  implementation(platform("org.springframework.boot:spring-boot-dependencies:{{springBootVersion}}"))
+  implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+}
+{{#jacoco}}
   project.tasks.test.get().finalizedBy(project.tasks.jacocoTestReport)
-
   project.tasks.jacocoTestReport {
     dependsOn( project.tasks.test)
     reports {
@@ -53,28 +63,34 @@ subprojects {
       html.destination = file("${buildDir}/reports/jacocoHtml")
     }
   }
+{{/jacoco}}
 }
 
+springBoot {
+  mainClass.set("co.com.testkotlin.MainApplication")
+}
+
+{{#jacoco}}
 jacoco {
   toolVersion = "{{jacocoVersion}}"
   reportsDir = file("$buildDir/reports")
 }
 
 tasks.withType<JacocoReport> {
-  dependsOn(subprojects.map {project -> project.tasks.jacocoTestReport  })
-  additionalSourceDirs.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
-  sourceDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
-  classDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().output }))
-  executionData.setFrom(
-    project.fileTree(project.buildDir) {
-      include(
-      "**/build/jacoco/test.exec"
-      )
-    }
-  )
+    dependsOn(subprojects.map {project -> project.tasks.jacocoTestReport  })
+    additionalSourceDirs.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
+    sourceDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs}))
+    classDirectories.setFrom (files(subprojects.map { project -> project.sourceSets.main.get().output }))
+    executionData.setFrom(
+      project.fileTree(project.buildDir) {
+        include("**/build/jacoco/test.exec")
+      }
+    )
   reports {
     xml.isEnabled = true
     csv.isEnabled = false
     html.isEnabled = true
   }
 }
+{{/jacoco}}
+

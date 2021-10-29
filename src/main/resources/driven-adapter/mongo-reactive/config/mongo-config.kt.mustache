@@ -1,47 +1,41 @@
-package {{package}}.config;
+package {{package}}.config
 
 {{#include-secret}}
-import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
-import co.com.bancolombia.secretsmanager.api.GenericManagerAsync;
-import org.springframework.beans.factory.annotation.Value;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException
+import co.com.bancolombia.secretsmanager.api.GenericManagerAsync
+import org.springframework.beans.factory.annotation.Value
 {{/include-secret}}
-import {{package}}.mongo.config.MongoDBSecret;
-import org.springframework.boot.autoconfigure.mongo.ReactiveMongoClientFactory;
-import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;
-import org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-
-import java.util.ArrayList;
-import java.util.List;
+import {{package}}.mongo.config.MongoDBSecret
+import org.springframework.boot.autoconfigure.mongo.ReactiveMongoClientFactory
+import org.springframework.boot.autoconfigure.mongo.MongoProperties
+import org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
 
 @Configuration
-class MongoConfig {
+open class MongoConfig {
 
     {{#include-secret}}
     @Bean
     @Throws(SecretException::class)
-    fun dbSecret(@Value("\${aws.secretName}") secret : String,  manager : GenericManagerAsync) :MongoDBSecret
+    open fun dbSecret(@Value("\${aws.secretName}") secret : String,  manager : GenericManagerAsync) : MongoDBSecret
     {
         return manager.getSecret(secret, MongoDBSecret::class.java).block()
     }
     {{/include-secret}}
     {{^include-secret}}
     @Bean
-    fun dbSecret(env :Environment) :MongoDBSecret{
-        return MongoDBSecret(uri = env.getProperty("spring.data.mongodb.uri"))
+    open fun dbSecret(env :Environment) : MongoDBSecret{
+      return MongoDBSecret(uri = env.getProperty("spring.data.mongodb.uri"))
     }
     {{/include-secret}}
 
     @Bean
-    fun mongoProperties(val secret :MongoDBSecret, val env :Environment) :ReactiveMongoClientFactory{
-        val properties :MongoProperties = new MongoProperties();
-        properties.setUri(secret.getUri());
-
-        val list :List<MongoClientSettingsBuilderCustomizer> = new ArrayList<>();
-        list.add(new MongoPropertiesClientSettingsBuilderCustomizer(properties, env));
-        return new ReactiveMongoClientFactory(list);
+    open fun mongoProperties(secret :MongoDBSecret, env :Environment) :ReactiveMongoClientFactory{
+        val properties = MongoProperties()
+        properties.uri = secret.uri
+        val list = listOf(MongoPropertiesClientSettingsBuilderCustomizer(properties, env))
+        return ReactiveMongoClientFactory(list)
     }
 }

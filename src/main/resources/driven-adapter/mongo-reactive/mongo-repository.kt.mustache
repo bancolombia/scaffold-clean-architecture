@@ -1,7 +1,6 @@
-package {{package}}.mongo;
+package {{package}}.mongo
 
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
 
-interface MongoDBRepository :ReactiveMongoRepository<Object/* change for adapter model */, String>, ReactiveQueryByExampleExecutor<Object/* change for adapter model */> {
-}
+interface MongoDBRepository : ReactiveMongoRepository<Any?, String?>, ReactiveQueryByExampleExecutor<Any?>
