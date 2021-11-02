@@ -9,3 +9,4 @@ open class MongoRepositoryAdapter(repository: MongoDBRepository, mapper: ObjectM
   AdapterOperations<Any?, Any?, String?, MongoDBRepository>(repository, mapper, { d ->
   mapper.map( d, Any::class.java)
   })
+

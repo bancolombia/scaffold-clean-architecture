@@ -20,7 +20,7 @@ class EventsHandler constructor(sampleUseCase: SampleUseCase) {
     }
 {{/lombok}}
 
-    fun handleEventA(val event :DomainEvent<Object/*change for proper model*/>):Mono<Unit> {
+    fun handleEventA(event :DomainEvent<Any/*change for proper model*/>):Mono<Unit> {
         fun println("event received: " + event.getName() + " ->" + event.getData()); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();

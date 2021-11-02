@@ -17,12 +17,12 @@ import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Configuration
-class RestConsumerConfig {
+class RestConsumerConfig() {
 
     @Value("${adapter.restconsumer.url}")
-    private url :String;
+    val url :String;
     @Value("${adapter.restconsumer.timeout}")
-    private val timeout :Int;
+    val timeout :Int;
 
     @Bean
     fun getWebClient() :WebClient {
@@ -36,9 +36,9 @@ class RestConsumerConfig {
     private getClientHttpConnector() :ClientHttpConnector {
         /*
         IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED
-        SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
+        val sslContext : SslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
                 .build();*/
-        return new ReactorClientHttpConnector(HttpClient.create()
+        return ReactorClientHttpConnector(HttpClient.create()
                 //.secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
                 .compress(true)
                 .keepAlive(true)

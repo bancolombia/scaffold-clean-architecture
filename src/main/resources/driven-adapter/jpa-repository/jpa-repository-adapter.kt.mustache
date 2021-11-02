@@ -10,7 +10,7 @@ class JPARepositoryAdapter :AdapterOperations<Object/* change for domain model *
 // implements ModelRepository from domain
 {
 
-    fun JPARepositoryAdapter(val repository :JPARepository, val mapper :ObjectMapper) {
+    fun JPARepositoryAdapter(repository :JPARepository, mapper :ObjectMapper) {
         /**
          *  Could be use mapper.mapBuilder if your domain model implement builder pattern
          *  super(repository, mapper, d -> mapper.mapBuilder(d,ObjectModel.ObjectModelBuilder.class).build());

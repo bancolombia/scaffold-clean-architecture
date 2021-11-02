@@ -12,7 +12,7 @@ class HandlerRegistryConfiguration {
 
     // see more at: https://reactivecommons.org/reactive-commons-java/#_handlerregistry_2
     @Bean
-    fun handlerRegistry(val commands :CommandsHandler, val events :EventsHandler, val queries QueriesHandler):HandlerRegistry {
+    fun handlerRegistry(commands :CommandsHandler, events :EventsHandler, queries QueriesHandler):HandlerRegistry {
         return HandlerRegistry.register()
                 .listenNotificationEvent("some.broadcast.event.name", events::handleEventA, Object.class/*change for proper model*/)
                 .listenEvent("some.event.name", events::handleEventA, Object.class/*change for proper model*/)

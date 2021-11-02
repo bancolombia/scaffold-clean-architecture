@@ -10,12 +10,12 @@ class RestConsumerConfig {
 
     @Bean
     fun getHttpClient() :OkHttpClient {
-        return new OkHttpClient();
+        return OkHttpClient();
     }
 
     @Bean
     fun getObjectMapper() :ObjectMapper {
-        return new ObjectMapper();
+        return ObjectMapper();
     }
 
 }

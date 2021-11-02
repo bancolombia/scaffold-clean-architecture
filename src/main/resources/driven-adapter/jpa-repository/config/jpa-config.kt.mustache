@@ -26,7 +26,7 @@ class JpaConfig {
     {{#include-secret}}
     @Bean
     @Throws(JMSException::class)
-    fun dbSecret(@Value("${aws.secretName}") val secret :String, val manager :GenericManager) :DBSecret
+    fun dbSecret(@Value("${aws.secretName}") secret :String, manager :GenericManager) :DBSecret
     {
         return manager.getSecret(secret, DBSecret.class);
     throw IOException()
@@ -34,7 +34,7 @@ class JpaConfig {
     {{/include-secret}}
     {{^include-secret}}
     @Bean
-    fun dbSecret(val env :Environment) :DBSecret {
+    fun dbSecret(env :Environment) :DBSecret {
         return DBSecret.builder()
                 .url(env.getProperty("spring.datasource.url"))
                 .username(env.getProperty("spring.datasource.username"))
@@ -44,8 +44,8 @@ class JpaConfig {
     {{/include-secret}}
 
     @Bean
-    fun datasource(val secret :DBSecret, @Value("${spring.datasource.driverClassName}") val driverClass :String) :DataSource {
-        HikariConfig config = new HikariConfig();
+    fun datasource(secret :DBSecret, @Value("${spring.datasource.driverClassName}") driverClass :String) :DataSource {
+        val config :HikariConfig  = HikariConfig();
         config.setJdbcUrl(secret.getUrl());
         config.setUsername(secret.getUsername());
         config.setPassword(secret.getPassword());
@@ -55,9 +55,9 @@ class JpaConfig {
 
     @Bean
     fun entityManagerFactory(
-            val dataSource :DataSource,
-            @Value("${spring.jpa.databasePlatform}") val dialect :String) :LocalContainerEntityManagerFactoryBean {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+            dataSource :DataSource,
+            @Value("${spring.jpa.databasePlatform}") dialect :String) :LocalContainerEntityManagerFactoryBean {
+        val em : LocalContainerEntityManagerFactoryBean = LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("{{package}}.jpa");
 

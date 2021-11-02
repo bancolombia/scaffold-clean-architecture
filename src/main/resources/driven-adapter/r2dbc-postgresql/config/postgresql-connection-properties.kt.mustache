@@ -11,17 +11,17 @@ import lombok.NoArgsConstructor;
 {{/lombok}}
 class PostgresqlConnectionProperties {
 
-    private val database :String;
-    private val schema :String;
-    private val username :String;
-    private val password :String;
-    private val host :String;
-    private val port :Integer;
+    val database :String;
+    val schema :String;
+    val username :String;
+    val password :String;
+    val host :String;
+    val port :Integer;
 
     {{^lombok}}
     public PostgresqlConnectionProperties(){}
 
-    fun PostgresqlConnectionProperties(val database :String, val schema :String, val username :String, val password :String, vale host :String, val port :Integer) {
+    fun PostgresqlConnectionProperties(database :String,  schema :String,  username :String,  password :String, e host :String,  port :Integer) {
         this.database = database;
         this.schema = schema;
         this.username = username;
@@ -34,7 +34,7 @@ class PostgresqlConnectionProperties {
         return database;
     }
 
-    fun setDatabase(String database) :Unit {
+    fun setDatabase(database :String) :Unit {
         this.database = database;
     }
 
@@ -42,7 +42,7 @@ class PostgresqlConnectionProperties {
         return schema;
     }
 
-    fun setSchema(String schema) :Unit {
+    fun setSchema(schema :String) :Unit {
         this.schema = schema;
     }
 
@@ -50,7 +50,7 @@ class PostgresqlConnectionProperties {
         return username;
     }
 
-    fun setUsername(String username) :Unit {
+    fun setUsername(username :String) :Unit {
         this.username = username;
     }
 
@@ -58,7 +58,7 @@ class PostgresqlConnectionProperties {
         return password;
     }
 
-    fun setPassword(String password) :Unit {
+    fun setPassword(password :String) :Unit {
         this.password = password;
     }
 
@@ -66,7 +66,7 @@ class PostgresqlConnectionProperties {
         return host;
     }
 
-    fun setHost(String host) :Unit {
+    fun setHost(host :String) :Unit {
         this.host = host;
     }
 
@@ -74,7 +74,7 @@ class PostgresqlConnectionProperties {
         return port;
     }
 
-    fun setPort(Integer port) :Unit {
+    fun setPort(port :Integer) :Unit {
         this.port = port;
     }
     {{/lombok}}

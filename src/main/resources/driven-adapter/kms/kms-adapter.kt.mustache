@@ -16,11 +16,11 @@ import java.util.concurrent.ExecutionException;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-class KmsAdapter // implements ModelRepository from domain
+class KmsAdapter(@Value("${adapters.aws.kms.keyId}")
+val keyId :String
+val kmsAsyncClient :KmsAsyncClient) // implements ModelRepository from domain
 {
-    @Value("${adapters.aws.kms.keyId}")
-    private val keyId :String;
-    private val kmsAsyncClient :KmsAsyncClient;
+
 
 {{^lombok}}
     fun KmsAdapter(KmsAsyncClient kmsAsyncClient ) :Unit{
@@ -29,7 +29,7 @@ class KmsAdapter // implements ModelRepository from domain
 {{/lombok}}
 @Throws(ExecutionException::class)
 @Throws(InterruptedException::class)
-    fun decrypt(val secretKey :String, val keyId :String) :byte[] {
+    fun decrypt(secretKey :String, keyId :String) :byte[] {
         return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
                 .get()
                 .plaintext()
@@ -41,21 +41,21 @@ throw InterruptedException()
 
 @Throws(ExecutionException::class)
 @Throws(InterruptedException::class)
-    fun encrypt(val secretKey :byte[]) :String {
+    fun encrypt(secretKey :byte[]) :String {
         return Base64Utils.encodeToString(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId))
                         .get()
                         .ciphertextBlob().asByteArray());
     }
 
-    fun getDecryptRequest(val secretKey :String, val keyId :String) :DecryptRequest{
-        byte[] decodedSecretKey = Base64Utils.decodeFromString(secretKey);
+    fun getDecryptRequest(secretKey :String, keyId :String) :DecryptRequest{
+        val decodedSecretKey :byte[]  = Base64Utils.decodeFromString(secretKey);
         return DecryptRequest.builder()
         .ciphertextBlob(SdkBytes.fromByteArray(decodedSecretKey))
         .keyId(keyId)
         .build();
     }
 
-    fun getEncryptRequest(val secretKey :byte[] , val keyId :String) :EncryptRequest{
+    fun getEncryptRequest(secretKey :byte[] , keyId :String) :EncryptRequest{
         return EncryptRequest.builder()
         .plaintext(SdkBytes.fromByteArray(secretKey))
         .encryptionAlgorithm(EncryptionAlgorithmSpec.SYMMETRIC_DEFAULT)

@@ -17,32 +17,32 @@ abstract class ReactiveTemplateAdapterOperations<E, K, V> {
     private final val toEntityFn :Function<V, E> ;
 
     @SuppressWarnings("unchecked")
-    fun ReactiveTemplateAdapterOperations(val connectionFactory :ReactiveRedisConnectionFactory ,val mapper :ObjectMapper ,val toEntityFn :Function<V, E> ) {
+    fun ReactiveTemplateAdapterOperations(connectionFactory :ReactiveRedisConnectionFactory ,mapper :ObjectMapper ,val toEntityFn :Function<V, E> ) {
         this.mapper = mapper;
-        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+        val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];
         this.toEntityFn = toEntityFn;
 
-        var serializationContext :RedisSerializationContext<K, V> =
-                RedisSerializationContext.<K, V>newSerializationContext(new Jackson2JsonRedisSerializer<>(dataClass))
+        val serializationContext :RedisSerializationContext<K, V> =
+                RedisSerializationContext.<K, V>newSerializationContext(Jackson2JsonRedisSerializer<>(dataClass))
                         .build();
 
-        template = new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
+        template = ReactiveRedisTemplate<>(connectionFactory, serializationContext);
     }
 
-    fun save(val key :K  ,val entity :E ) :Mono<E> {
+    fun save(key :K  ,entity :E ) :Mono<E> {
         return Mono.just(entity)
                 .map(this::toValue)
                 .flatMap(value -> template.opsForValue().set(key, value))
                 .thenReturn(entity);
     }
 
-    fun save(val key :K ,val entity :E ,val expirationMillis :long ) :Mono<E> {
+    fun save(key :K ,entity :E ,expirationMillis :long ) :Mono<E> {
         return save(key, entity)
                 .flatMap(v -> template.expire(key, Duration.ofMillis(expirationMillis)).thenReturn(v));
     }
 
-    fun findById(val key :K) :Mono<E> {
+    fun findById(key :K) :Mono<E> {
         return template.opsForValue().get(key)
                 .map(this::toEntity);
     }
@@ -51,7 +51,7 @@ abstract class ReactiveTemplateAdapterOperations<E, K, V> {
         return mapper.map(entity, dataClass);
     }
 
-    protected fun toEntity(val data :V ) :E {
+    protected fun toEntity(data :V ) :E {
         return data != null ? toEntityFn.apply(data) : null;
     }
 

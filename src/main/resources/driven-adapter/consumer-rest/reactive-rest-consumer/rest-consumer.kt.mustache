@@ -14,10 +14,10 @@ import reactor.core.publisher.Mono;
 class RestConsumer // implements Gateway from domain
 {
 
-    private val client :WebClient;
+    val client :WebClient;
 
 {{^lombok}}
-    fun RestConsumer(val client :WebClient) {
+    fun RestConsumer(client :WebClient) {
         this.client = client;
     }
 {{/lombok}}
@@ -30,7 +30,7 @@ class RestConsumer // implements Gateway from domain
         return client
             .get()
             .retrieve()
-            .bodyToMono(ObjectResponse.class);
+            .bodyToMono(ObjectResponse.class)
 
     }
 
@@ -43,15 +43,15 @@ class RestConsumer // implements Gateway from domain
             .build();
     {{/lombok}}
     {{^lombok}}
-        val request :ObjectRequest = new ObjectRequest();
-        request.setVal1("exampleval1");
-        request.setVal2("exampleval2");
+        val request :ObjectRequest = ObjectRequest();
+        request.setVal1("exampleval1")
+        request.setVal2("exampleval2")
     {{/lombok}}
 
         return client
             .post()
             .body(Mono.just(request), ObjectRequest.class)
             .retrieve()
-            .bodyToMono(ObjectResponse.class);
+            .bodyToMono(ObjectResponse.class)
     }
 }

@@ -3,5 +3,5 @@ package {{package}}.redis.repository;
 import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-interface ReactiveRedisRepository :ReactiveCrudRepository<Object/* change for adapter model */, String>, :ReactiveQueryByExampleExecutor<Object/* change for adapter model */> {
+interface ReactiveRedisRepository :ReactiveCrudRepository<Any/* change for adapter model */, String>, :ReactiveQueryByExampleExecutor<Any/* change for adapter model */> {
 }

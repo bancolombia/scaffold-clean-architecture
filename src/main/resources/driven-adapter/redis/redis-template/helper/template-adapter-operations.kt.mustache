@@ -15,38 +15,38 @@ abstract class TemplateAdapterOperations<E, K, V> {
     const val toEntityFn :Function<V, E> ;
 
     @SuppressWarnings("unchecked")
-    fun TemplateAdapterOperations(val connectionFactory :RedisConnectionFactory, mapper :ObjectMapper, toEntityFn :Function<V, E> ) {
+    fun TemplateAdapterOperations( connectionFactory :RedisConnectionFactory, mapper :ObjectMapper, toEntityFn :Function<V, E> ) {
         this.mapper = mapper;
         val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];
         this.toEntityFn = toEntityFn;
 
-        template = new RedisTemplate<>();
+        template = RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setDefaultSerializer(new Jackson2JsonRedisSerializer<>(dataClass));
         template.afterPropertiesSet();
     }
 
-    fun save(val key :K, val entity :E) :E{
+    fun save( key :K,  entity :E) :E{
         template.opsForValue().set(key, toValue(entity));
         return entity;
     }
 
-    fun save(val key :K, val entity :E, val expirationMillis :long) :E {
-        E result = save(key, entity);
+    fun save( key :K,  entity :E,  expirationMillis :long) :E {
+        Val result :E  = save(key, entity);
         template.expire(key, Duration.ofMillis(expirationMillis));
         return result;
     }
 
-    fun findById(val key :K) :E {
+    fun findById( key :K) :E {
         return toEntity(template.opsForValue().get(key));
     }
 
-    protected toValue(val entity :E) :V {
+    protected toValue( entity :E) :V {
         return mapper.map(entity, dataClass);
     }
 
-    protected toEntity(val data :V) :E {
+    protected toEntity( data :V) :E {
         return data != null ? toEntityFn.apply(data) : null;
     }
 

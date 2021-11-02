@@ -24,28 +24,28 @@ class RsocketController {
 
     // interaction model Request/Response
     @MessageMapping(value = "route.request.response")
-    fun getRequestResponse(val objRequest/* change for object request */ :Any) :Mono<Object/* change for object response */>{
+    fun getRequestResponse(objRequest/* change for object request */ :Any) :Mono<Any/* change for object response */>{
         // return useCase.doAction();
         return Mono.empty();
     }
 
     // interaction model Request/Stream
     @MessageMapping(value = "route.request.stream")
-    fun getRequestStream() :Flux<Object/* change for object response */> {
+    fun getRequestStream() :Flux<Any/* change for object response */> {
         // return useCase.doAction();
         return Flux.empty();
     }
 
     // interaction model Fire-and-Forget
     @MessageMapping(value = "route.fire.forget")
-    fun  getRequetsFireForget(val objRequest/* change for object request */ :Any) :Mono<Void> {
+    fun  getRequetsFireForget(objRequest/* change for object request */ :Any) :Mono<Void> {
         // return useCase.doAction(objRequest);
         return Mono.empty();
     }
 
     // interaction model Channel
     @MessageMapping(value = "route.channel")
-    fun  getChannel(val objRequest :Flux<Object/* change for object request */>) :Flux<Object/* change for object response */> {
+    fun  getChannel(val objRequest :Flux<Any/* change for object request */>) :Flux<Any/* change for object response */> {
         // return useCase.doAction(objRequest);
         return Flux.empty();
     }

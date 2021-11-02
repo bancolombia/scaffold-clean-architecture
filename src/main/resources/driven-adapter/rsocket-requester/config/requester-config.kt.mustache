@@ -13,7 +13,7 @@ class RequesterConfig {
 
     @Bean
     public rSocketRequester(RSocketStrategies rSocketStrategies): RSocketRequester {
-        RSocketStrategies strategies = RSocketStrategies.builder()
+        val strategies :RSocketStrategies = RSocketStrategies.builder()
             .encoders(encoders -> encoders.add(new Jackson2CborEncoder()))
             .decoders(decoders -> decoders.add(new Jackson2CborDecoder()))
             .build();

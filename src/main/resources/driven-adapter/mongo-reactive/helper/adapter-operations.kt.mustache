@@ -1,3 +1,4 @@
+
 package {{package}}.mongo.helper
 
 import org.reactivecommons.utils.ObjectMapper
@@ -71,5 +72,4 @@ abstract class AdapterOperations<E, D, I, R>(
   init {
     val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
     dataClass = genericSuperclass.actualTypeArguments[1] as Class<D>
-  }
-}
+  } }

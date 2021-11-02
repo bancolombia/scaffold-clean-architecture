@@ -21,29 +21,29 @@ import java.util.logging.Level;
 {{/lombok}}
 @EnableDirectAsyncGateway
 class ReactiveDirectAsyncGateway /*implements SomeGatewayFromDomain*/ {
-    const val val TARGET_NAME :String = "cleanArchitecture";// refers to remote spring.application.name property
-    const val SOME_COMMAND_NAME :String = "some.command.name";
-    const val SOME_QUERY_NAME :String = "some.query.name";
-    private val val gateway :DirectAsyncGateway;
+    val TARGET_NAME :String = "cleanArchitecture";// refers to remote spring.application.name property
+    val SOME_COMMAND_NAME :String = "some.command.name";
+    val SOME_QUERY_NAME :String = "some.query.name";
+    val gateway :DirectAsyncGateway;
 
     {{^lombok}}
     fun ReactiveDirectAsyncGateway(DirectAsyncGateway gateway) {
-        this.gateway = gateway;
+        this.gateway = gateway
     }
     {{/lombok}}
 
-    fun runRemoteJob(val command :Object/*change for proper model*/) :Mono<Void>  {
+    fun runRemoteJob(command :Any/*change for proper model*/) :Mono<Void>  {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
-        return gateway.sendCommand(new Command<>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
+        return gateway.sendCommand(Command<>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
                 TARGET_NAME);
     }
 
-    fun requestForRemoteData(val query :Object/*change for proper model*/) :Mono<Object>  {
+    fun requestForRemoteData(query :Any/*change for proper model*/) :Mono<Any>  {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}
-        return gateway.requestReply(new AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/);
+        return gateway.requestReply(AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/);
     }
 }

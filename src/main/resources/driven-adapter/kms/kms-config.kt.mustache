@@ -18,20 +18,20 @@ class KmsConfig {
 
     @Profile({"dev", "cer", "pdn"})
     @Bean
-    fun  kmsAsyncClient(val kmsProperties :KmsConnectionProperties) :KmsAsyncClient {
+    fun  kmsAsyncClient(kmsProperties :KmsConnectionProperties) :KmsAsyncClient {
         return getBuilder(kmsProperties).build();
     }
 
     @Profile("local")
     @Bean
-    fun localKmsAsyncClient(val awsBasicCredentials :AwsBasicCredentials, val kmsProperties :KmsConnectionProperties) :KmsAsyncClient{
+    fun localKmsAsyncClient(awsBasicCredentials :AwsBasicCredentials, kmsProperties :KmsConnectionProperties) :KmsAsyncClient{
         return getBuilder(kmsProperties)
         .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
         .endpointOverride(URI.create(kmsProperties.getEndpoint()))
         .build();
     }
 
-    fun  getBuilder(val kmsProperties :KmsConnectionProperties) :KmsAsyncClientBuilder {
+    fun  getBuilder(kmsProperties :KmsConnectionProperties) :KmsAsyncClientBuilder {
         return KmsAsyncClient.builder()
         .region(Region.of(kmsProperties.getRegion()));
     }

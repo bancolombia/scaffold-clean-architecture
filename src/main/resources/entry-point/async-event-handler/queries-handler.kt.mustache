@@ -19,7 +19,7 @@ class QueriesHandler constructor (sampleUseCase: SampleUseCase) {
     }
 {{/lombok}}
 
-    fun  handleQueryA(val query/*change for proper model*/ :Any) :Mono<Object/*change for proper model*/> {
+    fun  handleQueryA(query/*change for proper model*/ :Any) :Mono<Any/*change for proper model*/> {
         System.out.println("query received->" + query); // TODO: Remove this line
 //        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
         return Mono.just("Response Data");

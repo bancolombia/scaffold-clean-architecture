@@ -19,17 +19,17 @@ class Handler {
     public Handler() {
     }
 {{/lombok}}
-        fun listenGETUseCase(val serverRequest :ServerRequest): Mono<ServerResponse>{
+        fun listenGETUseCase(serverRequest :ServerRequest): Mono<ServerResponse>{
         // usecase.logic();
         return ServerResponse.ok().body("", String.class);
         }
 
-        fun listenGETOtherUseCase(val serverRequest :ServerRequest): Mono<ServerResponse> {
+        fun listenGETOtherUseCase(serverRequest :ServerRequest): Mono<ServerResponse> {
         // useCase2.logic();
         return ServerResponse.ok().body("", String.class);
         }
 
-        fun listenPOSTUseCase(val serverRequest :ServerRequest): Mono<ServerResponse> {
+        fun listenPOSTUseCase(serverRequest :ServerRequest): Mono<ServerResponse> {
             // usecase.logic();
             return ServerResponse.ok().body("", String.class);
             }

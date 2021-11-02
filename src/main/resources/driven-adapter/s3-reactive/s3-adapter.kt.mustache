@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 {{/lombok}}
 class S3Adapter /* implements SomeGatewayFromDomain*/ {
 
-   val s3Operations :S3Operations;
+   val s3Operations :S3Operations
 
 {{^lombok}}
-   fun S3Adapter(val s3Operations :S3Operations ) :Unit {
-      this.s3Operations = s3Operations;
+   fun S3Adapter(s3Operations :S3Operations ) :Unit {
+      this.s3Operations = s3Operations
    }
 {{/lombok}}
 

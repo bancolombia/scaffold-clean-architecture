@@ -19,7 +19,7 @@ class PostgreSQLConnectionPool {
 	@Bean
 	fun getConnectionConfig() :ConnectionPool {
         // TODO: change these properties for yours
-		PostgresqlConnectionProperties pgProperties = new PostgresqlConnectionProperties();
+		val pgProperties :PostgresqlConnectionProperties = PostgresqlConnectionProperties();
 		pgProperties.setDatabase("postgres");
 		pgProperties.setHost("localhost");
 		pgProperties.setPort(5432);
@@ -30,7 +30,7 @@ class PostgreSQLConnectionPool {
 		return buildConnectionConfiguration(pgProperties);
 	}
 
-	private fun buildConnectionConfiguration(val properties :PostgresqlConnectionProperties) :ConnectionPool {
+	private fun buildConnectionConfiguration(properties :PostgresqlConnectionProperties) :ConnectionPool {
 		PostgresqlConnectionConfiguration dbConfiguration = PostgresqlConnectionConfiguration.builder()
 				.host(properties.getHost())
 				.port(properties.getPort())
@@ -40,7 +40,7 @@ class PostgreSQLConnectionPool {
 				.password(properties.getPassword())
 				.build();
 
-        ConnectionPoolConfiguration poolConfiguration = ConnectionPoolConfiguration.builder()
+        val poolConfiguration :ConnectionPoolConfiguration = ConnectionPoolConfiguration.builder()
                 .connectionFactory(new PostgresqlConnectionFactory(dbConfiguration))
                 .name("api-postgres-connection-pool")
                 .initialSize(INITIAL_SIZE)
@@ -49,6 +49,6 @@ class PostgreSQLConnectionPool {
                 .validationQuery("SELECT 1")
                 .build();
 
-		return new ConnectionPool(poolConfiguration);
+		return ConnectionPool(poolConfiguration);
 	}
 }

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-class ReactiveRedisTemplateAdapter  :ReactiveTemplateAdapterOperations<Object/* change for domain model */, String, Object/* change for adapter model */>
+class ReactiveRedisTemplateAdapter  :ReactiveTemplateAdapterOperations<Any/* change for domain model */, String, Object/* change for adapter model */>
 // implements ModelRepository from domain
 {
-    fun ReactiveRedisTemplateAdapter(val connectionFactory :ReactiveRedisConnectionFactory ,val  mapper :ObjectMapper ) {
+    fun ReactiveRedisTemplateAdapter(connectionFactory :ReactiveRedisConnectionFactory , mapper :ObjectMapper ) {
         /**
          *  Could be use mapper.mapBuilder if your domain model implement builder pattern
          *  super(repository, mapper, d -> mapper.mapBuilder(d,ObjectModel.ObjectModelBuilder.class).build());

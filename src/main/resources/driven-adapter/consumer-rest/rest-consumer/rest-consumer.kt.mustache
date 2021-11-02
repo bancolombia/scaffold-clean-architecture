@@ -25,7 +25,7 @@ private val client :OkHttpClient;
 private val mapper :ObjectMapper;
 
 {{^lombok}}
-    fun RestConsumer(val client :OkHttpClient, val mapper :ObjectMapper) {
+    fun RestConsumer(client :OkHttpClient, mapper :ObjectMapper) {
     this.client = client;
     this.mapper = mapper;
     }

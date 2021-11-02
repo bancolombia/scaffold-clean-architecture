@@ -13,33 +13,33 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "adapter.aws.s3")
 class S3ConnectionProperties {
 
-    val bucketName :String ;
-    val region :String ;
-    val endpoint :String ;
+    val bucketName :String
+    val region :String
+    val endpoint :String
 
 {{^lombok}}
     fun getBucketName(): String {
-        return bucketName;
+        return bucketName
     }
 
-    fun setBucketName(val bucketName :String): void {
-        this.bucketName = bucketName;
+    fun setBucketName(bucketName :String): void {
+        this.bucketName = bucketName
     }
 
     fun getRegion(): String {
-        return region;
+        return region
     }
 
-    fun setRegion(val region :String): Unit {
-        this.region = region;
+    fun setRegion(region :String): Unit {
+        this.region = region
     }
 
     fun getEndpoint(): String {
-        return endpoint;
+        return endpoint
     }
 
     fun  setEndpoint(String endpoint): String {
-        this.endpoint = endpoint;
+        this.endpoint = endpoint
     }
 {{/lombok}}
 

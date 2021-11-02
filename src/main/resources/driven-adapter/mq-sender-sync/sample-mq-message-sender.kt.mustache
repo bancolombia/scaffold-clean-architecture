@@ -17,17 +17,17 @@ import javax.jms.Message;
 @EnableMQMessageSender
 //@EnableMQSelectorMessageListener // Enable it to retrieve a specific message by correlationId
 class SampleMQMessageSender /* implements SomeGateway */ {
-      private val sender :MQMessageSenderSync;
-//    private val MQTemporaryQueuesContainer container; // Inject it to reference a temporary queue
-//    private val MQMessageSelectorListenerSync listener; // Inject it to retrieve a specific message by correlationId
+       val sender :MQMessageSenderSync;
+//     val MQTemporaryQueuesContainer container; // Inject it to reference a temporary queue
+//     val MQMessageSelectorListenerSync listener; // Inject it to retrieve a specific message by correlationId
     {{^lombok}}
 
-    fun MyMessageSender(val sender :MQMessageSender) {
+    fun MyMessageSender(sender :MQMessageSender) {
         this.sender = sender;
     }
     {{/lombok}}
 
-    fun send(val message :String) :String {
+    fun send(message :String) :String {
         return sender.send(context -> {
             Message textMessage = context.createTextMessage(message);
 //            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container

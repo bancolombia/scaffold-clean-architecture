@@ -22,7 +22,7 @@ class S3ConnectionProperties {
         return bucketName;
     }
 
-    fun setBucketName(val bucketName :String) :Unit {
+    fun setBucketName(bucketName :String) :Unit {
         this.bucketName = bucketName;
     }
 
@@ -30,7 +30,7 @@ class S3ConnectionProperties {
         return region;
     }
 
-    fun setRegion(val region :String) :Unit {
+    fun setRegion(region :String) :Unit {
         this.region = region;
     }
 
@@ -38,7 +38,7 @@ class S3ConnectionProperties {
         return endpoint;
     }
 
-    public fun setEndpoint(val endpoint :String): String {
+    public fun setEndpoint(endpoint :String): String {
         this.endpoint = endpoint;
     }
 {{/lombok}}
