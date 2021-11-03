@@ -1,70 +1,64 @@
-package {{package}}.mongo.helper;
+package {{package}}.mongo.helper
 
-import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.data.domain.Example;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.query.QueryByExampleExecutor;
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.data.domain.Example
+import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.query.QueryByExampleExecutor
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
 
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+abstract class AdapterOperations<E, D, I, R>(
+    private val repository: R,
+    private val mapper: ObjectMapper,
+    private val toEntityFn: Function<D, E>
+) where R : MongoRepository<D, I>, R : QueryByExampleExecutor<D> {
 
-import static java.util.stream.StreamSupport.stream;
+    private val dataClass: Class<D>
 
-abstract class AdapterOperations<E, D, I, R extends MongoRepository<D, I> & QueryByExampleExecutor<D>> {
-    protected val repository :R;
-    private  dataClass :Class<D>;
-    protected mapper :ObjectMapper;
-    private val toEntityFn :Function<D, E>;
-
-    fun AdapterOperations(val repository :R, val mapper :ObjectMapper, val toEntityFn :Function<D, E>) {
-        this.repository = repository;
-        this.mapper = mapper;
-        ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
-        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];
-        this.toEntityFn = toEntityFn;
+    private fun toData(entity: E): D {
+        return mapper.map(entity, dataClass)
     }
 
-    fun toData(val entity :E) :D {
-        return mapper.map(entity, dataClass);
+    private fun toEntity(data: D?): E? {
+        return if (data != null) toEntityFn.apply(data) else null
     }
 
-    fun toEntity(val data :D) :E {
-        return data != null ? toEntityFn.apply(data) : null;
+    fun save(entity: E): E? {
+        val data = toData(entity)
+        return toEntity(saveData(data))
     }
 
-    fun save(val entity :E) :E {
-        D data = toData(entity);
-        return toEntity(saveData(data));
+    fun saveAllEntities(entities: List<E>): List<E?> {
+        val list = entities.map { entity: E -> toData(entity) }
+        return toList(saveData(list))
     }
 
-    fun saveAllEntities(val entities :List<E>) :List<E> {
-        List<D> list = entities.stream().map(this::toData).collect(Collectors.toList());
-        return toList(saveData(list));
+    private fun toList(iterable: Iterable<D>): List<E?> {
+        return iterable.map { data: D -> toEntity(data) }
     }
 
-    fun toList(val iterable :Iterable<D>) :List<E> {
-        return stream(iterable.spliterator(), false).map(this::toEntity).collect(Collectors.toList());
+    private fun saveData(data: D): D {
+        return repository.save(data)
     }
 
-    fun saveData(val data :D) :D {
-        return repository.save(data);
+    private fun saveData(data: List<D>): Iterable<D> {
+        return repository.saveAll(data)
     }
 
-    fun saveData(val data :List<D>) :Iterable<D> {
-        return repository.saveAll(data);
+    fun findById(id: I): E? {
+        return toEntity(repository.findById(id).orElse(null))
     }
 
-    fun findById(val id :I) :E{
-        return toEntity(repository.findById(id).orElse(null));
+    fun findByExample(entity: E): List<E?> {
+        return toList(repository.findAll(Example.of(toData(entity))))
     }
 
-    fun findByExample(val entity :E) :List<E> {
-        return toList(repository.findAll(Example.of(toData(entity))));
+    fun findAll(): List<E?> {
+        return toList(repository.findAll())
     }
 
-    fun findAll() :List<E> {
-        return toList(repository.findAll());
+    init {
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[1] as Class<D>
     }
 }

@@ -17,6 +17,6 @@
     "driven-adapter/mongo-repository/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.kt",
     "driven-adapter/mongo-repository/mongo-repository.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.kt",
     "driven-adapter/mongo-repository/mongo-repository-adapter.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoRepositoryAdapter.kt",
-    "driven-adapter/mongo-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle"
+    "driven-adapter/mongo-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle.kts"
   }
 }

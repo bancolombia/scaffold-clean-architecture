@@ -1,0 +1,42 @@
+package {{package}}.config
+
+{{#include-secret}}
+import co.com.bancolombia.secretsmanager.api.GenericManager
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException
+import org.springframework.beans.factory.annotation.Value
+{{/include-secret}}
+import co.com.testkotlin.mongo.config.MongoDBSecret
+import org.springframework.boot.autoconfigure.mongo.MongoClientFactory
+import org.springframework.boot.autoconfigure.mongo.MongoProperties
+import org.springframework.boot.autoconfigure.mongo.MongoPropertiesClientSettingsBuilderCustomizer
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
+
+
+@Configuration
+open class MongoConfig {
+
+    {{#include-secret}}
+    @Bean
+    open fun dbSecret(
+        @Value("\${aws.secretName}") secret: String,
+        manager: GenericManager
+    ): MongoDBSecret {
+        return manager.getSecret(secret, MongoDBSecret::class.java)
+    }
+    {{/include-secret}}
+    {{^include-secret}}
+    @Bean
+    open fun dbSecret(env: Environment): MongoDBSecret {
+        return MongoDBSecret(uri = env.getProperty("spring.data.mongodb.uri"))
+    }
+    {{/include-secret}}
+
+    @Bean
+    open fun mongoProperties(secret: MongoDBSecret, env: Environment): MongoClientFactory {
+        val properties = MongoProperties().apply { uri = secret.uri }
+        val list = listOf(MongoPropertiesClientSettingsBuilderCustomizer(properties, env))
+        return MongoClientFactory(list)
+    }
+}

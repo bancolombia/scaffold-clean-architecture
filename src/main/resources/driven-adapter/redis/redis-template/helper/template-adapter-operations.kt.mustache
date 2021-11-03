@@ -1,53 +1,50 @@
-package {{package}}.redis.template.helper;
+package {{package}}.redis.template.helper
 
-import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.data.redis.connection.RedisConnectionFactory
+import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer
+import java.lang.reflect.ParameterizedType
+import java.time.Duration
+import java.util.function.Function
 
-import java.lang.reflect.ParameterizedType;
-import java.util.function.Function;
+abstract class TemplateAdapterOperations<E, K, V>(
+    connectionFactory: RedisConnectionFactory?,
+    private val mapper: ObjectMapper,
+    private val toEntityFn: Function<V, E>
+) {
+    private val template: RedisTemplate<K, V>
+    private val dataClass: Class<V>
 
-abstract class TemplateAdapterOperations<E, K, V> {
-    const val template :RedisTemplate<K, V> ;
-    const val dataClass :Class<V> ;
-    protected val mapper :ObjectMapper;
-    const val toEntityFn :Function<V, E> ;
-
-    @SuppressWarnings("unchecked")
-    fun TemplateAdapterOperations( connectionFactory :RedisConnectionFactory, mapper :ObjectMapper, toEntityFn :Function<V, E> ) {
-        this.mapper = mapper;
-        val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
-        this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];
-        this.toEntityFn = toEntityFn;
-
-        template = RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setDefaultSerializer(new Jackson2JsonRedisSerializer<>(dataClass));
-        template.afterPropertiesSet();
+    fun save(key: K, entity: E): E {
+        template.opsForValue()[key] = toValue(entity)
+        return entity
     }
 
-    fun save( key :K,  entity :E) :E{
-        template.opsForValue().set(key, toValue(entity));
-        return entity;
+    fun save(key: K, entity: E, expirationMillis: Long): E {
+        val result = save(key, entity)
+        template.expire(key, Duration.ofMillis(expirationMillis))
+        return result
     }
 
-    fun save( key :K,  entity :E,  expirationMillis :long) :E {
-        Val result :E  = save(key, entity);
-        template.expire(key, Duration.ofMillis(expirationMillis));
-        return result;
+    fun findById(key: K): E? {
+        return toEntity(template.opsForValue()[key])
     }
 
-    fun findById( key :K) :E {
-        return toEntity(template.opsForValue().get(key));
+    private fun toValue(entity: E): V {
+        return mapper.map(entity, dataClass)
     }
 
-    protected toValue( entity :E) :V {
-        return mapper.map(entity, dataClass);
+    private fun toEntity(data: V?): E? {
+        return if (data != null) toEntityFn.apply(data) else null
     }
 
-    protected toEntity( data :V) :E {
-        return data != null ? toEntityFn.apply(data) : null;
+    init {
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[2] as Class<V>
+        template = RedisTemplate()
+        template.connectionFactory = connectionFactory
+        template.defaultSerializer = Jackson2JsonRedisSerializer(dataClass)
+        template.afterPropertiesSet()
     }
-
 }

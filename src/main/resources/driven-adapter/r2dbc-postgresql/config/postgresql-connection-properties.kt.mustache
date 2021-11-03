@@ -1,81 +1,17 @@
-package {{package}}.config;
+package {{package}}.config
 
 {{#lombok}}
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor
+import lombok.NoArgsConstructor
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 {{/lombok}}
-class PostgresqlConnectionProperties {
-
-    val database :String;
-    val schema :String;
-    val username :String;
-    val password :String;
-    val host :String;
-    val port :Integer;
-
-    {{^lombok}}
-    public PostgresqlConnectionProperties(){}
-
-    fun PostgresqlConnectionProperties(database :String,  schema :String,  username :String,  password :String, e host :String,  port :Integer) {
-        this.database = database;
-        this.schema = schema;
-        this.username = username;
-        this.password = password;
-        this.host = host;
-        this.port = port;
-    }
-
-    fun getDatabase() :String {
-        return database;
-    }
-
-    fun setDatabase(database :String) :Unit {
-        this.database = database;
-    }
-
-    fun getSchema() :String {
-        return schema;
-    }
-
-    fun setSchema(schema :String) :Unit {
-        this.schema = schema;
-    }
-
-    fun String getUsername() {
-        return username;
-    }
-
-    fun setUsername(username :String) :Unit {
-        this.username = username;
-    }
-
-    fun getPassword() :String {
-        return password;
-    }
-
-    fun setPassword(password :String) :Unit {
-        this.password = password;
-    }
-
-    fun getHost() :String {
-        return host;
-    }
-
-    fun setHost(host :String) :Unit {
-        this.host = host;
-    }
-
-    fun getPort() :Integer {
-        return port;
-    }
-
-    fun setPort(port :Integer) :Unit {
-        this.port = port;
-    }
-    {{/lombok}}
-}
+data class PostgresqlConnectionProperties(
+    val database: String,
+    val schema: String,
+    val username: String,
+    val password: String,
+    val host: String,
+    val port: Integer
+)

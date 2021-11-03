@@ -11,6 +11,6 @@
   "kotlin": {
     "driven-adapter/redis/redis-template/helper/template-adapter-operations.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/template/helper/TemplateAdapterOperations.kt",
     "driven-adapter/redis/redis-template/redis-template-adapter.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/template/RedisTemplateAdapter.kt",
-    "driven-adapter/redis/redis-template/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle"
+    "driven-adapter/redis/redis-template/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle.kts"
   }
 }

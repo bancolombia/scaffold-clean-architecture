@@ -1,54 +1,56 @@
-package {{package}}.config;
+package {{package}}.config
 
-import java.time.Duration;
-import io.r2dbc.pool.ConnectionPool;
-import io.r2dbc.pool.ConnectionPoolConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
+import java.time.Duration
+import io.r2dbc.pool.ConnectionPool
+import io.r2dbc.pool.ConnectionPoolConfiguration
+import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
+import io.r2dbc.postgresql.PostgresqlConnectionFactory
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
 @Configuration
-class PostgreSQLConnectionPool {
-    // TODO: change pool connection properties based on your resources.
-    const val INITIAL_SIZE :Int = 12;
-    const val MAX_SIZE :Int = 15;
-    const val MAX_IDLE_TIME :Int = 30;
-
-	@Bean
-	fun getConnectionConfig() :ConnectionPool {
+open class PostgreSQLConnectionPool {
+    @Bean
+    open fun getConnectionConfig(): ConnectionPool {
         // TODO: change these properties for yours
-		val pgProperties :PostgresqlConnectionProperties = PostgresqlConnectionProperties();
-		pgProperties.setDatabase("postgres");
-		pgProperties.setHost("localhost");
-		pgProperties.setPort(5432);
-		pgProperties.setUsername("postgres");
-		pgProperties.setPassword("secret");
-		pgProperties.setSchema("public");
+        return buildConnectionConfiguration(
+            PostgresqlConnectionProperties(
+                database = "postgres",
+                host = "localhost",
+                port = 5432,
+                username = "postgres",
+                password = "secret",
+                schema = "public"
+            )
+        )
+    }
 
-		return buildConnectionConfiguration(pgProperties);
-	}
+    private fun buildConnectionConfiguration(properties: PostgresqlConnectionProperties): ConnectionPool {
+        val dbConfiguration: PostgresqlConnectionConfiguration =
+          PostgresqlConnectionConfiguration.builder()
+              .host(properties.host)
+              .port(properties.port)
+              .database(properties.database)
+              .schema(properties.schema)
+              .username(properties.username)
+              .password(properties.password)
+              .build()
+        val poolConfiguration: ConnectionPoolConfiguration = ConnectionPoolConfiguration.builder()
+            .connectionFactory(PostgresqlConnectionFactory(dbConfiguration))
+            .name("api-postgres-connection-pool")
+            .initialSize(INITIAL_SIZE)
+            .maxSize(MAX_SIZE)
+            .maxIdleTime(Duration.ofMinutes(MAX_IDLE_TIME))
+            .validationQuery("SELECT 1")
+            .build()
+        return ConnectionPool(poolConfiguration)
+    }
 
-	private fun buildConnectionConfiguration(properties :PostgresqlConnectionProperties) :ConnectionPool {
-		PostgresqlConnectionConfiguration dbConfiguration = PostgresqlConnectionConfiguration.builder()
-				.host(properties.getHost())
-				.port(properties.getPort())
-				.database(properties.getDatabase())
-				.schema(properties.getSchema())
-				.username(properties.getUsername())
-				.password(properties.getPassword())
-				.build();
-
-        val poolConfiguration :ConnectionPoolConfiguration = ConnectionPoolConfiguration.builder()
-                .connectionFactory(new PostgresqlConnectionFactory(dbConfiguration))
-                .name("api-postgres-connection-pool")
-                .initialSize(INITIAL_SIZE)
-                .maxSize(MAX_SIZE)
-                .maxIdleTime(Duration.ofMinutes(MAX_IDLE_TIME))
-                .validationQuery("SELECT 1")
-                .build();
-
-		return ConnectionPool(poolConfiguration);
-	}
+    companion object{
+        // TODO: change pool connection properties based on your resources.
+        val INITIAL_SIZE = 12
+        val MAX_SIZE = 15
+        val MAX_IDLE_TIME = 30
+    }
 }
