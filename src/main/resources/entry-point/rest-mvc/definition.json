@@ -9,6 +9,6 @@
   },
   "kotlin": {
     "entry-point/rest-mvc/api.kt.mustache": "infrastructure/entry-points/api-rest/src/main/{{language}}/{{packagePath}}/api/ApiRest.kt",
-    "entry-point/rest-mvc/build.gradle.kts.mustache": "infrastructure/entry-points/api-rest/build.gradle"
+    "entry-point/rest-mvc/build.gradle.kts.mustache": "infrastructure/entry-points/api-rest/build.gradle.kts"
   }
 }
