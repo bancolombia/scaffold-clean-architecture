@@ -1,57 +1,34 @@
-package {{package}}.consumer;
+package {{package}}.consumer
 
-{{#lombok}}
-import lombok.RequiredArgsConstructor;
-{{/lombok}}
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.stereotype.Service
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 @Service
-{{#lombok}}
-@RequiredArgsConstructor
-{{/lombok}}
-class RestConsumer // implements Gateway from domain
+class RestConsumer(
+    val client :WebClient) // implements Gateway from domain
 {
-
-    val client :WebClient;
-
-{{^lombok}}
-    fun RestConsumer(client :WebClient) {
-        this.client = client;
-    }
-{{/lombok}}
 
     // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
 
     fun  testGet() :Mono<ObjectResponse> {
-
         return client
             .get()
             .retrieve()
-            .bodyToMono(ObjectResponse.class)
-
+            .bodyToMono(ObjectResponse::class.java)
     }
 
     fun testPost() :Mono<ObjectResponse> {
-
-    {{#lombok}}
-        val request :ObjectRequest = ObjectRequest.builder()
-            .val1("exampleval1")
-            .val2("exampleval2")
-            .build();
-    {{/lombok}}
-    {{^lombok}}
-        val request :ObjectRequest = ObjectRequest();
-        request.setVal1("exampleval1")
-        request.setVal2("exampleval2")
-    {{/lombok}}
+        val request :ObjectRequest = ObjectRequest(
+            val1 = "exampleval1",
+            val2 = "exampleval2"
+        )
 
         return client
             .post()
-            .body(Mono.just(request), ObjectRequest.class)
+            .body(Mono.just(request), ObjectRequest::class.java)
             .retrieve()
-            .bodyToMono(ObjectResponse.class)
+            .bodyToMono(ObjectResponse::class.java)
     }
 }

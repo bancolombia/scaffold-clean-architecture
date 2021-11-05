@@ -12,7 +12,7 @@
     "driven-adapter/kms-reactive/kms-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/KmsConfig.java"
   },
   "kotlin": {
-    "driven-adapter/kms-reactive/build.gradle.kts.mustache": "infrastructure/driven-adapters/kms-repository/build.gradle",
+    "driven-adapter/kms-reactive/build.gradle.kts.mustache": "infrastructure/driven-adapters/kms-repository/build.gradle.kts",
     "driven-adapter/kms-reactive/kms-adapter.kt.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/KmsAdapter.kt",
     "driven-adapter/kms-reactive/kms-connection-properties.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/model/KmsConnectionProperties.kt",
     "driven-adapter/kms-reactive/kms-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/KmsConfig.kt"

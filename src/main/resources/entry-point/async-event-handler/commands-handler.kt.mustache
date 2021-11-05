@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 {{/lombok}}
 @EnableCommandListeners
 class CommandsHandler constructor(sampleUseCase: SampleUseCase) {
-//    private val sampleUseCase: SampleUseCase;
+//    val sampleUseCase: SampleUseCase;
 
 {{^lombok}}
     fun CommandsHandler(/*SampleUseCase sampleUseCase*/) {
@@ -20,7 +20,7 @@ class CommandsHandler constructor(sampleUseCase: SampleUseCase) {
     }
 {{/lombok}}
 
-fun handleCommandA(val command :Command<Any/*change for proper model*/>) : Mono<Unit> {
+fun handleCommandA(command :Command<Any/*change for proper model*/>) : Mono<Unit> {
     System.out.println("command received: " + command.getName() + " ->" + command.getData()); // TODO: Remove this line
     //        return sampleUseCase.doSomething(command.getData());
     return Mono.empty();

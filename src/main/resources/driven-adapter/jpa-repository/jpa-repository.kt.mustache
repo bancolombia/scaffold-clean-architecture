@@ -3,5 +3,5 @@ package {{package}}.jpa;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 
-interface JPARepository :CrudRepository<Any/* change for adapter model */, String>, QueryByExampleExecutor<Object/* change for adapter model */> {
+interface JPARepository :CrudRepository<Any/* change for adapter model */, String>, QueryByExampleExecutor<Any/* change for adapter model */> {
 }

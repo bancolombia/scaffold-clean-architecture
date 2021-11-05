@@ -13,6 +13,6 @@
     "driven-adapter/async-event-bus/events-gateway.kt.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/events/gateways/EventsGateway.kt",
     "driven-adapter/async-event-bus/reactive-events-gateway.kt.mustache": "infrastructure/driven-adapters/async-event-bus/src/main/{{language}}/{{packagePath}}/events/ReactiveEventsGateway.kt",
     "driven-adapter/async-event-bus/reactive-direct-async-gateway.kt.mustache": "infrastructure/driven-adapters/async-event-bus/src/main/{{language}}/{{packagePath}}/events/ReactiveDirectAsyncGateway.kt",
-    "driven-adapter/async-event-bus/build.gradle.mustache": "infrastructure/driven-adapters/async-event-bus/build.gradle"
+    "driven-adapter/async-event-bus/build.gradle.kts.mustache": "infrastructure/driven-adapters/async-event-bus/build.gradle.kts"
   }
 }

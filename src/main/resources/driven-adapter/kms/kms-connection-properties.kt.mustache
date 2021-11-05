@@ -1,9 +1,9 @@
-package {{package}}.config.model;
+package {{package}}.config.model
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConfigurationProperties
 
-import lombok.Data;
+import lombok.Data
 
 {{#lombok}}
 @Data
@@ -11,27 +11,15 @@ import lombok.Data;
 @Configuration
 @ConfigurationProperties(prefix = "adapters.aws.kms")
 class KmsConnectionProperties(
-    val host :String;
-    val region :String;
-    val protocol :String;
-    val port :Int;
-    val keyId :String;
+    val host :String
+    val region :String
+    val protocol :String
+    val port :Int
+    val keyId :String
 ) {
 
-
-{{^lombok}}
-    public KmsConnectionProperties(host :String, region :String,
-    protocol :String, port :Int, keyId :String ) {
-    this.host = host;
-    this.region = region;
-    this.protocol = protocol;
-    this.port = port;
-    this.keyId = keyId;
-    }
-{{/lombok}}
-
     fun getEndpoint() :String{
-        return String.format("%s://%s:%s", protocol, host, port);
+        return String.format("%s://%s:%s", protocol, host, port)
     }
 
 }

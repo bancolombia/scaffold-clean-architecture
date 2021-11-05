@@ -9,6 +9,6 @@
     "driven-adapter/generic/build.gradle.mustache": "infrastructure/driven-adapters/{{name-dash}}/build.gradle"
   },
   "kotlin": {
-  "driven-adapter/generic/build.gradle.kts.mustache": "infrastructure/driven-adapters/{{name-dash}}/build.gradle.kts"
-}
+    "driven-adapter/generic/build.gradle.kts.mustache": "infrastructure/driven-adapters/{{name-dash}}/build.gradle.kts"
+  }
 }

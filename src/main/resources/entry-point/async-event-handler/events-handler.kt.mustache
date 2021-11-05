@@ -12,10 +12,10 @@ import reactor.core.publisher.Mono;
 {{/lombok}}
 @EnableEventListeners
 class EventsHandler constructor(sampleUseCase: SampleUseCase) {
-//    private final SampleUseCase sampleUseCase;
+//    final SampleUseCase sampleUseCase;
 
 {{^lombok}}
-    public EventsHandler(/*SampleUseCase sampleUseCase*/) {
+    fun EventsHandler(/*SampleUseCase sampleUseCase*/) {
         //this.sampleUseCase = sampleUseCase;
     }
 {{/lombok}}

@@ -17,6 +17,6 @@
     "driven-adapter/jpa-repository/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/helper/AdapterOperations.kt",
     "driven-adapter/jpa-repository/jpa-repository.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepository.kt",
     "driven-adapter/jpa-repository/jpa-repository-adapter.kt.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepositoryAdapter.kt",
-    "driven-adapter/jpa-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/jpa-repository/build.gradle"
+    "driven-adapter/jpa-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/jpa-repository/build.gradle.kts"
   }
 }

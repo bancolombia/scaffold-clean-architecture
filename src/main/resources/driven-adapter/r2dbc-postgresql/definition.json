@@ -14,6 +14,6 @@
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.kt.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/config/PostgreSQLConnectionPool.kt",
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-properties.kt.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/config/PostgresqlConnectionProperties.kt",
     "driven-adapter/r2dbc-postgresql/my-reactive-repository.kt.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/MyReactiveRepository.kt",
-    "driven-adapter/r2dbc-postgresql/build.gradle.kts.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/build.gradle"
+    "driven-adapter/r2dbc-postgresql/build.gradle.kts.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/build.gradle.kts"
   }
 }

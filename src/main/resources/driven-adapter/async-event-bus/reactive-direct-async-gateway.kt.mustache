@@ -1,49 +1,43 @@
-package {{package}}.events;
+package {{package}}.events
 
 {{#lombok}}
-import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.java.Log
 {{/lombok}}
-import org.reactivecommons.api.domain.Command;
-import org.reactivecommons.async.api.AsyncQuery;
-import org.reactivecommons.async.api.DirectAsyncGateway;
-import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
-import reactor.core.publisher.Mono;
+import org.reactivecommons.api.domain.Command
+import org.reactivecommons.async.api.AsyncQuery
+import org.reactivecommons.async.api.DirectAsyncGateway
+import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway
+import reactor.core.publisher.Mono
 
-import java.util.UUID;
+import java.util.UUID
 {{#lombok}}
-import java.util.logging.Level;
+import java.util.logging.Level
 {{/lombok}}
 
 {{#lombok}}
 @Log
-@AllArgsConstructor
 {{/lombok}}
 @EnableDirectAsyncGateway
-class ReactiveDirectAsyncGateway /*implements SomeGatewayFromDomain*/ {
-    val TARGET_NAME :String = "cleanArchitecture";// refers to remote spring.application.name property
-    val SOME_COMMAND_NAME :String = "some.command.name";
-    val SOME_QUERY_NAME :String = "some.query.name";
-    val gateway :DirectAsyncGateway;
+class ReactiveDirectAsyncGateway(
+     val gateway :DirectAsyncGateway) /*implements SomeGatewayFromDomain*/ {
 
-    {{^lombok}}
-    fun ReactiveDirectAsyncGateway(DirectAsyncGateway gateway) {
-        this.gateway = gateway
-    }
-    {{/lombok}}
-
-    fun runRemoteJob(command :Any/*change for proper model*/) :Mono<Void>  {
+    fun runRemoteJob(command :Any/*change for proper model*/) :Mono<Unit>  {
         {{#lombok}}
-        log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
+        log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()})
         {{/lombok}}
         return gateway.sendCommand(Command<>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
-                TARGET_NAME);
+                TARGET_NAME)
     }
 
     fun requestForRemoteData(query :Any/*change for proper model*/) :Mono<Any>  {
         {{#lombok}}
-        log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
+        log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()})
         {{/lombok}}
-        return gateway.requestReply(AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/);
+        return gateway.requestReply(AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/)
+    }
+    companion object {
+         val TARGET_NAME :String = "cleanArchitecture"// refers to remote spring.application.name property
+         val SOME_COMMAND_NAME :String = "some.command.name"
+         val SOME_QUERY_NAME :String = "some.query.name"
     }
 }

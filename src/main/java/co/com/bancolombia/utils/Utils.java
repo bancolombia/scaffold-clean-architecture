@@ -114,6 +114,10 @@ public class Utils {
     return isKotlin ? "(\"add\")" : " 'add'";
   }
 
+  public static String tomcatExclusion(boolean isKotlin) {
+    return isKotlin ? Constants.TOMCAT_EXCLUSION_KOTLIN : Constants.TOMCAT_EXCLUSION;
+  }
+
   public static String buildImplementationFromProject(boolean isKotlin, String content) {
     return buildImplementation(isKotlin, "project")
         .replace("'", "")

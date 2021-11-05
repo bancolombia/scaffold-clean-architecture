@@ -12,10 +12,10 @@
     "driven-adapter/consumer-rest/object-response.java.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/ObjectResponse.java"
   },
   "kotlin": {
-    "driven-adapter/consumer-rest/reactive-rest-consumer/config/rest-consumer-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/RestConsumerConfig.java",
+    "driven-adapter/consumer-rest/reactive-rest-consumer/config/rest-consumer-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/RestConsumerConfig.kt",
     "driven-adapter/consumer-rest/reactive-rest-consumer/build.gradle.kts.mustache": "infrastructure/driven-adapters/rest-consumer/build.gradle.kts",
-    "driven-adapter/consumer-rest/reactive-rest-consumer/rest-consumer.java.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/RestConsumer.java",
-    "driven-adapter/consumer-rest/object-request.java.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/ObjectRequest.java",
-    "driven-adapter/consumer-rest/object-response.java.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/ObjectResponse.java"
+    "driven-adapter/consumer-rest/reactive-rest-consumer/rest-consumer.kt.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/RestConsumer.kt",
+    "driven-adapter/consumer-rest/object-request.kt.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/ObjectRequest.kt",
+    "driven-adapter/consumer-rest/object-response.kt.mustache": "infrastructure/driven-adapters/rest-consumer/src/main/{{language}}/{{packagePath}}/consumer/ObjectResponse.kt"
   }
 }

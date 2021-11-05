@@ -9,6 +9,6 @@
   },
   "kotlin": {
     "driven-adapter/mq-sender/sample-mq-message-sender.kt.mustache": "infrastructure/driven-adapters/mq-sender/src/main/{{language}}/{{packagePath}}/mq/sender/SampleMQMessageSender.kt",
-    "driven-adapter/mq-sender/build.gradle.kts.mustache": "infrastructure/driven-adapters/mq-sender/build.gradle"
+    "driven-adapter/mq-sender/build.gradle.kts.mustache": "infrastructure/driven-adapters/mq-sender/build.gradle.kts"
   }
 }

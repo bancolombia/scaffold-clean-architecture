@@ -1,5 +1,8 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.utils.Utils.buildImplementation;
+import static co.com.bancolombia.utils.Utils.tomcatExclusion;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.InvalidTaskOptionException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -14,22 +17,21 @@ public class EntryPointRestMvcServer implements ModuleFactory {
 
     switch (server) {
       case UNDERTOW:
-        builder.appendDependencyToModule(
-            "app-service",
-            "compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', "
-                + "version: '"
-                + Constants.UNDERTOW_VERSION
-                + "'");
-        builder.appendConfigurationToModule("app-service", Constants.TOMCAT_EXCLUSION);
+        String undertowDependency =
+            buildImplementation(
+                builder.isKotlin(),
+                "org.springframework.boot:spring-boot-starter-undertow:"
+                    + Constants.UNDERTOW_VERSION);
+        builder.appendDependencyToModule("app-service", undertowDependency);
+        builder.appendConfigurationToModule("app-service", tomcatExclusion(builder.isKotlin()));
         return;
       case JETTY:
-        builder.appendDependencyToModule(
-            "app-service",
-            "compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', "
-                + "version: '"
-                + Constants.JETTY_VERSION
-                + "'");
-        builder.appendConfigurationToModule("app-service", Constants.TOMCAT_EXCLUSION);
+        String jettyDependency =
+            buildImplementation(
+                builder.isKotlin(),
+                "org.springframework.boot:spring-boot-starter-jetty:" + Constants.UNDERTOW_VERSION);
+        builder.appendDependencyToModule("app-service", jettyDependency);
+        builder.appendConfigurationToModule("app-service", tomcatExclusion(builder.isKotlin()));
         return;
       case TOMCAT:
         return;

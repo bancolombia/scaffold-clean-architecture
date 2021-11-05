@@ -1,21 +1,21 @@
-package {{package}}.config;
+package {{package}}.config
 
-import okhttp3.OkHttpClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import com.fasterxml.jackson.databind.ObjectMapper
 
 @Configuration
 class RestConsumerConfig {
 
     @Bean
     fun getHttpClient() :OkHttpClient {
-        return OkHttpClient();
+        return OkHttpClient()
     }
 
     @Bean
     fun getObjectMapper() :ObjectMapper {
-        return ObjectMapper();
+        return ObjectMapper()
     }
 
 }
