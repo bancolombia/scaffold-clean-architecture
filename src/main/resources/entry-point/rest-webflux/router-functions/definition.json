@@ -11,6 +11,6 @@
   "kotlin": {
     "entry-point/rest-webflux/router-functions/router.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/RouterRest.kt",
     "entry-point/rest-webflux/router-functions/handler.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/Handler.kt",
-    "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle.kts"
+    "entry-point/rest-webflux/build.gradle.kts.mustache": "infrastructure/entry-points/reactive-web/build.gradle.kts"
   }
 }
