@@ -21,16 +21,16 @@ public class Handler {
 {{/lombok}}
     public Mono<ServerResponse> listenGETUseCase(ServerRequest serverRequest) {
         // usecase.logic();
-        return ServerResponse.ok().body("", String.class);
+        return ServerResponse.ok().bodyValue("");
     }
 
     public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
         // useCase2.logic();
-        return ServerResponse.ok().body("", String.class);
+        return ServerResponse.ok().bodyValue("");
     }
 
     public Mono<ServerResponse> listenPOSTUseCase(ServerRequest serverRequest) {
         // usecase.logic();
-        return ServerResponse.ok().body("", String.class);
+        return ServerResponse.ok().bodyValue("");
     }
 }
