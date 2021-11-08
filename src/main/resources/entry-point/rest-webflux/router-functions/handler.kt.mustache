@@ -10,16 +10,16 @@ class Handler//(private val useCase: UseCase)
 {
     fun listenGETUseCase(serverRequest: ServerRequest): Mono<ServerResponse>{
         // usecase.logic()
-        return ServerResponse.ok().body("", String::class.java)
+        return ServerResponse.ok().body(Mono.just("Hola mundo"), String::class.java)
     }
 
     fun listenGETOtherUseCase(serverRequest: ServerRequest): Mono<ServerResponse> {
         // useCase2.logic()
-        return ServerResponse.ok().body("", String::class.java)
+        return ServerResponse.ok().body(Mono.just("Hola mundo"), String::class.java)
     }
 
     fun listenPOSTUseCase(serverRequest: ServerRequest): Mono<ServerResponse> {
          // usecase.logic()
-         return ServerResponse.ok().body("", String::class.java)
+         return ServerResponse.ok().body(Mono.just("Hola mundo"), String::class.java)
     }
 }

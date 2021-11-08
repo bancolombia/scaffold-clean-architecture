@@ -4,70 +4,70 @@ import org.reactivecommons.utils.ObjectMapper
 import org.springframework.data.domain.Example
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.QueryByExampleExecutor
-
 import java.lang.reflect.ParameterizedType
-import java.util.List
 import java.util.function.Function
 import java.util.stream.Collectors
 
-import static java.util.stream.StreamSupport.stream
+abstract class AdapterOperations<E, D, I, R>(
+    private var repository: R,
+    private var mapper: ObjectMapper,
+    private val toEntityFn: Function<D, E>
+) where R : CrudRepository<D, I>, R : QueryByExampleExecutor<D> {
 
-abstract class AdapterOperations(
-    val repository :R
-    val dataClass :Class<D>
-    val mapper :ObjectMapper
-    val toEntityFn :Function<D, E>
-)<E, D, I, R :CrudRepository<D, I> & QueryByExampleExecutor<D>> {
+    private val dataClass: Class<D>
 
-
-    fun AdapterOperations(repository :R, mapper :ObjectMapper, toEntityFn :Function<D, E>) {
-        this.repository = repository
-        this.mapper = mapper
-        val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass()
-        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1]
-        this.toEntityFn = toEntityFn
-    }
-
-    fun toData(entity :E) :D {
+    private fun toData(entity: E): D {
         return mapper.map(entity, dataClass)
     }
 
-    fun toEntity(data :D) :E {
-        return data != null ? toEntityFn.apply(data) : null
+    private fun toEntity(data: D?): E? {
+        return if (data != null) toEntityFn.apply(data) else null
+    }
 
-
-    fun save(entity :E) :E {
-        D data = toData(entity)
+    fun save(entity: E): E? {
+        val data = toData(entity)
         return toEntity(saveData(data))
     }
 
-    fun saveAllEntities(entities :List<E>) :List<E>{
-        val list :List<D> = entities.stream().map(this::toData).collect(Collectors.toList())
+    protected fun saveAllEntities(entities: List<E>): List<E> {
+        val list = entities.stream().map { entity: E ->
+            toData(
+                entity
+            )
+        }.collect(Collectors.toList())
         return toList(saveData(list))
     }
 
-    fun toList(iterable :Iterable<D>) :List<E> {
-        return stream(iterable.spliterator(), false).map(this::toEntity).collect(Collectors.toList())
+    private fun toList(iterable: Iterable<D>): List<E> {
+        return iterable.mapNotNull { data: D ->
+            toEntity(
+                data
+            )
+        }
     }
 
-    fun saveData(data :D) :D {
+    private fun saveData(data: D): D {
         return repository.save(data)
     }
 
-    fun saveData(data :List<D>) :Iterable<D>{
+    private fun saveData(data: List<D>?): Iterable<D> {
         return repository.saveAll(data)
     }
 
-    fun findById(id :I) :E {
+    fun findById(id: I): E? {
         return toEntity(repository.findById(id).orElse(null))
     }
 
-    fun findByExample(entity :E) :List<E> {
-        return toList(repository.findAll( Example.of(toData(entity))))
+    fun findByExample(entity: E): List<E> {
+        return toList(repository.findAll(Example.of(toData(entity))))
     }
 
-
-    fun findAll() :List<E>{
+    fun findAll(): List<E> {
         return toList(repository.findAll())
+    }
+
+    init {
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[1] as Class<D>
     }
 }

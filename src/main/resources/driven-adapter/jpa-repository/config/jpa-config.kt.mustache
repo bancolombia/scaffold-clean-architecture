@@ -1,4 +1,4 @@
-package {{package}}.config
+package {{package}}.jpa.config
 
 {{#include-secret}}
 import co.com.bancolombia.secretsmanager.api.GenericManager
@@ -24,47 +24,58 @@ import java.util.Properties
 open class JpaConfig {
 
     {{#include-secret}}
-        @Bean
-        @Throws(SecretException::class)
-        open fun dbSecret(@Value("\${aws.secretName}") secret: String?, manager: GenericManager): DBSecret? {
-        return manager.getSecret(secret, DBSecret::class.java)
-        }
+    @Bean
+    @Throws(SecretException::class)
+    open fun dbSecret(
+        @Value("\${aws.secretName}") secret: String?,
+        manager: GenericManager
+        ): DBSecret? {
+          return manager.getSecret(secret, DBSecret::class.java)
+    }
     {{/include-secret}}
     {{^include-secret}}
-        @Bean
-        open fun dbSecret(env: Environment): DBSecret {
+    @Bean
+    open fun dbSecret(env: Environment): DBSecret {
         return DBSecret(
-        url = env.getProperty("spring.datasource.url"),
-        username = env.getProperty("spring.datasource.username"),
-        password = env.getProperty("spring.datasource.password")
+            url = env.getProperty("spring.datasource.url"),
+            username = env.getProperty("spring.datasource.username"),
+            password = env.getProperty("spring.datasource.password")
         )
-        }
+    }
     {{/include-secret}}
 
     @Bean
-    open fun datasource(secret :DBSecret, @Value("${spring.datasource.driverClassName}") driverClass :String) :DataSource {
-        val config :HikariConfig  = HikariConfig()
-        config.setJdbcUrl(secret.getUrl())
-        config.setUsername(secret.getUsername())
-        config.setPassword(secret.getPassword())
-        config.setDriverClassName(driverClass)
-        return  HikariDataSource(config)
+    open fun datasource(
+        secret: DBSecret,
+        @Value("\${spring.datasource.driverClassName}") driverClass: String
+    ): DataSource {
+        val config: HikariConfig = HikariConfig().apply {
+            jdbcUrl = secret.url
+            username = secret.username
+            password = secret.password
+            driverClassName = driverClass
+        }
+        return HikariDataSource(config)
     }
 
     @Bean
     open fun entityManagerFactory(
-            dataSource :DataSource,
-            @Value("${spring.jpa.databasePlatform}") dialect :String) :LocalContainerEntityManagerFactoryBean {
-        val em : LocalContainerEntityManagerFactoryBean = LocalContainerEntityManagerFactoryBean()
-        em.setDataSource(dataSource)
+        dataSource: DataSource,
+        @Value("\${spring.jpa.databasePlatform}") dialect: String
+    ): LocalContainerEntityManagerFactoryBean {
+        val em  = LocalContainerEntityManagerFactoryBean()
+        em.dataSource = dataSource
         em.setPackagesToScan("{{package}}.jpa")
 
-        val vendorAdapter :JpaVendorAdapter = HibernateJpaVendorAdapter()
-        em.setJpaVendorAdapter(vendorAdapter)
+        val vendorAdapter: JpaVendorAdapter = HibernateJpaVendorAdapter()
+        em.jpaVendorAdapter = vendorAdapter
 
-        val properties :Properties = Properties()
+        val properties = Properties()
         properties.setProperty("hibernate.dialect", dialect)
-        properties.setProperty("hibernate.hbm2ddl.auto", "update") // TODO: remove this for non auto create schema
+        properties.setProperty(
+            "hibernate.hbm2ddl.auto",
+            "update"
+        ) // TODO: remove this for non auto create schema
         em.setJpaProperties(properties)
 
         return em

@@ -4,7 +4,7 @@
   ],
   "files": {},
   "java": {
-    "driven-adapter/mongo-reactive/config/mongo-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/MongoConfig.java",
+    "driven-adapter/mongo-reactive/config/mongo-config.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoConfig.java",
     "driven-adapter/mongo-reactive/config/db-secret.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoDBSecret.java",
     "driven-adapter/mongo-reactive/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.java",
     "driven-adapter/mongo-reactive/mongo-repository.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.java",
@@ -12,7 +12,7 @@
     "driven-adapter/mongo-reactive/build.gradle.kts.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle"
   },
   "kotlin": {
-    "driven-adapter/mongo-reactive/config/mongo-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/MongoConfig.kt",
+    "driven-adapter/mongo-reactive/config/mongo-config.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoConfig.kt",
     "driven-adapter/mongo-reactive/config/db-secret.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoDBSecret.kt",
     "driven-adapter/mongo-reactive/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.kt",
     "driven-adapter/mongo-reactive/mongo-repository.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.kt",
