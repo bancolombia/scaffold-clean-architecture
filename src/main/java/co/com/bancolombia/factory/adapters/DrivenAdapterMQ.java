@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -11,7 +13,9 @@ public class DrivenAdapterMQ implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.setupFromTemplate(getTemplate(builder.isReactive()));
     builder.appendToSettings("mq-sender", "infrastructure/driven-adapters");
-    builder.appendDependencyToModule("app-service", "implementation project(':mq-sender')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":mq-sender");
+
+    builder.appendDependencyToModule("app-service", dependency);
 
     builder
         .appendToProperties("commons.jms")

@@ -16,6 +16,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private CoveragePlugin coverage = CoveragePlugin.JACOCO;
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
+  private Language language = Language.JAVA;
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
@@ -25,6 +26,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   @Option(option = "type", description = "Set project type")
   public void setType(ProjectType type) {
     this.type = type;
+  }
+
+  @Option(option = "language", description = "Set project lang")
+  public void setLanguage(Language language) {
+    this.language = language;
   }
 
   @Option(option = "name", description = "Set project name, by default is cleanArchitecture ")
@@ -69,6 +75,8 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
+    builder.addParam("language", language.name().toLowerCase());
+
     if (lombok == BooleanOption.TRUE) {
       builder.setupFromTemplate("structure");
     } else {
@@ -85,5 +93,10 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   public enum CoveragePlugin {
     JACOCO,
     COBERTURA
+  }
+
+  public enum Language {
+    JAVA,
+    KOTLIN
   }
 }

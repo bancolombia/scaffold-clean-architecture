@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -21,8 +23,9 @@ public class DrivenAdapterKms implements ModuleFactory {
         .put("host", "localhost")
         .put("protocol", "http")
         .put("port", "4566")
-        .put("keyId", "add-your-key-here");
-    builder.appendDependencyToModule("app-service", "implementation project(':kms-repository')");
+        .put("keyId", "add-your-key-here"); // implementation project('kms-repository')
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":kms-repository");
+    builder.appendDependencyToModule("app-service", dependency);
     new DrivenAdapterSecrets().buildModule(builder);
   }
 

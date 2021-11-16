@@ -2,12 +2,21 @@
   "folders": [
     "infrastructure/driven-adapters/mongo-repository/src/test/java/{{packagePath}}/mongo/helper"
   ],
-  "files": {
-    "driven-adapter/mongo-repository/config/mongo-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/MongoConfig.java",
-    "driven-adapter/mongo-repository/config/db-secret.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/java/{{packagePath}}/mongo/config/MongoDBSecret.java",
-    "driven-adapter/mongo-repository/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/java/{{packagePath}}/mongo/helper/AdapterOperations.java",
-    "driven-adapter/mongo-repository/mongo-repository.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/java/{{packagePath}}/mongo/MongoDBRepository.java",
-    "driven-adapter/mongo-repository/mongo-repository-adapter.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/java/{{packagePath}}/mongo/MongoRepositoryAdapter.java",
+  "files": {},
+  "java": {
+    "driven-adapter/mongo-repository/config/mongo-config.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoConfig.java",
+    "driven-adapter/mongo-repository/config/db-secret.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoDBSecret.java",
+    "driven-adapter/mongo-repository/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.java",
+    "driven-adapter/mongo-repository/mongo-repository.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.java",
+    "driven-adapter/mongo-repository/mongo-repository-adapter.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoRepositoryAdapter.java",
     "driven-adapter/mongo-repository/build.gradle.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle"
+  },
+  "kotlin": {
+    "driven-adapter/mongo-repository/config/mongo-config.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoConfig.kt",
+    "driven-adapter/mongo-repository/config/db-secret.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoDBSecret.kt",
+    "driven-adapter/mongo-repository/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.kt",
+    "driven-adapter/mongo-repository/mongo-repository.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.kt",
+    "driven-adapter/mongo-repository/mongo-repository-adapter.kt.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoRepositoryAdapter.kt",
+    "driven-adapter/mongo-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle.kts"
   }
 }

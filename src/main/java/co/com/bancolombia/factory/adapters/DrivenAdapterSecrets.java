@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementation;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -20,13 +22,11 @@ public class DrivenAdapterSecrets implements ModuleFactory {
       builder.setupFromTemplate("driven-adapter/secrets");
     }
     logger.lifecycle("Generating  mode");
-    builder.appendDependencyToModule(
-        "app-service",
-        "implementation 'com.github.bancolombia:"
-            + secretLibrary
-            + ":"
-            + Constants.SECRETS_VERSION
-            + "'");
+    String dependency =
+        buildImplementation(
+            builder.isKotlin(),
+            "com.github.bancolombia:" + secretLibrary + ":" + Constants.SECRETS_VERSION);
+    builder.appendDependencyToModule("app-service", dependency);
     builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
   }
 }

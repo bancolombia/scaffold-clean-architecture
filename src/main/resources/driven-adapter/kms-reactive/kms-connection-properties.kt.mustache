@@ -1,0 +1,26 @@
+package {{package}}.config.model
+
+import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConfigurationProperties
+
+import lombok.Data
+
+{{#lombok}}
+@Data
+{{/lombok}}
+@Configuration
+@ConfigurationProperties(prefix = "adapters.aws.kms")
+class KmsConnectionProperties(
+    val host :String
+    val region :String
+    val protocol :String
+    val port :Integer
+    val keyId :String
+) {
+
+
+    fun  getEndpoint() :String{
+        return String.format("%s://%s:%s", protocol, host, port)
+    }
+
+}

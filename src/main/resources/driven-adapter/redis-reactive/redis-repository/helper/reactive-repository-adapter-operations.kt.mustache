@@ -1,0 +1,77 @@
+package {{package}}.redis.repository.helper;
+
+import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.lang.reflect.ParameterizedType;
+import java.util.function.Function;
+
+import static org.springframework.data.domain.Example.of;
+
+abstract class ReactiveRepositoryAdapterOperations<E, D, I, R : ReactiveCrudRepository<D, I> : ReactiveQueryByExampleExecutor<D>> {
+
+    val repository :R ;
+    val mapper :ObjectMapper ;
+    val dataClass :Class<D> ;
+    val toEntityFn :Function<D, E> ;
+
+    @SuppressWarnings("unchecked")
+    fun ReactiveRepositoryAdapterOperations(repository :R,  mapper :ObjectMapper,  toEntityFn :Function<D, E>) {
+        this.repository = repository;
+        this.mapper = mapper;
+        val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
+        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];
+        this.toEntityFn = toEntityFn;
+    }
+
+    fun save(entity :E): Mono<E> {
+        return Mono.just(entity)
+                .map(this::toData)
+                .flatMap(this::saveData)
+                .map(this::toEntity);
+    }
+
+    fun saveAll( entities :Flux<E> ):Flux<E> {
+        return doQueryMany(repository.saveAll(entities.map(this::toData)));
+    }
+
+    fun findById( id :I ) :Mono<E> {
+        return doQuery(repository.findById(id));
+    }
+
+    fun findByExample( entity :E ) :Flux<E> {
+        return doQueryMany(repository.findAll(of(toData(entity))));
+    }
+
+    fun deleteById( I id) :Mono<Unit> {
+        return repository.deleteById(id);
+    }
+
+    fun findAll() :Flux<E> {
+        return doQueryMany(repository.findAll());
+    }
+
+    fun doQuery( query :Mono<D>) :Mono<E> {
+        return query.map(this::toEntity);
+    }
+
+    fun doQueryMany( query :Flux<D>) :Flux<E> {
+        return query.map(this::toEntity);
+    }
+
+    fun saveData( data :D) :Mono<D> {
+        return repository.save(data);
+    }
+
+    fun toData( entity :E) :D {
+        return mapper.map(entity, dataClass);
+    }
+
+    fun toEntity( data :D) :E {
+        return toEntityFn.apply(data);
+    }
+
+}

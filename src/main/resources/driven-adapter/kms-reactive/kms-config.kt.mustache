@@ -1,0 +1,39 @@
+package {{package}}.config
+
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.kms.KmsAsyncClient
+import software.amazon.awssdk.services.kms.KmsAsyncClientBuilder
+import co.com.bancolombia.config.model.KmsConnectionProperties
+
+
+import java.net.URI
+
+@Configuration
+open class KmsConfig() {
+
+    @Profile(["dev", "cer", "pdn"])
+    @Bean
+    open fun kmsAsyncClient(kmsProperties : KmsConnectionProperties) : KmsAsyncClient {
+        return getBuilder(kmsProperties).build()
+    }
+
+    @Profile("local")
+    @Bean
+    open fun  localKmsAsyncClient(awsBasicCredentials :AwsBasicCredentials, kmsProperties :KmsConnectionProperties) :KmsAsyncClient{
+        return getBuilder(kmsProperties)
+        .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
+        .endpointOverride(URI.create(kmsProperties.getEndpoint()))
+        .build()
+    }
+
+    fun  getBuilder(kmsProperties :KmsConnectionProperties) :KmsAsyncClientBuilder{
+        return KmsAsyncClient.builder()
+        .region(Region.of(kmsProperties.getRegion()))
+    }
+
+}

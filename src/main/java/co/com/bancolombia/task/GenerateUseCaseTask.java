@@ -31,7 +31,6 @@ public class GenerateUseCaseTask extends CleanArchitectureDefaultTask {
     builder.addParam("useCaseName", useCaseName);
     builder.addParam("useCaseClassName", className);
     builder.addParam("lombok", builder.isEnableLombok());
-
     builder.setupFromTemplate("usecase");
     builder.persist();
   }

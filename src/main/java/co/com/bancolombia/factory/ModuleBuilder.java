@@ -27,9 +27,11 @@ import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 public class ModuleBuilder {
+
   private static final String APPLICATION_PROPERTIES =
       "applications/app-service/src/main/resources/application.yaml";
   private static final String DEFINITION_FILES = "definition.json";
+  private static final String LANGUAGE = "language";
   private final DefaultResolver resolver = new DefaultResolver();
   private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private final Map<String, FileModel> files = new ConcurrentHashMap<>();
@@ -92,7 +94,13 @@ public class ModuleBuilder {
     for (String folder : definition.getFolders()) {
       addDir(Utils.fillPath(folder, params));
     }
-    for (Map.Entry<String, String> fileEntry : definition.getFiles().entrySet()) {
+    Map<String, String> projectFiles = new HashMap<>(definition.getFiles());
+    if (isKotlin()) {
+      projectFiles.putAll(definition.getKotlin());
+    } else {
+      projectFiles.putAll(definition.getJava());
+    }
+    for (Map.Entry<String, String> fileEntry : projectFiles.entrySet()) {
       String path = Utils.fillPath(fileEntry.getValue(), params);
       String content = buildFromTemplate(fileEntry.getKey());
       addDir(Utils.extractDir(path));
@@ -101,8 +109,10 @@ public class ModuleBuilder {
   }
 
   public void appendToSettings(String module, String baseDir) throws IOException {
-    logger.lifecycle("adding module {} to settings.gradle", module);
-    updateFile("settings.gradle", settings -> Utils.addModule(settings, module, baseDir));
+    String settingsFile = "settings.gradle" + (isKotlin() ? ".kts" : "");
+    logger.lifecycle("adding module {} to " + settingsFile, module);
+    String include = isKotlin() ? Utils.INCLUDE_MODULE_KOTLIN : Utils.INCLUDE_MODULE_JAVA;
+    updateFile(settingsFile, settings -> Utils.addModule(settings, include, module, baseDir));
   }
 
   public void removeFromSettings(String module) throws IOException {
@@ -160,6 +170,8 @@ public class ModuleBuilder {
 
   public void loadPackage() throws IOException {
     addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
+    this.params.put(
+        LANGUAGE, FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE));
   }
 
   public void addParamPackage(String packageName) {
@@ -197,6 +209,10 @@ public class ModuleBuilder {
 
   public Boolean isReactive() {
     return getABooleanProperty("reactive");
+  }
+
+  public boolean isKotlin() {
+    return params.get(LANGUAGE).toString().equalsIgnoreCase("KOTLIN");
   }
 
   public Boolean isEnableLombok() {

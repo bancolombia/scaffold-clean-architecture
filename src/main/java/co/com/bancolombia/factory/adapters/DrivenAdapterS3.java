@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -20,7 +22,8 @@ public class DrivenAdapterS3 implements ModuleFactory {
         .put("bucketName", "")
         .put("region", "us-east-1")
         .put("endpoint", "");
-    builder.appendDependencyToModule("app-service", "implementation project(':s3-repository')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":s3-repository");
+    builder.appendDependencyToModule("app-service", dependency);
   }
 
   protected String getPathType(boolean isReactive) {

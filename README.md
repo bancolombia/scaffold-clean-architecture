@@ -6,7 +6,7 @@
 
 # Scaffolding of Clean Architecture
 
-Gradle plugin to create a java application based on Clean Architecture following our best practices!
+Gradle plugin to create a java and kotlin application based on Clean Architecture following our best practices!
 
 - [Scaffolding of Clean Architecture](#scaffolding-of-clean-architecture)
 - [Plugin Implementation](#plugin-implementation)
@@ -26,18 +26,32 @@ Gradle plugin to create a java application based on Clean Architecture following
 
 # Plugin Implementation
 
-To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 5.6 or later, to start add the following section into your **build.gradle** file.
+To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 6.9 or later, to start add the following section into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "1.9.9"
+    id "co.com.bancolombia.cleanArchitecture" version "2.0.0"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"1.9.9\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.0.0\"
 }" > build.gradle
+```
+
+To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 6.9 or later, to start add the following section into your **build.gradle.kts** file.
+
+```kotlin dls
+plugins {
+    id("co.com.bancolombia.cleanArchitecture") version "2.0.0"
+}
+```
+Or if is a new  project execute this script in the root directory of your project.
+```sh
+echo "plugins {
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.0.0\"
+}" > build.gradle.kts
 ```
 
 # Tasks
@@ -58,12 +72,14 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
+   - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
+   
    ```shell
    gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
    gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
    ```
 
-   **_The structure will look like this:_**
+   **_The structure will look like this for java:_**
 
    ```bash
    📦NameProject
@@ -117,14 +133,68 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    ┗ 📜settings.gradle
    ```
 
-## Generate Model
+
+**_The structure will look like this for java:_**
+
+   ```bash
+   📦NameProject
+   ┣ 📂applications
+   ┃ ┗ 📂app-service
+   ┃ ┃ ┣ 📂src
+   ┃ ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┃ ┣ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜[configs and beans]
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MainApplication.kt
+   ┃ ┃ ┃ ┃ ┗ 📂resources
+   ┃ ┃ ┃ ┃ ┃ ┣ 📜[properties]
+   ┃ ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┗ 📜build.gradle.kts
+   ┣ 📂deployment
+   ┃ ┣ 📜[Dockerfile, Pipelines as a code]
+   ┣ 📂domain
+   ┃ ┣ 📂model
+   ┃ ┃ ┣ 📂src
+   ┃ ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┗ 📜build.gradle.kts
+   ┃ ┗ 📂usecase
+   ┃ ┃ ┣ 📂src
+   ┃ ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
+   ┃ ┃ ┗ 📜build.gradle.kts
+   ┣ 📂infrastructure
+   ┃ ┣ 📂driven-adapters
+   ┃ ┣ 📂entry-points
+   ┃ ┗ 📂helpers
+   ┣ 📜.gitignore
+   ┣ 📜build.gradle.kts
+   ┣ 📜gradle.properties
+   ┣ 📜lombok.config
+   ┣ 📜README.md
+   ┗ 📜settings.gradle.kts
+   ```
+
+## Generate Model for Java an Kotlin
 
 The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
 
-   ```shell
+```shell
    gradle generateModel --name=[modelName]
    gradle gm --name [modelName]
-   ```
+  ```
 
    **_This task will generate something like that:_**
 
@@ -146,14 +216,34 @@ The **`generateModel | gm`** task will generate a class and interface in model l
    ┃ ┗ 📜build.gradle
    ```
 
-## Generate Use Case
+**_This task will generate something like that for kotlin:_**
+
+   ```bash
+   📦domain
+   ┣ 📂model
+   ┃ ┣ 📂src
+   ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂model
+   ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂gateways
+   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ModelRepository.kt
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Model.kt
+   ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂model
+   ┃ ┗ 📜build.gradle.kts
+   ```
+
+## Generate Use Case for Java and Kotlin
 
 The **`generateUseCase | guc`** task will generate a class in model layer, this task has one required parameter `name`.
 
-   ```shell
+```shell
    gradle generateUseCase --name=[useCaseName]
    gradle guc --name [useCaseName]
-   ```
+ ```
 
    **_This task will generate something like that:_**
 
@@ -175,30 +265,50 @@ The **`generateUseCase | guc`** task will generate a class in model layer, this 
    ┃ ┗ 📜build.gradle
    ```
 
+**_This task will generate something like that for kotlin:_**
+
+   ```bash
+   📦domain
+   ┗ 📂usecase
+   ┃ ┣ 📂src
+   ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
+   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜BusinessUseCase.kt
+   ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┗ 📂kotlin
+   ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
+   ┃ ┗ 📜build.gradle.kts
+   ```
+
 ## Generate Driven Adapter
 
 The **`generateDrivenAdapter | gda`** task will generate a module in Infrastructure layer, this task has one required parameter `type`. <br>
    Whether you'll use generic one also parameter `name` is required.
 
-   ```shell
+```shell
    gradle generateDrivenAdapter --type=[drivenAdapterType]
    gradle gda --type [drivenAdapterType]
    ```
 
-   | Reference for **drivenAdapterType** | Name                           | Additional Options                                 |
-   |-------------------------------------|--------------------------------|----------------------------------------------------|
-   | generic                             | Empty Driven Adapter           | --name [name]                                      |
-   | jpa                                 | JPA Repository                 | --secret [true-false]                              |
-   | mongodb                             | Mongo Repository               | --secret [true-false]                              |
-   | asynceventbus                       | Async Event Bus                |                                                    |
-   | restconsumer                        | Rest Client Consumer           | --url [url]                                        |
-   | redis                               | Redis                          | --mode [template-repository] --secret [true-false] |
-   | rsocket                             | RSocket Requester              |                                                    |
-   | r2dbc                               | R2dbc Postgresql Client        |                                                    |
-   | kms                                 | AWS Key Management Service     |                                                    |
-   | secrets                             | Secrets Manager Bancolombia    |                                                    |
-   | s3                                  | AWS Simple Storage Service     |                                                    |
-   | mq                                  | JMS MQ Client to send messages |                                                    |
+   | Reference for **drivenAdapterType** | Name                           | Additional Options                                 |Java   | Kotlin |
+   |-------------------------------------|--------------------------------|----------------------------------------------------|-------|--------|
+   | generic                      | Empty Driven Adapter           | --name [name]                                             |&#9745;|&#9744;|
+   | jpa                          | JPA Repository                 | --secret [true-false]                                     |&#9745;|&#9745;|
+   | mongodb                      | Mongo Repository               | --secret [true-false]                                     |&#9745;|&#9745;|
+   | asynceventbus                | Async Event Bus                |                                                           |&#9745;|&#9744;|
+   | restconsumer                 | Rest Client Consumer           | --url [url]                                               |&#9745;|&#9744;|
+   | redis                        | Redis                          | --mode [template-repository] --secret [true-false]        |&#9745;|&#9744;|
+   | rsocket                      | RSocket Requester              |                                                           |&#9745;|&#9744;|
+   | r2dbc                        | R2dbc Postgresql Client        |                                                           |&#9745;|&#9744;|
+   | kms                          | AWS Key Management Service     |                                                           |&#9745;|&#9744;|
+   | secrets                      | Secrets Manager Bancolombia    |                                                           |&#9745;|&#9744;|
+   | s3                           | AWS Simple Storage Service     |                                                           |&#9745;|&#9744;|
+   | mq                           | JMS MQ Client to send messages |                                                           |&#9745;|&#9744;|
    
    _**This task will generate something like that:**_
 
@@ -235,25 +345,25 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    gradle gep --type [entryPointType]
    ```
 
-   | Reference for **entryPointType** | Name                                   | Additional Options                       |
-   |----------------------------------|----------------------------------------|------------------------------------------|
-   | generic                          | Empty Entry Point                      | --name [name]                            |
-   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |
-   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |
-   | rsocket                          | Rsocket Controller Entry Point         |                                          |
-   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |
-   | asynceventhandler                | Async Event Handler                    |                                          |
-   | mq                               | JMS MQ Client to listen messages       |                                          |
+   | Reference for **entryPointType** | Name                                   | Additional Options                       |Java | Kotlin |
+   |----------------------------------|----------------------------------------|------------------------------------------|------|--------|
+   | generic                          | Empty Entry Point                      | --name [name]                            |&#9745;|&#9745;|
+   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |&#9745;|&#9745;|
+   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |&#9745;|&#9745;|
+   | rsocket                          | Rsocket Controller Entry Point         |                                          |&#9745;|&#9744;|
+   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |&#9745;|&#9744;|
+   | asynceventhandler                | Async Event Handler                    |                                          |&#9745;|&#9744;|
+   | mq                               | JMS MQ Client to listen messages       |                                          |&#9745;|&#9744;|
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
-    ```shell
+```shell
    gradle generateEntryPoint --type=restmvc --server=[serverOption]
    gradle gep --type=restmvc --server=[serverOption]
    ```
 
    | Reference for **serverOption** | Name                      |
-   | ------------------------------ | ------------------------- |
+   |--------------------------------|---------------------------|
    | undertow                       | Undertow server (default) |
    | tomcat                         | Tomcat server             |
    | jetty                          | Jetty server              |
@@ -281,7 +391,7 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
 
 The **`generateHelper | gh`** task will generate a module in Infrastructure layer, this task has one required parameter `name`. <br>
 
-   ```shell
+```shell
    gradle generateHelper --name=[helperName]
    gradle gh --name=[helperName]
    ```
@@ -290,7 +400,7 @@ The **`generateHelper | gh`** task will generate a module in Infrastructure laye
 
 The **`generatePipeline | gpl`** task will generate CI pipeline inside the folder "./deployment/", this task has one required parameter `type`.
 
-   ```shell
+```shell
    gradle generatePipeline --type=[pipelineType]
    gradle gpl --type=[pipelineType]
    ```
@@ -304,17 +414,17 @@ The **`generatePipeline | gpl`** task will generate CI pipeline inside the folde
  
 The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/",this task does not have  required parameters.
    
-      ```shell
+```shell
       gradle generateAcceptanceTest
       gradle gat 
-      ```
+  ```
 >   Karate is an open-source tool to combine API test-automation, mocks, performance-testing and even UI automation into a single, unified framework. The BDD syntax popularized by Cucumber is language-neutral, and easy for even non-programmers. Assertions and HTML reports are built-in, and you can run tests in parallel for speed.
 
 ## Validate Structure
 
 The **`validateStructure | vs`** Validate that project references aren't violated.
 
-   ```shell
+```shell
    gradle validateStructure
    gradle vs
    ```
@@ -322,7 +432,7 @@ The **`validateStructure | vs`** Validate that project references aren't violate
 
 The **`deleteModule | dm`** task will delete a sub project, this task has one required parameter `module`.
 
-   ```shell
+```shell
    gradle deleteModule --module=[name]
    gradle dm --module=[name]
    ```

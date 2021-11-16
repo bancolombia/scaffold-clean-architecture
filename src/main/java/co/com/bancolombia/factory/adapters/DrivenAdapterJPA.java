@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -20,7 +22,8 @@ public class DrivenAdapterJPA implements ModuleFactory {
     builder
         .appendToProperties("spring.jpa")
         .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
-    builder.appendDependencyToModule("app-service", "implementation project(':jpa-repository')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":jpa-repository");
+    builder.appendDependencyToModule("app-service", dependency);
     if (builder.getBooleanParam("include-secret")) {
       new DrivenAdapterSecrets().buildModule(builder);
     }

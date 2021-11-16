@@ -1,0 +1,11 @@
+package {{package}}.config.model
+
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
+
+@ConfigurationProperties(prefix = "adapter.aws.s3")
+data class S3ConnectionProperties @ConstructorBinding constructor(
+    val bucketName: String,
+    val region: String,
+    val endpoint: String
+)

@@ -1,0 +1,31 @@
+package {{package}}.graphqlapi;
+
+import graphql.kickstart.tools.GraphQLMutationResolver;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Controller;
+
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+@Controller
+/**
+* To interact with the API make use of Playground in the "/playground" path, but remember,
+* Playground ONLY must be used in dev or qa environments, not in production.
+*/
+class ApiMutations : GraphQLMutationResolver {
+
+//  private val useCase: MyUseCase;
+
+{{^lombok}}
+    fun ApiMutations(useCase: MyUseCase ){
+        this.useCase = useCase;
+    }
+{{/lombok}}
+
+    fun addSomething(String objRequest/* change for object request */) : String {
+//      return useCase.doAction(objRequest);
+        return "Hello world from graphql-api mutations " + objRequest;
+    }
+}

@@ -304,7 +304,9 @@ public class UtilsTest {
             + "include ':my-module'\n"
             + "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
     // Act
-    String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+    String result =
+        Utils.addModule(
+            settings, Utils.INCLUDE_MODULE_JAVA, "my-module", "infrastructure/entry-points");
     // Assert
     assertEquals(settingsNew, result);
   }
@@ -326,7 +328,9 @@ public class UtilsTest {
             + "include ':my-module'\n"
             + "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
     // Act
-    String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+    String result =
+        Utils.addModule(
+            settings, Utils.INCLUDE_MODULE_JAVA, "my-module", "infrastructure/entry-points");
     // Assert
     assertEquals(settings, result);
   }

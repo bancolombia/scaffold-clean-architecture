@@ -1,0 +1,8 @@
+dependencies {
+    implementation(project(":model"))
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}")
+
+    testImplementation("org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}")
+}

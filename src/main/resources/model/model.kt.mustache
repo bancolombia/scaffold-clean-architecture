@@ -1,0 +1,16 @@
+package {{package}}.model.{{modelName}}
+
+{{#lombok}}
+import lombok.Builder
+import lombok.Data
+import lombok.NoArgsConstructor
+
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+{{/lombok}}
+data class {{modelClassName}}(
+  //val anyField : Any?
+) {
+  //fun anyMethod():Any? { return null }
+}

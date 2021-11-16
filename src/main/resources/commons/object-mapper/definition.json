@@ -1,6 +1,11 @@
 {
   "folders": [],
   "files": {
-    "commons/object-mapper/object-mapper-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/ObjectMapperConfig.java"
+   },
+  "java": {
+    "commons/object-mapper/object-mapper-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/ObjectMapperConfig.java"
+  },
+  "kotlin": {
+    "commons/object-mapper/object-mapper-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/ObjectMapperConfig.kt"
   }
 }

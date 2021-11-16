@@ -1,0 +1,17 @@
+package {{package}}.jpa
+
+import co.com.testkotlin.jpa.helper.AdapterOperations
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.stereotype.Repository
+import java.util.function.Function
+
+
+@Repository
+open class JPARepositoryAdapter(repository: JPARepository, mapper: ObjectMapper) :
+    AdapterOperations<Any, Any, String, JPARepository>(repository, mapper,
+        Function { d ->
+            mapper.map(
+                d,
+                Any::class.java /* change for domain model */
+            )
+        }) // implements ModelRepository from domain

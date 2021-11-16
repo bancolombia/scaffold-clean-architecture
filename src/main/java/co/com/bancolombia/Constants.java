@@ -16,8 +16,14 @@ public class Constants {
   public static final String COBERTURA_VERSION = "3.0.0";
   public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "1.0.3";
   public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
-  public static final String PLUGIN_VERSION = "1.9.9";
-  public static final String GRADLE_WRAPPER_VERSION = "6.7";
+  public static final String PLUGIN_VERSION = "2.0.0";
+  public static final String GRADLE_WRAPPER_VERSION = "6.9.1";
+  public static final String TOMCAT_EXCLUSION_KOTLIN =
+      "configurations {\n"
+          + "\tall {\n"
+          + "\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n"
+          + "\t}\n"
+          + "}";
   public static final String TOMCAT_EXCLUSION =
       "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
   public static final String COMMONS_JMS_VERSION = "0.0.3";

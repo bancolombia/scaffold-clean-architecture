@@ -1,10 +1,15 @@
 {
   "folders": [
-    "infrastructure/entry-points/rsocket-responder/src/main/java/{{packagePath}}/controller",
-    "infrastructure/entry-points/rsocket-responder/src/test/java/{{packagePath}}/controller"
+    "infrastructure/entry-points/rsocket-responder/src/main/{{language}}/{{packagePath}}/controller",
+    "infrastructure/entry-points/rsocket-responder/src/test/{{language}}/{{packagePath}}/controller"
   ],
   "files": {
-    "entry-point/rsocket-responder/build.gradle.mustache": "infrastructure/entry-points/rsocket-responder/build.gradle",
+    "entry-point/rsocket-responder/build.gradle.mustache": "infrastructure/entry-points/rsocket-responder/build.gradle"
+  },
+  "java": {
     "entry-point/rsocket-responder/rsocket-responder.java.mustache": "infrastructure/entry-points/rsocket-responder/src/main/java/{{packagePath}}/controller/RsocketController.java"
+  },
+  "kotlin": {
+    "entry-point/rsocket-responder/rsocket-responder.kts.mustache": "infrastructure/entry-points/rsocket-responder/src/main/kotlin/{{packagePath}}/controller/RsocketController.kt"
   }
 }

@@ -1,0 +1,27 @@
+package {{package}}.events.handlers;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners;
+import reactor.core.publisher.Mono;
+
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+@EnableQueryListeners
+class QueriesHandler constructor (sampleUseCase: SampleUseCase) {
+//    private final SampleUseCase sampleUseCase;
+
+{{^lombok}}
+    fun QueriesHandler(/*SampleUseCase sampleUseCase*/) {
+        //this.sampleUseCase = sampleUseCase;
+    }
+{{/lombok}}
+
+    fun  handleQueryA(query/*change for proper model*/ :Any) :Mono<Any/*change for proper model*/> {
+        System.out.println("query received->" + query); // TODO: Remove this line
+//        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
+        return Mono.just("Response Data");
+    }
+}

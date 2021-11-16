@@ -1,0 +1,17 @@
+package {{package}}.config
+
+{{#lombok}}
+import lombok.AllArgsConstructor
+import lombok.NoArgsConstructor
+
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+data class PostgresqlConnectionProperties(
+    val database: String,
+    val schema: String,
+    val username: String,
+    val password: String,
+    val host: String,
+    val port: Integer
+)

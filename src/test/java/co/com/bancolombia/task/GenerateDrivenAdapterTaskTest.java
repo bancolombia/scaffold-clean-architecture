@@ -207,7 +207,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
@@ -240,7 +240,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
     assertTrue(
         new File(
@@ -280,7 +280,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
@@ -313,7 +313,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
