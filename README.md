@@ -30,7 +30,7 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "untagged-e6951c62b2620cdb7ffd"
+    id "co.com.bancolombia.cleanArchitecture" version "2.0.0"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
@@ -44,7 +44,7 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "untagged-e6951c62b2620cdb7ffd"
+    id("co.com.bancolombia.cleanArchitecture") version "2.0.0"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
