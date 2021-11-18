@@ -1,4 +1,4 @@
-package {{package}}.config
+package {{package}}.consumer.config
 
 import okhttp3.OkHttpClient
 import org.springframework.context.annotation.Bean
@@ -6,16 +6,14 @@ import org.springframework.context.annotation.Configuration
 import com.fasterxml.jackson.databind.ObjectMapper
 
 @Configuration
-class RestConsumerConfig {
-
+open class RestConsumerConfig {
     @Bean
-    fun getHttpClient() :OkHttpClient {
+    open fun getHttpClient(): OkHttpClient {
         return OkHttpClient()
     }
 
     @Bean
-    fun getObjectMapper() :ObjectMapper {
+    open fun getObjectMapper(): ObjectMapper {
         return ObjectMapper()
     }
-
 }

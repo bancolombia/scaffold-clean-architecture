@@ -118,7 +118,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
             .exists());
   }
 
@@ -343,7 +343,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
             .exists());
   }
 
