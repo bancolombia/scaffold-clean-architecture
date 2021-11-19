@@ -714,11 +714,11 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/S3Config.java")
+                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/S3Config.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/S3ConnectionProperties.java")
+                "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
