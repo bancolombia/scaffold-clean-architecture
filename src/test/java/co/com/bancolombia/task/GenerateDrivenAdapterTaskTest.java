@@ -135,15 +135,15 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/config/RequesterConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/service/RsocketAdapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/rsocket/service")
             .exists());
   }
 
