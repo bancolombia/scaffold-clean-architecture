@@ -1,9 +1,6 @@
 package {{package}}.mq.listener;
 
 import co.com.bancolombia.commons.jms.mq.MQListener;
-{{#lombok}}
-import lombok.AllArgsConstructor;
-{{/lombok}}
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -11,23 +8,13 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
-@Component
-{{#lombok}}
-@AllArgsConstructor
-{{/lombok}}
-class SampleMQMessageListener {
+class SampleMQMessageListener(private val sampleUseCase: SampleUseCase) {
     // private val useCase : SampleUseCase ;
 
-    {{^lombok}}
-    fun SampleMQMessageListener(/*SampleUseCase useCase*/) {
-        // this.useCase = useCase;
-    }
-
-    {{/lombok}}
     // For fixed queues
     @MQListener
     @Throws(JMSException::class)
-    fun process(Message message): Mono<Unit>  {
+    fun process(message :Message): Mono<Unit>  {
         val text = ((TextMessage) message).getText();
         // return useCase.sample(text);
     throw IOException()
@@ -36,7 +23,7 @@ class SampleMQMessageListener {
 
     // For an automatic generated temporary queue
     // @MQListener(tempQueueAlias = "any-custom-value")
-    // public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
+    // public Mono<Void> processFromTemporaryQueue(message :Message) throws JMSException {
     //     String text = ((TextMessage) message).getText();
     //     // return useCase.sample(text);
     //     return Mono.empty();
