@@ -1,3 +1,4 @@
+
 package {{package}}.graphqlapi
 
 import graphql.kickstart.tools.GraphQLQueryResolver
@@ -13,5 +14,6 @@ class ApiQueries(/*private val useCase :MyUseCase*/) : GraphQLQueryResolver {
     fun getSomething(objRequest : String/* change for object request */) : String {
 //      return useCase.doAction(objRequest)
         return "Hello world from graphql-api queries " + objRequest
+
     }
 }

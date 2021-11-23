@@ -1,3 +1,4 @@
+
 package {{package}}.events.handlers
 
 import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners
@@ -10,5 +11,6 @@ open class QueriesHandler  //(private val sampleUseCase: SampleUseCase)
         println("query received->$query") // TODO: Remove this line
         //        return sampleUseCase.doSomethingReturningNoMonoVoid(query)
         return Mono.just("Response Data")
+
     }
 }
