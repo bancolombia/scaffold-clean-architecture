@@ -1,0 +1,20 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "crudTest"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+  datasource:
+    url: "jdbc:h2:mem:test"
+    username: "sa"
+    password: "pass"
+    driverClassName: "org.h2.Driver"
+  jpa:
+    databasePlatform: "org.hibernate.dialect.H2Dialect"
