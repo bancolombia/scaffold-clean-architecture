@@ -118,9 +118,9 @@ public class ModuleBuilder {
   public void removeFromSettings(String module) throws IOException {
     logger.lifecycle("removing {} from settings.gradle", module);
     updateFile(
-        "settings.gradle",
+        "settings.gradle" + (isKotlin() ? ".kts" : ""),
         settings -> {
-          String moduleKey = "':" + module + "'";
+          String moduleKey = ":" + module;
           return Utils.removeLinesIncludes(settings, moduleKey);
         });
   }
