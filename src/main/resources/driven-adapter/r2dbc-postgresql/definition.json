@@ -1,7 +1,7 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}",
-    "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}"
+    "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}",
+    "infrastructure/driven-adapters/r2dbc-postgresql/src/test/{{language}}/{{packagePath}}"
   ],
   "files": {},
   "java": {

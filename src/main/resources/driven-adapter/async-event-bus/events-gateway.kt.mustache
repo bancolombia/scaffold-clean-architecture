@@ -3,5 +3,5 @@ package {{package}}.model.events.gateways
 import reactor.core.publisher.Mono
 
 interface EventsGateway {
-    fun emit(event :Any) : Mono<Unit>
+    fun emit(event :Any) : Mono<Void>
 }

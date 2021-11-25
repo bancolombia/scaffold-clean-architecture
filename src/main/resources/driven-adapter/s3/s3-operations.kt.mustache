@@ -7,10 +7,10 @@ import software.amazon.awssdk.services.s3.model.*
 import java.io.File
 import java.io.InputStream
 
+
 @Component
-class S3Operations(
-private val s3Client :S3Client
-) {
+class S3Operations(private val s3Client: S3Client) {
+    
     fun uploadObject(bucketName: String, objectKey: String, fileContent: ByteArray?): Boolean {
         return s3Client.putObject(
             configurePutObject(bucketName, objectKey),
@@ -41,27 +41,27 @@ private val s3Client :S3Client
         ).contents()
     }
 
-    fun getObject(bucketName: String?, objectKey: String?): InputStream? {
+    fun getObject(bucketName: String?, objectKey: String?): InputStream {
         return s3Client.getObjectAsBytes(
             GetObjectRequest.builder()
                 .key(objectKey)
                 .bucket(bucketName)
                 .build()
-            ).asInputStream()
+        ).asInputStream()
     }
 
     fun deleteObject(bucketName: String?, objectKey: String?): Boolean {
         return s3Client.deleteObject(
             DeleteObjectRequest.builder()
-            .key(objectKey)
-            .bucket(bucketName).build()
+                .key(objectKey)
+                .bucket(bucketName).build()
         ).sdkHttpResponse().isSuccessful
     }
 
     private fun configurePutObject(bucketName: String, objectKey: String): PutObjectRequest {
-      return PutObjectRequest.builder()
-          .bucket(bucketName)
-          .key(objectKey)
-          .build()
+        return PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(objectKey)
+            .build()
     }
 }

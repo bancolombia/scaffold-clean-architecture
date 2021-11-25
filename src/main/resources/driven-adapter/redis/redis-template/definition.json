@@ -1,6 +1,6 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/redis/src/test/java/{{packagePath}}/redis/template"
+    "infrastructure/driven-adapters/redis/src/test/{{language}}/{{packagePath}}/redis/template"
   ],
   "files": {},
   "java": {

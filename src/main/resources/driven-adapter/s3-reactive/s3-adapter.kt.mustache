@@ -1,23 +1,8 @@
-package co.com.bancolombia.s3.adapter;
+package {{package}}.s3.adapter
 
-import org.springframework.stereotype.Repository;
-import co.com.bancolombia.s3.operations.S3Operations;
-{{#lombok}}
-import lombok.RequiredArgsConstructor;
-{{/lombok}}
+import {{package}}.s3.operations.S3Operations
+import org.springframework.stereotype.Repository
+
 
 @Repository
-{{#lombok}}
-@RequiredArgsConstructor
-{{/lombok}}
-class S3Adapter /* implements SomeGatewayFromDomain*/ {
-
-   val s3Operations :S3Operations
-
-{{^lombok}}
-   fun S3Adapter(s3Operations :S3Operations ) :Unit {
-      this.s3Operations = s3Operations
-   }
-{{/lombok}}
-
-}
+class S3Adapter /* implements SomeGatewayFromDomain*/(private val s3Operations: S3Operations)

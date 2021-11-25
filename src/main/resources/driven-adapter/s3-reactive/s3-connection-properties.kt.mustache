@@ -1,47 +1,11 @@
-package {{package}}.config.model;
+package {{package}}.s3.config.model
 
-{{#lombok}}
-import lombok.Data;
-{{/lombok}}
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 
-{{#lombok}}
-@Data
-{{/lombok}}
-@Configuration
 @ConfigurationProperties(prefix = "adapter.aws.s3")
-class S3ConnectionProperties {
-
-    val bucketName :String
-    val region :String
-    val endpoint :String
-
-{{^lombok}}
-    fun getBucketName(): String {
-        return bucketName
-    }
-
-    fun setBucketName(bucketName :String): void {
-        this.bucketName = bucketName
-    }
-
-    fun getRegion(): String {
-        return region
-    }
-
-    fun setRegion(region :String): Unit {
-        this.region = region
-    }
-
-    fun getEndpoint(): String {
-        return endpoint
-    }
-
-    fun  setEndpoint(String endpoint): String {
-        this.endpoint = endpoint
-    }
-{{/lombok}}
-
-
-}
+data class S3ConnectionProperties @ConstructorBinding constructor(
+    val bucketName: String,
+    val region: String,
+    val endpoint: String
+)

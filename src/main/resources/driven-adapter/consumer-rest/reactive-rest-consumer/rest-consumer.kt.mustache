@@ -6,9 +6,9 @@ import reactor.core.publisher.Mono
 
 @Service
 class RestConsumer(
-    val client :WebClient) // implements Gateway from domain
+    private val client :WebClient
+) // implements Gateway from domain
 {
-
     // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
 
@@ -20,7 +20,7 @@ class RestConsumer(
     }
 
     fun testPost() :Mono<ObjectResponse> {
-        val request :ObjectRequest = ObjectRequest(
+        val request = ObjectRequest(
             val1 = "exampleval1",
             val2 = "exampleval2"
         )

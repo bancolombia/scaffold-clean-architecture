@@ -1,6 +1,4 @@
-package {{package}}.config
-
-package co.com.bancolombia.config
+package {{package}}.consumer.config
 
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
@@ -11,20 +9,22 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.client.reactive.ClientHttpConnector
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.netty.Connection
 import reactor.netty.http.client.HttpClient
+import io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS
+import java.util.concurrent.TimeUnit.MILLISECONDS
 
-import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS
-import static java.util.concurrent.TimeUnit.MILLISECONDS
 
 @Configuration
 open class RestConsumerConfig(
     @Value("\${adapter.restconsumer.url}")
-    val url :String,
+    private val url: String,
     @Value("\${adapter.restconsumer.timeout}")
-    val timeout :Int) {
+    private val timeout: Int
+) {
 
     @Bean
-    open fun getWebClient() : WebClient {
+    open fun getWebClient(): WebClient? {
         return WebClient.builder()
             .baseUrl(url)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -32,20 +32,20 @@ open class RestConsumerConfig(
             .build()
     }
 
-    fun getClientHttpConnector() : ClientHttpConnector {
+    private fun getClientHttpConnector(): ClientHttpConnector {
         /*
         IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED
-        val sslContext : SslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
-                .build()*/
-        return ReactorClientHttpConnector(HttpClient.create()
-                //.secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
-                .compress(true)
-                .keepAlive(true)
-                .option(CONNECT_TIMEOUT_MILLIS, timeout)
-                .doOnConnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(timeout, MILLISECONDS))
-                    connection.addHandlerLast(new WriteTimeoutHandler(timeout, MILLISECONDS))
-                }))
+        val sslContext =
+        SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
+        .build()*/
+        return ReactorClientHttpConnector(
+            HttpClient.create() //.secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
+            .compress(true)
+            .keepAlive(true)
+            .option(CONNECT_TIMEOUT_MILLIS, timeout)
+            .doOnConnected { connection: Connection ->
+                connection.addHandlerLast(ReadTimeoutHandler(timeout.toLong(), MILLISECONDS))
+                connection.addHandlerLast(WriteTimeoutHandler(timeout.toLong(), MILLISECONDS))
+            })
     }
-
 }

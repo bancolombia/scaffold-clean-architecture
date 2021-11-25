@@ -1,6 +1,6 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/mq-sender/src/test/java/{{packagePath}}/mq/sender"
+    "infrastructure/driven-adapters/mq-sender/src/test/{{language}}/{{packagePath}}/mq/sender"
   ],
   "files": {},
   "java": {
