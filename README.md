@@ -350,10 +350,10 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    | generic                          | Empty Entry Point                      | --name [name]                            |&#9745;|&#9745;|
    | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |&#9745;|&#9745;|
    | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |&#9745;|&#9745;|
-   | rsocket                          | Rsocket Controller Entry Point         |                                          |&#9745;|&#9744;|
-   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |&#9745;|&#9744;|
-   | asynceventhandler                | Async Event Handler                    |                                          |&#9745;|&#9744;|
-   | mq                               | JMS MQ Client to listen messages       |                                          |&#9745;|&#9744;|
+   | rsocket                          | Rsocket Controller Entry Point         |                                          |&#9745;|&#9745;|
+   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |&#9745;|&#9745;|
+   | asynceventhandler                | Async Event Handler                    |                                          |&#9745;|&#9745;|
+   | mq                               | JMS MQ Client to listen messages       |                                          |&#9745;|&#9745;|
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
