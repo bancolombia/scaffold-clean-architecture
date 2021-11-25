@@ -11,10 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "producto")
+@Table(name = "product")
 public class ProductEntity {
 
   @Id private String id;
   @Column private String name;
-  @Column private long precio;
+  @Column private long price;
 }

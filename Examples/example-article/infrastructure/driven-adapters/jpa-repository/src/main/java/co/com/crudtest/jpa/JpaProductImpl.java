@@ -30,11 +30,11 @@ public class JpaProductImpl implements ProductRepository {
     Product productDb = jpaRepositoryAdapter.findById(id);
 
     if (productDb == null) {
-      throw new Exception("Producto No Existe : " + id);
+      throw new Exception("Product Not Found : " + id);
     }
 
     productDb.setName(product.getName());
-    productDb.setPrecio(product.getPrecio());
+    productDb.setPrice(product.getPrice());
 
     jpaRepositoryAdapter.save(productDb);
   }
