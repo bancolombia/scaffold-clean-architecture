@@ -114,7 +114,7 @@ public class PluginClean implements Plugin<Project> {
             .shortcut("u")
             .description("Update project dependencies")
             .group(Constants.PLUGIN_TASK_GROUP)
-            .taskAction(UpdateProject.class)
+            .taskAction(UpdateProjectTask.class)
             .build());
     return tasksModels;
   }
