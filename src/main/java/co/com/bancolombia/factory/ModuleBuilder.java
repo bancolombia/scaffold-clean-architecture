@@ -125,6 +125,10 @@ public class ModuleBuilder {
         });
   }
 
+  public void updateProperty(String path, String property, String value) throws IOException {
+    updateFile(path, properties -> Utils.replaceLinesIncludes(properties, property, value));
+  }
+
   public void appendDependencyToModule(String module, String dependency) throws IOException {
     logger.lifecycle("adding dependency {} to module {}", dependency, module);
     String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();

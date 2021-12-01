@@ -937,6 +937,18 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
+  @Test
+  public void shouldUpdateProject() throws IOException {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "updateCleanArchitecture";
+
+    runner.withArguments(task);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);

@@ -108,7 +108,14 @@ public class PluginClean implements Plugin<Project> {
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(GenerateHelperTask.class)
             .build());
-
+    tasksModels.add(
+        TaskModel.builder()
+            .name("updateCleanArchitecture")
+            .shortcut("u")
+            .description("Update project dependencies")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(UpdateProject.class)
+            .build());
     return tasksModels;
   }
 
