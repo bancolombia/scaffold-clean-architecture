@@ -21,6 +21,7 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
   - [Generate Acceptance Tests](#generate-acceptance-test)
   - [Validate Structure](#validate-structure)
   - [Delete Module](#delete-module)
+  - [Update Project](#update-project)
 - [How can I help?](#how-can-i-help)
 - [Whats Next?](#whats-next)
 
@@ -438,6 +439,17 @@ The **`deleteModule | dm`** task will delete a sub project, this task has one re
    ```
 
    <br><br><br>
+  
+  ## Update Project
+  
+  The **`updateCleanArchitecture | u`** task will update plugin and dependencies in all sub projects, this task has one optional parameter `dependencies` 
+  if you only want to update some dependencies the dependency need to contain the group, and the artifact for example for the dependency **cleanArchitecture** you will need to append **co.com.bancolombia:cleanArchitecture**.
+  
+  ```shell
+     gradle updateCleanArchitecture --dependencies=[dependency1, dependency2, ...]
+     gradle u --dependencies=[dependency1, dependency2, ...]
+   ```
+  
 
 # How can I help?
 

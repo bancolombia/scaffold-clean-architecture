@@ -21,6 +21,8 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import org.gradle.api.Project;
@@ -125,8 +127,24 @@ public class ModuleBuilder {
         });
   }
 
-  public void updateProperty(String path, String property, String value) throws IOException {
-    updateFile(path, properties -> Utils.replaceLinesIncludes(properties, property, value));
+  public void updateExpression(String path, String regex, String value) throws IOException {
+    updateFile(path, properties -> Utils.replaceExpression(properties, regex, value));
+  }
+
+  public Collection<? extends String> findExpressions(String path, String regex)
+      throws IOException {
+    logger.lifecycle(
+        "find  "
+            + Pattern.compile(regex).matcher(readFile(path)).results().count()
+            + " dependencies in "
+            + path);
+    return Pattern.compile(regex)
+        .matcher(readFile(path))
+        .results()
+        .map(MatchResult::group)
+        .map(s -> s.replaceAll("'", ""))
+        .map(s -> s.replaceAll("\"", ""))
+        .collect(Collectors.toList());
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {
@@ -258,6 +276,11 @@ public class ModuleBuilder {
   }
 
   private void updateFile(String path, FileUpdater updater) throws IOException {
+    String content = readFile(path);
+    addFile(path, updater.update(content));
+  }
+
+  private String readFile(String path) throws IOException {
     FileModel current = files.get(path);
     String content;
     if (current == null) {
@@ -265,7 +288,7 @@ public class ModuleBuilder {
     } else {
       content = current.getContent();
     }
-    addFile(path, updater.update(content));
+    return content;
   }
 
   private ObjectNode getNode(ObjectNode node, List<String> attributes) {

@@ -2,18 +2,13 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
+import co.com.bancolombia.utils.RestConsumer;
 import co.com.bancolombia.utils.Utils;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
@@ -23,8 +18,6 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
   public static final String DEPENDENCY_RELEASES =
       "https://search.maven.org/solrsearch/select?q=g:%22%s%22+AND+a:%22%s%22&core=gav&rows=1&wt=json";
   private List<String> dependencies = new LinkedList<>();
-  ObjectMapper objectMapper = instantiateMapper();
-  OkHttpClient client = new OkHttpClient();
 
   @Option(option = "dependencies", description = "Set dependencies to update")
   public void setName(String dependencies) {
@@ -36,54 +29,40 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle(
         "Dependencies to update: {}",
-        (dependencies.isEmpty() ? "all" : dependencies.stream().collect(Collectors.joining(", "))));
+        (dependencies.isEmpty() ? "all" : String.join(", ", dependencies)));
 
-    Release[] releases = getPluginReleases();
-    updatePlugin(releases[0].getTagName());
+    Release latestRelease = getLatestPluginVersion();
+    logger.lifecycle("Latest version: {}", latestRelease.getTagName());
+
+    updatePlugin(latestRelease.getTagName());
     updateDependencies();
 
     builder.persist();
   }
 
-  private void updateDependencies() throws IOException {
-    logger.lifecycle("Updating Dependencies ");
+  private Release getLatestPluginVersion() throws IOException {
+    return RestConsumer.callRequest(PLUGIN_RELEASES, Release[].class)[0];
+  }
 
-    if (dependencies.isEmpty()) {
-
-    } else {
-      for (String dependency : dependencies) {
-        getDependencyReleases(dependency);
-      }
+  private DependencyRelease getDependencyReleases(String dependency) throws IOException {
+    try {
+      return RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class);
+    } catch (NullPointerException e) {
+      System.out.println("\tx Can't update this dependency " + dependency);
+      return null;
     }
   }
 
-  private Release[] getPluginReleases() throws IOException {
-    Request request = new Request.Builder().url(PLUGIN_RELEASES).build();
-    ResponseBody response = client.newCall(request).execute().body();
-    Release[] releases = objectMapper.readValue(response.string(), Release[].class);
-    logger.lifecycle("Latest version: {}", releases[0].getTagName());
-    return releases;
-  }
-
-  private void getDependencyReleases(String dependency) throws IOException {
+  private String getDependencyEndpoint(String dependency) {
     String[] id = dependency.split(":");
-    if (id.length == 2) {
-
-      String url = DEPENDENCY_RELEASES.replaceFirst("%s", id[0]).replace("%s", id[1]);
-      Request request = new Request.Builder().url(url).build();
-      ResponseBody response = client.newCall(request).execute().body();
-      DependencyRelease release =
-          objectMapper.readValue(response.string(), DependencyRelease.class);
-      System.out.println(
-          release.getGroup() + ":" + release.getArtifact() + ":" + release.getVersion());
-
-    } else {
-      throw new IllegalArgumentException(
-          dependency
-              + "is not a valid dependency usage: gradle u "
-              + "--dependency "
-              + "dependency.group:artifact");
+    if (id.length >= 2) {
+      return DEPENDENCY_RELEASES.replaceFirst("%s", id[0]).replace("%s", id[1]);
     }
+    throw new IllegalArgumentException(
+        dependency
+            + "is not a valid dependency usage: gradle u "
+            + "--dependency "
+            + "dependency.group:artifact");
   }
 
   private void updatePlugin(String lastRelease) throws IOException {
@@ -92,31 +71,47 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
       logger.lifecycle("You are already using the latest version of the plugin");
       return;
     }
-    logger.lifecycle("Updating Plugin ");
+    logger.lifecycle("Updating the plugin ");
 
     if (builder.isKotlin()) {
-      builder.updateProperty(
+      builder.updateExpression(
           "build.gradle.kts",
-          "cleanArchitecture",
-          "  id(\"co.com.bancolombia.cleanArchitecture\") version \""
-              + lastRelease
-              + "\" + releases[0].getTagName() + \"");
-    } else {
-      builder.updateProperty(
-          "gradle.properties", "systemProp.version", "systemProp.version=" + lastRelease);
-      builder.updateProperty(
-          "build.gradle",
-          "cleanArchitectureVersion =",
-          "\t\tcleanArchitectureVersion = " + "'" + lastRelease + "'");
+          "(id\\(\"co.com.bancolombia.cleanArchitecture\"\\)\\s?version\\s?).+",
+          "$1\"" + lastRelease + "\"");
+      return;
     }
-    logger.lifecycle("Plugin Updated");
+    builder.updateExpression(
+        "gradle.properties", "(systemProp.version\\s?=\\s?).+", "$1" + lastRelease);
+    builder.updateExpression(
+        "build.gradle", "(cleanArchitectureVersion\\s?=\\s?)'.+'", "$1'" + lastRelease + "'");
+
+    logger.lifecycle("Plugin updated");
   }
 
-  private ObjectMapper instantiateMapper() {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.findAndRegisterModules();
-    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    return objectMapper;
+  private void updateDependencies() throws IOException {
+    logger.lifecycle("Updating dependencies");
+    List<String> gradleFiles =
+        Utils.getAllFilesWithExtension(builder.isKotlin() ? "gradle.kts" : "gradle");
+
+    if (dependencies.isEmpty()) {
+      // find all dependencies
+      for (String gradleFile : gradleFiles) {
+        dependencies.addAll(builder.findExpressions(gradleFile, "['\"].+:.+:[^\\$].+['\"]"));
+      }
+    }
+    dependencies = dependencies.stream().distinct().collect(Collectors.toList());
+    logger.lifecycle(dependencies.size() + " different dependencies to update");
+    for (String dependency : dependencies) {
+      DependencyRelease latestDependency = getDependencyReleases(dependency);
+      if (latestDependency != null) {
+        logger.lifecycle("\t- " + latestDependency.toString());
+        for (String gradleFile : gradleFiles) {
+          builder.updateExpression(
+              gradleFile,
+              "['\"]" + dependency + ":[^\\$].+",
+              "'" + latestDependency.toString() + "'");
+        }
+      }
+    }
   }
 }

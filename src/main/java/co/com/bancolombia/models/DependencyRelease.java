@@ -15,4 +15,9 @@ public class DependencyRelease {
 
   @JsonProperty("a")
   String artifact;
+
+  @Override
+  public String toString() {
+    return String.format("%s:%s:%s", group, artifact, version);
+  }
 }
