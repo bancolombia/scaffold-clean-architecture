@@ -1,20 +1,20 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/kms-repository/src/main/java/{{packagePath}}/kms",
-    "infrastructure/driven-adapters/kms-repository/src/test/java/{{packagePath}}/kms",
-    "applications/app-service/src/main/java/{{packagePath}}/config/model"
+    "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms",
+    "infrastructure/driven-adapters/kms-repository/src/test/{{language}}/{{packagePath}}/kms",
+    "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/config/model"
   ],
   "files": {},
   "java": {
     "driven-adapter/kms-reactive/build.gradle.mustache": "infrastructure/driven-adapters/kms-repository/build.gradle",
     "driven-adapter/kms-reactive/kms-adapter.java.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/KmsAdapter.java",
-    "driven-adapter/kms-reactive/kms-connection-properties.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/model/KmsConnectionProperties.java",
-    "driven-adapter/kms-reactive/kms-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/KmsConfig.java"
+    "driven-adapter/kms-reactive/kms-connection-properties.java.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/config/model/KmsConnectionProperties.java",
+    "driven-adapter/kms-reactive/kms-config.java.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/config/KmsConfig.java"
   },
   "kotlin": {
     "driven-adapter/kms-reactive/build.gradle.kts.mustache": "infrastructure/driven-adapters/kms-repository/build.gradle.kts",
     "driven-adapter/kms-reactive/kms-adapter.kt.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/KmsAdapter.kt",
-    "driven-adapter/kms-reactive/kms-connection-properties.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/model/KmsConnectionProperties.kt",
-    "driven-adapter/kms-reactive/kms-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/KmsConfig.kt"
+    "driven-adapter/kms-reactive/kms-connection-properties.kt.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/config/model/KmsConnectionProperties.kt",
+    "driven-adapter/kms-reactive/kms-config.kt.mustache": "infrastructure/driven-adapters/kms-repository/src/main/{{language}}/{{packagePath}}/kms/config/KmsConfig.kt"
   }
 }

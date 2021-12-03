@@ -1,32 +1,24 @@
-package {{package}}.config
+package {{package}}.s3.config
 
+import {{package}}.s3.config.model.S3ConnectionProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
-import software.amazon.awssdk.services.s3.S3Client
-import software.amazon.awssdk.services.s3.S3ClientBuilder
-import {{package}}.config.model.S3ConnectionProperties
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.S3ClientBuilder
+import java.net.URI
 
-import java.net.URI;
 
 @Configuration
 open class S3Config {
 
     @Profile("dev", "cer", "pdn")
     @Bean
-    open fun s3Clients(s3Properties: S3ConnectionProperties): S3Client {
+    open fun s3Client(s3Properties: S3ConnectionProperties): S3Client {
         return getBuilder(s3Properties).build()
-    }
-
-    @Bean
-    open fun awsBasicCredentials(
-            @Value("\${any.property}") accessKeyId: String,
-            @Value("\${any.property}") secretAccessKey: String
-        ) : AwsBasicCredentials {
-        return AwsBasicCredentials.create(accessKeyId, secretAccessKey)
     }
 
     @Profile("local")
@@ -45,5 +37,4 @@ open class S3Config {
         return S3Client.builder()
             .region(Region.of(s3Properties.region))
     }
-
 }

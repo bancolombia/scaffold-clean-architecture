@@ -1,18 +1,18 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/redis/src/test/java/{{packagePath}}/redis/repository"
+    "infrastructure/driven-adapters/redis/src/test/{{language}}/{{packagePath}}/redis/repository"
   ],
   "files": {},
   "java": {
-    "driven-adapter/redis-reactive/redis-repository/helper/reactive-repository-adapter-operations.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/helper/ReactiveRepositoryAdapterOperations.java",
-    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepository.java",
-    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository-adapter.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepositoryAdapter.java",
+    "driven-adapter/redis-reactive/redis-repository/helper/reactive-repository-adapter-operations.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/helper/ReactiveRepositoryAdapterOperations.java",
+    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepository.java",
+    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository-adapter.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepositoryAdapter.java",
     "driven-adapter/redis-reactive/redis-repository/build.gradle.mustache": "infrastructure/driven-adapters/redis/build.gradle"
   },
   "kotlin": {
-    "driven-adapter/redis-reactive/redis-repository/helper/reactive-repository-adapter-operations.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/helper/ReactiveRepositoryAdapterOperations.kt",
-    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepository.kt",
-    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository-adapter.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepositoryAdapter.kt",
-    "driven-adapter/redis-reactive/redis-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle"
+    "driven-adapter/redis-reactive/redis-repository/helper/reactive-repository-adapter-operations.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/helper/ReactiveRepositoryAdapterOperations.kt",
+    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepository.kt",
+    "driven-adapter/redis-reactive/redis-repository/reactive-redis-repository-adapter.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ReactiveRedisRepositoryAdapter.kt",
+    "driven-adapter/redis-reactive/redis-repository/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle.kts"
   }
 }

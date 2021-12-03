@@ -1,7 +1,7 @@
 {
   "folders": [
-    "infrastructure/entry-points/graphql-api/src/main/java/{{packagePath}}/graphql-controllers",
-    "infrastructure/entry-points/graphql-api/src/test/java/{{packagePath}}/graphql-controllers",
+    "infrastructure/entry-points/graphql-api/src/main/{{language}}/{{packagePath}}/graphql-controllers",
+    "infrastructure/entry-points/graphql-api/src/test/{{language}}/{{packagePath}}/graphql-controllers",
     "applications/app-service/src/main/resources/graphql"
   ],
   "files": {},
@@ -15,6 +15,6 @@
     "entry-point/graphql-api/config/api-schema.graphqls.mustache": "applications/app-service/src/main/resources/graphql/api-schema.graphqls",
     "entry-point/graphql-api/api-queries.kt.mustache": "infrastructure/entry-points/graphql-api/src/main/{{language}}/{{packagePath}}/graphqlapi/ApiQueries.kt",
     "entry-point/graphql-api/api-mutations.kt.mustache": "infrastructure/entry-points/graphql-api/src/main/{{language}}/{{packagePath}}/graphqlapi/ApiMutations.kt",
-    "entry-point/graphql-api/build.gradle.kts.mustache": "infrastructure/entry-points/graphql-api/build.gradle"
+    "entry-point/graphql-api/build.gradle.kts.mustache": "infrastructure/entry-points/graphql-api/build.gradle.kts"
   }
 }

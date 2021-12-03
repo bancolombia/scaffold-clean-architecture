@@ -1,5 +1,7 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,9 +31,10 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
           "No valid module name is set, usage: gradle deleteModule --module "
               + Utils.formatTaskOptions(getModules()));
     }
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + module);
     builder.deleteModule(module);
     builder.removeFromSettings(module);
-    builder.removeDependencyFromModule("app-service", "implementation project(':" + module + "')");
+    builder.removeDependencyFromModule("app-service", dependency);
     builder.persist();
   }
 }

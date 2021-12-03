@@ -41,7 +41,7 @@ open class PostgreSQLConnectionPool {
             .name("api-postgres-connection-pool")
             .initialSize(INITIAL_SIZE)
             .maxSize(MAX_SIZE)
-            .maxIdleTime(Duration.ofMinutes(MAX_IDLE_TIME))
+            .maxIdleTime(Duration.ofMinutes(MAX_IDLE_TIME.toLong()))
             .validationQuery("SELECT 1")
             .build()
         return ConnectionPool(poolConfiguration)
@@ -49,8 +49,8 @@ open class PostgreSQLConnectionPool {
 
     companion object{
         // TODO: change pool connection properties based on your resources.
-        val INITIAL_SIZE = 12
-        val MAX_SIZE = 15
-        val MAX_IDLE_TIME = 30
+        const val INITIAL_SIZE = 12
+        const val MAX_SIZE = 15
+        const val MAX_IDLE_TIME = 30
     }
 }

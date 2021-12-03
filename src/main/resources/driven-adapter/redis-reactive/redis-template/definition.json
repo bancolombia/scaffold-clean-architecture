@@ -1,6 +1,6 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/redis/src/test/java/{{packagePath}}/redis/template"
+    "infrastructure/driven-adapters/redis/src/test/{{language}}/{{packagePath}}/redis/template"
   ],
   "files": {},
   "java": {
@@ -11,6 +11,6 @@
   "kotlin": {
     "driven-adapter/redis-reactive/redis-template/helper/reactive-template-adapter-operations.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/template/helper/ReactiveTemplateAdapterOperations.kt",
     "driven-adapter/redis-reactive/redis-template/reactive-redis-template-adapter.kt.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/template/ReactiveRedisTemplateAdapter.kt",
-    "driven-adapter/redis-reactive/redis-template/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle"
+    "driven-adapter/redis-reactive/redis-template/build.gradle.kts.mustache": "infrastructure/driven-adapters/redis/build.gradle.kts"
   }
 }

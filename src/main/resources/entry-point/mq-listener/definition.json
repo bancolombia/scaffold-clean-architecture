@@ -9,6 +9,6 @@
   },
   "kotlin": {
     "entry-point/mq-listener/sample-mq-message-listener.kt.mustache": "infrastructure/entry-points/mq-listener/src/main/{{language}}/{{packagePath}}/mq/listener/SampleMQMessageListener.kt",
-    "entry-point/mq-listener/build.gradle.kts.mustache": "infrastructure/entry-points/mq-listener/build.gradle"
+    "entry-point/mq-listener/build.gradle.kts.mustache": "infrastructure/entry-points/mq-listener/build.gradle.kts"
   }
 }

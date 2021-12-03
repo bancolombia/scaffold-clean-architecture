@@ -1,77 +1,75 @@
-package {{package}}.redis.repository.helper;
+package {{package}}.redis.repository.helper
 
-import org.reactivecommons.utils.ObjectMapper;
-import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.data.domain.Example
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
 
-import java.lang.reflect.ParameterizedType;
-import java.util.function.Function;
 
-import static org.springframework.data.domain.Example.of;
-
-abstract class ReactiveRepositoryAdapterOperations<E, D, I, R : ReactiveCrudRepository<D, I> : ReactiveQueryByExampleExecutor<D>> {
-
-    val repository :R ;
-    val mapper :ObjectMapper ;
-    val dataClass :Class<D> ;
-    val toEntityFn :Function<D, E> ;
-
-    @SuppressWarnings("unchecked")
-    fun ReactiveRepositoryAdapterOperations(repository :R,  mapper :ObjectMapper,  toEntityFn :Function<D, E>) {
-        this.repository = repository;
-        this.mapper = mapper;
-        val genericSuperclass :ParameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
-        this.dataClass = (Class<D>) genericSuperclass.getActualTypeArguments()[1];
-        this.toEntityFn = toEntityFn;
-    }
-
-    fun save(entity :E): Mono<E> {
+abstract class ReactiveRepositoryAdapterOperations<E, D, I, R>(
+    private var repository: R,
+    private var mapper: ObjectMapper,
+    private val toEntityFn: Function<D, E>
+) where R : ReactiveCrudRepository<D, I>, R : ReactiveQueryByExampleExecutor<D> {
+    private val dataClass: Class<D>
+    
+    fun save(entity: E): Mono<E> {
         return Mono.just(entity)
-                .map(this::toData)
-                .flatMap(this::saveData)
-                .map(this::toEntity);
+            .map { entity: E -> toData(entity) }
+            .flatMap { data: D -> saveData(data) }
+            .map { data: D -> toEntity(data) }
     }
 
-    fun saveAll( entities :Flux<E> ):Flux<E> {
-        return doQueryMany(repository.saveAll(entities.map(this::toData)));
+    fun saveAll(entities: Flux<E>): Flux<E> {
+        return doQueryMany(repository.saveAll(entities.map { entity: E ->
+            toData(
+                entity
+            )
+        }))
     }
 
-    fun findById( id :I ) :Mono<E> {
-        return doQuery(repository.findById(id));
+    fun findById(id: I): Mono<E> {
+        return doQuery(repository.findById(id))
     }
 
-    fun findByExample( entity :E ) :Flux<E> {
-        return doQueryMany(repository.findAll(of(toData(entity))));
+    fun findByExample(entity: E): Flux<E> {
+        return doQueryMany(repository.findAll(Example.of(toData(entity))))
     }
 
-    fun deleteById( I id) :Mono<Unit> {
-        return repository.deleteById(id);
+    fun deleteById(id: I): Mono<Void> {
+        return repository.deleteById(id)
     }
 
-    fun findAll() :Flux<E> {
-        return doQueryMany(repository.findAll());
+    fun findAll(): Flux<E> {
+        return doQueryMany(repository.findAll())
     }
 
-    fun doQuery( query :Mono<D>) :Mono<E> {
-        return query.map(this::toEntity);
+    private fun doQuery(query: Mono<D>): Mono<E> {
+        return query.map { data: D -> toEntity(data) }
     }
 
-    fun doQueryMany( query :Flux<D>) :Flux<E> {
-        return query.map(this::toEntity);
+    private fun doQueryMany(query: Flux<D>): Flux<E> {
+        return query.map { data: D -> toEntity(data) }
     }
 
-    fun saveData( data :D) :Mono<D> {
-        return repository.save(data);
+    private fun saveData(data: D): Mono<D> {
+        return repository.save(data)
     }
 
-    fun toData( entity :E) :D {
-        return mapper.map(entity, dataClass);
+    private fun toData(entity: E): D {
+        return mapper.map(entity, dataClass)
     }
 
-    fun toEntity( data :D) :E {
-        return toEntityFn.apply(data);
+    private fun toEntity(data: D): E {
+        return toEntityFn.apply(data)
     }
 
+    init {
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[1] as Class<D>
+    }
 }

@@ -1,30 +1,16 @@
 package {{package}}.controller;
 
-{{#lombok}}
-import lombok.RequiredArgsConstructor;
-{{/lombok}}
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
-{{#lombok}}
-@RequiredArgsConstructor
-{{/lombok}}
-class RsocketController {
-
-    // private final MyUseCase useCase;
-{{^lombok}}
-
-    /*public RsocketController(MyUseCase useCase) {
-        this.useCase = useCase;
-    }*/
-{{/lombok}}
+class RsocketController(private val useCase :MyUseCase) {
 
     // interaction model Request/Response
     @MessageMapping(value = "route.request.response")
-    fun getRequestResponse(objRequest/* change for object request */ :Any) :Mono<Any/* change for object response */>{
+    fun getRequestRespon|se(objRequest/* change for object request */ :Any) :Mono<Any/* change for object response */>{
         // return useCase.doAction();
         return Mono.empty();
     }
@@ -45,7 +31,7 @@ class RsocketController {
 
     // interaction model Channel
     @MessageMapping(value = "route.channel")
-    fun  getChannel(val objRequest :Flux<Any/* change for object request */>) :Flux<Any/* change for object response */> {
+    fun  getChannel(objRequest :Flux<Any/* change for object request */>) :Flux<Any/* change for object response */> {
         // return useCase.doAction(objRequest);
         return Flux.empty();
     }

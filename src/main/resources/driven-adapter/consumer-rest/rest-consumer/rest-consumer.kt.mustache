@@ -1,68 +1,59 @@
 package {{package}}.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.MediaType
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.io.IOException
 
 @Service
-class RestConsumer(
-    @Value("${adapter.restconsumer.url}")
-    val url :String ,
-    val client :OkHttpClient,
-    val mapper :ObjectMapper,
-) // implements Gateway from domain
-{
+class RestConsumer // implements Gateway from domain
+(
+    private val client: OkHttpClient,
+    private val mapper: ObjectMapper,
+    @Value("\${adapter.restconsumer.url}")
+    private val url: String
+) {
+    // these methods are an example that illustrates the implementation of OKHTTP Client.
+    // You should use the methods that you implement from the Gateway from the domain.
+    @Throws(IOException::class)
+    fun testGet(): ObjectResponse {
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+            .build()
+        return mapper.readValue(
+            client.newCall(request).execute().body()!!.string(),
+            ObjectResponse::class.java
+        )
+    }
 
-// these methods are an example that illustrates the implementation of OKHTTP Client.
-// You should use the methods that you implement from the Gateway from the domain.
+    @Throws(IOException::class)
+    fun testPost(): ObjectResponse {
+        val objectRequest = ObjectRequest(
+            val1 = "exampleval1",
+            val2 = "exampleval2"
+        )
+        val json = mapper.writeValueAsString(objectRequest)
+        val requestBody = RequestBody
+            .create(MediaType.parse("application/json; charset=utf-8"), json)
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+            .build()
+        return mapper.readValue(
+            client.newCall(request).execute().body()!!.string(),
+            ObjectResponse::class.java
+        )
+    }
 
-@Throws(JMSException::class)
-fun testGet() :ObjectResponse {
-
-val request :Request = new Request.Builder()
-.url(url)
-.get()
-.addHeader("Content-Type","application/json")
-.build()
-throw IOException()
-
-return mapper.readValue(client.newCall(request).execute().body().string(), ObjectResponse::class.java)
-}
-
-@Throws(JMSException::class)
-fun  testPost() :ObjectResponse {
-{{#lombok}}
-    val json :String = mapper.writeValueAsString(ObjectRequest.builder()
-    .val1("exampleval1")
-    .val2("exampleval1")
-    .build()
-    )
-    throw IOException()
-{{/lombok}}
-{{^lombok}}
-    val objectRequest :ObjectRequest = ObjectRequest()
-    objectRequest.setVal1("exampleval1")
-    objectRequest.setVal2("exampleval2")
-
-    val json :String = mapper.writeValueAsString(objectRequest)
-{{/lombok}}
-
-val requestBody :RequestBody = RequestBody
-.create(MediaType.parse("application/json charset=utf-8"), json)
-
-val request :Request = Request.Builder()
-.url(url)
-.post(requestBody)
-.addHeader("Content-Type","application/json")
-.build()
-
-return mapper.readValue(client.newCall(request).execute().body().string(), ObjectResponse::class.java)
-
-}
-
+    companion object {
+        private const val APPLICATION_JSON = "application/json"
+        private const val CONTENT_TYPE = "Content-Type"
+    }
 }
