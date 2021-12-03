@@ -938,8 +938,11 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProject() {
+  public void shouldUpdateProject() throws IOException {
+
+    init();
     canRunTaskGenerateStructureWithOutParameters();
+
     String task = "updateCleanArchitecture";
 
     runner.withArguments(task);
@@ -950,7 +953,8 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProjectWithOneDependency() {
+  public void shouldUpdateProjectWithOneDependency() throws IOException {
+    init();
     canRunTaskGenerateStructureWithOutParameters();
     String task = "updateCleanArchitecture";
 
