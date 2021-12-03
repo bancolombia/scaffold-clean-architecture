@@ -938,7 +938,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProject() throws IOException {
+  public void shouldUpdateProject() {
     canRunTaskGenerateStructureWithOutParameters();
     String task = "updateCleanArchitecture";
 
@@ -950,7 +950,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProjectWithOneDependency() throws IOException {
+  public void shouldUpdateProjectWithOneDependency() {
     canRunTaskGenerateStructureWithOutParameters();
     String task = "updateCleanArchitecture";
 

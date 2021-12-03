@@ -2,22 +2,24 @@ package co.com.bancolombia.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @JsonDeserialize(using = DependencyReleasesDeserializer.class)
 public class DependencyRelease {
   @JsonProperty("v")
-  String version;
+  private String version;
 
   @JsonProperty("g")
-  String group;
+  private String group;
 
   @JsonProperty("a")
-  String artifact;
+  private String artifact;
 
   @Override
   public String toString() {
-    return String.format("%s:%s:%s", group, artifact, version);
+    return String.format("%s:%s:%s", this.getGroup(), this.getArtifact(), this.getVersion());
   }
 }

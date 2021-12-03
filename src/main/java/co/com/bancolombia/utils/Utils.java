@@ -157,16 +157,19 @@ public class Utils {
     return content.replaceAll(regex, replaceValue);
   }
 
-  public static List<String> getAllFilesWithExtension(String extension) throws IOException {
+  public static List<String> getAllFilesWithExtension(boolean isKotlin) throws IOException {
+    String extension = isKotlin ? "gradle.kts" : "gradle";
     List<String> paths;
     try (Stream<Path> walk = Files.walk(Paths.get("."))) {
       paths =
           walk.filter(p -> !Files.isDirectory(p))
-              .map(p -> p.toString())
+              .map(Path::toString)
               .filter(f -> f.endsWith(extension))
               .filter(f -> !f.contains(".git"))
               .filter(f -> !f.contains("settings.gradle"))
+              .filter(f -> !f.contains("/resources"))
               .map(p -> p.replace("build/functionalTest/", ""))
+              .map(p -> p.replace("build/unitTest/", ""))
               .collect(Collectors.toList());
     }
     return paths;

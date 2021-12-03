@@ -2,13 +2,15 @@ package co.com.bancolombia.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class Release {
   @JsonProperty("tag_name")
-  String tagName;
+  private String tagName;
 
   @JsonProperty("published_at")
-  OffsetDateTime publishedAt;
+  private OffsetDateTime publishedAt;
 }

@@ -20,7 +20,7 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
   private List<String> dependencies = new LinkedList<>();
 
   @Option(option = "dependencies", description = "Set dependencies to update")
-  public void setName(String dependencies) {
+  public void setDependencies(String dependencies) {
     this.dependencies.addAll(Arrays.asList(dependencies.split("[ ,]+")));
   }
 
@@ -48,7 +48,7 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     try {
       return RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class);
     } catch (NullPointerException e) {
-      System.out.println("\tx Can't update this dependency " + dependency);
+      logger.lifecycle("\tx Can't update this dependency " + dependency);
       return null;
     }
   }
@@ -90,8 +90,7 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
 
   private void updateDependencies() throws IOException {
     logger.lifecycle("Updating dependencies");
-    List<String> gradleFiles =
-        Utils.getAllFilesWithExtension(builder.isKotlin() ? "gradle.kts" : "gradle");
+    List<String> gradleFiles = Utils.getAllFilesWithExtension(builder.isKotlin());
 
     if (dependencies.isEmpty()) {
       // find all dependencies
