@@ -164,10 +164,11 @@ public class Utils {
       paths =
           walk.filter(p -> !Files.isDirectory(p))
               .map(Path::toString)
-              .filter(f -> f.endsWith(extension))
+              .filter(f -> f.endsWith(extension) && !f.contains(".git"))
               .filter(f -> !f.contains(".git"))
               .filter(f -> !f.contains("settings.gradle"))
               .filter(f -> !f.contains("/resources"))
+              .filter(f -> !f.contains("/examples-ca"))
               .map(p -> p.replace("build/functionalTest/", ""))
               .map(p -> p.replace("build/unitTest/", ""))
               .collect(Collectors.toList());
