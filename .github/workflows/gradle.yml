@@ -31,7 +31,7 @@ jobs:
       - name: copy the reportTest to codeCoverage
         run: cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
       - name: Build with Gradle
-        run: ./gradlew build --refresh-dependencies --no-daemon --continue --info
+        run: ./gradlew build --refresh-dependencies --no-daemon --continue
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Run sonarqube
