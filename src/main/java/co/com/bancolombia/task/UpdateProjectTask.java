@@ -32,16 +32,23 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
         (dependencies.isEmpty() ? "all" : String.join(", ", dependencies)));
 
     Release latestRelease = getLatestPluginVersion();
-    logger.lifecycle("Latest version: {}", latestRelease.getTagName());
+    if (latestRelease != null) {
+      logger.lifecycle("Latest version: {}", latestRelease.getTagName());
 
-    updatePlugin(latestRelease.getTagName());
+      updatePlugin(latestRelease.getTagName());
+    }
     updateDependencies();
 
     builder.persist();
   }
 
   private Release getLatestPluginVersion() throws IOException {
-    return RestConsumer.callRequest(PLUGIN_RELEASES, Release[].class)[0];
+    try {
+      return RestConsumer.callRequest(PLUGIN_RELEASES, Release[].class)[0];
+    } catch (Exception e) {
+      logger.lifecycle("\tx Can't update the plugin " + e.getMessage());
+      return null;
+    }
   }
 
   private DependencyRelease getDependencyReleases(String dependency) throws IOException {
