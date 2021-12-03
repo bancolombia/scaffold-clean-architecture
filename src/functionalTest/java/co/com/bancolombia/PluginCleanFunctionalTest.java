@@ -19,12 +19,13 @@ import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 /** A simple functional test for the 'co.com.bancolombia.greeting' plugin. */
 public class PluginCleanFunctionalTest {
-  File projectDir = new File("build/functionalTest");
+  static File projectDir = new File("build/functionalTest");
   GradleRunner runner;
 
   @Before
@@ -41,7 +42,12 @@ public class PluginCleanFunctionalTest {
     runner.withPluginClasspath();
   }
 
-  private void deleteStructure(Path sourcePath) {
+  @AfterClass
+  public static void clean() {
+    deleteStructure(projectDir.toPath());
+  }
+
+  private static void deleteStructure(Path sourcePath) {
 
     try {
       Files.walkFileTree(
@@ -938,9 +944,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProject() throws IOException {
-
-    init();
+  public void shouldUpdateProject() {
     canRunTaskGenerateStructureWithOutParameters();
 
     String task = "updateCleanArchitecture";
@@ -953,8 +957,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldUpdateProjectWithOneDependency() throws IOException {
-    init();
+  public void shouldUpdateProjectWithOneDependency() {
     canRunTaskGenerateStructureWithOutParameters();
     String task = "updateCleanArchitecture";
 
