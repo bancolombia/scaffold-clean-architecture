@@ -1,10 +1,12 @@
 package co.com.bancolombia.factory;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
+import co.com.bancolombia.models.Release;
 import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
@@ -44,6 +46,7 @@ public class ModuleBuilder {
   private final Logger logger;
   @Getter private final Project project;
   private ObjectNode properties;
+  private final RestService restService = new RestService();
 
   public ModuleBuilder(Project project) {
     this.project = project;
@@ -68,7 +71,18 @@ public class ModuleBuilder {
   }
 
   public void persist() throws IOException {
+    Release latestRelease = restService.getLatestPluginVersion();
+    if (latestRelease != null) {
+      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+        logger.lifecycle(
+            "WARNING: You have an old version of the plugin, the latest version is: {}",
+            latestRelease.getTagName());
+        params.put("latestRelease", latestRelease);
+      }
+    }
     logger.lifecycle("Applying changes");
+
+    logger.lifecycle("");
     dirs.forEach(
         dir -> {
           getProject().mkdir(dir);

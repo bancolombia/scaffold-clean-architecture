@@ -27,7 +27,7 @@ public class RestConsumerTest {
   }
 
   @Test
-  public void getVersionPlugin() throws IOException {
+  public void getVersionPlugin() throws Exception {
     HttpUrl baseUrl = server.url("/releases");
 
     Release result = RestConsumer.callRequest(baseUrl.toString(), Release[].class)[0];

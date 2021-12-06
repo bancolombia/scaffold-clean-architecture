@@ -3,7 +3,7 @@ package co.com.bancolombia.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import java.io.IOException;
+import java.util.Objects;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -14,13 +14,13 @@ public class RestConsumer {
 
   private RestConsumer() {}
 
-  public static <T> T callRequest(String url, Class<T> classModel) throws IOException {
+  public static <T> T callRequest(String url, Class<T> classModel) throws Exception {
     Request request = new Request.Builder().url(url).build();
 
-    return getModel(client.newCall(request).execute().body(), classModel);
+    return getModel(Objects.requireNonNull(client.newCall(request).execute().body()), classModel);
   }
 
-  private static <T> T getModel(ResponseBody response, Class<T> modelClass) throws IOException {
+  private static <T> T getModel(ResponseBody response, Class<T> modelClass) throws Exception {
     return objectMapper.readValue(response.string(), modelClass);
   }
 

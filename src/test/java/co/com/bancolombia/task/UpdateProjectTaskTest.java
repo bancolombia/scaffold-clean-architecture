@@ -1,7 +1,5 @@
 package co.com.bancolombia.task;
 
-import static org.junit.Assert.assertThrows;
-
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
@@ -58,11 +56,11 @@ public class UpdateProjectTaskTest {
   }
 
   @Test
-  public void dependencyIncomplete() {
+  public void dependencyIncomplete() throws IOException {
     // Arrange
     task.setDependencies("does_dependency");
     // Act
 
-    assertThrows(IllegalArgumentException.class, () -> task.updateProject());
+    task.updateProject();
   }
 }
