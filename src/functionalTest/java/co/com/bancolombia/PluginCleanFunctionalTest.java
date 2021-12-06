@@ -27,25 +27,43 @@ public class PluginCleanFunctionalTest {
 
   public static final String BUILD_FUNCTIONAL_TEST_README_MD = "build/functionalTest/README.md";
   public static final String BUILD_FUNCTIONAL_TEST_GITIGNORE = "build/functionalTest/.gitignore";
-  public static final String BUILD_FUNCTIONAL_TEST_BUILD_GRADLE = "build/functionalTest/build.gradle";
+  public static final String BUILD_FUNCTIONAL_TEST_BUILD_GRADLE =
+      "build/functionalTest/build.gradle";
   public static final String BUILD_FUNCTIONAL_TEST_MAIN_GRADLE = "build/functionalTest/main.gradle";
-  public static final String BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE = "build/functionalTest/settings.gradle";
-  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS = "build/functionalTest/infrastructure/driven-adapters/";
-  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS = "build/functionalTest/infrastructure/entry-points";
-  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_HELPERS = "build/functionalTest/infrastructure/helpers";
-  public static final String BUILD_FUNCTIONAL_TEST_DOMAIN_MODEL_BUILD_GRADLE = "build/functionalTest/domain/model/build.gradle";
-  public static final String BUILD_FUNCTIONAL_TEST_DOMAIN_USECASE_BUILD_GRADLE = "build/functionalTest/domain/usecase/build.gradle";
-  public static final String BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE = "build/functionalTest/applications/app-service/build.gradle";
-  public static final String BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML = "build/functionalTest/applications/app-service/src/main/resources/application.yaml";
-  public static final String BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES = "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties";
+  public static final String BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE =
+      "build/functionalTest/settings.gradle";
+  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS =
+      "build/functionalTest/infrastructure/driven-adapters/";
+  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS =
+      "build/functionalTest/infrastructure/entry-points";
+  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_HELPERS =
+      "build/functionalTest/infrastructure/helpers";
+  public static final String BUILD_FUNCTIONAL_TEST_DOMAIN_MODEL_BUILD_GRADLE =
+      "build/functionalTest/domain/model/build.gradle";
+  public static final String BUILD_FUNCTIONAL_TEST_DOMAIN_USECASE_BUILD_GRADLE =
+      "build/functionalTest/domain/usecase/build.gradle";
+  public static final String BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE =
+      "build/functionalTest/applications/app-service/build.gradle";
+  public static final String
+      BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML =
+          "build/functionalTest/applications/app-service/src/main/resources/application.yaml";
+  public static final String
+      BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES =
+          "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties";
   public static final String GENERATE_DRIVEN_ADAPTER = "generateDrivenAdapter";
   public static final String TYPE = "--type=";
   public static final String NAME = "--name=";
   public static final String GENERATE_ENTRY_POINT = "generateEntryPoint";
   public static final String GRAPHQLPATH = "/graphqlpath";
-  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA = "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java";
-  public static final String BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE = "build/functionalTest/infrastructure/entry-points/api-rest/build.gradle";
-  public static final String COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT = "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
+  public static final String
+      BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA =
+          "build/functionalTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java";
+  public static final String
+      BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE =
+          "build/functionalTest/infrastructure/entry-points/api-rest/build.gradle";
+  public static final String
+      COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT =
+          "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
   public static final String ASYNCEVENTBUS = "ASYNCEVENTBUS";
   public static final String RESTMVC = "restmvc";
   public static final String SERVER = "--server=";
@@ -138,12 +156,11 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
-        new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
+        new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
             .exists());
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
+                BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
@@ -201,12 +218,11 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
             .exists());
     assertTrue(
-        new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
+        new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
             .exists());
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
+                BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
@@ -286,12 +302,11 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/applications/app-service/src/main/java/co/com/test/config")
             .exists());
     assertTrue(
-        new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
+        new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
             .exists());
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
+                BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
             .exists());
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/test")
@@ -448,11 +463,10 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
+                BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
             .exists());
     assertTrue(
-        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE)
-            .exists());
+        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -469,11 +483,10 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
+                BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
             .exists());
     assertTrue(
-        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE)
-            .exists());
+        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
 
     assertTrue(
         FileUtils.readFileToString(
@@ -502,11 +515,10 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
+                BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
             .exists());
     assertTrue(
-        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE)
-            .exists());
+        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
 
     assertTrue(
         FileUtils.readFileToString(
@@ -535,11 +547,10 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
     assertTrue(
         new File(
-            BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
+                BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
             .exists());
     assertTrue(
-        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE)
-            .exists());
+        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
 
     assertFalse(
         FileUtils.readFileToString(

@@ -77,15 +77,16 @@ public class ModuleBuilder {
       addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
     }
 
-    files.forEach((key, file) -> {
-      try {
-        FileUtils.writeString(getProject(), file.getPath(), file.getContent());
-      } catch (IOException e) {
-        logger.error("error to write file {}", file.getPath());
-        throw new RuntimeException(e.getMessage(), e);
-      }
-      logger.debug("file {} written", file.getPath());
-    });
+    files.forEach(
+        (key, file) -> {
+          try {
+            FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+          } catch (IOException e) {
+            logger.error("error to write file {}", file.getPath());
+            throw new RuntimeException(e.getMessage(), e);
+          }
+          logger.debug("file {} written", file.getPath());
+        });
 
     dirsToDelete.forEach(
         dir -> {
@@ -189,7 +190,6 @@ public class ModuleBuilder {
   public void addFile(String path, String content) {
     this.files.put(path, FileModel.builder().path(path).content(content).build());
   }
-
 
   public void addDir(String path) {
     if (path != null) {

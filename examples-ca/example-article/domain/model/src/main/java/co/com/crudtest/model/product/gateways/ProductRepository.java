@@ -9,9 +9,7 @@ public interface ProductRepository {
 
   Product read(String id);
 
-  default void update(String id, Product product) throws Exception {
-
-  }
+  default void update(String id, Product product) throws Exception {}
 
   void delete(String id);
 
