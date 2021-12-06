@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -24,7 +25,7 @@ public class GenerateHelperTaskTest {
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
     ProjectBuilder.builder()
-        .withName("app-service")
+        .withName(APP_SERVICE)
         .withProjectDir(new File("build/unitTest/applications/app-service"))
         .withParent(project)
         .build();

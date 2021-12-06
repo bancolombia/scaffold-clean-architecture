@@ -176,7 +176,7 @@ public class ModuleBuilder {
 
   public void addParamPackage(String packageName) {
     this.params.put("package", packageName.toLowerCase());
-    this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
+    this.params.put("packagePath", packageName.replace("\\.", "\\/").toLowerCase());
   }
 
   public void addFile(String path, String content) {

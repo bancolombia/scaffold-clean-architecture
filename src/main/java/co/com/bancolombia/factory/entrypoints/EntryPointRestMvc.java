@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -14,7 +15,7 @@ public class EntryPointRestMvc implements ModuleFactory {
     builder.setupFromTemplate("entry-point/rest-mvc");
     builder.appendToSettings("api-rest", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":api-rest");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
     new EntryPointRestMvcServer().buildModule(builder);
   }
 }

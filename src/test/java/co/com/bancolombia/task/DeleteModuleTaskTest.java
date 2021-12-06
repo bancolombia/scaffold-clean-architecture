@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -29,7 +30,7 @@ public class DeleteModuleTaskTest {
     generateStructureTask.generateStructureTask();
 
     ProjectBuilder.builder()
-        .withName("app-service")
+        .withName(APP_SERVICE)
         .withProjectDir(new File("build/unitTest/applications/app-service"))
         .withParent(project)
         .build();

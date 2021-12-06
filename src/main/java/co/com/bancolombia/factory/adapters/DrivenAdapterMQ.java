@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -15,7 +16,7 @@ public class DrivenAdapterMQ implements ModuleFactory {
     builder.appendToSettings("mq-sender", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":mq-sender");
 
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder
         .appendToProperties("commons.jms")

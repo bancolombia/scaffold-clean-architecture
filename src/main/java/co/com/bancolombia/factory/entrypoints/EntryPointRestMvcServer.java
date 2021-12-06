@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementation;
 import static co.com.bancolombia.utils.Utils.tomcatExclusion;
 
@@ -22,16 +23,16 @@ public class EntryPointRestMvcServer implements ModuleFactory {
                 builder.isKotlin(),
                 "org.springframework.boot:spring-boot-starter-undertow:"
                     + Constants.UNDERTOW_VERSION);
-        builder.appendDependencyToModule("app-service", undertowDependency);
-        builder.appendConfigurationToModule("app-service", tomcatExclusion(builder.isKotlin()));
+        builder.appendDependencyToModule(APP_SERVICE, undertowDependency);
+        builder.appendConfigurationToModule(APP_SERVICE, tomcatExclusion(builder.isKotlin()));
         return;
       case JETTY:
         String jettyDependency =
             buildImplementation(
                 builder.isKotlin(),
                 "org.springframework.boot:spring-boot-starter-jetty:" + Constants.UNDERTOW_VERSION);
-        builder.appendDependencyToModule("app-service", jettyDependency);
-        builder.appendConfigurationToModule("app-service", tomcatExclusion(builder.isKotlin()));
+        builder.appendDependencyToModule(APP_SERVICE, jettyDependency);
+        builder.appendConfigurationToModule(APP_SERVICE, tomcatExclusion(builder.isKotlin()));
         return;
       case TOMCAT:
         return;

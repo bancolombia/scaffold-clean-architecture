@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
   public static final String PLUGIN_TASK_GROUP = "Clean Architecture";
+  public static final String APP_SERVICE = "app-service";
+  public static final String PATH_GRAPHQL = "/graphqlpath";
   public static final String SECRETS_VERSION = "3.0.0";
   public static final String SPRING_BOOT_VERSION = "2.4.2";
   public static final String UNDERTOW_VERSION = "2.4.2";

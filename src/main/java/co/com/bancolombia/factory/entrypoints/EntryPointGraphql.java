@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -25,7 +26,7 @@ public class EntryPointGraphql implements ModuleFactory {
         .put("endpoint", name)
         .put("enabled", true);
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":graphql-api");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.setupFromTemplate("entry-point/graphql-api");
   }
 }
