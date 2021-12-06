@@ -76,11 +76,17 @@ public class ModuleBuilder {
       logger.lifecycle("Updating application properties");
       addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
     }
-    for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
-      FileModel file = fileEntry.getValue();
-      FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+
+    files.forEach((key, file) -> {
+      try {
+        FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+      } catch (IOException e) {
+        logger.error("error to write file {}", file.getPath());
+        throw new RuntimeException(e.getMessage(), e);
+      }
       logger.debug("file {} written", file.getPath());
-    }
+    });
+
     dirsToDelete.forEach(
         dir -> {
           getProject().delete(dir);
@@ -91,6 +97,7 @@ public class ModuleBuilder {
 
   public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
     TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
+
     for (String folder : definition.getFolders()) {
       addDir(Utils.fillPath(folder, params));
     }
@@ -176,12 +183,13 @@ public class ModuleBuilder {
 
   public void addParamPackage(String packageName) {
     this.params.put("package", packageName.toLowerCase());
-    this.params.put("packagePath", packageName.replace("\\.", "\\/").toLowerCase());
+    this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
   }
 
   public void addFile(String path, String content) {
     this.files.put(path, FileModel.builder().path(path).content(content).build());
   }
+
 
   public void addDir(String path) {
     if (path != null) {

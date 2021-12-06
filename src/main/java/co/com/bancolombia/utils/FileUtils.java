@@ -38,10 +38,12 @@ public class FileUtils {
 
   public static List<File> finderSubProjects(String dirPath) {
     File[] directories = new File(dirPath).getAbsoluteFile().listFiles(File::isDirectory);
-    FilenameFilter filter = (file, s) -> s.endsWith("build.gradle");
+    FilenameFilter filter = (file, s) -> s.contains("build.gradle");
     List<File> textFiles = new ArrayList<>();
-    for (File dir : directories) {
-      textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
+    if (directories != null) {
+      for (File dir : directories) {
+        textFiles.addAll(Arrays.asList(dir.listFiles(filter)));
+      }
     }
     return textFiles;
   }
