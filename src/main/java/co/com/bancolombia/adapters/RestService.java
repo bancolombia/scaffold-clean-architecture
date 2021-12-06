@@ -3,6 +3,7 @@ package co.com.bancolombia.adapters;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.RestConsumer;
+import java.util.Optional;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 
@@ -23,13 +24,14 @@ public class RestService {
     }
   }
 
-  public DependencyRelease getDependencyReleases(String dependency) {
+  public Optional<DependencyRelease> getTheLastDependencyRelease(String dependency) {
     try {
-      return RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class);
+      return Optional.of(
+          RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class));
     } catch (Exception e) {
       logger.lifecycle(
           "\tx Can't update this dependency {}, reason: {}", dependency, e.getMessage());
-      return null;
+      return Optional.empty();
     }
   }
 

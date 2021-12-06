@@ -27,6 +27,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
@@ -141,12 +142,13 @@ public class ModuleBuilder {
         });
   }
 
-  public void updateExpression(String path, String regex, String value) throws IOException {
+  @SneakyThrows
+  public void updateExpression(String path, String regex, String value) {
     updateFile(path, properties -> Utils.replaceExpression(properties, regex, value));
   }
 
-  public Collection<? extends String> findExpressions(String path, String regex)
-      throws IOException {
+  @SneakyThrows
+  public Set<String> findExpressions(String path, String regex) {
     logger.lifecycle(
         "find  "
             + Pattern.compile(regex).matcher(readFile(path)).results().count()
@@ -158,7 +160,7 @@ public class ModuleBuilder {
         .map(MatchResult::group)
         .map(s -> s.replaceAll("'", ""))
         .map(s -> s.replaceAll("\"", ""))
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {

@@ -5,15 +5,15 @@ import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
+import org.jetbrains.annotations.NotNull;
 
 public class UpdateProjectTask extends CleanArchitectureDefaultTask {
-  private List<String> dependencies = new LinkedList<>();
+  private Set<String> dependencies = new HashSet<>();
   private final RestService restService = new RestService();
 
   @Option(option = "dependencies", description = "Set dependencies to update")
@@ -38,7 +38,7 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     builder.persist();
   }
 
-  private void updatePlugin(String lastRelease) throws IOException {
+  private void updatePlugin(String lastRelease) {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
 
     if (lastRelease.equals(Utils.getVersionPlugin())) {
@@ -67,24 +67,38 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     List<String> gradleFiles = Utils.getAllFilesWithExtension(builder.isKotlin());
 
     if (dependencies.isEmpty()) {
-      // find all dependencies
-      for (String gradleFile : gradleFiles) {
-        dependencies.addAll(builder.findExpressions(gradleFile, "['\"].+:.+:[^\\$].+['\"]"));
-      }
+      dependencies =
+          gradleFiles.stream()
+              .flatMap(
+                  gradleFile ->
+                      builder.findExpressions(gradleFile, "['\"].+:.+:[^\\$].+['\"]").stream())
+              .collect(Collectors.toSet());
     }
-    dependencies = dependencies.stream().distinct().collect(Collectors.toList());
     logger.lifecycle(dependencies.size() + " different dependencies to update");
-    for (String dependency : dependencies) {
-      DependencyRelease latestDependency = restService.getDependencyReleases(dependency);
-      if (latestDependency != null) {
-        logger.lifecycle("\t- " + latestDependency.toString());
-        for (String gradleFile : gradleFiles) {
-          builder.updateExpression(
-              gradleFile,
-              "['\"]" + dependency + ":[^\\$].+",
-              "'" + latestDependency.toString() + "'");
-        }
-      }
-    }
+
+    dependencies.stream()
+        .map(restService::getTheLastDependencyRelease)
+        .forEach(updateDependencyInFiles(gradleFiles));
+  }
+
+  @NotNull
+  private Consumer<Optional<DependencyRelease>> updateDependencyInFiles(List<String> gradleFiles) {
+    return dependencyRelease ->
+        dependencyRelease.ifPresent(
+            latestDependency -> {
+              logger.lifecycle("\t- " + latestDependency.toString());
+              gradleFiles
+                  .parallelStream()
+                  .forEach(
+                      gradleFile ->
+                          builder.updateExpression(
+                              gradleFile,
+                              "['\"]"
+                                  + latestDependency.getGroup()
+                                  + ":"
+                                  + latestDependency.getArtifact()
+                                  + ":[^\\$].+",
+                              "'" + latestDependency.toString() + "'"));
+            });
   }
 }
