@@ -37,7 +37,7 @@ plugins {
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"2.0.0\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.1.0\"
 }" > build.gradle
 ```
 
@@ -51,7 +51,7 @@ plugins {
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.0.0\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.1.0\"
 }" > build.gradle.kts
 ```
 
