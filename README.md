@@ -135,7 +135,7 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    ```
 
 
-**_The structure will look like this for java:_**
+**_The structure will look like this for kotlin:_**
 
    ```bash
    📦NameProject
