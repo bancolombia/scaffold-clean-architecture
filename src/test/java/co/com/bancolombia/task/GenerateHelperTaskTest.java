@@ -7,8 +7,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +24,35 @@ public class GenerateHelperTaskTest {
   @Before
   public void init() throws IOException, CleanException {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+  }
+
+  @AfterClass
+  public static void clean() {
+    deleteStructure(Path.of("build/unitTest"));
+  }
+
+  private static void deleteStructure(Path sourcePath) {
+
+    try {
+      Files.walkFileTree(
+          sourcePath,
+          new SimplePathVisitor() {
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+              Files.delete(dir);
+              return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+                throws IOException {
+              Files.delete(file);
+              return FileVisitResult.CONTINUE;
+            }
+          });
+    } catch (IOException e) {
+      System.out.println("error delete Structure " + e.getMessage());
+    }
   }
 
   private void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
