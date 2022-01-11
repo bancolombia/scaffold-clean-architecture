@@ -17,7 +17,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.{{javaVersion}}
 
     dependencies {
         {{#reactive}}
