@@ -17,6 +17,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
   private Language language = Language.JAVA;
+  private JavaVersion javaVersion = JavaVersion.VERSION_11;
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
@@ -48,6 +49,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     this.lombok = lombok;
   }
 
+  @Option(option = "javaVersion", description = "Set Java version")
+  public void setJavaVersion(JavaVersion javaVersion) {
+    this.javaVersion = javaVersion;
+  }
+
   @OptionValues("type")
   public List<ProjectType> getAvailableProjectTypes() {
     return Arrays.asList(ProjectType.values());
@@ -63,6 +69,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("javaVersion")
+  public List<JavaVersion> getJavaVersions() {
+    return Arrays.asList(JavaVersion.values());
+  }
+
   @TaskAction
   public void generateStructureTask() throws IOException, CleanException {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
@@ -76,6 +87,10 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("language", language.name().toLowerCase());
+    builder.addParam("javaVersion", javaVersion);
+    builder.addParam("java8", javaVersion == JavaVersion.VERSION_1_8);
+    builder.addParam("java11", javaVersion == JavaVersion.VERSION_11);
+    builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
 
     if (lombok == BooleanOption.TRUE) {
       builder.setupFromTemplate("structure");
@@ -98,5 +113,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   public enum Language {
     JAVA,
     KOTLIN
+  }
+
+  public enum JavaVersion {
+    VERSION_1_8,
+    VERSION_11,
+    VERSION_17
   }
 }

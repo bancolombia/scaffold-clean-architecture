@@ -74,6 +74,8 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
    - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
+
+   - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_11`
    
    ```shell
    gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
