@@ -11,7 +11,7 @@ public class Constants {
   public static final String UNDERTOW_VERSION = "2.4.2";
   public static final String JETTY_VERSION = "2.4.2";
   public static final String SONAR_VERSION = "3.0";
-  public static final String LOMBOK_VERSION = "1.18.20";
+  public static final String LOMBOK_VERSION = "1.18.22";
   public static final String JACOCO_VERSION = "0.8.5";
   public static final String COBERTURA_VERSION = "3.0.0";
   public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "1.0.3";
