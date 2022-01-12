@@ -56,6 +56,7 @@ public class ModuleBuilder {
     params.put("projectNameLower", getProject().getName().toLowerCase());
     params.put("pluginVersion", Constants.PLUGIN_VERSION);
     params.put("springBootVersion", Constants.SPRING_BOOT_VERSION);
+    params.put("kotlinVersion", Constants.KOTLIN_VERSION);
     params.put("sonarVersion", Constants.SONAR_VERSION);
     params.put("jacocoVersion", Constants.JACOCO_VERSION);
     params.put("gradleVersion", Constants.GRADLE_WRAPPER_VERSION);

@@ -32,6 +32,8 @@ public class ModuleFactoryDrivenAdapter {
         return new DrivenAdapterSecrets();
       case MQ:
         return new DrivenAdapterMQ();
+      case KTOR:
+        return new DrivenAdapterKtorClient();
       default:
         throw new InvalidTaskOptionException("Driven Adapter type invalid");
     }
@@ -49,6 +51,7 @@ public class ModuleFactoryDrivenAdapter {
     KMS,
     SECRETS,
     S3,
-    MQ
+    MQ,
+    KTOR
   }
 }

@@ -36,7 +36,20 @@ public class PluginCleanFunctionalTest {
     writeString(new File(projectDir, "settings.gradle"), "");
     writeString(
         new File(projectDir, "build.gradle"),
-        "plugins {" + "  id('co.com.bancolombia.cleanArchitecture')" + "}");
+        "plugins {" + " id \"co.com.bancolombia.cleanArchitecture\" version \"2.1.1\"" + "}");
+    runner = GradleRunner.create();
+    runner.forwardOutput();
+    runner.withPluginClasspath();
+  }
+
+  public void initKotlin() throws IOException {
+    // Setup the test build
+    deleteStructure(projectDir.toPath());
+    Files.createDirectories(projectDir.toPath());
+    writeString(new File(projectDir, "settings.gradle.kts"), "");
+    writeString(
+            new File(projectDir, "build.gradle.kts"),
+            "plugins {" + "  id(\"co.com.bancolombia.cleanArchitecture\")" + "}");
     runner = GradleRunner.create();
     runner.forwardOutput();
     runner.withPluginClasspath();
@@ -964,6 +977,93 @@ public class PluginCleanFunctionalTest {
     runner.withArguments(task, "--dependencies=org.mockito:mockito-core org.projectlombok:lombok");
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+
+  @Test
+  public void canRunTaskGenerateDrivenAdapterKtorClient() throws IOException {
+    canRunTaskGenerateStructureKotlinWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "KTOR";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/KtorClient.kt")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/config/KtorConfig.kt")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
+                    .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateStructureKotlinWithOutParameters() throws IOException {
+    initKotlin();
+    String task = "ca";
+
+    runner.withArguments(task, "--language=" + "KOTLIN");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    // Verify the result
+    assertTrue(new File("build/functionalTest/README.md").exists());
+    assertTrue(new File("build/functionalTest/.gitignore").exists());
+    assertTrue(new File("build/functionalTest/build.gradle.kts").exists());
+    assertTrue(new File("build/functionalTest/lombok.config").exists());
+    assertTrue(new File("build/functionalTest/settings.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
+
+    assertTrue(
+            new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
+                    .exists());
+    assertTrue(new File("build/functionalTest/domain/model/build.gradle.kts").exists());
+    assertTrue(
+            new File("build/functionalTest/domain/usecase/src/main/kotlin/co/com/bancolombia/usecase")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/domain/usecase/src/test/kotlin/co/com/bancolombia/usecase")
+                    .exists());
+    assertTrue(new File("build/functionalTest/domain/usecase/build.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/applications/app-service/build.gradle.kts").exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/MainApplication.kt")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/UseCasesConfig.kt")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/applications/app-service/src/test/kotlin/co/com/bancolombia")
+                    .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
