@@ -36,7 +36,7 @@ public class PluginCleanFunctionalTest {
     writeString(new File(projectDir, "settings.gradle"), "");
     writeString(
         new File(projectDir, "build.gradle"),
-        "plugins {" + " id \"co.com.bancolombia.cleanArchitecture\" version \"2.1.1\"" + "}");
+        "plugins {" + " id 'co.com.bancolombia.cleanArchitecture'" + "}");
     runner = GradleRunner.create();
     runner.forwardOutput();
     runner.withPluginClasspath();
