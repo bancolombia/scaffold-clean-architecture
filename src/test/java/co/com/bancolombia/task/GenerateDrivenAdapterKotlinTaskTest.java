@@ -95,7 +95,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   }
 
   @Test
-  public void generateRestConsumer() throws IOException, CleanException {
+  public void generateRestConsumerForKotlin() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
     task.setUrl("http://localhost:8080");
