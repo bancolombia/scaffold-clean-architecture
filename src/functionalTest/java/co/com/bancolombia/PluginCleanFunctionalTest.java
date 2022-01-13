@@ -104,10 +104,10 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
 
     assertTrue(
-        new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
+        new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model")
             .exists());
     assertTrue(
-        new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
+        new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model")
             .exists());
     assertTrue(new File("build/functionalTest/domain/model/build.gradle").exists());
     assertTrue(
