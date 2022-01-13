@@ -635,7 +635,8 @@ public class GenerateDrivenAdapterTaskTest {
   }
 
   @Test(expected = ValidationException.class)
-  public void generateDrivenAdapterKtorShouldThrowValidationException() throws IOException, CleanException {
+  public void generateDrivenAdapterKtorShouldThrowValidationException()
+      throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
     // Act

@@ -1,23 +1,21 @@
 package co.com.bancolombia.task;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
-import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.gradle.api.Project;
+import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GenerateDrivenAdapterKotlinTaskTest {
   private GenerateDrivenAdapterTask task;
@@ -604,7 +602,8 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle.kts").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle.kts")
+            .exists());
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/kotlin/co/com/bancolombia/mq/sender/SampleMQMessageSender.kt")
@@ -619,9 +618,8 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-            new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
-                    .exists());
-
+        new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
+            .exists());
   }
 
   private void writeString(File file, String string) throws IOException {
