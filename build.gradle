@@ -41,24 +41,23 @@ compileJava {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    api 'com.github.spullara.mustache.java:compiler:0.9.6'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.11.0'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
-    api 'commons-io:commons-io:2.7'
+    api 'com.github.spullara.mustache.java:compiler:0.9.10'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1'
+    api 'commons-io:commons-io:2.11.0'
     api gradleApi()
-    testImplementation "org.mockito:mockito-core:2.9.0"
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:4.2.0'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation gradleTestKit()
 
-    compileOnly 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    testImplementation "com.squareup.okhttp3:mockwebserver:4.9.0"
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
 }
 
 gradlePlugin {

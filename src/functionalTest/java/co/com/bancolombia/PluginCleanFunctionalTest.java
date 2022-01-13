@@ -48,8 +48,8 @@ public class PluginCleanFunctionalTest {
     Files.createDirectories(projectDir.toPath());
     writeString(new File(projectDir, "settings.gradle.kts"), "");
     writeString(
-            new File(projectDir, "build.gradle.kts"),
-            "plugins {" + "  id(\"co.com.bancolombia.cleanArchitecture\")" + "}");
+        new File(projectDir, "build.gradle.kts"),
+        "plugins {" + "  id(\"co.com.bancolombia.cleanArchitecture\")" + "}");
     runner = GradleRunner.create();
     runner.forwardOutput();
     runner.withPluginClasspath();
@@ -981,7 +981,6 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
-
   @Test
   public void canRunTaskGenerateDrivenAdapterKtorClient() throws IOException {
     canRunTaskGenerateStructureKotlinWithOutParameters();
@@ -992,16 +991,16 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
     assertTrue(
-            new File(
-                    "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/KtorClient.kt")
-                    .exists());
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/KtorClient.kt")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/config/KtorConfig.kt")
-                    .exists());
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/config/KtorConfig.kt")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
-                    .exists());
+        new File("build/functionalTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
+            .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -1026,44 +1025,44 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
 
     assertTrue(
-            new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
-                    .exists());
+        new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
-                    .exists());
+        new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
+            .exists());
     assertTrue(new File("build/functionalTest/domain/model/build.gradle.kts").exists());
     assertTrue(
-            new File("build/functionalTest/domain/usecase/src/main/kotlin/co/com/bancolombia/usecase")
-                    .exists());
+        new File("build/functionalTest/domain/usecase/src/main/kotlin/co/com/bancolombia/usecase")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/domain/usecase/src/test/kotlin/co/com/bancolombia/usecase")
-                    .exists());
+        new File("build/functionalTest/domain/usecase/src/test/kotlin/co/com/bancolombia/usecase")
+            .exists());
     assertTrue(new File("build/functionalTest/domain/usecase/build.gradle.kts").exists());
 
     assertTrue(new File("build/functionalTest/applications/app-service/build.gradle.kts").exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/MainApplication.kt")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/MainApplication.kt")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/UseCasesConfig.kt")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/UseCasesConfig.kt")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/applications/app-service/src/test/kotlin/co/com/bancolombia")
-                    .exists());
+        new File("build/functionalTest/applications/app-service/src/test/kotlin/co/com/bancolombia")
+            .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
