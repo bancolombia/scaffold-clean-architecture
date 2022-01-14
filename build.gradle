@@ -40,11 +40,6 @@ publishing {
             }
         }
     }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
-    }
 }
 group 'co.com.bancolombia.cleanArchitecture'
 
