@@ -26,7 +26,7 @@ public class Constants {
           + "}";
   public static final String TOMCAT_EXCLUSION =
       "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
-  public static final String COMMONS_JMS_VERSION = "0.1.0";
+  public static final String COMMONS_JMS_VERSION = "0.1.1";
 
   public enum BooleanOption {
     TRUE,
