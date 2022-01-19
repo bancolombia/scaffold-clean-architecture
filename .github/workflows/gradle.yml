@@ -38,6 +38,9 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: OSSF Scorecard action
+        uses: ossf/scorecard-action@v1.0.1
+
   release:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
