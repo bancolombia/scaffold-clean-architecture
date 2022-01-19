@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
@@ -18,7 +17,7 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GenerateDrivenAdapterTaskTest {
+public class GenerateDrivenAdapterKotlinTaskTest {
   private GenerateDrivenAdapterTask task;
 
   @Before
@@ -39,6 +38,7 @@ public class GenerateDrivenAdapterTaskTest {
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("ca");
     taskStructure.setType(type);
+    taskStructure.setLanguage(GenerateStructureTask.Language.KOTLIN);
     taskStructure.generateStructureTask();
 
     project.getTasks().create("test", GenerateDrivenAdapterTask.class);
@@ -82,20 +82,20 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/main/java/co/com/bancolombia/mydrivenadapter")
+                "build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/main/kotlin/co/com/bancolombia/mydrivenadapter")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/test/java/co/com/bancolombia/mydrivenadapter")
+                "build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/test/kotlin/co/com/bancolombia/mydrivenadapter")
             .exists());
   }
 
   @Test
-  public void generateRestConsumer() throws IOException, CleanException {
+  public void generateRestConsumerForKotlin() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
     task.setUrl("http://localhost:8080");
@@ -103,48 +103,23 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/RestConsumer.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectResponse.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/ObjectResponse.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectRequest.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/ObjectRequest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
-            .exists());
-  }
-
-  @Test
-  public void generateRsocketRequester() throws IOException, CleanException {
-    // Arrange
-    setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RSOCKET);
-    // Act
-    task.generateDrivenAdapterTask();
-    // Assert
-    assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/rsocket-requester/build.gradle")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/config/RequesterConfig.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/service/RsocketAdapter.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/rsocket/service")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/config/RestConsumerConfig.kt")
             .exists());
   }
 
@@ -156,27 +131,27 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/kotlin/co/com/bancolombia/jpa/JPARepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/kotlin/co/com/bancolombia/jpa/JPARepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/kotlin/co/com/bancolombia/jpa/helper/AdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/DBSecret.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/kotlin/co/com/bancolombia/jpa/config/DBSecret.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/kotlin/co/com/bancolombia/jpa/config/JpaConfig.kt")
             .exists());
   }
 
@@ -188,27 +163,27 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoDBRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoRepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/helper/AdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoDBSecret.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoConfig.kt")
             .exists());
   }
 
@@ -221,31 +196,31 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoDBRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoRepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/helper/AdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoDBSecret.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoConfig.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/SecretsConfig.java")
+                "build/unitTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/SecretsConfig.kt")
             .exists());
   }
 
@@ -261,27 +236,27 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoDBRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoRepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/helper/AdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoDBSecret.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoConfig.kt")
             .exists());
   }
 
@@ -294,27 +269,27 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoDBRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/MongoRepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/helper/AdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoDBSecret.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/kotlin/co/com/bancolombia/mongo/config/MongoConfig.kt")
             .exists());
   }
 
@@ -328,23 +303,23 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/RestConsumer.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/RestConsumer.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectResponse.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/ObjectResponse.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/ObjectRequest.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/ObjectRequest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/kotlin/co/com/bancolombia/consumer/config/RestConsumerConfig.kt")
             .exists());
   }
 
@@ -357,19 +332,19 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java")
+                "build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/kotlin/co/com/bancolombia/events/ReactiveEventsGateway.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java")
+                "build/unitTest/infrastructure/driven-adapters/async-event-bus/src/main/kotlin/co/com/bancolombia/events/ReactiveDirectAsyncGateway.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
+                "build/unitTest/domain/model/src/main/kotlin/co/com/bancolombia/model/events/gateways/EventsGateway.kt")
             .exists());
   }
 
@@ -393,18 +368,18 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/RepositoryAdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/helper/RepositoryAdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/RedisRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/RedisRepositoryAdapter.kt")
             .exists());
   }
 
@@ -420,22 +395,22 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/ReactiveRepositoryAdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/helper/ReactiveRepositoryAdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/ReactiveRedisRepository.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepositoryAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/ReactiveRedisRepositoryAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/config/RedisConfig.kt")
             .exists());
   }
 
@@ -448,14 +423,14 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/helper/TemplateAdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/template/helper/TemplateAdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/RedisTemplateAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/template/RedisTemplateAdapter.kt")
             .exists());
   }
 
@@ -468,19 +443,19 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/kotlin/co/com/bancolombia/config/PostgreSQLConnectionPool.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/kotlin/co/com/bancolombia/config/PostgresqlConnectionProperties.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/kotlin/co/com/bancolombia/MyReactiveRepository.kt")
             .exists());
   }
 
@@ -495,18 +470,18 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/helper/ReactiveTemplateAdapterOperations.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/template/helper/ReactiveTemplateAdapterOperations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/config/RedisConfig.kt")
             .exists());
   }
 
@@ -519,19 +494,19 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/kotlin/co/com/bancolombia/kms/KmsAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/config/RedisConfig.kt")
             .exists());
   }
 
@@ -544,19 +519,19 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/kotlin/co/com/bancolombia/kms/KmsAdapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/KmsConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/kotlin/co/com/bancolombia/kms/config/KmsConfig.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/model/KmsConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/kotlin/co/com/bancolombia/kms/config/model/KmsConnectionProperties.kt")
             .exists());
   }
 
@@ -569,23 +544,23 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/adapter/S3Adapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/operations/S3Operations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/S3Config.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/config/S3Config.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/config/model/S3ConnectionProperties.kt")
             .exists());
   }
 
@@ -598,23 +573,23 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/adapter/S3Adapter.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/operations/S3Operations.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/S3Config.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/config/S3Config.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/kotlin/co/com/bancolombia/s3/config/model/S3ConnectionProperties.kt")
             .exists());
   }
 
@@ -627,20 +602,24 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle").exists());
+        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle.kts")
+            .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+                "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/kotlin/co/com/bancolombia/mq/sender/SampleMQMessageSender.kt")
             .exists());
   }
 
-  @Test(expected = ValidationException.class)
-  public void generateDrivenAdapterKtorShouldThrowValidationException()
-      throws IOException, CleanException {
+  @Test
+  public void generateDrivenAdapterKtor() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
     // Act
     task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
+            .exists());
   }
 
   private void writeString(File file, String string) throws IOException {

@@ -1,11 +1,13 @@
 plugins {
     id("co.com.bancolombia.cleanArchitecture") version "{{pluginVersion}}"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.springframework.boot") version "{{springBootVersion}}"
     id("org.sonarqube") version "{{sonarVersion}}" apply true
 {{#jacoco }}
     id("jacoco") apply true
 {{/jacoco }}
-    kotlin("jvm") version "1.5.31"
+    kotlin("jvm") version "{{kotlinVersion}}"
+    kotlin("plugin.spring") version "{{kotlinVersion}}"
 }
 
 sonarqube {
@@ -50,7 +52,6 @@ subprojects {
         implementation("io.projectreactor.addons:reactor-extra")
         testImplementation("io.projectreactor:reactor-test")
 {{/reactive}}
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
 {{#lombok}}
         compileOnly("org.projectlombok:lombok:{{lombokVersion}}")
         annotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
@@ -58,32 +59,30 @@ subprojects {
         testAnnotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
 {{/lombok}}
         implementation(platform("org.springframework.boot:spring-boot-dependencies:{{springBootVersion}}"))
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+        runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.0")
         implementation("org.springframework.boot:spring-boot-starter")
-        implementation("org.springframework:spring-context")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 {{#jacoco}}
     project.tasks.test.get().finalizedBy(project.tasks.jacocoTestReport)
     project.tasks.jacocoTestReport {
         dependsOn(project.tasks.test)
         reports {
-            xml.isEnabled = true
-            xml.destination = file("${buildDir}/reports/jacoco.xml")
-            csv.isEnabled = false
-            html.destination = file("${buildDir}/reports/jacocoHtml")
+            xml.required.set(true)
+            xml.outputLocation.set(file("${buildDir}/reports/jacoco.xml"))
+            csv.required.set(false)
+            html.outputLocation.set(file("${buildDir}/reports/jacocoHtml"))
         }
     }
 {{/jacoco }}
 }
 
-springBoot {
-    mainClass.set("co.com.testkotlin.MainApplication")
-}
-
 {{#jacoco}}
 jacoco {
     toolVersion = "{{jacocoVersion}}"
-    reportsDir = file("$buildDir/reports")
+    reportsDirectory.set(file("$buildDir/reports"))
 }
 
 tasks.withType<JacocoReport> {
@@ -97,9 +96,9 @@ tasks.withType<JacocoReport> {
         }
     )
     reports {
-        xml.isEnabled = true
-        csv.isEnabled = false
-        html.isEnabled = true
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
     }
 }
 {{/jacoco}}
