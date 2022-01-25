@@ -634,6 +634,17 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
   }
 
+  @Test
+  public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.DYNAMODB);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/dynamo-db/build.gradle").exists());
+  }
+
   @Test(expected = ValidationException.class)
   public void generateDrivenAdapterKtorShouldThrowValidationException()
       throws IOException, CleanException {
