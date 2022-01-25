@@ -313,6 +313,7 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    | s3                                  | AWS Simple Storage Service          |                                     | &#9745; | &#9745; |
    | mq                                  | JMS MQ Client to send messages      |                                     | &#9745; | &#9745; |
    | ktor                                | HTTP client for kotlin              |                                     | &#9744; | &#9745; |
+   | dynamodb                            | Dynamo DB adapter                   |                                     | &#9745; | &#9745; |
 
    
    _**This task will generate something like that:**_
