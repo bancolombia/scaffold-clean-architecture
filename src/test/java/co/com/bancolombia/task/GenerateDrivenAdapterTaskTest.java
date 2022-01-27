@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
@@ -73,7 +74,7 @@ public class GenerateDrivenAdapterTaskTest {
   }
 
   @Test
-  public void generateEntryPointGeneric() throws IOException, CleanException {
+  public void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
     task.setName("MyDrivenAdapter");
@@ -118,7 +119,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
             .exists());
   }
 
@@ -135,15 +136,15 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RequesterConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/config/RequesterConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/service/RsocketAdapter.java")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/main/java/co/com/bancolombia/rsocket/service/RsocketAdapter.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/service")
+                "build/unitTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/rsocket/service")
             .exists());
   }
 
@@ -207,7 +208,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
@@ -240,7 +241,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
     assertTrue(
         new File(
@@ -280,7 +281,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
@@ -313,7 +314,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/MongoConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/mongo-repository/src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java")
             .exists());
   }
 
@@ -343,13 +344,14 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RestConsumerConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/config/RestConsumerConfig.java")
             .exists());
   }
 
   @Test
   public void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
     // Act
     task.generateDrivenAdapterTask();
@@ -433,7 +435,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
             .exists());
   }
 
@@ -504,7 +506,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
             .exists());
   }
 
@@ -529,7 +531,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/RedisConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
             .exists());
   }
 
@@ -550,12 +552,95 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/KmsConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/KmsConfig.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/model/KmsConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/model/KmsConnectionProperties.java")
             .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/S3Config.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/adapter/S3Adapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/operations/S3Operations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/S3Config.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
+            .exists());
+  }
+
+  @Test
+  public void generateMQSender() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MQ);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+            .exists());
+  }
+
+  @Test(expected = ValidationException.class)
+  public void generateDrivenAdapterKtorShouldThrowValidationException()
+      throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
+    // Act
+    task.generateDrivenAdapterTask();
   }
 
   private void writeString(File file, String string) throws IOException {

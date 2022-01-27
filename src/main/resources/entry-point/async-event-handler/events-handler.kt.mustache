@@ -1,0 +1,15 @@
+package {{package}}.events.handlers
+
+import org.reactivecommons.api.domain.DomainEvent
+import org.reactivecommons.async.impl.config.annotations.EnableEventListeners
+import reactor.core.publisher.Mono
+
+@EnableEventListeners
+open class EventsHandler  //(private val sampleUseCase: SampleUseCase)
+{
+    open fun handleEventA(event: DomainEvent<Any>): Mono<Void> {
+        println("event received: " + event.name + " ->" + event.data) // TODO: Remove this line
+        //        return sampleUseCase.doSomething(event.getData())
+        return Mono.empty()
+    }
+}

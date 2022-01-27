@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class TemplateDefinition {
   private Map<String, String> files;
+  private Map<String, String> java;
+  private Map<String, String> kotlin;
   private List<String> folders;
 }

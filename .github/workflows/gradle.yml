@@ -1,4 +1,4 @@
-name: 'gradle-actions'
+name: "gradle-actions"
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
   push:
     branches:
       - master
-  
+
   pull_request:
     branches:
       - master
@@ -35,11 +35,12 @@ jobs:
       - name: Run sonarqube
         if: github.event.pull_request.head.repo.fork == false
         run: ./gradlew sonarqube --stacktrace
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
-    if: github.event_name == 'release' 
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -48,7 +49,35 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Upgrade README.md
+        run: sed -i 's/version \".*\"/version "${{ env.RELEASE_VERSION }}"/g' README.md
+      - name: Upgrade README.md
+        run: sed -i 's/version \\".*\\"/version \\"${{ env.RELEASE_VERSION }}\\"/g' README.md
+      - name: Upgrade Gradle.properties
+        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
+      - name: Upgrade Constants.java
+        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
+      - name: Gradle Wrapper Generation
+        run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Publish plugin
+      - name: Save version
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: "master"
+          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} versión'
+          force-add: "true"
+          files: README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
+          name: Release Bot
+          email: release-bot@bancolombia.com.co
+      - name: Publish plugin in gradle plugins
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
+      - name: Publish plugin in github packages
+        run: ./gradlew publish --info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+

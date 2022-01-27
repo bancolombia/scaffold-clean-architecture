@@ -143,7 +143,7 @@ public class GenerateEntryPointTaskTest {
   @Test
   public void generateEntryPointApiGraphql() throws IOException, CleanException {
     // Arrange
-    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType(ModuleFactoryEntryPoint.EntryPointType.GRAPHQL);
     // Act
     task.generateEntryPointTask();
@@ -288,7 +288,7 @@ public class GenerateEntryPointTaskTest {
             .exists());
     assertFalse(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertFalse(
         new File(
@@ -311,7 +311,7 @@ public class GenerateEntryPointTaskTest {
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertTrue(
         new File(
@@ -333,7 +333,7 @@ public class GenerateEntryPointTaskTest {
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Router.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
             .exists());
     assertTrue(
         new File(
@@ -367,6 +367,23 @@ public class GenerateEntryPointTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
+            .exists());
+  }
+
+  @Test
+  public void generateEntryPointMQListener() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryEntryPoint.EntryPointType.MQ);
+
+    // Act
+    task.generateEntryPointTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/entry-points/mq-listener/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
             .exists());
   }
 

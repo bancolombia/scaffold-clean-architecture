@@ -1,0 +1,14 @@
+{
+  "folders": [
+    "infrastructure/driven-adapters/mq-sender/src/test/{{language}}/{{packagePath}}/mq/sender"
+  ],
+  "files": {},
+  "java": {
+    "driven-adapter/mq-sender/sample-mq-message-sender.java.mustache": "infrastructure/driven-adapters/mq-sender/src/main/{{language}}/{{packagePath}}/mq/sender/SampleMQMessageSender.java",
+    "driven-adapter/mq-sender/build.gradle.mustache": "infrastructure/driven-adapters/mq-sender/build.gradle"
+  },
+  "kotlin": {
+    "driven-adapter/mq-sender/sample-mq-message-sender.kt.mustache": "infrastructure/driven-adapters/mq-sender/src/main/{{language}}/{{packagePath}}/mq/sender/SampleMQMessageSender.kt",
+    "driven-adapter/mq-sender/build.gradle.kts.mustache": "infrastructure/driven-adapters/mq-sender/build.gradle.kts"
+  }
+}

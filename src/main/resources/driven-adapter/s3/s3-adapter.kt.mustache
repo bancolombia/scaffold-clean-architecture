@@ -1,0 +1,11 @@
+package {{package}}.s3.adapter
+
+import org.springframework.stereotype.Repository
+import {{package}}.s3.operations.S3Operations
+
+@Repository
+class S3Adapter /* implements SomeGatewayFromDomain*/(
+    private val s3Operations: S3Operations
+) {
+
+}

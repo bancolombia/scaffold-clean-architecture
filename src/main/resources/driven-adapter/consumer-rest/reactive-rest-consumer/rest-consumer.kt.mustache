@@ -1,0 +1,34 @@
+package {{package}}.consumer
+
+import org.springframework.stereotype.Service
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
+
+@Service
+class RestConsumer(
+    private val client :WebClient
+) // implements Gateway from domain
+{
+    // these methods are an example that illustrates the implementation of WebClient.
+    // You should use the methods that you implement from the Gateway from the domain.
+
+    fun  testGet() :Mono<ObjectResponse> {
+        return client
+            .get()
+            .retrieve()
+            .bodyToMono(ObjectResponse::class.java)
+    }
+
+    fun testPost() :Mono<ObjectResponse> {
+        val request = ObjectRequest(
+            val1 = "exampleval1",
+            val2 = "exampleval2"
+        )
+
+        return client
+            .post()
+            .body(Mono.just(request), ObjectRequest::class.java)
+            .retrieve()
+            .bodyToMono(ObjectResponse::class.java)
+    }
+}

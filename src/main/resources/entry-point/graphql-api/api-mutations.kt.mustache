@@ -1,0 +1,18 @@
+
+package {{package}}.graphqlapi
+
+import graphql.kickstart.tools.GraphQLMutationResolver
+import org.springframework.stereotype.Controller
+
+@Controller
+/**
+* To interact with the API make use of Playground in the "/playground" path, but remember,
+* Playground ONLY must be used in dev or qa environments, not in production.
+*/
+class ApiMutations(/*private val useCase: MyUseCase*/) : GraphQLMutationResolver {
+
+fun addSomething(objRequest :String/* change for object request */) : String {
+//      return useCase.doAction(objRequest)
+        return "Hello world from graphql-api mutations " + objRequest
+    }
+}

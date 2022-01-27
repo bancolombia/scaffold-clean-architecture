@@ -1,0 +1,104 @@
+plugins {
+    id("co.com.bancolombia.cleanArchitecture") version "{{pluginVersion}}"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "{{springBootVersion}}"
+    id("org.sonarqube") version "{{sonarVersion}}" apply true
+{{#jacoco }}
+    id("jacoco") apply true
+{{/jacoco }}
+    kotlin("jvm") version "{{kotlinVersion}}"
+    kotlin("plugin.spring") version "{{kotlinVersion}}"
+}
+
+sonarqube {
+    val modules = subprojects.map { subproject ->
+        subproject.projectDir.toString().replace(project.projectDir.toString() + "/", "")
+    }
+    properties {
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.modules", modules.joinToString(","))
+        property(
+            "sonar.sources",
+            "src,deployment,settings.gradle.kts,build.gradle.kts,${modules.joinToString(",") { module -> "${module}/build.gradle.kts" }}"
+        )
+        property("sonar.test", "src/test")
+        property("sonar.java.binaries", "{{sonar.java.binaries}}")
+        property("sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "build/reports/jacoco/test/jacocoTestReport.xml"
+        )
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://repo.spring.io/milestone") }
+        maven { url = uri("https://repo.spring.io/snapshot") }
+    }
+}
+
+subprojects {
+    apply(plugin = "kotlin")
+{{#jacoco}}
+    apply(plugin = "jacoco")
+{{/jacoco }}
+    apply(plugin = "io.spring.dependency-management")
+    dependencies {
+{{#reactive}}
+        implementation("io.projectreactor:reactor-core")
+        implementation("io.projectreactor.addons:reactor-extra")
+        testImplementation("io.projectreactor:reactor-test")
+{{/reactive}}
+{{#lombok}}
+        compileOnly("org.projectlombok:lombok:{{lombokVersion}}")
+        annotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
+        testCompileOnly("org.projectlombok:lombok:{{lombokVersion}}")
+        testAnnotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
+{{/lombok}}
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:{{springBootVersion}}"))
+        runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.0")
+        implementation("org.springframework.boot:spring-boot-starter")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+    }
+{{#jacoco}}
+    project.tasks.test.get().finalizedBy(project.tasks.jacocoTestReport)
+    project.tasks.jacocoTestReport {
+        dependsOn(project.tasks.test)
+        reports {
+            xml.required.set(true)
+            xml.outputLocation.set(file("${buildDir}/reports/jacoco.xml"))
+            csv.required.set(false)
+            html.outputLocation.set(file("${buildDir}/reports/jacocoHtml"))
+        }
+    }
+{{/jacoco }}
+}
+
+{{#jacoco}}
+jacoco {
+    toolVersion = "{{jacocoVersion}}"
+    reportsDirectory.set(file("$buildDir/reports"))
+}
+
+tasks.withType<JacocoReport> {
+    dependsOn(subprojects.map { project -> project.tasks.jacocoTestReport })
+    additionalSourceDirs.setFrom(files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs }))
+    sourceDirectories.setFrom(files(subprojects.map { project -> project.sourceSets.main.get().allSource.srcDirs }))
+    classDirectories.setFrom(files(subprojects.map { project -> project.sourceSets.main.get().output }))
+    executionData.setFrom(
+        project.fileTree(project.buildDir) {
+            include("**/build/jacoco/test.exec")
+        }
+    )
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+    }
+}
+{{/jacoco}}

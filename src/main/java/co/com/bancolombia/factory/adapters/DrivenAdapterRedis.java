@@ -1,20 +1,20 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
-import lombok.AllArgsConstructor;
 import org.gradle.api.logging.Logger;
 
-@AllArgsConstructor
 public class DrivenAdapterRedis implements ModuleFactory {
   public static final String PARAM_MODE = "task-param-mode";
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    builder.loadPackage();
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);
@@ -25,10 +25,12 @@ public class DrivenAdapterRedis implements ModuleFactory {
     } else {
       builder.appendToProperties("spring.redis").put("host", "localhost").put("port", 6379);
     }
-    builder.appendDependencyToModule("app-service", "implementation project(':redis')");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":redis");
+    builder.appendDependencyToModule("app-service", dependency);
     if (builder.getBooleanParam("include-secret")) {
       new DrivenAdapterSecrets().buildModule(builder);
     }
+    new ObjectMapperFactory().buildModule(builder);
   }
 
   protected String getPathMode(Mode mode) {

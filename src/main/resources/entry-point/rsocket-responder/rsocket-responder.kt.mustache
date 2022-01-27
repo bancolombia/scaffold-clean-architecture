@@ -1,0 +1,39 @@
+package {{package}}.controller;
+
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+@Controller
+class RsocketController(private val useCase :MyUseCase) {
+
+    // interaction model Request/Response
+    @MessageMapping(value = "route.request.response")
+    fun getRequestRespon|se(objRequest/* change for object request */ :Any) :Mono<Any/* change for object response */>{
+        // return useCase.doAction();
+        return Mono.empty();
+    }
+
+    // interaction model Request/Stream
+    @MessageMapping(value = "route.request.stream")
+    fun getRequestStream() :Flux<Any/* change for object response */> {
+        // return useCase.doAction();
+        return Flux.empty();
+    }
+
+    // interaction model Fire-and-Forget
+    @MessageMapping(value = "route.fire.forget")
+    fun  getRequetsFireForget(objRequest/* change for object request */ :Any) :Mono<Void> {
+        // return useCase.doAction(objRequest);
+        return Mono.empty();
+    }
+
+    // interaction model Channel
+    @MessageMapping(value = "route.channel")
+    fun  getChannel(objRequest :Flux<Any/* change for object request */>) :Flux<Any/* change for object response */> {
+        // return useCase.doAction(objRequest);
+        return Flux.empty();
+    }
+
+}

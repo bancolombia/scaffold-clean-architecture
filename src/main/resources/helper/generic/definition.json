@@ -1,0 +1,15 @@
+{
+  "folders": [
+    "infrastructure/helpers/{{name-dash}}/src/main/{{language}}/{{packagePath}}/{{name-package}}",
+    "infrastructure/helpers/{{name-dash}}/src/test/{{language}}/{{packagePath}}/{{name-package}}"
+  ],
+  "files": {
+    "helper/generic/build.gradle.mustache": "infrastructure/helpers/{{name-dash}}/build.gradle"
+  },
+  "java": {
+    "helper/generic/build.gradle.mustache": "infrastructure/helpers/{{name-dash}}/build.gradle"
+  },
+  "kotlin": {
+    "helper/generic/build.gradle.kts.mustache": "infrastructure/helpers/{{name-dash}}/build.gradle.kts"
+  }
+}

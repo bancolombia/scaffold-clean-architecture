@@ -1,0 +1,8 @@
+package {{package}}.redis.repository
+
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+
+
+interface ReactiveRedisRepository : ReactiveCrudRepository<Any, String>,
+    ReactiveQueryByExampleExecutor<Any>

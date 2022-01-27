@@ -92,7 +92,30 @@ public class PluginClean implements Plugin<Project> {
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(DeleteModuleTask.class)
             .build());
-
+    tasksModels.add(
+        TaskModel.builder()
+            .name("generateAcceptanceTest")
+            .shortcut("gat")
+            .description("Generate subproject by karate framework in deployment layer")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(GenerateAcceptanceTestTask.class)
+            .build());
+    tasksModels.add(
+        TaskModel.builder()
+            .name("generateHelper")
+            .shortcut("gh")
+            .description("Generate helper in infrastructure layer")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(GenerateHelperTask.class)
+            .build());
+    tasksModels.add(
+        TaskModel.builder()
+            .name("updateCleanArchitecture")
+            .shortcut("u")
+            .description("Update project dependencies")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(UpdateProjectTask.class)
+            .build());
     return tasksModels;
   }
 

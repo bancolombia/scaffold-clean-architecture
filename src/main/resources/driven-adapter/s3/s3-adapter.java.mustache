@@ -1,0 +1,23 @@
+package {{package}}.s3.adapter;
+
+import org.springframework.stereotype.Repository;
+import {{package}}.s3.operations.S3Operations;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+
+@Repository
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class S3Adapter /* implements SomeGatewayFromDomain*/ {
+
+   private final S3Operations s3Operations;
+
+{{^lombok}}
+   public S3Adapter(S3Operations s3Operations ) {
+      this.s3Operations = s3Operations;
+   }
+{{/lombok}}
+
+}

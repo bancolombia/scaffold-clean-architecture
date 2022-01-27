@@ -1,4 +1,4 @@
-package {{package}}.config;
+package {{package}}.kms.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +8,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.kms.KmsAsyncClient;
 import software.amazon.awssdk.services.kms.KmsAsyncClientBuilder;
-import co.com.bancolombia.config.model.KmsConnectionProperties;
+import {{package}}.kms.config.model.KmsConnectionProperties;
 
 
 import java.net.URI;

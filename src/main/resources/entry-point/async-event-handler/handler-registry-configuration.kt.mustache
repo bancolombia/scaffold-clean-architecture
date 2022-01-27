@@ -1,0 +1,53 @@
+
+package {{package}}.events
+
+import {{package}}.events.handlers.CommandsHandler
+import {{package}}.events.handlers.EventsHandler
+import {{package}}.events.handlers.QueriesHandler
+import org.reactivecommons.api.domain.Command
+import org.reactivecommons.api.domain.DomainEvent
+import org.reactivecommons.async.api.HandlerRegistry
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+
+@Configuration
+open class HandlerRegistryConfiguration {
+    // see more at: https://reactivecommons.org/reactive-commons-java/#_handlerregistry_2
+    @Bean
+    open fun handlerRegistry(commands: CommandsHandler, events: EventsHandler, queries: QueriesHandler): HandlerRegistry {
+        return HandlerRegistry.register()
+            .listenNotificationEvent(
+                "some.broadcast.event.name",
+                { event: DomainEvent<Any> ->
+                    events.handleEventA(
+                        event
+                    )
+                },
+                Any::class.java /*change for proper model*/
+            )
+            .listenEvent(
+                "some.event.name",
+                { event: DomainEvent<Any> ->
+                    events.handleEventA(
+                        event
+                    )
+                },
+                Any::class.java /*change for proper model*/
+            )
+            .handleCommand(
+                "some.command.name",
+                { command: Command<Any> ->
+                    commands.handleCommandA(
+                        command
+                    )
+                },
+                Any::class.java /*change for proper model*/
+            )
+            .serveQuery(
+                "some.query.name",
+                { query: Any -> queries.handleQueryA(query) },
+                Any::class.java /*change for proper model*/
+            )
+    }
+}

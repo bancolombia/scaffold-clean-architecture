@@ -1,0 +1,7 @@
+apply(plugin = "org.springframework.boot")
+
+dependencies {
+    implementation(project(":model"))
+    implementation(project(":usecase"))
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+}

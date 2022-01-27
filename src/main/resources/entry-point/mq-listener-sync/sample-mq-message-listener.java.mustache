@@ -1,0 +1,40 @@
+package {{package}}.mq.listener;
+
+import co.com.bancolombia.commons.jms.mq.MQListener;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.TextMessage;
+
+@Component
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+public class SampleMQMessageListener {
+    // private final SampleUseCase useCase;
+
+    {{^lombok}}
+    public SampleMQMessageListener(/*SampleUseCase useCase*/) {
+        // this.useCase = useCase;
+    }
+
+    {{/lombok}}
+    // For fixed queues
+    @MQListener
+    public void process(Message message) throws JMSException {
+        String text = ((TextMessage) message).getText();
+        // useCase.sample(text);
+    }
+
+    // For an automatic generated temporary queue
+    // @MQListener(tempQueueAlias = "any-custom-value")
+    // public void processFromTemporaryQueue(Message message) throws JMSException {
+    //     String text = ((TextMessage) message).getText();
+    //     // useCase.sample(text);
+    // }
+}

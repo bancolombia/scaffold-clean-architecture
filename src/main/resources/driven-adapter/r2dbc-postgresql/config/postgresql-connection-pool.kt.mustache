@@ -1,0 +1,56 @@
+package {{package}}.config
+
+import java.time.Duration
+import io.r2dbc.pool.ConnectionPool
+import io.r2dbc.pool.ConnectionPoolConfiguration
+import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
+import io.r2dbc.postgresql.PostgresqlConnectionFactory
+
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+open class PostgreSQLConnectionPool {
+    @Bean
+    open fun getConnectionConfig(): ConnectionPool {
+        // TODO: change these properties for yours
+        return buildConnectionConfiguration(
+            PostgresqlConnectionProperties(
+                database = "postgres",
+                host = "localhost",
+                port = 5432,
+                username = "postgres",
+                password = "secret",
+                schema = "public"
+            )
+        )
+    }
+
+    private fun buildConnectionConfiguration(properties: PostgresqlConnectionProperties): ConnectionPool {
+        val dbConfiguration: PostgresqlConnectionConfiguration =
+          PostgresqlConnectionConfiguration.builder()
+              .host(properties.host)
+              .port(properties.port)
+              .database(properties.database)
+              .schema(properties.schema)
+              .username(properties.username)
+              .password(properties.password)
+              .build()
+        val poolConfiguration: ConnectionPoolConfiguration = ConnectionPoolConfiguration.builder()
+            .connectionFactory(PostgresqlConnectionFactory(dbConfiguration))
+            .name("api-postgres-connection-pool")
+            .initialSize(INITIAL_SIZE)
+            .maxSize(MAX_SIZE)
+            .maxIdleTime(Duration.ofMinutes(MAX_IDLE_TIME.toLong()))
+            .validationQuery("SELECT 1")
+            .build()
+        return ConnectionPool(poolConfiguration)
+    }
+
+    companion object{
+        // TODO: change pool connection properties based on your resources.
+        const val INITIAL_SIZE = 12
+        const val MAX_SIZE = 15
+        const val MAX_IDLE_TIME = 30
+    }
+}

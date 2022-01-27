@@ -1,0 +1,12 @@
+package {{package}}.mongo
+
+import {{package}}.mongo.helper.AdapterOperations
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.stereotype.Repository
+
+@Repository
+open class MongoRepositoryAdapter(repository: MongoDBRepository, mapper: ObjectMapper) :
+  AdapterOperations<Any?, Any?, String?, MongoDBRepository>(repository, mapper, { d ->
+  mapper.map( d, Any::class.java)
+  })
+

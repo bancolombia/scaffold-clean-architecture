@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -116,7 +117,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -125,7 +126,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     // Act
     String result = Utils.addDependency(build, "implementation project(':my-module')");
@@ -143,7 +144,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -152,7 +153,7 @@ public class UtilsTest {
             + "\timplementation project(':my-module')\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     // Act
     String result = Utils.addDependency(build, "implementation project(':my-module')");
@@ -169,7 +170,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}";
     String expected =
         "apply plugin: 'org.springframework.boot'\n"
@@ -177,7 +178,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -201,7 +202,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -213,7 +214,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -237,7 +238,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -249,7 +250,7 @@ public class UtilsTest {
             + "dependencies {\n"
             + "\timplementation project(':model')\n"
             + "\timplementation project(':usecase')\n"
-            + "\tcompile 'org.springframework.boot:spring-boot-starter'\n"
+            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
             + "}\n"
             + "\n"
             + "configurations{\n"
@@ -304,7 +305,9 @@ public class UtilsTest {
             + "include ':my-module'\n"
             + "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
     // Act
-    String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+    String result =
+        Utils.addModule(
+            settings, Utils.INCLUDE_MODULE_JAVA, "my-module", "infrastructure/entry-points");
     // Assert
     assertEquals(settingsNew, result);
   }
@@ -326,7 +329,9 @@ public class UtilsTest {
             + "include ':my-module'\n"
             + "project(':my-module').projectDir = file('./infrastructure/entry-points/my-module')";
     // Act
-    String result = Utils.addModule(settings, "my-module", "infrastructure/entry-points");
+    String result =
+        Utils.addModule(
+            settings, Utils.INCLUDE_MODULE_JAVA, "my-module", "infrastructure/entry-points");
     // Assert
     assertEquals(settings, result);
   }
@@ -362,6 +367,49 @@ public class UtilsTest {
     String result = Utils.removeLinesIncludes(settings, "api-rest");
     // Assert
     assertEquals(settingsExpected, result);
+  }
+
+  @Test
+  public void ShouldGetBuildImplementation() {
+    String result = Utils.buildImplementation(true, "module");
+    assertEquals("implementation(\"module\")", result);
+    result = Utils.buildImplementation(false, "module");
+    assertEquals("implementation 'module'", result);
+  }
+
+  @Test
+  public void shouldExcludeTomcat() {
+    String result = Utils.tomcatExclusion(true);
+    assertEquals(
+        "configurations {\n"
+            + "\tall {\n"
+            + "\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n"
+            + "\t}\n"
+            + "}",
+        result);
+    result = Utils.tomcatExclusion(false);
+    assertEquals(
+        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"",
+        result);
+  }
+
+  @Test
+  public void shouldReplaceExpression() {
+    String expected = "'com.fasterxml.jackson.core:jackson-databind:2.11.0'";
+    String result =
+        Utils.replaceExpression(
+            "'com.github.spullara.mustache.java:compiler:0.9.6'",
+            "['\"]com.github.spullara.mustache.java:compiler:[^\\$].+",
+            expected);
+    assertEquals(expected, result);
+  }
+
+  @Test
+  public void shouldGetAllFilesWithExtension() throws IOException {
+    List<String> result = Utils.getAllFilesWithExtension(true);
+    assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle.kts")));
+    result = Utils.getAllFilesWithExtension(false);
+    assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
   }
 
   private enum Options {

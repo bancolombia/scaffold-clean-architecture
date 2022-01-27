@@ -1,0 +1,34 @@
+package {{package}}.events
+
+import org.reactivecommons.api.domain.Command
+import org.reactivecommons.async.api.AsyncQuery
+import org.reactivecommons.async.api.DirectAsyncGateway
+import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway
+import reactor.core.publisher.Mono
+import java.util.UUID
+
+@EnableDirectAsyncGateway
+open class ReactiveDirectAsyncGateway(
+    private val gateway : DirectAsyncGateway
+) /*implements SomeGatewayFromDomain*/ {
+
+    fun runRemoteJob(command :Any/*change for proper model*/): Mono<Void> {
+      return gateway.sendCommand(
+          Command(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
+          TARGET_NAME
+      )
+    }
+
+    fun requestForRemoteData(query :Any/*change for proper model*/): Mono<Any> {
+        return gateway.requestReply(
+            AsyncQuery(SOME_QUERY_NAME, query), TARGET_NAME,
+            Any::class.java /*change for proper model*/
+        )
+    }
+
+    companion object {
+        const val TARGET_NAME :String = "cleanArchitecture"// refers to remote spring.application.name property
+        const val SOME_COMMAND_NAME :String = "some.command.name"
+        const val SOME_QUERY_NAME :String = "some.query.name"
+    }
+}

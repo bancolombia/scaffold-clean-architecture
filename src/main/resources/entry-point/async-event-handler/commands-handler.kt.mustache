@@ -1,0 +1,17 @@
+
+package {{package}}.events.handlers
+
+import org.reactivecommons.api.domain.Command
+import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners
+import reactor.core.publisher.Mono
+
+@EnableCommandListeners
+open class CommandsHandler //(private val  sampleUseCase: SampleUseCase)
+{
+    open fun handleCommandA(command: Command<Any>): Mono<Void> {
+        println("command received: " + command.name + " ->" + command.data) // TODO: Remove this line
+        //return sampleUseCase.doSomething(command.getData())
+        return Mono.empty()
+    }
+}
+

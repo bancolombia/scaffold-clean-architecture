@@ -1,0 +1,75 @@
+
+package {{package}}.mongo.helper
+
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.data.domain.Example
+import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor
+import org.springframework.data.repository.reactive.ReactiveCrudRepository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
+
+abstract class AdapterOperations<E, D, I, R>(
+  private val repository: R,
+  private val mapper: ObjectMapper,
+  private val toEntityFn: Function<D, E>,
+) where R : ReactiveCrudRepository<D, I>, R : ReactiveQueryByExampleExecutor<D>{
+
+  private val dataClass: Class<D>
+
+  fun save(entity: E): Mono<E> {
+    return Mono.just(entity)
+      .map(this::toData)
+      .flatMap { data: D -> saveData(data) }
+      .map { data: D -> toEntity(data) }
+  }
+
+  fun saveAll(entities: Flux<E>): Flux<E> {
+    return doQueryMany(repository.saveAll(entities.map { entity: E ->
+      toData(
+        entity
+      )
+    }))
+  }
+
+  fun findById(id: I): Mono<E> {
+    return doQuery(repository.findById(id))
+  }
+
+  fun findByExample(entity: E): Flux<E> {
+    return doQueryMany(repository.findAll(Example.of(toData(entity))))
+  }
+
+  fun deleteById(id: I): Mono<Void> {
+    return repository.deleteById(id)
+  }
+
+  fun findAll(): Flux<E> {
+    return doQueryMany(repository.findAll())
+  }
+
+  private fun doQuery(query: Mono<D>): Mono<E> {
+    return query.map { data: D -> toEntity(data) }
+  }
+
+  private fun doQueryMany(query: Flux<D>): Flux<E> {
+    return query.map { data: D -> toEntity(data) }
+  }
+
+  private fun saveData(data: D): Mono<D> {
+    return repository.save(data)
+  }
+
+  private fun toData(entity: E): D {
+    return mapper.map(entity, dataClass)
+  }
+
+  private fun toEntity(data: D): E {
+    return toEntityFn.apply(data)
+  }
+
+  init {
+    val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+    dataClass = genericSuperclass.actualTypeArguments[1] as Class<D>
+  } }

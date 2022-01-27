@@ -21,13 +21,19 @@ public class ModuleFactoryDrivenAdapter {
       case REDIS:
         return new DrivenAdapterRedis();
       case RSOCKET:
-        return new DrivenAdapterRsocketRequester();
+        return new DrivenAdapterRSocketRequester();
       case R2DBC:
         return new DrivenAdapterR2dbcPostgreSQL();
+      case S3:
+        return new DrivenAdapterS3();
       case KMS:
         return new DrivenAdapterKms();
       case SECRETS:
         return new DrivenAdapterSecrets();
+      case MQ:
+        return new DrivenAdapterMQ();
+      case KTOR:
+        return new DrivenAdapterKtorClient();
       default:
         throw new InvalidTaskOptionException("Driven Adapter type invalid");
     }
@@ -43,6 +49,9 @@ public class ModuleFactoryDrivenAdapter {
     RSOCKET,
     R2DBC,
     KMS,
-    SECRETS
+    SECRETS,
+    S3,
+    MQ,
+    KTOR
   }
 }

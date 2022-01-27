@@ -1,0 +1,53 @@
+package {{package}}.kms
+
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import org.springframework.util.Base64Utils
+
+import software.amazon.awssdk.core.SdkBytes
+import software.amazon.awssdk.services.kms.KmsAsyncClient
+import software.amazon.awssdk.services.kms.model.DecryptRequest
+import software.amazon.awssdk.services.kms.model.EncryptRequest
+import software.amazon.awssdk.services.kms.model.EncryptionAlgorithmSpec
+import java.util.concurrent.ExecutionException
+
+@Component
+class KmsAdapter(
+    @Value("\${adapters.aws.kms.keyId}")
+    private val keyId: String,
+    private val kmsAsyncClient: KmsAsyncClient
+) {
+
+    @Throws(ExecutionException::class, InterruptedException::class)
+    fun decrypt(secretKey: String, keyId: String): ByteArray? {
+        return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
+            .get()
+            .plaintext()
+            .asByteArray()
+    }
+
+    @Throws(ExecutionException::class, InterruptedException::class)
+    fun encrypt(secretKey: ByteArray): String? {
+        return Base64Utils.encodeToString(
+            kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId))
+            .get()
+            .ciphertextBlob().asByteArray()
+        )
+    }
+
+    private fun getDecryptRequest(secretKey: String, keyId: String): DecryptRequest? {
+        val decodedSecretKey = Base64Utils.decodeFromString(secretKey)
+        return DecryptRequest.builder()
+            .ciphertextBlob(SdkBytes.fromByteArray(decodedSecretKey))
+            .keyId(keyId)
+            .build()
+    }
+
+    private fun getEncryptRequest(secretKey: ByteArray, keyId: String): EncryptRequest? {
+        return EncryptRequest.builder()
+            .plaintext(SdkBytes.fromByteArray(secretKey))
+            .encryptionAlgorithm(EncryptionAlgorithmSpec.SYMMETRIC_DEFAULT)
+            .keyId(keyId)
+            .build()
+    }
+}
