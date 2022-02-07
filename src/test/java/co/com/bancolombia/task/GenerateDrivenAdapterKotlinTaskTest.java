@@ -618,7 +618,19 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.generateDrivenAdapterTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
+        new File("build/unitTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.DYNAMODB);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/dynamo-db/build.gradle.kts")
             .exists());
   }
 

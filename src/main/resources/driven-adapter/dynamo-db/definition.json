@@ -1,0 +1,18 @@
+{
+  "folders": [
+    "infrastructure/driven-adapters/dynamo-db/src/test/{{language}}/{{packagePath}}/dynamodb/helper"
+  ],
+  "files": {},
+  "java": {
+    "driven-adapter/dynamo-db/config/dynamodb-config.java.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.java",
+    "driven-adapter/dynamo-db/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/helper/TemplateAdapterOperations.java",
+    "driven-adapter/dynamo-db/dynamo-db-template-adapter.java.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/DynamoDBTemplateAdapter.java",
+    "driven-adapter/dynamo-db/build.gradle.mustache": "infrastructure/driven-adapters/dynamo-db/build.gradle"
+  },
+  "kotlin": {
+    "driven-adapter/dynamo-db/config/dynamodb-config.kt.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.kt",
+    "driven-adapter/dynamo-db/helper/adapter-operations.kt.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/helper/TemplateAdapterOperations.kt",
+    "driven-adapter/dynamo-db/dynamo-db-template-adapter.kt.mustache": "infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/DynamoDBTemplateAdapter.kt",
+    "driven-adapter/dynamo-db/build.gradle.kts.mustache": "infrastructure/driven-adapters/dynamo-db/build.gradle.kts"
+  }
+}

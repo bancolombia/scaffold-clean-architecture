@@ -1,0 +1,56 @@
+package {{package}}.dynamodb.helper
+
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
+import com.amazonaws.services.dynamodbv2.util.TableUtils
+import org.reactivecommons.utils.ObjectMapper
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
+
+abstract class TemplateAdapterOperations<E, K, V> protected constructor(
+    amazonDynamoDB: AmazonDynamoDB,
+    private var mapper: ObjectMapper,
+    private val toEntityFn: Function<V, E>
+) {
+    private val dataClass: Class<V>
+    private var dynamoDBMapper: DynamoDBMapper
+
+    init {
+        dynamoDBMapper = DynamoDBMapper(amazonDynamoDB, DynamoDBMapperConfig.DEFAULT)
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[2] as Class<V>
+        val tableRequest = dynamoDBMapper.generateCreateTableRequest(dataClass)
+        tableRequest.provisionedThroughput = ProvisionedThroughput(1L, 1L)
+        TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest)
+    }
+
+    fun save(model: E): E? {
+        val entity = toEntity(model)
+        dynamoDBMapper.save(entity)
+        return toModel(entity)
+    }
+
+    fun getById(id: K): E? {
+        return toModel(dynamoDBMapper.load(dataClass, id))
+    }
+
+    fun delete(model: E) {
+        dynamoDBMapper.delete(toEntity(model))
+    }
+
+    fun findAll(): List<E> {
+        val result = dynamoDBMapper.scan(dataClass, DynamoDBScanExpression())
+        return result.mapNotNull { data: V -> toModel(data) }
+    }
+
+    private fun toEntity(model: E): V {
+        return mapper.map(model, dataClass)
+    }
+
+    private fun toModel(data: V?): E? {
+        return if (data != null) toEntityFn.apply(data) else null
+    }
+}
