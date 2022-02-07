@@ -1,0 +1,18 @@
+package {{package}}.dynamodb
+
+import {{package}}.dynamodb.helper.TemplateAdapterOperations
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.stereotype.Repository
+
+@Repository
+class DynamoDBTemplateAdapter(connectionFactory: AmazonDynamoDB, mapper: ObjectMapper) :
+    TemplateAdapterOperations<Any?, String?, Any?>(
+        connectionFactory,
+        mapper,
+        { d ->
+            mapper.map(
+                d,
+                Any::class.java
+            )
+        })

@@ -15,20 +15,27 @@ import java.nio.file.attribute.BasicFileAttributes;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 public class GenerateTestTaskTest {
 
   GenerateAcceptanceTestTask task;
+  static Project project =
+      ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
   @Before
   public void init() throws IOException, CleanException {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
   }
 
+  @AfterClass
+  public static void clean() {
+    deleteStructure(project.getProjectDir().toPath());
+  }
+
   public void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
-    Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
     deleteStructure(project.getProjectDir().toPath());
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
@@ -45,7 +52,7 @@ public class GenerateTestTaskTest {
     task = (GenerateAcceptanceTestTask) project.getTasks().getByName("test");
   }
 
-  private void deleteStructure(Path sourcePath) {
+  private static void deleteStructure(Path sourcePath) {
     try {
       Files.walkFileTree(
           sourcePath,

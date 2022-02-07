@@ -1,10 +1,12 @@
 package co.com.bancolombia.factory;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
+import co.com.bancolombia.models.Release;
 import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
@@ -21,8 +23,11 @@ import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
@@ -42,6 +47,7 @@ public class ModuleBuilder {
   private final Logger logger;
   @Getter private final Project project;
   private ObjectNode properties;
+  private final RestService restService = new RestService();
 
   public ModuleBuilder(Project project) {
     this.project = project;
@@ -50,6 +56,7 @@ public class ModuleBuilder {
     params.put("projectNameLower", getProject().getName().toLowerCase());
     params.put("pluginVersion", Constants.PLUGIN_VERSION);
     params.put("springBootVersion", Constants.SPRING_BOOT_VERSION);
+    params.put("kotlinVersion", Constants.KOTLIN_VERSION);
     params.put("sonarVersion", Constants.SONAR_VERSION);
     params.put("jacocoVersion", Constants.JACOCO_VERSION);
     params.put("gradleVersion", Constants.GRADLE_WRAPPER_VERSION);
@@ -66,7 +73,18 @@ public class ModuleBuilder {
   }
 
   public void persist() throws IOException {
+    Release latestRelease = restService.getLatestPluginVersion();
+    if (latestRelease != null) {
+      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+        logger.lifecycle(
+            "WARNING: You have an old version of the plugin, the latest version is: {}",
+            latestRelease.getTagName());
+        params.put("latestRelease", latestRelease);
+      }
+    }
     logger.lifecycle("Applying changes");
+
+    logger.lifecycle("");
     dirs.forEach(
         dir -> {
           getProject().mkdir(dir);
@@ -131,6 +149,27 @@ public class ModuleBuilder {
           String moduleKey = ":" + module;
           return Utils.removeLinesIncludes(settings, moduleKey);
         });
+  }
+
+  @SneakyThrows
+  public void updateExpression(String path, String regex, String value) {
+    updateFile(path, properties -> Utils.replaceExpression(properties, regex, value));
+  }
+
+  @SneakyThrows
+  public Set<String> findExpressions(String path, String regex) {
+    logger.lifecycle(
+        "find  "
+            + Pattern.compile(regex).matcher(readFile(path)).results().count()
+            + " dependencies in "
+            + path);
+    return Pattern.compile(regex)
+        .matcher(readFile(path))
+        .results()
+        .map(MatchResult::group)
+        .map(s -> s.replaceAll("'", ""))
+        .map(s -> s.replaceAll("\"", ""))
+        .collect(Collectors.toSet());
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {
@@ -262,6 +301,11 @@ public class ModuleBuilder {
   }
 
   private void updateFile(String path, FileUpdater updater) throws IOException {
+    String content = readFile(path);
+    addFile(path, updater.update(content));
+  }
+
+  private String readFile(String path) throws IOException {
     FileModel current = files.get(path);
     String content;
     if (current == null) {
@@ -269,7 +313,7 @@ public class ModuleBuilder {
     } else {
       content = current.getContent();
     }
-    addFile(path, updater.update(content));
+    return content;
   }
 
   private ObjectNode getNode(ObjectNode node, List<String> attributes) {

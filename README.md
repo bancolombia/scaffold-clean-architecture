@@ -3,6 +3,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bancolombia_scaffold-clean-architecture&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bancolombia_scaffold-clean-architecture)
 [![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
+[![Scorecards supply-chain security](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml/badge.svg)](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml)
 
 # Scaffolding of Clean Architecture
 
@@ -21,6 +22,7 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
   - [Generate Acceptance Tests](#generate-acceptance-test)
   - [Validate Structure](#validate-structure)
   - [Delete Module](#delete-module)
+  - [Update Project](#update-project)
 - [How can I help?](#how-can-i-help)
 - [Whats Next?](#whats-next)
 
@@ -30,13 +32,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "2.0.0"
+    id "co.com.bancolombia.cleanArchitecture" version "2.2.1"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"2.0.0\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.1\"
 }" > build.gradle
 ```
 
@@ -44,13 +46,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "2.0.0"
+    id("co.com.bancolombia.cleanArchitecture") version "2.2.1"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.0.0\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.2.1\"
 }" > build.gradle.kts
 ```
 
@@ -73,6 +75,8 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
    - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
+
+   - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_11`
    
    ```shell
    gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
@@ -134,7 +138,7 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
    ```
 
 
-**_The structure will look like this for java:_**
+**_The structure will look like this for kotlin:_**
 
    ```bash
    📦NameProject
@@ -295,20 +299,23 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    gradle gda --type [drivenAdapterType]
    ```
 
-   | Reference for **drivenAdapterType** | Name                           | Additional Options                                 |Java   | Kotlin |
-   |-------------------------------------|--------------------------------|----------------------------------------------------|-------|--------|
-   | generic                      | Empty Driven Adapter           | --name [name]                                             |&#9745;|&#9745;|
-   | jpa                          | JPA Repository                 | --secret [true-false]                                     |&#9745;|&#9745;|
-   | mongodb                      | Mongo Repository               | --secret [true-false]                                     |&#9745;|&#9745;|
-   | asynceventbus                | Async Event Bus                |                                                           |&#9745;|&#9745;|
-   | restconsumer                 | Rest Client Consumer           | --url [url]                                               |&#9745;|&#9745;|
-   | redis                        | Redis                          | --mode [template-repository] --secret [true-false]        |&#9745;|&#9745;|
-   | rsocket                      | RSocket Requester              |                                                           |&#9745;|&#9745;|
-   | r2dbc                        | R2dbc Postgresql Client        |                                                           |&#9745;|&#9745;|
-   | kms                          | AWS Key Management Service     |                                                           |&#9745;|&#9745;|
-   | secrets                      | Secrets Manager Bancolombia    |                                                           |&#9745;|&#9745;|
-   | s3                           | AWS Simple Storage Service     |                                                           |&#9745;|&#9745;|
-   | mq                           | JMS MQ Client to send messages |                                                           |&#9745;|&#9745;|
+   | Reference for **drivenAdapterType** | Name                                | Additional Options                  | Java    | Kotlin  |
+   |-------------------------------------|-------------------------------------|-------------------------------------|---------|---------|
+   | generic                             | Empty Driven Adapter                | --name [name]                       | &#9745; | &#9745; |
+   | jpa                                 | JPA Repository                      | --secret [true-false]               | &#9745; | &#9745; |
+   | mongodb                             | Mongo Repository                    | --secret [true-false]               | &#9745; | &#9745; |
+   | asynceventbus                       | Async Event Bus                     |                                     | &#9745; | &#9745; |
+   | restconsumer                        | Rest Client Consumer                | --url [url]                         | &#9745; | &#9745; |
+   | redis                               | Redis                               | --mode [template-repository] --secret [true-false] | &#9745; | &#9745; |
+   | rsocket                             | RSocket Requester                   |                                     | &#9745; | &#9745; |
+   | r2dbc                               | R2dbc Postgresql Client             |                                     | &#9745; | &#9745; |
+   | kms                                 | AWS Key Management Service          |                                     | &#9745; | &#9745; |
+   | secrets                             | Secrets Manager Bancolombia         |                                     | &#9745; | &#9745; |
+   | s3                                  | AWS Simple Storage Service          |                                     | &#9745; | &#9745; |
+   | mq                                  | JMS MQ Client to send messages      |                                     | &#9745; | &#9745; |
+   | ktor                                | HTTP client for kotlin              |                                     | &#9744; | &#9745; |
+   | dynamodb                            | Dynamo DB adapter                   |                                     | &#9745; | &#9745; |
+
    
    _**This task will generate something like that:**_
 
@@ -438,6 +445,17 @@ The **`deleteModule | dm`** task will delete a sub project, this task has one re
    ```
 
    <br><br><br>
+  
+  ## Update Project
+  
+  The **`updateCleanArchitecture | u`** task will update plugin and dependencies in all sub projects, this task has one optional parameter `dependencies` 
+  if you only want to update some dependencies the dependency need to contain the group, and the artifact for example for the dependency **cleanArchitecture** you will need to append **co.com.bancolombia:cleanArchitecture**.
+  
+  ```shell
+     gradle updateCleanArchitecture --dependencies=[dependency1, dependency2, ...]
+     gradle u --dependencies=[dependency1, dependency2, ...]
+   ```
+  
 
 # How can I help?
 

@@ -19,6 +19,7 @@ import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,7 +69,7 @@ public class PluginCleanFunctionalTest {
   public static final String RESTMVC = "restmvc";
   public static final String SERVER = "--server=";
   public static final String VALIDATE_STRUCTURE = "validateStructure";
-  File projectDir = new File("build/functionalTest");
+  static File projectDir = new File("build/functionalTest");
   GradleRunner runner;
 
   @Before
@@ -79,13 +80,31 @@ public class PluginCleanFunctionalTest {
     writeString(new File(projectDir, "settings.gradle"), "");
     writeString(
         new File(projectDir, "build.gradle"),
-        "plugins {" + "  id('co.com.bancolombia.cleanArchitecture')" + "}");
+        "plugins {" + " id 'co.com.bancolombia.cleanArchitecture'" + "}");
     runner = GradleRunner.create();
     runner.forwardOutput();
     runner.withPluginClasspath();
   }
 
-  private void deleteStructure(Path sourcePath) {
+  public void initKotlin() throws IOException {
+    // Setup the test build
+    deleteStructure(projectDir.toPath());
+    Files.createDirectories(projectDir.toPath());
+    writeString(new File(projectDir, "settings.gradle.kts"), "");
+    writeString(
+        new File(projectDir, "build.gradle.kts"),
+        "plugins {" + "  id(\"co.com.bancolombia.cleanArchitecture\")" + "}");
+    runner = GradleRunner.create();
+    runner.forwardOutput();
+    runner.withPluginClasspath();
+  }
+
+  @AfterClass
+  public static void clean() {
+    deleteStructure(projectDir.toPath());
+  }
+
+  private static void deleteStructure(Path sourcePath) {
 
     try {
       Files.walkFileTree(
@@ -969,6 +988,165 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
+            .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldUpdateProject() {
+    canRunTaskGenerateStructureWithOutParameters();
+
+    String task = "updateCleanArchitecture";
+
+    runner.withArguments(task);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldUpdateProjectWithOneDependency() {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "updateCleanArchitecture";
+
+    runner.withArguments(task, "--dependencies=org.mockito:mockito-core org.projectlombok:lombok");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateDrivenAdapterKtorClient() throws IOException {
+    canRunTaskGenerateStructureKotlinWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "KTOR";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/KtorClient.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/ktor-client/src/main/kotlin/co/com/bancolombia/client/config/KtorConfig.kt")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateStructureKotlinWithOutParameters() throws IOException {
+    initKotlin();
+    String task = "ca";
+
+    runner.withArguments(task, "--language=" + "KOTLIN");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    // Verify the result
+    assertTrue(new File("build/functionalTest/README.md").exists());
+    assertTrue(new File("build/functionalTest/.gitignore").exists());
+    assertTrue(new File("build/functionalTest/build.gradle.kts").exists());
+    assertTrue(new File("build/functionalTest/lombok.config").exists());
+    assertTrue(new File("build/functionalTest/settings.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
+
+    assertTrue(
+        new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
+            .exists());
+    assertTrue(new File("build/functionalTest/domain/model/build.gradle.kts").exists());
+    assertTrue(
+        new File("build/functionalTest/domain/usecase/src/main/kotlin/co/com/bancolombia/usecase")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/domain/usecase/src/test/kotlin/co/com/bancolombia/usecase")
+            .exists());
+    assertTrue(new File("build/functionalTest/domain/usecase/build.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/applications/app-service/build.gradle.kts").exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/MainApplication.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/UseCasesConfig.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/applications/app-service/src/test/kotlin/co/com/bancolombia")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateDynamoDBDrivenAdapterInKotlin() throws IOException {
+    canRunTaskGenerateStructureKotlinWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "DYNAMODB";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/kotlin/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/kotlin/co/com/bancolombia/dynamodb/config/DynamoDBConfig.kt")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle.kts")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateDynamoDBDrivenAdapterInJava() {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "DYNAMODB";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/config/DynamoDBConfig.java")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }

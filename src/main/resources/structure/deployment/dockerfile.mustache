@@ -1,4 +1,12 @@
+{{#java8}}
 FROM adoptopenjdk/openjdk8-openj9:alpine-slim
+{{/java8}}
+{{#java11}}
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim
+{{/java11}}
+{{#java17}}
+FROM amazoncorretto:17-alpine
+{{/java17}}
 VOLUME /tmp
 COPY *.jar app.jar
 RUN sh -c 'touch /app.jar'

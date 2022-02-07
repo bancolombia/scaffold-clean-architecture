@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
@@ -632,6 +633,26 @@ public class GenerateDrivenAdapterTaskTest {
         new File(
                 "build/unitTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
             .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.DYNAMODB);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/dynamo-db/build.gradle").exists());
+  }
+
+  @Test(expected = ValidationException.class)
+  public void generateDrivenAdapterKtorShouldThrowValidationException()
+      throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
+    // Act
+    task.generateDrivenAdapterTask();
   }
 
   private void writeString(File file, String string) throws IOException {
