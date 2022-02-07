@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CrudProductoUseCase {
+public class CrudProductUseCase {
 
   private ProductRepository productRepository;
 
