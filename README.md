@@ -3,6 +3,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bancolombia_scaffold-clean-architecture&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bancolombia_scaffold-clean-architecture)
 [![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
+[![Scorecards supply-chain security](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml/badge.svg)](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml)
 
 # Scaffolding of Clean Architecture
 
@@ -31,13 +32,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "2.2.0"
+    id "co.com.bancolombia.cleanArchitecture" version "2.2.1"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.0\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.1\"
 }" > build.gradle
 ```
 
@@ -45,13 +46,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "2.2.0"
+    id("co.com.bancolombia.cleanArchitecture") version "2.2.1"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.2.0\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.2.1\"
 }" > build.gradle.kts
 ```
 
@@ -313,6 +314,7 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    | s3                                  | AWS Simple Storage Service          |                                     | &#9745; | &#9745; |
    | mq                                  | JMS MQ Client to send messages      |                                     | &#9745; | &#9745; |
    | ktor                                | HTTP client for kotlin              |                                     | &#9744; | &#9745; |
+   | dynamodb                            | Dynamo DB adapter                   |                                     | &#9745; | &#9745; |
 
    
    _**This task will generate something like that:**_
