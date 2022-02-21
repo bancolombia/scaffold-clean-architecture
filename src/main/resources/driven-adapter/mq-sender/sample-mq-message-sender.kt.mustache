@@ -10,7 +10,7 @@ import javax.jms.Message
 @Component
 @EnableMQMessageSender
 //@EnableMQSelectorMessageListener // Enable it to retrieve a specific message by correlationId
-class SampleMQMessageSender /* implements SomeGateway */(
+class SampleMQMessageSender /* implements Gateway from domain */(
     private val sender: MQMessageSender,
 //    private val container: MQQueuesContainer,// Inject it to reference a temporary queue
 //    private val listener: MQMessageSelectorListener// Inject it to retrieve a specific message by correlationId

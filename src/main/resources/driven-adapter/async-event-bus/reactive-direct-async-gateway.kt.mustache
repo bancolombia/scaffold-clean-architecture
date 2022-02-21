@@ -10,7 +10,7 @@ import java.util.UUID
 @EnableDirectAsyncGateway
 open class ReactiveDirectAsyncGateway(
     private val gateway : DirectAsyncGateway
-) /*implements SomeGatewayFromDomain*/ {
+) /*implements Gateway from domain*/ {
 
     fun runRemoteJob(command :Any/*change for proper model*/): Mono<Void> {
       return gateway.sendCommand(

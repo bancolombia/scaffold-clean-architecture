@@ -11,8 +11,7 @@ import reactor.core.publisher.Mono;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class RestConsumer // implements Gateway from domain
-{
+public class RestConsumer /* implements Gateway from domain */{
 
     private final WebClient client;
 

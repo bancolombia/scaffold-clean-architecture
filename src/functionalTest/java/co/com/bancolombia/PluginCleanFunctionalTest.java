@@ -1107,6 +1107,10 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/ModelEntity.java")
+            .exists());
+    assertTrue(
+        new File(
                 "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/config/DynamoDBConfig.java")
             .exists());
     assertTrue(

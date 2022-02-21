@@ -5,6 +5,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
 
 public class DrivenAdapterDynamoDB implements ModuleFactory {
@@ -17,5 +18,7 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
     builder.setupFromTemplate("driven-adapter/dynamo-db");
     builder.appendToProperties("aws").put("access-key", "").put("secret-key", "");
     builder.appendToProperties("aws.dynamodb").put("endpoint", "http://localhost:8000");
+    builder.appendToProperties("aws.dynamodb").put("threads", "10");
+    new ObjectMapperFactory().buildModule(builder);
   }
 }
