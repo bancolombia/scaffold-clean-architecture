@@ -16,6 +16,9 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+{{#reactive}}
+import reactor.core.publisher.Mono;
+{{/reactive}}
 
 public abstract class TemplateAdapterOperations<E, K, V> {
     private final Class<V> dataClass;
@@ -37,6 +40,47 @@ public abstract class TemplateAdapterOperations<E, K, V> {
         tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
         TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
     }
+{{#reactive}}
+    public Mono<E> save(E model) {
+        return Mono.defer(() -> {
+            V entity = toEntity(model);
+            dynamoDBMapper.save(entity);
+            return Mono.just(toModel(entity));
+        });
+    }
+
+    public Mono<E> getById(K id) {
+        return Mono.defer(() -> Mono.just(toModel(dynamoDBMapper.load(dataClass, id))));
+    }
+
+    public Mono<Void> delete(E model) {
+        return Mono.defer(() -> {
+            dynamoDBMapper.delete(toEntity(model));
+            return Mono.empty();
+        });
+
+    }
+
+    public Mono<List<E>> query(DynamoDBQueryExpression<V> queryExpression) {
+        return Mono.defer(() -> {
+            PaginatedQueryList<V> result = dynamoDBMapper.query(dataClass, queryExpression);
+            return Mono.just(result.stream().map(this::toModel).collect(Collectors.toList()));
+        });
+    }
+
+    /**
+     * @implNote Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
+     */
+    @Deprecated
+    public Mono<List<E>> scan() {
+        return Mono.defer(() -> {
+            PaginatedScanList<V> result = dynamoDBMapper.scan(dataClass, new DynamoDBScanExpression());
+            return Mono.just(result.stream().map(this::toModel).collect(Collectors.toList()));
+        });
+    }
+{{/reactive}}
+
+{{^reactive}}
 
     public E save(E model) {
         V entity = toEntity(model);
@@ -66,7 +110,7 @@ public abstract class TemplateAdapterOperations<E, K, V> {
         PaginatedScanList<V> result = dynamoDBMapper.scan(dataClass, new DynamoDBScanExpression());
         return result.stream().map(this::toModel).collect(Collectors.toList());
     }
-
+{{/reactive}}
     protected V toEntity(E model) {
         return mapper.map(model, dataClass);
     }

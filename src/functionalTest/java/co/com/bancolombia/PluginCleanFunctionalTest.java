@@ -1119,6 +1119,35 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
+
+  @Test
+  public void shouldGenerateDynamoDBDrivenAdapterInJavaReactive() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateDrivenAdapter";
+    String type = "DYNAMODB";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.java")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/ModelEntity.java")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/config/DynamoDBConfig.java")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle")
+                    .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);

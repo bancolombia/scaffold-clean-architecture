@@ -12,6 +12,7 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+    builder.addParam("reactive", builder.isReactive());
     builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":dynamo-db");
     builder.appendDependencyToModule("app-service", dependency);

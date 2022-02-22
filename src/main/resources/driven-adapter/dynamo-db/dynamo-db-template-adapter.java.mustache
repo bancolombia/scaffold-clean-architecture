@@ -9,6 +9,10 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+{{#reactive}}
+import reactor.core.publisher.Mono;
+{{/reactive}}
+
 
 @Repository
 public class DynamoDBTemplateAdapter extends TemplateAdapterOperations<Object /*domain model*/, String, ModelEntity /*adapter model*/> /* implements Gateway from domain */ {
@@ -21,12 +25,20 @@ public class DynamoDBTemplateAdapter extends TemplateAdapterOperations<Object /*
          */
         super(connectionFactory, mapper, d -> mapper.map(d, Object.class /*domain model*/));
     }
+{{#reactive}}
+        public Mono<List<Object /*domain model*/>> getEntityBySomeKey(String key) {
+            DynamoDBQueryExpression<ModelEntity /*adapter model*/> queryExpression = generateQueryExpression(key);
+           return query(queryExpression);
+        }
 
+{{/reactive}}
+{{^reactive}}
         public List<Object /*domain model*/> getEntityBySomeKey(String key) {
             DynamoDBQueryExpression<ModelEntity /*adapter model*/> queryExpression = generateQueryExpression(key);
             return query(queryExpression);
         }
 
+{{/reactive}}
         private DynamoDBQueryExpression<ModelEntity /*adapter model*/> generateQueryExpression(String key) {
             Map<String, AttributeValue> eav = new HashMap<>();
             eav.put(":val1", new AttributeValue().withS(key));
