@@ -21,7 +21,7 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GenerateEntryPointTaskTest {
+public class GenerateEntryPointKotlinTaskTest {
   private GenerateEntryPointTask task;
 
   @Before
@@ -35,6 +35,7 @@ public class GenerateEntryPointTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
     caTask.setType(type);
+    caTask.setLanguage(GenerateStructureTask.Language.KOTLIN);
     caTask.generateStructureTask();
 
     ProjectBuilder.builder()
@@ -107,15 +108,15 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/my-entry-point/build.gradle")
+        new File("build/unitTest/infrastructure/entry-points/my-entry-point/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/my-entry-point/src/main/java/co/com/bancolombia/myentrypoint")
+                "build/unitTest/infrastructure/entry-points/my-entry-point/src/main/kotlin/co/com/bancolombia/myentrypoint")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/my-entry-point/src/test/java/co/com/bancolombia/myentrypoint")
+                "build/unitTest/infrastructure/entry-points/my-entry-point/src/test/kotlin/co/com/bancolombia/myentrypoint")
             .exists());
   }
 
@@ -128,15 +129,15 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/rsocket-responder/build.gradle")
+        new File("build/unitTest/infrastructure/entry-points/rsocket-responder/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/rsocket-responder/src/main/java/co/com/bancolombia/controller/RsocketController.java")
+                "build/unitTest/infrastructure/entry-points/rsocket-responder/src/main/kotlin/co/com/bancolombia/controller/RsocketController.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller")
+                "build/unitTest/infrastructure/entry-points/rsocket-responder/src/test/kotlin/co/com/bancolombia/controller")
             .exists());
   }
 
@@ -149,14 +150,15 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiQueries.java")
+        new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java")
+                "build/unitTest/infrastructure/entry-points/graphql-api/src/main/kotlin/co/com/bancolombia/graphqlapi/ApiQueries.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/graphql-api/src/main/kotlin/co/com/bancolombia/graphqlapi/ApiMutations.kt")
             .exists());
   }
 
@@ -168,14 +170,14 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/kotlin/co/com/bancolombia/api")
             .exists());
   }
 
@@ -189,18 +191,18 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/kotlin/co/com/bancolombia/api")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/config/SpringFoxConfig.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/config/SpringFoxConfig.kt")
             .exists());
   }
 
@@ -213,27 +215,27 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/kotlin/co/com/bancolombia/api")
             .exists());
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/applications/app-service/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-undertow"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/applications/app-service/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains(
-                "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+                "exclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")"));
   }
 
   @Test
@@ -245,27 +247,27 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/kotlin/co/com/bancolombia/api")
             .exists());
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/applications/app-service/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-jetty"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/applications/app-service/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains(
-                "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+                "exclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")"));
   }
 
   @Test
@@ -277,19 +279,19 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/kotlin/co/com/bancolombia/api")
             .exists());
 
     assertFalse(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/applications/app-service/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains(
                 "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
@@ -306,18 +308,19 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
+            .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
             .exists());
     assertFalse(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/RouterRest.kt")
             .exists());
     assertFalse(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/Handler.kt")
             .exists());
   }
 
@@ -333,22 +336,23 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java")
-            .exists());
-    assertFalse(
-        new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
-            .exists());
-    assertFalse(
-        new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/config/SpringFoxConfig.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/ApiRest.kt")
+            .exists());
+    assertFalse(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/RouterRest.kt")
+            .exists());
+    assertFalse(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/Handler.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/config/SpringFoxConfig.kt")
             .exists());
   }
 
@@ -364,14 +368,15 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
+        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/RouterRest.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/Handler.kt")
             .exists());
   }
 
@@ -386,14 +391,15 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
+        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/RouterRest.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/kotlin/co/com/bancolombia/api/Handler.kt")
             .exists());
   }
 
@@ -406,23 +412,23 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/async-event-handler/build.gradle")
+        new File("build/unitTest/infrastructure/entry-points/async-event-handler/build.gradle.kts")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java")
+                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/kotlin/co/com/bancolombia/events/HandlerRegistryConfiguration.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java")
+                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/kotlin/co/com/bancolombia/events/handlers/EventsHandler.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java")
+                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/kotlin/co/com/bancolombia/events/handlers/CommandsHandler.kt")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
+                "build/unitTest/infrastructure/entry-points/async-event-handler/src/main/kotlin/co/com/bancolombia/events/handlers/QueriesHandler.kt")
             .exists());
   }
 
@@ -436,10 +442,11 @@ public class GenerateEntryPointTaskTest {
     task.generateEntryPointTask();
     // Assert
     assertTrue(
-        new File("build/unitTest/infrastructure/entry-points/mq-listener/build.gradle").exists());
+        new File("build/unitTest/infrastructure/entry-points/mq-listener/build.gradle.kts")
+            .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
+                "build/unitTest/infrastructure/entry-points/mq-listener/src/main/kotlin/co/com/bancolombia/mq/listener/SampleMQMessageListener.kt")
             .exists());
   }
 
