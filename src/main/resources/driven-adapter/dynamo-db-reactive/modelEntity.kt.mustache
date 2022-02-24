@@ -1,0 +1,21 @@
+package co.com.bancolombia.dynamodb
+
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
+
+/* Enhanced DynamoDB annotations are incompatible with Lombok #1932
+         https://github.com/aws/aws-sdk-java-v2/issues/1932*/
+@DynamoDbBean
+class ModelEntity{
+
+constructor()
+    constructor(id: String?, atr1: String?) {
+        this.id = id
+        this.atr1 = atr1
+    }
+
+    @get:DynamoDbPartitionKey
+    var id: String? = null
+
+    @get:DynamoDbAttribute("atr1")
+    var atr1: String? = null
+}

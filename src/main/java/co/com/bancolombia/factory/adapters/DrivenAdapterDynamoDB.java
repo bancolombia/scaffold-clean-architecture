@@ -13,13 +13,18 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.addParam("reactive", builder.isReactive());
+    String typePath = getPathType(builder.isReactive());
+
     builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":dynamo-db");
     builder.appendDependencyToModule("app-service", dependency);
-    builder.setupFromTemplate("driven-adapter/dynamo-db");
-    builder.appendToProperties("aws").put("access-key", "").put("secret-key", "");
+    builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToProperties("aws.dynamodb").put("endpoint", "http://localhost:8000");
     builder.appendToProperties("aws.dynamodb").put("threads", "10");
     new ObjectMapperFactory().buildModule(builder);
+  }
+
+  protected String getPathType(boolean isReactive) {
+    return isReactive ? "dynamo-db-reactive" : "dynamo-db";
   }
 }
