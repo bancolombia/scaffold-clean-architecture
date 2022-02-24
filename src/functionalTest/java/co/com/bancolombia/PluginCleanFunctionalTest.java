@@ -19,6 +19,7 @@ import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class PluginCleanFunctionalTest {
   @Before
   public void init() throws IOException {
     // Set up the test build
-    // deleteStructure(projectDir.toPath());
+    deleteStructure(projectDir.toPath());
     Files.createDirectories(projectDir.toPath());
     writeString(new File(projectDir, "settings.gradle"), "");
     writeString(
@@ -54,7 +55,7 @@ public class PluginCleanFunctionalTest {
     runner.withPluginClasspath();
   }
 
-  // @AfterClass
+  @AfterClass
   public static void clean() {
     deleteStructure(projectDir.toPath());
   }
