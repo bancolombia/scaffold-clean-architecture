@@ -5,9 +5,9 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*
 /* Enhanced DynamoDB annotations are incompatible with Lombok #1932
          https://github.com/aws/aws-sdk-java-v2/issues/1932*/
 @DynamoDbBean
-class ModelEntity{
+class ModelEntity {
 
-constructor()
+    constructor()
     constructor(id: String?, atr1: String?) {
         this.id = id
         this.atr1 = atr1

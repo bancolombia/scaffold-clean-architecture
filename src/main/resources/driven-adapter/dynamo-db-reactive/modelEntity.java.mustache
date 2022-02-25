@@ -5,7 +5,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 /* Enhanced DynamoDB annotations are incompatible with Lombok #1932
          https://github.com/aws/aws-sdk-java-v2/issues/1932*/
 @DynamoDbBean
-public class ModelEntity{
+public class ModelEntity {
 
     private String id;
     public String atr1;
@@ -17,6 +17,7 @@ public class ModelEntity{
         this.id = id;
         this.atr1 = atr1;
     }
+
     @DynamoDbPartitionKey
     @DynamoDbAttribute("name")
     public String getId() {
@@ -26,6 +27,7 @@ public class ModelEntity{
     public void setId(String id) {
         this.id = id;
     }
+
     @DynamoDbAttribute("atr1")
     public String getAtr1() {
         return atr1;

@@ -55,7 +55,7 @@ public class PluginCleanFunctionalTest {
     runner.withPluginClasspath();
   }
 
-  @AfterClass
+  //@AfterClass
   public static void clean() {
     deleteStructure(projectDir.toPath());
   }
