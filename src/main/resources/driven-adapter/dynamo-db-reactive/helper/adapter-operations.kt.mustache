@@ -1,0 +1,69 @@
+package {{package}}.dynamodb.helper
+
+import org.reactivecommons.utils.ObjectMapper
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
+import reactor.core.publisher.Mono
+import software.amazon.awssdk.enhanced.dynamodb.*
+import software.amazon.awssdk.enhanced.dynamodb.model.PagePublisher
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue
+import java.util.stream.Collectors
+
+abstract class TemplateAdapterOperations<E, K, V> protected constructor(
+        dynamoDbEnhancedAsyncClient: DynamoDbEnhancedAsyncClient,
+        private var mapper: ObjectMapper,
+        private val toEntityFn: Function<V, E>,
+        tableName: String
+) {
+    private val dataClass: Class<V>
+    private var customerTable: DynamoDbAsyncTable<V>
+
+
+    init {
+        val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
+        dataClass = genericSuperclass.actualTypeArguments[2] as Class<V>
+        customerTable = dynamoDbEnhancedAsyncClient.table(tableName, TableSchema.fromBean(dataClass))
+
+    }
+
+    fun save(model: E): Mono<Void> {
+        return Mono.fromFuture(customerTable.putItem(toEntity(model)))
+    }
+
+    fun getById(id: K): Mono<E> {
+        return Mono.fromFuture(customerTable.getItem(Key.builder().partitionValue(AttributeValue.builder().s(id.toString()).build()).build())).map(this::toModel)
+    }
+
+    fun delete(model: E): Mono<E> {
+        return Mono.fromFuture(customerTable.deleteItem(toEntity(model))).map(this::toModel)
+    }
+
+    fun query(queryExpression: QueryEnhancedRequest): Mono<List<E>> {
+        var pagePublisher: PagePublisher<V> = customerTable.query(queryExpression)
+        return listOfModel(pagePublisher)
+    }
+
+    /**
+     * @implNote Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
+     * @return Mono<List<E>>
+     */
+    @Deprecated("")
+    fun scan(): Mono<List<E>> {
+        var pagePublisher: PagePublisher<V> = customerTable.scan()
+        return listOfModel(pagePublisher)
+    }
+
+    private fun listOfModel(pagePublisher: PagePublisher<V>): Mono<List<E>> {
+        return Mono.from(pagePublisher)
+                .map { it.items().stream().map { o -> toModel(o) }.collect(Collectors.toList()) as List<E>? }
+    }
+
+    private fun toEntity(model: E): V {
+        return mapper.map(model, dataClass)
+    }
+
+    private fun toModel(data: V?): E? {
+        return if (data != null) toEntityFn.apply(data) else null
+    }
+}

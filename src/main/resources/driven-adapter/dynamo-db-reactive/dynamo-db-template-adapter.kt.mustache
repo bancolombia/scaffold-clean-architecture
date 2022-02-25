@@ -1,0 +1,20 @@
+package {{package}}.dynamodb
+
+import {{package}}.dynamodb.helper.TemplateAdapterOperations
+import org.reactivecommons.utils.ObjectMapper
+import org.springframework.stereotype.Repository
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
+
+
+@Repository
+class DynamoDBTemplateAdapter(connectionFactory: DynamoDbEnhancedAsyncClient, mapper: ObjectMapper) :
+    TemplateAdapterOperations<Any?, String?, ModelEntity?>(
+        connectionFactory,
+        mapper,
+        { d ->
+            mapper.map(
+                d,
+                Any::class.java
+            )},
+            "table_name"
+        )
