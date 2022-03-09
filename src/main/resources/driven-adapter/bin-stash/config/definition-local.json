@@ -1,0 +1,12 @@
+{
+  "folders": [],
+  "files": {},
+  "java": {
+    "driven-adapter/bin-stash/config/bin-stash-local-cache-config.java.mustache": "infrastructure/driven-adapters/bin-stash/src/main/config/{{language}}/{{packagePath}}/bin-stash-cache-config.java",
+    "driven-adapter/bin-stash/config/build.gradle.mustache": "infrastructure/driven-adapters/bin-stash/config/build.gradle"
+  },
+  "kotlin": {
+    "driven-adapter/bin-stash/config/bin-stash-local-cache-config.kt.mustache": "infrastructure/driven-adapters/bin-stash/src/main/config/{{language}}/{{packagePath}}/bin-stash-cache-config.kt",
+    "driven-adapter/bin-stash/config/build.gradle.kts.mustache": "infrastructure/driven-adapters/bin-stash/config/build.gradle.kts"
+  }
+}

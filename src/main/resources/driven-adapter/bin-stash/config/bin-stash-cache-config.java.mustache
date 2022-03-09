@@ -1,0 +1,50 @@
+package {{package}}.binstash.config;
+
+import co.com.bancolombia.binstash.demolocal.handler.PersonCachedHandler;
+import co.com.bancolombia.binstash.demolocal.model.DummyRepo;
+import co.com.bancolombia.binstash.LocalCacheFactory;
+import co.com.bancolombia.binstash.demolocal.handler.PersonHandler;
+import co.com.bancolombia.binstash.demolocal.model.Person;
+import co.com.bancolombia.binstash.demolocal.repository.PersonRepo;
+import co.com.bancolombia.binstash.model.api.ObjectCache;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
+
+@Configuration
+public class BinStashConfiguration {
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+
+    @Bean
+    public ObjectCache<Object/*Replace for domain model*/> objectCache(
+        {{#include-local}}LocalCacheFactory<Object/*Replace for domain model*/>{{/include-local}}
+        {{#include-centralized }}CentralizedCacheFactory<>{{/include-centralized }} cacheFactory) {
+        return cacheFactory.newObjectCache();
+    }
+
+
+{{#include-hybrid}}
+        @Bean
+        public List<SyncRule> cacheSyncRules() {
+            SyncRule simpleSyncRule = (keyArg, syncType) -> true;
+            return Collections.singletonList(simpleSyncRule);
+        }
+
+        @Bean
+        public ObjectCache<Object/*Replace for domain model*/> objectCache(HybridCacheFactory<Object/*Replace for domain model*/> cacheFactory,
+            List<SyncRule> cacheSyncRules) {
+            return cacheFactory.newObjectCache(cacheSyncRules);
+        }
+{{/include-hybrid}}
+
+}
