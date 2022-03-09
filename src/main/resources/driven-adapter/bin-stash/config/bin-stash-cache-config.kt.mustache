@@ -1,6 +1,21 @@
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.gradle.configurationcache.problems.PropertyTrace.*
-import org.gradle.internal.impldep.org.codehaus.plexus.component.annotations.Configuration
+package {{package}}.binstash.config;
+
+
+import co.com.bancolombia.binstash.demolocal.handler.PersonCachedHandler;
+import co.com.bancolombia.binstash.demolocal.model.DummyRepo;
+import co.com.bancolombia.binstash.LocalCacheFactory;
+import co.com.bancolombia.binstash.demolocal.handler.PersonHandler;
+import co.com.bancolombia.binstash.demolocal.model.Person;
+import co.com.bancolombia.binstash.demolocal.repository.PersonRepo;
+import co.com.bancolombia.binstash.model.api.ObjectCache;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 
 @Configuration
