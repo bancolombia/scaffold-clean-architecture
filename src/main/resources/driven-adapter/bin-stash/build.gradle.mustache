@@ -1,13 +1,11 @@
 dependencies {
     implementation project(':model')
     {{#include-local}}
-    implementation 'com.github.bancolombia:bin-stash-local:1.0.3'
+        implementation 'com.github.bancolombia:bin-stash-local:1.0.3'
     {{/include-local}}
-
     {{#include-centralized }}
         implementation 'com.github.bancolombia:bin-stash-centralized:1.0.3'
     {{/include-centralized }}
-
     {{#include-hybrid}}
         implementation 'com.github.bancolombia:bin-stash-hybrid:1.0.3'
     {{/include-hybrid}}

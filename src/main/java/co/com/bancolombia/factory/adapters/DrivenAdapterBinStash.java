@@ -18,11 +18,14 @@ public class DrivenAdapterBinStash implements ModuleFactory {
 
     CacheMode cacheMode = (CacheMode) builder.getParam("task-param-cache-mode");
     Logger logger = builder.getProject().getLogger();
+    builder.setupFromTemplate("driven-adapter/bin-stash");
 
     builder.addParam("include-local",cacheMode.equals(CacheMode.LOCAL));
     builder.addParam("include-hybrid",cacheMode.equals(CacheMode.HIBRID));
     builder.addParam("include-centralized",cacheMode.equals(CacheMode.CENTRALIZED));
     builder.appendToSettings("bin-stash", "infrastructure/driven-adapters");
+    String dependency = buildImplementationFromProject(builder.isKotlin(), ":bin-stash");
+    builder.appendDependencyToModule("app-service", dependency);
 
     builder.appendToProperties("stash.memory").put("maxSize", "10000");
     builder.appendToProperties("stash.redis").put("host", "myredis.host");
@@ -33,12 +36,7 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     new ObjectMapperFactory().buildModule(builder);
 
   }
-
-  protected String getPathType(boolean isReactive) {
-    return isReactive ? "dynamo-db-reactive" : "dynamo-db";
-  }
-
-
+  
   public enum CacheMode {
     LOCAL,
     HIBRID,
