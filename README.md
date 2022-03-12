@@ -9,6 +9,7 @@
 
 Gradle plugin to create a java and kotlin application based on Clean Architecture following our best practices!
 
+- [Getting Started](#Getting Started)
 - [Scaffolding of Clean Architecture](#scaffolding-of-clean-architecture)
 - [Plugin Implementation](#plugin-implementation)
 - [Tasks](#tasks)
@@ -25,6 +26,28 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
   - [Update Project](#update-project)
 - [How can I help?](#how-can-i-help)
 - [Whats Next?](#whats-next)
+
+# Getting Started
+
+1. Open your .bashrc
+2. Paste the next function to start your first imperative project
+```
+mkipj() {
+	mkdir $1
+	cd $1
+	echo "plugins {id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.3\"}" > build.gradle
+	gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=$1 --coverage=jacoco --lombok=true
+	gradle generateEntryPoint --type=restmvc
+	gradle build bootrun
+}
+```
+
+3. open your terminal and execute
+```
+mkpj MyNewProject
+```
+4. Done
+
 
 # Plugin Implementation
 
