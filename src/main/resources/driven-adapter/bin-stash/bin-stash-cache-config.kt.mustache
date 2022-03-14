@@ -1,4 +1,4 @@
-package {{package}}.binstash.config;
+package {{package}}.binstash.config
 
 import co.com.bancolombia.binstash.model.api.ObjectCache
 import org.springframework.context.annotation.Bean
@@ -28,7 +28,7 @@ open class BinStashConfiguration {
     {{#include-centralized }}
     @Bean
     open fun objectCache(centralizedCacheFactory: CentralizedCacheFactory<Any?>): ObjectCache<Any?>? {
-        return centralizedCacheFactory.newObjectCache();
+        return centralizedCacheFactory.newObjectCache()
     }
     {{/include-centralized }}
 

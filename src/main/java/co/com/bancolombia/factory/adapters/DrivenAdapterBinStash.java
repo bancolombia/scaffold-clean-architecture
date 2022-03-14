@@ -1,15 +1,13 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
-import org.gradle.api.logging.Logger;
-
 import java.io.IOException;
-
-import static co.com.bancolombia.utils.Utils.buildImplementation;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+import org.gradle.api.logging.Logger;
 
 public class DrivenAdapterBinStash implements ModuleFactory {
 
@@ -20,9 +18,9 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     Logger logger = builder.getProject().getLogger();
     builder.setupFromTemplate("driven-adapter/bin-stash");
 
-    builder.addParam("include-local",cacheMode.equals(CacheMode.LOCAL));
-    builder.addParam("include-hybrid",cacheMode.equals(CacheMode.HIBRID));
-    builder.addParam("include-centralized",cacheMode.equals(CacheMode.CENTRALIZED));
+    builder.addParam("include-local", cacheMode.equals(CacheMode.LOCAL));
+    builder.addParam("include-hybrid", cacheMode.equals(CacheMode.HYBRID));
+    builder.addParam("include-centralized", cacheMode.equals(CacheMode.CENTRALIZED));
     builder.appendToSettings("bin-stash", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":bin-stash");
     builder.appendDependencyToModule("app-service", dependency);
@@ -34,12 +32,11 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     builder.appendToProperties("stash.redis").put("password", "mypwd");
 
     new ObjectMapperFactory().buildModule(builder);
-
   }
-  
+
   public enum CacheMode {
     LOCAL,
-    HIBRID,
+    HYBRID,
     CENTRALIZED
   }
 }

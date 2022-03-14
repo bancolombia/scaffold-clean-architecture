@@ -1244,12 +1244,12 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
 
     assertTrue(
-            new File(
-                    "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/BinStashCacheConfig.java")
-                    .exists());
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
-                    .exists());
+        new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
+            .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
