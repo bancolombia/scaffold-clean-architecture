@@ -1,0 +1,11 @@
+{
+  "folders": [
+  ],
+  "files": {},
+  "java": {
+    "entry-point/swagger/spring-fox-config.java.mustache": "infrastructure/entry-points/{{module}}/src/main/{{language}}/{{packagePath}}/config/SpringFoxConfig.java"
+  },
+  "kotlin": {
+    "entry-point/swagger/spring-fox-config.kt.mustache": "infrastructure/entry-points/{{module}}/src/main/{{language}}/{{packagePath}}/config/SpringFoxConfig.kt"
+  }
+}
