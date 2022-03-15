@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementation;
 
 import co.com.bancolombia.Constants;
@@ -14,7 +15,7 @@ public class DrivenAdapterSecrets implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
     String secretLibrary = "";
-    if (builder.isReactive()) {
+    if (Boolean.TRUE.equals(builder.isReactive())) {
       secretLibrary = "aws-secrets-manager-async";
       builder.setupFromTemplate("driven-adapter/secrets-reactive");
     } else {
@@ -26,7 +27,7 @@ public class DrivenAdapterSecrets implements ModuleFactory {
         buildImplementation(
             builder.isKotlin(),
             "com.github.bancolombia:" + secretLibrary + ":" + Constants.SECRETS_VERSION);
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
   }
 }

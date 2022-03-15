@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CrudProductoUseCase {
+public class CrudProductUseCase {
 
   private ProductRepository productRepository;
 
@@ -18,7 +18,7 @@ public class CrudProductoUseCase {
     return productRepository.read(id);
   }
 
-  public void update(String id, Product product) throws Exception {
+  public void update(String id, Product product) throws new Exception {
     productRepository.update(id, product);
   }
 

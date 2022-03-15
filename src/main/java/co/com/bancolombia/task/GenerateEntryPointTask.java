@@ -1,5 +1,7 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.PATH_GRAPHQL;
+
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -17,7 +19,7 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
   private EntryPointType type;
   private String name;
-  private String pathGraphql = "/graphql";
+  private String pathGraphql = PATH_GRAPHQL;
   private Server server = Server.UNDERTOW;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;

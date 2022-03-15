@@ -1,7 +1,7 @@
 package co.com.crudtest.api;
 
 import co.com.crudtest.model.product.Product;
-import co.com.crudtest.usecase.crudproducto.CrudProductoUseCase;
+import co.com.crudtest.usecase.crudproducto.CrudProductUseCase;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,34 +14,34 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ApiRest {
-  private final CrudProductoUseCase crudProductoUseCase;
+  private final CrudProductUseCase crudProductUseCase;
 
-  @GetMapping(path = "/producto/{id}")
+  @GetMapping(path = "/product/{id}")
   public Product read(@PathVariable String id) {
-    return crudProductoUseCase.read(id);
+    return crudProductUseCase.read(id);
   }
 
-  @PostMapping(path = "/producto")
+  @PostMapping(path = "/product")
   public void create(@RequestBody Product product) {
-    crudProductoUseCase.create(product);
+    crudProductUseCase.create(product);
   }
 
-  @PutMapping(path = "/producto/{id}")
+  @PutMapping(path = "/product/{id}")
   public void update(@PathVariable String id, @RequestBody Product product) {
     try {
-      crudProductoUseCase.update(id, product);
+      crudProductUseCase.update(id, product);
     } catch (Exception e) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
     }
   }
 
-  @DeleteMapping(path = "/producto/{id}")
+  @DeleteMapping(path = "/product/{id}")
   public void delete(@PathVariable String id) {
-    crudProductoUseCase.delete(id);
+    crudProductUseCase.delete(id);
   }
 
-  @GetMapping(path = "/producto")
+  @GetMapping(path = "/product")
   public List<Product> getAll() {
-    return crudProductoUseCase.getAll();
+    return crudProductUseCase.getAll();
   }
 }

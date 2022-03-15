@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -15,6 +16,6 @@ public class DrivenAdapterAsyncEventBus implements ModuleFactory {
     builder.setupFromTemplate("driven-adapter/async-event-bus");
     builder.appendToSettings("async-event-bus", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":async-event-bus");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }

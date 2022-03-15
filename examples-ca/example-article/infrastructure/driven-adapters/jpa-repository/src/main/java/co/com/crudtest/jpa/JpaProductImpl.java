@@ -29,9 +29,7 @@ public class JpaProductImpl implements ProductRepository {
   public void update(String id, Product product) throws Exception {
     Product productDb = jpaRepositoryAdapter.findById(id);
 
-    if (productDb == null) {
-      throw new Exception("Product Not Found : " + id);
-    }
+    if (productDb == null) throw new Exception("Product Not Found : " + id);
 
     productDb.setName(product.getName());
     productDb.setPrice(product.getPrice());

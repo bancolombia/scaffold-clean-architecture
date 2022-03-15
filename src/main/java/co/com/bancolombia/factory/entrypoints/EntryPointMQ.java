@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -14,7 +15,7 @@ public class EntryPointMQ implements ModuleFactory {
     builder.setupFromTemplate(getTemplate(builder.isReactive()));
     builder.appendToSettings("mq-listener", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":mq-listener");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder
         .appendToProperties("commons.jms")

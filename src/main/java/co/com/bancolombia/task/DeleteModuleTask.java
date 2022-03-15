@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.utils.Utils;
@@ -34,7 +35,7 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + module);
     builder.deleteModule(module);
     builder.removeFromSettings(module);
-    builder.removeDependencyFromModule("app-service", dependency);
+    builder.removeDependencyFromModule(APP_SERVICE, dependency);
     builder.persist();
   }
 }
