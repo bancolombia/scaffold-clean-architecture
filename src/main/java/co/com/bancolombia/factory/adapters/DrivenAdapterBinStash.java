@@ -15,7 +15,6 @@ public class DrivenAdapterBinStash implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
 
     CacheMode cacheMode = (CacheMode) builder.getParam("task-param-cache-mode");
-    Logger logger = builder.getProject().getLogger();
     builder.setupFromTemplate("driven-adapter/bin-stash");
 
     builder.addParam("include-local", cacheMode.equals(CacheMode.LOCAL));
