@@ -7,7 +7,6 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
-import org.gradle.api.logging.Logger;
 
 public class DrivenAdapterBinStash implements ModuleFactory {
 
