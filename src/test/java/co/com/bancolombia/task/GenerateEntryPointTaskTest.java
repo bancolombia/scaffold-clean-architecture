@@ -181,6 +181,31 @@ public class GenerateEntryPointTaskTest {
   }
 
   @Test
+  public void generateEntryPointApiRestWithDefaultServerAndSwagger()
+      throws IOException, CleanException {
+    // Arrange
+    task.setType(ModuleFactoryEntryPoint.EntryPointType.RESTMVC);
+    task.setSwagger(Constants.BooleanOption.TRUE);
+    // Act
+    task.generateEntryPointTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/config/SpringFoxConfig.java")
+            .exists());
+  }
+
+  @Test
   public void generateEntryPointApiRestWithUndertowServer() throws IOException, CleanException {
     // Arrange
     task.setType(ModuleFactoryEntryPoint.EntryPointType.RESTMVC);
@@ -294,6 +319,37 @@ public class GenerateEntryPointTaskTest {
     assertFalse(
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+            .exists());
+  }
+
+  @Test
+  public void generateEntryPointReactiveWebWithoutRouterFunctionsAndSwagger()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryEntryPoint.EntryPointType.WEBFLUX);
+    task.setRouter(Constants.BooleanOption.FALSE);
+    task.setSwagger(Constants.BooleanOption.TRUE);
+    // Act
+    task.generateEntryPointTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            .exists());
+    assertFalse(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
+            .exists());
+    assertFalse(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/config/SpringFoxConfig.java")
             .exists());
   }
 

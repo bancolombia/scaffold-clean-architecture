@@ -17,6 +17,15 @@ public class EntryPointRestWebflux implements ModuleFactory {
       builder.setupFromTemplate("entry-point/rest-webflux/router-functions");
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
+      if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
+        builder.addParam("module", "reactive-web");
+        builder.setupFromTemplate("entry-point/swagger");
+        if (builder.isKotlin()) {
+          builder
+              .appendToProperties("spring.mvc.pathmatch")
+              .put("matching-strategy", "ant_path_matcher");
+        }
+      }
     }
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");

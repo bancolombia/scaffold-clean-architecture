@@ -74,7 +74,7 @@ public class PluginCleanFunctionalTest {
 
   @Before
   public void init() throws IOException {
-    // Setup the test build
+    // Set up the test build
     deleteStructure(projectDir.toPath());
     Files.createDirectories(projectDir.toPath());
     writeString(new File(projectDir, "settings.gradle"), "");
@@ -1104,8 +1104,94 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void canRunTaskGenerateStructureKotlinReactive() throws IOException {
+    initKotlin();
+    String task = "ca";
+
+    runner.withArguments(task, "--type=reactive", "--language=" + "KOTLIN");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    // Verify the result
+    assertTrue(new File("build/functionalTest/README.md").exists());
+    assertTrue(new File("build/functionalTest/.gitignore").exists());
+    assertTrue(new File("build/functionalTest/build.gradle.kts").exists());
+    assertTrue(new File("build/functionalTest/lombok.config").exists());
+    assertTrue(new File("build/functionalTest/settings.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/infrastructure/driven-adapters/").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/entry-points").exists());
+    assertTrue(new File("build/functionalTest/infrastructure/helpers").exists());
+
+    assertTrue(
+        new File("build/functionalTest/domain/model/src/main/kotlin/co/com/bancolombia/model")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/domain/model/src/test/kotlin/co/com/bancolombia/model")
+            .exists());
+    assertTrue(new File("build/functionalTest/domain/model/build.gradle.kts").exists());
+    assertTrue(
+        new File("build/functionalTest/domain/usecase/src/main/kotlin/co/com/bancolombia/usecase")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/domain/usecase/src/test/kotlin/co/com/bancolombia/usecase")
+            .exists());
+    assertTrue(new File("build/functionalTest/domain/usecase/build.gradle.kts").exists());
+
+    assertTrue(new File("build/functionalTest/applications/app-service/build.gradle.kts").exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/MainApplication.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config/UseCasesConfig.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/kotlin/co/com/bancolombia/config")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/application.yaml")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/applications/app-service/src/main/resources/log4j2.properties")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/applications/app-service/src/test/kotlin/co/com/bancolombia")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
   public void canRunTaskGenerateDynamoDBDrivenAdapterInKotlin() throws IOException {
     canRunTaskGenerateStructureKotlinWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "DYNAMODB";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/kotlin/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.kt")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/kotlin/co/com/bancolombia/dynamodb/config/DynamoDBConfig.kt")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle.kts")
+            .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateDynamoDBDrivenAdapterInKotlinReactive() throws IOException {
+    canRunTaskGenerateStructureKotlinReactive();
     String task = "generateDrivenAdapter";
     String type = "DYNAMODB";
 
@@ -1140,6 +1226,38 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/ModelEntity.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/config/DynamoDBConfig.java")
+            .exists());
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle")
+            .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateDynamoDBDrivenAdapterInJavaReactive() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = "generateDrivenAdapter";
+    String type = "DYNAMODB";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/DynamoDBTemplateAdapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/dynamo-db/src/main/java/co/com/bancolombia/dynamodb/ModelEntity.java")
             .exists());
     assertTrue(
         new File(

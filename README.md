@@ -2,7 +2,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bancolombia_scaffold-clean-architecture&metric=alert_status)](https://sonarcloud.io/dashboard?id=bancolombia_scaffold-clean-architecture)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bancolombia_scaffold-clean-architecture&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=bancolombia_scaffold-clean-architecture)
 [![codecov](https://codecov.io/gh/bancolombia/scaffold-clean-architecture/branch/master/graph/badge.svg)](https://codecov.io/gh/bancolombia/scaffold-clean-architecture)
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
+[![GitHub license](https://shields.io/badge/license-Apache%202-blue)](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/LICENSE)
 [![Scorecards supply-chain security](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml/badge.svg)](https://github.com/bancolombia/scaffold-clean-architecture/actions/workflows/scorecards-analysis.yml)
 
 # Scaffolding of Clean Architecture
@@ -32,13 +32,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "2.2.1"
+    id "co.com.bancolombia.cleanArchitecture" version "2.2.3"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.1\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.2.3\"
 }" > build.gradle
 ```
 
@@ -46,13 +46,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "2.2.1"
+    id("co.com.bancolombia.cleanArchitecture") version "2.2.3"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.2.1\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.2.3\"
 }" > build.gradle.kts
 ```
 
@@ -465,4 +465,4 @@ Review the issues, we hear new ideas. Read more [Contributing](https://github.co
 
 # Whats Next?
 
-Read more [About Clean Architecure](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+Read more  [About Clean Architecure](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)

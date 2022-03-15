@@ -22,6 +22,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
   private String pathGraphql = PATH_GRAPHQL;
   private Server server = Server.UNDERTOW;
   private BooleanOption router = BooleanOption.TRUE;
+  private BooleanOption swagger = BooleanOption.FALSE;
 
   @Option(option = "type", description = "Set type of entry point to be generated")
   public void setType(EntryPointType type) {
@@ -45,6 +46,11 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     this.router = router;
   }
 
+  @Option(option = "swagger", description = "Set swagger configuration to rest entry point ")
+  public void setSwagger(BooleanOption swagger) {
+    this.swagger = swagger;
+  }
+
   @Option(option = "pathgql", description = "set API GraphQL path")
   public void setPathGraphql(String pathgql) {
     this.pathGraphql = pathgql;
@@ -65,6 +71,11 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("swagger")
+  public List<BooleanOption> getSwaggerOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @TaskAction
   public void generateEntryPointTask() throws IOException, CleanException {
     if (type == null) {
@@ -80,6 +91,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     builder.addParam("task-param-server", server);
     builder.addParam("task-param-pathgql", pathGraphql);
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
+    builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
     builder.addParam("lombok", builder.isEnableLombok());
     moduleFactory.buildModule(builder);
     builder.persist();
