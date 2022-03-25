@@ -1234,7 +1234,7 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void shouldGenerateBinStashDrivenAdapter() {
+  public void shouldGenerateBinStashDrivenAdapterInJavaReactive() {
     canRunTaskGenerateStructureReactiveProject();
     String task = "generateDrivenAdapter";
     String type = "BINSTASH";
@@ -1250,6 +1250,46 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
             .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateBinStashDrivenAdapterInJavaNoReactive() {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "BINSTASH";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
+                    .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateBinStashDrivenAdapterInKotlin() throws IOException {
+    canRunTaskGenerateStructureKotlinWithOutParameters();
+    String task = "generateDrivenAdapter";
+    String type = "BINSTASH";
+
+    runner.withArguments(task, "--type=" + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+            new File(
+                    "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/kotlin/co/com/bancolombia/binstash/config/BinStashCacheConfig.kt")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle.kts")
+                    .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
