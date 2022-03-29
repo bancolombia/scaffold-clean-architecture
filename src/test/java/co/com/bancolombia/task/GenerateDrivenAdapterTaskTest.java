@@ -176,7 +176,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java")
             .exists());
   }
 

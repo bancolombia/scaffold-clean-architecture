@@ -572,7 +572,7 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
+                "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
