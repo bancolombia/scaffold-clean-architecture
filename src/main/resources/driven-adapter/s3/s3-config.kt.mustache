@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
+import software.amazon.awssdk.auth.credentials.AwsCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
@@ -24,11 +25,11 @@ open class S3Config {
     @Profile("local")
     @Bean
     open fun localS3Client(
-        awsBasicCredentials: AwsBasicCredentials,
+        awsCredentials: AwsCredentials,
         s3Properties: S3ConnectionProperties
     ): S3Client {
         return getBuilder(s3Properties)
-            .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
+            .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
             .endpointOverride(URI.create(s3Properties.endpoint))
             .build()
     }
@@ -37,4 +38,8 @@ open class S3Config {
         return S3Client.builder()
             .region(Region.of(s3Properties.region))
     }
+
+    @Profile("local")
+    @Bean
+    open fun getCredentials(): AwsBasicCredentials = AwsBasicCredentials.create("test","test")
 }

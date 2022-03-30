@@ -3,21 +3,23 @@ package {{package}}.s3.adapter;
 import org.springframework.stereotype.Repository;
 import {{package}}.s3.operations.S3Operations;
 {{#lombok}}
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 {{/lombok}}
 
 @Repository
 {{#lombok}}
-@RequiredArgsConstructor
+@AllArgsConstructor
 {{/lombok}}
 public class S3Adapter /* implements Gateway from domain*/ {
 
-   private final S3Operations s3Operations;
+    private final S3Operations s3Operations;
+
+    private final S3ConnectionProperties properties;
 
 {{^lombok}}
-   public S3Adapter(S3Operations s3Operations ) {
-      this.s3Operations = s3Operations;
-   }
+    public S3Adapter(S3Operations s3Operations, S3ConnectionProperties properties) {
+        this.s3Operations = s3Operations;
+        this.properties = properties
+    }
 {{/lombok}}
-
 }
