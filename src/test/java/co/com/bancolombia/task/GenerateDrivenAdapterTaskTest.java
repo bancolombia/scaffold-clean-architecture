@@ -461,6 +461,23 @@ public class GenerateDrivenAdapterTaskTest {
   }
 
   @Test
+  public void generateDrivenAdapterBinStashTemplateForImperative()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.BINSTASH);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/bin-stash/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
+            .exists());
+  }
+
+  @Test
   public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);

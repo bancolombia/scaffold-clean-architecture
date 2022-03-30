@@ -1329,6 +1329,26 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
+  @Test
+  public void shouldGenerateBinStashDrivenAdapter() {
+    canRunTaskGenerateStructureWithOutLombok();
+    String task = GENERATE_DRIVEN_ADAPTER;
+    String type = "BINSTASH";
+
+    runner.withArguments(task, TYPE + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
+            .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);
