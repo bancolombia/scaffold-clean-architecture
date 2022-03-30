@@ -1,5 +1,7 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
@@ -80,7 +82,7 @@ public class ValidateStructureTask extends DefaultTask {
   }
 
   private boolean validateInfrastructureLayer() {
-    List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, "app-service", USE_CASE_MODULE);
+    List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, APP_SERVICE, USE_CASE_MODULE);
     AtomicBoolean valid = new AtomicBoolean(true);
     Set<Map.Entry<String, Project>> modules = getModules();
 
@@ -129,7 +131,7 @@ public class ValidateStructureTask extends DefaultTask {
 
   private Predicate<Dependency> filterDependenciesInfrastructure() {
     return dependency ->
-        "app-service".contains(dependency.getName())
+        APP_SERVICE.contains(dependency.getName())
             && !Arrays.asList(MODEL_MODULE, USE_CASE_MODULE).contains(dependency.getName());
   }
 

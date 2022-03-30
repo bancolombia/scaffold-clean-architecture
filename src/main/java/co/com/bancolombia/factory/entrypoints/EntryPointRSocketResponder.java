@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -16,7 +17,7 @@ public class EntryPointRSocketResponder implements ModuleFactory {
     builder.appendToSettings("rsocket-responder", "infrastructure/entry-points");
     builder.appendToProperties("spring.rsocket.server").put("port", 7000);
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":rsocket-responder");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.setupFromTemplate("entry-point/rsocket-responder");
   }
 }

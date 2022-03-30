@@ -94,11 +94,18 @@ public class ModuleBuilder {
       logger.lifecycle("Updating application properties");
       addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
     }
-    for (Map.Entry<String, FileModel> fileEntry : files.entrySet()) {
-      FileModel file = fileEntry.getValue();
-      FileUtils.writeString(getProject(), file.getPath(), file.getContent());
-      logger.debug("file {} written", file.getPath());
-    }
+
+    files.forEach(
+        (key, file) -> {
+          try {
+            FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+          } catch (IOException e) {
+            logger.error("error to write file {}", file.getPath());
+            throw new RuntimeException(e.getMessage(), e);
+          }
+          logger.debug("file {} written", file.getPath());
+        });
+
     dirsToDelete.forEach(
         dir -> {
           getProject().delete(dir);
@@ -109,6 +116,7 @@ public class ModuleBuilder {
 
   public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
     TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
+
     for (String folder : definition.getFolders()) {
       addDir(Utils.fillPath(folder, params));
     }

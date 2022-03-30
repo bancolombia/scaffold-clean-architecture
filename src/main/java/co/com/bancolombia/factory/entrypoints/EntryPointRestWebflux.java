@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -16,9 +17,18 @@ public class EntryPointRestWebflux implements ModuleFactory {
       builder.setupFromTemplate("entry-point/rest-webflux/router-functions");
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
+      if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
+        builder.addParam("module", "reactive-web");
+        builder.setupFromTemplate("entry-point/swagger");
+        if (builder.isKotlin()) {
+          builder
+              .appendToProperties("spring.mvc.pathmatch")
+              .put("matching-strategy", "ant_path_matcher");
+        }
+      }
     }
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }

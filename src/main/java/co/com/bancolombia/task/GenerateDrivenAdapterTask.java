@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter.DrivenAdapterType;
@@ -19,6 +20,8 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
   private String name;
   private String url = "http://localhost:8080";
   private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
+  private DrivenAdapterBinStash.CacheMode cacheMode = DrivenAdapterBinStash.CacheMode.LOCAL;
+
   private BooleanOption secret = BooleanOption.FALSE;
 
   @Option(option = "type", description = "Set type of driven adapter to be generated")
@@ -56,6 +59,11 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @Option(option = "cache-mode", description = "Set value for cache type")
+  public void setcacheMode(DrivenAdapterBinStash.CacheMode cacheMode) {
+    this.cacheMode = cacheMode;
+  }
+
   @TaskAction
   public void generateDrivenAdapterTask() throws IOException, CleanException {
     if (type == null) {
@@ -69,6 +77,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Driven Adapter type: {}", type);
     builder.addParam("task-param-name", name);
+    builder.addParam("task-param-cache-mode", cacheMode);
     builder.addParam("include-secret", secret == BooleanOption.TRUE);
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("lombok", builder.isEnableLombok());

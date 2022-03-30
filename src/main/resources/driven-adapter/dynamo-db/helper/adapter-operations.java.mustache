@@ -5,6 +5,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
@@ -14,6 +16,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 
 public abstract class TemplateAdapterOperations<E, K, V> {
     private final Class<V> dataClass;
@@ -27,6 +30,10 @@ public abstract class TemplateAdapterOperations<E, K, V> {
         this.dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB, DynamoDBMapperConfig.DEFAULT);
         ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];
+        createTableIfNotExists(amazonDynamoDB);
+    }
+
+    private void createTableIfNotExists(AmazonDynamoDB amazonDynamoDB) {
         CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(dataClass);
         tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
         TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
@@ -46,7 +53,17 @@ public abstract class TemplateAdapterOperations<E, K, V> {
         dynamoDBMapper.delete(toEntity(model));
     }
 
-    public List<E> findAll() {
+    public List<E> query(DynamoDBQueryExpression<V> queryExpression) {
+        PaginatedQueryList<V> result = dynamoDBMapper.query(dataClass,queryExpression);
+        return result.stream().map(this::toModel).collect(Collectors.toList());
+    }
+
+    /**
+     * @implNote  Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
+     * @return List<E>
+     */
+    @Deprecated
+    public List<E> scan() {
         PaginatedScanList<V> result = dynamoDBMapper.scan(dataClass, new DynamoDBScanExpression());
         return result.stream().map(this::toModel).collect(Collectors.toList());
     }

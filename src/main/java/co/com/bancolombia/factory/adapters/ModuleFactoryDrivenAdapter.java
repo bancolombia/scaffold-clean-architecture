@@ -36,6 +36,8 @@ public class ModuleFactoryDrivenAdapter {
         return new DrivenAdapterKtorClient();
       case DYNAMODB:
         return new DrivenAdapterDynamoDB();
+      case BINSTASH:
+        return new DrivenAdapterBinStash();
       default:
         throw new InvalidTaskOptionException("Driven Adapter type invalid");
     }
@@ -55,6 +57,7 @@ public class ModuleFactoryDrivenAdapter {
     S3,
     MQ,
     KTOR,
-    DYNAMODB
+    DYNAMODB,
+    BINSTASH
   }
 }

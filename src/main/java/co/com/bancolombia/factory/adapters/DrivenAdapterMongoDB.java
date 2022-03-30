@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -13,7 +14,7 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    if (builder.isReactive()) {
+    if (Boolean.TRUE.equals(builder.isReactive())) {
       logger.lifecycle("Generating for reactive project");
       builder.setupFromTemplate("driven-adapter/mongo-reactive");
     } else {
@@ -23,8 +24,8 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
     builder.appendToSettings("mongo-repository", "infrastructure/driven-adapters");
     builder.appendToProperties("spring.data.mongodb").put("uri", "mongodb://localhost:27017/test");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":mongo-repository");
-    builder.appendDependencyToModule("app-service", dependency);
-    if (builder.getBooleanParam("include-secret")) {
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
+    if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
       new DrivenAdapterSecrets().buildModule(builder);
     }
     new ObjectMapperFactory().buildModule(builder);
