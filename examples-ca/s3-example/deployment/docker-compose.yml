@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+  s3-storage:
+    image: localstack/localstack:0.12.5
+    environment:
+      # permite más servicios separados por comas
+      - SERVICES=s3
+      - DEBUG=1
+      - DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    ports:
+      # localstack usa rango de puertos, para el ejemplo,
+      # usaremos solo el de S3, mapeado en local a 14566 en un
+      # fichero docker-compose.override.yml para permitir
+      # tests con puerto dinámico
+      - '4566'
+    volumes:
+      # inicializaremos un bucket aquí
+      - './volumes/s3-storage/.init:/docker-entrypoint-initaws.d'
+      # no versionado, localstack nos generará aquí el .pem
+      # para nuestras claves de acceso fake
+      - './volumes/s3-storage/.localstack:/tmp/localstack'
