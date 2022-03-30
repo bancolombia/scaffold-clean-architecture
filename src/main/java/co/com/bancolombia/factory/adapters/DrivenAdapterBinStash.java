@@ -24,10 +24,12 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     builder.appendDependencyToModule("app-service", dependency);
 
     builder.appendToProperties("stash.memory").put("maxSize", "10000");
-    builder.appendToProperties("stash.redis").put("host", "myredis.host");
-    builder.appendToProperties("stash.redis").put("port", "6379");
-    builder.appendToProperties("stash.redis").put("database", "0");
-    builder.appendToProperties("stash.redis").put("password", "mypwd");
+    builder
+        .appendToProperties("stash.redis")
+        .put("host", "myredis.host")
+        .put("port", "6379")
+        .put("database", "0")
+        .put("password", "mypwd");
 
     new ObjectMapperFactory().buildModule(builder);
   }

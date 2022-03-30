@@ -608,7 +608,7 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/JpaConfig.java")
+                "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java")
             .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
@@ -1325,6 +1325,26 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle.kts")
+            .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void shouldGenerateBinStashDrivenAdapter() {
+    canRunTaskGenerateStructureWithOutLombok();
+    String task = GENERATE_DRIVEN_ADAPTER;
+    String type = "BINSTASH";
+
+    runner.withArguments(task, TYPE + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
