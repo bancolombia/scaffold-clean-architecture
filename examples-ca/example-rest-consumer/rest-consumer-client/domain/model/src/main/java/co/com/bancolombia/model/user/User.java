@@ -1,5 +1,4 @@
-package co.com.bancolombia.consumer;
-
+package co.com.bancolombia.model.user;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder(toBuilder = true)
-@NoArgsConstructor
 @AllArgsConstructor
-public class ObjectResponse {
-
-    private String state;
-
+@NoArgsConstructor
+public class User {
+    private String name;
+    private Integer age;
 }
