@@ -1,0 +1,14 @@
+##Spring Configuration
+server:
+  port: 8081
+spring:
+  application:
+    name: rest-consumer-server
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  profiles:
+    include:
