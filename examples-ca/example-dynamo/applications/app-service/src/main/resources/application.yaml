@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "dynamoDB"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+aws:
+  access-key: ""
+  secret-key: ""
+  dynamodb:
+    endpoint: "http://localhost:8000"
+
