@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "s3-example"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+adapter:
+  aws:
+    s3:
+      bucketName: "testbucket"
+      region: "us-east-1"
+      endpoint: "http://localhost:49153"
