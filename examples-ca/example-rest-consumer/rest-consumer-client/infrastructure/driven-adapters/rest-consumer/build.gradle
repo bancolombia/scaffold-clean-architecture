@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework:spring-context'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.14.9'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}
