@@ -1,0 +1,12 @@
+rootProject.name = 's3-example'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':s3-repository'
+project(':s3-repository').projectDir = file('./infrastructure/driven-adapters/s3-repository')
+include ':api-rest'
+project(':api-rest').projectDir = file('./infrastructure/entry-points/api-rest')

@@ -1,0 +1,21 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-undertow:2.6.2'
+	implementation project( ':api-rest')
+	implementation project( ':s3-repository')
+    implementation project(':model')
+    implementation project(':usecase')
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    implementation 'org.springframework.boot:spring-boot-starter'
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
+
+configurations{
+	compile.exclude group: "org.springframework.boot", module:"spring-boot-starter-tomcat"
+}
