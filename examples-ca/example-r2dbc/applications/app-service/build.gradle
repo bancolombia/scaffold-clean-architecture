@@ -1,0 +1,15 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+	implementation project( ':reactive-web')
+	implementation project( ':r2dbc-postgresql')
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+}
+
+task explodedJar(type: Copy) {
+    with jar
+    into "${buildDir}/exploded"
+}
