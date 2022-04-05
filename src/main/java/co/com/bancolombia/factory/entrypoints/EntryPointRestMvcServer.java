@@ -30,7 +30,7 @@ public class EntryPointRestMvcServer implements ModuleFactory {
         String jettyDependency =
             buildImplementation(
                 builder.isKotlin(),
-                "org.springframework.boot:spring-boot-starter-jetty:" + Constants.UNDERTOW_VERSION);
+                "org.springframework.boot:spring-boot-starter-jetty:" + Constants.JETTY_VERSION);
         builder.appendDependencyToModule(APP_SERVICE, jettyDependency);
         builder.appendConfigurationToModule(APP_SERVICE, tomcatExclusion(builder.isKotlin()));
         return;
