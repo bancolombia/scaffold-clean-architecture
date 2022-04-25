@@ -11,3 +11,13 @@ task explodedJar(type: Copy) {
     with jar
     into "${buildDir}/exploded"
 }
+
+jar {
+    // To disable the *-plain.jar
+    enabled = false
+}
+
+bootJar {
+    // Sets output jar name
+    archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
+}
