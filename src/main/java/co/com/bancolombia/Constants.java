@@ -11,7 +11,7 @@ public class Constants {
   public static final String SECRETS_VERSION = "3.0.0";
   public static final String SPRING_BOOT_VERSION = "2.6.7";
   public static final String UNDERTOW_VERSION = "2.6.7";
-  public static final String JETTY_VERSION = "2.6.6";
+  public static final String JETTY_VERSION = "2.6.7";
   public static final String SONAR_VERSION = "3.0";
   public static final String LOMBOK_VERSION = "1.18.22";
   public static final String JACOCO_VERSION = "0.8.5";
