@@ -5,3 +5,13 @@ dependencies {
     implementation(project(":usecase"))
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 }
+
+tasks.getByName<Jar>("jar") {
+    // To disable the *-plain.jar
+    enabled = false
+}
+
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    // Sets output jar name
+   this.archiveFileName.set("${project.getParent()?.getName()}.${archiveExtension.get()}")
+}

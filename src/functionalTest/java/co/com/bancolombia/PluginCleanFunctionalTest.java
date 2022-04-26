@@ -1349,6 +1349,22 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
+  @Test
+  public void shouldGenerateJarWithSpecificName() {
+    runner.withArguments("ca", "--type=reactive", "--name=MagicProjectName");
+    runner.withProjectDir(projectDir);
+    runner.build();
+
+    // Act
+    runner.withArguments("build");
+    runner.withProjectDir(projectDir);
+    runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/applications/app-service/build/libs/MagicProjectName.jar")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);
