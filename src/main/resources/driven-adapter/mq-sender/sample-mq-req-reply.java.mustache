@@ -1,0 +1,50 @@
+package {{package}}.mq.reqreply;
+
+import co.com.bancolombia.commons.jms.mq.EnableReqReply;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+import javax.jms.Message;
+import javax.jms.TextMessage;
+
+@Component
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+@EnableReqReply
+public class SampleMQReqReply /* implements SomeGateway */ {
+    private final ReqReplyGateway sender;
+    {{^lombok}}
+
+    public SampleMQReqReply(ReqReplyGateway sender) {
+        this.sender = sender;
+    }
+    {{/lombok}}
+
+    public Mono<String> doRequest(String message) {
+        return sender.requestReply(message)
+                .map(this::extractResponse);
+    }
+
+    {{#lombok}}
+    @SneakyThrows
+    {{/lombok}}
+    private String extractResponse(Message message) {
+        {{#lombok}}
+        TextMessage textMessage = (TextMessage) message;
+        return textMessage.getText();
+        {{/lombok}}
+        {{^lombok}}
+        try {
+            TextMessage textMessage = (TextMessage) message;
+            return textMessage.getText();
+        } catch (JMSException e) {
+            throw new JMSRuntimeException(e.getMessage(), e.getErrorCode(), e);
+        }
+        {{/lombok}}
+    }
+}
