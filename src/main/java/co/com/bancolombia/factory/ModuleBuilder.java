@@ -68,23 +68,15 @@ public class ModuleBuilder {
     try {
       loadPackage();
     } catch (IOException e) {
-      logger.warn("cannot read gradle.properties");
+      logger.debug("cannot read gradle.properties");
     }
   }
 
   public void persist() throws IOException {
-    Release latestRelease = restService.getLatestPluginVersion();
-    if (latestRelease != null) {
-      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-        logger.lifecycle(
-            "WARNING: You have an old version of the plugin, the latest version is: {}",
-            latestRelease.getTagName());
-        params.put("latestRelease", latestRelease);
-      }
-    }
-    logger.lifecycle("Applying changes");
+    logger.lifecycle("Applying changes on disk");
 
-    logger.lifecycle("");
+    logger.lifecycle(
+        "files: {}, dirs: {}, deleted dirs: {}", files.size(), dirs.size(), dirsToDelete.size());
     dirs.forEach(
         dir -> {
           getProject().mkdir(dir);
@@ -112,6 +104,7 @@ public class ModuleBuilder {
           logger.debug("deleting dir {}", dir);
         });
     logger.lifecycle("Changes successfully applied");
+    getLatestRelease();
   }
 
   public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
@@ -282,6 +275,30 @@ public class ModuleBuilder {
     }
   }
 
+  public void updateFile(String path, FileUpdater updater) throws IOException {
+    String content = readFile(path);
+    addFile(path, updater.update(content));
+  }
+
+  public Release getLatestRelease() {
+    if (params.get("latestRelease") == null) {
+      loadLatestRelease();
+    }
+    return (Release) params.get("latestRelease");
+  }
+
+  private void loadLatestRelease() {
+    Release latestRelease = restService.getLatestPluginVersion();
+    if (latestRelease != null) {
+      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+        logger.lifecycle(
+            "WARNING: You have an old version of the plugin, the latest version is: {}",
+            latestRelease.getTagName());
+        params.put("latestRelease", latestRelease);
+      }
+    }
+  }
+
   private Boolean getABooleanProperty(String property) {
     try {
       String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
@@ -298,11 +315,6 @@ public class ModuleBuilder {
               + "=true to gradle.properties and relaunch this task");
       return false;
     }
-  }
-
-  private void updateFile(String path, FileUpdater updater) throws IOException {
-    String content = readFile(path);
-    addFile(path, updater.update(content));
   }
 
   private String readFile(String path) throws IOException {
