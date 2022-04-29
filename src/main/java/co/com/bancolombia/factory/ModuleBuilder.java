@@ -66,7 +66,7 @@ public class ModuleBuilder {
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
     try {
-      loadPackage();
+      loadPackage(); // TODO: Avoid real api call in unit tests
     } catch (IOException e) {
       logger.debug("cannot read gradle.properties");
     }

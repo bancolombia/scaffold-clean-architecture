@@ -111,6 +111,7 @@ pluginBundle {
 }
 
 jacocoTestReport {
+    dependsOn(tasks.test)
     reports {
         xml.enabled true
         xml.destination file("${buildDir}/reports/jacoco/report.xml")

@@ -10,13 +10,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.gradle.api.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
+@AllArgsConstructor
 public class UpdateDependencies implements UpgradeAction {
   public static final String DEPENDENCIES_TO_UPDATE = "dependenciesToUpdate";
-  private final RestService restService = new RestService();
+  private final RestService restService;
+
+  public UpdateDependencies() {
+    restService = new RestService();
+  }
 
   @Override
   @SneakyThrows

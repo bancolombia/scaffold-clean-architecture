@@ -13,10 +13,17 @@ import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
 
 public class UpgradeFactory implements ModuleFactory {
+  private static final String DEFAULT_PACKAGE = "co.com.bancolombia.factory.upgrades.actions";
+  public static final String UPGRADES = "upgrades.package";
+
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    getActions()
+    String basePackage =
+        builder.getStringParam(UPGRADES) != null
+            ? builder.getStringParam(UPGRADES)
+            : DEFAULT_PACKAGE;
+    getActions(basePackage)
         .sorted(Comparator.comparing(clazz -> clazz.getClass().getSimpleName()))
         .filter(action -> action.up(builder))
         .forEach(
@@ -25,8 +32,8 @@ public class UpgradeFactory implements ModuleFactory {
                     "Applying update with name {}: {}", action.name(), action.description()));
   }
 
-  private Stream<UpgradeAction> getActions() {
-    return new Reflections("co.com.bancolombia.factory.upgrades.actions", Scanners.SubTypes)
+  private Stream<UpgradeAction> getActions(String basePackage) {
+    return new Reflections(basePackage, Scanners.SubTypes)
         .getSubTypesOf(UpgradeAction.class).stream().map(this::instantiate);
   }
 
