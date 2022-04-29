@@ -32,7 +32,6 @@ import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 public class ModuleBuilder {
-
   private static final String APPLICATION_PROPERTIES =
       "applications/app-service/src/main/resources/application.yaml";
   private static final String DEFINITION_FILES = "definition.json";
