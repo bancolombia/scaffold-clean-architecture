@@ -289,13 +289,11 @@ public class ModuleBuilder {
 
   private void loadLatestRelease() {
     Release latestRelease = restService.getLatestPluginVersion();
-    if (latestRelease != null) {
-      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-        logger.lifecycle(
-            "WARNING: You have an old version of the plugin, the latest version is: {}",
-            latestRelease.getTagName());
-        params.put(LATEST_RELEASE, latestRelease);
-      }
+    if (latestRelease != null && !latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+      logger.lifecycle(
+          "WARNING: You have an old version of the plugin, the latest version is: {}",
+          latestRelease.getTagName());
+      params.put(LATEST_RELEASE, latestRelease);
     }
   }
 
