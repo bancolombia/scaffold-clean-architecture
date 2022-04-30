@@ -132,7 +132,7 @@ sonarqube {
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
         property "sonar.test", "src/test/java"
-        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/*AnUpdate.java"
+        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java"
         property "sonar.sourceEncoding", "UTF-8"
     }
 }
