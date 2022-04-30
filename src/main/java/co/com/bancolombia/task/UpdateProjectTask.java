@@ -24,7 +24,7 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void updateProject() throws IOException, CleanException {
-    if (CommandUtils.getDefault().hasGitPendingChanges()) {
+    if (CommandUtils.getDefault().hasGitPendingChanges(logger)) {
       logger.error(
           "ERROR: You have changes pending to be committed, please commit your changes before run this task");
       return;

@@ -36,6 +36,7 @@ public class ModuleBuilder {
       "applications/app-service/src/main/resources/application.yaml";
   private static final String DEFINITION_FILES = "definition.json";
   private static final String LANGUAGE = "language";
+  public static final String LATEST_RELEASE = "latestRelease";
   private final DefaultResolver resolver = new DefaultResolver();
   private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private final Map<String, FileModel> files = new ConcurrentHashMap<>();
@@ -65,7 +66,7 @@ public class ModuleBuilder {
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
     try {
-      loadPackage(); // TODO: Avoid real api call in unit tests
+      loadPackage();
     } catch (IOException e) {
       logger.debug("cannot read gradle.properties");
     }
@@ -280,10 +281,10 @@ public class ModuleBuilder {
   }
 
   public Release getLatestRelease() {
-    if (params.get("latestRelease") == null) {
+    if (params.get(LATEST_RELEASE) == null) {
       loadLatestRelease();
     }
-    return (Release) params.get("latestRelease");
+    return (Release) params.get(LATEST_RELEASE);
   }
 
   private void loadLatestRelease() {
@@ -293,7 +294,7 @@ public class ModuleBuilder {
         logger.lifecycle(
             "WARNING: You have an old version of the plugin, the latest version is: {}",
             latestRelease.getTagName());
-        params.put("latestRelease", latestRelease);
+        params.put(LATEST_RELEASE, latestRelease);
       }
     }
   }

@@ -13,17 +13,11 @@ public class RestService {
   private final Operations operations;
 
   public RestService() {
-    Operations definedOperations = null;
-    try {
-      if ("true".equals(FileUtils.readProperties(".", "simulateRest"))) {
-        definedOperations = new SimulatedOperations();
-      }
-    } catch (IOException ignored) {
+    if (shouldMock()) {
+      this.operations = new SimulatedOperations();
+    } else {
+      this.operations = new RestOperations();
     }
-    if (definedOperations == null) {
-      definedOperations = new RestOperations();
-    }
-    this.operations = definedOperations;
   }
 
   public Release getLatestPluginVersion() {
@@ -34,12 +28,20 @@ public class RestService {
     return operations.getTheLastDependencyRelease(dependency);
   }
 
+  private boolean shouldMock() {
+    try {
+      return "true".equals(FileUtils.readProperties(".", "simulateRest"));
+    } catch (IOException ignored) {
+      return false;
+    }
+  }
+
   private static class RestOperations implements Operations {
     public static final String PLUGIN_RELEASES =
         "http://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
     public static final String DEPENDENCY_RELEASES =
         "https://search.maven.org/solrsearch/select?q=g:%22%s%22+AND+a:%22%s%22&core=gav&rows=1&wt=json";
-    private final Logger logger = Logging.getLogger(RestService.class);
+    private final Logger logger = Logging.getLogger(RestOperations.class);
 
     @Override
     public Release getLatestPluginVersion() {
