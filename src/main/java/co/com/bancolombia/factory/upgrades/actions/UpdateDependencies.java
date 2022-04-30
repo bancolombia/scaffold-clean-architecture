@@ -4,7 +4,6 @@ import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
-import co.com.bancolombia.utils.Utils;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,7 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 public class UpdateDependencies implements UpgradeAction {
-  public static final String DEPENDENCIES_TO_UPDATE = "dependenciesToUpdate";
+  public static final String DEPENDENCIES_TO_UPDATE =
+      UpdateDependencies.class.getSimpleName() + "dependencies";
+  public static final String FILES_TO_UPDATE = UpdateDependencies.class.getSimpleName() + "files";
   private final RestService restService;
 
   public UpdateDependencies() {
@@ -30,7 +31,7 @@ public class UpdateDependencies implements UpgradeAction {
   public boolean up(ModuleBuilder builder) {
     Logger logger = builder.getProject().getLogger();
     logger.lifecycle("Updating dependencies");
-    List<String> gradleFiles = Utils.getAllFilesWithExtension(builder.isKotlin());
+    List<String> gradleFiles = (List<String>) builder.getParam(FILES_TO_UPDATE);
     Set<String> dependencies = (Set<String>) builder.getParam(DEPENDENCIES_TO_UPDATE);
     logger.lifecycle(
         "Dependencies to update: {}",
