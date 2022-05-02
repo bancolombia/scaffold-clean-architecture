@@ -40,6 +40,7 @@ public class Constants {
   public static class MainFiles {
     public static final String BUILD_GRADLE = "./build.gradle";
     public static final String MAIN_GRADLE = "./main.gradle";
+    public static final String DOCKERFILE = "./deployment/Dockerfile";
     public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
     public static final String APPLICATION_PROPERTIES =
         "applications/app-service/src/main/resources/application.yaml";

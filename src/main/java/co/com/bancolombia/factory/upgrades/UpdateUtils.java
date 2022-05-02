@@ -24,11 +24,12 @@ public class UpdateUtils {
     return applied.get();
   }
 
-  public static void updateVersions(
-      ModuleBuilder builder, String file, String property, String version) {
-    builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
-    builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
-  }
+    public static void updateVersions(
+            ModuleBuilder builder, String file, String property, String version) {
+        builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
+        builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
+    }
+
 
   public static void updateConfiguration(
       ModuleBuilder builder, String file, String configuration, String newConfiguration) {
