@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory;
 
+import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -32,8 +34,6 @@ import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 public class ModuleBuilder {
-  private static final String APPLICATION_PROPERTIES =
-      "applications/app-service/src/main/resources/application.yaml";
   private static final String DEFINITION_FILES = "definition.json";
   private static final String LANGUAGE = "language";
   public static final String LATEST_RELEASE = "latestRelease";
@@ -90,6 +90,7 @@ public class ModuleBuilder {
     files.forEach(
         (key, file) -> {
           try {
+            System.out.println("saving " + file.getPath());
             FileUtils.writeString(getProject(), file.getPath(), file.getContent());
           } catch (IOException e) {
             logger.error("error to write file {}", file.getPath());

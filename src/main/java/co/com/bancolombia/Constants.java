@@ -38,9 +38,11 @@ public class Constants {
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
-    public static final String BUILD_GRADLE = "build.gradle";
-    public static final String MAIN_GRADLE = "main.gradle";
-    public static final String APP_BUILD_GRADLE = "applications/app-service/build.gradle";
-    public static final String GRADLE_PROPERTIES = "gradle.properties";
+    public static final String BUILD_GRADLE = "./build.gradle";
+    public static final String MAIN_GRADLE = "./main.gradle";
+    public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
+    public static final String APPLICATION_PROPERTIES =
+        "applications/app-service/src/main/resources/application.yaml";
+    public static final String GRADLE_PROPERTIES = "./gradle.properties";
   }
 }
