@@ -19,7 +19,7 @@ public class Constants {
   public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "1.0.4";
   public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
   public static final String PLUGIN_VERSION = "2.2.5";
-  public static final String GRADLE_WRAPPER_VERSION = "6.9.1";
+  public static final String GRADLE_WRAPPER_VERSION = "7.4.2";
   public static final String KOTLIN_VERSION = "1.6.10";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
       "configurations {\n"
@@ -34,5 +34,16 @@ public class Constants {
   public enum BooleanOption {
     TRUE,
     FALSE
+  }
+
+  @NoArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class MainFiles {
+    public static final String BUILD_GRADLE = "./build.gradle";
+    public static final String MAIN_GRADLE = "./main.gradle";
+    public static final String DOCKERFILE = "./deployment/Dockerfile";
+    public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
+    public static final String APPLICATION_PROPERTIES =
+        "applications/app-service/src/main/resources/application.yaml";
+    public static final String GRADLE_PROPERTIES = "./gradle.properties";
   }
 }

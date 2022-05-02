@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory;
 
+import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -32,11 +34,9 @@ import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 
 public class ModuleBuilder {
-
-  private static final String APPLICATION_PROPERTIES =
-      "applications/app-service/src/main/resources/application.yaml";
   private static final String DEFINITION_FILES = "definition.json";
   private static final String LANGUAGE = "language";
+  public static final String LATEST_RELEASE = "latestRelease";
   private final DefaultResolver resolver = new DefaultResolver();
   private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private final Map<String, FileModel> files = new ConcurrentHashMap<>();
@@ -68,23 +68,15 @@ public class ModuleBuilder {
     try {
       loadPackage();
     } catch (IOException e) {
-      logger.warn("cannot read gradle.properties");
+      logger.debug("cannot read gradle.properties");
     }
   }
 
   public void persist() throws IOException {
-    Release latestRelease = restService.getLatestPluginVersion();
-    if (latestRelease != null) {
-      if (!latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-        logger.lifecycle(
-            "WARNING: You have an old version of the plugin, the latest version is: {}",
-            latestRelease.getTagName());
-        params.put("latestRelease", latestRelease);
-      }
-    }
-    logger.lifecycle("Applying changes");
+    logger.lifecycle("Applying changes on disk");
 
-    logger.lifecycle("");
+    logger.lifecycle(
+        "files: {}, dirs: {}, deleted dirs: {}", files.size(), dirs.size(), dirsToDelete.size());
     dirs.forEach(
         dir -> {
           getProject().mkdir(dir);
@@ -112,6 +104,7 @@ public class ModuleBuilder {
           logger.debug("deleting dir {}", dir);
         });
     logger.lifecycle("Changes successfully applied");
+    getLatestRelease();
   }
 
   public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
@@ -282,6 +275,28 @@ public class ModuleBuilder {
     }
   }
 
+  public void updateFile(String path, FileUpdater updater) throws IOException {
+    String content = readFile(path);
+    addFile(path, updater.update(content));
+  }
+
+  public Release getLatestRelease() {
+    if (params.get(LATEST_RELEASE) == null) {
+      loadLatestRelease();
+    }
+    return (Release) params.get(LATEST_RELEASE);
+  }
+
+  private void loadLatestRelease() {
+    Release latestRelease = restService.getLatestPluginVersion();
+    if (latestRelease != null && !latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+      logger.lifecycle(
+          "WARNING: You have an old version of the plugin, the latest version is: {}",
+          latestRelease.getTagName());
+      params.put(LATEST_RELEASE, latestRelease);
+    }
+  }
+
   private Boolean getABooleanProperty(String property) {
     try {
       String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
@@ -298,11 +313,6 @@ public class ModuleBuilder {
               + "=true to gradle.properties and relaunch this task");
       return false;
     }
-  }
-
-  private void updateFile(String path, FileUpdater updater) throws IOException {
-    String content = readFile(path);
-    addFile(path, updater.update(content));
   }
 
   private String readFile(String path) throws IOException {
