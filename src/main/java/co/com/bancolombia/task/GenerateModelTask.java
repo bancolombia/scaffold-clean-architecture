@@ -24,7 +24,6 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
     name = Utils.capitalize(name);
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Model Name: {}", name);
-    builder.loadPackage();
     builder.addParam("modelName", name.toLowerCase());
     builder.addParam("modelClassName", name);
     builder.addParam("lombok", builder.isEnableLombok());

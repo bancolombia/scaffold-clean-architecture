@@ -12,7 +12,7 @@ public class UpgradeY2022M04D26 implements UpgradeAction {
   public static final String GRADLE_VERSION_WRAPPER =
       "\n\n" + "tasks.named('wrapper') {" + "gradleVersion = '7.4.2'\n" + "}\n";
   public static final String LANGUAGE_PROPERTY = "language";
-  public static final String LANGUAGE_PROPERTY_VALUER = "language=java";
+  public static final String LANGUAGE_PROPERTY_VALUER = "\nlanguage=java";
 
   @Override
   @SneakyThrows
