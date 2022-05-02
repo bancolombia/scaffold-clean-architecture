@@ -1,6 +1,9 @@
 package co.com.bancolombia.factory;
 
 import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
+import static org.gradle.internal.impldep.org.apache.commons.lang.StringUtils.defaultIfBlank;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
@@ -210,8 +213,8 @@ public class ModuleBuilder {
 
   public void loadPackage() throws IOException {
     addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
-    this.params.put(
-        LANGUAGE, FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE));
+    String language = FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE);
+    this.params.put(LANGUAGE, defaultIfBlank(language, JAVA.name()));
   }
 
   public void addParamPackage(String packageName) {
@@ -252,7 +255,7 @@ public class ModuleBuilder {
   }
 
   public boolean isKotlin() {
-    return params.get(LANGUAGE).toString().equalsIgnoreCase("KOTLIN");
+    return KOTLIN.name().equalsIgnoreCase(params.get(LANGUAGE).toString());
   }
 
   public Boolean isEnableLombok() {
