@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UtilsTest {
+public class UpdateUtilsTest {
 
   @Mock private Project project;
   @Mock private Logger logger;
@@ -40,7 +40,7 @@ public class UtilsTest {
     builder.addFile(file, currentContent);
     String expectedContent = "dependencies {}\njar {enabled = false}";
     // Act
-    boolean applied = Utils.appendIfNotContains(builder, file, check, toAdd);
+    boolean applied = UpdateUtils.appendIfNotContains(builder, file, check, toAdd);
     // Assert
     verify(builder).addFile(file, expectedContent);
     assertTrue(applied);
@@ -55,7 +55,7 @@ public class UtilsTest {
     String currentContent = "dependencies {}\njar {enabled = false}";
     builder.addFile(file, currentContent);
     // Act
-    boolean applied = Utils.appendIfNotContains(builder, file, check, toAdd);
+    boolean applied = UpdateUtils.appendIfNotContains(builder, file, check, toAdd);
     // Assert
     verify(builder, times(2)).addFile(file, currentContent);
     assertFalse(applied);

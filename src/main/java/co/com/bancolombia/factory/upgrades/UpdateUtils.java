@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Utils {
+public class UpdateUtils {
 
   public static boolean appendIfNotContains(
       ModuleBuilder builder, String file, String contains, String toAdd) throws IOException {
@@ -22,5 +22,11 @@ public class Utils {
           return content;
         });
     return applied.get();
+  }
+
+  public static void updateVersions(
+      ModuleBuilder builder, String file, String property, String version) {
+    builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
+    builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
   }
 }
