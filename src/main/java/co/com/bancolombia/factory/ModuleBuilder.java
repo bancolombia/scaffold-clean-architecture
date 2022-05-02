@@ -90,7 +90,6 @@ public class ModuleBuilder {
     files.forEach(
         (key, file) -> {
           try {
-            System.out.println("saving " + file.getPath());
             FileUtils.writeString(getProject(), file.getPath(), file.getContent());
           } catch (IOException e) {
             logger.error("error to write file {}", file.getPath());
