@@ -80,7 +80,7 @@ public class UpdateDependencies implements UpgradeAction {
                                   + latestDependency.getGroup()
                                   + ":"
                                   + latestDependency.getArtifact()
-                                  + ":[^\\$].+",
+                                  + ":[^\\$].+['\"]",
                               "'" + latestDependency + "'"));
             });
   }

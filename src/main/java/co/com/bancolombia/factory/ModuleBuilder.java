@@ -1,6 +1,8 @@
 package co.com.bancolombia.factory;
 
 import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
@@ -65,11 +67,8 @@ public class ModuleBuilder {
     params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
-    try {
-      loadPackage();
-    } catch (IOException e) {
-      logger.debug("cannot read gradle.properties");
-    }
+    loadPackage();
+    loadLanguage();
   }
 
   public void persist() throws IOException {
@@ -208,12 +207,6 @@ public class ModuleBuilder {
     this.params.put(key, value);
   }
 
-  public void loadPackage() throws IOException {
-    addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
-    this.params.put(
-        LANGUAGE, FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE));
-  }
-
   public void addParamPackage(String packageName) {
     this.params.put("package", packageName.toLowerCase());
     this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
@@ -252,7 +245,7 @@ public class ModuleBuilder {
   }
 
   public boolean isKotlin() {
-    return params.get(LANGUAGE).toString().equalsIgnoreCase("KOTLIN");
+    return KOTLIN.name().equalsIgnoreCase(params.get(LANGUAGE).toString());
   }
 
   public Boolean isEnableLombok() {
@@ -285,6 +278,27 @@ public class ModuleBuilder {
       loadLatestRelease();
     }
     return (Release) params.get(LATEST_RELEASE);
+  }
+
+  private void loadPackage() {
+    try {
+      addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
+    } catch (IOException e) {
+      logger.debug("cannot read package from gradle.properties");
+    }
+  }
+
+  private void loadLanguage() {
+    String language = null;
+    try {
+      language = FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE);
+    } catch (IOException e) {
+      logger.debug("cannot read language from gradle.properties");
+    }
+    if (language == null) {
+      language = JAVA.name();
+    }
+    this.params.put(LANGUAGE, language);
   }
 
   private void loadLatestRelease() {

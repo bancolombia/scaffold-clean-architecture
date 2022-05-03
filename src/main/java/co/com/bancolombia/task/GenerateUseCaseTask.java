@@ -27,7 +27,6 @@ public class GenerateUseCaseTask extends CleanArchitectureDefaultTask {
     String useCaseName = className.replace(USECASE_CLASS_NAME, "").toLowerCase();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Use Case Name: {}", name);
-    builder.loadPackage();
     builder.addParam("useCaseName", useCaseName);
     builder.addParam("useCaseClassName", className);
     builder.addParam("lombok", builder.isEnableLombok());
