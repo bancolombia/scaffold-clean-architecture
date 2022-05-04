@@ -16,6 +16,8 @@ public class DrivenAdapterKms implements ModuleFactory {
     Logger logger = builder.getProject().getLogger();
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
+
+    builder.addAwsBom();
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
     builder

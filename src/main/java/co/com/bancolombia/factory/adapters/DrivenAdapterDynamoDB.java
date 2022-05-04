@@ -15,6 +15,7 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
     builder.addParam("reactive", builder.isReactive());
     String typePath = getPathType(builder.isReactive());
 
+    builder.addAwsBom();
     builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":dynamo-db");
     builder.appendDependencyToModule("app-service", dependency);
