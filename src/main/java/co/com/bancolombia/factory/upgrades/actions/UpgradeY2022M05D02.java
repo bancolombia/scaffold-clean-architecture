@@ -31,5 +31,6 @@ public class UpgradeY2022M05D02 implements UpgradeAction {
     UpdateUtils.updateConfiguration(builder, file, "runtime", "runtimeOnly");
     UpdateUtils.updateConfiguration(builder, file, "testRuntime", "testRuntimeOnly");
     UpdateUtils.updateConfiguration(builder, file, "testCompile", "testImplementation");
+    builder.updateExpression(file, "compile.exclude", "implementation.exclude");
   }
 }

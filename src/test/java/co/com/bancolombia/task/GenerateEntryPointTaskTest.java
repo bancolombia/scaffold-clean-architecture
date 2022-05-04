@@ -226,15 +226,15 @@ public class GenerateEntryPointTaskTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-undertow"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle"),
                 StandardCharsets.UTF_8)
             .contains(
-                "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+                "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'"));
   }
 
   @Test
@@ -258,15 +258,15 @@ public class GenerateEntryPointTaskTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-jetty"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle"),
                 StandardCharsets.UTF_8)
             .contains(
-                "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\""));
+                "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'"));
   }
 
   @Test
