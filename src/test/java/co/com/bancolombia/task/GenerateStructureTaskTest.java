@@ -144,6 +144,18 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
+  public void generateStructureOnExistingProject() throws IOException, CleanException {
+    // Arrange
+    task.generateStructureTask();
+    // Act
+    task.generateStructureTask();
+    // Assert
+    assertTrue(new File("build/unitTest/build.gradle").exists());
+    assertTrue(new File("build/unitTest/gradle.properties").exists());
+    assertTrue(new File("build/unitTest/main.gradle").exists());
+  }
+
+  @Test
   public void shouldGetLombokOptions() {
     // Arrange
     // Act
