@@ -23,6 +23,7 @@ public class DrivenAdapterSecrets implements ModuleFactory {
       builder.setupFromTemplate("driven-adapter/secrets");
     }
     logger.lifecycle("Generating  mode");
+    builder.addAwsBom();
     String dependency =
         buildImplementation(
             builder.isKotlin(),

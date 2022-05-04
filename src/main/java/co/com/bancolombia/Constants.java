@@ -19,6 +19,8 @@ public class Constants {
   public static final String PLUGIN_VERSION = "2.3.1";
   public static final String GRADLE_WRAPPER_VERSION = "7.4.2";
   public static final String KOTLIN_VERSION = "1.6.10";
+  public static final String AWS_BOM_VERSION = "2.17.182";
+  public static final String COMMONS_JMS_VERSION = "0.2.0";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
       "configurations {\n"
           + "\tall {\n"
@@ -27,7 +29,8 @@ public class Constants {
           + "}";
   public static final String TOMCAT_EXCLUSION =
       "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
-  public static final String COMMONS_JMS_VERSION = "0.2.0";
+  public static final String AWS_BOM =
+      "\timplementation platform('software.amazon.awssdk:bom:" + Constants.AWS_BOM_VERSION + "')";
 
   public enum BooleanOption {
     TRUE,

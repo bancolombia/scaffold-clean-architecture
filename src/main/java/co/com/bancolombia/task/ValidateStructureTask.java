@@ -25,6 +25,7 @@ public class ValidateStructureTask extends DefaultTask {
   private static final String REACTOR_CORE = "reactor-core";
   private static final String REACTOR_EXTRA = "reactor-extra";
   private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
+  private static final String AWS_BOM = "bom";
 
   @TaskAction
   public void validateStructureTask() throws IOException, CleanException {
@@ -77,7 +78,7 @@ public class ValidateStructureTask extends DefaultTask {
   }
 
   private boolean filterExcludedDependencies(Dependency dependency) {
-    return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE, SPRING_DEPENDENCIES)
+    return !Arrays.asList(REACTOR_EXTRA, REACTOR_CORE, SPRING_DEPENDENCIES, AWS_BOM)
         .contains(dependency.getName());
   }
 

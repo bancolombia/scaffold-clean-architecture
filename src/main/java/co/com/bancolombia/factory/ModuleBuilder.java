@@ -1,6 +1,6 @@
 package co.com.bancolombia.factory;
 
-import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.*;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
 
@@ -271,6 +271,15 @@ public class ModuleBuilder {
   public void updateFile(String path, FileUpdater updater) throws IOException {
     String content = readFile(path);
     addFile(path, updater.update(content));
+  }
+
+  public void addAwsBom() throws IOException {
+    if (!readFile(MAIN_GRADLE).contains("software.amazon.awssdk")) {
+      updateFile(MAIN_GRADLE, content -> Utils.addDependency(content, Constants.AWS_BOM));
+    }
+    updateFile(
+        APP_BUILD_GRADLE,
+        content -> Utils.addDependency(content, "implementation 'software.amazon.awssdk:sts'"));
   }
 
   public Release getLatestRelease() {
