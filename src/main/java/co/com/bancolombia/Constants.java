@@ -10,8 +10,6 @@ public class Constants {
   public static final String PATH_GRAPHQL = "/graphqlpath";
   public static final String SECRETS_VERSION = "3.0.0";
   public static final String SPRING_BOOT_VERSION = "2.6.7";
-  public static final String UNDERTOW_VERSION = "2.6.7";
-  public static final String JETTY_VERSION = "2.6.7";
   public static final String SONAR_VERSION = "3.0";
   public static final String LOMBOK_VERSION = "1.18.22";
   public static final String JACOCO_VERSION = "0.8.5";
@@ -28,7 +26,7 @@ public class Constants {
           + "\t}\n"
           + "}";
   public static final String TOMCAT_EXCLUSION =
-      "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
+      "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String COMMONS_JMS_VERSION = "0.2.0";
 
   public enum BooleanOption {

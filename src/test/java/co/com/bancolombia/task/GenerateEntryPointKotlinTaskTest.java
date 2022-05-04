@@ -227,12 +227,12 @@ public class GenerateEntryPointKotlinTaskTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle.kts"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-undertow"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle.kts"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains(
                 "exclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")"));
@@ -259,12 +259,12 @@ public class GenerateEntryPointKotlinTaskTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle.kts"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-jetty"));
     assertTrue(
         FileUtils.readFileToString(
-                new File("build/unitTest/applications/app-service/build.gradle.kts"),
+                new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts"),
                 StandardCharsets.UTF_8)
             .contains(
                 "exclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")"));

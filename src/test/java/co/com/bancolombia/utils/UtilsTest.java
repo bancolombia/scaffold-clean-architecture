@@ -389,7 +389,7 @@ public class UtilsTest {
         result);
     result = Utils.tomcatExclusion(false);
     assertEquals(
-        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"",
+        "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'",
         result);
   }
 
