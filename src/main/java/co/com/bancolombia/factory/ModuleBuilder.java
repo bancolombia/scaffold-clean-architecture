@@ -144,7 +144,7 @@ public class ModuleBuilder {
   }
 
   public void updateExpression(String path, String regex, String value) throws IOException {
-    updateFile(path, properties -> Utils.replaceExpression(properties, regex, value));
+    updateFile(path, content -> Utils.replaceExpression(content, regex, value));
   }
 
   @SneakyThrows
@@ -158,8 +158,8 @@ public class ModuleBuilder {
         .matcher(readFile(path))
         .results()
         .map(MatchResult::group)
-        .map(s -> s.replaceAll("'", ""))
-        .map(s -> s.replaceAll("\"", ""))
+        .map(s -> s.replace("'", ""))
+        .map(s -> s.replace("\"", ""))
         .collect(Collectors.toSet());
   }
 
@@ -211,7 +211,7 @@ public class ModuleBuilder {
 
   public void addParamPackage(String packageName) {
     this.params.put("package", packageName.toLowerCase());
-    this.params.put("packagePath", packageName.replaceAll("\\.", "\\/").toLowerCase());
+    this.params.put("packagePath", packageName.replace('.', '/').toLowerCase());
   }
 
   public void addFile(String path, String content) {

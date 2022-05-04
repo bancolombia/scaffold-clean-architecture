@@ -1,7 +1,9 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
+import static org.junit.Assert.assertNull;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
@@ -36,11 +38,13 @@ public class UpdateProjectTaskTest {
 
     project.getTasks().create("test", UpdateProjectTask.class);
     task = (UpdateProjectTask) project.getTasks().getByName("test");
+    task.setGit(Constants.BooleanOption.FALSE);
   }
 
   @Test
   public void shouldUpdateProject() throws IOException, CleanException {
     task.updateProject();
+    assertNull(task.getState().getOutcome());
   }
 
   @Test
@@ -49,6 +53,7 @@ public class UpdateProjectTaskTest {
     task.setDependencies("org.mockito:mockito-core org.projectlombok:lombok");
     // Act
     task.updateProject();
+    assertNull(task.getState().getOutcome());
   }
 
   @Test
@@ -57,6 +62,7 @@ public class UpdateProjectTaskTest {
     task.setDependencies("does_dependency:not_exist");
     // Act
     task.updateProject();
+    assertNull(task.getState().getOutcome());
   }
 
   @Test
@@ -66,5 +72,6 @@ public class UpdateProjectTaskTest {
     // Act
 
     task.updateProject();
+    assertNull(task.getState().getOutcome());
   }
 }
