@@ -1,0 +1,13 @@
+{
+  "folders": [],
+  "files": {
+    "structure/root/gradle.properties.mustache": "gradle.properties"
+  },
+  "kotlin": {
+    "structure/root/build.gradle.kts.mustache": "build.gradle.kts"
+  },
+  "java": {
+    "structure/root/main.gradle.mustache": "main.gradle",
+    "structure/root/build.gradle.mustache": "build.gradle"
+  }
+}

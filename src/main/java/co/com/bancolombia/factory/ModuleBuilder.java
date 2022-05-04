@@ -143,8 +143,7 @@ public class ModuleBuilder {
         });
   }
 
-  @SneakyThrows
-  public void updateExpression(String path, String regex, String value) {
+  public void updateExpression(String path, String regex, String value) throws IOException {
     updateFile(path, properties -> Utils.replaceExpression(properties, regex, value));
   }
 

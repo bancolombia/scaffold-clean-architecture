@@ -25,13 +25,14 @@ public class UpdateUtils {
   }
 
   public static void updateVersions(
-      ModuleBuilder builder, String file, String property, String version) {
+      ModuleBuilder builder, String file, String property, String version) throws IOException {
     builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
     builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
   }
 
   public static void updateConfiguration(
-      ModuleBuilder builder, String file, String configuration, String newConfiguration) {
+      ModuleBuilder builder, String file, String configuration, String newConfiguration)
+      throws IOException {
     builder.updateExpression(file, "(" + configuration + "\\s)", newConfiguration + " ");
     builder.updateExpression(file, "(" + configuration + "\\()", newConfiguration + "(");
   }

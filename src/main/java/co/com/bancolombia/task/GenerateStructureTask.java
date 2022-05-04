@@ -1,7 +1,10 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -92,12 +95,39 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("java11", javaVersion == JavaVersion.VERSION_11);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
 
-    if (lombok == BooleanOption.TRUE) {
-      builder.setupFromTemplate("structure");
+    boolean exists = FileUtils.exists(MAIN_GRADLE);
+    if (exists) {
+      logger.lifecycle(
+          "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
+      loadProperty("package");
+      loadProperty("reactive");
+      loadProperty("lombok");
+      loadProperty("language");
+      if (builder.getBooleanParam("lombok")) {
+        builder.setupFromTemplate("structure/restructure");
+      } else {
+        builder.setupFromTemplate("structure/restructure/without-lombok");
+      }
     } else {
-      builder.setupFromTemplate("structure/without-lombok");
+      if (lombok == BooleanOption.TRUE) {
+        builder.setupFromTemplate("structure");
+      } else {
+        builder.setupFromTemplate("structure/without-lombok");
+      }
     }
+
     builder.persist();
+  }
+
+  private void loadProperty(String property) {
+    try {
+      String propertyValue = FileUtils.readProperties(".", property);
+      if (propertyValue != null && !propertyValue.isEmpty()) {
+        builder.addParam(property, propertyValue);
+      }
+    } catch (IOException ignored) {
+      logger.debug("Error reading property {} from gradle.properties", property);
+    }
   }
 
   public enum ProjectType {

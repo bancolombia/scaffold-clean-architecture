@@ -7,9 +7,11 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
+import lombok.SneakyThrows;
 
 public class ZUpdateGenericDependenciesVersion implements UpgradeAction {
   @Override
+  @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     UpdateUtils.updateVersions(
         builder, BUILD_GRADLE, "springBootVersion", Constants.SPRING_BOOT_VERSION);

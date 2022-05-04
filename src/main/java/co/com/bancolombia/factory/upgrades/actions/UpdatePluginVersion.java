@@ -8,10 +8,13 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.Utils;
+import java.io.IOException;
+import lombok.SneakyThrows;
 import org.gradle.api.logging.Logger;
 
 public class UpdatePluginVersion implements UpgradeAction {
   @Override
+  @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     Logger logger = builder.getProject().getLogger();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
@@ -35,7 +38,8 @@ public class UpdatePluginVersion implements UpgradeAction {
     return "Update the plugin to the latest version";
   }
 
-  private boolean updatePlugin(String lastRelease, Logger logger, ModuleBuilder builder) {
+  private boolean updatePlugin(String lastRelease, Logger logger, ModuleBuilder builder)
+      throws IOException {
     if (lastRelease.equals(Utils.getVersionPlugin())) {
       logger.lifecycle("You are already using the latest version of the plugin");
       return false;

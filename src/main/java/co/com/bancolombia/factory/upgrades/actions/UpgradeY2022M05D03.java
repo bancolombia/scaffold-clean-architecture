@@ -39,11 +39,12 @@ public class UpgradeY2022M05D03 implements UpgradeAction {
   private boolean applyUpdate(ModuleBuilder builder, String file) {
     AtomicBoolean applied = new AtomicBoolean(false);
     String regex = "['\\\"](software\\.amazon\\.awssdk:)((?!(bom)).*)(:.+)['\\\"]";
+    String regexExists = "['\\\"](software\\.amazon\\.awssdk:)(.+)['\\\"]";
     builder.updateFile(
         file,
         content -> {
           String result = Utils.replaceExpression(content, regex, "'$1$2'");
-          if (!content.equals(result)) {
+          if (!content.matches(regexExists)) {
             applied.set(true);
           }
           return result;

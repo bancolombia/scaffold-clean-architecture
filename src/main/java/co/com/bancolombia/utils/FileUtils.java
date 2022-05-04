@@ -79,4 +79,8 @@ public class FileUtils {
         new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
     return mapper.writeValueAsString(node);
   }
+
+  public static boolean exists(String file) {
+    return Files.exists(Paths.get(file));
+  }
 }

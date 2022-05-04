@@ -72,16 +72,20 @@ public class UpdateDependencies implements UpgradeAction {
               logger.lifecycle("\t- " + latestDependency);
               gradleFiles
                   .parallelStream()
-                  .forEach(
-                      gradleFile ->
-                          builder.updateExpression(
-                              gradleFile,
-                              "['\"]"
-                                  + latestDependency.getGroup()
-                                  + ":"
-                                  + latestDependency.getArtifact()
-                                  + ":[^\\$].+['\"]",
-                              "'" + latestDependency + "'"));
+                  .forEach(gradleFile -> update(builder, latestDependency, gradleFile));
             });
+  }
+
+  @SneakyThrows
+  private void update(
+      ModuleBuilder builder, DependencyRelease latestDependency, String gradleFile) {
+    builder.updateExpression(
+        gradleFile,
+        "['\"]"
+            + latestDependency.getGroup()
+            + ":"
+            + latestDependency.getArtifact()
+            + ":[^\\$].+['\"]",
+        "'" + latestDependency + "'");
   }
 }
