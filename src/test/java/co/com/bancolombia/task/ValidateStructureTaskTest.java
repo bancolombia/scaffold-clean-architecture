@@ -1,12 +1,14 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.plugins.JavaPlugin;
@@ -21,6 +23,7 @@ public class ValidateStructureTaskTest {
   ValidateStructureTask task;
 
   public void setupException() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     Project project =
         ProjectBuilder.builder()
             .withName("cleanArchitecture")
@@ -64,9 +67,7 @@ public class ValidateStructureTaskTest {
     Task task2 = modelProject.getTasks().getByName("clean");
     task2.getActions().get(0).execute(task2);
 
-    assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
-            .exists());
+    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
 
     project.getTasks().create("validate", ValidateStructureTask.class);
     task = (ValidateStructureTask) project.getTasks().getByName("validate");

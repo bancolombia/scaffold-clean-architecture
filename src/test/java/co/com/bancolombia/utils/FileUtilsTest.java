@@ -9,8 +9,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Test;
@@ -161,6 +166,29 @@ public class FileUtilsTest {
     String result = Utils.addDependency(build, "implementation project(':my-module')");
     // Assert
     assertEquals(expected, result);
+  }
+
+  public static void deleteStructure(Path sourcePath) {
+    try {
+      Files.walkFileTree(
+          sourcePath,
+          new SimplePathVisitor() {
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+              Files.delete(dir);
+              return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+                throws IOException {
+              Files.delete(file);
+              return FileVisitResult.CONTINUE;
+            }
+          });
+    } catch (IOException e) {
+      System.out.println("error delete Structure " + e.getMessage());
+    }
   }
 
   private enum Options {

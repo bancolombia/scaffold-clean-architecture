@@ -63,6 +63,7 @@ The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
 ## Generate Project
 
 The **`cleanArchitecture | ca`** task will generate a clean architecture structure in your project, this task has four optional parameters; `package` , `type`, `name` and `coverage`.
+If you run this task on an existing project it will override the `main.gradle`, `build.gradle` and `gradle.properties` files. 
 
    - **`package`** `= <package.we.need>`: You can specify the main or default package of your project. `Default Value = co.com.bancolombia`
 

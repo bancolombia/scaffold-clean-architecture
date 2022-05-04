@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.List;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -24,6 +26,7 @@ public class GenerateDrivenAdapterTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
   }
 
@@ -542,14 +545,6 @@ public class GenerateDrivenAdapterTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/KmsAdapter.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
             .exists());
   }
 

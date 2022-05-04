@@ -1,8 +1,11 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
+
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -13,6 +16,7 @@ public class UpdateProjectTaskTest {
 
   @Before
   public void setup() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     Project project =
         ProjectBuilder.builder()
             .withName("cleanArchitecture")

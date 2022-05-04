@@ -6,6 +6,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.util.List;
+import lombok.SneakyThrows;
 
 public class UpgradeY2022M05D02 implements UpgradeAction {
   @Override
@@ -26,6 +27,7 @@ public class UpgradeY2022M05D02 implements UpgradeAction {
     return "Update of gradle removed configurations";
   }
 
+  @SneakyThrows
   private void applyUpdate(ModuleBuilder builder, String file) {
     UpdateUtils.updateConfiguration(builder, file, "compile", "implementation");
     UpdateUtils.updateConfiguration(builder, file, "runtime", "runtimeOnly");
