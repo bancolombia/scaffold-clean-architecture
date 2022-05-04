@@ -1,5 +1,8 @@
 package co.com.bancolombia.factory;
 
+import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static org.junit.Assert.assertTrue;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateStructureTask;
 import java.io.File;
@@ -44,6 +47,12 @@ public class ModuleBuilderTest {
     builder.appendToProperties("server").put("port", 8000);
     builder.removeDir(null);
     builder.persist();
+    builder.updateFile(
+        APPLICATION_PROPERTIES,
+        content -> {
+          assertTrue(content.contains("myUnitTes"));
+          return content;
+        });
   }
 
   private void writeString(File file, String string) throws IOException {

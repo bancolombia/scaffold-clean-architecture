@@ -412,6 +412,13 @@ public class UtilsTest {
     assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
   }
 
+  @Test
+  public void sample() throws IOException {
+    assertEquals("my/path/package", "my.path.package".replace('.', '/'));
+    assertEquals("mypathpackage", "my'path'package".replace("'", ""));
+    assertEquals("mypathpackage", "my\"path\"package".replace("\"", ""));
+  }
+
   private enum Options {
     A,
     BC,
