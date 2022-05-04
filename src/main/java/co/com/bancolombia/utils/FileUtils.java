@@ -80,7 +80,7 @@ public class FileUtils {
     return mapper.writeValueAsString(node);
   }
 
-  public static boolean exists(String file) {
-    return Files.exists(Paths.get(file));
+  public static boolean exists(String dir, String file) {
+    return Files.exists(Paths.get(dir, file));
   }
 }

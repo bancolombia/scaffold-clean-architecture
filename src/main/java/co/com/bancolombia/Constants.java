@@ -31,6 +31,10 @@ public class Constants {
       "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String AWS_BOM =
       "\timplementation platform('software.amazon.awssdk:bom:" + Constants.AWS_BOM_VERSION + "')";
+  public static final String AWS_BOM_KT =
+      "\timplementation(platform(\"software.amazon.awssdk:bom:"
+          + Constants.AWS_BOM_VERSION
+          + "\"))";
 
   public enum BooleanOption {
     TRUE,
@@ -39,10 +43,13 @@ public class Constants {
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
+    public static final String KTS = ".kts";
     public static final String BUILD_GRADLE = "./build.gradle";
+    public static final String BUILD_GRADLE_KTS = BUILD_GRADLE + KTS;
     public static final String MAIN_GRADLE = "./main.gradle";
     public static final String DOCKERFILE = "./deployment/Dockerfile";
     public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
+    public static final String APP_BUILD_GRADLE_KTS = APP_BUILD_GRADLE + KTS;
     public static final String APPLICATION_PROPERTIES =
         "applications/app-service/src/main/resources/application.yaml";
     public static final String GRADLE_PROPERTIES = "./gradle.properties";

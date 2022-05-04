@@ -1,8 +1,10 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import org.gradle.api.Project;
 import org.gradle.api.internal.tasks.options.OptionDescriptor;
@@ -17,6 +19,7 @@ public class CleanArchitectureDefaultTaskTest {
 
   @Before
   public void setup() {
+    deleteStructure(Path.of("build/unitTest"));
     project =
         ProjectBuilder.builder()
             .withName("cleanArchitecture")

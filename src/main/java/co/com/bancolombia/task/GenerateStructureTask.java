@@ -96,7 +96,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("java11", javaVersion == JavaVersion.VERSION_11);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
 
-    boolean exists = FileUtils.exists(MAIN_GRADLE);
+    boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
     if (exists) {
       logger.lifecycle(
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");

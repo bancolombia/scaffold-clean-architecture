@@ -1,18 +1,13 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
-import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.AfterClass;
@@ -27,6 +22,7 @@ public class GenerateTestTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
   }
 
@@ -50,29 +46,6 @@ public class GenerateTestTaskTest {
 
     project.getTasks().create("test", GenerateAcceptanceTestTask.class);
     task = (GenerateAcceptanceTestTask) project.getTasks().getByName("test");
-  }
-
-  private static void deleteStructure(Path sourcePath) {
-    try {
-      Files.walkFileTree(
-          sourcePath,
-          new SimplePathVisitor() {
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-              Files.delete(dir);
-              return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-                throws IOException {
-              Files.delete(file);
-              return FileVisitResult.CONTINUE;
-            }
-          });
-    } catch (IOException e) {
-      System.out.println("error delete Structure " + e.getMessage());
-    }
   }
 
   @Test
@@ -101,11 +74,5 @@ public class GenerateTestTaskTest {
     assertTrue(new File("build/unitTest/deployment/acceptance-test/settings.gradle").exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/build.gradle").exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/README.md").exists());
-  }
-
-  private void writeString(File file, String string) throws IOException {
-    try (Writer writer = new FileWriter(file)) {
-      writer.write(string);
-    }
   }
 }

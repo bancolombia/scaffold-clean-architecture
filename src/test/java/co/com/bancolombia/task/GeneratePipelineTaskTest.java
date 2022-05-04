@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -9,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -20,6 +22,7 @@ public class GeneratePipelineTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     File projectDir = new File("build/unitTest");
     Files.createDirectories(projectDir.toPath());
     writeString(

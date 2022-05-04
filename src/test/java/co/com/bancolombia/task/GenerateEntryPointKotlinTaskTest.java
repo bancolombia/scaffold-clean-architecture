@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
 import co.com.bancolombia.Constants;
@@ -26,6 +27,7 @@ public class GenerateEntryPointKotlinTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
   }
 

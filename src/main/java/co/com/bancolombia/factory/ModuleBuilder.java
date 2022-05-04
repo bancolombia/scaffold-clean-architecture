@@ -166,6 +166,9 @@ public class ModuleBuilder {
   public void appendDependencyToModule(String module, String dependency) throws IOException {
     logger.lifecycle("adding dependency {} to module {}", dependency, module);
     String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+    if (isKotlin() && !buildFilePath.endsWith(KTS)) {
+      buildFilePath += KTS;
+    }
     updateFile(buildFilePath, current -> Utils.addDependency(current, dependency));
   }
 
@@ -272,7 +275,22 @@ public class ModuleBuilder {
     addFile(path, updater.update(content));
   }
 
+  public Release getLatestRelease() {
+    if (params.get(LATEST_RELEASE) == null) {
+      loadLatestRelease();
+    }
+    return (Release) params.get(LATEST_RELEASE);
+  }
+
   public void addAwsBom() throws IOException {
+    if (isKotlin()) {
+      addAwsBomKotlin();
+    } else {
+      addAwsBomJava();
+    }
+  }
+
+  private void addAwsBomJava() throws IOException {
     if (!readFile(MAIN_GRADLE).contains("software.amazon.awssdk")) {
       updateFile(MAIN_GRADLE, content -> Utils.addDependency(content, Constants.AWS_BOM));
     }
@@ -281,11 +299,13 @@ public class ModuleBuilder {
         content -> Utils.addDependency(content, "implementation 'software.amazon.awssdk:sts'"));
   }
 
-  public Release getLatestRelease() {
-    if (params.get(LATEST_RELEASE) == null) {
-      loadLatestRelease();
+  private void addAwsBomKotlin() throws IOException {
+    if (!readFile(BUILD_GRADLE_KTS).contains("software.amazon.awssdk")) {
+      updateFile(BUILD_GRADLE_KTS, content -> Utils.addDependency(content, Constants.AWS_BOM_KT));
     }
-    return (Release) params.get(LATEST_RELEASE);
+    updateFile(
+        APP_BUILD_GRADLE_KTS,
+        content -> Utils.addDependency(content, "implementation(\"software.amazon.awssdk:sts\")"));
   }
 
   private void loadPackage() {

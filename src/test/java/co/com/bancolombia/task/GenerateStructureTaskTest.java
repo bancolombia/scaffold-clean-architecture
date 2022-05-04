@@ -1,25 +1,33 @@
 package co.com.bancolombia.task;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
+import static org.junit.Assert.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
 public class GenerateStructureTaskTest {
+  public static final String DIR = "build/unitTest/";
   private GenerateStructureTask task;
 
   @Before
   public void setup() {
-    Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+    deleteStructure(Path.of(DIR));
+    Project project =
+        ProjectBuilder.builder()
+            .withProjectDir(new File("build/unitTest/"))
+            .withGradleUserHomeDir(new File(DIR))
+            .build();
     project.getTasks().create("test", GenerateStructureTask.class);
 
     task = (GenerateStructureTask) project.getTasks().getByName("test");
@@ -97,19 +105,20 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void generateStructureReactiveWithCobertura() throws IOException, CleanException {
+  public void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
     // Arrange
     task.setPackage("test");
     task.setName("projectTest");
     task.setType(GenerateStructureTask.ProjectType.REACTIVE);
     task.setCoveragePlugin(GenerateStructureTask.CoveragePlugin.COBERTURA);
+    task.setStatusLombok(Constants.BooleanOption.FALSE);
     // Act
     task.generateStructureTask();
     // Assert
     assertTrue(new File("build/unitTest/README.md").exists());
     assertTrue(new File("build/unitTest/.gitignore").exists());
     assertTrue(new File("build/unitTest/build.gradle").exists());
-    assertTrue(new File("build/unitTest/lombok.config").exists());
+    assertFalse(new File("build/unitTest/lombok.config").exists());
     assertTrue(new File("build/unitTest/main.gradle").exists());
     assertTrue(new File("build/unitTest/settings.gradle").exists());
 
@@ -130,7 +139,7 @@ public class GenerateStructureTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+                "build/unitTest/applications/app-service/src/main/java/test/config/UseCasesConfig.java")
             .exists());
     assertTrue(
         new File("build/unitTest/applications/app-service/src/main/java/test/config").exists());
@@ -156,11 +165,30 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
+  public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
+    // Arrange
+    task.setStatusLombok(Constants.BooleanOption.FALSE);
+    task.generateStructureTask();
+    // Act
+    task.generateStructureTask();
+    // Assert
+    assertTrue(new File("build/unitTest/build.gradle").exists());
+    assertTrue(new File("build/unitTest/gradle.properties").exists());
+    assertTrue(new File("build/unitTest/main.gradle").exists());
+    assertFalse(new File("build/unitTest/lombok.config").exists());
+  }
+
+  @Test
   public void shouldGetLombokOptions() {
     // Arrange
     // Act
     List<Constants.BooleanOption> options = task.getLombokOptions();
     // Assert
     assertEquals(2, options.size());
+  }
+
+  @AfterClass
+  public static void clean() {
+    deleteStructure(Path.of(DIR));
   }
 }
