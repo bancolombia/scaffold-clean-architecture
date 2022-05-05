@@ -79,7 +79,6 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateStructureTask() throws IOException, CleanException {
-    String lombokParam = "lombok";
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
@@ -89,7 +88,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("reactive", type == ProjectType.REACTIVE);
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
-    builder.addParam(lombokParam, lombok == BooleanOption.TRUE);
+    builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("language", language.name().toLowerCase());
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java8", javaVersion == JavaVersion.VERSION_1_8);
@@ -101,10 +100,10 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
       logger.lifecycle(
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
       loadProperty("package");
-      loadProperty("reactive");
-      loadProperty(lombokParam);
       loadProperty("language");
-      if (builder.getBooleanParam(lombokParam)) {
+      builder.addParam("reactive", builder.isReactive());
+      builder.addParam("lombok", builder.isEnableLombok());
+      if (builder.isEnableLombok()) {
         builder.setupFromTemplate("structure/restructure");
       } else {
         builder.setupFromTemplate("structure/restructure/without-lombok");

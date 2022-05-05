@@ -26,11 +26,11 @@ public class GenerateDrivenAdapterTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
-    deleteStructure(Path.of("build/unitTest"));
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
   }
 
   private void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
     ProjectBuilder.builder()
