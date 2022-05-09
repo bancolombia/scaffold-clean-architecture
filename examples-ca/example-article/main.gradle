@@ -15,11 +15,12 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
+        implementation platform('software.amazon.awssdk:bom:2.17.186')
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
@@ -60,6 +61,7 @@ tasks.withType(JavaCompile) {
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+
 tasks.named('wrapper') {
-  gradleVersion = '6.7'
- }
+    gradleVersion = '7.4.2'
+}
