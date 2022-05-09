@@ -18,7 +18,7 @@ public class CrudProductUseCase {
     return productRepository.read(id);
   }
 
-  public void update(String id, Product product) throws new Exception {
+  public void update(String id, Product product) throws Exception {
     productRepository.update(id, product);
   }
 
