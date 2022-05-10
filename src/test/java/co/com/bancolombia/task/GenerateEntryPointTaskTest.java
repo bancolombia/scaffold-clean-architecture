@@ -463,4 +463,21 @@ public class GenerateEntryPointTaskTest {
     // Assert
     assertEquals(2, options.size());
   }
+
+  @Test
+  public void generateEntryPointSQSListener() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryEntryPoint.EntryPointType.SQS);
+
+    // Act
+    task.generateEntryPointTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/entry-points/sqs-listener/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/sqs-listener/src/main/java/co/com/bancolombia/sqs/listener/SQSProcessor.java")
+            .exists());
+  }
 }
