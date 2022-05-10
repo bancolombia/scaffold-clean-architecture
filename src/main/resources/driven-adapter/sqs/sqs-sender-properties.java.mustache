@@ -1,0 +1,38 @@
+package {{package}}.sqs.sender.config;
+
+{{#lombok}}
+import lombok.Data;
+{{/lombok}}
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+{{#lombok}}
+@Data
+{{/lombok}}
+@Configuration
+@ConfigurationProperties(prefix = "adapter.sqs")
+public class SQSSenderProperties {
+    private String region;
+    private String queueUrl;
+{{^lombok}}
+
+    public SQSSenderProperties() {
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getQueueUrl() {
+        return queueUrl;
+    }
+
+    public void setQueueUrl(String queueUrl) {
+        this.queueUrl = queueUrl;
+    }
+{{/lombok}}
+}
