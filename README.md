@@ -13,13 +13,13 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
 - [Plugin Implementation](#plugin-implementation)
 - [Tasks](#tasks)
   - [Generate Project](#generate-project)
-  - [Generate Model](#generate-model)
-  - [Generate Use Case](#generate-use-case)
+  - [Generate Model for Java an Kotlin](#generate-model-for-java-an-kotlin)
+  - [Generate Use Case for Java and Kotlin](#generate-use-case-for-java-and-kotlin)
   - [Generate Driven Adapter](#generate-driven-adapter)
   - [Generate Entry Point](#generate-entry-point)
   - [Generate Helper](#generate-helper)
   - [Generate Pipeline](#generate-pipeline)
-  - [Generate Acceptance Tests](#generate-acceptance-test)
+  - [Generate Acceptance Test](#generate-acceptance-test)
   - [Validate Structure](#validate-structure)
   - [Delete Module](#delete-module)
   - [Update Project](#update-project)
@@ -353,16 +353,16 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    gradle gep --type [entryPointType]
    ```
 
-   | Reference for **entryPointType** | Name                                   | Additional Options                       |Java | Kotlin |
-----------------------------------|----------------------------------|----------------------------------------|------------------------------------------|------|--------|
-   | generic                          | Empty Entry Point                      | --name [name]                            |&#9745;|&#9745;|
-   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |&#9745;|&#9745;|
-   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |&#9745;|&#9745;|
-   | rsocket                          | Rsocket Controller Entry Point         |                                          |&#9745;|&#9745;|
-   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |&#9745;|&#9745;|
-   | asynceventhandler                | Async Event Handler                    |                                          |&#9745;|&#9745;|
-   | mq                               | JMS MQ Client to listen messages       |                                          |&#9745;|&#9745;|
-   | sqs                              | SQS Listener                           |                                          |&#9745;|       |
+   | Reference for **entryPointType** | Name                                   | Additional Options                       |Java   | Kotlin  |
+   |----------------------------------|----------------------------------------|------------------------------------------|-------|---------|
+   | generic                          | Empty Entry Point                      | --name [name]                            |&#9745;| &#9745; |
+   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow |&#9745;| &#9745; |
+   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true      |&#9745;| &#9745; |
+   | rsocket                          | Rsocket Controller Entry Point         |                                          |&#9745;| &#9745; |
+   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql   |&#9745;| &#9745; |
+   | asynceventhandler                | Async Event Handler                    |                                          |&#9745;| &#9745; |
+   | mq                               | JMS MQ Client to listen messages       |                                          |&#9745;| &#9745; |
+   | sqs                              | SQS Listener                           |                                          |&#9745;|         |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 

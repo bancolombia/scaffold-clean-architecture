@@ -170,7 +170,6 @@ public class ModuleBuilder {
     if (isKotlin() && !buildFilePath.endsWith(KTS)) {
       buildFilePath += KTS;
     }
-    System.out.println("file path: " + buildFilePath);
     updateFile(buildFilePath, current -> Utils.addDependency(current, dependency));
   }
 
@@ -218,7 +217,7 @@ public class ModuleBuilder {
 
   public void addFile(String path, String content) {
     String finalPath = FileUtils.toRelative(path);
-    this.files.put(finalPath, FileModel.builder().path(path).content(content).build());
+    this.files.put(finalPath, FileModel.builder().path(finalPath).content(content).build());
   }
 
   public void addDir(String path) {
@@ -297,8 +296,6 @@ public class ModuleBuilder {
     if (!readFile(MAIN_GRADLE).contains("software.amazon.awssdk")) {
       updateFile(MAIN_GRADLE, content -> Utils.addDependency(content, Constants.AWS_BOM));
     }
-    //    appendDependencyToModule(Constants.APP_SERVICE, "implementation
-    // 'software.amazon.awssdk:sts'");
     updateFile(
         APP_BUILD_GRADLE,
         content -> Utils.addDependency(content, "implementation 'software.amazon.awssdk:sts'"));
