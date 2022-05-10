@@ -13,7 +13,7 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
 - [Plugin Implementation](#plugin-implementation)
 - [Tasks](#tasks)
   - [Generate Project](#generate-project)
-  - [Generate Model for Java an Kotlin](#generate-model-for-java-an-kotlin)
+  - [Generate Model for Java and Kotlin](#generate-model-for-java-and-kotlin)
   - [Generate Use Case for Java and Kotlin](#generate-use-case-for-java-and-kotlin)
   - [Generate Driven Adapter](#generate-driven-adapter)
   - [Generate Entry Point](#generate-entry-point)
@@ -192,7 +192,7 @@ If you run this task on an existing project it will override the `main.gradle`, 
    ┗ 📜settings.gradle.kts
    ```
 
-## Generate Model for Java an Kotlin
+## Generate Model for Java and Kotlin
 
 The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
 
