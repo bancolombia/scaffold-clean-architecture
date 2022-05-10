@@ -83,4 +83,14 @@ public class FileUtils {
   public static boolean exists(String dir, String file) {
     return Files.exists(Paths.get(dir, file));
   }
+
+  public static String toRelative(String path) {
+    if (path.startsWith("./")) {
+      return path;
+    }
+    if (path.startsWith("/")) {
+      return path;
+    }
+    return "./" + path;
+  }
 }
