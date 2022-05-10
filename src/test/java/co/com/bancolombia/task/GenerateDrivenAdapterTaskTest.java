@@ -667,6 +667,22 @@ public class GenerateDrivenAdapterTaskTest {
     task.generateDrivenAdapterTask();
   }
 
+  @Test
+  public void generateSQSSender() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.SQS);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/sqs-sender/src/main/java/co/com/bancolombia/sqs/sender/SQSSender.java")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);
