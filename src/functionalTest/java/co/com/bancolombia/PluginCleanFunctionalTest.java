@@ -993,6 +993,26 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void shouldGenerateSQSEntryPoint() {
+    canRunTaskGenerateStructureReactiveProject();
+    String task = GENERATE_ENTRY_POINT;
+    String type = "SQS";
+
+    runner.withArguments(task, TYPE + type);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        new File("build/functionalTest/infrastructure/entry-points/sqs-listener/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/functionalTest/infrastructure/entry-points/sqs-listener/src/main/java/co/com/bancolombia/sqs/listener/SQSProcessor.java")
+            .exists());
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
   public void shouldUpdateProject() {
     canRunTaskGenerateStructureWithOutParameters();
 

@@ -22,6 +22,8 @@ public class ModuleFactoryEntryPoint {
         return new EntryPointAsyncEventHandler();
       case MQ:
         return new EntryPointMQ();
+      case SQS:
+        return new EntryPointSQS();
       default:
         throw new InvalidTaskOptionException("Entry Point type invalid");
     }
@@ -34,6 +36,7 @@ public class ModuleFactoryEntryPoint {
     RSOCKET,
     GRAPHQL,
     ASYNCEVENTHANDLER,
-    MQ
+    MQ,
+    SQS
   }
 }

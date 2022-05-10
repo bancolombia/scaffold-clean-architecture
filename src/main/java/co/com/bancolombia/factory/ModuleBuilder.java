@@ -166,6 +166,7 @@ public class ModuleBuilder {
   public void appendDependencyToModule(String module, String dependency) throws IOException {
     logger.lifecycle("adding dependency {} to module {}", dependency, module);
     String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+    buildFilePath = buildFilePath.replace(project.getProjectDir().getPath(), ".");
     if (isKotlin() && !buildFilePath.endsWith(KTS)) {
       buildFilePath += KTS;
     }
@@ -215,7 +216,8 @@ public class ModuleBuilder {
   }
 
   public void addFile(String path, String content) {
-    this.files.put(path, FileModel.builder().path(path).content(content).build());
+    String finalPath = FileUtils.toRelative(path);
+    this.files.put(finalPath, FileModel.builder().path(finalPath).content(content).build());
   }
 
   public void addDir(String path) {
@@ -358,10 +360,11 @@ public class ModuleBuilder {
   }
 
   private String readFile(String path) throws IOException {
-    FileModel current = files.get(path);
+    String finalPath = FileUtils.toRelative(path);
+    FileModel current = files.get(finalPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(getProject(), path).collect(Collectors.joining("\n"));
+      content = FileUtils.readFile(getProject(), finalPath).collect(Collectors.joining("\n"));
     } else {
       content = current.getContent();
     }
