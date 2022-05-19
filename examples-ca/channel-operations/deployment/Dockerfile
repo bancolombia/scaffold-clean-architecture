@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8-openj9:alpine-slim
+FROM adoptopenjdk/openjdk8-openj9@sha256:75225e1550aab2a1c57c806d18ed301419cc6dcadb521effe7dc0652a160a3a1
 VOLUME /tmp
 COPY *.jar app.jar
 RUN sh -c 'touch /app.jar'
