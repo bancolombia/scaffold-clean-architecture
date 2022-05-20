@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class DrivenAdapterSQS implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.runValidations(ReactiveTypeValidation.class);
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     builder.setupFromTemplate("driven-adapter/sqs");
     builder.appendToSettings("sqs-sender", "infrastructure/driven-adapters");
     builder

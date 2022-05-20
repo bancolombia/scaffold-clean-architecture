@@ -93,6 +93,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
     builder.addParam("lombok", builder.isEnableLombok());
+    builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
   }

@@ -1,0 +1,13 @@
+{
+  "folders": [
+    "infrastructure/helpers/metrics/src/test/{{language}}/{{packagePath}}/metrics/aws"
+  ],
+  "files": {
+  },
+  "java": {
+    "helper/metrics/aws/build.gradle.mustache": "infrastructure/helpers/metrics/build.gradle",
+    "helper/metrics/aws/micrometer-metric-publisher.java.mustache": "infrastructure/helpers/metrics/src/main/{{language}}/{{packagePath}}/metrics/aws/MicrometerMetricPublisher.java"
+  },
+  "kotlin": {
+  }
+}

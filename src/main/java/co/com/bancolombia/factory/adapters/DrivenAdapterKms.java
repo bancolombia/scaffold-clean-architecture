@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
@@ -17,11 +18,11 @@ public class DrivenAdapterKms implements ModuleFactory {
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
 
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
     builder
-        .appendToProperties("adapter.aws.kms")
+        .appendToProperties("adapters.aws.kms")
         .put("region", "us-east-1")
         .put("host", "localhost")
         .put("protocol", "http")

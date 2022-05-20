@@ -27,6 +27,11 @@ public class SampleMQReqReply /* implements SomeGateway */ {
 
     public Mono<String> doRequest(String message) {
         return sender.requestReply(message)
+                {{#metrics}}
+                .name("mq_req_reply")
+                .tag("operation", "my-operation") // TODO: Change operation name
+                .metrics()
+                {{/metrics}}
                 .map(this::extractResponse);
     }
 

@@ -2,4 +2,7 @@ dependencies {
     implementation project(':model')
     implementation 'com.github.bancolombia:commons-jms-mq:{{commonsJmsVersion}}'
     implementation 'org.springframework:spring-context'
+    {{#metrics}}
+    implementation 'io.micrometer:micrometer-core'
+    {{/metrics}}
 }

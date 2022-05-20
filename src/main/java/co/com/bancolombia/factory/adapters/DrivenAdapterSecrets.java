@@ -7,6 +7,7 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
@@ -23,7 +24,7 @@ public class DrivenAdapterSecrets implements ModuleFactory {
       builder.setupFromTemplate("driven-adapter/secrets");
     }
     logger.lifecycle("Generating  mode");
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     String dependency =
         buildImplementation(
             builder.isKotlin(),

@@ -10,6 +10,9 @@ import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvide
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
+{{#metrics}}
+import software.amazon.awssdk.metrics.MetricPublisher;
+{{/metrics}}
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
@@ -19,6 +22,18 @@ import java.net.URI;
 @ConditionalOnMissingBean(SqsAsyncClient.class)
 public class SQSSenderConfig {
 
+    {{#metrics}}
+    @Bean
+    public SqsAsyncClient configSqs(SQSSenderProperties properties, MetricPublisher publisher) {
+        return SqsAsyncClient.builder()
+                // .endpointOverride(URI.create("http://localhost:4566")) // TODO: enable only for localstack
+                .region(Region.of(properties.getRegion()))
+                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
+                .credentialsProvider(getProviderChain())
+                .build();
+    }
+    {{/metrics}}
+    {{^metrics}}
     @Bean
     public SqsAsyncClient configSqs(SQSSenderProperties properties) {
         return SqsAsyncClient.builder()
@@ -27,6 +42,7 @@ public class SQSSenderConfig {
                 .credentialsProvider(getProviderChain())
                 .build();
     }
+    {{/metrics}}
 
     private AwsCredentialsProviderChain getProviderChain() {
         return AwsCredentialsProviderChain.builder()

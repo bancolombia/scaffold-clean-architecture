@@ -23,6 +23,7 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Helper name: {}", name);
     builder.addParam("task-param-name", name);
     builder.addParam("lombok", builder.isEnableLombok());
+    builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
   }

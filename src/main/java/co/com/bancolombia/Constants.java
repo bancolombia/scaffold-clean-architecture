@@ -47,6 +47,7 @@ public class Constants {
     public static final String BUILD_GRADLE = "./build.gradle";
     public static final String BUILD_GRADLE_KTS = BUILD_GRADLE + KTS;
     public static final String MAIN_GRADLE = "./main.gradle";
+    public static final String SETTINGS_GRADLE = "./settings.gradle";
     public static final String DOCKERFILE = "./deployment/Dockerfile";
     public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
     public static final String APP_BUILD_GRADLE_KTS = APP_BUILD_GRADLE + KTS;

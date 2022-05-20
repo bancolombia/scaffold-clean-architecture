@@ -5,6 +5,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
     builder.addParam("reactive", builder.isReactive());
     String typePath = getPathType(builder.isReactive());
 
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":dynamo-db");
     builder.appendDependencyToModule("app-service", dependency);

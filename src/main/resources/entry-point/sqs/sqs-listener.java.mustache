@@ -28,6 +28,9 @@ public class SQSListener {
     private final SqsAsyncClient client;
     private final SQSProperties properties;
     private final Function<Message, Mono<Void>> processor;
+    {{#metrics}}
+    private String operation;
+    {{/metrics}}
 {{^lombok}}
 
     public SQSListener(final SqsAsyncClient client, final SQSProperties properties, final Function<Message, Mono<Void>> processor) {
@@ -38,6 +41,9 @@ public class SQSListener {
 {{/lombok}}
 
     public SQSListener start() {
+        {{#metrics}}
+        this.operation = "MessageFrom:" + properties.getQueueUrl();
+        {{/metrics}}
         ExecutorService service = Executors.newFixedThreadPool(properties.getNumberOfThreads());
         Flux<Void> flow = listenRetryRepeat().publishOn(Schedulers.fromExecutorService(service));
         for (int i = 0; i < properties.getNumberOfThreads(); i++) {
@@ -54,7 +60,13 @@ public class SQSListener {
 
     private Flux<Void> listen() {
         return getMessages()
-                .flatMap(message -> processor.apply(message).then(confirm(message)))
+                .flatMap(message -> processor.apply(message)
+                         {{#metrics}}
+                        .name("async_operation")
+                        .tag("operation", operation)
+                        .metrics()
+                         {{/metrics}}
+                        .then(confirm(message)))
                 .onErrorContinue((e, o) -> log.error("Error listening sqs message", e));
     }
 

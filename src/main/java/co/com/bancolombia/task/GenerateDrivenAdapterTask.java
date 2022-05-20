@@ -81,6 +81,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     builder.addParam("include-secret", secret == BooleanOption.TRUE);
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("lombok", builder.isEnableLombok());
+    builder.addParam("metrics", builder.withMetrics());
     builder.addParam("task-param-url", url);
     moduleFactory.buildModule(builder);
     builder.persist();

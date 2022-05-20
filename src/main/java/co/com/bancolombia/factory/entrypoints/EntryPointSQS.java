@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ public class EntryPointSQS implements ModuleFactory {
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":sqs-listener");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     builder
         .appendToProperties("entrypoint.sqs")
         .put("region", "us-east-1")
