@@ -2,4 +2,7 @@ dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    {{#metrics}}
+    implementation 'io.micrometer:micrometer-core'
+    {{/metrics}}
 }
