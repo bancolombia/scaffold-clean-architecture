@@ -5,10 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
 import {{package}}.s3.config.model.S3ConnectionProperties;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+{{#metrics}}
+import software.amazon.awssdk.metrics.MetricPublisher;
+{{/metrics}}
 import software.amazon.awssdk.regions.Region;
 
 import java.net.URI;
@@ -16,6 +19,7 @@ import java.net.URI;
 @Configuration
 public class S3Config {
 
+    {{^metrics}}
     @Profile({"dev", "cer", "pdn"})
     @Bean
     public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties) {
@@ -35,6 +39,30 @@ public class S3Config {
         return S3AsyncClient.builder()
         .region(Region.of(s3Properties.getRegion()));
     }
+    {{/metrics}}
+    {{#metrics}}
+    @Profile({"dev", "cer", "pdn"})
+    @Bean
+    public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties, MetricPublisher publisher) {
+        return getBuilder(s3Properties, publisher).build();
+    }
+
+    @Profile("local")
+    @Bean
+    public S3AsyncClient localS3AsyncClient(AwsCredentials awsCredentials, S3ConnectionProperties s3Properties,
+                                            MetricPublisher publisher) {
+        return getBuilder(s3Properties, publisher)
+                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .build();
+    }
+
+    private S3AsyncClientBuilder getBuilder(S3ConnectionProperties s3Properties, MetricPublisher publisher) {
+        return S3AsyncClient.builder()
+                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
+                .region(Region.of(s3Properties.getRegion()));
+    }
+    {{/metrics}}
 
     @Profile("local")
     @Bean
