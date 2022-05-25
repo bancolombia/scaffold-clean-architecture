@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.GenericModule;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
@@ -17,7 +18,7 @@ public class DrivenAdapterS3 implements ModuleFactory {
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
 
-    builder.addAwsBom();
+    GenericModule.addAwsBom(builder);
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToSettings("s3-repository", "infrastructure/driven-adapters");
     builder

@@ -245,7 +245,7 @@ public class ModuleBuilder {
   }
 
   public Boolean isReactive() {
-    return getABooleanProperty("reactive");
+    return getABooleanProperty("reactive", false);
   }
 
   public boolean isKotlin() {
@@ -253,7 +253,11 @@ public class ModuleBuilder {
   }
 
   public Boolean isEnableLombok() {
-    return getABooleanProperty("lombok");
+    return getABooleanProperty("lombok", true);
+  }
+
+  public Boolean withMetrics() {
+    return getABooleanProperty("metrics", true);
   }
 
   @SafeVarargs
@@ -282,32 +286,6 @@ public class ModuleBuilder {
       loadLatestRelease();
     }
     return (Release) params.get(LATEST_RELEASE);
-  }
-
-  public void addAwsBom() throws IOException {
-    if (isKotlin()) {
-      addAwsBomKotlin();
-    } else {
-      addAwsBomJava();
-    }
-  }
-
-  private void addAwsBomJava() throws IOException {
-    if (!readFile(MAIN_GRADLE).contains("software.amazon.awssdk")) {
-      updateFile(MAIN_GRADLE, content -> Utils.addDependency(content, Constants.AWS_BOM));
-    }
-    updateFile(
-        APP_BUILD_GRADLE,
-        content -> Utils.addDependency(content, "implementation 'software.amazon.awssdk:sts'"));
-  }
-
-  private void addAwsBomKotlin() throws IOException {
-    if (!readFile(BUILD_GRADLE_KTS).contains("software.amazon.awssdk")) {
-      updateFile(BUILD_GRADLE_KTS, content -> Utils.addDependency(content, Constants.AWS_BOM_KT));
-    }
-    updateFile(
-        APP_BUILD_GRADLE_KTS,
-        content -> Utils.addDependency(content, "implementation(\"software.amazon.awssdk:sts\")"));
   }
 
   private void loadPackage() {
@@ -341,7 +319,7 @@ public class ModuleBuilder {
     }
   }
 
-  private Boolean getABooleanProperty(String property) {
+  private Boolean getABooleanProperty(String property, boolean defaultValue) {
     try {
       String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
       return "true".equals(value);
@@ -355,7 +333,7 @@ public class ModuleBuilder {
               + " please add "
               + property
               + "=true to gradle.properties and relaunch this task");
-      return false;
+      return defaultValue;
     }
   }
 

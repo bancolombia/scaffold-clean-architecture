@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.upgrades.actions;
 import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.Utils;
 import java.util.List;
@@ -20,7 +21,7 @@ public class UpgradeY2022M05D03 implements UpgradeAction {
             .map(file -> applyUpdate(builder, file))
             .reduce(false, (app, current) -> app || current);
     if (applied) {
-      builder.addAwsBom();
+      GenericModule.addAwsBom(builder);
     }
     return applied;
   }

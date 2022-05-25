@@ -17,5 +17,8 @@ public class EntryPointAsyncEventHandler implements ModuleFactory {
     builder.appendToSettings("async-event-handler", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":async-event-handler");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
+    if (builder.withMetrics()) {
+      builder.setupFromTemplate("entry-point/async-event-handler/metrics");
+    }
   }
 }

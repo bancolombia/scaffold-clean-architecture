@@ -25,6 +25,14 @@ public class EntryPointRestMvc implements ModuleFactory {
             .put("matching-strategy", "ant_path_matcher");
       }
     }
+    if (builder.withMetrics()) {
+      builder
+          .appendToProperties("management.endpoints.web.exposure")
+          .put("include", "health,prometheus");
+    } else {
+      builder.appendToProperties("management.endpoints.web.exposure").put("include", "health");
+    }
+    builder.appendToProperties("management.endpoint.health.probes").put("enabled", true);
     new EntryPointRestMvcServer().buildModule(builder);
   }
 }

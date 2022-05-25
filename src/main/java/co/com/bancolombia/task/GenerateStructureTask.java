@@ -19,6 +19,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private CoveragePlugin coverage = CoveragePlugin.JACOCO;
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
+  private BooleanOption metrics = BooleanOption.TRUE;
   private Language language = Language.JAVA;
   private JavaVersion javaVersion = JavaVersion.VERSION_11;
 
@@ -47,9 +48,14 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     this.coverage = coverage;
   }
 
-  @Option(option = "lombok", description = "Switch the satus of lombok in this project")
+  @Option(option = "lombok", description = "Switch the status of lombok in this project")
   public void setStatusLombok(BooleanOption lombok) {
     this.lombok = lombok;
+  }
+
+  @Option(option = "metrics", description = "Set if metrics will be enabled in this project")
+  public void setMetrics(BooleanOption metrics) {
+    this.metrics = metrics;
   }
 
   @Option(option = "javaVersion", description = "Set Java version")
@@ -89,6 +95,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
+    builder.addParam("metrics", metrics == BooleanOption.TRUE);
     builder.addParam("language", language.name().toLowerCase());
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java8", javaVersion == JavaVersion.VERSION_1_8);
@@ -103,6 +110,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
       loadProperty("language");
       builder.addParam("reactive", builder.isReactive());
       builder.addParam("lombok", builder.isEnableLombok());
+      builder.addParam("metrics", builder.withMetrics());
       if (builder.isEnableLombok()) {
         builder.setupFromTemplate("structure/restructure");
       } else {

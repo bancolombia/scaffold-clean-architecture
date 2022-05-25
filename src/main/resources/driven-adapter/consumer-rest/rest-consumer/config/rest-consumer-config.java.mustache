@@ -1,17 +1,37 @@
 package {{package}}.consumer.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+{{#metrics}}
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
+{{/metrics}}
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class RestConsumerConfig {
 
+    {{^metrics}}
     @Bean
     public OkHttpClient getHttpClient() {
         return new OkHttpClient();
     }
+    {{/metrics}}
+    {{#metrics}}
+    @Bean
+    public OkHttpClient getHttpClient(OkHttpMetricsEventListener listener) {
+        return new OkHttpClient.Builder()
+                .eventListener(listener)
+                .build();
+    }
+
+    @Bean
+    public OkHttpMetricsEventListener okHttpMetricsListener(MeterRegistry registry) {
+        return OkHttpMetricsEventListener.builder(registry, "http-outgoing")
+                .uriMapper(req -> req.url().encodedPath()).build();
+    }
+    {{/metrics}}
 
     @Bean
     public ObjectMapper getObjectMapper() {

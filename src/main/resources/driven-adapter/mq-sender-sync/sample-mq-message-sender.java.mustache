@@ -2,6 +2,10 @@ package {{package}}.mq.sender;
 
 import co.com.bancolombia.commons.jms.api.MQMessageSenderSync;
 import co.com.bancolombia.commons.jms.mq.EnableMQMessageSender;
+{{#metrics}}
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Timer;
+{{/metrics}}
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
@@ -9,6 +13,9 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 import javax.jms.Message;
+{{#metrics}}
+import java.util.concurrent.TimeUnit;
+{{/metrics}}
 
 @Component
 {{#lombok}}
@@ -20,6 +27,9 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     private final MQMessageSenderSync sender;
 //    private final MQQueuesContainer container; // Inject it to reference a temporary queue
 //    private final MQMessageSelectorListenerSync listener; // Inject it to retrieve a specific message by correlationId
+    {{#metrics}}
+    private final Timer timer = Metrics.timer("mq_send_message", "operation", "my-operation"); // TODO: Change operation name
+    {{/metrics}}
     {{^lombok}}
 
     public MyMessageSender(MQMessageSender sender) {
@@ -28,11 +38,23 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     {{/lombok}}
 
     public String send(String message) {
+        {{#metrics}}
+        long start = System.currentTimeMillis();
+        String messageId = sender.send(context -> {
+            Message textMessage = context.createTextMessage(message);
+//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+            return textMessage;
+        });
+        timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
+        return messageId;
+        {{/metrics}}
+        {{^metrics}}
         return sender.send(context -> {
             Message textMessage = context.createTextMessage(message);
 //            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
             return textMessage;
         });
+        {{/metrics}}
     }
 
     // Enable it to retrieve a specific message by correlationId

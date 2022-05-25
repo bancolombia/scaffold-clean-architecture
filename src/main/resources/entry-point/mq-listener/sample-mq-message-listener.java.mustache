@@ -1,6 +1,10 @@
 package {{package}}.mq.listener;
 
 import co.com.bancolombia.commons.jms.mq.MQListener;
+{{#metrics}}
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.Timer;
+{{/metrics}}
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
@@ -10,12 +14,18 @@ import reactor.core.publisher.Mono;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
+{{#metrics}}
+import java.util.concurrent.TimeUnit;
+{{/metrics}}
 
 @Component
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
 public class SampleMQMessageListener {
+    {{#metrics}}
+    private final Timer timer = Metrics.timer("mq_receive_message", "operation", "my-operation"); // TODO: Change operation name
+    {{/metrics}}
     // private final SampleUseCase useCase;
 
     {{^lombok}}
@@ -27,6 +37,9 @@ public class SampleMQMessageListener {
     // For fixed queues
     @MQListener
     public Mono<Void> process(Message message) throws JMSException {
+        {{#metrics}}
+        timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
+        {{/metrics}}
         String text = ((TextMessage) message).getText();
         // return useCase.sample(text);
         return Mono.empty();
@@ -35,6 +48,9 @@ public class SampleMQMessageListener {
     // For an automatic generated temporary queue
     // @MQListener(tempQueueAlias = "any-custom-value")
     // public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
+    {{#metrics}}
+    //     timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
+    {{/metrics}}
     //     String text = ((TextMessage) message).getText();
     //     // return useCase.sample(text);
     //     return Mono.empty();

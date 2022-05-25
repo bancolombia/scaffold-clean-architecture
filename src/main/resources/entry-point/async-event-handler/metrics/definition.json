@@ -1,0 +1,10 @@
+{
+  "folders": [
+    "infrastructure/entry-points/async-event-handler/src/test/{{language}}/{{packagePath}}/events/metrics"
+  ],
+  "files": {},
+  "java": {
+    "entry-point/async-event-handler/metrics/metrics-reporter.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/metrics/MetricsReporter.java"
+  },
+  "kotlin": {}
+}

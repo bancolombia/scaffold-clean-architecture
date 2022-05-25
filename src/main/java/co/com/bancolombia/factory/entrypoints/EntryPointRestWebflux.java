@@ -30,5 +30,13 @@ public class EntryPointRestWebflux implements ModuleFactory {
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
+    if (builder.withMetrics()) {
+      builder
+          .appendToProperties("management.endpoints.web.exposure")
+          .put("include", "health,prometheus");
+    } else {
+      builder.appendToProperties("management.endpoints.web.exposure").put("include", "health");
+    }
+    builder.appendToProperties("management.endpoint.health.probes").put("enabled", true);
   }
 }
