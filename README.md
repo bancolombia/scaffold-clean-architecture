@@ -75,6 +75,8 @@ If you run this task on an existing project it will override the `main.gradle`, 
    
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
+   - **`metrics`** `= <true | false>`: Specify if you want to enable this feature with micrometer  . `Default Value = true`
+
    - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
 
    - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_11`

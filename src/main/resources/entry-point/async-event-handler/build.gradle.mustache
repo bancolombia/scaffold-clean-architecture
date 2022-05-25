@@ -3,4 +3,7 @@ dependencies {
     implementation project(':usecase')
     implementation 'org.reactivecommons:async-commons-rabbit-starter:{{asyncCommonsStarterVersion}}'
     implementation 'org.springframework:spring-context'
+    {{#metrics}}
+    implementation 'io.micrometer:micrometer-core'
+    {{/metrics}}
 }
