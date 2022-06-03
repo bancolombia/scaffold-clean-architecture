@@ -4,15 +4,16 @@ package {{package}}.sqs.listener;
 import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import software.amazon.awssdk.services.sqs.model.Message;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Service
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
-public class SQSProcessor implements Consumer<Message, Mono<Void>> {
+public class SQSProcessor implements Function<Message, Mono<Void>> {
     // private final MyUseCase myUseCase;
 {{^lombok}}
 
@@ -22,8 +23,9 @@ public class SQSProcessor implements Consumer<Message, Mono<Void>> {
 {{/lombok}}
 
     @Override
-    public void accept(Message message) {
+    public Mono<Void> apply(Message message) {
         System.out.println(message.body());
-        // myUseCase.doAny(message.body());
+        return Mono.empty();
+        // return myUseCase.doAny(message.body());
     }
 }
