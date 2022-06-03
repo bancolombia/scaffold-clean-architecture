@@ -1,97 +1,86 @@
 package {{package}}.sqs.listener.helper;
 
 import {{package}}.sqs.listener.config.SQSProperties;
-{{#metrics}}
-import io.micrometer.core.instrument.Metrics;
-import io.micrometer.core.instrument.Timer;
-{{/metrics}}
 {{#lombok}}
 import lombok.Builder;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 {{/lombok}}
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 {{#lombok}}
 @Log4j2
 @Builder
 {{/lombok}}
-public class SQSListener implements Runnable {
+public class SQSListener {
 {{^lombok}}
     private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(SQSListener.class);
 {{/lombok}}
     private final SqsAsyncClient client;
     private final SQSProperties properties;
-    private final Consumer<Message> consumer;
+    private final Function<Message, Mono<Void>> processor;
     {{#metrics}}
-    private Timer timer;
+    private String operation;
     {{/metrics}}
 {{^lombok}}
 
-    public SQSListener(final SqsAsyncClient client, final SQSProperties properties, final Consumer<Message> consumer) {
+    public SQSListener(final SqsAsyncClient client, final SQSProperties properties, final Function<Message, Mono<Void>> processor) {
         this.client = client;
         this.properties = properties;
-        this.consumer = consumer;
+        this.processor = processor;
     }
 {{/lombok}}
 
     public SQSListener start() {
         {{#metrics}}
-        this.timer = Metrics.timer("async_operation_flow_duration",
-                "operation", "MessageFrom:" + properties.getQueueUrl(), "type", "", "status", "");
+        this.operation = "MessageFrom:" + properties.getQueueUrl();
         {{/metrics}}
         ExecutorService service = Executors.newFixedThreadPool(properties.getNumberOfThreads());
+        Flux<Void> flow = listenRetryRepeat().publishOn(Schedulers.fromExecutorService(service));
         for (int i = 0; i < properties.getNumberOfThreads(); i++) {
-            service.submit(this);
+            flow.subscribe();
         }
         return this;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                listen();
-            } catch (Exception e) {
-                log.warn("Error from SQS", e);
-            }
-        }
+    private Flux<Void> listenRetryRepeat() {
+        return listen()
+                .doOnError(e -> log.error("Error listening sqs queue", e))
+                .repeat();
     }
 
-    private void listen() throws ExecutionException, InterruptedException {
-        ReceiveMessageResponse response = getMessages();
-        log.debug("Processing {} messages", response.messages().size());
-        response.messages()
-                .stream()
-                .parallel()
-                {{#metrics}}
-                .peek(message -> timer.record(() -> consumer.accept(message)))
-                {{/metrics}}
-                {{^metrics}}
-                .peek(message -> consumer.accept(message))
-                {{/metrics}}
-                .forEach(this::confirm);
+    private Flux<Void> listen() {
+        return getMessages()
+                .flatMap(message -> processor.apply(message)
+                         {{#metrics}}
+                        .name("async_operation")
+                        .tag("operation", operation)
+                        .metrics()
+                         {{/metrics}}
+                        .then(confirm(message)))
+                .onErrorContinue((e, o) -> log.error("Error listening sqs message", e));
     }
 
-    @SneakyThrows
-    private void confirm(Message message) {
-        DeleteMessageRequest request = getDeleteMessageRequest(message.receiptHandle());
-        client.deleteMessage(request).get();
-        log.debug("Message confirmed {}", message.messageId());
+    private Mono<Void> confirm(Message message) {
+        return Mono.fromCallable(() -> getDeleteMessageRequest(message.receiptHandle()))
+                .flatMap(request -> Mono.fromFuture(client.deleteMessage(request)))
+                .then();
     }
 
-    private ReceiveMessageResponse getMessages() throws ExecutionException, InterruptedException {
-        ReceiveMessageRequest request = getReceiveMessageRequest();
-        return client.receiveMessage(request).get();
+    private Flux<Message> getMessages() {
+        return Mono.fromCallable(this::getReceiveMessageRequest)
+                .flatMap(request -> Mono.fromFuture(client.receiveMessage(request)))
+                .doOnNext(response -> log.debug("{} received messages from sqs", response.messages().size()))
+                .flatMapMany(response -> Flux.fromIterable(response.messages()));
     }
 
     private ReceiveMessageRequest getReceiveMessageRequest() {
@@ -109,13 +98,12 @@ public class SQSListener implements Runnable {
                 .receiptHandle(receiptHandle)
                 .build();
     }
-
 {{^lombok}}
 
     public static class SQSListenerBuilder {
         private SqsAsyncClient client;
         private SQSProperties properties;
-        private Consumer<Message> consumer;
+        private Function<Message, Mono<Void>> processor;
 
         SQSListenerBuilder() {
         }
@@ -130,13 +118,13 @@ public class SQSListener implements Runnable {
             return this;
         }
 
-        public SQSListener.SQSListenerBuilder consumer(final Consumer<Message> consumer) {
-            this.consumer = consumer;
+        public SQSListener.SQSListenerBuilder processor(final Function<Message, Mono<Void>> processor) {
+            this.processor = processor;
             return this;
         }
 
         public SQSListener build() {
-            return new SQSListener(this.client, this.properties, this.consumer);
+            return new SQSListener(this.client, this.properties, this.processor);
         }
 
     }

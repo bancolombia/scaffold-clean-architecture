@@ -3,6 +3,7 @@ package {{package}}.sqs.listener.config;
 import {{package}}.sqs.listener.helper.SQSListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain;
 import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
@@ -18,17 +19,17 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.Message;
 
 import java.net.URI;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Configuration
 public class SQSConfig {
 
     @Bean
-    public SQSListener sqsListener(SqsAsyncClient client, SQSProperties properties, Consumer<Message> consumer) {
+    public SQSListener sqsListener(SqsAsyncClient client, SQSProperties properties, Function<Message, Mono<Void>> fn) {
         return SQSListener.builder()
                 .client(client)
                 .properties(properties)
-                .consumer(consumer)
+                .processor(fn)
                 .build()
                 .start();
     }
