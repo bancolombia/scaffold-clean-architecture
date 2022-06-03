@@ -318,7 +318,7 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    | mq                                  | JMS MQ Client to send messages      |                                                    | &#9745; | &#9745; |
    | ktor                                | HTTP client for kotlin              |                                                    | &#9744; | &#9745; |
    | dynamodb                            | Dynamo DB adapter                   |                                                    | &#9745; | &#9745; |
-   | sqs                                 | SQS message sender                  |                                                    | &#9745; |         |
+   | sqs                                 | SQS message sender                  |                                                    | &#9745; | &#9745; |
 
    
    _**This task will generate something like that:**_
