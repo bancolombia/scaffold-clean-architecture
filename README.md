@@ -420,7 +420,8 @@ The **`generatePipeline | gpl`** task will generate CI pipeline inside the folde
    | Reference for **pipelineType** | Name           |
    | ------------------------------ | -------------- |
    | azure                          | Azure Pipeline |
-   | github                          | GitHub Action |
+   | github                         | GitHub Action |
+   | jenkins                        | Jenkins Pipeline |
    
  ## Generate Acceptance Test
  
