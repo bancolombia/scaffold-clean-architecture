@@ -9,5 +9,10 @@
     "driven-adapter/sqs-reactive/sqs-sender-config.java.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderConfig.java",
     "driven-adapter/sqs-reactive/sqs-sender-properties.java.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderProperties.java"
   },
-  "kotlin": {}
+  "kotlin": {
+    "driven-adapter/sqs-reactive/build.gradle.mustache": "infrastructure/driven-adapters/sqs-sender/build.gradle",
+    "driven-adapter/sqs-reactive/sqs-sender.java.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/SQSSender.kt",
+    "driven-adapter/sqs-reactive/sqs-sender-config.java.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderConfig.kt",
+    "driven-adapter/sqs-reactive/sqs-sender-properties.java.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderProperties.kt"
+  }
 }
