@@ -1,0 +1,11 @@
+package {{package}}.sqs.sender.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@ConfigurationProperties(prefix = "adapter.sqs")
+data class SQSSenderProperties  @ConstructorBinding constructor{
+    var region: String,
+    var queueUrl: String,
+    var endpoint: String;
+}
