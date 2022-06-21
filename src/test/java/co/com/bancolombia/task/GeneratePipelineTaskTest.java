@@ -54,6 +54,15 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
+  public void generateJenkinsPipelineTest() throws IOException, CleanException {
+
+    task.setType(ModuleFactoryPipeline.PipelineType.JENKINS);
+    task.generatePipelineTask();
+
+    assertTrue(new File("build/unitTest/deployment/Jenkinsfile").exists());
+  }
+
+  @Test
   public void generateGithubActionTest() throws IOException, CleanException {
 
     task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
