@@ -1,38 +1,40 @@
 package {{package}}.dynamodb;
 
 import {{package}}.dynamodb.helper.TemplateAdapterOperations;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
-import software.amazon.awssdk.enhanced.dynamodb.Key;
-import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
-import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 
 
 @Repository
 public class DynamoDBTemplateAdapter extends TemplateAdapterOperations<Object /*domain model*/, String, ModelEntity /*adapter model*/> /* implements Gateway from domain */ {
 
-    public DynamoDBTemplateAdapter(DynamoDbEnhancedAsyncClient connectionFactory, ObjectMapper mapper) {
+    public DynamoDBTemplateAdapter(AmazonDynamoDB connectionFactory, ObjectMapper mapper) {
         /**
          *  Could be use mapper.mapBuilder if your domain model implement builder pattern
          *  super(repository, mapper, d -> mapper.mapBuilder(d,ObjectModel.ObjectModelBuilder.class).build());
          *  Or using mapper.map with the class of the object model
          */
-        super(connectionFactory, mapper, d -> mapper.map(d, Object.class /*domain model*/), "table_name", "secondary_index" /*index is optional*/);
+        super(connectionFactory, mapper, d -> mapper.map(d, Object.class /*domain model*/));
     }
 
-    public List<Object /*domain model*/> getEntityBySomeKey(String partitionKey, String sortKey) {
-        QueryEnhancedRequest queryExpression = generateQueryExpression(partitionKey, sortKey);
-        return queryByIndex(queryExpression, "secondary_index" /*index is optional if you define in constructor*/);
-    }
+        public List<Object /*domain model*/> getEntityBySomeKey(String key) {
+            DynamoDBQueryExpression<ModelEntity /*adapter model*/> queryExpression = generateQueryExpression(key);
+            return query(queryExpression);
+        }
 
-    private QueryEnhancedRequest generateQueryExpression(String partitionKey, String sortKey) {
-        return QueryEnhancedRequest.builder()
-                .queryConditional(QueryConditional.keyEqualTo(Key.builder().partitionValue(partitionKey).build()))
-                .queryConditional(QueryConditional.sortGreaterThanOrEqualTo(Key.builder().sortValue(sortKey).build()))
-                .build();
-    }
+        private DynamoDBQueryExpression<ModelEntity /*adapter model*/> generateQueryExpression(String key) {
+            Map<String, AttributeValue> eav = new HashMap<>();
+            eav.put(":val1", new AttributeValue().withS(key));
+
+            DynamoDBQueryExpression<ModelEntity /*adapter model*/> queryExpression = new DynamoDBQueryExpression<ModelEntity /*adapter model*/>()
+                    .withKeyConditionExpression("someKey = :val1")
+                    .withExpressionAttributeValues(eav);
+            return queryExpression;
+        }
 }
