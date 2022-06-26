@@ -1,58 +1,39 @@
 package {{package}}.sqs.sender.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain;
-import software.amazon.awssdk.auth.credentials.ContainerCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
-import software.amazon.awssdk.metrics.MetricPublisher;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sqs.SqsAsyncClient;
-
-import java.net.URI;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import software.amazon.awssdk.auth.credentials.*
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration
+import software.amazon.awssdk.metrics.MetricPublisher
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.sqs.SqsAsyncClient
+import java.net.URI
 
 @Configuration
-@ConditionalOnMissingBean(SqsAsyncClient.class)
+@ConditionalOnMissingBean(SqsAsyncClient::class)
 class SQSSenderConfig {
 
-    @Bean
-    fun  configSqs( properties: SQSSenderProperties,  publisher: MetricPublisher): SqsAsyncClient {
-        return SqsAsyncClient.builder()
-                .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
-                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
-                .credentialsProvider(getProviderChain())
-                .build();
-    }
-    @Bean
-    fun  configSqs( properties: SQSSenderProperties): SqsAsyncClient {
-        return SqsAsyncClient.builder()
-                .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
-                .credentialsProvider(getProviderChain())
-                .build();
-    }
 
-    fun  getProviderChain(): AwsCredentialsProviderChain {
-        return AwsCredentialsProviderChain.builder()
-                .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
-                .addCredentialsProvider(SystemPropertyCredentialsProvider.create())
-                .addCredentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
-                .addCredentialsProvider(ProfileCredentialsProvider.create())
-                .addCredentialsProvider(ContainerCredentialsProvider.builder().build())
-                .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
-                .build();
-    }
+    @Bean
+    fun configSqs(properties: SQSSenderProperties, publisher: MetricPublisher?): SqsAsyncClient {
+            return SqsAsyncClient.builder().endpointOverride(resolveEndpoint(properties))
+            .region(Region.of(properties.region)).overrideConfiguration {
+            o: ClientOverrideConfiguration.Builder -> o.addMetricPublisher(publisher)}
+            .credentialsProvider(providerChain).build()
+}
 
-    fun  resolveEndpoint( properties: SQSSenderProperties): URI {
-        if (properties.getEndpoint() != null) {
-            return URI.create(properties.getEndpoint());
-        }
-        return null;
+    private val providerChain: AwsCredentialsProviderChain
+    private get() = AwsCredentialsProviderChain.builder()
+        .addCredentialsProvider(EnvironmentVariableCredentialsProvider.create())
+        .addCredentialsProvider(SystemPropertyCredentialsProvider.create())
+        .addCredentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
+        .addCredentialsProvider(ProfileCredentialsProvider.create())
+        .addCredentialsProvider(ContainerCredentialsProvider.builder().build())
+        .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
+        .build()
+
+    private fun resolveEndpoint(properties: SQSSenderProperties): URI? {
+         return URI.create(properties.endpoint)
     }
 }
