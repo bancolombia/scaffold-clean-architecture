@@ -64,7 +64,7 @@ public class PluginCleanFunctionalTest {
           "build/functionalTest/infrastructure/entry-points/api-rest/build.gradle";
   public static final String
       COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT =
-          "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"";
+          "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String ASYNCEVENTBUS = "ASYNCEVENTBUS";
   public static final String RESTMVC = "restmvc";
   public static final String SERVER = "--server=";
@@ -509,12 +509,12 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-undertow"));
     assertTrue(
         FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains(
                 COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
@@ -541,12 +541,12 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(
         FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains("spring-boot-starter-jetty"));
     assertTrue(
         FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains(
                 COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
