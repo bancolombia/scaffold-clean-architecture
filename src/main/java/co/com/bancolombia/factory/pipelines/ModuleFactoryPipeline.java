@@ -15,6 +15,8 @@ public class ModuleFactoryPipeline {
         return new GitHubAction();
       case JENKINS:
         return new Jenkins();
+      case CIRCLECI:
+        return new CircleCI();
       default:
         throw new InvalidTaskOptionException("Pipeline value invalid");
     }
@@ -23,6 +25,7 @@ public class ModuleFactoryPipeline {
   public enum PipelineType {
     AZURE,
     GITHUB,
-    JENKINS
+    JENKINS,
+    CIRCLECI
   }
 }

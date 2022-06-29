@@ -63,6 +63,15 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
+  public void generateCircleCIPipelineTest() throws IOException, CleanException {
+
+    task.setType(ModuleFactoryPipeline.PipelineType.CIRCLECI);
+    task.generatePipelineTask();
+
+    assertTrue(new File("build/unitTest/.circleci/config.yml").exists());
+  }
+
+  @Test
   public void generateGithubActionTest() throws IOException, CleanException {
 
     task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
