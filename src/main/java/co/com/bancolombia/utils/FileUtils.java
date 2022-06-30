@@ -88,7 +88,10 @@ public class FileUtils {
     if (path.startsWith("./")) {
       return path;
     }
-    if (path.startsWith("/")) {
+    if (path.startsWith(".\\")) {
+      return path;
+    }
+    if (Paths.get(path).isAbsolute()) {
       return path;
     }
     return "./" + path;
