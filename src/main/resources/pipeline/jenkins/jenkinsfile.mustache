@@ -1,0 +1,45 @@
+pipeline {
+
+    agent any
+
+    environment {
+        PROJECT_NAME = "{{projectName}}"
+    }
+
+    stages {
+        stage('Build and Unit Tests') {
+            steps {
+                sh "./gradlew clean build jacocoMergedReport --no-daemon --continue"
+            }
+            post {
+                always {
+                    junit '**/build/test-results/test/TEST-*.xml'
+                    publishCoverage adapters: [jacocoAdapter('build/reports/jacocoMergedReport/jacocoMergedReport.xml')]
+                }
+            }
+        }
+        stage ('Code Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                sh "./gradlew sonarqube \
+                  -Dsonar.projectKey=${PROJECT_NAME} \
+                  -Dsonar.projectName=${PROJECT_NAME} \
+                  -Dsonar.projectVersion=${BUILD_NUMBER} \
+                  -Dsonar.host.url=${env.SONAR_HOST_URL} \
+                  -Dsonar.login=${env.SONAR_AUTH_TOKEN} \
+                  --no-daemon"
+                }
+             }
+        }
+        stage("Quality gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+        stage('Publish Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'applications/app-service/build/libs/*.jar'
+            }
+        }
+    }
+}

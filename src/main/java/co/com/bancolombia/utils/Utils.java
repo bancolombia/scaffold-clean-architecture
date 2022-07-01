@@ -167,6 +167,8 @@ public class Utils {
               .filter(f -> f.endsWith(extension) && !f.contains(".git"))
               .filter(f -> !f.contains(".git"))
               .filter(f -> !f.contains("settings.gradle"))
+              .map(f -> f.replace("\\", "/"))
+              .filter(f -> !f.contains("/bin"))
               .filter(f -> !f.contains("/resources"))
               .filter(f -> !f.contains("/examples-ca"))
               .map(p -> p.replace("build/functionalTest/", ""))

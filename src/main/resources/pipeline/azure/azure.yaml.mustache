@@ -1,79 +1,68 @@
-# Gradle
-# Build your Java project and run tests with Gradle using a Gradle wrapper script.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 name: $(Build.SourceBranchName).$(date:yyyyMMdd)$(rev:.r)
 
 variables:
-  - name: 'artifactory.Repository'
+  - name: 'Artifactory.Repository'
     value: 'build-{{projectName}}'
-  - name: 'projectName'
-    value: '{{projectName}}'
-  - name: 'artifactName'
+  - name: 'Artifact.Name'
     value: '{{projectName}}'
 
 resources:
   - repo: self
+    clean: true
 
 trigger:
   branches:
     include:
       - master
+      - trunk
+      - main
       - feature/*
-      # TODO: Update the main {master/trunk} branch in the list to include it in the branch trigger
 
-jobs:
-  - job: BuildJob
+stages:
+- stage: CI
+  jobs:
+  - job: build
     displayName: 'Build'
     pool:
       name: Build
       demands:
         - java
     steps:
-      - task: CmdLine@2
-        displayName: 'Gradle Wrapper Generation'
-        inputs:
-          script: |
-            gradle wrapper
-      - task: SonarQubePrepare@4
-        displayName: 'Prepare analysis on SonarQube'
-        inputs:
-          SonarQube: SonarQube
-          scannerMode: Other
-          extraProperties: |
-            sonar.projectKey=$(Build.Repository.Name)
-            sonar.projectName=$(Build.Repository.Name)
-            sonar.project.version=$(Build.BuildNumber)
-            sonar.branch.name=$(Build.SourceBranchName)
+    - task: SonarQubePrepare@5
+      displayName: 'Prepare analysis on SonarQube'
+      inputs:
+        SonarQube: SonarQube
+        scannerMode: Other
+        extraProperties: |
+          sonar.projectKey=$(Build.Repository.Name)
+          sonar.projectName=$(Build.Repository.Name)
+          sonar.projectVersion=$(Build.BuildNumber)
 
-      - task: Gradle@2
-        displayName: 'Gradle build and test'
-        inputs:
-          workingDirectory: .
-          gradleWrapperFile: gradlew
-          tasks: 'clean build jacocoMergedReport'
-          publishJUnitResults: true
-          testResultsFiles: '**/TEST-*.xml'
-          sonarQubeRunAnalysis: true
-          sqGradlePluginVersionChoice: 'build'
+    - task: Gradle@3
+      displayName: 'Build and Test'
+      inputs:
+        workingDirectory: .
+        gradleWrapperFile: gradlew
+        tasks: 'clean build jacocoMergedReport'
+        publishJUnitResults: true
+        testResultsFiles: '**/TEST-*.xml'
+        sonarQubeRunAnalysis: true
+        sqGradlePluginVersionChoice: 'build'
 
-      - task: PublishCodeCoverageResults@1
-        displayName: 'Publish code coverage'
-        inputs:
-          summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage'
+      inputs:
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/html'
 
-      - task: Sonar-buildbreaker@8
-        displayName: 'Break Build on Quality Gate Failure'
-        inputs:
-          SonarQube: SonarQube
+    - task: Sonar-buildbreaker@8
+      displayName: 'Quality Gate'
+      inputs:
+        SonarQube: SonarQube
 
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Artifact'
-        inputs:
-          PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
-          ArtifactName: '$(artifactName)'
-          publishLocation: 'Container'
-          condition: false
-        # condition: and(succeeded(), eq(variables['Build.SourceBranch'],'refs/heads/master'))
-        # TODO: Replace the line with 'condition: false' renaming the main branch in 'refs/heads/{master/trunk}' to work properly the source branch condition
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact'
+      condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
+        ArtifactName: '$(Artifact.Name)'

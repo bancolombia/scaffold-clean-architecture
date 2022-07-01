@@ -95,6 +95,8 @@ configurations.functionalTestImplementation.extendsFrom(configurations.testImple
 
 // Add a task to run the functional tests
 task functionalTest(type: Test) {
+    description = 'Runs functional tests.'
+    group = 'verification'
     testClassesDirs = sourceSets.functionalTest.output.classesDirs
     classpath = sourceSets.functionalTest.runtimeClasspath
 }
