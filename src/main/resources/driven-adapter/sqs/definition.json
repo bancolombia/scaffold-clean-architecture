@@ -15,5 +15,4 @@
     "driven-adapter/sqs/sqs-sender-config.kt.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderConfig.kt",
     "driven-adapter/sqs/sqs-sender-properties.kt.mustache": "infrastructure/driven-adapters/sqs-sender/src/main/{{language}}/{{packagePath}}/sqs/sender/config/SQSSenderProperties.kt"
   }
-
 }
