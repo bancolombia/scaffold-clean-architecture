@@ -642,6 +642,19 @@ public class GenerateDrivenAdapterKotlinTaskTest {
             .exists());
   }
 
+  @Test
+  public void generateDrivenAdapterSQSSenderImperative() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.SQS);
+    // Act
+    task.generateDrivenAdapterTask();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle.kts")
+            .exists());
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);

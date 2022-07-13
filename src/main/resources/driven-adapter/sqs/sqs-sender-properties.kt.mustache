@@ -1,0 +1,14 @@
+package {{package}}.sqs.sender.config;
+
+import lombok.Data
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
+
+@Data
+@Configuration
+@ConfigurationProperties(prefix = "adapter.sqs")
+class SQSSenderProperties {
+    val region: String? = null
+    val queueUrl: String? = null
+    val endpoint: String? = null
+}
