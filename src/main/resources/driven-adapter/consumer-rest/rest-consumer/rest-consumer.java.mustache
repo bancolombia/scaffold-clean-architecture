@@ -62,7 +62,7 @@ public class RestConsumer // implements Gateway from domain
         {{/lombok}}
 
         RequestBody requestBody = RequestBody
-            .create(MediaType.parse("application/json; charset=utf-8"), json);
+            .create(json, MediaType.parse("application/json; charset=utf-8"));
 
         Request request = new Request.Builder()
             .url(url)
