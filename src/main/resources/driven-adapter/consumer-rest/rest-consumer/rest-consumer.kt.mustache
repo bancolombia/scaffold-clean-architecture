@@ -40,7 +40,7 @@ class RestConsumer // implements Gateway from domain
         )
         val json = mapper.writeValueAsString(objectRequest)
         val requestBody = RequestBody
-            .create(MediaType.parse("application/json; charset=utf-8"), json)
+            .create(json, MediaType.parse("application/json; charset=utf-8"))
         val request = Request.Builder()
             .url(url)
             .post(requestBody)
