@@ -8,35 +8,21 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    {{#jacoco}}
     apply plugin: 'jacoco'
-    {{/jacoco}}
-    {{#cobertura}}
-    apply plugin: 'net.saliman.cobertura'
-    {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.{{javaVersion}}
+    sourceCompatibility = JavaVersion.VERSION_11
 
     dependencies {
-        {{#reactive}}
-        implementation 'io.projectreactor:reactor-core'
-        implementation 'io.projectreactor.addons:reactor-extra'
-
-        testImplementation 'io.projectreactor:reactor-test'
-        {{/reactive}}
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        {{#lombok}}
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
         testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        {{/lombok}}
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    {{#jacoco}}
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     jacocoTestReport {
@@ -48,18 +34,9 @@ subprojects {
             html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
         }
     }
-    {{/jacoco}}
-    {{#cobertura}}
-    test.finalizedBy(project.tasks.cobertura)
-
-    cobertura {
-        coverageFormats = [ 'xml', 'html' ]
-    }
-    {{/cobertura}}
 
 }
 
-{{#jacoco}}
 jacoco {
     toolVersion = "${jacocoVersion}"
     reportsDirectory = file("$buildDir/reports")
@@ -77,18 +54,6 @@ task jacocoMergedReport(type: JacocoReport) {
         html.setRequired true
     }
 }
-{{/jacoco}}
-{{#cobertura}}
-def files = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
-
-cobertura {
-    coverageFormats = ['xml', 'html']
-    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
-    coverageMergeDatafiles = files
-}
-
-test.finalizedBy(project.tasks.cobertura)
-{{/cobertura}}
 
 tasks.withType(JavaCompile) {
     options.compilerArgs = [
@@ -96,5 +61,5 @@ tasks.withType(JavaCompile) {
     ]
 }
 tasks.named('wrapper') {
-    gradleVersion = '{{gradleVersion}}'
+    gradleVersion = '7.4.2'
 }
