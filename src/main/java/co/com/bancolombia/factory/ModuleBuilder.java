@@ -240,11 +240,11 @@ public class ModuleBuilder {
     return params.get(key);
   }
 
-  public Boolean getBooleanParam(String key) {
+  public boolean getBooleanParam(String key) {
     return (Boolean) params.get(key);
   }
 
-  public Boolean isReactive() {
+  public boolean isReactive() {
     return getABooleanProperty("reactive", false);
   }
 
@@ -252,11 +252,11 @@ public class ModuleBuilder {
     return KOTLIN.name().equalsIgnoreCase(params.get(LANGUAGE).toString());
   }
 
-  public Boolean isEnableLombok() {
+  public boolean isEnableLombok() {
     return getABooleanProperty("lombok", true);
   }
 
-  public Boolean withMetrics() {
+  public boolean withMetrics() {
     return getABooleanProperty("metrics", true);
   }
 
@@ -319,7 +319,7 @@ public class ModuleBuilder {
     }
   }
 
-  private Boolean getABooleanProperty(String property, boolean defaultValue) {
+  private boolean getABooleanProperty(String property, boolean defaultValue) {
     try {
       String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
       return "true".equals(value);
