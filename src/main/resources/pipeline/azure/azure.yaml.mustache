@@ -31,11 +31,6 @@ jobs:
       demands:
         - java
     steps:
-      - task: CmdLine@2
-        displayName: 'Gradle Wrapper Generation'
-        inputs:
-          script: |
-            gradle wrapper
       - task: SonarQubePrepare@4
         displayName: 'Prepare analysis on SonarQube'
         inputs:
