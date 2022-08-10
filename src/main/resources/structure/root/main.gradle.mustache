@@ -18,7 +18,9 @@ subprojects {
 
     compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.{{javaVersion}}
-
+    test {
+        useJUnitPlatform()
+    }
     dependencies {
         {{#reactive}}
         implementation 'io.projectreactor:reactor-core'
