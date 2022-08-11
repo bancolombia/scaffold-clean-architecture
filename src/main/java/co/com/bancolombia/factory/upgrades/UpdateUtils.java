@@ -36,4 +36,13 @@ public class UpdateUtils {
     builder.updateExpression(file, "(" + configuration + "\\s)", newConfiguration + " ");
     builder.updateExpression(file, "(" + configuration + "\\()", newConfiguration + "(");
   }
+
+  public static String appendValidate(
+      String main, String match, String containsValue, String concatValue) {
+    if (main.contains(containsValue)) {
+      return main;
+    }
+    int start = main.indexOf(match);
+    return main.substring(0, start) + concatValue + main.substring(start);
+  }
 }
