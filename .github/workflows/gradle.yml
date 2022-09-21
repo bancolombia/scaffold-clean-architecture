@@ -68,7 +68,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "master"
-          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} versión'
+          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
           force-add: "true"
           files: README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
           name: Release Bot
