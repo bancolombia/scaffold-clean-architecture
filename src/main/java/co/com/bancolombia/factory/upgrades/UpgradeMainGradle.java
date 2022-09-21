@@ -14,12 +14,12 @@ public class UpgradeMainGradle implements UpgradeAction {
   }
 
   @SneakyThrows
-  public boolean up(ModuleBuilder builder, String MATCH, String VALIDATION, String VALUE) {
+  public boolean up(ModuleBuilder builder, String match, String validation, String value) {
     AtomicBoolean applied = new AtomicBoolean(false);
     builder.updateFile(
         MAIN_GRADLE,
         content -> {
-          String res = UpdateUtils.appendValidate(content, MATCH, VALIDATION, VALUE);
+          String res = UpdateUtils.appendValidate(content, match, validation, value);
           if (!content.equals(res)) {
             applied.set(true);
           }
