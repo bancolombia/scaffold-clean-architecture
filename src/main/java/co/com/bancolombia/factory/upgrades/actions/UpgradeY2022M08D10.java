@@ -1,10 +1,11 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.factory.upgrades.UpgradeMainGradle;
 import lombok.SneakyThrows;
 
-public class UpgradeY2022M08D10 extends UpgradeMainGradle {
+public class UpgradeY2022M08D10 extends UpgradeMainGradle implements UpgradeAction {
 
   public static final String VALIDATION = "useJUnitPlatform";
 
