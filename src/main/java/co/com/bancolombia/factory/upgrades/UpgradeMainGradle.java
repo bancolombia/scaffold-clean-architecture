@@ -1,40 +1,26 @@
 package co.com.bancolombia.factory.upgrades;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
-
 import co.com.bancolombia.factory.ModuleBuilder;
-import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.SneakyThrows;
 
-public class UpgradeMainGradle implements UpgradeAction {
+import java.util.concurrent.atomic.AtomicBoolean;
 
-  @Override
-  public boolean up(ModuleBuilder builder) {
-    return false;
-  }
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 
-  @SneakyThrows
-  public boolean up(ModuleBuilder builder, String match, String validation, String value) {
-    AtomicBoolean applied = new AtomicBoolean(false);
-    builder.updateFile(
-        MAIN_GRADLE,
-        content -> {
-          String res = UpdateUtils.appendValidate(content, match, validation, value);
-          if (!content.equals(res)) {
-            applied.set(true);
-          }
-          return res;
-        });
-    return applied.get();
-  }
+public abstract class UpgradeMainGradle implements UpgradeAction {
 
-  @Override
-  public String name() {
-    return null;
-  }
-
-  @Override
-  public String description() {
-    return null;
-  }
+    @SneakyThrows
+    public boolean up(ModuleBuilder builder, String match, String validation, String value) {
+        AtomicBoolean applied = new AtomicBoolean(false);
+        builder.updateFile(
+                MAIN_GRADLE,
+                content -> {
+                    String res = UpdateUtils.appendValidate(content, match, validation, value);
+                    if (!content.equals(res)) {
+                        applied.set(true);
+                    }
+                    return res;
+                });
+        return applied.get();
+    }
 }
