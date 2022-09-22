@@ -1,7 +1,6 @@
 package co.com.bancolombia.factory.upgrades;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -59,5 +58,34 @@ public class UpdateUtilsTest {
     // Assert
     verify(builder, times(2)).addFile(file, currentContent);
     assertFalse(applied);
+  }
+
+  @Test
+  public void shouldNotAppendValidate() {
+    // Arrange
+    String file = "build.gradle";
+    String check = "jar {";
+    String match = "jar {enabled = false}";
+    String currentContent = "dependencies {}\njar {enabled = false}";
+    builder.addFile(file, currentContent);
+    // Act
+    String result = UpdateUtils.appendValidate(currentContent, match, check, file);
+    // Assert
+    assertEquals(currentContent, result);
+  }
+
+  @Test
+  public void shouldAppendValidate() {
+    // Arrange
+    String file = "build.gradle\n";
+    String check = "jar {enabled = false}";
+    String match = "dependencies";
+    String currentContent = "dependencies {}\n";
+    builder.addFile(file, currentContent);
+    // Act
+    String expected = "build.gradle\ndependencies {}\n";
+    String result = UpdateUtils.appendValidate(currentContent, match, check, file);
+    // Assert
+    assertEquals(expected, result);
   }
 }

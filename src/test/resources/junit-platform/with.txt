@@ -1,0 +1,8 @@
+    compileJava.dependsOn validateStructure
+    sourceCompatibility = JavaVersion.VERSION_11
+
+    test {
+        useJUnitPlatform()
+    }
+
+	dependencies {

@@ -1,29 +1,17 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
-
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
-import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.SneakyThrows;
+import co.com.bancolombia.factory.upgrades.UpgradeMainGradle;
 
-public class UpgradeY2021M05D20 implements UpgradeAction {
+public class UpgradeY2021M05D20 extends UpgradeMainGradle implements UpgradeAction {
   public static final String VALIDATION = "compileJava.dependsOn validateStructure";
+  public static final String VALUE = VALIDATION + "\n\t";
+  public static final String MATCH = "dependencies";
 
   @Override
-  @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    AtomicBoolean applied = new AtomicBoolean(false);
-    builder.updateFile(
-        MAIN_GRADLE,
-        content -> {
-          String res = appendValidate(content);
-          if (!content.equals(res)) {
-            applied.set(true);
-          }
-          return res;
-        });
-    return applied.get();
+    return super.up(builder, MATCH, VALIDATION, VALUE);
   }
 
   @Override
@@ -34,13 +22,5 @@ public class UpgradeY2021M05D20 implements UpgradeAction {
   @Override
   public String description() {
     return "Append validate structure task dependency";
-  }
-
-  private String appendValidate(String main) {
-    if (main.contains(VALIDATION)) {
-      return main;
-    }
-    int start = main.indexOf("dependencies");
-    return main.substring(0, start) + VALIDATION + "\n\t" + main.substring(start);
   }
 }
