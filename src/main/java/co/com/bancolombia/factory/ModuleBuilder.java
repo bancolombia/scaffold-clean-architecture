@@ -304,7 +304,7 @@ public class ModuleBuilder {
       logger.debug("cannot read language from gradle.properties");
     }
     if (language == null) {
-      language = JAVA.name();
+      language = JAVA.name().toLowerCase();
     }
     this.params.put(LANGUAGE, language);
   }
