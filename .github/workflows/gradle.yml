@@ -39,7 +39,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate Changelog
-        uses: heinrichreimer/github-changelog-generator-action@04f64206d10b4f9c882da8157ffc3dfa6ce66b3e
+        uses: heinrichreimer/action-github-changelog-generator@6f5b9494dd265d6fb7243a10c53dc0169c55f247
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pullRequests: true
@@ -47,16 +47,6 @@ jobs:
           issues: true
           issuesWoLabels: true
           stripGeneratorNotice: true
-      - name: Push Docs and Changelog
-        uses: github-actions-x/commit@722d56b8968bf00ced78407bbe2ead81062d8baa
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'master'
-          commit-message: 'Automatic docs and changelog generation'
-          force-add: 'true'
-          files: CHANGELOG.md docs/
-          name: ${{ github.actor }}
-          email: ${{ github.actor }}@users.noreply.github.com
 
   release:
     if: github.event_name == 'release'
