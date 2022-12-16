@@ -305,3 +305,6 @@ Temporary Items
 
 #gradle wrapper
 gradle/
+
+# Visual Studio Code
+.vscode
