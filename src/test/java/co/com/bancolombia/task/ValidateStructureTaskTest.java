@@ -73,10 +73,65 @@ public class ValidateStructureTaskTest {
     task = (ValidateStructureTask) project.getTasks().getByName("validate");
   }
 
+  public void setupWithoutModelWhitelistDepException() throws IOException, CleanException {
+    deleteStructure(Path.of("build/unitTest"));
+    Project project =
+        ProjectBuilder.builder()
+            .withName("cleanArchitecture")
+            .withProjectDir(new File("build/unitTest"))
+            .build();
+
+    project.getPluginManager().apply(JavaPlugin.class);
+
+    project.getTasks().create("ca", GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask =
+        (GenerateStructureTask) project.getTasks().getByName("ca");
+    generateStructureTask.generateStructureTask();
+
+    ProjectBuilder.builder()
+        .withName(APP_SERVICE)
+        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    project.getTasks().create("guc", GenerateUseCaseTask.class);
+    GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
+    generateUseCase.setName("business");
+    generateUseCase.generateUseCaseTask();
+
+    Project modelProject =
+        ProjectBuilder.builder()
+            .withName("model")
+            .withProjectDir(new File("build/unitTest/domain/model"))
+            .withParent(project)
+            .build();
+
+    modelProject.getPluginManager().apply(JavaPlugin.class);
+
+    // adding a dependency to the model module, without a whitelist, this would trigger a failure
+    modelProject.getDependencies().add("implementation", "org.apache.commons:commons-text:1.10.0");
+
+    Task task2 = modelProject.getTasks().getByName("clean");
+    task2.getActions().get(0).execute(task2);
+
+    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
+
+    project.getTasks().create("validate", ValidateStructureTask.class);
+    task = (ValidateStructureTask) project.getTasks().getByName("validate");
+  }
+
   @Test(expected = CleanException.class)
   public void validateStructureException() throws IOException, CleanException {
     // Act
     this.setupException();
+    task.validateStructureTask();
+    // Assert
+  }
+
+  @Test(expected = CleanException.class)
+  public void validateStructureModelException() throws IOException, CleanException {
+    // Act
+    this.setupWithoutModelWhitelistDepException();
     task.validateStructureTask();
     // Assert
   }
@@ -126,15 +181,9 @@ public class ValidateStructureTaskTest {
             .withProjectDir(new File("build/unitTest/domain/model"))
             .withParent(project)
             .build();
-    mongoProject
-        .getConfigurations()
-        .create("capsule")
-        .defaultDependencies(
-            dependencySet -> {
-              dependencySet.add(
-                  project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
-            });
+
     mongoProject.getPluginManager().apply(JavaPlugin.class);
+    mongoProject.getDependencies().add("implementation", "org.apache.commons:commons-text:1.10.0");
 
     modelProject.getPluginManager().apply(JavaPlugin.class);
     Task task2 = modelProject.getTasks().getByName("clean");
@@ -194,14 +243,14 @@ public class ValidateStructureTaskTest {
             .withProjectDir(new File("build/unitTest/domain/model"))
             .withParent(project)
             .build();
+
     mongoProject
         .getConfigurations()
         .create("capsule")
         .defaultDependencies(
-            dependencySet -> {
-              dependencySet.add(
-                  project.getDependencies().create("co.paralleluniverse:capsule:1.0.3"));
-            });
+            dependencySet ->
+                dependencySet.add(
+                    project.getDependencies().create("co.paralleluniverse:capsule:1.0.3")));
     mongoProject.getPluginManager().apply(JavaPlugin.class);
 
     modelProject.getPluginManager().apply(JavaPlugin.class);

@@ -4,6 +4,7 @@ import co.com.bancolombia.models.TaskModel;
 import co.com.bancolombia.task.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -11,10 +12,16 @@ import org.gradle.api.tasks.TaskContainer;
 
 public class PluginClean implements Plugin<Project> {
   private TaskContainer taskContainer;
+  private CleanPluginExtension cleanPluginExtension;
 
   public void apply(Project project) {
-    List<TaskModel> tasks = initTasks();
+
+    cleanPluginExtension =
+        project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
+
     taskContainer = project.getTasks();
+    List<TaskModel> tasks = initTasks();
+
     tasks.forEach(this::appendTask);
   }
 
@@ -73,6 +80,11 @@ public class PluginClean implements Plugin<Project> {
             .description("Validate that project references are not violated")
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(ValidateStructureTask.class)
+            .action(
+                (Action<? extends ValidateStructureTask>)
+                    task ->
+                        task.getWhitelistedDependencies()
+                            .set(cleanPluginExtension.getModelProps().getWhitelistedDependencies()))
             .build());
 
     tasksModels.add(
@@ -121,9 +133,28 @@ public class PluginClean implements Plugin<Project> {
 
   @SuppressWarnings("unchecked")
   private void appendTask(TaskModel t) {
-    Task temp = taskContainer.create(t.getName(), t.getTaskAction());
-    taskContainer.create(t.getShortcut(), t.getTaskAction());
-    temp.setGroup(t.getGroup());
-    temp.setDescription(t.getDescription());
+    if (t.getAction() == null) {
+      taskContainer.create(
+          t.getName(),
+          t.getTaskAction(),
+          task -> {
+            task.setGroup(t.getGroup());
+            task.setDescription(t.getDescription());
+          });
+      taskContainer.create(
+          t.getShortcut(),
+          t.getTaskAction(),
+          task -> {
+            task.setGroup(t.getGroup());
+            task.setDescription(t.getDescription());
+          });
+    } else {
+      Task temp = taskContainer.create(t.getName(), t.getTaskAction(), t.getAction());
+      temp.setGroup(t.getGroup());
+      temp.setDescription(t.getDescription());
+      Task temp2 = taskContainer.create(t.getShortcut(), t.getTaskAction(), t.getAction());
+      temp2.setGroup(t.getGroup());
+      temp2.setDescription(t.getDescription());
+    }
   }
 }
