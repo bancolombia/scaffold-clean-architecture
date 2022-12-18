@@ -1,6 +1,6 @@
 {
   "folders": [
-    "deployment/acceptance-test/src/test/java/{{packagePath}}/util",
+    "deployment/acceptance-test/src/test/java/{{packagePath}}/utils",
     "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo"
   ],
   "files": {
@@ -13,7 +13,7 @@
   },
   "java": {
     "test/acceptance-test/TestParallel.java.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/TestParallel.java",
-    "test/acceptance-test/example/validator.test.utils.java.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/util/ValidatorTestUtil.java",
+    "test/acceptance-test/utils/validator.test.utils.java.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/utils/ValidatorTestUtils.java",
     "test/acceptance-test/build.gradle.mustache": "deployment/acceptance-test/build.gradle",
     "test/acceptance-test/settings.gradle.mustache": "deployment/acceptance-test/settings.gradle"
   },

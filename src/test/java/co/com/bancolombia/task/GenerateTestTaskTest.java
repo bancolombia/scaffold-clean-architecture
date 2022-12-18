@@ -59,7 +59,7 @@ public class GenerateTestTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/util/ValidatorTestUtil.java")
+                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
             .exists());
     assertTrue(
         new File("build/unitTest/deployment/acceptance-test/src/test/resources/logback-test.xml")
