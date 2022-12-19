@@ -17,7 +17,8 @@ import org.junit.Test;
 public class GenerateTestTaskTest {
 
   GenerateAcceptanceTestTask task;
-  static Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
+  static Project project =
+      ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
 
   @Before
   public void init() throws IOException, CleanException {
@@ -54,11 +55,11 @@ public class GenerateTestTaskTest {
 
     assertTrue(
         new File(
-            "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/TestParallel.java")
+                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/TestParallel.java")
             .exists());
     assertTrue(
         new File(
-            "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
+                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
             .exists());
     assertTrue(
         new File("build/unitTest/deployment/acceptance-test/src/test/resources/logback-test.xml")
@@ -68,11 +69,15 @@ public class GenerateTestTaskTest {
             .exists());
     assertTrue(
         new File(
-            "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/demo.feature")
+                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/demo.feature")
             .exists());
     assertTrue(
         new File(
-            "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/pet-store.yaml")
+                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/addPet.json")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/pet-store.yaml")
             .exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/settings.gradle").exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/build.gradle").exists());

@@ -23,7 +23,6 @@ public class TestParallel {
       Results results = Runner.path()
               .outputCucumberJson(true)
               .relativeTo(getClass())
-              .tags("#{feature}")
               .parallel(WORKERS);
       generateReport(results.getReportDir());
       assertEquals(0, results.getFailCount(), results.getErrorMessages());

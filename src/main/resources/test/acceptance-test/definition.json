@@ -8,6 +8,7 @@
     "test/acceptance-test/resources/logback-test.xml.mustache": "deployment/acceptance-test/src/test/resources/logback-test.xml",
     "test/acceptance-test/resources/karate-config.js.mustache": "deployment/acceptance-test/src/test/resources/karate-config.js",
     "test/acceptance-test/resources/demo.feature.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/demo.feature",
+    "test/acceptance-test/resources/addPet.json.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/addPet.json",
     "test/acceptance-test/resources/pet-store.yaml.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/pet-store.yaml",
     "test/acceptance-test/readme.md.mustache": "deployment/acceptance-test/README.md"
 
