@@ -50,9 +50,9 @@ public class GenerateTestTaskTest {
 
   @Test
   public void generateAcceptanceTest() throws IOException, CleanException {
-    
+
     task.setName("acceptance-test");
-    
+
     task.generateAcceptanceTestTask();
 
     assertTrue(
