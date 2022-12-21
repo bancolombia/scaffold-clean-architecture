@@ -1,28 +1,28 @@
 {
   "folders": [
-    "deployment/acceptance-test/src/test/java/{{packagePath}}/utils",
-    "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo"
+    "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/utils",
+    "deployment/{{acceptanceTestPath}}/src/test/resources/{{packagePath}}/demo"
   ],
   "files": {
 
-    "test/acceptance-test/resources/logback-test.xml.mustache": "deployment/acceptance-test/src/test/resources/logback-test.xml",
-    "test/acceptance-test/resources/karate-config.js.mustache": "deployment/acceptance-test/src/test/resources/karate-config.js",
-    "test/acceptance-test/resources/demo.feature.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/demo.feature",
-    "test/acceptance-test/resources/addPet.json.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/demo/addPet.json",
-    "test/acceptance-test/resources/pet-store.yaml.mustache": "deployment/acceptance-test/src/test/resources/{{packagePath}}/pet-store.yaml",
-    "test/acceptance-test/readme.md.mustache": "deployment/acceptance-test/README.md"
+    "test/acceptance-test/resources/logback-test.xml.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/logback-test.xml",
+    "test/acceptance-test/resources/karate-config.js.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/karate-config.js",
+    "test/acceptance-test/resources/demo.feature.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/{{packagePath}}/demo/demo.feature",
+    "test/acceptance-test/resources/addPet.json.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/{{packagePath}}/demo/addPet.json",
+    "test/acceptance-test/resources/pet-store.yaml.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/{{packagePath}}/pet-store.yaml",
+    "test/acceptance-test/readme.md.mustache": "deployment/{{acceptanceTestPath}}/README.md"
 
   },
   "java": {
-    "test/acceptance-test/TestParallel.java.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/TestParallel.java",
-    "test/acceptance-test/utils/validator.test.utils.java.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/utils/ValidatorTestUtils.java",
-    "test/acceptance-test/build.gradle.mustache": "deployment/acceptance-test/build.gradle",
-    "test/acceptance-test/settings.gradle.mustache": "deployment/acceptance-test/settings.gradle"
+    "test/acceptance-test/TestParallel.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/{{language}}/{{packagePath}}/TestParallel.java",
+    "test/acceptance-test/utils/validator.test.utils.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/{{language}}/{{packagePath}}/utils/ValidatorTestUtils.java",
+    "test/acceptance-test/build.gradle.mustache": "deployment/{{acceptanceTestPath}}/build.gradle",
+    "test/acceptance-test/settings.gradle.mustache": "deployment/{{acceptanceTestPath}}/settings.gradle"
   },
   "kotlin": {
-    "test/acceptance-test/TestParallel.kt.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/TestParallel.kt",
-    "test/acceptance-test/example/demo.runner.kt.mustache": "deployment/acceptance-test/src/test/{{language}}/{{packagePath}}/demo/DemoRunner.kt",
-    "test/acceptance-test/build.gradle.mustache": "deployment/acceptance-test/build.gradle",
-    "test/acceptance-test/settings.gradle.mustache": "deployment/acceptance-test/settings.gradle"
+    "test/acceptance-test/TestParallel.kt.mustache": "deployment/{{acceptanceTestPath}}/src/test/{{language}}/{{packagePath}}/TestParallel.kt",
+    "test/acceptance-test/example/demo.runner.kt.mustache": "deployment/{{acceptanceTestPath}}/src/test/{{language}}/{{packagePath}}/demo/DemoRunner.kt",
+    "test/acceptance-test/build.gradle.mustache": "deployment/{{acceptanceTestPath}}/build.gradle",
+    "test/acceptance-test/settings.gradle.mustache": "deployment/{{acceptanceTestPath}}/settings.gradle"
   }
 }

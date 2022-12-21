@@ -50,37 +50,39 @@ public class GenerateTestTaskTest {
 
   @Test
   public void generateAcceptanceTest() throws IOException, CleanException {
-
+    
+    task.setName("acceptanceTest");
+    
     task.generateAcceptanceTestTask();
 
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/TestParallel.java")
+                "build/unitTest/deployment/acceptanceTest/src/test/java/co/com/bancolombia/TestParallel.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
+                "build/unitTest/deployment/acceptanceTest/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
             .exists());
     assertTrue(
-        new File("build/unitTest/deployment/acceptance-test/src/test/resources/logback-test.xml")
+        new File("build/unitTest/deployment/acceptanceTest/src/test/resources/logback-test.xml")
             .exists());
     assertTrue(
-        new File("build/unitTest/deployment/acceptance-test/src/test/resources/karate-config.js")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/demo.feature")
+        new File("build/unitTest/deployment/acceptanceTest/src/test/resources/karate-config.js")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/addPet.json")
+                "build/unitTest/deployment/acceptanceTest/src/test/resources/co/com/bancolombia/demo/demo.feature")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/pet-store.yaml")
+                "build/unitTest/deployment/acceptanceTest/src/test/resources/co/com/bancolombia/demo/addPet.json")
             .exists());
-    assertTrue(new File("build/unitTest/deployment/acceptance-test/settings.gradle").exists());
-    assertTrue(new File("build/unitTest/deployment/acceptance-test/build.gradle").exists());
-    assertTrue(new File("build/unitTest/deployment/acceptance-test/README.md").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/deployment/acceptanceTest/src/test/resources/co/com/bancolombia/pet-store.yaml")
+            .exists());
+    assertTrue(new File("build/unitTest/deployment/acceptanceTest/settings.gradle").exists());
+    assertTrue(new File("build/unitTest/deployment/acceptanceTest/build.gradle").exists());
+    assertTrue(new File("build/unitTest/deployment/acceptanceTest/README.md").exists());
   }
 }
