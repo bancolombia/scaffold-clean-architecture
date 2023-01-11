@@ -20,6 +20,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
+  private BooleanOption force = BooleanOption.FALSE;
   private Language language = Language.JAVA;
   private JavaVersion javaVersion = JavaVersion.VERSION_11;
 
@@ -63,6 +64,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     this.javaVersion = javaVersion;
   }
 
+  @Option(option = "force", description = "Force regenerates all files")
+  public void setForce(BooleanOption force) {
+    this.force = force;
+  }
+
   @OptionValues("type")
   public List<ProjectType> getAvailableProjectTypes() {
     return Arrays.asList(ProjectType.values());
@@ -75,6 +81,16 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
   @OptionValues("lombok")
   public List<BooleanOption> getLombokOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @OptionValues("metrics")
+  public List<BooleanOption> getMetricsOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @OptionValues("force")
+  public List<BooleanOption> getForceOptions() {
     return Arrays.asList(BooleanOption.values());
   }
 
@@ -103,7 +119,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
 
     boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
-    if (exists) {
+    if (exists && force == BooleanOption.FALSE) {
       logger.lifecycle(
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
       loadProperty("package");
