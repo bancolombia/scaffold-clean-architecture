@@ -3,8 +3,9 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
-import co.com.bancolombia.Constants;
+import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.GenerateStructureTask.JavaVersion;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -49,6 +50,33 @@ public class GenerateStructureTaskTest {
     List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
     // Assert
     assertEquals(Arrays.asList(GenerateStructureTask.CoveragePlugin.values()), types);
+  }
+
+  @Test
+  public void shouldReturnMetricsOptions() {
+    // Arrange
+    // Act
+    List<BooleanOption> types = task.getMetricsOptions();
+    // Assert
+    assertEquals(Arrays.asList(BooleanOption.values()), types);
+  }
+
+  @Test
+  public void shouldReturnForceOptions() {
+    // Arrange
+    // Act
+    List<BooleanOption> types = task.getForceOptions();
+    // Assert
+    assertEquals(Arrays.asList(BooleanOption.values()), types);
+  }
+
+  @Test
+  public void shouldReturnJavaVersion() {
+    // Arrange
+    // Act
+    List<JavaVersion> types = task.getJavaVersions();
+    // Assert
+    assertEquals(Arrays.asList(JavaVersion.values()), types);
   }
 
   @Test
@@ -111,7 +139,10 @@ public class GenerateStructureTaskTest {
     task.setName("projectTest");
     task.setType(GenerateStructureTask.ProjectType.REACTIVE);
     task.setCoveragePlugin(GenerateStructureTask.CoveragePlugin.COBERTURA);
-    task.setStatusLombok(Constants.BooleanOption.FALSE);
+    task.setStatusLombok(BooleanOption.FALSE);
+    task.setMetrics(BooleanOption.FALSE);
+    task.setForce(BooleanOption.FALSE);
+    task.setJavaVersion(JavaVersion.VERSION_11);
     // Act
     task.generateStructureTask();
     // Assert
@@ -167,7 +198,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
     // Arrange
-    task.setStatusLombok(Constants.BooleanOption.FALSE);
+    task.setStatusLombok(BooleanOption.FALSE);
     task.generateStructureTask();
     // Act
     task.generateStructureTask();
@@ -182,7 +213,7 @@ public class GenerateStructureTaskTest {
   public void shouldGetLombokOptions() {
     // Arrange
     // Act
-    List<Constants.BooleanOption> options = task.getLombokOptions();
+    List<BooleanOption> options = task.getLombokOptions();
     // Assert
     assertEquals(2, options.size());
   }
