@@ -1,12 +1,4 @@
-pluginManagement {
-    repositories {
-        //mavenLocal()
-        //maven { url '...' }
-        gradlePluginPortal()
-    }
-}
-
-rootProject.name = '{{projectName}}'
+rootProject.name = 'cleanArchitecture'
 
 include ':app-service'
 include ':model'
