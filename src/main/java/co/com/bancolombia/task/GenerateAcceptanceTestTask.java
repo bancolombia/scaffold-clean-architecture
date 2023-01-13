@@ -9,11 +9,11 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 
 public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
-  private String name;
+  private String name = "acceptanceTest";
 
-  @Option(option = "name", description = "Set driven adapter name")
-  public void setName(String name) {
-    this.name = name;
+  @Option(option = "name", description = "Set acceptance Test project name")
+  public void setName(String projectName) {
+    this.name = projectName;
   }
 
   @TaskAction

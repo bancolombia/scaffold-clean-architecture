@@ -426,7 +426,9 @@ The **`generatePipeline | gpl`** task will generate CI pipeline inside the folde
    
  ## Generate Acceptance Test
  
-The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/", this task has one required parameter `name`.
+The **`generateAcceptanceTest | gat`** task will generate subproject by [karate framework](https://github.com/intuit/karate)  inside the folder "./deployment/", this task has one optional parameter, `name`.
+
+   - **`name`** `= NameAcceptanceTestProject`: This parameter is going to specify the name of the acceptance test project. `Default Value = acceptanceTest`
    
 ```shell
       gradle generateAcceptanceTest --name=[acceptanceTestProjectName]
