@@ -3,40 +3,48 @@ _Karate es una herramienta de código abierto que combina la automatización de 
 
 _Si está familiarizado con Cucumber / Gherkin, la gran diferencia aquí es que no necesita escribir código extra de "pegamento" o "definiciones de pasos" de Java._
 
-**RECOMENDACION !!!**: Visitar la documentacion oficial para obtener todas las ventajas de este potencial framework: https://github.com/intuit/karate
+**RECOMENDACION !!!**: Visitar la documentación oficial para obtener todas las ventajas de este potencial framework: https://github.com/intuit/karate
 ## Comenzando
 
 ### Instalación 🔧
 
-**IMPORTANTE**: Este proyecto es una demo, proyecto base, para estructurar las pruebas de integracion (AcceptanceTest) que se realizarán, no es funcional si se ejecuta sin modificar, por eso a continuacion de contamos que debes modificar y configurar para comenzar en tu contexto de aplicacion con las pruebas:
-- Ir al karate-config.js y modificar la `urlBase` por la url o endpoint de tu aplicacion
-- Ir a los archivos .feature (src>test>resources>{{package}}) agregar tus escenarios, metodos de prueba, aserciones, y todo lo necesario para tus pruebas en particular
-- Ir a los runners de prueba (src>test>java>{{package}}) y agregar en Runner.path(nombre del feature a probar)
-
-
+**IMPORTANTE**: Este proyecto es una demo, proyecto base, para estructurar las pruebas de integración (AcceptanceTest) que se realizarán. Este proyecto es funcional yo consume la pet-store  API en su versión 3 (https://petstore3.swagger.io/api/v3), sin embargo, a continuación te contamos que debes modificar y configurar para comenzar en tu contexto de aplicación con las pruebas:
+- Ir al karate-config.js y modificar la `urlBase` por la url o endpoint de tu aplicación.
+- Ir al karate-config.js y modificar la `oasUrl` por el path y nombre de la deficnicón open Api de la API a testear.
+- Ir a los archivos .feature (src>test>resources>{{package}}) agregar tus escenarios, métodos de prueba, aserciones, y todo lo necesario para tus pruebas en particular.
 
 Aquí se detalla la estructura que debe guiar las pruebas con Karate, es un ejemplo:
 
 ```
-├───src
-└───test
-├───java
-│   └───{{package}}
-│   |    ├───demo
-|   |    |    └───DemoRunner.java
-|   └───TestParallel.java
-|
-└───resources
-└───karate
-|    ├───demo
-|    |   └───demo.feature
-└───karate-config.js
-└───logback-test.xml
+src
+└── test
+    ├── java
+    │   └── {{package}}
+    │       ├── TestParallel.java
+    │       └── utils
+    │           └── ValidatorTestUtils.java
+    └── resources
+        ├── {{package}}
+        │   ├── demo
+        │   │   ├── demo.feature
+        │   │   └── addPet.json
+        │   └── pet-store.yaml
+        ├── karate-config.js
+        └── logback-test.xml
 ```
 
 - TestParallel -> Clase general en java que ejecuta los TESTS de karate en Paralelo y tambien genera el reporte de dichos TESTS en formato json que luego se convierte en reporte cucumber
 
 ## Ejecutando las pruebas ⚙️
+Este proyecto soporta ejecución por features tageados de manera independiente, como es el caso del feature demo.feature el cual tiene el tag @acceptanceTest.
+
+```gradle
+gradlew clean test "-Dkarate.options=--tags @acceptanceTest" -i
+```
+
+De esta manera se ejecutaran todos los features con el tag @acceptanceTest.
+
+Por otra parte, si lo que se quiere es ejecutar todos los features almacenados en el proyecto bastará con ejecura el comando
 
 ```gradle
 gradlew clean test -i

@@ -51,6 +51,8 @@ public class GenerateTestTaskTest {
   @Test
   public void generateAcceptanceTest() throws IOException, CleanException {
 
+    task.setName("acceptance-test");
+
     task.generateAcceptanceTestTask();
 
     assertTrue(
@@ -59,7 +61,7 @@ public class GenerateTestTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/demo/DemoRunner.java")
+                "build/unitTest/deployment/acceptance-test/src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java")
             .exists());
     assertTrue(
         new File("build/unitTest/deployment/acceptance-test/src/test/resources/logback-test.xml")
@@ -70,6 +72,14 @@ public class GenerateTestTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/demo.feature")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/demo/addPet.json")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/deployment/acceptance-test/src/test/resources/co/com/bancolombia/pet-store.yaml")
             .exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/settings.gradle").exists());
     assertTrue(new File("build/unitTest/deployment/acceptance-test/build.gradle").exists());

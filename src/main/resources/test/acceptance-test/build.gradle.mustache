@@ -5,6 +5,10 @@ plugins {
 ext {
     karateVersion = "1.0.1"
     cucumberReportVersion = "5.5.3"
+    swaggerRequestValidatorVersion = "2.27.1"
+    commonsCodecVersion = "1.15"
+    rhinoVersion = "1.7.14"
+    fasterxmlJacksonCoreVersion = "2.13.2.2"
 }
 
 repositories {
@@ -14,6 +18,10 @@ repositories {
 dependencies {
     testImplementation "com.intuit.karate:karate-junit5:${karateVersion}"
     testImplementation "net.masterthought:cucumber-reporting:${cucumberReportVersion}"
+    testImplementation "com.atlassian.oai:swagger-request-validator-core:${swaggerRequestValidatorVersion}"
+    testImplementation "commons-codec:commons-codec:${commonsCodecVersion}"
+    testImplementation "org.mozilla:rhino:${rhinoVersion}"
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlJacksonCoreVersion}"
 }
 
 test {
