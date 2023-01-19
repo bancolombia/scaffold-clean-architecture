@@ -39,11 +39,8 @@ public class AnalyticsBody {
     public UserProperties() {
       super();
       put("plugin_version", new Val(Constants.PLUGIN_VERSION));
-      try {
-        put("country", new Val(Locale.getDefault().getDisplayCountry()));
-        put("language", new Val(Locale.getDefault().getLanguage()));
-      } catch (Exception ignored) {
-      }
+      put("country", new Val(Locale.getDefault().getDisplayCountry()));
+      put("language", new Val(Locale.getDefault().getLanguage()));
       put("java_specification", new Val(System.getProperty("java.specification.version")));
       loadProperties(
           "java.vendor",

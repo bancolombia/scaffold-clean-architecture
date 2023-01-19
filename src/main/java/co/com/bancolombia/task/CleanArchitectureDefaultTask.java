@@ -77,7 +77,8 @@ public class CleanArchitectureDefaultTask extends DefaultTask {
                               .with("type", type)
                               .with(
                                   "project_type", builder.isReactive() ? "reactive" : "imperative")
-                              .with("duration", duration))));
+                              .with("duration", duration))),
+          logger);
     }
   }
 }

@@ -14,6 +14,7 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 public class GenerateStructureTask extends CleanArchitectureDefaultTask {
+  private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";
   private ProjectType type = ProjectType.IMPERATIVE;
   private CoveragePlugin coverage = CoveragePlugin.JACOCO;
@@ -108,7 +109,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Project Name: {}", name);
     builder.addParamPackage(packageName);
     builder.addParam("projectName", name);
-    builder.addParam("reactive", type == ProjectType.REACTIVE);
+    builder.addParam(REACTIVE, type == ProjectType.REACTIVE);
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
@@ -125,7 +126,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
       loadProperty("package");
       loadProperty("language");
-      builder.addParam("reactive", builder.isReactive());
+      builder.addParam(REACTIVE, builder.isReactive());
       builder.addParam("lombok", builder.isEnableLombok());
       builder.addParam("metrics", builder.withMetrics());
       if (builder.isEnableLombok()) {
@@ -143,7 +144,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
     builder.persist();
     sendAnalytics(
-        builder.getBooleanParam("reactive") ? "reactive" : "imperative",
+        builder.getBooleanParam(REACTIVE) ? REACTIVE : "imperative",
         System.currentTimeMillis() - start);
   }
 

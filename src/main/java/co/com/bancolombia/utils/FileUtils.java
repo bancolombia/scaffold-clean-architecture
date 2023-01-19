@@ -20,6 +20,7 @@ import org.gradle.api.Project;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
+  private static final String GRADLE_PROPERTIES = "/gradle.properties";
 
   public static void writeString(Project project, String filePath, String content)
       throws IOException {
@@ -50,8 +51,7 @@ public class FileUtils {
 
   public static String readProperties(String projectPath, String variable) throws IOException {
     Properties properties = new Properties();
-    try (BufferedReader br =
-        new BufferedReader(new FileReader(projectPath + "/gradle.properties"))) {
+    try (BufferedReader br = new BufferedReader(new FileReader(projectPath + GRADLE_PROPERTIES))) {
       properties.load(br);
     }
     if (properties.getProperty(variable) != null) {
@@ -63,11 +63,11 @@ public class FileUtils {
 
   public static void setGradleProperty(String projectPath, String variable, String value)
       throws IOException {
-    try (FileInputStream fis = new FileInputStream(projectPath + "/gradle.properties")) {
+    try (FileInputStream fis = new FileInputStream(projectPath + GRADLE_PROPERTIES)) {
       Properties properties = new Properties();
       properties.load(fis);
       properties.setProperty(variable, value);
-      try (FileOutputStream fos = new FileOutputStream(projectPath + "/gradle.properties")) {
+      try (FileOutputStream fos = new FileOutputStream(projectPath + GRADLE_PROPERTIES)) {
         properties.store(fos, null);
       }
     }
