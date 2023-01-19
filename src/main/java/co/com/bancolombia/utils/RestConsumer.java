@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Objects;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 public class RestConsumer {
@@ -21,8 +22,22 @@ public class RestConsumer {
     return getModel(Objects.requireNonNull(client.newCall(request).execute().body()), classModel);
   }
 
+  public static <T> T postRequest(String url, Object body, Class<T> classModel) throws IOException {
+    Request request =
+        new Request.Builder()
+            .url(url)
+            .post(RequestBody.create(objectMapper.writeValueAsBytes(body)))
+            .build();
+
+    return getModel(Objects.requireNonNull(client.newCall(request).execute().body()), classModel);
+  }
+
   private static <T> T getModel(ResponseBody response, Class<T> modelClass) throws IOException {
-    return objectMapper.readValue(response.string(), modelClass);
+    final String body = response.string();
+    if (!body.isEmpty()) {
+      return objectMapper.readValue(body, modelClass);
+    }
+    return null;
   }
 
   private static ObjectMapper instantiateMapper() {

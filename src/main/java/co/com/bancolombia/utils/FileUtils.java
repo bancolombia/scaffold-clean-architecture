@@ -61,6 +61,18 @@ public class FileUtils {
     }
   }
 
+  public static void setGradleProperty(String projectPath, String variable, String value)
+      throws IOException {
+    try (FileInputStream fis = new FileInputStream(projectPath + "/gradle.properties")) {
+      Properties properties = new Properties();
+      properties.load(fis);
+      properties.setProperty(variable, value);
+      try (FileOutputStream fos = new FileOutputStream(projectPath + "/gradle.properties")) {
+        properties.store(fos, null);
+      }
+    }
+  }
+
   public static String getResourceAsString(DefaultResolver resolver, String path)
       throws IOException {
     Reader reader = resolver.getReader(path);

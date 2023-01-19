@@ -26,6 +26,7 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void deleteModule() throws IOException {
+    long start = System.currentTimeMillis();
     if (module == null || !getProject().getChildProjects().containsKey(module)) {
       printHelp();
       throw new IllegalArgumentException(
@@ -37,5 +38,6 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
     builder.removeFromSettings(module);
     builder.removeDependencyFromModule(APP_SERVICE, dependency);
     builder.persist();
+    sendAnalytics(module, System.currentTimeMillis() - start);
   }
 }

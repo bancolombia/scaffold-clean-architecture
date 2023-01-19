@@ -27,6 +27,7 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generatePipelineTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -38,5 +39,6 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Pipeline type: {}", type);
     pipelineFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(type.name(), System.currentTimeMillis() - start);
   }
 }

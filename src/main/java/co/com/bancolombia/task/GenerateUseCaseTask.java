@@ -17,6 +17,7 @@ public class GenerateUseCaseTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateUseCaseTask() throws IOException, ParamNotFoundException {
+    long start = System.currentTimeMillis();
     if (name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(
@@ -32,6 +33,7 @@ public class GenerateUseCaseTask extends CleanArchitectureDefaultTask {
     builder.addParam("lombok", builder.isEnableLombok());
     builder.setupFromTemplate("usecase");
     builder.persist();
+    sendAnalytics(name, System.currentTimeMillis() - start);
   }
 
   private String refactorName(String useCaseName) {

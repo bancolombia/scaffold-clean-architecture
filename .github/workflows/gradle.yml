@@ -73,6 +73,10 @@ jobs:
           files: README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
           name: Release Bot
           email: release-bot@bancolombia.com.co
+      - name: Set Analytics Endpoint
+        run: gsed -i 's/ENDPOINT = ""/ENDPOINT = "$ANALYTICS_ENDPOINT"/g' src/main/java/co/com/bancolombia/analytics/AnalyticsExporter.java
+        env:
+          ANALYTICS_ENDPOINT: ${{ secrets.ANALYTICS_ENDPOINT }}
       - name: Publish plugin in gradle plugins
         run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
       - name: Publish plugin in github packages

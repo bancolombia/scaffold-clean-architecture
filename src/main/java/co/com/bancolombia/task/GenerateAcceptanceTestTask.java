@@ -19,10 +19,12 @@ public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
   @TaskAction
   public void generateAcceptanceTestTask() throws IOException, CleanException {
     ModuleFactory moduleFactory = ModuleFactoryTests.getTestsFactory();
+    long start = System.currentTimeMillis();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("AcceptanceTest name: {}", name);
     builder.addParam("acceptanceTestPath", name);
     moduleFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(System.currentTimeMillis() - start);
   }
 }

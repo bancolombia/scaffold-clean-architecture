@@ -101,6 +101,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateStructureTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
@@ -141,6 +142,9 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     builder.persist();
+    sendAnalytics(
+        builder.getBooleanParam("reactive") ? "reactive" : "imperative",
+        System.currentTimeMillis() - start);
   }
 
   private void loadProperty(String property) {
