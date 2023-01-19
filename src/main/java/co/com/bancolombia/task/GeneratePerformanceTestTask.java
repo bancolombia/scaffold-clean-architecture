@@ -28,6 +28,7 @@ public class GeneratePerformanceTestTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateAcceptanceTestTask() throws CleanException, IOException {
+    long start = System.currentTimeMillis();
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -40,5 +41,6 @@ public class GeneratePerformanceTestTask extends CleanArchitectureDefaultTask {
 
     moduleFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(type.name(), System.currentTimeMillis() - start);
   }
 }
