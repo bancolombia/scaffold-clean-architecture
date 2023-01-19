@@ -33,13 +33,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "2.4.7"
+    id "co.com.bancolombia.cleanArchitecture" version "2.4.8"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"2.4.7\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"2.4.8\"
 }" > build.gradle
 ```
 
@@ -47,13 +47,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "2.4.7"
+    id("co.com.bancolombia.cleanArchitecture") version "2.4.8"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.4.7\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"2.4.8\"
 }" > build.gradle.kts
 ```
 
