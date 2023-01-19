@@ -66,6 +66,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateDrivenAdapterTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -85,5 +86,6 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     builder.addParam("task-param-url", url);
     moduleFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(type.name(), System.currentTimeMillis() - start);
   }
 }

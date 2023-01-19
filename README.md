@@ -526,6 +526,42 @@ The **`deleteModule | dm`** task will delete a sub project, this task has one re
 
 Review the issues, we hear new ideas. Read more [Contributing](https://github.com/bancolombia/scaffold-clean-architecture/wiki/Contributing)
 
+## Analytics
+
+You can help the Contributors Team to prioritize features and improvements by permitting the Contributors team to send
+gradle tasks usage statistics to Analytics Server.
+The Contributors Team collect usage statistics unless you explicitly opt in off. 
+
+Due to the user input limitations to gradle task, when running any plugin task you will be notified about the analytics
+recollection, and you have the possibility to disable this recollection. If you enable or disable analytics explicitly,
+future task executions will not notify you.
+
+To explicitly enable analytics and avoid the notification message
+```shell
+gradle analytics --enabled true
+# o gradle a --enabled true
+```
+
+To disable analytics
+```shell
+gradle analytics --enabled false
+# # o gradle a --enabled false
+```
+
+### What is collected?
+
+Usage analytics include the commands and selected flags for each execution.
+Usage analytics may include the following information:
+
+- Your operating system \(macOS, Linux distribution, Windows\) and its version.
+- Java vendor name and version.
+- Java specification and runtime versions.
+- Plugin version.
+- Task name that was run.
+- Workspace information like language, user that is running the task.
+- For generate use case, generate model, generate helper and delete module tasks, the name will be sent.
+- For all tasks, the type and name, the time it took to run the task, and project type (reactive, imperative).
+
 <br><br>
 
 # Whats Next?

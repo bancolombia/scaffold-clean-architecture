@@ -1370,6 +1370,22 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void shouldSetTheAnalyticsStatate() throws IOException {
+    canRunTaskGenerateStructureWithOutLombok();
+    String task = "analytics";
+
+    runner.withArguments(task, "--enabled=true");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(
+        FileUtils.readFileToString(
+                new File("build/functionalTest/gradle.properties"), StandardCharsets.UTF_8)
+            .contains("analytics=true"));
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
   public void shouldGenerateJarWithSpecificName() {
     runner.withArguments("ca", "--type=reactive", "--name=MagicProjectName");
     runner.withProjectDir(projectDir);

@@ -14,6 +14,7 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 public class GenerateStructureTask extends CleanArchitectureDefaultTask {
+  private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";
   private ProjectType type = ProjectType.IMPERATIVE;
   private CoveragePlugin coverage = CoveragePlugin.JACOCO;
@@ -101,13 +102,14 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateStructureTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
     logger.lifecycle("Project Name: {}", name);
     builder.addParamPackage(packageName);
     builder.addParam("projectName", name);
-    builder.addParam("reactive", type == ProjectType.REACTIVE);
+    builder.addParam(REACTIVE, type == ProjectType.REACTIVE);
     builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
@@ -124,7 +126,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
       loadProperty("package");
       loadProperty("language");
-      builder.addParam("reactive", builder.isReactive());
+      builder.addParam(REACTIVE, builder.isReactive());
       builder.addParam("lombok", builder.isEnableLombok());
       builder.addParam("metrics", builder.withMetrics());
       if (builder.isEnableLombok()) {
@@ -141,6 +143,9 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     builder.persist();
+    sendAnalytics(
+        builder.getBooleanParam(REACTIVE) ? REACTIVE : "imperative",
+        System.currentTimeMillis() - start);
   }
 
   private void loadProperty(String property) {

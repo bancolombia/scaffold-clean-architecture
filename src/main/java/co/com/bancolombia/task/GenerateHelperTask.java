@@ -18,6 +18,7 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateHelperTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     ModuleFactory moduleFactory = ModuleFactoryHelpers.getDrivenAdapterFactory();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Helper name: {}", name);
@@ -26,5 +27,6 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
     builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(name, System.currentTimeMillis() - start);
   }
 }

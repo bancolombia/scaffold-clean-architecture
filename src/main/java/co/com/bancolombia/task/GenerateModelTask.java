@@ -16,6 +16,7 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateModelTask() throws IOException, ParamNotFoundException {
+    long start = System.currentTimeMillis();
     if (name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(
@@ -30,5 +31,6 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
 
     builder.setupFromTemplate("model");
     builder.persist();
+    sendAnalytics(name, System.currentTimeMillis() - start);
   }
 }

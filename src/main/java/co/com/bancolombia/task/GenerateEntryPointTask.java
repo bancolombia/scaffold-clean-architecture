@@ -78,6 +78,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
 
   @TaskAction
   public void generateEntryPointTask() throws IOException, CleanException {
+    long start = System.currentTimeMillis();
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -96,5 +97,6 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
+    sendAnalytics(type.name(), System.currentTimeMillis() - start);
   }
 }

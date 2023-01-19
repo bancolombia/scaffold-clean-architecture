@@ -128,6 +128,14 @@ public class PluginClean implements Plugin<Project> {
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(UpdateProjectTask.class)
             .build());
+    tasksModels.add(
+        TaskModel.builder()
+            .name("analytics")
+            .shortcut("a")
+            .description("Set analytics state")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(AnalyticsTask.class)
+            .build());
     return tasksModels;
   }
 

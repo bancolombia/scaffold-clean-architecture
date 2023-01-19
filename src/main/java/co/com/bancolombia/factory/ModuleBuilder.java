@@ -1,8 +1,10 @@
 package co.com.bancolombia.factory;
 
-import static co.com.bancolombia.Constants.MainFiles.*;
+import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.KTS;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
@@ -31,9 +33,11 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
+import org.gradle.internal.logging.text.StyledTextOutput;
 
 public class ModuleBuilder {
   private static final String DEFINITION_FILES = "definition.json";
@@ -49,11 +53,25 @@ public class ModuleBuilder {
   private final Logger logger;
   @Getter private final Project project;
   private ObjectNode properties;
-  private final RestService restService = new RestService();
+
+  @Setter private StyledTextOutput styledLogger;
+  private final RestService restService;
 
   public ModuleBuilder(Project project) {
     this.project = project;
     this.logger = getProject().getLogger();
+    this.restService = new RestService();
+    initialize();
+  }
+
+  public ModuleBuilder(Project project, RestService restService) {
+    this.project = project;
+    this.logger = getProject().getLogger();
+    this.restService = restService;
+    initialize();
+  }
+
+  private void initialize() {
     params.put("projectName", getProject().getName());
     params.put("projectNameLower", getProject().getName().toLowerCase());
     params.put("pluginVersion", Constants.PLUGIN_VERSION);
@@ -73,17 +91,30 @@ public class ModuleBuilder {
   }
 
   public void persist() throws IOException {
-    logger.lifecycle("Applying changes on disk");
+    styledLogger.style(Header).println("Applying changes on disk");
 
-    logger.lifecycle(
-        "files: {}, dirs: {}, deleted dirs: {}", files.size(), dirs.size(), dirsToDelete.size());
+    styledLogger
+        .style(Header)
+        .append("files: ")
+        .style(Success)
+        .append(Integer.toString(files.size()))
+        .style(Header)
+        .append(", dirs: ")
+        .style(Success)
+        .append(Integer.toString(dirs.size()))
+        .style(Header)
+        .append(", deleted dirs: ")
+        .style(Success)
+        .append(Integer.toString(dirsToDelete.size()))
+        .println();
+
     dirs.forEach(
         dir -> {
           getProject().mkdir(dir);
           logger.debug("creating dir {}", dir);
         });
     if (properties != null) {
-      logger.lifecycle("Updating application properties");
+      styledLogger.style(Normal).println("Updating application properties");
       addFile(APPLICATION_PROPERTIES, FileUtils.parseToYaml(properties));
     }
 
@@ -103,7 +134,7 @@ public class ModuleBuilder {
           getProject().delete(dir);
           logger.debug("deleting dir {}", dir);
         });
-    logger.lifecycle("Changes successfully applied");
+    styledLogger.style(Success).println("Changes successfully applied");
     getLatestRelease();
   }
 
@@ -249,6 +280,11 @@ public class ModuleBuilder {
     return getABooleanProperty("reactive", false);
   }
 
+  public boolean analyticsEnabled() throws IOException {
+    String value = FileUtils.readProperties(project.getProjectDir().getPath(), "analytics");
+    return "true".equals(value);
+  }
+
   public boolean isKotlin() {
     return KOTLIN.name().equalsIgnoreCase(params.get(LANGUAGE).toString());
   }
@@ -313,9 +349,18 @@ public class ModuleBuilder {
   private void loadLatestRelease() {
     Release latestRelease = restService.getLatestPluginVersion();
     if (latestRelease != null && !latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-      logger.lifecycle(
-          "WARNING: You have an old version of the plugin, the latest version is: {}",
-          latestRelease.getTagName());
+      styledLogger
+          .style(Description)
+          .append("You have an old version of the plugin ")
+          .style(Normal)
+          .append("the latest version is: ")
+          .style(Header)
+          .append(latestRelease.getTagName())
+          .style(Normal)
+          .append(" to update it please run: ")
+          .style(Success)
+          .append("gradle u")
+          .println();
       params.put(LATEST_RELEASE, latestRelease);
     }
   }

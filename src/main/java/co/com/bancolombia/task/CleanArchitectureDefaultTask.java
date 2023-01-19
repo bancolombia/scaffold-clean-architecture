@@ -1,6 +1,11 @@
 package co.com.bancolombia.task;
 
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+
+import co.com.bancolombia.analytics.AnalyticsBody;
+import co.com.bancolombia.analytics.AnalyticsExporter;
 import co.com.bancolombia.factory.ModuleBuilder;
+import java.io.IOException;
 import javax.inject.Inject;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Task;
@@ -14,6 +19,10 @@ import org.gradle.internal.logging.text.StyledTextOutputFactory;
 public class CleanArchitectureDefaultTask extends DefaultTask {
   protected final ModuleBuilder builder = new ModuleBuilder(getProject());
   protected final Logger logger = getProject().getLogger();
+
+  public CleanArchitectureDefaultTask() {
+    builder.setStyledLogger(getTextOutputFactory().create(CleanArchitectureDefaultTask.class));
+  }
 
   protected void printHelp() {
     StyledTextOutput output =
@@ -34,5 +43,45 @@ public class CleanArchitectureDefaultTask extends DefaultTask {
   @Inject
   protected OptionReader getOptionReader() {
     throw new UnsupportedOperationException();
+  }
+
+  protected void sendAnalytics(long duration) {
+    sendAnalytics("default", duration);
+  }
+
+  protected void sendAnalytics(String type, long duration) {
+    boolean enabled = true;
+    try {
+      enabled = builder.analyticsEnabled();
+    } catch (IOException ignored) {
+      StyledTextOutput output = getTextOutputFactory().create(CleanArchitectureDefaultTask.class);
+      output
+          .style(Header)
+          .println("##########################")
+          .println("##   Analytics Notice   ##")
+          .println("##########################")
+          .append("Analytics are enabled by default ")
+          .style(Description)
+          .append("if you want to disable it please run: ")
+          .withStyle(Success)
+          .println("gradle analytics --enabled false");
+    }
+    if (enabled) {
+      try {
+        AnalyticsBody.Event.Params params =
+            AnalyticsBody.Event.Params.empty()
+                .with("task_name", getName())
+                .with("type", type)
+                .with("project_type", builder.isReactive() ? "reactive" : "imperative")
+                .with("duration", duration);
+
+        AnalyticsExporter.collectMetric(
+            AnalyticsBody.defaults()
+                .withEvent(AnalyticsBody.Event.withName("task_executed").withParams(params)));
+      } catch (Exception e) {
+        logger.warn("Error sending analytics: {}", e.getMessage());
+        logger.info("Error detail", e);
+      }
+    }
   }
 }

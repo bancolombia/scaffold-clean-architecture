@@ -6,25 +6,14 @@
  * User Manual available at https://docs.gradle.org/5.6.3/userguide/custom_plugins.html
  */
 
-buildscript {
 
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
-        classpath "gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9"
-    }
-}
 
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'idea'
-    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'com.gradle.plugin-publish' version '1.1.0'
     id "org.sonarqube" version "3.0"
     id 'maven-publish'
     id "com.github.sherter.google-java-format" version "0.9"
@@ -56,9 +45,9 @@ repositories {
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.10'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.2'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1'
     implementation 'org.reflections:reflections:0.10.2'
     api 'commons-io:commons-io:2.11.0'
     api gradleApi()
@@ -68,8 +57,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
 }
 
 gradlePlugin {
