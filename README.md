@@ -533,8 +533,20 @@ gradle tasks usage statistics to Analytics Server.
 The Contributors Team collect usage statistics unless you explicitly opt in off. 
 
 Due to the user input limitations to gradle task, when running any plugin task you will be notified about the analytics
-recollection, and you have the posibility to disable this recollection. If you enables or disables analytics explicitly,
+recollection, and you have the possibility to disable this recollection. If you enable or disable analytics explicitly,
 future task executions will not notify you.
+
+To explicitly enable analytics and avoid the notification message
+```shell
+gradle analytics --enabled true
+# o gradle a --enabled true
+```
+
+To disable analytics
+```shell
+gradle analytics --enabled false
+# # o gradle a --enabled false
+```
 
 ### What is collected?
 
