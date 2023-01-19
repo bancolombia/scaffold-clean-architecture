@@ -6,19 +6,14 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.gradle.api.logging.Logger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AnalyticsExporter {
   private static final String ENDPOINT = "";
 
-  public static void collectMetric(AnalyticsBody body, Logger logger) {
+  public static void collectMetric(AnalyticsBody body) throws IOException {
     if (!shouldMock()) {
-      try {
-        RestConsumer.postRequest(ENDPOINT, body, Map.class);
-      } catch (Exception e) {
-        logger.warn("Error sending analytics", e);
-      }
+      RestConsumer.postRequest(ENDPOINT, body, Map.class);
     }
   }
 

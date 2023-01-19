@@ -67,18 +67,21 @@ public class CleanArchitectureDefaultTask extends DefaultTask {
           .println("gradle analytics --enabled false");
     }
     if (enabled) {
-      AnalyticsExporter.collectMetric(
-          AnalyticsBody.defaults()
-              .withEvent(
-                  AnalyticsBody.Event.withName("task_executed")
-                      .withParams(
-                          AnalyticsBody.Event.Params.empty()
-                              .with("task_name", getName())
-                              .with("type", type)
-                              .with(
-                                  "project_type", builder.isReactive() ? "reactive" : "imperative")
-                              .with("duration", duration))),
-          logger);
+      try {
+        AnalyticsBody.Event.Params params =
+            AnalyticsBody.Event.Params.empty()
+                .with("task_name", getName())
+                .with("type", type)
+                .with("project_type", builder.isReactive() ? "reactive" : "imperative")
+                .with("duration", duration);
+
+        AnalyticsExporter.collectMetric(
+            AnalyticsBody.defaults()
+                .withEvent(AnalyticsBody.Event.withName("task_executed").withParams(params)));
+      } catch (Exception e) {
+        logger.warn("Error sending analytics: {}", e.getMessage());
+        logger.info("Error detail", e);
+      }
     }
   }
 }
