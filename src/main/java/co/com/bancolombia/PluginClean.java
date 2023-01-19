@@ -98,6 +98,15 @@ public class PluginClean implements Plugin<Project> {
 
     tasksModels.add(
         TaskModel.builder()
+            .name("generatePerformanceTest")
+            .shortcut("gpt")
+            .description("Generate performance test")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(GeneratePerformanceTestTask.class)
+            .build());
+
+    tasksModels.add(
+        TaskModel.builder()
             .name("deleteModule")
             .shortcut("dm")
             .description("Delete gradle module")

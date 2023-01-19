@@ -20,6 +20,7 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
   - [Generate Helper](#generate-helper)
   - [Generate Pipeline](#generate-pipeline)
   - [Generate Acceptance Test](#generate-acceptance-test)
+  - [Generate Performance Test](#generate-performance-test)
   - [Validate Structure](#validate-structure)
   - [Delete Module](#delete-module)
   - [Update Project](#update-project)
@@ -435,6 +436,19 @@ The **`generateAcceptanceTest | gat`** task will generate subproject by [karate 
       gradle gat --name=[acceptanceTestProjectName] 
   ```
 >   Karate is an open-source tool to combine API test-automation, mocks, performance-testing and even UI automation into a single, unified framework. The BDD syntax popularized by Cucumber is language-neutral, and easy for even non-programmers. Assertions and HTML reports are built-in, and you can run tests in parallel for speed.
+
+## Generate Performance Test
+
+The **`generatePerformanceTest | gpt`** task will generate Performance test inside the folder "./performance-test/", this task has one required parameter `type`.
+
+```shell
+   gradle generatePerformanceTest --type=[performanceType]
+   gradle gpt --type=[performanceType]
+   ```
+
+    | Reference for **performanceType** | Name           |
+    | ------------------------------ | -------------- |
+    | jmeter                          | Jmeter Performance Test |
 
 ## Validate Structure
 
