@@ -98,7 +98,7 @@ check {
 pluginBundle {
     website = 'https://github.com/bancolombia/scaffold-clean-architecture'
     vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
-    tags = ['gradle', 'plugin', 'scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
+    tags = ['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
 }
 
 jacocoTestReport {
