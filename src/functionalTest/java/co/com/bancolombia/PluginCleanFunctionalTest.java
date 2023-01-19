@@ -1401,6 +1401,21 @@ public class PluginCleanFunctionalTest {
             .exists());
   }
 
+  @Test
+  public void canRunTaskGeneratePerformanceTest() {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = "generatePerformanceTest";
+    String valuePerformanceType = "JMETER";
+
+    runner.withArguments(task, TYPE + valuePerformanceType);
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(new File("build/functionalTest/performance-test/README.md").exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
   private void writeString(File file, String string) throws IOException {
     try (Writer writer = new FileWriter(file)) {
       writer.write(string);
