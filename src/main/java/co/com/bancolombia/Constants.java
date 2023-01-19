@@ -16,7 +16,7 @@ public class Constants {
   public static final String COBERTURA_VERSION = "3.0.0";
   public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "1.0.5";
   public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
-  public static final String PLUGIN_VERSION = "2.4.6";
+  public static final String PLUGIN_VERSION = "2.4.7";
   public static final String GRADLE_WRAPPER_VERSION = "7.4.2";
   public static final String KOTLIN_VERSION = "1.6.10";
   public static final String AWS_BOM_VERSION = "2.18.39";
