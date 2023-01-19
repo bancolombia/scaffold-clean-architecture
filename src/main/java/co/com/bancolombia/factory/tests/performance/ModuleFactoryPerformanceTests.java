@@ -12,9 +12,9 @@ public class ModuleFactoryPerformanceTests {
       throws InvalidTaskOptionException {
     switch (type) {
       case JMETER:
-        return new JmeterPerformanceTests();
+        return new JmeterPerformanceTest();
       default:
-        throw new InvalidTaskOptionException("Pipeline value invalid");
+        throw new InvalidTaskOptionException("Performance test type value invalid");
     }
   }
 

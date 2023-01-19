@@ -15,9 +15,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GeneratePerformanceTestsTest {
+public class GeneratePerformanceTestTaskTest {
 
-  GeneratePerformanceTests task;
+  GeneratePerformanceTestTask task;
 
   static Project project =
       ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
@@ -46,8 +46,8 @@ public class GeneratePerformanceTestsTest {
         .withParent(project)
         .build();
 
-    project.getTasks().create("test", GeneratePerformanceTests.class);
-    task = (GeneratePerformanceTests) project.getTasks().getByName("test");
+    project.getTasks().create("test", GeneratePerformanceTestTask.class);
+    task = (GeneratePerformanceTestTask) project.getTasks().getByName("test");
   }
 
   @Test

@@ -12,7 +12,7 @@ import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GeneratePerformanceTests extends CleanArchitectureDefaultTask {
+public class GeneratePerformanceTestTask extends CleanArchitectureDefaultTask {
 
   private PerformanceTestType type;
 

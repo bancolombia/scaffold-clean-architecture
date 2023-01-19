@@ -102,7 +102,7 @@ public class PluginClean implements Plugin<Project> {
             .shortcut("gpt")
             .description("Generate performance test")
             .group(Constants.PLUGIN_TASK_GROUP)
-            .taskAction(GeneratePerformanceTests.class)
+            .taskAction(GeneratePerformanceTestTask.class)
             .build());
 
     tasksModels.add(
