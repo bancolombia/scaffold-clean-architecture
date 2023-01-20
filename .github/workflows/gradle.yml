@@ -63,6 +63,15 @@ jobs:
         run: gradle wrapper
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Generate Changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pullRequests: true
+          prWoLabels: true
+          issues: true
+          issuesWoLabels: true
+          stripGeneratorNotice: true
       - name: Save version
         uses: github-actions-x/commit@722d56b8968bf00ced78407bbe2ead81062d8baa
         with:
@@ -70,7 +79,7 @@ jobs:
           push-branch: "master"
           commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
           force-add: "true"
-          files: README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
+          files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
           name: Release Bot
           email: release-bot@bancolombia.com.co
       - name: Set Analytics Endpoint
