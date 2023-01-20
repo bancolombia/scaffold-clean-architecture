@@ -493,15 +493,19 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/config/PostgreSQLConnectionPool.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/config/PostgresqlConnectionProperties.java")
             .exists());
     assertTrue(
         new File(
-                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java")
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/MyReactiveRepository.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/MyReactiveRepositoryAdapter.java")
             .exists());
   }
 
