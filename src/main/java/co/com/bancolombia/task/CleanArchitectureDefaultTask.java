@@ -73,6 +73,7 @@ public class CleanArchitectureDefaultTask extends DefaultTask {
                 .with("task_name", getName())
                 .with("type", type)
                 .with("project_type", builder.isReactive() ? "reactive" : "imperative")
+                .with("project_language", builder.isKotlin() ? "kotlin" : "java")
                 .with("duration", duration);
 
         AnalyticsExporter.collectMetric(
