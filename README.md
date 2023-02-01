@@ -571,6 +571,7 @@ Usage analytics may include the following information:
 - Java vendor name and version.
 - Java specification and runtime versions.
 - Plugin version.
+- Project language (`kotlin` or `java`)
 - Task name that was run.
 - Workspace information like language, user that is running the task.
 - For generate use case, generate model, generate helper and delete module tasks, the name will be sent.
