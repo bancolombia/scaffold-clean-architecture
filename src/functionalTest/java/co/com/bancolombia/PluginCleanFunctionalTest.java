@@ -704,15 +704,15 @@ public class PluginCleanFunctionalTest {
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgreSQLConnectionPool.java")
+                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/config/PostgreSQLConnectionPool.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/config/PostgresqlConnectionProperties.java")
+                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/config/PostgresqlConnectionProperties.java")
             .exists());
     assertTrue(
         new File(
-                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/MyReactiveRepository.java")
+                "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/MyReactiveRepository.java")
             .exists());
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
