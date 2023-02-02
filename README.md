@@ -68,7 +68,7 @@ If you run this task on an existing project it will override the `main.gradle`, 
 
    - **`package`** `= <package.we.need>`: You can specify the main or default package of your project. `Default Value = co.com.bancolombia`
 
-   - **`type`** `= <imperative | reactive>`: With this parameter the task will generate a POO project. `Default Value = imperative`
+   - **`type`** `= <imperative | reactive>`: With this parameter the task will generate a POO project. `Default Value = reactive`
 
    - **`name`** `= NameProject`: This parameter is going to specify the name of the project. `Default Value = cleanArchitecture`
 
@@ -80,11 +80,11 @@ If you run this task on an existing project it will override the `main.gradle`, 
 
    - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
 
-   - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_11`
+   - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_17`
    
    ```shell
-   gradle cleanArchitecture --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
-   gradle ca --package=co.com.bancolombia --type=imperative --name=NameProject --coverage=jacoco --lombok=true
+   gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=NameProject --coverage=jacoco --lombok=true
+   gradle ca --package=co.com.bancolombia --type=reactive --name=NameProject --coverage=jacoco --lombok=true
    ```
 
    **_The structure will look like this for java:_**
