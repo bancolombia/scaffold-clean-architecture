@@ -314,6 +314,10 @@ public class GenerateEntryPointTaskTest {
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java")
             .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api/ApiRestTest.java")
+            .exists());
     assertFalse(
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/RouterRest.java")
@@ -340,6 +344,10 @@ public class GenerateEntryPointTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/ApiRest.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api/ApiRestTest.java")
             .exists());
     assertFalse(
         new File(
@@ -376,6 +384,10 @@ public class GenerateEntryPointTaskTest {
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
             .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api/RouterRestTest.java")
+            .exists());
   }
 
   @Test
@@ -397,6 +409,10 @@ public class GenerateEntryPointTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/Handler.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api/RouterRestTest.java")
             .exists());
   }
 
