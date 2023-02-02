@@ -21,6 +21,7 @@ sonarqube {
             "sonar.sources",
             "src,deployment,settings.gradle.kts,build.gradle.kts,${modules.joinToString(",") { module -> "${module}/build.gradle.kts" }}"
         )
+        property("sonar.exclusions","**/MainApplication.kt")
         property("sonar.test", "src/test")
         property("sonar.java.binaries", "{{sonar.java.binaries}}")
         property("sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}")
