@@ -1,7 +1,6 @@
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
-    implementation 'org.springframework:spring-context'
-    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:11.0.0'
-    implementation 'com.graphql-java-kickstart:playground-spring-boot-starter:11.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:{{graphqlKickStartVersion}}'
 }

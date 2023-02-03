@@ -85,6 +85,7 @@ public class ModuleBuilder {
     params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
+    params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
     loadPackage();
     loadLanguage();
