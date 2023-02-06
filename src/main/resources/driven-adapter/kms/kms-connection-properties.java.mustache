@@ -6,7 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Data;
 
 {{#lombok}}
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 {{/lombok}}
 @Configuration
 @ConfigurationProperties(prefix = "adapters.aws.kms")

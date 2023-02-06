@@ -9,9 +9,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 {{#lombok}}
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 {{/lombok}}
 @Configuration
 @ConfigurationProperties(prefix = "adapter.aws.s3")

@@ -4,7 +4,10 @@ package {{package}}.consumer;
     import lombok.Builder;
     import lombok.Data;
 
-    @Data
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Builder(toBuilder = true)
 {{/lombok}}
 public class ObjectRequest {

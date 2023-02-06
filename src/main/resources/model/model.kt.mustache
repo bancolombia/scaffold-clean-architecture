@@ -5,9 +5,11 @@ import lombok.Builder
 import lombok.Data
 import lombok.NoArgsConstructor
 
-@Data
-@Builder(toBuilder = true)
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 {{/lombok}}
 data class {{modelClassName}}(
   //val anyField : Any?
