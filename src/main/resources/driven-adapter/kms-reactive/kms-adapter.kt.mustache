@@ -16,7 +16,7 @@ class KmsAdapter // implements ModelRepository from domain
     private val keyId: String
 ) {
 
-    fun decrypt(secretKey: String, keyId: String): Mono<ByteArray> {
+    fun decrypt(secretKey: String): Mono<ByteArray> {
         return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
             .map { obj: DecryptResponse -> obj.plaintext() }
             .map { obj: SdkBytes -> obj.asByteArray() }
