@@ -19,7 +19,7 @@ class KmsAdapter(
 ) {
 
     @Throws(ExecutionException::class, InterruptedException::class)
-    fun decrypt(secretKey: String, keyId: String): ByteArray? {
+    fun decrypt(secretKey: String): ByteArray? {
         return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
             .get()
             .plaintext()
