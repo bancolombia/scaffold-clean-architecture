@@ -34,12 +34,10 @@ open class RestConsumerConfig(
 
     private fun getClientHttpConnector(): ClientHttpConnector {
         /*
-        IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED
-        val sslContext =
-        SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
-        .build()*/
+        IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED: this should be in the default cacerts trustore
+        */
         return ReactorClientHttpConnector(
-            HttpClient.create() //.secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
+            HttpClient.create()
             .compress(true)
             .keepAlive(true)
             .option(CONNECT_TIMEOUT_MILLIS, timeout)

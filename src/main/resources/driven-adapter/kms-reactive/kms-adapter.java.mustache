@@ -28,7 +28,7 @@ public class KmsAdapter // implements ModelRepository from domain
     this.kmsAsyncClient = kmsAsyncClient;
     }
 {{/lombok}}
-    public Mono<byte[]> decrypt(String secretKey, String keyId) {
+    public Mono<byte[]> decrypt(String secretKey) {
         return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
         .map(DecryptResponse::plaintext)
         .map(SdkBytes::asByteArray)
