@@ -16,14 +16,14 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";
-  private ProjectType type = ProjectType.IMPERATIVE;
+  private ProjectType type = ProjectType.REACTIVE;
   private CoveragePlugin coverage = CoveragePlugin.JACOCO;
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private Language language = Language.JAVA;
-  private JavaVersion javaVersion = JavaVersion.VERSION_11;
+  private JavaVersion javaVersion = JavaVersion.VERSION_17;
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
@@ -106,6 +106,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
+    logger.lifecycle("Java Version: {}", javaVersion);
     logger.lifecycle("Project Name: {}", name);
     builder.addParamPackage(packageName);
     builder.addParam("projectName", name);
@@ -175,6 +176,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   }
 
   public enum JavaVersion {
+    @Deprecated
     VERSION_1_8,
     VERSION_11,
     VERSION_17

@@ -308,3 +308,6 @@ gradle/
 
 # Visual Studio Code
 .vscode
+
+# local scripts
+*.sh

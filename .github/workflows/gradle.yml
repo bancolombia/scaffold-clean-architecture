@@ -8,10 +8,12 @@ on:
       - master
       - feature/*
       - fix/*
+      - sb3/* # TODO: Revert
 
   pull_request:
     branches:
       - master
+      - feature/spring-boot-3.0.x  # TODO: Revert
 
 jobs:
   build:
