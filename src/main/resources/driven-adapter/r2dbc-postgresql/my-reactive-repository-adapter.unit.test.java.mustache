@@ -1,0 +1,41 @@
+package {{package}}.r2dbc;
+
+import {{package}}.r2dbc.MyReactiveRepository;
+import {{package}}.r2dbc.MyReactiveRepositoryAdapter;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.reactivecommons.utils.ObjectMapper;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class MyReactiveRepositoryAdapterTest {
+    // TODO: change four you own tests
+
+    @InjectMocks
+    MyReactiveRepositoryAdapter repositoryAdapter;
+
+    @Mock
+    MyReactiveRepository repository;
+
+    @Mock
+    ObjectMapper mapper;
+
+    @Test
+    void mustFindValueById() {
+
+        when(repository.findById("1")).thenReturn(Mono.just("test"));
+        when(mapper.map("test", Object.class)).thenReturn("test");
+
+        Mono<Object> result = repositoryAdapter.findById("1");
+
+        StepVerifier.create(result)
+                .expectNextMatches(value -> value.equals("test"))
+                .verifyComplete();
+    }
+}
