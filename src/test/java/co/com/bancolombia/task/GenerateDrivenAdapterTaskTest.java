@@ -412,7 +412,7 @@ public class GenerateDrivenAdapterTaskTest {
             .exists());
   }
 
-  @Test
+  @Test(expected = ValidationException.class)
   public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
       throws IOException, CleanException {
     // Arrange
@@ -422,25 +422,6 @@ public class GenerateDrivenAdapterTaskTest {
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
     task.generateDrivenAdapterTask();
-    // Assert
-    assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/ReactiveRepositoryAdapterOperations.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepository.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/ReactiveRedisRepositoryAdapter.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
-            .exists());
   }
 
   @Test

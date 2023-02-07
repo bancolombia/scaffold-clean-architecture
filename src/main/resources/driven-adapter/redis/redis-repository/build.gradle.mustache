@@ -1,7 +1,10 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'jakarta.persistence:jakarta.persistence-api' // TODO: Check if it's still necessary
+    {{#include-secret}}
     implementation 'com.github.bancolombia:aws-secrets-manager-sync:{{secretsVersion}}'
+    {{/include-secret}}
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
     testImplementation 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
