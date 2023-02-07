@@ -8,7 +8,7 @@ public class Constants {
   public static final String PLUGIN_TASK_GROUP = "Clean Architecture";
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
-  public static final String SECRETS_VERSION = "3.2.0";
+  public static final String SECRETS_VERSION = "4.0.0";
   public static final String SPRING_BOOT_VERSION = "3.0.2";
   public static final String SONAR_VERSION = "3.0";
   public static final String LOMBOK_VERSION = "1.18.24";
@@ -19,7 +19,7 @@ public class Constants {
   public static final String PLUGIN_VERSION = "2.4.9";
   public static final String GRADLE_WRAPPER_VERSION = "7.6";
   public static final String KOTLIN_VERSION = "1.6.10";
-  public static final String AWS_BOM_VERSION = "2.19.28";
+  public static final String AWS_BOM_VERSION = "2.19.31";
   public static final String COMMONS_JMS_VERSION = "0.6.0";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.0.0";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
