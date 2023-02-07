@@ -4,6 +4,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
-    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.h2database:h2' // TODO: remove this to use real database
     testImplementation 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
 }
