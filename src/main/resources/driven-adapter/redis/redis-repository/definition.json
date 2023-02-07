@@ -7,6 +7,7 @@
     "driven-adapter/redis/redis-repository/helper/repository-adapter-operations.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/helper/RepositoryAdapterOperations.java",
     "driven-adapter/redis/redis-repository/redis-repository.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/RedisRepository.java",
     "driven-adapter/redis/redis-repository/redis-repository-adapter.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/RedisRepositoryAdapter.java",
+    "driven-adapter/redis/redis-repository/model-dto.java.mustache": "infrastructure/driven-adapters/redis/src/main/{{language}}/{{packagePath}}/redis/repository/ModelDTO.java",
     "driven-adapter/redis/redis-repository/build.gradle.mustache": "infrastructure/driven-adapters/redis/build.gradle"
   },
   "kotlin": {

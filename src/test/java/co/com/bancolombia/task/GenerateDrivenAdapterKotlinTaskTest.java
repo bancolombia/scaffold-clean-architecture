@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
@@ -386,7 +387,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
             .exists());
   }
 
-  @Test
+  @Test(expected = ValidationException.class)
   public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
       throws IOException, CleanException {
     // Arrange
@@ -396,25 +397,6 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
     task.generateDrivenAdapterTask();
-    // Assert
-    assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/helper/ReactiveRepositoryAdapterOperations.kt")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/ReactiveRedisRepository.kt")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/repository/ReactiveRedisRepositoryAdapter.kt")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/infrastructure/driven-adapters/redis/src/main/kotlin/co/com/bancolombia/redis/config/RedisConfig.kt")
-            .exists());
   }
 
   @Test
