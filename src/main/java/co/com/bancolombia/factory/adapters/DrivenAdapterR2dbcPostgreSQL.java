@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
@@ -21,5 +22,6 @@ public class DrivenAdapterR2dbcPostgreSQL implements ModuleFactory {
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":r2dbc-postgresql");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.appendToSettings("r2dbc-postgresql", "infrastructure/driven-adapters");
+    new ObjectMapperFactory().buildModule(builder);
   }
 }
