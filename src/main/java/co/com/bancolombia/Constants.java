@@ -20,7 +20,7 @@ public class Constants {
   public static final String GRADLE_WRAPPER_VERSION = "7.6";
   public static final String KOTLIN_VERSION = "1.6.10";
   public static final String AWS_BOM_VERSION = "2.19.31";
-  public static final String COMMONS_JMS_VERSION = "0.6.0";
+  public static final String COMMONS_JMS_VERSION = "1.0.0";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.0.0";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
       "configurations {\n"
