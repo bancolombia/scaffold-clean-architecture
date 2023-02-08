@@ -13,22 +13,10 @@ buildscript {
         lombokVersion = '{{lombokVersion}}'
         {{/lombok}}
 	}
-//<!--	TODO: revert it A-->
-	repositories {
-      mavenLocal()
-      maven {
-        url "https://plugins.gradle.org/m2/"
-      }
-    }
-    dependencies {
-      classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.0.0-PREVIEW"
-    }
-//<!--	TODO: revert it A END-->
 }
 
 plugins {
-//<!--	TODO: revert comment-->
-	// id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'org.sonarqube' version "${sonarVersion}"
 	{{#jacoco}}
@@ -38,8 +26,6 @@ plugins {
 	id 'net.saliman.cobertura' version "${coberturaVersion}"
 	{{/cobertura}}
 }
-//<!--	TODO: revert apply-->
-apply plugin: "co.com.bancolombia.cleanArchitecture"
 
 sonarqube {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }

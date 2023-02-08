@@ -45,4 +45,8 @@ public class UpdateUtils {
     int start = main.indexOf(match);
     return main.substring(0, start) + concatValue + main.substring(start);
   }
+
+  public static String replace(String content, String previous, String next) {
+    return content.replace(previous, next);
+  }
 }
