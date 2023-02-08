@@ -10,13 +10,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @ContextConfiguration(classes = {ApiRest.class})
 @WebFluxTest
-public class ApiRestTest {
+class ApiRestTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @Test
-    public void testCommandName() {
+    void testCommandName() {
         webTestClient.get()
                 .uri("/api/path")
                 .accept(MediaType.APPLICATION_JSON)
@@ -24,7 +24,7 @@ public class ApiRestTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEqualTo("Hello World");
+                            Assertions.assertThat(userResponse).isEmpty();
                         }
                 );
     }

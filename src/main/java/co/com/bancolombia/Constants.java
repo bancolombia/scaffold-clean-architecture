@@ -10,13 +10,13 @@ public class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
   public static final String SECRETS_VERSION = "4.0.0";
   public static final String SPRING_BOOT_VERSION = "3.0.2";
-  public static final String SONAR_VERSION = "3.0";
-  public static final String LOMBOK_VERSION = "1.18.24";
+  public static final String SONAR_VERSION = "3.5.0.2730";
+  public static final String LOMBOK_VERSION = "1.18.26";
   public static final String JACOCO_VERSION = "0.8.8";
-  public static final String COBERTURA_VERSION = "3.0.0";
+  public static final String COBERTURA_VERSION = "4.0.0";
   public static final String RCOMMONS_ASYNC_COMMONS_STARTER_VERSION = "2.0.0";
   public static final String RCOMMONS_OBJECT_MAPPER_VERSION = "0.1.0";
-  public static final String PLUGIN_VERSION = "2.4.9";
+  public static final String PLUGIN_VERSION = "2.4.10";
   public static final String GRADLE_WRAPPER_VERSION = "7.6";
   public static final String KOTLIN_VERSION = "1.6.10";
   public static final String AWS_BOM_VERSION = "2.19.31";

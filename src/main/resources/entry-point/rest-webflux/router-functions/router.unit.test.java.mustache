@@ -10,13 +10,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @ContextConfiguration(classes = {RouterRest.class, Handler.class})
 @WebFluxTest
-public class RouterRestTest {
+class RouterRestTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @Test
-    public void testListenGETUseCase() {
+    void testListenGETUseCase() {
         webTestClient.get()
                 .uri("/api/usecase/path")
                 .accept(MediaType.APPLICATION_JSON)
@@ -24,13 +24,13 @@ public class RouterRestTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEqualTo("");
+                            Assertions.assertThat(userResponse).isEmpty();
                         }
                 );
     }
 
     @Test
-    public void testListenGETOtherUseCase() {
+    void testListenGETOtherUseCase() {
         webTestClient.get()
                 .uri("/api/otherusercase/path")
                 .accept(MediaType.APPLICATION_JSON)
@@ -38,13 +38,13 @@ public class RouterRestTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEqualTo("");
+                            Assertions.assertThat(userResponse).isEmpty();
                         }
                 );
     }
 
     @Test
-    public void testListenPOSTUseCase() {
+    void testListenPOSTUseCase() {
         webTestClient.post()
                 .uri("/api/usecase/otherpath")
                 .accept(MediaType.APPLICATION_JSON)
@@ -53,7 +53,7 @@ public class RouterRestTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEqualTo("");
+                            Assertions.assertThat(userResponse).isEmpty();
                         }
                 );
     }

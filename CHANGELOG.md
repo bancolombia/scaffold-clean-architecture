@@ -2,11 +2,39 @@
 
 ## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.9...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.10...HEAD)
 
 **Closed issues:**
 
+- Validate Spring Boot 3 - DYNAMODB [\#328](https://github.com/bancolombia/scaffold-clean-architecture/issues/328)
+- Validate Spring Boot 3 - S3 [\#327](https://github.com/bancolombia/scaffold-clean-architecture/issues/327)
+- Validate Spring Boot 3 - SECRETS [\#326](https://github.com/bancolombia/scaffold-clean-architecture/issues/326)
+- Validate Spring Boot 3 - KMS [\#325](https://github.com/bancolombia/scaffold-clean-architecture/issues/325)
+- Validate Spring Boot 3 - R2DBC [\#324](https://github.com/bancolombia/scaffold-clean-architecture/issues/324)
+- Validate Spring Boot 3 - REDIS [\#323](https://github.com/bancolombia/scaffold-clean-architecture/issues/323)
+- Validate Spring Boot 3 - MONGODB [\#321](https://github.com/bancolombia/scaffold-clean-architecture/issues/321)
+- Validate Spring Boot 3 - JPA [\#320](https://github.com/bancolombia/scaffold-clean-architecture/issues/320)
+- Validate Spring Boot 3 - MQ [\#319](https://github.com/bancolombia/scaffold-clean-architecture/issues/319)
+- Validate Spring Boot 3 - RESTMVC [\#317](https://github.com/bancolombia/scaffold-clean-architecture/issues/317)
+- Validate Spring Boot 3 - GraphQL [\#316](https://github.com/bancolombia/scaffold-clean-architecture/issues/316)
+
+## [2.4.10](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.4.10) (2023-02-06)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.9...2.4.10)
+
+**Closed issues:**
+
+- Validate Spring Boot 3 - RESTCONSUMER [\#322](https://github.com/bancolombia/scaffold-clean-architecture/issues/322)
+- Validate Spring Boot 3 - RSocket [\#315](https://github.com/bancolombia/scaffold-clean-architecture/issues/315)
+- Validate Spring Boot 3 - SQS [\#313](https://github.com/bancolombia/scaffold-clean-architecture/issues/313)
+- Validate Spring Boot 3 - WEBFLUX [\#312](https://github.com/bancolombia/scaffold-clean-architecture/issues/312)
 - Generate changelog automatically [\#259](https://github.com/bancolombia/scaffold-clean-architecture/issues/259)
+
+**Merged pull requests:**
+
+- Feature/r2dbc unit test [\#330](https://github.com/bancolombia/scaffold-clean-architecture/pull/330) ([santicalleg](https://github.com/santicalleg))
+- Feature/webflux unit tests [\#309](https://github.com/bancolombia/scaffold-clean-architecture/pull/309) ([gabheadz](https://github.com/gabheadz))
+- Add project language metric [\#308](https://github.com/bancolombia/scaffold-clean-architecture/pull/308) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [2.4.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.4.9) (2023-01-20)
 
