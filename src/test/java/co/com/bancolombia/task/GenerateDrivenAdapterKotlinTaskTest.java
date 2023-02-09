@@ -388,8 +388,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   }
 
   @Test(expected = ValidationException.class)
-  public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
-      throws IOException, CleanException {
+  public void shouldHandleErrorBecauseIncompatibility() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
