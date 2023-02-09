@@ -4,6 +4,7 @@ import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
@@ -15,6 +16,11 @@ public class DrivenAdapterRedis implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+    if (builder.isReactive() && Mode.REPOSITORY == builder.getParam(PARAM_MODE)) {
+      // https://github.com/spring-projects/spring-data-redis/issues/1823
+      throw new ValidationException(
+          "This mode is only available for imperative projects, please use `template` mode");
+    }
     Logger logger = builder.getProject().getLogger();
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));

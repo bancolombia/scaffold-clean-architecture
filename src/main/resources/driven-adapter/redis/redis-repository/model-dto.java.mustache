@@ -1,0 +1,49 @@
+package {{package}}.redis.repository;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+{{/lombok}}
+
+{{#lombok}}
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+{{/lombok}}
+@Entity // TODO: Or you can use @RedisHash
+public class ModelDTO {
+    @Id
+    private String id;
+    private String name;
+    {{^lombok}}
+
+    public SampleDTO() {
+    }
+
+    public SampleDTO(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    {{/lombok}}
+}

@@ -27,7 +27,7 @@ public class KmsAdapter // implements ModelRepository from domain
     this.kmsAsyncClient = kmsAsyncClient;
     }
 {{/lombok}}
-    public byte[] decrypt(String secretKey, String keyId) throws ExecutionException, InterruptedException {
+    public byte[] decrypt(String secretKey) throws ExecutionException, InterruptedException {
         return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
                 .get()
                 .plaintext()

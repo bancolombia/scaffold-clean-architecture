@@ -29,41 +29,20 @@ public class RestConsumerConfig {
     @Value("${adapter.restconsumer.timeout}")
     private int timeout;
 
-    {{^metrics}}
     @Bean
-    public WebClient getWebClient() {
-        return WebClient.builder()
+    public WebClient getWebClient(WebClient.Builder builder) {
+        return builder
             .baseUrl(url)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
             .clientConnector(getClientHttpConnector())
             .build();
     }
-    {{/metrics}}
-    {{#metrics}}
-    @Bean
-    public WebClient getWebClient(MetricsWebClientFilterFunction metricsFilter) {
-        return WebClient.builder()
-                .baseUrl(url)
-                .filter(metricsFilter)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                .clientConnector(getClientHttpConnector())
-                .build();
-    }
-
-    @Bean
-    public MetricsWebClientFilterFunction webClientMetricsFilter(MeterRegistry registry) {
-        WebClientExchangeTagsProvider tagsProvider = new DefaultWebClientExchangeTagsProvider();
-        return new MetricsWebClientFilterFunction(registry, tagsProvider, "http-outgoing", AutoTimer.ENABLED);
-    }
-    {{/metrics}}
 
     private ClientHttpConnector getClientHttpConnector() {
         /*
-        IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED
-        SslContext sslContext = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE)
-                .build();*/
+        IF YO REQUIRE APPEND SSL CERTIFICATE SELF SIGNED: this should be in the default cacerts trustore
+        */
         return new ReactorClientHttpConnector(HttpClient.create()
-                //.secure(sslContextSpec -> sslContextSpec.sslContext(sslContext))
                 .compress(true)
                 .keepAlive(true)
                 .option(CONNECT_TIMEOUT_MILLIS, timeout)

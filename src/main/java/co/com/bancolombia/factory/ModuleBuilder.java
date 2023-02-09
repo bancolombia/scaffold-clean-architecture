@@ -85,6 +85,7 @@ public class ModuleBuilder {
     params.put("coberturaVersion", Constants.COBERTURA_VERSION);
     params.put("lombokVersion", Constants.LOMBOK_VERSION);
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
+    params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
     loadPackage();
     loadLanguage();
@@ -196,13 +197,20 @@ public class ModuleBuilder {
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {
-    logger.lifecycle("adding dependency {} to module {}", dependency, module);
     String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
     buildFilePath = buildFilePath.replace(project.getProjectDir().getPath(), ".");
     if (isKotlin() && !buildFilePath.endsWith(KTS)) {
       buildFilePath += KTS;
     }
-    updateFile(buildFilePath, current -> Utils.addDependency(current, dependency));
+    updateFile(
+        buildFilePath,
+        current -> {
+          String res = Utils.addDependency(current, dependency);
+          if (!current.equals(res)) {
+            logger.lifecycle("adding dependency {} to module {}", dependency, module);
+          }
+          return res;
+        });
   }
 
   public void appendConfigurationToModule(String module, String configuration) throws IOException {

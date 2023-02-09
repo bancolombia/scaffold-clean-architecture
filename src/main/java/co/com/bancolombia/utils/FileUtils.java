@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -107,5 +108,23 @@ public class FileUtils {
       return path;
     }
     return "./" + path;
+  }
+
+  public static void allFiles(final File root, final Consumer<File> handler) {
+    allFiles(root, handler, (dir, name) -> true);
+  }
+
+  public static void allFiles(
+      final File root, final Consumer<File> handler, final FilenameFilter filter) {
+    if (root.isDirectory()) {
+      File[] files = root.listFiles();
+      if (files != null) {
+        Arrays.stream(files).forEach(file -> allFiles(file, handler, filter));
+      }
+    } else {
+      if (filter.accept(root.getParentFile(), root.getName())) {
+        handler.accept(root);
+      }
+    }
   }
 }
