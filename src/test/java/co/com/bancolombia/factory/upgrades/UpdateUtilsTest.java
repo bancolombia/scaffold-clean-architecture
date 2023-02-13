@@ -56,7 +56,7 @@ public class UpdateUtilsTest {
     // Act
     boolean applied = UpdateUtils.appendIfNotContains(builder, file, check, toAdd);
     // Assert
-    verify(builder, times(2)).addFile(file, currentContent);
+    verify(builder, times(1)).addFile(file, currentContent);
     assertFalse(applied);
   }
 

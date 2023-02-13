@@ -321,9 +321,14 @@ public class ModuleBuilder {
     }
   }
 
-  public void updateFile(String path, FileUpdater updater) throws IOException {
+  public boolean updateFile(String path, FileUpdater updater) throws IOException {
     String content = readFile(path);
-    addFile(path, updater.update(content));
+    String newContent = updater.update(content);
+    boolean changed = !content.equals(newContent);
+    if (changed) {
+      addFile(path, newContent);
+    }
+    return changed;
   }
 
   public Release getLatestRelease() {

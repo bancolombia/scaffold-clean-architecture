@@ -4,7 +4,6 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.SneakyThrows;
 
 public class UpgradeY2023M02D08Redis implements UpgradeAction {
@@ -23,27 +22,21 @@ public class UpgradeY2023M02D08Redis implements UpgradeAction {
 
     if (builder.getProject().file(repository).getAbsoluteFile().exists()
         && builder.getProject().file(repositoryAdapter).getAbsoluteFile().exists()) {
-      AtomicBoolean applied = new AtomicBoolean(false);
-      apply(builder, repository, applied);
-      apply(builder, repositoryAdapter, applied);
       builder.appendDependencyToModule(
           "redis", "implementation 'jakarta.persistence:jakarta.persistence-api'");
-      return applied.get();
+      return apply(builder, repository) | apply(builder, repositoryAdapter);
     }
     return false;
   }
 
-  private void apply(ModuleBuilder builder, String file, AtomicBoolean applied) throws IOException {
+  private boolean apply(ModuleBuilder builder, String file) throws IOException {
     String prev = "org.springframework.data.repository.CrudRepository";
     String next = "org.springframework.data.keyvalue.repository.KeyValueRepository";
-    builder.updateFile(
+    return builder.updateFile(
         file,
         content -> {
           String res = UpdateUtils.replace(content, prev, next);
           res = UpdateUtils.replace(res, "CrudRepository", "KeyValueRepository");
-          if (!content.equals(res)) {
-            applied.set(true);
-          }
           return res;
         });
   }

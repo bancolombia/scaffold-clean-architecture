@@ -8,11 +8,10 @@ public class AnUpdate implements UpgradeAction {
   @Override
   public boolean up(ModuleBuilder builder) {
     try {
-      builder.updateFile("build.gradle", content -> content + "modified");
+      return builder.updateFile("build.gradle", content -> content + "modified");
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return true;
   }
 
   @Override
