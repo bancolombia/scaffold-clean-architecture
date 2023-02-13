@@ -20,7 +20,12 @@ public class CommandUtils {
     try {
       Process process = rt.exec(GIT_STATUS);
       String output = processCommandOutput(process);
-      return !output.contains("nothing to commit");
+      boolean hasPending =
+          !(output.contains("nothing to commit") || output.contains("nada para hacer commit"));
+      if (hasPending) {
+        logger.lifecycle(output);
+      }
+      return hasPending;
     } catch (IOException e) {
       logger.warn("Could not run git verification", e);
     }

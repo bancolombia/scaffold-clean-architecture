@@ -67,7 +67,7 @@ jacoco {
     reportsDirectory = file("$buildDir/reports")
 }
 
-task jacocoMergedReport(type: JacocoReport) {
+tasks.register('jacocoMergedReport', JacocoReport) {
     dependsOn = subprojects.jacocoTestReport
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
@@ -92,7 +92,7 @@ cobertura {
 test.finalizedBy(project.tasks.cobertura)
 {{/cobertura}}
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]

@@ -7,7 +7,7 @@ dependencies {
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 
-task explodedJar(type: Copy) {
+tasks.register('explodedJar', Copy) {
     with jar
     into "${buildDir}/exploded"
 }

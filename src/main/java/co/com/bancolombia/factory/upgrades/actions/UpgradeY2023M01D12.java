@@ -5,7 +5,6 @@ import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
-import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.SneakyThrows;
 
 public class UpgradeY2023M01D12 implements UpgradeAction {
@@ -23,17 +22,8 @@ public class UpgradeY2023M01D12 implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    AtomicBoolean applied = new AtomicBoolean(false);
-    builder.updateFile(
-        SETTINGS_GRADLE,
-        content -> {
-          String res = UpdateUtils.appendValidate(content, MATCH, VALIDATION, VALUE);
-          if (!content.equals(res)) {
-            applied.set(true);
-          }
-          return res;
-        });
-    return applied.get();
+    return builder.updateFile(
+        SETTINGS_GRADLE, content -> UpdateUtils.appendValidate(content, MATCH, VALIDATION, VALUE));
   }
 
   @Override

@@ -36,8 +36,8 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     if (git == BooleanOption.TRUE && CommandUtils.getDefault().hasGitPendingChanges(logger)) {
       getTextOutputFactory()
           .create(UpdateProjectTask.class)
-          .style(StyledTextOutput.Style.Error)
-          .append(
+          .style(StyledTextOutput.Style.Info)
+          .println(
               "You have changes pending to be committed, please commit your changes before run this task"
                   + " or pass the '--git false' flag");
       return;

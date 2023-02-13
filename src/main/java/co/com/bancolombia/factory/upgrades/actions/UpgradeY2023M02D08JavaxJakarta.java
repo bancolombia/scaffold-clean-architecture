@@ -25,16 +25,26 @@ public class UpgradeY2023M02D08JavaxJakarta implements UpgradeAction {
 
   private void apply(ModuleBuilder builder, File file, AtomicBoolean applied, Logger logger) {
     try {
-      builder.updateFile(
-          file.getAbsolutePath(),
-          content -> {
-            String res = UpdateUtils.replace(content, "javax.persistence", "jakarta.persistence");
-            if (!content.equals(res)) {
-              logger.debug("javax to jakarta applied in: ${}", file.getName());
-              applied.set(true);
-            }
-            return res;
-          });
+      boolean appliedItem =
+          builder.updateFile(
+              file.getAbsolutePath(),
+              content -> {
+                String res =
+                    UpdateUtils.replace(content, "javax.persistence", "jakarta.persistence");
+                res = UpdateUtils.replace(res, "javax.jms", "jakarta.jms");
+                res = UpdateUtils.replace(res, "com.ibm.mq.jms", "com.ibm.mq.jakarta.jms");
+                res =
+                    UpdateUtils.replace(
+                        res, "com.ibm.msg.client.jms", "com.ibm.msg.client.jakarta.jms");
+                res =
+                    UpdateUtils.replace(
+                        res, "com.ibm.msg.client.wmq", "com.ibm.msg.client.jakarta.wmq");
+                return res;
+              });
+      if (appliedItem) {
+        logger.debug("javax to jakarta applied in: ${}", file.getName());
+        applied.set(true);
+      }
     } catch (IOException e) {
       logger.warn("Error applying javax to jakarta persistence", e);
     }

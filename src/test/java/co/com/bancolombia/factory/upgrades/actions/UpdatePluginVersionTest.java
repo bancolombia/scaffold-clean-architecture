@@ -75,7 +75,7 @@ public class UpdatePluginVersionTest {
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder, times(2))
+    verify(builder, times(1))
         .addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = '" + release.getTagName() + "'\n");
     verify(builder).addFile(GRADLE_PROPERTIES, "systemProp.version=" + release.getTagName());
   }
