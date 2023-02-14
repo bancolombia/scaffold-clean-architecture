@@ -19,7 +19,6 @@ public class UpgradeY2023M02D14RestMapping implements UpgradeAction {
         "(Get|Post|Put|Delete|Patch|Request)Mapping\\((.*(path|value)\\s*=\\s*|)\\\".*(/)\\\".*\\)";
     Optional<Project> project =
         builder.getProject().getSubprojects().stream()
-            .peek(p -> p.getLogger().lifecycle(p.getName()))
             .filter(p -> "api-rest".equals(p.getName()) || "reactive-web".equals(p.getName()))
             .findFirst();
     AtomicBoolean applied = new AtomicBoolean(false);
