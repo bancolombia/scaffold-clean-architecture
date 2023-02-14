@@ -177,4 +177,17 @@ public class Utils {
     }
     return paths;
   }
+
+  public static String replaceGroup(
+      final String source, final String regex, final String replacement, final int group) {
+    Pattern pattern = Pattern.compile(regex);
+    String result = source;
+    Matcher m = pattern.matcher(result);
+    while (m.find()) {
+      result =
+          new StringBuilder(result).replace(m.start(group), m.end(group), replacement).toString();
+      m = pattern.matcher(result);
+    }
+    return result;
+  }
 }
