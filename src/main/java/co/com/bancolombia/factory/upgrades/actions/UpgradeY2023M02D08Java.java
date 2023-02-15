@@ -11,8 +11,8 @@ public class UpgradeY2023M02D08Java implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    builder.updateExpression(MAIN_GRADLE, "JavaVersion.VERSION_11", "JavaVersion.VERSION_17");
-    return true;
+    return builder.updateExpression(
+        MAIN_GRADLE, "JavaVersion.VERSION_11", "JavaVersion.VERSION_17");
   }
 
   @Override

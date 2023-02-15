@@ -10,13 +10,14 @@ public class UpgradeY2022M08D08 implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    builder.updateExpression(
-        Constants.MainFiles.MAIN_GRADLE, "reportsDir\\s?=", "reportsDirectory =");
-    builder.updateExpression(
-        Constants.MainFiles.MAIN_GRADLE, "(xml|csv|html)\\.enabled", "$1.setRequired");
-    builder.updateExpression(
-        Constants.MainFiles.MAIN_GRADLE, "(xml|csv|html)\\.destination", "$1.setOutputLocation");
-    return true;
+    return builder.updateExpression(
+            Constants.MainFiles.MAIN_GRADLE, "reportsDir\\s?=", "reportsDirectory =")
+        | builder.updateExpression(
+            Constants.MainFiles.MAIN_GRADLE, "(xml|csv|html)\\.enabled", "$1.setRequired")
+        | builder.updateExpression(
+            Constants.MainFiles.MAIN_GRADLE,
+            "(xml|csv|html)\\.destination",
+            "$1.setOutputLocation");
   }
 
   @Override

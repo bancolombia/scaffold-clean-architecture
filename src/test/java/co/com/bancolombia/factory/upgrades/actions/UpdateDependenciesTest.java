@@ -56,7 +56,8 @@ public class UpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of(dependency));
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(restService.getTheLastDependencyRelease(anyString())).thenReturn(Optional.of(release));
+    when(restService.getTheLastDependencyRelease(any(DependencyRelease.class)))
+        .thenReturn(Optional.of(release));
     // add possible files
     builder.addFile(file, current);
 
@@ -79,7 +80,8 @@ public class UpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(restService.getTheLastDependencyRelease(anyString())).thenReturn(Optional.of(release));
+    when(restService.getTheLastDependencyRelease(any(DependencyRelease.class)))
+        .thenReturn(Optional.of(release));
     // add possible files
     builder.addFile(file, current);
     // Act

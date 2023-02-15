@@ -176,16 +176,15 @@ public class ModuleBuilder {
         });
   }
 
-  public void updateExpression(String path, String regex, String value) throws IOException {
-    updateFile(path, content -> Utils.replaceExpression(content, regex, value));
+  public boolean updateExpression(String path, String regex, String value) throws IOException {
+    return updateFile(path, content -> Utils.replaceExpression(content, regex, value));
   }
 
   @SneakyThrows
   public Set<String> findExpressions(String path, String regex) {
-    logger.lifecycle(
-        "find  "
-            + Pattern.compile(regex).matcher(readFile(path)).results().count()
-            + " dependencies in "
+    logger.debug(
+        Pattern.compile(regex).matcher(readFile(path)).results().count()
+            + " dependencies found in "
             + path);
     return Pattern.compile(regex)
         .matcher(readFile(path))

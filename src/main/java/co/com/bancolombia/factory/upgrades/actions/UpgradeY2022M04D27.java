@@ -15,14 +15,14 @@ public class UpgradeY2022M04D27 implements UpgradeAction {
   public boolean up(ModuleBuilder builder) {
     builder.updateExpression(MAIN_GRADLE, "JavaVersion.VERSION_1_8", "JavaVersion.VERSION_11");
     try {
-      builder.updateExpression(
-          DOCKERFILE,
-          "adoptopenjdk/openjdk8-openj9:alpine-slim",
-          "adoptopenjdk/openjdk11-openj9:alpine-slim");
+      return builder.updateExpression(
+              DOCKERFILE, "adoptopenjdk/openjdk8-openj9:alpine-slim", "eclipse-temurin:17-alpine")
+          | builder.updateExpression(
+              DOCKERFILE, "adoptopenjdk/openjdk11-openj9:alpine-slim", "eclipse-temurin:17-alpine");
     } catch (IOException e) {
       builder.getProject().getLogger().debug("Could not update Dockerfile", e);
     }
-    return true;
+    return false;
   }
 
   @Override
