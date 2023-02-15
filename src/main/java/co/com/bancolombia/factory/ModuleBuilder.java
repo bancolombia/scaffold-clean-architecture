@@ -183,9 +183,9 @@ public class ModuleBuilder {
   @SneakyThrows
   public Set<String> findExpressions(String path, String regex) {
     logger.debug(
-        Pattern.compile(regex).matcher(readFile(path)).results().count()
-            + " dependencies found in "
-            + path);
+        "{} dependencies found in {}",
+        Pattern.compile(regex).matcher(readFile(path)).results().count(),
+        path);
     return Pattern.compile(regex)
         .matcher(readFile(path))
         .results()
