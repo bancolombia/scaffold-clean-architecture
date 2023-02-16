@@ -6,15 +6,17 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.SneakyThrows;
 
 public class UpgradeY2022M05D02 implements UpgradeAction {
   @Override
   @SuppressWarnings("unchecked")
   public boolean up(ModuleBuilder builder) {
+    AtomicBoolean applied = new AtomicBoolean(false);
     List<String> gradleFiles = (List<String>) builder.getParam(FILES_TO_UPDATE);
-    gradleFiles.forEach(file -> applyUpdate(builder, file));
-    return true;
+    gradleFiles.forEach(file -> applyUpdate(builder, applied, file));
+    return applied.get();
   }
 
   @Override
@@ -28,11 +30,15 @@ public class UpgradeY2022M05D02 implements UpgradeAction {
   }
 
   @SneakyThrows
-  private void applyUpdate(ModuleBuilder builder, String file) {
-    UpdateUtils.updateConfiguration(builder, file, "compile", "implementation");
-    UpdateUtils.updateConfiguration(builder, file, "runtime", "runtimeOnly");
-    UpdateUtils.updateConfiguration(builder, file, "testRuntime", "testRuntimeOnly");
-    UpdateUtils.updateConfiguration(builder, file, "testCompile", "testImplementation");
-    builder.updateExpression(file, "compile.exclude", "implementation.exclude");
+  private void applyUpdate(ModuleBuilder builder, AtomicBoolean applied, String file) {
+    boolean isApplied =
+        UpdateUtils.updateConfiguration(builder, file, "compile", "implementation")
+            | UpdateUtils.updateConfiguration(builder, file, "runtime", "runtimeOnly")
+            | UpdateUtils.updateConfiguration(builder, file, "testRuntime", "testRuntimeOnly")
+            | UpdateUtils.updateConfiguration(builder, file, "testCompile", "testImplementation")
+            | builder.updateExpression(file, "compile.exclude", "implementation.exclude");
+    if (isApplied) {
+      applied.set(true);
+    }
   }
 }

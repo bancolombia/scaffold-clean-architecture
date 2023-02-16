@@ -22,11 +22,23 @@ public class DependencyReleasesDeserializer extends StdDeserializer<DependencyRe
 
     JsonNode productNode = jp.getCodec().readTree(jp);
     DependencyRelease dependencyRelease = new DependencyRelease();
-    dependencyRelease.setGroup(productNode.get("response").get("docs").get(0).get("g").textValue());
-    dependencyRelease.setArtifact(
-        productNode.get("response").get("docs").get(0).get("a").textValue());
-    dependencyRelease.setVersion(
-        productNode.get("response").get("docs").get(0).get("v").textValue());
+    JsonNode list = productNode.get("response").get("docs");
+    int i = 0;
+    while (list.has(i)) {
+      JsonNode dependency = list.get(i);
+      String version = dependency.get("v").textValue();
+      if (isStable(version)) {
+        dependencyRelease.setGroup(dependency.get("g").textValue());
+        dependencyRelease.setArtifact(dependency.get("a").textValue());
+        dependencyRelease.setVersion(version);
+        break;
+      }
+      i++;
+    }
     return dependencyRelease;
+  }
+
+  private boolean isStable(String version) {
+    return !version.contains("alpha") && !version.contains("beta") && !version.contains("RC");
   }
 }

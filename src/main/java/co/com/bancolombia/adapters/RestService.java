@@ -24,7 +24,7 @@ public class RestService {
     return operations.getLatestPluginVersion();
   }
 
-  public Optional<DependencyRelease> getTheLastDependencyRelease(String dependency) {
+  public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
     return operations.getTheLastDependencyRelease(dependency);
   }
 
@@ -38,9 +38,9 @@ public class RestService {
 
   private static class RestOperations implements Operations {
     public static final String PLUGIN_RELEASES =
-        "http://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
+        "https://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
     public static final String DEPENDENCY_RELEASES =
-        "https://search.maven.org/solrsearch/select?q=g:%22%s%22+AND+a:%22%s%22&core=gav&rows=1&wt=json";
+        "https://search.maven.org/solrsearch/select?q=g:%22%s%22+AND+a:%22%s%22&core=gav&rows=5&wt=json";
     private final Logger logger = Logging.getLogger(RestOperations.class);
 
     @Override
@@ -55,10 +55,11 @@ public class RestService {
     }
 
     @Override
-    public Optional<DependencyRelease> getTheLastDependencyRelease(String dependency) {
+    public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
       try {
-        return Optional.of(
-            RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class));
+        DependencyRelease release =
+            RestConsumer.callRequest(getDependencyEndpoint(dependency), DependencyRelease.class);
+        return release.getVersion() != null ? Optional.of(release) : Optional.empty();
       } catch (Exception e) {
         logger.lifecycle(
             "\tx Can't update this dependency {}, reason: {}", dependency, e.getMessage());
@@ -66,10 +67,16 @@ public class RestService {
       }
     }
 
-    private String getDependencyEndpoint(String dependency) {
-      String[] id = dependency.split(":");
-      if (id.length >= 2) {
-        return DEPENDENCY_RELEASES.replaceFirst("%s", id[0]).replace("%s", id[1]);
+    private String getDependencyEndpoint(DependencyRelease dependency) {
+      if (dependency.valid()) {
+        if (dependency.getArtifact().equals("okhttp3"))
+          logger.lifecycle(
+              DEPENDENCY_RELEASES
+                  .replaceFirst("%s", dependency.getGroup())
+                  .replace("%s", dependency.getArtifact()));
+        return DEPENDENCY_RELEASES
+            .replaceFirst("%s", dependency.getGroup())
+            .replace("%s", dependency.getArtifact());
       }
       throw new IllegalArgumentException(
           dependency
@@ -87,7 +94,7 @@ public class RestService {
     }
 
     @Override
-    public Optional<DependencyRelease> getTheLastDependencyRelease(String dependency) {
+    public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
       return Optional.empty();
     }
   }
@@ -95,6 +102,6 @@ public class RestService {
   private interface Operations {
     Release getLatestPluginVersion();
 
-    Optional<DependencyRelease> getTheLastDependencyRelease(String dependency);
+    Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency);
   }
 }

@@ -20,17 +20,23 @@ public class UpdateUtils {
         });
   }
 
-  public static void updateVersions(
+  public static boolean updateVersions(
       ModuleBuilder builder, String file, String property, String version) throws IOException {
-    builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
-    builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
+    boolean appliedA =
+        builder.updateExpression(file, "(" + property + "\\s?=\\s?)'.+'", "$1'" + version + "'");
+    boolean appliedB =
+        builder.updateExpression(file, "(" + property + "\\s?=\\s?)\".+\"", "$1'" + version + "'");
+    return appliedA || appliedB;
   }
 
-  public static void updateConfiguration(
+  public static boolean updateConfiguration(
       ModuleBuilder builder, String file, String configuration, String newConfiguration)
       throws IOException {
-    builder.updateExpression(file, "(" + configuration + "\\s)", newConfiguration + " ");
-    builder.updateExpression(file, "(" + configuration + "\\()", newConfiguration + "(");
+    boolean appliedA =
+        builder.updateExpression(file, "(" + configuration + "\\s)", newConfiguration + " ");
+    boolean appliedB =
+        builder.updateExpression(file, "(" + configuration + "\\()", newConfiguration + "(");
+    return appliedA || appliedB;
   }
 
   public static String appendValidate(

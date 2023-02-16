@@ -13,16 +13,17 @@ public class ZUpdateGenericDependenciesVersion implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    UpdateUtils.updateVersions(
-        builder, BUILD_GRADLE, "springBootVersion", Constants.SPRING_BOOT_VERSION);
-    UpdateUtils.updateVersions(builder, BUILD_GRADLE, "sonarVersion", Constants.SONAR_VERSION);
-    UpdateUtils.updateVersions(builder, BUILD_GRADLE, "jacocoVersion", Constants.JACOCO_VERSION);
-    UpdateUtils.updateVersions(
-        builder, BUILD_GRADLE, "coberturaVersion", Constants.COBERTURA_VERSION);
-    UpdateUtils.updateVersions(builder, BUILD_GRADLE, "lombokVersion", Constants.LOMBOK_VERSION);
-    UpdateUtils.updateVersions(
-        builder, MAIN_GRADLE, "gradleVersion", Constants.GRADLE_WRAPPER_VERSION);
-    return true;
+    return UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "springBootVersion", Constants.SPRING_BOOT_VERSION)
+        | UpdateUtils.updateVersions(builder, BUILD_GRADLE, "sonarVersion", Constants.SONAR_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "jacocoVersion", Constants.JACOCO_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "coberturaVersion", Constants.COBERTURA_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "lombokVersion", Constants.LOMBOK_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, MAIN_GRADLE, "gradleVersion", Constants.GRADLE_WRAPPER_VERSION);
   }
 
   @Override

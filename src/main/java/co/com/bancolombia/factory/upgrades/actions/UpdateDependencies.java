@@ -7,12 +7,10 @@ import co.com.bancolombia.models.DependencyRelease;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.gradle.api.logging.Logger;
-import org.jetbrains.annotations.NotNull;
 
 @AllArgsConstructor
 public class UpdateDependencies implements UpgradeAction {
@@ -30,27 +28,29 @@ public class UpdateDependencies implements UpgradeAction {
   @SuppressWarnings("unchecked")
   public boolean up(ModuleBuilder builder) {
     Logger logger = builder.getProject().getLogger();
-    logger.lifecycle("Updating dependencies");
     List<String> gradleFiles = (List<String>) builder.getParam(FILES_TO_UPDATE);
-    Set<String> dependencies = (Set<String>) builder.getParam(DEPENDENCIES_TO_UPDATE);
-    logger.lifecycle(
-        "Dependencies to update: {}",
-        (dependencies.isEmpty() ? "all" : String.join(", ", dependencies)));
+    Set<String> deps = (Set<String>) builder.getParam(DEPENDENCIES_TO_UPDATE);
 
-    if (dependencies.isEmpty()) {
-      dependencies =
+    if (deps.isEmpty()) {
+      deps =
           gradleFiles.stream()
-              .flatMap(
-                  gradleFile ->
-                      builder.findExpressions(gradleFile, "['\"].+:.+:[^\\$].+['\"]").stream())
+              .flatMap(file -> builder.findExpressions(file, "['\"].+:.+:[^\\$].+['\"]").stream())
               .collect(Collectors.toSet());
     }
-    logger.lifecycle(dependencies.size() + " different dependencies to update");
 
-    dependencies.stream()
+    Set<DependencyRelease> dependencies =
+        deps.stream().map(DependencyRelease::from).collect(Collectors.toSet());
+
+    String depsMsg = String.join("\n- ", deps);
+    logger.lifecycle("Checking {} dependencies updates: \n- {}", dependencies.size(), depsMsg);
+
+    return dependencies.stream()
+        .distinct()
         .map(restService::getTheLastDependencyRelease)
-        .forEach(applyToFile(gradleFiles, logger, builder));
-    return true;
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(release -> applyToFile(builder, gradleFiles, release))
+        .reduce(false, (current, applied) -> current || applied);
   }
 
   @Override
@@ -63,29 +63,21 @@ public class UpdateDependencies implements UpgradeAction {
     return "Update dependencies to the latest version";
   }
 
-  @NotNull
-  private Consumer<Optional<DependencyRelease>> applyToFile(
-      List<String> gradleFiles, Logger logger, ModuleBuilder builder) {
-    return dependencyRelease ->
-        dependencyRelease.ifPresent(
-            latestDependency -> {
-              logger.lifecycle("\t- " + latestDependency);
-              gradleFiles
-                  .parallelStream()
-                  .forEach(gradleFile -> update(builder, latestDependency, gradleFile));
-            });
+  private boolean applyToFile(
+      ModuleBuilder builder, List<String> files, DependencyRelease release) {
+    boolean applied =
+        files
+            .parallelStream()
+            .map(file -> update(builder, release, file))
+            .reduce(false, (current, itemApplied) -> current || itemApplied);
+    if (applied) {
+      builder.getProject().getLogger().lifecycle("Dependency updated: {}", release);
+    }
+    return applied;
   }
 
   @SneakyThrows
-  private void update(
-      ModuleBuilder builder, DependencyRelease latestDependency, String gradleFile) {
-    builder.updateExpression(
-        gradleFile,
-        "['\"]"
-            + latestDependency.getGroup()
-            + ":"
-            + latestDependency.getArtifact()
-            + ":[^\\$].+['\"]",
-        "'" + latestDependency + "'");
+  private boolean update(ModuleBuilder builder, DependencyRelease release, String file) {
+    return builder.updateExpression(file, release.toRegex(), release.toString());
   }
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
 import java.util.*;
 import org.junit.Assert;
@@ -417,6 +418,18 @@ public class UtilsTest {
     assertEquals("my/path/package", "my.path.package".replace('.', '/'));
     assertEquals("mypathpackage", "my'path'package".replace("'", ""));
     assertEquals("mypathpackage", "my\"path\"package".replace("\"", ""));
+  }
+
+  @Test
+  public void shouldReplaceGroup() throws IOException {
+    String regex =
+        "(Get|Post|Put|Delete|Patch|Request)Mapping\\((.*(path|value)\\s*=\\s*|)\\\".*(/)\\\".*\\)";
+    DefaultResolver resolver = new DefaultResolver();
+    String text = FileUtils.getResourceAsString(resolver, "rest/mapping-before.txt");
+    String expectedText = FileUtils.getResourceAsString(resolver, "rest/mapping-after.txt");
+
+    String result = Utils.replaceGroup(text, regex, "", 4);
+    assertEquals(expectedText, result);
   }
 
   private enum Options {
