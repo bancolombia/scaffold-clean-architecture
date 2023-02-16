@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [3.0.0-alpha](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0-alpha) (2023-02-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.10...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.10...3.0.0-alpha)
 
 **Closed issues:**
 
@@ -15,8 +15,18 @@
 - Validate Spring Boot 3 - MONGODB [\#321](https://github.com/bancolombia/scaffold-clean-architecture/issues/321)
 - Validate Spring Boot 3 - JPA [\#320](https://github.com/bancolombia/scaffold-clean-architecture/issues/320)
 - Validate Spring Boot 3 - MQ [\#319](https://github.com/bancolombia/scaffold-clean-architecture/issues/319)
+- Validate Spring Boot 3 - ASYNCEVENTHANDLER - ASYNCEVENTBUS [\#318](https://github.com/bancolombia/scaffold-clean-architecture/issues/318)
 - Validate Spring Boot 3 - RESTMVC [\#317](https://github.com/bancolombia/scaffold-clean-architecture/issues/317)
 - Validate Spring Boot 3 - GraphQL [\#316](https://github.com/bancolombia/scaffold-clean-architecture/issues/316)
+- Add configuration parameter to indicate spring boot track [\#314](https://github.com/bancolombia/scaffold-clean-architecture/issues/314)
+- Update each adapter or helper module for compatibility with Spring Boot 3 [\#311](https://github.com/bancolombia/scaffold-clean-architecture/issues/311)
+- Update base structure with required changes for Spring Boot 3 [\#310](https://github.com/bancolombia/scaffold-clean-architecture/issues/310)
+
+**Merged pull requests:**
+
+- Update rest entrypoint RequestMapping path [\#343](https://github.com/bancolombia/scaffold-clean-architecture/pull/343) ([juancgalvis](https://github.com/juancgalvis))
+- Add new updates from sb2 to sb3 [\#342](https://github.com/bancolombia/scaffold-clean-architecture/pull/342) ([juancgalvis](https://github.com/juancgalvis))
+- Feature/spring boot 3.0.x [\#341](https://github.com/bancolombia/scaffold-clean-architecture/pull/341) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [2.4.10](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.4.10) (2023-02-06)
 
