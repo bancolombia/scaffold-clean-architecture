@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0) (2023-02-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.0-alpha...3.0.0)
+
+**Closed issues:**
+
+- Change the automatic use of @Data as a good practice of Clean Code [\#332](https://github.com/bancolombia/scaffold-clean-architecture/issues/332)
+
+**Merged pull requests:**
+
+- fix release task [\#344](https://github.com/bancolombia/scaffold-clean-architecture/pull/344) ([santitigaga](https://github.com/santitigaga))
+- replace @Data [\#333](https://github.com/bancolombia/scaffold-clean-architecture/pull/333) ([santitigaga](https://github.com/santitigaga))
+
 ## [3.0.0-alpha](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0-alpha) (2023-02-16)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.10...3.0.0-alpha)
