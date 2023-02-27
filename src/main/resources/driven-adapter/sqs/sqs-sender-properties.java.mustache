@@ -1,13 +1,19 @@
 package {{package}}.sqs.sender.config;
 
 {{#lombok}}
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 {{/lombok}}
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 {{#lombok}}
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 {{/lombok}}
 @Configuration
 @ConfigurationProperties(prefix = "adapter.sqs")

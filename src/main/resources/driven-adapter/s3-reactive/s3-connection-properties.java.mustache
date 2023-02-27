@@ -2,16 +2,18 @@ package {{package}}.s3.config.model;
 
 {{#lombok}}
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 {{/lombok}}
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 {{#lombok}}
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 {{/lombok}}
 @Configuration
 @ConfigurationProperties(prefix = "adapter.aws.s3")

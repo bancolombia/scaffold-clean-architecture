@@ -3,10 +3,16 @@ package {{package}}.kms.config.model;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 {{#lombok}}
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 {{/lombok}}
 @Configuration
 @ConfigurationProperties(prefix = "adapters.aws.kms")
