@@ -37,6 +37,8 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish local
+        run: ./publish_plugin_local.sh
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
