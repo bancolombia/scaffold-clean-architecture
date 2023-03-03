@@ -34,4 +34,6 @@ branch=$(git symbolic-ref --short HEAD)
 git init
 git checkout -b $branch
 git add .
+git config user.email "github@actions.bot"
+git config user.name "Github Actions Bot"
 git commit -am "to scan"
