@@ -1,4 +1,7 @@
 apply plugin: 'org.springframework.boot'
+{{#example}}
+apply plugin: 'org.owasp.dependencycheck'
+{{/example}}
 
 dependencies {
     implementation project(':model')
@@ -21,3 +24,9 @@ bootJar {
     // Sets output jar name
     archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
 }
+
+{{#example}}
+dependencyCheck {
+    format = 'CSV'
+}
+{{/example}}

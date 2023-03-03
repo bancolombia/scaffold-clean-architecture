@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Analyze generated project dependencies
         working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAggregate && cat build/reports/dependency-check-report.csv
+        run: ./gradlew dependencyCheckAnalyze && cat applications/app-service/build/reports/dependency-check-report.csv
 
   release:
     if: github.event_name == 'release'

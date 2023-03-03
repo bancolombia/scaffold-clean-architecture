@@ -15,9 +15,6 @@ subprojects {
     apply plugin: 'net.saliman.cobertura'
     {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
-    {{#example}}
-    apply plugin: 'org.owasp.dependencycheck'
-    {{/example}}
 
     compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.{{javaVersion}}
