@@ -3,7 +3,7 @@ package {{package}}.mq.reqreply;
 import co.com.bancolombia.commons.jms.mq.ReqReply;
 import reactor.core.publisher.Mono;
 
-import javax.jms.Message;
+import jakarta.jms.Message;
 
 @ReqReply(requestQueue = "DEV.QUEUE.1") // TODO: Change the queue name, or use from properties like ${my.queue}
 public interface ReqReplyGateway {
