@@ -29,3 +29,9 @@ for entry in "webflux" "rsocket" "graphql" "mq" "sqs"
 do
   ./gradlew gep --type $entry
 done
+
+branch=$(git symbolic-ref --short HEAD)
+git init
+git checkout -b $branch
+git add .
+git commit -am "to scan"
