@@ -48,10 +48,7 @@ jobs:
         run: ./generate_project.sh
       - name: Scan generated project dependencies
         working-directory: ./build/toscan
-        run: |
-          ./gradlew dependencyCheckAnalyze \
-            ./gradlew it \
-            cat applications/app-service/build/reports/dependency-check-sonar.json
+        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project
 #        if: github.event.pull_request.head.repo.fork == false
         working-directory: ./build/toscan
