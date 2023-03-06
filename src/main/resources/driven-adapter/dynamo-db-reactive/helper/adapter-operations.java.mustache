@@ -6,7 +6,6 @@ import java.lang.reflect.ParameterizedType;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.async.SdkPublisher;
@@ -60,8 +59,9 @@ public abstract class TemplateAdapterOperations<E, K, V> {
     /**
      * @return Mono<List < E>>
      * @implNote Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
+     * @deprecated
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public Mono<List<E>> scan() {
         PagePublisher<V> pagePublisher = customerTable.scan();
         return listOfModel(pagePublisher);

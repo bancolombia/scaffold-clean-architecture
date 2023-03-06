@@ -46,6 +46,9 @@ jobs:
           java-version: 17
       - name: Generate project to scan
         run: ./generate_project.sh
+      - name: Analyze generated project dependencies
+        working-directory: ./build/toscan
+        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Analyze generated project code
 #        if: github.event.pull_request.head.repo.fork == false
         working-directory: ./build/toscan
@@ -53,9 +56,6 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Analyze generated project dependencies
-        working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAnalyze && cat applications/app-service/build/reports/dependency-check-report.csv
 
   release:
     if: github.event_name == 'release'
