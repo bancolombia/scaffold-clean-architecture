@@ -47,6 +47,7 @@ jobs:
       - name: Generate project to scan
         run: ./generate_project.sh
       - name: Analyze generated project code
+#        if: github.event.pull_request.head.repo.fork == false
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}

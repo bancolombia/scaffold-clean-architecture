@@ -68,11 +68,11 @@ public abstract class TemplateAdapterOperations<E, K, V> {
     }
 
     private Mono<List<E>> listOfModel(PagePublisher<V> pagePublisher) {
-        return Mono.from(pagePublisher).map(page -> page.items().stream().map(this::toModel).collect(Collectors.toList()));
+        return Mono.from(pagePublisher).map(page -> page.items().stream().map(this::toModel).toList());
     }
 
     private Mono<List<E>> listOfModel(SdkPublisher<Page<V>> pagePublisher) {
-        return Mono.from(pagePublisher).map(page -> page.items().stream().map(this::toModel).collect(Collectors.toList()));
+        return Mono.from(pagePublisher).map(page -> page.items().stream().map(this::toModel).toList());
     }
 
     protected V toEntity(E model) {

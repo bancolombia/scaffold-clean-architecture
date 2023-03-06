@@ -19,13 +19,13 @@ echo "buildscript {
 cd build/toscan || exit
 gradle ca --metrics false --example true
 gradle wrapper
-# "asynceventbus" "asynceventhandler"
-for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "r2dbc" "rsocket" "redis" "restconsumer" "mongodb"
+
+for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "r2dbc" "rsocket" "redis" "restconsumer" "mongodb" "asynceventbus"
 do
   ./gradlew gda --type $adapter
 done
 
-for entry in "webflux" "rsocket" "graphql" "mq" "sqs"
+for entry in "webflux" "rsocket" "graphql" "mq" "sqs" "asynceventhandler"
 do
   ./gradlew gep --type $entry
 done
