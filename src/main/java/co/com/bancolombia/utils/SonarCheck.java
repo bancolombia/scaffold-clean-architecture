@@ -3,6 +3,8 @@ package co.com.bancolombia.utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,18 +20,30 @@ public class SonarCheck {
       "applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java";
 
   public static void parse(Project project) throws IOException {
-    ObjectMapper mapper =
+    final ObjectMapper mapper =
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    List<Issue> issues =
-        FileUtils.readFile(project, INPUT)
-            .map(content -> getReport(content, mapper))
-            .flatMap(report -> report.dependencies.stream())
-            .filter(
-                dependency ->
-                    dependency.getVulnerabilities() != null
-                        && !dependency.getVulnerabilities().isEmpty())
-            .flatMap(SonarCheck::extractIssues)
-            .collect(Collectors.toList());
+    parseSingle(project, mapper);
+    project.getSubprojects().forEach(p -> parseSingle(p, mapper));
+  }
+
+  @SneakyThrows
+  private static void parseSingle(Project project, ObjectMapper mapper) {
+    List<Issue> issues;
+    if (project.file(INPUT).exists()) {
+      issues =
+          FileUtils.readFile(project, INPUT)
+              .map(content -> getReport(content, mapper))
+              .flatMap(report -> report.dependencies.stream())
+              .filter(
+                  dependency ->
+                      dependency.getVulnerabilities() != null
+                          && !dependency.getVulnerabilities().isEmpty())
+              .flatMap(SonarCheck::extractIssues)
+              .collect(Collectors.toList());
+    } else {
+      issues = new ArrayList<>();
+    }
+    Files.createDirectories(project.file("build/reports/").toPath());
     FileUtils.writeString(
         project, OUTPUT, mapper.writeValueAsString(SonarReport.builder().issues(issues).build()));
   }

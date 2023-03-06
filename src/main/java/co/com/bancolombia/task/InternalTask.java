@@ -23,19 +23,9 @@ public class InternalTask extends CleanArchitectureDefaultTask {
   }
 
   @TaskAction
-  public void persistAnalyticsState() {
+  public void persistAnalyticsState() throws IOException {
     if (Objects.requireNonNull(action) == Action.SONARCHECK) {
-      getProject().getSubprojects().stream()
-          .filter(project -> "app-service".equals(project.getName()))
-          .findFirst()
-          .ifPresent(
-              project -> {
-                try {
-                  SonarCheck.parse(project);
-                } catch (IOException e) {
-                  logger.warn("Error parsing report", e);
-                }
-              });
+      SonarCheck.parse(getProject());
     }
   }
 
