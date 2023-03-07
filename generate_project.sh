@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+TYPE=$1
+echo "Generating project with type $TYPE"
+
 rm -rf build/toscan
 mkdir build/toscan
 echo "buildscript {
@@ -17,18 +20,31 @@ echo "buildscript {
       apply plugin: 'co.com.bancolombia.cleanArchitecture'" >> build/toscan/build.gradle
 
 cd build/toscan || exit
-gradle ca --metrics false --example true
+gradle ca --metrics false --example true --type $TYPE
 gradle wrapper
 
-for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "r2dbc" "rsocket" "redis" "restconsumer" "mongodb" "asynceventbus"
-do
-  ./gradlew gda --type $adapter
-done
+if [ $TYPE == "reactive" ]
+then
+  for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "r2dbc" "rsocket" "redis" "restconsumer" "mongodb" "asynceventbus"
+  do
+    ./gradlew gda --type $adapter
+  done
 
-for entry in "webflux" "rsocket" "graphql" "mq" "sqs" "asynceventhandler"
-do
-  ./gradlew gep --type $entry
-done
+  for entry in "webflux" "rsocket" "graphql" "mq" "sqs" "asynceventhandler"
+  do
+    ./gradlew gep --type $entry
+  done
+else
+  for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "jpa" "redis" "restconsumer" "mongodb"
+  do
+    ./gradlew gda --type $adapter
+  done
+
+  for entry in "restmvc" "mq" "sqs"
+  do
+    ./gradlew gep --type $entry
+  done
+fi
 
 branch=$(git symbolic-ref --short HEAD)
 git init

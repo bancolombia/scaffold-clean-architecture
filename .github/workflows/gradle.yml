@@ -32,11 +32,12 @@ jobs:
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Run sonarqube
-#        if: github.event.pull_request.head.repo.fork == false
+        if: github.event.pull_request.head.repo.fork == false
         run: ./gradlew sonarqube --stacktrace 
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Generated code Analysis
       - name: Publish local
         run: ./publish_plugin_local.sh
       - name: Set up JDK 17
@@ -45,17 +46,30 @@ jobs:
           distribution: 'temurin' 
           java-version: 17
       - name: Generate project to scan
-        run: ./generate_project.sh
+        run: ./generate_project.sh reactive
       - name: Scan generated project dependencies
         working-directory: ./build/toscan
         run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project
-#        if: github.event.pull_request.head.repo.fork == false
+        if: github.event.pull_request.head.repo.fork == false
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate project to scan [imperative]
+        run: ./generate_project.sh imperative
+      - name: Scan generated project dependencies [imperative]
+        working-directory: ./build/toscan
+        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+      - name: Sonar analysis for generated project [imperative]
+        if: github.event.pull_request.head.repo.fork == false
+        working-directory: ./build/toscan
+        run: ./gradlew sonarqube --stacktrace
+          -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
 
   release:
     if: github.event_name == 'release'

@@ -51,7 +51,12 @@ sonarqube {
     properties {
         {{#example}}
         property "sonar.organization", "grupo-bancolombia"
+        {{#reactive}}
         property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated"
+        {{/reactive}}
+        {{^reactive}}
+        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated-i"
+        {{/reactive}}
         property "sonar.host.url", "https://sonarcloud.io/"
         property "sonar.externalIssuesReportPaths", "build/reports/dependency-check-sonar.json"
         {{/example}}
