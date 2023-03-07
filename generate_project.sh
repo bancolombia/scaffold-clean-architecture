@@ -46,7 +46,7 @@ else
   done
 fi
 
-branch=$(git symbolic-ref --short HEAD)
+branch=${GITHUB_REF##*/}
 git init
 git checkout -b $branch
 git add .
