@@ -4,6 +4,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
+    {{^example}}
     runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo' // TODO: remove this dependency to connect to real database
+    {{/example}}
     testImplementation 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
 }

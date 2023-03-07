@@ -4,7 +4,6 @@ package {{package}}.jpa.config;
 import co.com.bancolombia.secretsmanager.api.GenericManager;
 import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
 {{/include-secret}}
-import {{package}}.jpa.config.DBSecret;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +16,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import jakarta.sql.DataSource;
+import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration

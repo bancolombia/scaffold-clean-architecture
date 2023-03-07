@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
-public class SQSProcessor implements Consumer<Message, Mono<Void>> {
+public class SQSProcessor implements Consumer<Message> {
     // private final MyUseCase myUseCase;
 {{^lombok}}
 
