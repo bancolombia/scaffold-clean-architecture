@@ -23,7 +23,7 @@ public class InternalTask extends CleanArchitectureDefaultTask {
   }
 
   @TaskAction
-  public void persistAnalyticsState() throws IOException {
+  public void executeAction() throws IOException {
     if (Objects.requireNonNull(action) == Action.SONARCHECK) {
       SonarCheck.parse(getProject());
     }

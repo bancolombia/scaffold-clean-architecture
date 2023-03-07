@@ -58,10 +58,10 @@ public class SQSListener implements Runnable {
 
     @Override
     public void run() {
-        while (true) { //nosonar
+        while (true) {
             try {
                 listen();
-            } catch (Exception e) { //nosonar
+            } catch (Exception e) {
                 log.warn("Error from SQS", e);
             }
         }

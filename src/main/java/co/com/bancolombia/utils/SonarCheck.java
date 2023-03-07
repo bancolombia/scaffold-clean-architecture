@@ -14,8 +14,8 @@ import org.gradle.api.Project;
 /** This class should translate the dependency check vulnerabilities to sonar issues */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SonarCheck {
-  private static final String INPUT = "build/reports/dependency-check-report.json";
-  private static final String OUTPUT = "build/reports/dependency-check-sonar.json";
+  public static final String INPUT = "build/reports/dependency-check-report.json";
+  public static final String OUTPUT = "build/reports/dependency-check-sonar.json";
   public static final String DEFAULT_LOCATION =
       "src/main/java/co/com/bancolombia/MainApplication.java";
 
