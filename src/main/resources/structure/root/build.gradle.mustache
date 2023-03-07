@@ -63,7 +63,9 @@ sonarqube {
         property "sonar.sourceEnconding", "UTF-8"
         property "sonar.modules", "${modules.join(',')}"
         property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
+        {{^example}}
         property "sonar.exclusions","**/MainApplication.java"
+        {{/example}}
         property "sonar.test", "src/test"
         property "sonar.java.binaries", "{{sonar.java.binaries}}"
         property "sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}"

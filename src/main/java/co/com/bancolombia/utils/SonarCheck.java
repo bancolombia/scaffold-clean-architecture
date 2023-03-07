@@ -170,7 +170,7 @@ public class SonarCheck {
   public static class TextRange {
     @Builder.Default private final int startLine = 7;
     @Builder.Default private final int endLine = 7;
-    @Builder.Default private final int startColumn = 14;
-    @Builder.Default private final int endColumn = 29;
+    @Builder.Default private final int startColumn = 13;
+    @Builder.Default private final int endColumn = 28;
   }
 }

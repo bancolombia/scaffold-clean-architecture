@@ -32,9 +32,8 @@ public class DynamoDBTemplateAdapter extends TemplateAdapterOperations<Object /*
             Map<String, AttributeValue> eav = new HashMap<>();
             eav.put(":val1", new AttributeValue().withS(key));
 
-            DynamoDBQueryExpression<ModelEntity /*adapter model*/> queryExpression = new DynamoDBQueryExpression<ModelEntity /*adapter model*/>()
+            return new DynamoDBQueryExpression<ModelEntity /*adapter model*/>()
                     .withKeyConditionExpression("someKey = :val1")
                     .withExpressionAttributeValues(eav);
-            return queryExpression;
         }
 }
