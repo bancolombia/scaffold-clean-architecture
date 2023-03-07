@@ -17,7 +17,7 @@ public class SonarCheck {
   private static final String INPUT = "build/reports/dependency-check-report.json";
   private static final String OUTPUT = "build/reports/dependency-check-sonar.json";
   public static final String DEFAULT_LOCATION =
-      "applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java";
+      "src/main/java/co/com/bancolombia/MainApplication.java";
 
   public static void parse(Project project) throws IOException {
     final ObjectMapper mapper =
