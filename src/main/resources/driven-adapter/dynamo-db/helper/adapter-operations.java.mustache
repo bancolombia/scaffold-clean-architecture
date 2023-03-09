@@ -15,7 +15,6 @@ import java.lang.reflect.ParameterizedType;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 public abstract class TemplateAdapterOperations<E, K, V> {
@@ -55,17 +54,18 @@ public abstract class TemplateAdapterOperations<E, K, V> {
 
     public List<E> query(DynamoDBQueryExpression<V> queryExpression) {
         PaginatedQueryList<V> result = dynamoDBMapper.query(dataClass,queryExpression);
-        return result.stream().map(this::toModel).collect(Collectors.toList());
+        return result.stream().map(this::toModel).toList();
     }
 
     /**
      * @implNote  Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
      * @return List<E>
+     * @deprecated 
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public List<E> scan() {
         PaginatedScanList<V> result = dynamoDBMapper.scan(dataClass, new DynamoDBScanExpression());
-        return result.stream().map(this::toModel).collect(Collectors.toList());
+        return result.stream().map(this::toModel).toList();
     }
 
     protected V toEntity(E model) {

@@ -73,13 +73,18 @@ public class SQSListener implements Runnable {
         response.messages()
                 .stream()
                 .parallel()
-                {{#metrics}}
-                .peek(message -> timer.record(() -> consumer.accept(message)))
-                {{/metrics}}
-                {{^metrics}}
-                .peek(message -> consumer.accept(message))
-                {{/metrics}}
+                .map(this::process)
                 .forEach(this::confirm);
+    }
+
+    private Message process(Message message) {
+        {{#metrics}}
+        timer.record(() -> consumer.accept(message))
+        {{/metrics}}
+        {{^metrics}}
+        consumer.accept(message);
+        {{/metrics}}
+        return message;
     }
 
     @SneakyThrows

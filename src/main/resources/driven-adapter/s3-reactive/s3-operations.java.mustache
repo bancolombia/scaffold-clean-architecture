@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 {{/lombok}}
+import software.amazon.awssdk.core.BytesWrapper;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
@@ -53,7 +54,8 @@ public class S3Operations {
         return Mono.fromFuture(s3AsyncClient.listObjects(ListObjectsRequest
                 .builder()
                 .bucket(bucketName)
-                .build())).map(response -> response.contents());
+                .build()))
+                .map(ListObjectsResponse::contents);
     }
 
     public Mono<InputStream> getObject(String bucketName,String objectKey) {
@@ -61,7 +63,7 @@ public class S3Operations {
                 .key(objectKey)
                 .bucket(bucketName)
                 .build(), AsyncResponseTransformer.toBytes()))
-                .map(response -> response.asInputStream());
+                .map(BytesWrapper::asInputStream);
     }
 
     public Mono<Boolean> deleteObject(String bucketName,String objectKey) {

@@ -89,6 +89,7 @@ public class ModuleBuilder {
     params.put("secretsVersion", Constants.SECRETS_VERSION);
     loadPackage();
     loadLanguage();
+    loadIsExample();
   }
 
   public void persist() throws IOException {
@@ -342,6 +343,17 @@ public class ModuleBuilder {
       addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
     } catch (IOException e) {
       logger.debug("cannot read package from gradle.properties");
+    }
+  }
+
+  private void loadIsExample() {
+    final String param = "example";
+    try {
+      this.params.put(
+          param, "true".equals(FileUtils.readProperties(project.getProjectDir().getPath(), param)));
+    } catch (IOException e) {
+      logger.debug("cannot read example from gradle.properties");
+      this.params.put(param, false);
     }
   }
 

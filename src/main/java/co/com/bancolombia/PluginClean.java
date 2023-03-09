@@ -145,6 +145,14 @@ public class PluginClean implements Plugin<Project> {
             .group(Constants.PLUGIN_TASK_GROUP)
             .taskAction(AnalyticsTask.class)
             .build());
+    tasksModels.add(
+        TaskModel.builder()
+            .name("internalTask")
+            .shortcut("it")
+            .description("Run non final user task")
+            .group(Constants.PLUGIN_TASK_GROUP)
+            .taskAction(InternalTask.class)
+            .build());
     return tasksModels;
   }
 

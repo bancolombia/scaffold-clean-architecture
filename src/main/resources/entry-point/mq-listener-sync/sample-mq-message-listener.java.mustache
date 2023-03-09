@@ -9,11 +9,10 @@ import io.micrometer.core.instrument.Timer;
 import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.TextMessage;
+import jakarta.jms.JMSException;
+import jakarta.jms.Message;
+import jakarta.jms.TextMessage;
 {{#metrics}}
 import java.util.concurrent.TimeUnit;
 {{/metrics}}

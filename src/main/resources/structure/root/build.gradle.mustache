@@ -13,10 +13,26 @@ buildscript {
         lombokVersion = '{{lombokVersion}}'
         {{/lombok}}
 	}
+	{{#example}}
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:{{pluginVersion}}"
+    }
+    {{/example}}
 }
 
 plugins {
+    {{^example}}
 	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+	{{/example}}
+    {{#example}}
+    id "org.owasp.dependencycheck" version "8.1.2" apply false
+    {{/example}}
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'org.sonarqube' version "${sonarVersion}"
 	{{#jacoco}}
@@ -26,14 +42,30 @@ plugins {
 	id 'net.saliman.cobertura' version "${coberturaVersion}"
 	{{/cobertura}}
 }
+{{#example}}
+apply plugin: "co.com.bancolombia.cleanArchitecture"
+{{/example}}
 
 sonarqube {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
     properties {
+        {{#example}}
+        property "sonar.organization", "grupo-bancolombia"
+        {{#reactive}}
+        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated"
+        {{/reactive}}
+        {{^reactive}}
+        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated-i"
+        {{/reactive}}
+        property "sonar.host.url", "https://sonarcloud.io/"
+        property "sonar.externalIssuesReportPaths", "build/reports/dependency-check-sonar.json"
+        {{/example}}
         property "sonar.sourceEnconding", "UTF-8"
         property "sonar.modules", "${modules.join(',')}"
         property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
+        {{^example}}
         property "sonar.exclusions","**/MainApplication.java"
+        {{/example}}
         property "sonar.test", "src/test"
         property "sonar.java.binaries", "{{sonar.java.binaries}}"
         property "sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}"
