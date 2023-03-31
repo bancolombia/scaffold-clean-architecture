@@ -37,33 +37,48 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Next steps will only run if generation code templates have been changed
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            templates:
+              - 'src/main/resources/**'
       # Generated code Analysis
       - name: Publish local
+        if: steps.changes.outputs.templates == 'true'
         run: ./publish_plugin_local.sh
       - name: Set up JDK 17
+        if: steps.changes.outputs.templates == 'true'
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin' 
           java-version: 17
+      # Generated code reactive
       - name: Generate project to scan
+        if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh reactive
       - name: Scan generated project dependencies
+        if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project
-        if: github.event.pull_request.head.repo.fork == false
+        if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Generated code reactive
       - name: Generate project to scan [imperative]
+        if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh imperative
       - name: Scan generated project dependencies [imperative]
+        if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project [imperative]
-        if: github.event.pull_request.head.repo.fork == false
+        if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
