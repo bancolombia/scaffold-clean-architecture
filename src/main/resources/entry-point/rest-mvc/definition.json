@@ -5,7 +5,7 @@
   "files": {},
   "java": {
     "entry-point/rest-mvc/api.java.mustache": "infrastructure/entry-points/api-rest/src/main/{{language}}/{{packagePath}}/api/ApiRest.java",
-    "entry-point/rest-mvc/api.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/main/{{language}}/{{packagePath}}/api/ApiRestTest.java",
+    "entry-point/rest-mvc/api.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/{{language}}/{{packagePath}}/api/ApiRestTest.java",
     "entry-point/rest-mvc/build.gradle.mustache": "infrastructure/entry-points/api-rest/build.gradle"
   },
   "kotlin": {
