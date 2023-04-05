@@ -1,0 +1,15 @@
+package {{package}}.api;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ApiRestTest {
+
+    ApiRest apiRest = new ApiRest();
+    @Test
+    void name() {
+        var response = apiRest.commandName();
+        assertEquals("Hello World", response);
+    }
+}
