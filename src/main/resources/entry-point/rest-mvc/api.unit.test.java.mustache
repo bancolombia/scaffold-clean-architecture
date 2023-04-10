@@ -7,8 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ApiRestTest {
 
     ApiRest apiRest = new ApiRest();
+
     @Test
-    void name() {
+    void apiRestTest() {
         var response = apiRest.commandName();
         assertEquals("Hello World", response);
     }
