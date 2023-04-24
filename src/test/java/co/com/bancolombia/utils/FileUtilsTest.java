@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -38,7 +37,7 @@ public class FileUtilsTest {
   public void readFile() throws IOException {
     Project project =
         ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-    String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
+    String response = FileUtils.readFile(project, "temp.txt");
 
     assertEquals("hello", response);
   }
@@ -75,7 +74,7 @@ public class FileUtilsTest {
   public void writeString() throws IOException {
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/tmp")).build();
     FileUtils.writeString(project, "temp.txt", "hello");
-    String response = FileUtils.readFile(project, "temp.txt").collect(Collectors.joining());
+    String response = FileUtils.readFile(project, "temp.txt");
 
     assertEquals("hello", response);
   }

@@ -412,7 +412,7 @@ public class ModuleBuilder {
     FileModel current = files.get(finalPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(getProject(), finalPath).collect(Collectors.joining("\n"));
+      content = FileUtils.readFile(getProject(), finalPath);
     } else {
       content = current.getContent();
     }
