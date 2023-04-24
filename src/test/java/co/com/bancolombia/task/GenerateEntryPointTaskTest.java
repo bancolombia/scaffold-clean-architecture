@@ -178,6 +178,10 @@ public class GenerateEntryPointTaskTest {
             .exists());
     assertTrue(
         new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api/ApiRestTest.java")
+            .exists());
+    assertTrue(
+        new File(
                 "build/unitTest/infrastructure/entry-points/api-rest/src/test/java/co/com/bancolombia/api")
             .exists());
   }

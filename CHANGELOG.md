@@ -1,5 +1,22 @@
 # Changelog
 
+## [3.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.2) (2023-04-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.1...3.0.2)
+
+**Merged pull requests:**
+
+- Performance test update and test fix [\#349](https://github.com/bancolombia/scaffold-clean-architecture/pull/349) ([maocq](https://github.com/maocq))
+
+## [3.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.1) (2023-03-31)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.0...3.0.1)
+
+**Merged pull requests:**
+
+- fix upgrade junit [\#348](https://github.com/bancolombia/scaffold-clean-architecture/pull/348) ([juancgalvis](https://github.com/juancgalvis))
+- Feature/generated code analysis [\#347](https://github.com/bancolombia/scaffold-clean-architecture/pull/347) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [3.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0) (2023-02-27)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.0-alpha...3.0.0)
