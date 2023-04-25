@@ -46,7 +46,8 @@ public class UpgradeY2023M02D08JavaxJakarta implements UpgradeAction {
         applied.set(true);
       }
     } catch (IOException e) {
-      logger.warn("Error applying javax to jakarta persistence", e);
+      logger.warn(
+          "Error applying javax to jakarta persistence on file {}", file.getAbsoluteFile(), e);
     }
   }
 

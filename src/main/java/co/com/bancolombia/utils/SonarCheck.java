@@ -31,7 +31,7 @@ public class SonarCheck {
     List<Issue> issues;
     if (project.file(INPUT).exists()) {
       issues =
-          FileUtils.readFile(project, INPUT)
+          Stream.of(FileUtils.readFile(project, INPUT))
               .map(content -> getReport(content, mapper))
               .flatMap(report -> report.dependencies.stream())
               .filter(

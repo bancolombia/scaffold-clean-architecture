@@ -9,7 +9,7 @@ public class Constants {
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
   public static final String SECRETS_VERSION = "4.0.0";
-  public static final String SPRING_BOOT_VERSION = "3.0.4";
+  public static final String SPRING_BOOT_VERSION = "3.0.6";
   public static final String SONAR_VERSION = "4.0.0.2929";
   public static final String LOMBOK_VERSION = "1.18.26";
   public static final String JACOCO_VERSION = "0.8.8";

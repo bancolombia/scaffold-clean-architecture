@@ -6,6 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.*;
+import java.nio.charset.MalformedInputException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.IOUtils;
@@ -32,10 +34,21 @@ public class FileUtils {
     }
   }
 
-  public static Stream<String> readFile(Project project, String filePath) throws IOException {
+  public static String readFile(Project project, String filePath) throws IOException {
     File file = project.file(filePath).getAbsoluteFile();
     project.getLogger().debug(file.getAbsolutePath());
-    return Files.lines(Paths.get(file.toURI()));
+    try {
+      return Files.lines(Paths.get(file.toURI())).collect(Collectors.joining("\n"));
+    } catch (MalformedInputException e) {
+      project
+          .getLogger()
+          .warn(
+              "error '{}' reading file {}, trying to read with ISO_8859_1 charset",
+              e.getMessage(),
+              file.getAbsoluteFile());
+      return Files.lines(Paths.get(file.toURI()), StandardCharsets.ISO_8859_1)
+          .collect(Collectors.joining("\n"));
+    }
   }
 
   public static List<File> finderSubProjects(String dirPath) {
