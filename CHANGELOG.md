@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.3) (2023-04-25)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.2...3.0.3)
+
+**Merged pull requests:**
+
+- Feature/charsets [\#352](https://github.com/bancolombia/scaffold-clean-architecture/pull/352) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [3.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.2) (2023-04-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.1...3.0.2)
