@@ -31,9 +31,6 @@ public class UpgradeY2023M05D04BlockHoundTest {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
-    //    when(project.getRootDir()).thenReturn(new File("Sample.java"));
-    //    when(project.getName()).thenReturn("api-rest");
-    //    when(project.getSubprojects()).thenReturn(Set.of(project));
     builder = spy(new ModuleBuilder(project));
     doReturn(true).when(builder).isReactive();
     updater = new UpgradeY2023M05D04BlockHound();
