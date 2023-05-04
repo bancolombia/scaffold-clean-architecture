@@ -87,6 +87,7 @@ public class ModuleBuilder {
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
     params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
+    params.put("blockHoundVersion", Constants.BLOCK_HOUND_VERSION);
     loadPackage();
     loadLanguage();
     loadIsExample();
