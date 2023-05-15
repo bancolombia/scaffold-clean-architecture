@@ -22,6 +22,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
+  private BooleanOption withExample = BooleanOption.FALSE;
   private Language language = Language.JAVA;
   private JavaVersion javaVersion = JavaVersion.VERSION_17;
 
@@ -70,6 +71,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     this.force = force;
   }
 
+  @Option(option = "example", description = "Generate locally for example")
+  public void setWithExample(BooleanOption withExample) {
+    this.withExample = withExample;
+  }
+
   @OptionValues("type")
   public List<ProjectType> getAvailableProjectTypes() {
     return Arrays.asList(ProjectType.values());
@@ -115,6 +121,7 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("metrics", metrics == BooleanOption.TRUE);
+    builder.addParam("example", withExample == BooleanOption.TRUE);
     builder.addParam("language", language.name().toLowerCase());
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java8", javaVersion == JavaVersion.VERSION_1_8);

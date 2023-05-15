@@ -17,13 +17,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@d171c3b028d844f2bf14e9fdec0c58114451e4bf
+      - uses: actions/checkout@v3
       - name: Set up JDK 11
-        uses: actions/setup-java@e54a62b3df9364d4b4c1c29c7225e57fe605d7dd
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin' 
           java-version: 11
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
       - name: Validate code formatting
         run: ./gradlew verGJF
       - name: Execute build test and report
@@ -34,20 +33,69 @@ jobs:
         run: bash <(curl -s https://codecov.io/bash)
       - name: Run sonarqube
         if: github.event.pull_request.head.repo.fork == false
-        run: ./gradlew sonarqube --stacktrace
+        run: ./gradlew sonarqube --stacktrace 
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Next steps will only run if generation code templates have been changed
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            templates:
+              - 'src/main/resources/**'
+      # Generated code Analysis
+      - name: Publish local
+        if: steps.changes.outputs.templates == 'true'
+        run: ./publish_plugin_local.sh
+      - name: Set up JDK 17
+        if: steps.changes.outputs.templates == 'true'
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' 
+          java-version: 17
+      # Generated code reactive
+      - name: Generate project to scan
+        if: steps.changes.outputs.templates == 'true'
+        run: ./generate_project.sh reactive
+      - name: Scan generated project dependencies
+        if: steps.changes.outputs.templates == 'true'
+        working-directory: ./build/toscan
+        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+      - name: Sonar analysis for generated project
+        if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
+        working-directory: ./build/toscan
+        run: ./gradlew sonarqube --stacktrace
+          -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Generated code reactive
+      - name: Generate project to scan [imperative]
+        if: steps.changes.outputs.templates == 'true'
+        run: ./generate_project.sh imperative
+      - name: Scan generated project dependencies [imperative]
+        if: steps.changes.outputs.templates == 'true'
+        working-directory: ./build/toscan
+        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+      - name: Sonar analysis for generated project [imperative]
+        if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
+        working-directory: ./build/toscan
+        run: ./gradlew sonarqube --stacktrace
+          -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
 
   release:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - uses: actions/checkout@d171c3b028d844f2bf14e9fdec0c58114451e4bf
+      - uses: actions/checkout@v3
       - name: Set up JDK 11
-        uses: actions/setup-java@e54a62b3df9364d4b4c1c29c7225e57fe605d7dd
+        uses: actions/setup-java@v3
         with:
+          distribution: 'temurin' 
           java-version: 11
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -71,7 +119,7 @@ jobs:
           issuesWoLabels: true
           stripGeneratorNotice: true
       - name: Save version
-        uses: github-actions-x/commit@722d56b8968bf00ced78407bbe2ead81062d8baa
+        uses: github-actions-x/commit@v2.9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           push-branch: "master"

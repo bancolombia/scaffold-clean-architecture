@@ -16,7 +16,7 @@ public abstract class TemplateAdapterOperations<E, K, V> {
     private final Function<V, E> toEntityFn;
 
     @SuppressWarnings("unchecked")
-    public TemplateAdapterOperations(RedisConnectionFactory connectionFactory, ObjectMapper mapper, Function<V, E> toEntityFn) {
+    protected TemplateAdapterOperations(RedisConnectionFactory connectionFactory, ObjectMapper mapper, Function<V, E> toEntityFn) {
         this.mapper = mapper;
         ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
         this.dataClass = (Class<V>) genericSuperclass.getActualTypeArguments()[2];

@@ -26,6 +26,9 @@ subprojects {
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{blockHoundVersion}}'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
         testImplementation 'io.projectreactor:reactor-test'
         {{/reactive}}
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -37,6 +40,16 @@ subprojects {
         {{/lombok}}
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
+
+    {{#reactive}}
+    tasks.withType(Test).configureEach {
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+            jvmArgs += [
+                    "-XX:+AllowRedefinitionToAddDeleteMethods"
+            ]
+        }
+    }
+    {{/reactive}}
 
     {{#jacoco}}
     test.finalizedBy(project.tasks.jacocoTestReport)

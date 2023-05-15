@@ -87,8 +87,10 @@ public class ModuleBuilder {
     params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
     params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
+    params.put("blockHoundVersion", Constants.BLOCK_HOUND_VERSION);
     loadPackage();
     loadLanguage();
+    loadIsExample();
   }
 
   public void persist() throws IOException {
@@ -345,6 +347,17 @@ public class ModuleBuilder {
     }
   }
 
+  private void loadIsExample() {
+    final String param = "example";
+    try {
+      this.params.put(
+          param, "true".equals(FileUtils.readProperties(project.getProjectDir().getPath(), param)));
+    } catch (IOException e) {
+      logger.debug("cannot read example from gradle.properties");
+      this.params.put(param, false);
+    }
+  }
+
   private void loadLanguage() {
     String language = null;
     try {
@@ -400,7 +413,7 @@ public class ModuleBuilder {
     FileModel current = files.get(finalPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(getProject(), finalPath).collect(Collectors.joining("\n"));
+      content = FileUtils.readFile(getProject(), finalPath);
     } else {
       content = current.getContent();
     }

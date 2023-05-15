@@ -5,6 +5,7 @@ import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.RestConsumer;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -46,7 +47,13 @@ public class RestService {
     @Override
     public Release getLatestPluginVersion() {
       try {
-        return RestConsumer.callRequest(PLUGIN_RELEASES, Release[].class)[0];
+        return Arrays.stream(RestConsumer.callRequest(PLUGIN_RELEASES, Release[].class))
+            .filter(
+                release ->
+                    !release.getTagName().contains("alpha")
+                        && !release.getTagName().contains("beta"))
+            .findFirst()
+            .orElse(null);
       } catch (Exception e) {
         logger.lifecycle(
             "\tx Can't check the latest version of the plugin, reason: {}", e.getMessage());

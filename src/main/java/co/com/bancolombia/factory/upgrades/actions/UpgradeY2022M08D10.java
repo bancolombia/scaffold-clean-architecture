@@ -10,9 +10,9 @@ public class UpgradeY2022M08D10 extends UpgradeMainGradle implements UpgradeActi
   public static final String VALIDATION = "useJUnitPlatform";
 
   public static final String JUNIT_PLATFORM_VALUER =
-      "\n    test {\n" + "        useJUnitPlatform()\n" + "    }\n\n";
+      "\n\ttest {\n" + "        useJUnitPlatform()\n" + "    }\n\n\t";
 
-  public static final String MATCH = "\tdependencies";
+  public static final String MATCH = "dependencies";
 
   @Override
   @SneakyThrows

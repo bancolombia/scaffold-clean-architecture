@@ -1,5 +1,43 @@
 # Changelog
 
+## [3.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.3) (2023-04-25)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.2...3.0.3)
+
+**Merged pull requests:**
+
+- Feature/charsets [\#352](https://github.com/bancolombia/scaffold-clean-architecture/pull/352) ([juancgalvis](https://github.com/juancgalvis))
+
+## [3.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.2) (2023-04-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.1...3.0.2)
+
+**Merged pull requests:**
+
+- Performance test update and test fix [\#349](https://github.com/bancolombia/scaffold-clean-architecture/pull/349) ([maocq](https://github.com/maocq))
+
+## [3.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.1) (2023-03-31)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.0...3.0.1)
+
+**Merged pull requests:**
+
+- fix upgrade junit [\#348](https://github.com/bancolombia/scaffold-clean-architecture/pull/348) ([juancgalvis](https://github.com/juancgalvis))
+- Feature/generated code analysis [\#347](https://github.com/bancolombia/scaffold-clean-architecture/pull/347) ([juancgalvis](https://github.com/juancgalvis))
+
+## [3.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0) (2023-02-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.0-alpha...3.0.0)
+
+**Closed issues:**
+
+- Change the automatic use of @Data as a good practice of Clean Code [\#332](https://github.com/bancolombia/scaffold-clean-architecture/issues/332)
+
+**Merged pull requests:**
+
+- fix release task [\#344](https://github.com/bancolombia/scaffold-clean-architecture/pull/344) ([santitigaga](https://github.com/santitigaga))
+- replace @Data [\#333](https://github.com/bancolombia/scaffold-clean-architecture/pull/333) ([santitigaga](https://github.com/santitigaga))
+
 ## [3.0.0-alpha](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.0-alpha) (2023-02-16)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/2.4.10...3.0.0-alpha)
