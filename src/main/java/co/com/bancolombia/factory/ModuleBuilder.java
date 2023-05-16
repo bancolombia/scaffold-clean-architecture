@@ -88,6 +88,7 @@ public class ModuleBuilder {
     params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
     params.put("blockHoundVersion", Constants.BLOCK_HOUND_VERSION);
+    params.put("archUnitVersion", Constants.ARCH_UNIT_VERSION);
     loadPackage();
     loadLanguage();
     loadIsExample();

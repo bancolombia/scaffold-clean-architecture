@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.APP_SERVICE;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
@@ -13,20 +14,17 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.DependencySet;
-import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.TaskAction;
 
-public abstract class ValidateStructureTask extends DefaultTask {
-  private final Logger logger = getProject().getLogger();
+public abstract class ValidateStructureTask extends CleanArchitectureDefaultTask {
   private static final String MODEL_MODULE = "model";
   private static final String USE_CASE_MODULE = "usecase";
   private static final String REACTOR_CORE = "reactor-core";
@@ -45,6 +43,8 @@ public abstract class ValidateStructureTask extends DefaultTask {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
     logger.lifecycle("Project Package: {}", packageName);
+
+    ArchitectureValidation.inject(getProject(), builder);
 
     if (!validateModelLayer()) {
       throw new CleanException("Model module is invalid");

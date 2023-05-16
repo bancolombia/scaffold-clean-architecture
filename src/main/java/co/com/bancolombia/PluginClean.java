@@ -15,7 +15,7 @@ public class PluginClean implements Plugin<Project> {
   private CleanPluginExtension cleanPluginExtension;
 
   public void apply(Project project) {
-
+    project.getPluginManager().apply("java");
     cleanPluginExtension =
         project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
 
@@ -23,6 +23,10 @@ public class PluginClean implements Plugin<Project> {
     List<TaskModel> tasks = initTasks();
 
     tasks.forEach(this::appendTask);
+    taskContainer
+        .getByName("compileJava")
+        .getDependsOn()
+        .add(taskContainer.getByName("validateStructure"));
   }
 
   private List<TaskModel> initTasks() {
