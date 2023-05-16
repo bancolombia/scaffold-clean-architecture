@@ -23,6 +23,10 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
+      - run: npx semantic-release@21.0.2
+        name: semantic version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate code formatting
         run: ./gradlew verGJF
       - name: Execute build test and report
@@ -97,6 +101,10 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
+      - name: install semantic release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Upgrade README.md
