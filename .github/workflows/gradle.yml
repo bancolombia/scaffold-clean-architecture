@@ -23,6 +23,7 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
+      - run: npm -g install @semantic-release/git semantic-release && semantic-release
       - run: npx semantic-release@21.0.2
         name: semantic version
         env:
