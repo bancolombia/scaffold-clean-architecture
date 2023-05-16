@@ -23,6 +23,9 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
       - run: npm -g install @semantic-release/git semantic-release && semantic-release
       - run: npx semantic-release@21.0.2
         name: semantic version
