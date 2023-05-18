@@ -5,8 +5,10 @@
   "files": {},
   "java": {
     "driven-adapter/jpa-repository/config/jpa-config.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/config/JpaConfig.java",
+    "driven-adapter/jpa-repository/config/jpa-config.unit.test.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/test/{{language}}/{{packagePath}}/jpa/config/JpaConfigTest.java",
     "driven-adapter/jpa-repository/config/db-secret.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/config/DBSecret.java",
     "driven-adapter/jpa-repository/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/helper/AdapterOperations.java",
+    "driven-adapter/jpa-repository/helper/adapter-operations.unit.test.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/test/{{language}}/{{packagePath}}/jpa/helper/AdapterOperationsTest.java",
     "driven-adapter/jpa-repository/jpa-repository.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepository.java",
     "driven-adapter/jpa-repository/jpa-repository-adapter.java.mustache": "infrastructure/driven-adapters/jpa-repository/src/main/{{language}}/{{packagePath}}/jpa/JPARepositoryAdapter.java",
     "driven-adapter/jpa-repository/build.gradle.mustache": "infrastructure/driven-adapters/jpa-repository/build.gradle"
