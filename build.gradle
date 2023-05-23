@@ -35,8 +35,8 @@ group 'co.com.bancolombia.cleanArchitecture'
 version System.getProperty('version')
 
 compileJava {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -45,18 +45,18 @@ repositories {
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.10'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.1'
     implementation 'org.reflections:reflections:0.10.2'
-    api 'commons-io:commons-io:2.11.0'
+    api 'commons-io:commons-io:2.12.0'
     api gradleApi()
     testImplementation 'org.mockito:mockito-core:4.5.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation gradleTestKit()
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
 }

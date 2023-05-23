@@ -4,7 +4,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.AZURE);
+    task.setType("AZURE");
     task.generatePipelineTask();
 
     assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
@@ -56,7 +55,7 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateJenkinsPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.JENKINS);
+    task.setType("JENKINS");
     task.generatePipelineTask();
 
     assertTrue(new File("build/unitTest/deployment/Jenkinsfile").exists());
@@ -65,7 +64,7 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateCircleCIPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.CIRCLECI);
+    task.setType("CIRCLECI");
     task.generatePipelineTask();
 
     assertTrue(new File("build/unitTest/.circleci/config.yml").exists());
@@ -74,7 +73,7 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateGithubActionTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
+    task.setType("GITHUB");
     task.generatePipelineTask();
 
     assertTrue(

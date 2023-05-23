@@ -11,7 +11,7 @@ import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
-public class DrivenAdapterR2dbcPostgreSQL implements ModuleFactory {
+public class DrivenAdapterR2dbc implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {

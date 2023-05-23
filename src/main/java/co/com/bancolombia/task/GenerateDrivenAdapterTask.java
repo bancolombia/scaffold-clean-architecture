@@ -5,8 +5,6 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter.DrivenAdapterType;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -16,7 +14,7 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
-  private DrivenAdapterType type;
+  private String type;
   private String name;
   private String url = "http://localhost:8080";
   private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
@@ -25,7 +23,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
   private BooleanOption secret = BooleanOption.FALSE;
 
   @Option(option = "type", description = "Set type of driven adapter to be generated")
-  public void setType(DrivenAdapterType type) {
+  public void setType(String type) {
     this.type = type;
   }
 
@@ -50,8 +48,8 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
   }
 
   @OptionValues("type")
-  public List<DrivenAdapterType> getTypes() {
-    return Arrays.asList(DrivenAdapterType.values());
+  public List<String> getTypes() {
+    return super.resolveTypes();
   }
 
   @OptionValues("secret")
@@ -60,7 +58,7 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
   }
 
   @Option(option = "cache-mode", description = "Set value for cache type")
-  public void setcacheMode(DrivenAdapterBinStash.CacheMode cacheMode) {
+  public void setCacheMode(DrivenAdapterBinStash.CacheMode cacheMode) {
     this.cacheMode = cacheMode;
   }
 
@@ -74,7 +72,8 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
               + "--type "
               + Utils.formatTaskOptions(getTypes()));
     }
-    ModuleFactory moduleFactory = ModuleFactoryDrivenAdapter.getDrivenAdapterFactory(type);
+    getTypes().forEach(x -> getProject().getLogger().lifecycle(x));
+    ModuleFactory moduleFactory = resolveFactory(type);
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Driven Adapter type: {}", type);
     builder.addParam("task-param-name", name);
@@ -86,6 +85,16 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     builder.addParam("task-param-url", url);
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(type.name(), System.currentTimeMillis() - start);
+    sendAnalytics(type, System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected String resolvePrefix() {
+    return "DrivenAdapter";
+  }
+
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.adapters";
   }
 }

@@ -5,7 +5,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -159,7 +158,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    generateDriven.setType("MONGODB");
     generateDriven.generateDrivenAdapterTask();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);
@@ -221,7 +220,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    generateDriven.setType("MONGODB");
     generateDriven.generateDrivenAdapterTask();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);

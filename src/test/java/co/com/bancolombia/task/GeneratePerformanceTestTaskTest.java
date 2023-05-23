@@ -5,7 +5,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.tests.performance.ModuleFactoryPerformanceTests.PerformanceTestType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -52,7 +51,7 @@ public class GeneratePerformanceTestTaskTest {
 
   @Test
   public void generatePerformanceTest() throws IOException, CleanException {
-    task.setType(PerformanceTestType.JMETER);
+    task.setType("JMETER");
     task.generateAcceptanceTestTask();
 
     assertTrue(new File("build/unitTest/performance-test/README.md").exists());

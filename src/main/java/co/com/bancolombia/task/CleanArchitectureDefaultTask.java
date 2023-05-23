@@ -4,9 +4,15 @@ import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.analytics.AnalyticsBody;
 import co.com.bancolombia.analytics.AnalyticsExporter;
+import co.com.bancolombia.exceptions.InvalidTaskOptionException;
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.ModuleFactory;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
+import lombok.SneakyThrows;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.Task;
 import org.gradle.api.internal.tasks.options.OptionReader;
@@ -15,6 +21,8 @@ import org.gradle.configuration.TaskDetailPrinter;
 import org.gradle.execution.TaskSelection;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
 public class CleanArchitectureDefaultTask extends DefaultTask {
   protected final ModuleBuilder builder = new ModuleBuilder(getProject());
@@ -43,6 +51,43 @@ public class CleanArchitectureDefaultTask extends DefaultTask {
   @Inject
   protected OptionReader getOptionReader() {
     throw new UnsupportedOperationException();
+  }
+
+  @SneakyThrows
+  protected ModuleFactory resolveFactory(String type) {
+    return getCandidates(resolvePackage())
+        .filter(clazz -> clazz.getSimpleName().replace(resolvePrefix(), "").equalsIgnoreCase(type))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new InvalidTaskOptionException(
+                    resolvePrefix()
+                        + " of type "
+                        + type
+                        + " not found, valid values: "
+                        + resolveTypes()))
+        .getDeclaredConstructor()
+        .newInstance();
+  }
+
+  @SneakyThrows
+  protected List<String> resolveTypes() {
+    return getCandidates(resolvePackage())
+        .map(clazz -> clazz.getSimpleName().replace(resolvePrefix(), "").toUpperCase())
+        .collect(Collectors.toList());
+  }
+
+  protected String resolvePrefix() {
+    throw new UnsupportedOperationException("Method not implemented");
+  }
+
+  protected String resolvePackage() {
+    throw new UnsupportedOperationException("Method not implemented");
+  }
+
+  private Stream<Class<? extends ModuleFactory>> getCandidates(String packageName) {
+    return new Reflections(packageName, Scanners.SubTypes)
+        .getSubTypesOf(ModuleFactory.class).stream();
   }
 
   protected void sendAnalytics(long duration) {

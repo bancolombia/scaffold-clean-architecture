@@ -11,18 +11,18 @@ import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
 
 public class PluginClean implements Plugin<Project> {
-  private TaskContainer taskContainer;
   private CleanPluginExtension cleanPluginExtension;
 
   public void apply(Project project) {
-
     cleanPluginExtension =
         project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
 
-    taskContainer = project.getTasks();
-    List<TaskModel> tasks = initTasks();
+    TaskContainer taskContainer = project.getTasks();
+    withExternalTasks(initTasks()).forEach(task -> this.appendTask(taskContainer, task));
+  }
 
-    tasks.forEach(this::appendTask);
+  protected List<TaskModel> withExternalTasks(List<TaskModel> baseTasks) {
+    return baseTasks;
   }
 
   private List<TaskModel> initTasks() {
@@ -157,7 +157,7 @@ public class PluginClean implements Plugin<Project> {
   }
 
   @SuppressWarnings("unchecked")
-  private void appendTask(TaskModel t) {
+  private void appendTask(TaskContainer taskContainer, TaskModel t) {
     if (t.getAction() == null) {
       taskContainer.create(
           t.getName(),

@@ -6,8 +6,6 @@ import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
-import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint;
-import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint.EntryPointType;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,7 +15,7 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
-  private EntryPointType type;
+  private String type;
   private String name;
   private String pathGraphql = PATH_GRAPHQL;
   private Server server = Server.UNDERTOW;
@@ -25,7 +23,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
   private BooleanOption swagger = BooleanOption.FALSE;
 
   @Option(option = "type", description = "Set type of entry point to be generated")
-  public void setType(EntryPointType type) {
+  public void setType(String type) {
     this.type = type;
   }
 
@@ -62,8 +60,8 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
   }
 
   @OptionValues("type")
-  public List<EntryPointType> getTypes() {
-    return Arrays.asList(EntryPointType.values());
+  public List<String> getTypes() {
+    return super.resolveTypes();
   }
 
   @OptionValues("router")
@@ -85,7 +83,7 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
           "No Entry Point is set, usage: gradle generateEntryPoint --type "
               + Utils.formatTaskOptions(getTypes()));
     }
-    ModuleFactory moduleFactory = ModuleFactoryEntryPoint.getEntryPointFactory(type);
+    ModuleFactory moduleFactory = resolveFactory(type);
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Entry Point type: {}", type);
     builder.addParam("task-param-name", name);
@@ -97,6 +95,16 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(type.name(), System.currentTimeMillis() - start);
+    sendAnalytics(type, System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected String resolvePrefix() {
+    return "EntryPoint";
+  }
+
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.entrypoints";
   }
 }

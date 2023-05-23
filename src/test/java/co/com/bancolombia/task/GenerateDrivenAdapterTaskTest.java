@@ -9,7 +9,6 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -62,7 +61,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test(expected = IllegalArgumentException.class)
   public void shouldHandleErrorWhenNoName() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     // Act
     task.generateDrivenAdapterTask();
   }
@@ -71,7 +70,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test(expected = IllegalArgumentException.class)
   public void shouldHandleErrorWhenEmptyName() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     task.setName("");
     // Act
     task.generateDrivenAdapterTask();
@@ -80,7 +79,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     task.setName("MyDrivenAdapter");
     // Act
     task.generateDrivenAdapterTask();
@@ -101,7 +100,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateRestConsumer() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+    task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
     // Act
     task.generateDrivenAdapterTask();
@@ -131,7 +130,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateRsocketRequester() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RSOCKET);
+    task.setType("RSOCKET");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -155,7 +154,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);
+    task.setType("JPA");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -187,7 +186,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -219,7 +218,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
     task.generateDrivenAdapterTask();
@@ -260,7 +259,7 @@ public class GenerateDrivenAdapterTaskTest {
     writeString(
         new File("build/unitTest/gradle.properties"),
         "package=co.com.bancolombia\nsystemProp.version=" + Constants.PLUGIN_VERSION + "\n");
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -293,7 +292,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -327,7 +326,7 @@ public class GenerateDrivenAdapterTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setUrl("http://localhost:8080");
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+    task.setType("RESTCONSUMER");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -356,7 +355,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
+    task.setType("ASYNCEVENTBUS");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -391,7 +390,7 @@ public class GenerateDrivenAdapterTaskTest {
       throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     // Act
     task.generateDrivenAdapterTask();
@@ -416,7 +415,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void shouldHandleErrorBecauseIncompatibility() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
@@ -427,7 +426,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -448,7 +447,7 @@ public class GenerateDrivenAdapterTaskTest {
       throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.BINSTASH);
+    task.setType("BINSTASH");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -464,7 +463,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.R2DBC);
+    task.setType("R2DBC");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -494,7 +493,7 @@ public class GenerateDrivenAdapterTaskTest {
       throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
     task.generateDrivenAdapterTask();
@@ -519,7 +518,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+    task.setType("KMS");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -536,7 +535,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+    task.setType("KMS");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -561,7 +560,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    task.setType("S3");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -590,7 +589,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    task.setType("S3");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -619,7 +618,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateMQSender() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MQ);
+    task.setType("MQ");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -634,7 +633,7 @@ public class GenerateDrivenAdapterTaskTest {
   @Test
   public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.DYNAMODB);
+    task.setType("DYNAMODB");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
@@ -646,7 +645,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterKtorShouldThrowValidationException()
       throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
+    task.setType("KTOR");
     // Act
     task.generateDrivenAdapterTask();
   }
@@ -655,7 +654,7 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateSQSSender() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.SQS);
+    task.setType("SQS");
     // Act
     task.generateDrivenAdapterTask();
     // Assert
