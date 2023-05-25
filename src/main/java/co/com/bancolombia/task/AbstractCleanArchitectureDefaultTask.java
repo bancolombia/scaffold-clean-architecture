@@ -48,6 +48,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   public void executeBaseTask() throws IOException, CleanException {
     long start = System.currentTimeMillis();
     execute();
+    afterExecute();
     resolveAnalyticsType()
         .ifPresentOrElse(
             type -> sendAnalytics(type, System.currentTimeMillis() - start),
@@ -55,6 +56,18 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   }
 
   public abstract void execute() throws IOException, CleanException;
+
+  private void afterExecute() {
+    try {
+      resolveFactory("After" + builder.getStringParam("type")).buildModule(builder);
+    } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
+      getLogger().debug("Task not implements afterExecute");
+    } catch (IOException | CleanException e) {
+      getLogger().warn("Error on afterExecute: ", e);
+    } catch (Exception e) { // NOSONAR
+      getLogger().debug("Some other error", e);
+    }
+  }
 
   protected Optional<String> resolveAnalyticsType() {
     return Optional.empty();
