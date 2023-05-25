@@ -5,15 +5,20 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generateDrivenAdapter",
+    shortcut = "gda",
+    description = "Generate driven adapter in infrastructure layer")
+public class GenerateDrivenAdapterTask extends AbstractCleanArchitectureDefaultTask {
   private String type;
   private String name;
   private String url = "http://localhost:8080";
@@ -62,9 +67,8 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     this.cacheMode = cacheMode;
   }
 
-  @TaskAction
-  public void generateDrivenAdapterTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -85,7 +89,6 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
     builder.addParam("task-param-url", url);
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(type, System.currentTimeMillis() - start);
   }
 
   @Override
@@ -96,5 +99,10 @@ public class GenerateDrivenAdapterTask extends CleanArchitectureDefaultTask {
   @Override
   protected String resolvePackage() {
     return "co.com.bancolombia.factory.adapters";
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(type);
   }
 }

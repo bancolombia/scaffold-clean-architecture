@@ -29,7 +29,7 @@ public class DeleteModuleTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -41,7 +41,7 @@ public class DeleteModuleTaskTest {
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
     generateDriven.setType("MONGODB");
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.execute();
 
     ProjectBuilder.builder()
         .withName("mongo-repository")
@@ -59,27 +59,27 @@ public class DeleteModuleTaskTest {
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
-  public void deleteNullModule() throws IOException {
+  public void deleteNullModule() throws IOException, CleanException {
     // Arrange
     // Act
-    task.deleteModule();
+    task.execute();
   }
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
-  public void deleteNonExistentModule() throws IOException {
+  public void deleteNonExistentModule() throws IOException, CleanException {
     // Arrange
     task.setModule("non-existent");
     // Act
-    task.deleteModule();
+    task.execute();
   }
 
   @Test
-  public void generateEntryPoint() throws IOException {
+  public void generateEntryPoint() throws IOException, CleanException {
     // Arrange
     task.setModule("mongo-repository");
     // Act
-    task.deleteModule();
+    task.execute();
     // Assert
     assertFalse(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")

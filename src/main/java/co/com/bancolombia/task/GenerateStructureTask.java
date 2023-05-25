@@ -4,16 +4,21 @@ import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateStructureTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "cleanArchitecture",
+    shortcut = "ca",
+    description = "Scaffolding clean architecture project")
+public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask {
   private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";
   private ProjectType type = ProjectType.REACTIVE;
@@ -106,9 +111,8 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(JavaVersion.values());
   }
 
-  @TaskAction
-  public void generateStructureTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
@@ -151,9 +155,11 @@ public class GenerateStructureTask extends CleanArchitectureDefaultTask {
     }
 
     builder.persist();
-    sendAnalytics(
-        builder.getBooleanParam(REACTIVE) ? REACTIVE : "imperative",
-        System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(builder.getBooleanParam(REACTIVE) ? REACTIVE : "imperative");
   }
 
   private void loadProperty(String property) {

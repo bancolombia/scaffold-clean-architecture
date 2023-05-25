@@ -36,7 +36,7 @@ public class GenerateEntryPointTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
     caTask.setType(type);
-    caTask.generateStructureTask();
+    caTask.execute();
 
     ProjectBuilder.builder()
         .withProjectDir(new File("build/unitTest/applications/app-service"))
@@ -77,7 +77,7 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     task.setType(null);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   // Assert
@@ -86,7 +86,7 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     task.setType("GENERIC");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   // Assert
@@ -96,7 +96,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("GENERIC");
     task.setName("");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   @Test
@@ -105,7 +105,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("GENERIC");
     task.setName("MyEntryPoint");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/my-entry-point/build.gradle")
@@ -126,7 +126,7 @@ public class GenerateEntryPointTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("RSOCKET");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/rsocket-responder/build.gradle")
@@ -147,7 +147,7 @@ public class GenerateEntryPointTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("GRAPHQL");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle").exists());
@@ -166,7 +166,7 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     task.setType("RESTMVC");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
@@ -191,7 +191,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("RESTMVC");
     task.setSwagger(Constants.BooleanOption.TRUE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
@@ -215,7 +215,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
@@ -247,7 +247,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.JETTY);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
@@ -279,7 +279,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle").exists());
@@ -308,7 +308,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("WEBFLUX");
     task.setRouter(Constants.BooleanOption.FALSE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
@@ -339,7 +339,7 @@ public class GenerateEntryPointTaskTest {
     task.setRouter(Constants.BooleanOption.FALSE);
     task.setSwagger(Constants.BooleanOption.TRUE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
@@ -374,7 +374,7 @@ public class GenerateEntryPointTaskTest {
     task.setRouter(Constants.BooleanOption.TRUE);
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
@@ -400,7 +400,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("WEBFLUX");
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle").exists());
@@ -424,7 +424,7 @@ public class GenerateEntryPointTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("ASYNCEVENTHANDLER");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/async-event-handler/build.gradle")
@@ -454,7 +454,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("MQ");
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/mq-listener/build.gradle").exists());
@@ -489,7 +489,7 @@ public class GenerateEntryPointTaskTest {
     task.setType("SQS");
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/sqs-listener/build.gradle").exists());

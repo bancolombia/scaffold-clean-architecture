@@ -34,7 +34,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -45,7 +45,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project useCaseProject =
         ProjectBuilder.builder()
@@ -85,7 +85,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -96,7 +96,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project modelProject =
         ProjectBuilder.builder()
@@ -147,7 +147,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -159,12 +159,12 @@ public class ValidateStructureTaskTest {
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
     generateDriven.setType("MONGODB");
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.execute();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project mongoProject =
         ProjectBuilder.builder()
@@ -209,7 +209,7 @@ public class ValidateStructureTaskTest {
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
     generateStructureTask.setType(GenerateStructureTask.ProjectType.REACTIVE);
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -221,12 +221,12 @@ public class ValidateStructureTaskTest {
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
     generateDriven.setType("MONGODB");
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.execute();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project mongoProject =
         ProjectBuilder.builder()

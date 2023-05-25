@@ -36,7 +36,7 @@ public class GenerateEntryPointKotlinTaskTest {
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
     caTask.setType(type);
     caTask.setLanguage(GenerateStructureTask.Language.KOTLIN);
-    caTask.generateStructureTask();
+    caTask.execute();
 
     ProjectBuilder.builder()
         .withProjectDir(new File("build/unitTest/applications/app-service"))
@@ -77,7 +77,7 @@ public class GenerateEntryPointKotlinTaskTest {
     // Arrange
     task.setType(null);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   // Assert
@@ -86,7 +86,7 @@ public class GenerateEntryPointKotlinTaskTest {
     // Arrange
     task.setType("GENERIC");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   // Assert
@@ -96,7 +96,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("GENERIC");
     task.setName("");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
   }
 
   @Test
@@ -105,7 +105,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("GENERIC");
     task.setName("MyEntryPoint");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/my-entry-point/build.gradle.kts")
@@ -126,7 +126,7 @@ public class GenerateEntryPointKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("RSOCKET");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/rsocket-responder/build.gradle.kts")
@@ -147,7 +147,7 @@ public class GenerateEntryPointKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("GRAPHQL");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/graphql-api/build.gradle.kts")
@@ -167,7 +167,7 @@ public class GenerateEntryPointKotlinTaskTest {
     // Arrange
     task.setType("RESTMVC");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
@@ -188,7 +188,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("RESTMVC");
     task.setSwagger(Constants.BooleanOption.TRUE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
@@ -212,7 +212,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
@@ -244,7 +244,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.JETTY);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
@@ -276,7 +276,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/api-rest/build.gradle.kts").exists());
@@ -305,7 +305,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("WEBFLUX");
     task.setRouter(Constants.BooleanOption.FALSE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
@@ -333,7 +333,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setRouter(Constants.BooleanOption.FALSE);
     task.setSwagger(Constants.BooleanOption.TRUE);
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
@@ -365,7 +365,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setRouter(Constants.BooleanOption.TRUE);
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
@@ -388,7 +388,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("WEBFLUX");
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/reactive-web/build.gradle.kts")
@@ -409,7 +409,7 @@ public class GenerateEntryPointKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("ASYNCEVENTHANDLER");
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/async-event-handler/build.gradle.kts")
@@ -439,7 +439,7 @@ public class GenerateEntryPointKotlinTaskTest {
     task.setType("MQ");
 
     // Act
-    task.generateEntryPointTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/entry-points/mq-listener/build.gradle.kts")

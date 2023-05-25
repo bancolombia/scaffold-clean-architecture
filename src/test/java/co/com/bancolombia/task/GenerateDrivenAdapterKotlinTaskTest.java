@@ -42,7 +42,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
         (GenerateStructureTask) project.getTasks().getByName("ca");
     taskStructure.setType(type);
     taskStructure.setLanguage(GenerateStructureTask.Language.KOTLIN);
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     project.getTasks().create("test", GenerateDrivenAdapterTask.class);
     task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
@@ -54,7 +54,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType(null);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   // Assert
@@ -63,7 +63,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType("GENERIC");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   // Assert
@@ -73,7 +73,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("GENERIC");
     task.setName("");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   @Test
@@ -82,7 +82,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("GENERIC");
     task.setName("MyDrivenAdapter");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
@@ -103,7 +103,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
@@ -131,7 +131,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType("JPA");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle.kts")
@@ -163,7 +163,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -196,7 +196,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("MONGODB");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -236,7 +236,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
         "package=co.com.bancolombia\nsystemProp.version=" + Constants.PLUGIN_VERSION + "\n");
     task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -269,7 +269,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -303,7 +303,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setUrl("http://localhost:8080");
     task.setType("RESTCONSUMER");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
@@ -332,7 +332,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("ASYNCEVENTBUS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle.kts")
@@ -368,7 +368,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -394,7 +394,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   @Test
@@ -403,7 +403,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
     task.setType("REDIS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -423,7 +423,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("R2DBC");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle.kts")
@@ -450,7 +450,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     task.setType("REDIS");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -474,7 +474,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("KMS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
@@ -491,7 +491,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
     task.setType("KMS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
@@ -516,7 +516,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("S3");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
@@ -545,7 +545,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
     task.setType("S3");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
@@ -574,7 +574,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("MQ");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle.kts")
@@ -590,7 +590,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType("KTOR");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
@@ -602,7 +602,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType("DYNAMODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/dynamo-db/build.gradle.kts")
@@ -615,7 +615,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("SQS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle.kts")
@@ -628,7 +628,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
     task.setType("SQS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle.kts")

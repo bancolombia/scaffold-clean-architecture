@@ -2,14 +2,19 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generateAcceptanceTest",
+    shortcut = "gat",
+    description = "Generate subproject by karate framework in deployment layer")
+public class GenerateAcceptanceTestTask extends AbstractCleanArchitectureDefaultTask {
   private String name = "acceptanceTest";
   private String type = "karate";
 
@@ -28,16 +33,14 @@ public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
     return super.resolveTypes();
   }
 
-  @TaskAction
-  public void generateAcceptanceTestTask() throws IOException, CleanException {
+  @Override
+  public void execute() throws IOException, CleanException {
     ModuleFactory moduleFactory = resolveFactory(type);
-    long start = System.currentTimeMillis();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("AcceptanceTest name: {}", name);
     builder.addParam("acceptanceTestPath", name);
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(System.currentTimeMillis() - start);
   }
 
   @Override
@@ -48,5 +51,10 @@ public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
   @Override
   protected String resolvePackage() {
     return "co.com.bancolombia.factory.tests.acceptance";
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(type);
   }
 }

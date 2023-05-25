@@ -6,15 +6,20 @@ import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generateEntryPoint",
+    shortcut = "gep",
+    description = "Generate entry point in infrastructure layer")
+public class GenerateEntryPointTask extends AbstractCleanArchitectureDefaultTask {
   private String type;
   private String name;
   private String pathGraphql = PATH_GRAPHQL;
@@ -74,9 +79,8 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(BooleanOption.values());
   }
 
-  @TaskAction
-  public void generateEntryPointTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -95,7 +99,6 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(type, System.currentTimeMillis() - start);
   }
 
   @Override
@@ -106,5 +109,10 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
   @Override
   protected String resolvePackage() {
     return "co.com.bancolombia.factory.entrypoints";
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(type);
   }
 }

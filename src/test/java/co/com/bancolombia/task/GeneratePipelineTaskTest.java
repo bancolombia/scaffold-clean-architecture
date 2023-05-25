@@ -37,7 +37,7 @@ public class GeneratePipelineTaskTest {
     project.getTasks().create("testStructure", GenerateStructureTask.class);
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("testStructure");
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     project.getTasks().create("test", GeneratePipelineTask.class);
     task = (GeneratePipelineTask) project.getTasks().getByName("test");
@@ -47,7 +47,7 @@ public class GeneratePipelineTaskTest {
   public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
     task.setType("AZURE");
-    task.generatePipelineTask();
+    task.execute();
 
     assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
   }
@@ -56,7 +56,7 @@ public class GeneratePipelineTaskTest {
   public void generateJenkinsPipelineTest() throws IOException, CleanException {
 
     task.setType("JENKINS");
-    task.generatePipelineTask();
+    task.execute();
 
     assertTrue(new File("build/unitTest/deployment/Jenkinsfile").exists());
   }
@@ -65,7 +65,7 @@ public class GeneratePipelineTaskTest {
   public void generateCircleCIPipelineTest() throws IOException, CleanException {
 
     task.setType("CIRCLECI");
-    task.generatePipelineTask();
+    task.execute();
 
     assertTrue(new File("build/unitTest/.circleci/config.yml").exists());
   }
@@ -74,7 +74,7 @@ public class GeneratePipelineTaskTest {
   public void generateGithubActionTest() throws IOException, CleanException {
 
     task.setType("GITHUB");
-    task.generatePipelineTask();
+    task.execute();
 
     assertTrue(
         new File("build/unitTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml")
@@ -84,7 +84,7 @@ public class GeneratePipelineTaskTest {
   @Test(expected = IllegalArgumentException.class)
   public void generatePipelineWithoutType() throws IOException, CleanException {
     task.setType(null);
-    task.generatePipelineTask();
+    task.execute();
   }
 
   private void writeString(File file, String string) throws IOException {

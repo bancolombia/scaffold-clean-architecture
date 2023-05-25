@@ -2,14 +2,19 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generatePipeline",
+    shortcut = "gpl",
+    description = "Generate CI pipeline as a code in deployment layer")
+public class GeneratePipelineTask extends AbstractCleanArchitectureDefaultTask {
   private String type;
 
   @Option(option = "type", description = "Set type of pipeline to be generated")
@@ -22,9 +27,8 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
     return super.resolveTypes();
   }
 
-  @TaskAction
-  public void generatePipelineTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     if (type == null) {
       printHelp();
       throw new IllegalArgumentException(
@@ -36,7 +40,6 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
     logger.lifecycle("Pipeline type: {}", type);
     pipelineFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(type, System.currentTimeMillis() - start);
   }
 
   @Override
@@ -47,5 +50,10 @@ public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
   @Override
   protected String resolvePackage() {
     return "co.com.bancolombia.factory.pipelines";
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(type);
   }
 }

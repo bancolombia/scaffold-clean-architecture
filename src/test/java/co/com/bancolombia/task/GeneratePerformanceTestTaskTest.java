@@ -37,7 +37,7 @@ public class GeneratePerformanceTestTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
     caTask.setType(type);
-    caTask.generateStructureTask();
+    caTask.execute();
 
     ProjectBuilder.builder()
         .withProjectDir(new File("build/unitTest/applications/app-service"))
@@ -52,7 +52,7 @@ public class GeneratePerformanceTestTaskTest {
   @Test
   public void generatePerformanceTest() throws IOException, CleanException {
     task.setType("JMETER");
-    task.generateAcceptanceTestTask();
+    task.execute();
 
     assertTrue(new File("build/unitTest/performance-test/README.md").exists());
   }

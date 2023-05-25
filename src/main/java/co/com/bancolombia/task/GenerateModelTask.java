@@ -1,12 +1,14 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 
-public class GenerateModelTask extends CleanArchitectureDefaultTask {
+@CATask(name = "generateModel", shortcut = "gm", description = "Generate model in domain layer")
+public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   private String name = "";
 
   @Option(option = "name", description = "Set the model name")
@@ -14,9 +16,8 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
     this.name = modelName;
   }
 
-  @TaskAction
-  public void generateModelTask() throws IOException, ParamNotFoundException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, ParamNotFoundException {
     if (name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(
@@ -31,6 +32,10 @@ public class GenerateModelTask extends CleanArchitectureDefaultTask {
 
     builder.setupFromTemplate("model");
     builder.persist();
-    sendAnalytics(name, System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(name);
   }
 }

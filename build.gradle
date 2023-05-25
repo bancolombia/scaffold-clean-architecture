@@ -13,10 +13,10 @@ plugins {
     id 'java-gradle-plugin'
     id 'jacoco'
     id 'idea'
-    id 'com.gradle.plugin-publish' version '1.1.0'
-    id "org.sonarqube" version "3.0"
+    id 'com.gradle.plugin-publish' version '1.2.0'
+    id 'org.sonarqube' version '4.0.0.2929'
     id 'maven-publish'
-    id "com.github.sherter.google-java-format" version "0.9"
+    id 'com.github.sherter.google-java-format' version '0.9'
 }
 publishing {
     repositories {
@@ -63,12 +63,16 @@ dependencies {
 
 gradlePlugin {
     // Define the plugin
+    website = 'https://github.com/bancolombia/scaffold-clean-architecture'
+    vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
+
     plugins {
         cleanArchitecture {
             id = 'co.com.bancolombia.cleanArchitecture'
             displayName = 'Scaffold Clean Architecture Bancolombia'
             description = 'Gradle plugin to create a clean application in Java that already works, It follows our best practices!'
             implementationClass = 'co.com.bancolombia.PluginClean'
+            tags.set(['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource'])
         }
     }
 }
@@ -95,19 +99,13 @@ check {
     dependsOn(tasks.functionalTest)
 }
 
-pluginBundle {
-    website = 'https://github.com/bancolombia/scaffold-clean-architecture'
-    vcsUrl = 'https://github.com/bancolombia/scaffold-clean-architecture'
-    tags = ['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource']
-}
-
 jacocoTestReport {
     dependsOn(tasks.test)
     reports {
-        xml.enabled true
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
-        html.enabled true
-        csv.enabled false
+        xml.setRequired true
+        xml.setOutputLocation file("${buildDir}/reports/jacoco/report.xml")
+        html.setRequired true
+        csv.setRequired false
     }
 }
 
@@ -147,6 +145,6 @@ tasks.register('installGitHooks', Copy) {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '6.9.1'
+    gradleVersion = '8.1.1'
 }
 

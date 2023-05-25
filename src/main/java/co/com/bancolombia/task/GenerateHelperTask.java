@@ -2,14 +2,19 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateHelperTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generateHelper",
+    shortcut = "gh",
+    description = "Generate helper in infrastructure layer")
+public class GenerateHelperTask extends AbstractCleanArchitectureDefaultTask {
   private String name;
   private String type = "generic";
 
@@ -28,9 +33,8 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
     return super.resolveTypes();
   }
 
-  @TaskAction
-  public void generateHelperTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     ModuleFactory moduleFactory = resolveFactory(type);
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Helper name: {}", name);
@@ -39,7 +43,6 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
     builder.addParam("metrics", builder.withMetrics());
     moduleFactory.buildModule(builder);
     builder.persist();
-    sendAnalytics(name, System.currentTimeMillis() - start);
   }
 
   @Override
@@ -50,5 +53,10 @@ public class GenerateHelperTask extends CleanArchitectureDefaultTask {
   @Override
   protected String resolvePackage() {
     return "co.com.bancolombia.factory.helpers";
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(type);
   }
 }

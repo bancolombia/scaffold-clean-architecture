@@ -83,7 +83,7 @@ public class GenerateStructureTaskTest {
   public void generateStructure() throws IOException, CleanException {
     // Arrange
     // Act
-    task.generateStructureTask();
+    task.execute();
     // Assert
     assertTrue(new File("build/unitTest/README.md").exists());
     assertTrue(new File("build/unitTest/.gitignore").exists());
@@ -144,7 +144,7 @@ public class GenerateStructureTaskTest {
     task.setForce(BooleanOption.FALSE);
     task.setJavaVersion(JavaVersion.VERSION_11);
     // Act
-    task.generateStructureTask();
+    task.execute();
     // Assert
     assertTrue(new File("build/unitTest/README.md").exists());
     assertTrue(new File("build/unitTest/.gitignore").exists());
@@ -186,9 +186,9 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
-    task.generateStructureTask();
+    task.execute();
     // Act
-    task.generateStructureTask();
+    task.execute();
     // Assert
     assertTrue(new File("build/unitTest/build.gradle").exists());
     assertTrue(new File("build/unitTest/gradle.properties").exists());
@@ -199,9 +199,9 @@ public class GenerateStructureTaskTest {
   public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
     // Arrange
     task.setStatusLombok(BooleanOption.FALSE);
-    task.generateStructureTask();
+    task.execute();
     // Act
-    task.generateStructureTask();
+    task.execute();
     // Assert
     assertTrue(new File("build/unitTest/build.gradle").exists());
     assertTrue(new File("build/unitTest/gradle.properties").exists());
