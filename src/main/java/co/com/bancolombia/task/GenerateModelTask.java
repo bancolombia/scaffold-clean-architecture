@@ -28,7 +28,6 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     logger.lifecycle("Model Name: {}", name);
     builder.addParam("modelName", name.toLowerCase());
     builder.addParam("modelClassName", name);
-    builder.addParam("lombok", builder.isEnableLombok());
 
     builder.setupFromTemplate("model");
     builder.persist();

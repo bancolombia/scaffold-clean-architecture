@@ -34,7 +34,6 @@ public class GenerateUseCaseTask extends AbstractCleanArchitectureDefaultTask {
     logger.lifecycle("Use Case Name: {}", name);
     builder.addParam("useCaseName", useCaseName);
     builder.addParam("useCaseClassName", className);
-    builder.addParam("lombok", builder.isEnableLombok());
     builder.setupFromTemplate("usecase");
     builder.persist();
   }
