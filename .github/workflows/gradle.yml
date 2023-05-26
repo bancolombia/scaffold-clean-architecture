@@ -51,6 +51,16 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # try publish
+      - name: Prepare gpg key
+        run: |
+          mkdir -p ~/.gradle/
+          echo "${{secrets.SIGNING_KEY_FILE}}" | base64 -d > ~/.gradle/secring.gpg
+      - name: Publish Libraries
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} -Psigning.password=${{ secrets.SIGNING_KEY_PASSWORD }} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
+        env:
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.MAVEN_PASSWORD }}
       # Next steps will only run if generation code templates have been changed
       - uses: dorny/paths-filter@v2
         id: changes

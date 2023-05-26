@@ -88,8 +88,6 @@ public class ModuleBuilder {
     params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
     params.put("secretsVersion", Constants.SECRETS_VERSION);
     params.put("blockHoundVersion", Constants.BLOCK_HOUND_VERSION);
-
-    // TODO: review it
     params.put("lombok", isEnableLombok());
     params.put("metrics", withMetrics());
     loadPackage();

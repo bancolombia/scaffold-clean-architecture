@@ -39,16 +39,6 @@ public abstract class ValidateStructureTask extends DefaultTask {
   private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
   private static final String AWS_BOM = "bom";
 
-  //    @Inject
-  //    public ValidateStructureTask(Object some) {
-  //        if (some instanceof Lambda) {
-  //            getLogger().lifecycle("Lambda");
-  //        }
-  //        getLogger().lifecycle("VALIDATE STRUCTUREEEEEE");
-  //        getLogger().lifecycle(some.getClass().toString());
-  //        getLogger().lifecycle(this.getWhitelistedDependencies().getOrElse("Notthing"));
-  //    }
-
   @Input
   @Optional
   //    @Inject
