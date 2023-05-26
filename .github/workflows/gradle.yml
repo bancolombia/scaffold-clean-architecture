@@ -15,6 +15,10 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +27,16 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - run: npm -g install @semantic-release/git semantic-release && semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npx semantic-release@21.0.2
+        name: semantic version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate code formatting
         run: ./gradlew verGJF
       - name: Execute build test and report
