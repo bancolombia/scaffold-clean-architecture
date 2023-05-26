@@ -27,16 +27,6 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
-      # try publish
-      - name: Prepare gpg key
-        run: |
-          mkdir -p ~/.gradle/
-          echo "${{secrets.SIGNING_KEY_FILE}}" | base64 -d > ~/.gradle/secring.gpg
-      - name: Publish Libraries
-        run: ./gradlew publishToSonatype --debug closeAndReleaseSonatypeStagingRepository -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} -Psigning.password=${{ secrets.SIGNING_KEY_PASSWORD }} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
-        env:
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.MAVEN_PASSWORD }}
       - uses: actions/setup-node@v2
         with:
           node-version: 18
@@ -162,3 +152,13 @@ jobs:
         run: ./gradlew publish --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # publish as library in maven
+      - name: Prepare gpg key
+        run: |
+          mkdir -p ~/.gradle/
+          echo "${{secrets.SIGNING_KEY_FILE}}" | base64 -d > ~/.gradle/secring.gpg
+      - name: Publish Libraries
+        run: ./gradlew publishToSonatype --debug closeAndReleaseSonatypeStagingRepository -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} -Psigning.password=${{ secrets.SIGNING_KEY_PASSWORD }} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
+        env:
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.MAVEN_PASSWORD }}
