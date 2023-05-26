@@ -68,7 +68,7 @@ publishing {
 
             from components.java
 
-            groupId = "com.github.bancolombia"
+            groupId = groupId
             version = project.property('version')
         }
     }
@@ -82,7 +82,9 @@ if (project.hasProperty('signing.keyId')) {
 
 nexusPublishing {
     repositories {
-        sonatype()
+        sonatype(){
+            stagingProfileId = "com.github.bancolombia"
+        }
     }
 }
 
