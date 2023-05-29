@@ -5,10 +5,10 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import java.io.IOException;
 
-public class GitHubAction implements ModuleFactory {
+public class PipelineJenkins implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.setupFromTemplate("pipeline/github");
+    builder.setupFromTemplate("pipeline/jenkins");
   }
 }

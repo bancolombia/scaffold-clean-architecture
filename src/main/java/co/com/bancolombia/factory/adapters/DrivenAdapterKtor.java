@@ -8,7 +8,7 @@ import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.validations.LanguageValidation;
 import java.io.IOException;
 
-public class DrivenAdapterKtorClient implements ModuleFactory {
+public class DrivenAdapterKtor implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {

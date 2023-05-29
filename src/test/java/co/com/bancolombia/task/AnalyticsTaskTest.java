@@ -31,7 +31,7 @@ public class AnalyticsTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -44,22 +44,22 @@ public class AnalyticsTaskTest {
   }
 
   @Test
-  public void shouldEnableAnalytics() throws IOException {
+  public void shouldEnableAnalytics() throws IOException, CleanException {
     // Arrange
     task.setAnalyticsState(Constants.BooleanOption.TRUE);
     // Act
-    task.persistAnalyticsState();
+    task.execute();
     // Assert
     assertTrue(
         Files.readString(Path.of("build/unitTest/gradle.properties")).contains("analytics=true"));
   }
 
   @Test
-  public void shouldDisableAnalytics() throws IOException {
+  public void shouldDisableAnalytics() throws IOException, CleanException {
     // Arrange
     task.setAnalyticsState(Constants.BooleanOption.FALSE);
     // Act
-    task.persistAnalyticsState();
+    task.execute();
     // Assert
     assertTrue(
         Files.readString(Path.of("build/unitTest/gradle.properties")).contains("analytics=false"));
