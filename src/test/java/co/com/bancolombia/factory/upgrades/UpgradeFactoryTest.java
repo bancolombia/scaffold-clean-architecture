@@ -38,7 +38,7 @@ public class UpgradeFactoryTest {
     project.getTasks().create("testStructure", GenerateStructureTask.class);
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("testStructure");
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     builder = spy(new ModuleBuilder(project));
     builder.addParam(UpgradeFactory.UPGRADES, "co.com.bancolombia.factory.upgrades.samples");

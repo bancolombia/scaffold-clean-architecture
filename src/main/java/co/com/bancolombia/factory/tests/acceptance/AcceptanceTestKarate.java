@@ -1,14 +1,14 @@
-package co.com.bancolombia.factory.pipelines;
+package co.com.bancolombia.factory.tests.acceptance;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import java.io.IOException;
 
-public class CircleCI implements ModuleFactory {
+public class AcceptanceTestKarate implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.setupFromTemplate("pipeline/circleci");
+    builder.setupFromTemplate("test/acceptance-test");
   }
 }

@@ -28,7 +28,7 @@ public class UpdateProjectTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName("app-service")
@@ -43,7 +43,7 @@ public class UpdateProjectTaskTest {
 
   @Test
   public void shouldUpdateProject() throws IOException, CleanException {
-    task.updateProject();
+    task.execute();
     assertNull(task.getState().getOutcome());
   }
 
@@ -52,7 +52,7 @@ public class UpdateProjectTaskTest {
     // Arrange
     task.setDependencies("org.mockito:mockito-core org.projectlombok:lombok");
     // Act
-    task.updateProject();
+    task.execute();
     assertNull(task.getState().getOutcome());
   }
 
@@ -61,7 +61,7 @@ public class UpdateProjectTaskTest {
     // Arrange
     task.setDependencies("does_dependency:not_exist");
     // Act
-    task.updateProject();
+    task.execute();
     assertNull(task.getState().getOutcome());
   }
 
@@ -71,7 +71,7 @@ public class UpdateProjectTaskTest {
     task.setDependencies("does_dependency");
     // Act
 
-    task.updateProject();
+    task.execute();
     assertNull(task.getState().getOutcome());
   }
 }

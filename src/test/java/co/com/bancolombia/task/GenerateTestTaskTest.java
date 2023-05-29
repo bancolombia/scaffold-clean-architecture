@@ -36,7 +36,7 @@ public class GenerateTestTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
     caTask.setType(type);
-    caTask.generateStructureTask();
+    caTask.execute();
 
     ProjectBuilder.builder()
         .withProjectDir(new File("build/unitTest/applications/app-service"))
@@ -53,7 +53,7 @@ public class GenerateTestTaskTest {
 
     task.setName("acceptance-test");
 
-    task.generateAcceptanceTestTask();
+    task.execute();
 
     assertTrue(
         new File(

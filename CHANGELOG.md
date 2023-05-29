@@ -1,5 +1,32 @@
 # Changelog
 
+## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
+
+**Merged pull requests:**
+
+- Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
+- fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
+
+## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
+
+**Closed issues:**
+
+- Draft [\#354](https://github.com/bancolombia/scaffold-clean-architecture/issues/354)
+
+**Merged pull requests:**
+
+- Fix semantic release [\#357](https://github.com/bancolombia/scaffold-clean-architecture/pull/357) ([santitigaga](https://github.com/santitigaga))
+- Use semantic release [\#356](https://github.com/bancolombia/scaffold-clean-architecture/pull/356) ([santitigaga](https://github.com/santitigaga))
+- add block hound validations to reactive projects [\#353](https://github.com/bancolombia/scaffold-clean-architecture/pull/353) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [3.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.3) (2023-04-25)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.2...3.0.3)
@@ -428,15 +455,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
-
-## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
 
 ## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+
+## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
 
 **Implemented enhancements:**
 

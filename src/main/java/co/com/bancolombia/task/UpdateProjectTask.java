@@ -6,17 +6,21 @@ import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FIL
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.upgrades.UpgradeFactory;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.CommandUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.internal.logging.text.StyledTextOutput;
 
-public class UpdateProjectTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "updateCleanArchitecture",
+    shortcut = "u",
+    description = "Update project dependencies")
+public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   private final Set<String> dependencies = new HashSet<>();
   private BooleanOption git = BooleanOption.TRUE;
 
@@ -30,9 +34,8 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     this.git = git;
   }
 
-  @TaskAction
-  public void updateProject() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     if (git == BooleanOption.TRUE && CommandUtils.getDefault().hasGitPendingChanges(logger)) {
       getTextOutputFactory()
           .create(UpdateProjectTask.class)
@@ -48,6 +51,5 @@ public class UpdateProjectTask extends CleanArchitectureDefaultTask {
     UpgradeFactory factory = new UpgradeFactory();
     factory.buildModule(builder);
     builder.persist();
-    sendAnalytics(System.currentTimeMillis() - start);
   }
 }

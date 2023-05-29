@@ -3,15 +3,18 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
+import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
+import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class DeleteModuleTask extends CleanArchitectureDefaultTask {
+@CATask(name = "deleteModule", shortcut = "dm", description = "Delete gradle module")
+public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   private String module;
 
   @Option(option = "module", description = "Set module name to delete")
@@ -24,9 +27,8 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
     return new ArrayList<>(getProject().getChildProjects().keySet());
   }
 
-  @TaskAction
-  public void deleteModule() throws IOException {
-    long start = System.currentTimeMillis();
+  @Override
+  public void execute() throws IOException, CleanException {
     if (module == null || !getProject().getChildProjects().containsKey(module)) {
       printHelp();
       throw new IllegalArgumentException(
@@ -38,6 +40,10 @@ public class DeleteModuleTask extends CleanArchitectureDefaultTask {
     builder.removeFromSettings(module);
     builder.removeDependencyFromModule(APP_SERVICE, dependency);
     builder.persist();
-    sendAnalytics(module, System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected Optional<String> resolveAnalyticsType() {
+    return Optional.of(module);
   }
 }

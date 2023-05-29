@@ -3,36 +3,22 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
 import co.com.bancolombia.Constants.BooleanOption;
-import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
-import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint;
-import co.com.bancolombia.factory.entrypoints.ModuleFactoryEntryPoint.EntryPointType;
-import co.com.bancolombia.utils.Utils;
-import java.io.IOException;
+import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;
-import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
-  private EntryPointType type;
-  private String name;
+@CATask(
+    name = "generateEntryPoint",
+    shortcut = "gep",
+    description = "Generate entry point in infrastructure layer")
+public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
   private Server server = Server.UNDERTOW;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
-
-  @Option(option = "type", description = "Set type of entry point to be generated")
-  public void setType(EntryPointType type) {
-    this.type = type;
-  }
-
-  @Option(option = "name", description = "Set entry point name when GENERIC type")
-  public void setName(String name) {
-    this.name = name;
-  }
 
   @Option(
       option = "server",
@@ -61,11 +47,6 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(Server.values());
   }
 
-  @OptionValues("type")
-  public List<EntryPointType> getTypes() {
-    return Arrays.asList(EntryPointType.values());
-  }
-
   @OptionValues("router")
   public List<BooleanOption> getRoutersOptions() {
     return Arrays.asList(BooleanOption.values());
@@ -76,27 +57,21 @@ public class GenerateEntryPointTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(BooleanOption.values());
   }
 
-  @TaskAction
-  public void generateEntryPointTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
-    if (type == null) {
-      printHelp();
-      throw new IllegalArgumentException(
-          "No Entry Point is set, usage: gradle generateEntryPoint --type "
-              + Utils.formatTaskOptions(getTypes()));
-    }
-    ModuleFactory moduleFactory = ModuleFactoryEntryPoint.getEntryPointFactory(type);
-    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    logger.lifecycle("Entry Point type: {}", type);
-    builder.addParam("task-param-name", name);
+  @Override
+  protected void prepareParams() {
     builder.addParam("task-param-server", server);
     builder.addParam("task-param-pathgql", pathGraphql);
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
-    builder.addParam("lombok", builder.isEnableLombok());
-    builder.addParam("metrics", builder.withMetrics());
-    moduleFactory.buildModule(builder);
-    builder.persist();
-    sendAnalytics(type.name(), System.currentTimeMillis() - start);
+  }
+
+  @Override
+  protected String resolvePrefix() {
+    return "EntryPoint";
+  }
+
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.entrypoints";
   }
 }

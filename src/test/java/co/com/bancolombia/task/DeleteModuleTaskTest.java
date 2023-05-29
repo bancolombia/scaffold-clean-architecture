@@ -6,7 +6,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,7 +29,7 @@ public class DeleteModuleTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -41,8 +40,8 @@ public class DeleteModuleTaskTest {
     project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.setType("MONGODB");
+    generateDriven.execute();
 
     ProjectBuilder.builder()
         .withName("mongo-repository")
@@ -60,27 +59,27 @@ public class DeleteModuleTaskTest {
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
-  public void deleteNullModule() throws IOException {
+  public void deleteNullModule() throws IOException, CleanException {
     // Arrange
     // Act
-    task.deleteModule();
+    task.execute();
   }
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
-  public void deleteNonExistentModule() throws IOException {
+  public void deleteNonExistentModule() throws IOException, CleanException {
     // Arrange
     task.setModule("non-existent");
     // Act
-    task.deleteModule();
+    task.execute();
   }
 
   @Test
-  public void generateEntryPoint() throws IOException {
+  public void generateEntryPoint() throws IOException, CleanException {
     // Arrange
     task.setModule("mongo-repository");
     // Act
-    task.deleteModule();
+    task.execute();
     // Assert
     assertFalse(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")

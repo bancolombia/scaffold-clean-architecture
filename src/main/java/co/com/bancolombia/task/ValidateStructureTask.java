@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.APP_SERVICE;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
@@ -25,6 +26,10 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.TaskAction;
 
+@CATask(
+    name = "validateStructure",
+    shortcut = "vs",
+    description = "Validate that project references are not violated")
 public abstract class ValidateStructureTask extends DefaultTask {
   private final Logger logger = getProject().getLogger();
   private static final String MODEL_MODULE = "model";
@@ -36,6 +41,7 @@ public abstract class ValidateStructureTask extends DefaultTask {
 
   @Input
   @Optional
+  //    @Inject
   public abstract Property<String> getWhitelistedDependencies();
 
   @TaskAction
