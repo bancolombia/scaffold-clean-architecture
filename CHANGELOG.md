@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.9) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.8...v3.0.9)
+
 ## [v3.0.8](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.8) (2023-05-30)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.7...v3.0.8)
@@ -22,20 +26,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
-
 ## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
 
 **Closed issues:**
 
