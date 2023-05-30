@@ -71,7 +71,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
       getLogger().debug("Some other error", e);
     }
     try {
-      resolveFactory(getClass().getPackageName(), "", "After" + getClass().getSimpleName())
+      resolveFactory(getClass().getPackageName(), "", "After" + getCleanedClass())
           .buildModule(builder);
     } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
       getLogger().debug("No After{} ModuleFactory implementation", getClass().getSimpleName());
@@ -169,5 +169,9 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
         logger.info("Error detail", e);
       }
     }
+  }
+
+  private String getCleanedClass() {
+    return getClass().getSimpleName().split("_")[0];
   }
 }

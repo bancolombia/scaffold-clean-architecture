@@ -1,8 +1,7 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -10,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import javax.inject.Inject;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.internal.tasks.options.OptionDescriptor;
@@ -23,7 +21,7 @@ import org.junit.Test;
 public class AbstractCleanArchitectureDefaultTaskTest {
   private Project project;
   private AbstractCleanArchitectureDefaultTask task;
-  private AbstractCleanArchitectureDefaultTask helperTask;
+  private HelperTask helperTask;
 
   @Before
   public void setup() {
@@ -37,7 +35,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     project.getTasks().create("dm", DeleteModuleTask.class);
     project.getTasks().create("cadt", HelperTask.class);
     task = (AbstractCleanArchitectureDefaultTask) project.getTasks().getByName("dm");
-    helperTask = spy((AbstractCleanArchitectureDefaultTask) project.getTasks().getByName("cadt"));
+    helperTask = spy((HelperTask) project.getTasks().getByName("cadt"));
   }
 
   @Test
@@ -98,18 +96,84 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     verify(helperTask, times(1)).execute();
   }
 
-  public static class HelperTask extends AbstractCleanArchitectureDefaultTask {
+  @Test
+  public void shouldExecuteAfterModuleFactory() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertEquals("OK", helperTask.helperCheck("check1"));
+  }
 
-    @Inject
-    public String getTaskPath() {
-      throw new UnsupportedOperationException();
-    }
+  @Test
+  public void shouldHandleCleanException() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    helperTask.setThrow("CleanException");
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertNull(helperTask.helperCheck("check3"));
+  }
 
-    public void setTaskPath(String taskPath) {
-      throw new UnsupportedOperationException();
-    }
+  @Test
+  public void shouldHandleException() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    helperTask.setThrow("Exception");
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertNull(helperTask.helperCheck("check4"));
+  }
 
-    @Override
-    public void execute() throws IOException, CleanException {}
+  @Test
+  public void shouldExecuteAfterTaskModuleFactory() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertEquals("OK", task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskCleanException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("CleanException");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("Exception");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("InvalidTaskOptionException");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
   }
 }
