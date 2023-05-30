@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.8](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.8) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.7...v3.0.8)
+
 ## [v3.0.7](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.7) (2023-05-30)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.6...v3.0.7)
