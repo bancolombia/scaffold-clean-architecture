@@ -29,17 +29,17 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
 
 # Plugin Implementation
 
-To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 7.4 or later, to start add the following section into your **build.gradle** file.
+To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 7.6.1 or later, to start add the following section into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "3.0.3"
+    id "co.com.bancolombia.cleanArchitecture" version "3.0.9"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"3.0.3\"
+    id \"co.com.bancolombia.cleanArchitecture\" version \"3.0.9\"
 }" > build.gradle
 ```
 
@@ -47,13 +47,13 @@ To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanAr
 
 ```kotlin dls
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "3.0.3"
+    id("co.com.bancolombia.cleanArchitecture") version "3.0.9"
 }
 ```
 Or if is a new  project execute this script in the root directory of your project.
 ```sh
 echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"3.0.3\"
+    id(\"co.com.bancolombia.cleanArchitecture\") version \"3.0.9\"
 }" > build.gradle.kts
 ```
 

@@ -4,7 +4,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class GeneratePipelineTaskTest {
     project.getTasks().create("testStructure", GenerateStructureTask.class);
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("testStructure");
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     project.getTasks().create("test", GeneratePipelineTask.class);
     task = (GeneratePipelineTask) project.getTasks().getByName("test");
@@ -47,8 +46,8 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.AZURE);
-    task.generatePipelineTask();
+    task.setType("AZURE");
+    task.execute();
 
     assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
   }
@@ -56,8 +55,8 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateJenkinsPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.JENKINS);
-    task.generatePipelineTask();
+    task.setType("JENKINS");
+    task.execute();
 
     assertTrue(new File("build/unitTest/deployment/Jenkinsfile").exists());
   }
@@ -65,8 +64,8 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateCircleCIPipelineTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.CIRCLECI);
-    task.generatePipelineTask();
+    task.setType("CIRCLECI");
+    task.execute();
 
     assertTrue(new File("build/unitTest/.circleci/config.yml").exists());
   }
@@ -74,8 +73,8 @@ public class GeneratePipelineTaskTest {
   @Test
   public void generateGithubActionTest() throws IOException, CleanException {
 
-    task.setType(ModuleFactoryPipeline.PipelineType.GITHUB);
-    task.generatePipelineTask();
+    task.setType("GITHUB");
+    task.execute();
 
     assertTrue(
         new File("build/unitTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml")
@@ -85,7 +84,7 @@ public class GeneratePipelineTaskTest {
   @Test(expected = IllegalArgumentException.class)
   public void generatePipelineWithoutType() throws IOException, CleanException {
     task.setType(null);
-    task.generatePipelineTask();
+    task.execute();
   }
 
   private void writeString(File file, String string) throws IOException {

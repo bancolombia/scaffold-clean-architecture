@@ -3,7 +3,7 @@
  */
 package co.com.bancolombia;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -28,6 +28,7 @@ public class PluginCleanTest {
     String descriptionTask9 = "Generate subproject by karate framework in deployment layer";
     String descriptionTask10 = "Generate helper in infrastructure layer";
     Project project = ProjectBuilder.builder().build();
+
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
     // Act

@@ -5,7 +5,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import java.io.IOException;
 
-public class JmeterPerformanceTest implements ModuleFactory {
+public class PerformanceTestJmeter implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {

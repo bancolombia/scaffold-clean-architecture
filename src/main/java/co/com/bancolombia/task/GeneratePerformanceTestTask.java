@@ -1,46 +1,25 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.factory.tests.performance.ModuleFactoryPerformanceTests;
-import co.com.bancolombia.factory.tests.performance.ModuleFactoryPerformanceTests.PerformanceTestType;
-import co.com.bancolombia.utils.Utils;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.options.Option;
-import org.gradle.api.tasks.options.OptionValues;
+import co.com.bancolombia.task.annotations.CATask;
 
-public class GeneratePerformanceTestTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "generatePerformanceTest",
+    shortcut = "gpt",
+    description = "Generate performance test")
+public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
 
-  private PerformanceTestType type;
-
-  @Option(option = "type", description = "Set type of performance test to be generated")
-  public void setType(PerformanceTestType type) {
-    this.type = type;
+  @Override
+  protected void prepareParams() {
+    // No additional params required
   }
 
-  @OptionValues("type")
-  public List<PerformanceTestType> getTypes() {
-    return Arrays.asList(PerformanceTestType.values());
+  @Override
+  protected String resolvePrefix() {
+    return "PerformanceTest";
   }
 
-  @TaskAction
-  public void generateAcceptanceTestTask() throws CleanException, IOException {
-    long start = System.currentTimeMillis();
-    if (type == null) {
-      printHelp();
-      throw new IllegalArgumentException(
-          "No Performance test type was set, usage: gradle generatePerformanceTest --type "
-              + Utils.formatTaskOptions(getTypes()));
-    }
-    ModuleFactory moduleFactory = ModuleFactoryPerformanceTests.getPerformanceTestsFactory(type);
-    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    logger.lifecycle("PerformanceTest type: {}", "type");
-
-    moduleFactory.buildModule(builder);
-    builder.persist();
-    sendAnalytics(type.name(), System.currentTimeMillis() - start);
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.tests.performance";
   }
 }

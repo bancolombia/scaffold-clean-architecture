@@ -5,7 +5,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -35,7 +34,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -46,7 +45,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project useCaseProject =
         ProjectBuilder.builder()
@@ -86,7 +85,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -97,7 +96,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project modelProject =
         ProjectBuilder.builder()
@@ -124,7 +123,7 @@ public class ValidateStructureTaskTest {
   public void validateStructureException() throws IOException, CleanException {
     // Act
     this.setupException();
-    task.validateStructureTask();
+    task.execute();
     // Assert
   }
 
@@ -132,7 +131,7 @@ public class ValidateStructureTaskTest {
   public void validateStructureModelException() throws IOException, CleanException {
     // Act
     this.setupWithoutModelWhitelistDepException();
-    task.validateStructureTask();
+    task.execute();
     // Assert
   }
 
@@ -148,7 +147,7 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -159,13 +158,13 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.setType("MONGODB");
+    generateDriven.execute();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project mongoProject =
         ProjectBuilder.builder()
@@ -210,7 +209,7 @@ public class ValidateStructureTaskTest {
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
     generateStructureTask.setType(GenerateStructureTask.ProjectType.REACTIVE);
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
@@ -221,13 +220,13 @@ public class ValidateStructureTaskTest {
     project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
     GenerateDrivenAdapterTask generateDriven =
         (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
-    generateDriven.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
-    generateDriven.generateDrivenAdapterTask();
+    generateDriven.setType("MONGODB");
+    generateDriven.execute();
 
     project.getTasks().create("guc", GenerateUseCaseTask.class);
     GenerateUseCaseTask generateUseCase = (GenerateUseCaseTask) project.getTasks().getByName("guc");
     generateUseCase.setName("business");
-    generateUseCase.generateUseCaseTask();
+    generateUseCase.execute();
 
     Project mongoProject =
         ProjectBuilder.builder()
@@ -269,7 +268,7 @@ public class ValidateStructureTaskTest {
   public void validateStructureImperativeProject() throws IOException, CleanException {
     // Act
     this.prepareImperativeProject();
-    task.validateStructureTask();
+    task.execute();
     // Assert
   }
 
@@ -277,7 +276,7 @@ public class ValidateStructureTaskTest {
   public void validateStructureReactiveProject() throws IOException, CleanException {
     // Act
     this.prepareReactiveProject();
-    task.validateStructureTask();
+    task.execute();
     // Assert
   }
 }

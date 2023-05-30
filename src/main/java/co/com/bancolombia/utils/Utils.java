@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -72,11 +71,9 @@ public class Utils {
   }
 
   public static String formatTaskOptions(List<?> options) {
-    List<String> items = new ArrayList<>();
-    for (Object type : options) {
-      items.add(type.toString());
-    }
-    return "[" + String.join("|", items) + "]";
+    return "["
+        + options.stream().map(Object::toString).sorted().collect(Collectors.joining("|"))
+        + "]";
   }
 
   public static String addDependency(String build, String dependency) {

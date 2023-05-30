@@ -14,12 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
-import java.util.stream.Stream;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ConfigurationContainer;
-import org.gradle.api.artifacts.ResolvedConfiguration;
-import org.gradle.api.artifacts.ResolvedDependency;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -31,13 +26,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ArchitectureValidationTest {
   public static final String BASE_PATH = "build/unitTest/applications/app-service";
+  public static final String TEST_FILE = "/src/test/java/co/com/bancolombia/ArchitectureTest.java";
   @Mock private StyledTextOutput styledTextOutput;
-  @Mock private ConfigurationContainer configurations;
-  @Mock private Configuration configuration;
-  @Mock private ResolvedConfiguration resolvedConfiguration;
-  @Mock private ResolvedDependency resolvedDependency;
   private Project project;
-  private Project appService;
 
   @Before
   public void setup() throws IOException, CleanException {
@@ -52,39 +43,29 @@ public class ArchitectureValidationTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.executeBaseTask();
 
-    appService =
-        spy(
-            ProjectBuilder.builder()
-                .withName(APP_SERVICE)
-                .withProjectDir(new File(BASE_PATH))
-                .withParent(project)
-                .build());
+    Project appService =
+        ProjectBuilder.builder()
+            .withName(APP_SERVICE)
+            .withProjectDir(new File(BASE_PATH))
+            .withParent(project)
+            .build();
     doReturn(Set.of(appService)).when(project).getAllprojects();
   }
 
   @Test
-  public void shouldInjectTests() {
+  public void shouldInjectTests() throws IOException {
     // Arrange
+    Path testFile = Path.of(BASE_PATH, TEST_FILE);
+    Files.deleteIfExists(testFile);
     when(styledTextOutput.style(any())).thenReturn(styledTextOutput);
     when(styledTextOutput.append(any())).thenReturn(styledTextOutput);
-    doReturn(configurations).when(appService).getConfigurations();
-    doReturn(Stream.of(configuration)).when(configurations).stream();
-    doReturn(true).when(configuration).isCanBeResolved();
-    doReturn(resolvedConfiguration).when(configuration).getResolvedConfiguration();
-    doReturn(Set.of(resolvedDependency))
-        .when(resolvedConfiguration)
-        .getFirstLevelModuleDependencies();
-    doReturn("name").when(resolvedDependency).getName();
-    doReturn("group").when(resolvedDependency).getModuleGroup();
     ModuleBuilder builder = new ModuleBuilder(project);
     builder.setStyledLogger(styledTextOutput);
     // Act
     ArchitectureValidation.inject(project, builder);
     // Assert
-    assertTrue(
-        Files.exists(
-            Path.of(BASE_PATH, "/src/test/java/co/com/bancolombia/ArchitectureTest.java")));
+    assertTrue(Files.exists(testFile));
   }
 }

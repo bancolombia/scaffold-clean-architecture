@@ -4,6 +4,7 @@ import static co.com.bancolombia.Constants.APP_SERVICE;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
@@ -22,9 +23,12 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
-import org.gradle.api.tasks.TaskAction;
 
-public abstract class ValidateStructureTask extends CleanArchitectureDefaultTask {
+@CATask(
+    name = "validateStructure",
+    shortcut = "vs",
+    description = "Validate that project references are not violated")
+public abstract class ValidateStructureTask extends AbstractCleanArchitectureDefaultTask {
   private static final String MODEL_MODULE = "model";
   private static final String USE_CASE_MODULE = "usecase";
   private static final String REACTOR_CORE = "reactor-core";
@@ -36,8 +40,8 @@ public abstract class ValidateStructureTask extends CleanArchitectureDefaultTask
   @Optional
   public abstract Property<String> getWhitelistedDependencies();
 
-  @TaskAction
-  public void validateStructureTask() throws IOException, CleanException {
+  @Override
+  public void execute() throws IOException, CleanException {
     String packageName =
         FileUtils.readProperties(getProject().getProjectDir().getPath(), "package");
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());

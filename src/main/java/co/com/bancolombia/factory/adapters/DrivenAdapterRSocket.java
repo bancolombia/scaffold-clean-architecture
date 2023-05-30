@@ -9,7 +9,7 @@ import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 
-public class DrivenAdapterRSocketRequester implements ModuleFactory {
+public class DrivenAdapterRSocket implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {

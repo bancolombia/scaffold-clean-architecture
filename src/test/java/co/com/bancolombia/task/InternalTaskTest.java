@@ -37,7 +37,7 @@ public class InternalTaskTest {
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
     generateStructureTask.setWithExample(Constants.BooleanOption.TRUE);
-    generateStructureTask.generateStructureTask();
+    generateStructureTask.execute();
 
     appService =
         ProjectBuilder.builder()
@@ -57,7 +57,7 @@ public class InternalTaskTest {
     FileUtils.writeString(
         appService, SonarCheck.INPUT, readResourceFile("dependencies-check/report.json"));
     // Act
-    task.executeAction();
+    task.execute();
     // Assert
     assertTrue(appService.file(SonarCheck.OUTPUT).exists());
   }

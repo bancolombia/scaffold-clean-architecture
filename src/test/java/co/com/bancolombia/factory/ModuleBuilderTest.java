@@ -49,7 +49,7 @@ public class ModuleBuilderTest {
     project.getTasks().create("testStructure", GenerateStructureTask.class);
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("testStructure");
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     builder = new ModuleBuilder(project, restService);
     when(styledTextOutput.style(any())).thenReturn(styledTextOutput);

@@ -41,7 +41,7 @@ public class GenerateHelperTaskTest {
     GenerateStructureTask taskStructure =
         (GenerateStructureTask) project.getTasks().getByName("ca");
     taskStructure.setType(type);
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     project.getTasks().create("test", GenerateHelperTask.class);
     task = (GenerateHelperTask) project.getTasks().getByName("test");
@@ -52,7 +52,7 @@ public class GenerateHelperTaskTest {
   public void shouldHandleErrorWhenNoName() throws IOException, CleanException {
 
     // Act
-    task.generateHelperTask();
+    task.execute();
   }
 
   // Assert
@@ -61,7 +61,7 @@ public class GenerateHelperTaskTest {
     // Arrange
     task.setName("");
     // Act
-    task.generateHelperTask();
+    task.execute();
   }
 
   @Test
@@ -69,7 +69,7 @@ public class GenerateHelperTaskTest {
     // Arrange
     task.setName("MyHelper");
     // Act
-    task.generateHelperTask();
+    task.execute();
     // Assert
     assertTrue(new File("build/unitTest/infrastructure/helpers/my-helper/build.gradle").exists());
     assertTrue(
