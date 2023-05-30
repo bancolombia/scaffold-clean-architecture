@@ -104,7 +104,6 @@ jobs:
   release:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
