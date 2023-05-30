@@ -2,7 +2,7 @@ name: "gradle-actions"
 
 on:
   release:
-    types: [ published ]
+    types: [ published, created, released ]
   push:
     branches:
       - master
@@ -19,6 +19,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
