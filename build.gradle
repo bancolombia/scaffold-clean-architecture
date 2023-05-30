@@ -37,6 +37,7 @@ compileJava {
 }
 
 if (project.hasProperty('signing.keyId')) { // publish as library in maven central
+    apply plugin: 'signing'
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -108,8 +109,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         if(task.name == 'publishMavenJavaPublicationToSonatypeRepository') {
             project.logger.lifecycle('Applied to ' + task.name)
             task.mustRunAfter('signMavenJavaPublication')
+            task.mustRunAfter('signPluginMavenPublication')
         } else {
-            task.enabled = false;
+            task.enabled = false
         }
     }
 } else { // publish as plugin in gradle and github
