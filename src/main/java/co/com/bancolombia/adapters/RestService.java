@@ -4,7 +4,6 @@ import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.RestConsumer;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import org.gradle.api.logging.Logger;
@@ -30,11 +29,7 @@ public class RestService {
   }
 
   private boolean shouldMock() {
-    try {
-      return "true".equals(FileUtils.readProperties(".", "simulateRest"));
-    } catch (IOException ignored) {
-      return false;
-    }
+    return FileUtils.readBooleanProperty("simulateRest");
   }
 
   private static class RestOperations implements Operations {

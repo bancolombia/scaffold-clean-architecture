@@ -459,6 +459,9 @@ The **`validateStructure | vs`** Validate that project references aren't violate
    gradle vs
    ```
 
+This validation has another best practices verifications, which you can see on the generated
+`ArchitectureTest` file within the unit tests of the `app-service` module. 
+
 ### Dependency Rules
 
 One important point made by Robert C. Martin on Clean Architecture is the **Dependency Rule**, that can be summarized like 

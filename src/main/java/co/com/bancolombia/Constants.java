@@ -23,6 +23,7 @@ public class Constants {
   public static final String AWS_BOM_VERSION = "2.19.33";
   public static final String COMMONS_JMS_VERSION = "1.0.0";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.0.0";
+  public static final String ARCH_UNIT_VERSION = "1.0.1";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
       "configurations {\n"
           + "\tall {\n"
