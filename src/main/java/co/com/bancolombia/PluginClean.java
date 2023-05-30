@@ -10,6 +10,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.testing.Test;
 import org.jetbrains.annotations.NotNull;
 
 public class PluginClean implements Plugin<Project> {
@@ -23,10 +24,27 @@ public class PluginClean implements Plugin<Project> {
     TaskContainer taskContainer = project.getTasks();
     initTasks().forEach(task -> this.appendTask(taskContainer, task));
 
+    project.getSubprojects().forEach(this::listenTest);
+
     taskContainer
         .getByName("compileJava")
         .getDependsOn()
         .add(taskContainer.getByName("validateStructure"));
+  }
+
+  private void listenTest(Project project) {
+    project.getLogger().lifecycle("Injecting test logger");
+    project
+        .getTasks()
+        .withType(Test.class)
+        .configureEach(
+            test ->
+                test.addTestOutputListener(
+                    (testDescriptor, testOutputEvent) -> {
+                      if (!testOutputEvent.getMessage().contains("DEBUG")) {
+                        test.getLogger().lifecycle(testOutputEvent.getMessage().replace('\n', ' '));
+                      }
+                    }));
   }
 
   private Stream<TaskModel> initTasks() {

@@ -10,6 +10,7 @@ import com.tngtech.archunit.lang.ConditionEvent;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.elements.MembersShouldConjunction;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,6 +29,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 // Please do not modify this file
+@Log4j2
 class ArchitectureTest {
     private static JavaClasses allClasses;
     private static JavaClasses domainClasses;
@@ -51,7 +53,7 @@ class ArchitectureTest {
                 .allowEmptyShould(true)
                 .as("Rule_1.5: Reactive flows should use aws async clients");
 
-        rule.check(allClasses);
+        checkWithWarning(() -> rule.check(allClasses));
     }
 
     {{/reactive}}
@@ -65,7 +67,7 @@ class ArchitectureTest {
                 .allowEmptyShould(true)
                 .as("Rule_2.2: Domain classes should not be named with technology suffixes");
 
-        rule.check(domainClasses);
+        checkWithWarning(() -> rule.check(domainClasses));
     }
 
     @Test
@@ -79,7 +81,7 @@ class ArchitectureTest {
                 .allowEmptyShould(true)
                 .as("Rule_2.4: Domain classes should not be named with technology names");
 
-        rule.check(domainClasses);
+        checkWithWarning(() -> rule.check(domainClasses));
     }
 
     @Test
@@ -106,7 +108,7 @@ class ArchitectureTest {
                 .allowEmptyShould(true)
                 .as("Rule_2.7: Domain classes should not have fields named with technology names");
 
-        rule.check(domainClasses);
+        checkWithWarning(() -> rule.check(domainClasses));
     }
 
     @Test
@@ -128,7 +130,7 @@ class ArchitectureTest {
                 .allowEmptyShould(true)
                 .as("Rule_2.7: Beans classes should only have final attributes (injection by constructor) to avoid concurrency issues");
 
-        rule.check(allClasses);
+        checkWithWarning(() -> rule.check(allClasses));
     }
 
     // Utilities
@@ -195,4 +197,12 @@ class ArchitectureTest {
         void check(JavaClass item, ConditionEvents events);
     }
     {{/reactive}}
+
+    private void checkWithWarning(Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (AssertionError e) {
+            log.warn("ARCHITECTURE_RULE_VIOLATED: This will cause a build error in future.\nPlease review our wiki at https://github.com/bancolombia/scaffold-clean-architecture/wiki/Architecture-Rules", e);
+        }
+    }
 }
