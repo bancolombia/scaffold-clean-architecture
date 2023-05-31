@@ -172,6 +172,13 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   }
 
   private String getCleanedClass() {
-    return getClass().getSimpleName().split("_")[0];
+    String className = getClass().getSimpleName();
+    if (className.contains("$")) {
+      className = className.split("\\$")[1];
+    }
+    if (className.contains("_Decorated")) {
+      className = className.split("_")[0];
+    }
+    return className;
   }
 }

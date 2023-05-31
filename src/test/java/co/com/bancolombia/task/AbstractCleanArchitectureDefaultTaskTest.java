@@ -5,10 +5,14 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.InvalidTaskOptionException;
+import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.ModuleFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import javax.inject.Inject;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
 import org.gradle.api.internal.tasks.options.OptionDescriptor;
@@ -175,5 +179,65 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     task.executeBaseTask();
     // Assert
     assertNull(task.helperCheck("check2"));
+  }
+
+  public static class AfterCustomJPA extends AfterModuleFactory {
+    @Override
+    public String check() {
+      return "check1";
+    }
+  }
+
+  public static class AfterHelperTask extends AfterModuleFactory {
+    @Override
+    public String check() {
+      return "check2";
+    }
+  }
+
+  public abstract static class AfterModuleFactory implements ModuleFactory {
+
+    @Override
+    public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+      // some custom module should be called
+      if ("CleanException".equals(builder.getStringParam("throw"))) {
+        throw new CleanException("Thrown out for testing");
+      }
+      if ("Exception".equals(builder.getStringParam("throw"))) {
+        throw new RuntimeException("Thrown out for testing");
+      }
+      if ("InvalidTaskOptionException".equals(builder.getStringParam("throw"))) {
+        throw new InvalidTaskOptionException("Thrown out for testing");
+      }
+      builder.addParam(check(), "OK");
+    }
+
+    protected abstract String check();
+  }
+
+  public static class HelperTask extends AbstractCleanArchitectureDefaultTask {
+    public HelperTask() {
+      builder.addParam("type", "JPA");
+    }
+
+    public String helperCheck(String check) {
+      return builder.getStringParam(check);
+    }
+
+    public void setThrow(String value) {
+      builder.addParam("throw", value);
+    }
+
+    @Inject
+    public String getTaskPath() {
+      throw new UnsupportedOperationException();
+    }
+
+    public void setTaskPath(String taskPath) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void execute() throws IOException, CleanException {}
   }
 }
