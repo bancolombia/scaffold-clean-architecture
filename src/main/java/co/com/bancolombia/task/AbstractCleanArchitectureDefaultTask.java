@@ -58,12 +58,25 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   public abstract void execute() throws IOException, CleanException;
 
   private void afterExecute() {
+    String name = "";
     try {
-      resolveFactory("After" + builder.getStringParam("type")).buildModule(builder);
+      String type = "After" + builder.getStringParam("type");
+      name = resolvePrefix() + type;
+      resolveFactory(type).buildModule(builder);
     } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
-      getLogger().debug("Task not implements afterExecute");
+      getLogger().debug("No {} ModuleFactory implementation", name);
     } catch (IOException | CleanException e) {
-      getLogger().warn("Error on afterExecute: ", e);
+      getLogger().warn("Error on afterExecute factory: ", e);
+    } catch (Exception e) { // NOSONAR
+      getLogger().debug("Some other error", e);
+    }
+    try {
+      resolveFactory(getClass().getPackageName(), "", "After" + getCleanedClass())
+          .buildModule(builder);
+    } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
+      getLogger().debug("No After{} ModuleFactory implementation", getClass().getSimpleName());
+    } catch (IOException | CleanException e) {
+      getLogger().warn("Error on afterExecute task: ", e);
     } catch (Exception e) { // NOSONAR
       getLogger().debug("Some other error", e);
     }
@@ -85,17 +98,18 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
 
   @SneakyThrows
   protected ModuleFactory resolveFactory(String type) {
-    return ReflectionUtils.getModuleFactories(resolvePackage())
-        .filter(clazz -> clazz.getSimpleName().replace(resolvePrefix(), "").equalsIgnoreCase(type))
+    return resolveFactory(resolvePackage(), resolvePrefix(), type);
+  }
+
+  @SneakyThrows
+  protected ModuleFactory resolveFactory(String packageName, String prefix, String type) {
+    return ReflectionUtils.getModuleFactories(packageName)
+        .filter(clazz -> clazz.getSimpleName().replace(prefix, "").equalsIgnoreCase(type))
         .findFirst()
         .orElseThrow(
             () ->
                 new InvalidTaskOptionException(
-                    resolvePrefix()
-                        + " of type "
-                        + type
-                        + " not found, valid values: "
-                        + resolveTypes()))
+                    prefix + " of type " + type + " not found, valid values: " + resolveTypes()))
         .getDeclaredConstructor()
         .newInstance();
   }
@@ -155,5 +169,16 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
         logger.info("Error detail", e);
       }
     }
+  }
+
+  private String getCleanedClass() {
+    String className = getClass().getSimpleName();
+    if (className.contains("$")) {
+      className = className.split("\\$")[1];
+    }
+    if (className.contains("_Decorated")) {
+      className = className.split("_")[0];
+    }
+    return className;
   }
 }

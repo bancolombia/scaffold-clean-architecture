@@ -1,11 +1,13 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.InvalidTaskOptionException;
+import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.ModuleFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,7 +25,7 @@ import org.junit.Test;
 public class AbstractCleanArchitectureDefaultTaskTest {
   private Project project;
   private AbstractCleanArchitectureDefaultTask task;
-  private AbstractCleanArchitectureDefaultTask helperTask;
+  private HelperTask helperTask;
 
   @Before
   public void setup() {
@@ -37,7 +39,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     project.getTasks().create("dm", DeleteModuleTask.class);
     project.getTasks().create("cadt", HelperTask.class);
     task = (AbstractCleanArchitectureDefaultTask) project.getTasks().getByName("dm");
-    helperTask = spy((AbstractCleanArchitectureDefaultTask) project.getTasks().getByName("cadt"));
+    helperTask = spy((HelperTask) project.getTasks().getByName("cadt"));
   }
 
   @Test
@@ -98,7 +100,133 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     verify(helperTask, times(1)).execute();
   }
 
+  @Test
+  public void shouldExecuteAfterModuleFactory() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertEquals("OK", helperTask.helperCheck("check1"));
+  }
+
+  @Test
+  public void shouldHandleCleanException() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    helperTask.setThrow("CleanException");
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertNull(helperTask.helperCheck("check3"));
+  }
+
+  @Test
+  public void shouldHandleException() throws CleanException, IOException {
+    // Arrange
+    doReturn("Custom").when(helperTask).resolvePrefix();
+    doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
+    helperTask.setThrow("Exception");
+    // Act
+    helperTask.executeBaseTask();
+    // Assert
+    verify(helperTask, times(1)).execute();
+    assertNull(helperTask.helperCheck("check4"));
+  }
+
+  @Test
+  public void shouldExecuteAfterTaskModuleFactory() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertEquals("OK", task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskCleanException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("CleanException");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("Exception");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
+  }
+
+  @Test
+  public void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
+    // Arrange
+    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
+    task.setThrow("InvalidTaskOptionException");
+    // Act
+    task.executeBaseTask();
+    // Assert
+    assertNull(task.helperCheck("check2"));
+  }
+
+  public static class AfterCustomJPA extends AfterModuleFactory {
+    @Override
+    public String check() {
+      return "check1";
+    }
+  }
+
+  public static class AfterHelperTask extends AfterModuleFactory {
+    @Override
+    public String check() {
+      return "check2";
+    }
+  }
+
+  public abstract static class AfterModuleFactory implements ModuleFactory {
+
+    @Override
+    public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+      // some custom module should be called
+      if ("CleanException".equals(builder.getStringParam("throw"))) {
+        throw new CleanException("Thrown out for testing");
+      }
+      if ("Exception".equals(builder.getStringParam("throw"))) {
+        throw new RuntimeException("Thrown out for testing");
+      }
+      if ("InvalidTaskOptionException".equals(builder.getStringParam("throw"))) {
+        throw new InvalidTaskOptionException("Thrown out for testing");
+      }
+      builder.addParam(check(), "OK");
+    }
+
+    protected abstract String check();
+  }
+
   public static class HelperTask extends AbstractCleanArchitectureDefaultTask {
+    public HelperTask() {
+      builder.addParam("type", "JPA");
+    }
+
+    public String helperCheck(String check) {
+      return builder.getStringParam(check);
+    }
+
+    public void setThrow(String value) {
+      builder.addParam("throw", value);
+    }
 
     @Inject
     public String getTaskPath() {
