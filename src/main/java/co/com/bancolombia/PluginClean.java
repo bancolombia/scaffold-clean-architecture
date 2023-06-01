@@ -33,7 +33,7 @@ public class PluginClean implements Plugin<Project> {
   }
 
   private void listenTest(Project project) {
-    project.getLogger().lifecycle("Injecting test logger");
+    project.getLogger().info("Injecting test logger");
     project
         .getTasks()
         .withType(Test.class)
