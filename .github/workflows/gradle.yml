@@ -53,6 +53,8 @@ jobs:
           filters: |
             templates:
               - 'src/main/resources/**'
+              - 'src/main/java/co/com/bancolombia/Constants.java'
+              - 'src/main/java/co/com/bancolombia/factory/**'
       # Generated code Analysis
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
