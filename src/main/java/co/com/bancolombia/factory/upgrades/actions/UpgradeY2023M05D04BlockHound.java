@@ -35,8 +35,8 @@ public class UpgradeY2023M05D04BlockHound implements UpgradeAction {
       return builder.updateFile(
           Constants.MainFiles.MAIN_GRADLE,
           content -> {
-            String partial = UpdateUtils.appendValidate(content, MATCH, CHECK, APPEND);
-            return UpdateUtils.appendValidate(partial, MATCH_ARG, CHECK_ARG, APPEND_ARG);
+            String partial = UpdateUtils.insertBeforeMatch(content, MATCH, CHECK, APPEND);
+            return UpdateUtils.insertBeforeMatch(partial, MATCH_ARG, CHECK_ARG, APPEND_ARG);
           });
     } else {
       return false;

@@ -39,12 +39,30 @@ public class UpdateUtils {
     return appliedA || appliedB;
   }
 
-  public static String appendValidate(
+  /**
+   * Inserts concatValue before match if main does not containsValue
+   *
+   * @param main
+   * @param match
+   * @param containsValue
+   * @param concatValue
+   * @return
+   */
+  public static String insertBeforeMatch(
       String main, String match, String containsValue, String concatValue) {
     if (main.contains(containsValue)) {
       return main;
     }
     int start = main.indexOf(match);
+    return main.substring(0, start) + concatValue + main.substring(start);
+  }
+
+  public static String insertAfterMatch(
+      String main, String match, String containsValue, String concatValue) {
+    if (main.contains(containsValue)) {
+      return main;
+    }
+    int start = main.indexOf(match) + match.length();
     return main.substring(0, start) + concatValue + main.substring(start);
   }
 
