@@ -1,25 +1,19 @@
 name: "gradle-actions"
-
 on:
-  release:
-    types: [ published, created, released ]
   push:
     branches:
       - master
       - feature/*
       - fix/*
-
   pull_request:
     branches:
       - master
-
 jobs:
   build:
     permissions:
       contents: write
       issues: write
       pull-requests: write
-    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -99,66 +93,3 @@ jobs:
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-
-  release:
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' 
-          java-version: 11
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-      - name: Upgrade README.md
-        run: sed -i 's/version \".*\"/version "${{ env.RELEASE_VERSION }}"/g' README.md
-      - name: Upgrade README.md
-        run: sed -i 's/version \\".*\\"/version \\"${{ env.RELEASE_VERSION }}\\"/g' README.md
-      - name: Upgrade Gradle.properties
-        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
-      - name: Upgrade Constants.java
-        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Generate Changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pullRequests: true
-          prWoLabels: true
-          issues: true
-          issuesWoLabels: true
-          stripGeneratorNotice: true
-      - name: Save version
-        uses: github-actions-x/commit@v2.9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: "master"
-          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
-          force-add: "true"
-          files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
-          name: Release Bot
-          email: release-bot@bancolombia.com.co
-      - name: Set Analytics Endpoint
-        run: sed -i "s/ENDPOINT = \"\"/ENDPOINT = \"$ANALYTICS_ENDPOINT\"/g" src/main/java/co/com/bancolombia/analytics/AnalyticsExporter.java
-        env:
-          ANALYTICS_ENDPOINT: ${{ secrets.ANALYTICS_ENDPOINT }}
-      - name: Publish plugin in gradle plugins
-        run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
-      - name: Publish plugin in github packages
-        run: ./gradlew publish --info
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # publish as library in maven
-      - name: Prepare gpg key
-        run: |
-          mkdir -p ~/.gradle/
-          echo "${{secrets.SIGNING_KEY_FILE}}" | base64 -d > ~/.gradle/secring.gpg
-      - name: Publish Libraries
-        run: ./gradlew publishToSonatype --info closeAndReleaseSonatypeStagingRepository -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} -Psigning.password=${{ secrets.SIGNING_KEY_PASSWORD }} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
-        env:
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.MAVEN_PASSWORD }}
