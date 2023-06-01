@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.1.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.2) (2023-06-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.1...v3.1.2)
+
+**Merged pull requests:**
+
+- Fix spring plugin in root project [\#364](https://github.com/bancolombia/scaffold-clean-architecture/pull/364) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.1.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.1) (2023-06-01)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.0...v3.1.1)
