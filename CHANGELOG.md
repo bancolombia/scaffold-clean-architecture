@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.1.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.1) (2023-06-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.0...v3.1.1)
+
+**Merged pull requests:**
+
+- fix\(refactor\): refactor utils name for clarity, remove lifecycle logs [\#363](https://github.com/bancolombia/scaffold-clean-architecture/pull/363) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.0) (2023-05-31)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.9...v3.1.0)
