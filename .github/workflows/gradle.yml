@@ -70,7 +70,7 @@ jobs:
       - name: Scan generated project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+        run: ./gradlew build && ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
@@ -85,7 +85,7 @@ jobs:
       - name: Scan generated project dependencies [imperative]
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+        run: ./gradlew build && ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
       - name: Sonar analysis for generated project [imperative]
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
