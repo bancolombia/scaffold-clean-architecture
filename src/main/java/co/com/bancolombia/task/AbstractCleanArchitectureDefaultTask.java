@@ -12,6 +12,7 @@ import co.com.bancolombia.utils.ReflectionUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -48,7 +49,13 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   public void executeBaseTask() throws IOException, CleanException {
     long start = System.currentTimeMillis();
     execute();
-    afterExecute();
+    afterExecute(
+        () -> {
+          String type = "After" + builder.getStringParam("type");
+          return resolveFactory(resolvePackage(), resolvePrefix(), type);
+        });
+    afterExecute(
+        () -> resolveFactory(getClass().getPackageName(), "", "After" + getCleanedClass()));
     resolveAnalyticsType()
         .ifPresentOrElse(
             type -> sendAnalytics(type, System.currentTimeMillis() - start),
@@ -57,28 +64,18 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
 
   public abstract void execute() throws IOException, CleanException;
 
-  private void afterExecute() {
-    String name = "";
+  private void afterExecute(Supplier<ModuleFactory> factorySupplier) {
     try {
-      String type = "After" + builder.getStringParam("type");
-      name = resolvePrefix() + type;
-      resolveFactory(type).buildModule(builder);
+      ModuleFactory factory = factorySupplier.get();
+      logger.lifecycle("Applying {}", factory.getClass().getSimpleName());
+      factory.buildModule(builder);
+      logger.lifecycle("{} applied", factory.getClass().getSimpleName());
     } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
-      getLogger().debug("No {} ModuleFactory implementation", name);
+      logger.debug("No ModuleFactory implementation");
     } catch (IOException | CleanException e) {
-      getLogger().warn("Error on afterExecute factory: ", e);
+      logger.warn("Error on afterExecute factory: ", e);
     } catch (Exception e) { // NOSONAR
-      getLogger().debug("Some other error", e);
-    }
-    try {
-      resolveFactory(getClass().getPackageName(), "", "After" + getCleanedClass())
-          .buildModule(builder);
-    } catch (UnsupportedOperationException | InvalidTaskOptionException ignored) {
-      getLogger().debug("No After{} ModuleFactory implementation", getClass().getSimpleName());
-    } catch (IOException | CleanException e) {
-      getLogger().warn("Error on afterExecute task: ", e);
-    } catch (Exception e) { // NOSONAR
-      getLogger().debug("Some other error", e);
+      logger.debug("Some other error", e);
     }
   }
 
@@ -103,6 +100,8 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
 
   @SneakyThrows
   protected ModuleFactory resolveFactory(String packageName, String prefix, String type) {
+    logger.info(
+        "Finding factory with prefix {} and type {} in package {}", prefix, type, packageName);
     return ReflectionUtils.getModuleFactories(packageName)
         .filter(clazz -> clazz.getSimpleName().replace(prefix, "").equalsIgnoreCase(type))
         .findFirst()

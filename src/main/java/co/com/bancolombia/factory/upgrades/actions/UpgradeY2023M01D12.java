@@ -23,7 +23,8 @@ public class UpgradeY2023M01D12 implements UpgradeAction {
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     return builder.updateFile(
-        SETTINGS_GRADLE, content -> UpdateUtils.appendValidate(content, MATCH, VALIDATION, VALUE));
+        SETTINGS_GRADLE,
+        content -> UpdateUtils.insertBeforeMatch(content, MATCH, VALIDATION, VALUE));
   }
 
   @Override

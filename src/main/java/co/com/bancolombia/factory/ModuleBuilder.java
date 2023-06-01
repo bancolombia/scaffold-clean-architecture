@@ -398,8 +398,8 @@ public class ModuleBuilder {
       String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
       return "true".equals(value);
     } catch (IOException e) {
-      logger.warn(e.getMessage());
-      logger.lifecycle(
+      logger.info(e.getMessage());
+      logger.info(
           "WARN: variable "
               + property
               + " not present, if your project use "
