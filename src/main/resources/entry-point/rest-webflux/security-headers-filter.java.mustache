@@ -1,0 +1,25 @@
+package {{package}}.api.config;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
+@Component
+public class SecurityHeadersConfig implements WebFilter {
+
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        HttpHeaders headers = exchange.getResponse().getHeaders();
+        headers.add("Content-Security-Policy", "default-src 'self'; frame-ancestors 'self'; form-action 'self'");
+        headers.add("Strict-Transport-Security", "max-age=31536000;");
+        headers.add("X-Content-Type-Options", "nosniff");
+        headers.add("Server", "");
+        headers.add("Cache-Control", "no-store");
+        headers.add("Pragma", "no-cache");
+        headers.add("Referrer-Policy", "strict-origin-when-cross-origin");
+        return chain.filter(exchange);
+    }
+}
