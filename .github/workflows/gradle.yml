@@ -22,14 +22,14 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
-      - uses: actions/setup-node@v2
+      - name: Set up NodeJS 18
+        uses: actions/setup-node@v2
         with:
           node-version: 18
-      - run: npm -g install @semantic-release/git semantic-release && semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: npx semantic-release@21.0.2
-        name: semantic version
+      - name: Set up Semantic Release
+        run: npm -g install @semantic-release/git semantic-release@21.0.3
+      - name: Semantic Release
+        run: npx semantic-release@21.0.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate code formatting
@@ -47,7 +47,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Next steps will only run if generation code templates have been changed
-      - uses: dorny/paths-filter@v2
+      - name: Detect changes in generated code
+        uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
@@ -66,29 +67,29 @@ jobs:
           distribution: 'temurin' 
           java-version: 17
       # Generated code reactive
-      - name: Generate project to scan
+      - name: Generate reactive project to scan
         if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh reactive
-      - name: Scan generated project dependencies
+      - name: Scan generated reactive project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew build dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
-      - name: Sonar analysis for generated project
+      - name: Sonar analysis for generated reactive project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # Generated code reactive
-      - name: Generate project to scan [imperative]
+      # Generated code imperative
+      - name: Generate imperative project to scan
         if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh imperative
-      - name: Scan generated project dependencies [imperative]
+      - name: Scan generated imperative project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew build dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
-      - name: Sonar analysis for generated project [imperative]
+      - name: Sonar analysis for generated imperative project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace

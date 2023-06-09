@@ -33,6 +33,9 @@ public class EntryPointRestMvc implements ModuleFactory {
       builder.appendToProperties("management.endpoints.web.exposure").put("include", "health");
     }
     builder.appendToProperties("management.endpoint.health.probes").put("enabled", true);
+    builder
+        .appendToProperties("cors")
+        .put("allowed-origins", "http://localhost:4200,http://localhost:8080");
     new EntryPointRestMvcServer().buildModule(builder);
   }
 }
