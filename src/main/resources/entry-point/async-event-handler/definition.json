@@ -8,7 +8,11 @@
     "entry-point/async-event-handler/events-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/EventsHandler.java",
     "entry-point/async-event-handler/commands-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/CommandsHandler.java",
     "entry-point/async-event-handler/queries-handler.java.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/handlers/QueriesHandler.java",
-    "entry-point/async-event-handler/build.gradle.mustache": "infrastructure/entry-points/async-event-handler/build.gradle"
+    "entry-point/async-event-handler/build.gradle.mustache": "infrastructure/entry-points/async-event-handler/build.gradle",
+    "entry-point/async-event-handler/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/{{language}}/{{packagePath}}/events/HandlerRegistryConfigurationTest.java",
+    "entry-point/async-event-handler/commands-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/{{language}}/{{packagePath}}/events/handlers/CommandsHandlerTest.java",
+    "entry-point/async-event-handler/events-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/{{language}}/{{packagePath}}/events/handlers/EventsHandlerTest.java",
+    "entry-point/async-event-handler/queries-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/{{language}}/{{packagePath}}/events/handlers/QueriesHandlerTest.java"
   },
   "kotlin": {
     "entry-point/async-event-handler/handler-registry-configuration.kt.mustache": "infrastructure/entry-points/async-event-handler/src/main/{{language}}/{{packagePath}}/events/HandlerRegistryConfiguration.kt",
