@@ -7,6 +7,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
@@ -33,8 +34,24 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     builder
         .appendToProperties("adapter.restconsumer")
         .put("url", builder.getStringParam("task-param-url"));
+    builder.appendToProperties("management.health.circuitbreakers").put("enabled", true);
+    withCircuitBreaker(builder.appendToProperties("resilience4j.circuitbreaker.instances.testGet"));
+    withCircuitBreaker(
+        builder.appendToProperties("resilience4j.circuitbreaker.instances.testPost"));
     builder.appendToSettings("rest-consumer", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":rest-consumer");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
+  }
+
+  private void withCircuitBreaker(ObjectNode instance) {
+    instance
+        .put("registerHealthIndicator", true)
+        .put("failureRateThreshold", 50)
+        .put("slowCallRateThreshold", 50)
+        .put("slowCallDurationThreshold", "2s")
+        .put("permittedNumberOfCallsInHalfOpenState", 3)
+        .put("slidingWindowSize", 10)
+        .put("minimumNumberOfCalls", 10)
+        .put("waitDurationInOpenState", "10s");
   }
 }
