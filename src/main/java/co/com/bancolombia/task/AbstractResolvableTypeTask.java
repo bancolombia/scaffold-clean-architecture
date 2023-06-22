@@ -46,6 +46,7 @@ public abstract class AbstractResolvableTypeTask extends AbstractCleanArchitectu
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("{} name: {}", resolvePrefix(), name);
     builder.addParam("task-param-name", name);
+    builder.addParam("type", type);
     prepareParams();
     moduleFactory.buildModule(builder);
     builder.persist();
