@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.3.0) (2023-06-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.2.1...v3.3.0)
+
+**Merged pull requests:**
+
+- feat\(circuit breaker\): Applied to rest consumer [\#370](https://github.com/bancolombia/scaffold-clean-architecture/pull/370) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.2.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.2.1) (2023-06-09)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.2.0...v3.2.1)
@@ -67,20 +75,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
-
 ## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
+
+## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
 
 **Closed issues:**
 
