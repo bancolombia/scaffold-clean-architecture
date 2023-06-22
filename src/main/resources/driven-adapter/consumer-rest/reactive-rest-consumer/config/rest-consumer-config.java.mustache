@@ -3,13 +3,6 @@ package {{package}}.consumer.config;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.beans.factory.annotation.Value;
-{{#metrics}}
-import io.micrometer.core.instrument.MeterRegistry;
-import org.springframework.boot.actuate.metrics.AutoTimer;
-import org.springframework.boot.actuate.metrics.web.reactive.client.DefaultWebClientExchangeTagsProvider;
-import org.springframework.boot.actuate.metrics.web.reactive.client.MetricsWebClientFilterFunction;
-import org.springframework.boot.actuate.metrics.web.reactive.client.WebClientExchangeTagsProvider;
-{{/metrics}}
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
