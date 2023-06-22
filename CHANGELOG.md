@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.3.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.3.1) (2023-06-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.3.0...v3.3.1)
+
+**Merged pull requests:**
+
+- fix\(type\): missing type parameter [\#371](https://github.com/bancolombia/scaffold-clean-architecture/pull/371) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.3.0) (2023-06-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.2.1...v3.3.0)
