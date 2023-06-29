@@ -37,7 +37,7 @@ compileJava {
 }
 
 if (project.hasProperty('signing.keyId')) { // publish as library in maven central
-//    apply plugin: 'signing'
+    apply plugin: 'signing'
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -74,17 +74,17 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         }
     }
 
-//    nexusPublishing {
-//        repositories {
-//            sonatype() {
-//                group = "com.github.bancolombia"
-//            }
-//        }
-//    }
+    nexusPublishing {
+        repositories {
+            sonatype() {
+                group = "com.github.bancolombia"
+            }
+        }
+    }
 
-//    signing {
-//        sign(publishing.publications.mavenJava)
-//    }
+    signing {
+        sign(publishing.publications.mavenJava)
+    }
 
     java {
         withJavadocJar()
@@ -102,18 +102,18 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         enabled = false
     }
 
-//    def signingTasks = tasks.withType(Sign)
-//    signingTasks.forEach {project.logger.lifecycle('task sign: ' + it.name)}
-//    tasks.withType(PublishToMavenRepository).configureEach { task ->
-//        project.logger.lifecycle('task publish: ' + task.name)
-//        if(task.name == 'publishMavenJavaPublicationToSonatypeRepository') {
-//            project.logger.lifecycle('Applied to ' + task.name)
-//            task.mustRunAfter('signMavenJavaPublication')
-//            task.mustRunAfter('signPluginMavenPublication')
-//        } else {
-//            task.enabled = false
-//        }
-//    }
+    def signingTasks = tasks.withType(Sign)
+    signingTasks.forEach {project.logger.lifecycle('task sign: ' + it.name)}
+    tasks.withType(PublishToMavenRepository).configureEach { task ->
+        project.logger.lifecycle('task publish: ' + task.name)
+        if(task.name == 'publishMavenJavaPublicationToSonatypeRepository') {
+            project.logger.lifecycle('Applied to ' + task.name)
+            task.mustRunAfter('signMavenJavaPublication')
+            task.mustRunAfter('signPluginMavenPublication')
+        } else {
+            task.enabled = false
+        }
+    }
 } else { // publish as plugin in gradle and github
     publishing {
         repositories {
