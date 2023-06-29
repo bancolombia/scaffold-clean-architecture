@@ -7,7 +7,7 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
     {{/metrics}}
 {{#include-swagger}}
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'io.springfox:springfox-boot-starter:{{springfoxVersion}}'
+    implementation 'io.springfox:springfox-swagger-ui:{{springfoxVersion}}'
 {{/include-swagger}}
 }

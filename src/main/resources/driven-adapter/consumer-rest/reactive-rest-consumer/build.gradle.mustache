@@ -3,8 +3,8 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.0.2'
-    implementation 'io.github.resilience4j:resilience4j-reactor:2.0.2'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{resilience4jVersion}}'
+    implementation 'io.github.resilience4j:resilience4j-reactor:{{resilience4jVersion}}'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'
     {{/metrics}}
