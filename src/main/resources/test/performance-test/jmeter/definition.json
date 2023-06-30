@@ -9,6 +9,7 @@
     "test/performance-test/jmeter/Jmeter/Api/README.md.mustache": "performance-test/Jmeter/Api/README.md",
     "test/performance-test/jmeter/Jmeter/Api/SC_Template_UDP_Service.jmx.mustache": "performance-test/Jmeter/Api/SC_Template_UDP_Service.jmx",
     "test/performance-test/jmeter/Jmeter/Api/SC_Template_HTTP_Service.jmx.mustache": "performance-test/Jmeter/Api/SC_Template_HTTP_Service.jmx",
+    "test/performance-test/jmeter/Jmeter/ColaMQ/SC_Template_ColaMQ.jmx.mustache": "performance-test/Jmeter/ColaMQ/SC_Template_ColaMQ.jmx",
 
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Ejemplo.csv.mustache": "performance-test/Jmeter/Api/DataSet/DT_Ejemplo.csv",
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Ejemplo.txt.mustache": "performance-test/Jmeter/Api/DataSet/DT_Ejemplo.txt"
