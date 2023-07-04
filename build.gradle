@@ -180,10 +180,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation gradleTestKit()
 
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
 }
 
 jacocoTestReport {
