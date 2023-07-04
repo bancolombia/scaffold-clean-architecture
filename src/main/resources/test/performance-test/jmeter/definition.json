@@ -15,7 +15,7 @@
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Ejemplo.csv.mustache": "performance-test/Jmeter/Api/DataSet/DT_Ejemplo.csv",
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Ejemplo.txt.mustache": "performance-test/Jmeter/Api/DataSet/DT_Ejemplo.txt",
     "test/performance-test/jmeter/Jmeter/ColasMQ/DataSet/DT_Ejemplo.txt.mustache": "performance-test/Jmeter/ColasMQ/DataSet/DT_Ejemplo.txt",
-    "test/performance-test/jmeter/Jmeter/ColasMQ/DataSet/DT_Ejemplo.csv.mustache": "performance-test/jmeter/ColasMQ/DataSet/DT_Ejemplo.csv"
+    "test/performance-test/jmeter/Jmeter/ColasMQ/DataSet/DT_Ejemplo.csv.mustache": "performance-test/Jmeter/ColasMQ/DataSet/DT_Ejemplo.csv"
   },
   "java": {
   },
