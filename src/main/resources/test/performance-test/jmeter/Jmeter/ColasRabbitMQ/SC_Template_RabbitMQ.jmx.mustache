@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test_Plan_${__P(P_Proyecto,Proyecto_Demo)}" enabled="true">
+      <stringProp name="TestPlan.comments">Aca puedes configurar librerias especificas y variables iniciales en formato clave valor</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+        <stringProp name="TestPlan.comments">Determina variables para ser usadas en tu Script</stringProp>
+      </Arguments>
+      <hashTree/>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">${__P(P_Hostname,www.ejemplo.edu.gov.com.co)}</stringProp>
+        <stringProp name="HTTPSampler.port">${__P(P_Puerto,443)}</stringProp>
+        <stringProp name="HTTPSampler.protocol">${__P(P_Esquema,https)}</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+        <stringProp name="HTTPSampler.path">${__P(P_Hostpath,)}</stringProp>
+        <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+        <stringProp name="HTTPSampler.response_timeout"></stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="GH_${__P(P_Escenario,Escenario_Demo)}" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${__P(P_Contador,1)}</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(P_Hilos,1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(P_Subida,1)}</stringProp>
+        <longProp name="ThreadGroup.start_time">1370726934000</longProp>
+        <longProp name="ThreadGroup.end_time">1370726934000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Recuerda configurar tu stage con los parametros entregados por el calculo de concurrencia que lo encuentras en el checklist </stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <RecordingController guiclass="RecordController" testclass="RecordingController" testname="Tx_${__P(P_Nombre_Tx,Transaccion_1)}" enabled="true">
+          <stringProp name="TestPlan.comments">Nombra tu Transacción sin caracteres especiales o espacios evitando que el stage el stage falle /  1 tx puede comprender 1 o muchas operaciones segun sea el caso.</stringProp>
+        </RecordingController>
+        <hashTree>
+          <com.zeroclue.jmeter.protocol.amqp.AMQPPublisher guiclass="com.zeroclue.jmeter.protocol.amqp.gui.AMQPPublisherGui" testclass="com.zeroclue.jmeter.protocol.amqp.AMQPPublisher" testname="AMQP Publisher" enabled="true">
+            <stringProp name="AMQPSampler.Exchange">${__P(P_Exchange,&quot;&quot;)}</stringProp>
+            <boolProp name="AMQPSampler.ExchangeDurable">true</boolProp>
+            <boolProp name="AMQPSampler.ExchangeAutoDelete">true</boolProp>
+            <boolProp name="AMQPSampler.ExchangeRedeclare">false</boolProp>
+            <stringProp name="AMQPSampler.Queue">${__P(P_Queue,&quot;jmeterQueue&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.RoutingKey">${__P(P_RoutingKey,&quot;jmeterRoutingKey&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.VirtualHost">${__P(P_Host,&quot;rabbitmq.virtualhost&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.MessageTTL">${__P(P_MessageTTL,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.MessageExpires">${__P(P_Expires,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.ExchangeType">direct</stringProp>
+            <stringProp name="AMQPSampler.QueueDurable">true</stringProp>
+            <stringProp name="AMQPSampler.QueueExclusive">false</stringProp>
+            <stringProp name="AMQPSampler.QueueAutoDelete">false</stringProp>
+            <boolProp name="AMQPSampler.Redeclare">false</boolProp>
+            <stringProp name="AMQPSampler.Timeout">${__P(P_Timeout,1000)}</stringProp>
+            <stringProp name="AMQPSampler.Iterations">1</stringProp>
+            <stringProp name="AMQPSampler.Host">${__P(P_Amqps,&quot;hostamq&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Port">${__P(P_Port,&quot;rabbitmq.port&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Username">${__P(P_Username,&quot;rabbitmq.username&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Password">${__P(P_Passwordt,&quot;rabbitmq.password&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.SSL">false</stringProp>
+            <boolProp name="AMQPPublisher.Persistent">false</boolProp>
+            <boolProp name="AMQPPublisher.UseTx">false</boolProp>
+            <stringProp name="AMQPPublisher.MessageRoutingKey">${__P(P_Routingkey,&quot;jrouting.key&quot;)}</stringProp>
+            <stringProp name="AMQPPublisher.Message">&quot;aditionalErrorInfo&quot;:[]
+},
+&quot;aditionaliInfo&quot;:[
+&quot;The record was succesfully saved.&quot;
+],
+&quot;soapTransactions&quot;:[],
+&quot;saveFunctionLog&quot;:true
+}
+</stringProp>
+            <stringProp name="AMQPPublisher.MessageType">${__P(P_Msgtype,&quot;jmeterQueue&quot;)}</stringProp>
+            <stringProp name="AMQPPublisher.ReplyToQueue">${__P(P_ReplytoQueue,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPPublisher.CorrelationId">${__P(P_CorrelationId,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPPublisher.ContentType">${__P(P_ContentType,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPPublisher.MessageId">${__P(P_MEssageId,&quot;&quot;)}</stringProp>
+            <elementProp name="AMQPPublisher.Headers" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables definidas por el Usuario" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+          </com.zeroclue.jmeter.protocol.amqp.AMQPPublisher>
+          <hashTree/>
+          <com.zeroclue.jmeter.protocol.amqp.AMQPConsumer guiclass="com.zeroclue.jmeter.protocol.amqp.gui.AMQPConsumerGui" testclass="com.zeroclue.jmeter.protocol.amqp.AMQPConsumer" testname="RPC Respone" enabled="true">
+            <stringProp name="AMQPSampler.Exchange">${__P(P_Exchange,&quot;&quot;)}</stringProp>
+            <boolProp name="AMQPSampler.ExchangeDurable">true</boolProp>
+            <boolProp name="AMQPSampler.ExchangeAutoDelete">true</boolProp>
+            <boolProp name="AMQPSampler.ExchangeRedeclare">false</boolProp>
+            <stringProp name="AMQPSampler.Queue">${__P(P_Queue,&quot;jmeterQueue&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.RoutingKey">${__P(P_RoutingKey,&quot;jmeterRoutingKey&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.VirtualHost">${__P(P_Host,&quot;rabbitmq.virtualhost&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.MessageTTL">${__P(P_MessageTTL,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.MessageExpires">${__P(P_Expires,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.ExchangeType">direct</stringProp>
+            <stringProp name="AMQPSampler.QueueDurable">true</stringProp>
+            <stringProp name="AMQPSampler.QueueExclusive">false</stringProp>
+            <stringProp name="AMQPSampler.QueueAutoDelete">false</stringProp>
+            <boolProp name="AMQPSampler.Redeclare">false</boolProp>
+            <stringProp name="AMQPSampler.Timeout">${__P(P_Timeout,1000)}</stringProp>
+            <stringProp name="AMQPSampler.Iterations">${__P(P_NumberofSamples,1)}</stringProp>
+            <stringProp name="AMQPSampler.Host">${__P(P_Amqps,&quot;hostamq&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Port">${__P(P_Port,&quot;rabbitmq.port&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Username">${__P(P_Username,&quot;rabbitmq.username&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.Password">${__P(P_Passwordt,&quot;rabbitmq.password&quot;)}</stringProp>
+            <stringProp name="AMQPSampler.SSL">false</stringProp>
+            <boolProp name="AMQPConsumer.ReadResponse">true</boolProp>
+            <stringProp name="AMQPConsumer.PrefetchCount">${__P(P_PrefetchCount,0)}</stringProp>
+            <stringProp name="AMQPConsumer.ReceiveTimeout">${__P(P_ReceiveTimeout,&quot;&quot;)}</stringProp>
+            <stringProp name="AMQPConsumer.PurgeQueue">false</stringProp>
+            <stringProp name="AMQPConsumer.AutoAck">false</stringProp>
+            <boolProp name="AMQPConsumer.UseTx">false</boolProp>
+          </com.zeroclue.jmeter.protocol.amqp.AMQPConsumer>
+          <hashTree/>
+        </hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Aserción de Respuesta" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="299310883">${__P(P_CodigoRespuesta,200)}</stringProp>
+          </collectionProp>
+          <stringProp name="TestPlan.comments">La asercion del codigo de respuesta determina el cumplimiento del requisito funcional</stringProp>
+          <stringProp name="Assertion.custom_message">Fallo asercion de codigo respuesta: ${__P(P_CodigoRespuesta,200)}</stringProp>
+          <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="false">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>false</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>false</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>true</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <hostname>true</hostname>
+            <threadCounts>true</threadCounts>
+            <sampleCount>true</sampleCount>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
