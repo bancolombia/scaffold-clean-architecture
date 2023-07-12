@@ -24,7 +24,7 @@ class ApiRestTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isNotEmpty();
+                            Assertions.assertThat(userResponse).isEmpty();
                         }
                 );
     }
