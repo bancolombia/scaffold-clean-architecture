@@ -1,5 +1,6 @@
 package {{package}}.consumer;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 {{/lombok}}
@@ -12,7 +13,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 {{/lombok}}
 public class RestConsumer /* implements Gateway from domain */{
-
     private final WebClient client;
 
 {{^lombok}}
@@ -23,18 +23,24 @@ public class RestConsumer /* implements Gateway from domain */{
 
     // these methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
-
+    @CircuitBreaker(name = "testGet" /*, fallbackMethod = "testGetOk"*/)
     public Mono<ObjectResponse> testGet() {
-
         return client
-            .get()
-            .retrieve()
-            .bodyToMono(ObjectResponse.class);
-
+                .get()
+                .retrieve()
+                .bodyToMono(ObjectResponse.class);
     }
 
-    public Mono<ObjectResponse> testPost() {
+// Possible fallback method
+//    public Mono<String> testGetOk(Exception ignored) {
+//        return client
+//                .get() // TODO: change for another endpoint or destination
+//                .retrieve()
+//                .bodyToMono(String.class);
+//    }
 
+    @CircuitBreaker(name = "testPost")
+    public Mono<ObjectResponse> testPost() {
     {{#lombok}}
         ObjectRequest request = ObjectRequest.builder()
             .val1("exampleval1")
@@ -46,11 +52,10 @@ public class RestConsumer /* implements Gateway from domain */{
         request.setVal1("exampleval1");
         request.setVal2("exampleval2");
     {{/lombok}}
-
         return client
-            .post()
-            .body(Mono.just(request), ObjectRequest.class)
-            .retrieve()
-            .bodyToMono(ObjectResponse.class);
+                .post()
+                .body(Mono.just(request), ObjectRequest.class)
+                .retrieve()
+                .bodyToMono(ObjectResponse.class);
     }
 }

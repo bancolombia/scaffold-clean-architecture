@@ -1,44 +1,25 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline;
-import co.com.bancolombia.factory.pipelines.ModuleFactoryPipeline.PipelineType;
-import co.com.bancolombia.utils.Utils;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.options.Option;
-import org.gradle.api.tasks.options.OptionValues;
+import co.com.bancolombia.task.annotations.CATask;
 
-public class GeneratePipelineTask extends CleanArchitectureDefaultTask {
-  private PipelineType type;
+@CATask(
+    name = "generatePipeline",
+    shortcut = "gpl",
+    description = "Generate CI pipeline as a code in deployment layer")
+public class GeneratePipelineTask extends AbstractResolvableTypeTask {
 
-  @Option(option = "type", description = "Set type of pipeline to be generated")
-  public void setType(PipelineType type) {
-    this.type = type;
+  @Override
+  protected void prepareParams() {
+    // No additional params required
   }
 
-  @OptionValues("type")
-  public List<PipelineType> getTypes() {
-    return Arrays.asList(PipelineType.values());
+  @Override
+  protected String resolvePrefix() {
+    return "Pipeline";
   }
 
-  @TaskAction
-  public void generatePipelineTask() throws IOException, CleanException {
-    long start = System.currentTimeMillis();
-    if (type == null) {
-      printHelp();
-      throw new IllegalArgumentException(
-          "No Pipeline type was set, usage: gradle generatePipeline --type "
-              + Utils.formatTaskOptions(getTypes()));
-    }
-    ModuleFactory pipelineFactory = ModuleFactoryPipeline.getPipelineFactory(type);
-    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    logger.lifecycle("Pipeline type: {}", type);
-    pipelineFactory.buildModule(builder);
-    builder.persist();
-    sendAnalytics(type.name(), System.currentTimeMillis() - start);
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.pipelines";
   }
 }

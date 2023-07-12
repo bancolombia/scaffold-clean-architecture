@@ -1,15 +1,16 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.SonarCheck;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
-public class InternalTask extends CleanArchitectureDefaultTask {
+@CATask(name = "internalTask", shortcut = "it", description = "Run non final user task")
+public class InternalTask extends AbstractCleanArchitectureDefaultTask {
   private Action action = Action.SONARCHECK;
 
   @Option(option = "action", description = "Set task action to run")
@@ -22,8 +23,8 @@ public class InternalTask extends CleanArchitectureDefaultTask {
     return Arrays.asList(Action.values());
   }
 
-  @TaskAction
-  public void executeAction() throws IOException {
+  @Override
+  public void execute() throws IOException {
     if (Objects.requireNonNull(action) == Action.SONARCHECK) {
       SonarCheck.parse(getProject());
     }

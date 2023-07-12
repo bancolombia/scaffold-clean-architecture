@@ -17,7 +17,8 @@
     "structure/root/.gitignore.mustache": ".gitignore",
     "structure/root/gradle.properties.mustache": "gradle.properties",
     "structure/root/lombok.config.mustache": "lombok.config",
-    "structure/root/readme.md.mustache": "README.md"
+    "structure/root/readme.md.mustache": "README.md",
+    "structure/applications/appservice/arch-validations/.gitignore.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/.gitignore"
   },
   "kotlin" : {
     "structure/applications/appservice/build.gradle.kts.mustache": "applications/app-service/build.gradle.kts",

@@ -3,8 +3,17 @@
  */
 package co.com.bancolombia;
 
-import static org.junit.Assert.*;
+import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.GenerateStructureTask;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -28,6 +37,7 @@ public class PluginCleanTest {
     String descriptionTask9 = "Generate subproject by karate framework in deployment layer";
     String descriptionTask10 = "Generate helper in infrastructure layer";
     Project project = ProjectBuilder.builder().build();
+
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
     // Act
@@ -72,5 +82,29 @@ public class PluginCleanTest {
 
     assertEquals(taskGroup, task10.getGroup());
     assertEquals(descriptionTask10, task10.getDescription());
+  }
+
+  @Test
+  public void shouldApply() throws CleanException, IOException {
+    deleteStructure(Path.of("build/unitTest"));
+    Project project =
+        ProjectBuilder.builder()
+            .withName("cleanArchitecture")
+            .withProjectDir(new File("build/unitTest"))
+            .build();
+
+    project.getTasks().create("other", GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask =
+        (GenerateStructureTask) project.getTasks().getByName("other");
+    generateStructureTask.execute();
+
+    ProjectBuilder.builder()
+        .withName(APP_SERVICE)
+        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    Plugin<?> applied = project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    assertNotNull(applied);
   }
 }

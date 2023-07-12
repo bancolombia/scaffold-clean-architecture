@@ -1,30 +1,35 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.ModuleFactory;
-import co.com.bancolombia.factory.tests.ModuleFactoryTests;
-import co.com.bancolombia.utils.Utils;
-import java.io.IOException;
-import org.gradle.api.tasks.TaskAction;
-import org.gradle.api.tasks.options.Option;
+import co.com.bancolombia.task.annotations.CATask;
 
-public class GenerateAcceptanceTestTask extends CleanArchitectureDefaultTask {
-  private String name = "acceptanceTest";
+@CATask(
+    name = "generateAcceptanceTest",
+    shortcut = "gat",
+    description = "Generate subproject by karate framework in deployment layer")
+public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
-  @Option(option = "name", description = "Set acceptance Test project name")
-  public void setName(String projectName) {
-    this.name = projectName;
+  @Override
+  protected void prepareParams() {
+    builder.addParam("acceptanceTestPath", name);
   }
 
-  @TaskAction
-  public void generateAcceptanceTestTask() throws IOException, CleanException {
-    ModuleFactory moduleFactory = ModuleFactoryTests.getTestsFactory();
-    long start = System.currentTimeMillis();
-    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    logger.lifecycle("AcceptanceTest name: {}", name);
-    builder.addParam("acceptanceTestPath", name);
-    moduleFactory.buildModule(builder);
-    builder.persist();
-    sendAnalytics(System.currentTimeMillis() - start);
+  @Override
+  protected String resolvePrefix() {
+    return "AcceptanceTest";
+  }
+
+  @Override
+  protected String resolvePackage() {
+    return "co.com.bancolombia.factory.tests.acceptance";
+  }
+
+  @Override
+  protected String defaultName() {
+    return "acceptanceTest";
+  }
+
+  @Override
+  protected String defaultType() {
+    return "karate";
   }
 }

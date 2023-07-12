@@ -10,6 +10,6 @@ public class UpgradeMainGradle {
   @SneakyThrows
   public boolean up(ModuleBuilder builder, String match, String validation, String value) {
     return builder.updateFile(
-        MAIN_GRADLE, content -> UpdateUtils.appendValidate(content, match, validation, value));
+        MAIN_GRADLE, content -> UpdateUtils.insertBeforeMatch(content, match, validation, value));
   }
 }

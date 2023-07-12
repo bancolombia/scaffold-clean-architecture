@@ -8,7 +8,6 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
-import co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
         (GenerateStructureTask) project.getTasks().getByName("ca");
     taskStructure.setType(type);
     taskStructure.setLanguage(GenerateStructureTask.Language.KOTLIN);
-    taskStructure.generateStructureTask();
+    taskStructure.execute();
 
     project.getTasks().create("test", GenerateDrivenAdapterTask.class);
     task = (GenerateDrivenAdapterTask) project.getTasks().getByName("test");
@@ -55,35 +54,35 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     task.setType(null);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
   public void shouldHandleErrorWhenNoName() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   // Assert
   @Test(expected = IllegalArgumentException.class)
   public void shouldHandleErrorWhenEmptyName() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     task.setName("");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   @Test
   public void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.GENERIC);
+    task.setType("GENERIC");
     task.setName("MyDrivenAdapter");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/my-driven-adapter/build.gradle.kts")
@@ -101,10 +100,10 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateRestConsumerForKotlin() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+    task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
@@ -130,9 +129,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.JPA);
+    task.setType("JPA");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle.kts")
@@ -162,9 +161,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -194,10 +193,10 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -235,9 +234,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     writeString(
         new File("build/unitTest/gradle.properties"),
         "package=co.com.bancolombia\nsystemProp.version=" + Constants.PLUGIN_VERSION + "\n");
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -268,9 +267,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MONGODB);
+    task.setType("MONGODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle.kts")
@@ -302,9 +301,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setUrl("http://localhost:8080");
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.RESTCONSUMER);
+    task.setType("RESTCONSUMER");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/rest-consumer/build.gradle.kts")
@@ -331,9 +330,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.ASYNCEVENTBUS);
+    task.setType("ASYNCEVENTBUS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/async-event-bus/build.gradle.kts")
@@ -366,10 +365,10 @@ public class GenerateDrivenAdapterKotlinTaskTest {
       throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -391,20 +390,20 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void shouldHandleErrorBecauseIncompatibility() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
   }
 
   @Test
   public void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -422,9 +421,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.R2DBC);
+    task.setType("R2DBC");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/r2dbc-postgresql/build.gradle.kts")
@@ -448,10 +447,10 @@ public class GenerateDrivenAdapterKotlinTaskTest {
       throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.REDIS);
+    task.setType("REDIS");
     task.setSecret(Constants.BooleanOption.TRUE);
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle.kts").exists());
@@ -473,9 +472,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+    task.setType("KMS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
@@ -490,9 +489,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KMS);
+    task.setType("KMS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/kms-repository/build.gradle.kts")
@@ -515,9 +514,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    task.setType("S3");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
@@ -544,9 +543,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.S3);
+    task.setType("S3");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/s3-repository/build.gradle.kts")
@@ -573,9 +572,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateMQSender() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.MQ);
+    task.setType("MQ");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/mq-sender/build.gradle.kts")
@@ -589,9 +588,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateDrivenAdapterKtor() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.KTOR);
+    task.setType("KTOR");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/ktor-client/build.gradle.kts")
@@ -601,9 +600,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   @Test
   public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
     // Arrange
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.DYNAMODB);
+    task.setType("DYNAMODB");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/dynamo-db/build.gradle.kts")
@@ -614,9 +613,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterSQSSenderForReactive() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.SQS);
+    task.setType("SQS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle.kts")
@@ -627,9 +626,9 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterSQSSenderImperative() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.IMPERATIVE);
-    task.setType(ModuleFactoryDrivenAdapter.DrivenAdapterType.SQS);
+    task.setType("SQS");
     // Act
-    task.generateDrivenAdapterTask();
+    task.execute();
     // Assert
     assertTrue(
         new File("build/unitTest/infrastructure/driven-adapters/sqs-sender/build.gradle.kts")

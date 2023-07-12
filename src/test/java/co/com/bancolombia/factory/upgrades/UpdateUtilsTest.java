@@ -69,7 +69,7 @@ public class UpdateUtilsTest {
     String currentContent = "dependencies {}\njar {enabled = false}";
     builder.addFile(file, currentContent);
     // Act
-    String result = UpdateUtils.appendValidate(currentContent, match, check, file);
+    String result = UpdateUtils.insertBeforeMatch(currentContent, match, check, file);
     // Assert
     assertEquals(currentContent, result);
   }
@@ -84,7 +84,7 @@ public class UpdateUtilsTest {
     builder.addFile(file, currentContent);
     // Act
     String expected = "build.gradle\ndependencies {}\n";
-    String result = UpdateUtils.appendValidate(currentContent, match, check, file);
+    String result = UpdateUtils.insertBeforeMatch(currentContent, match, check, file);
     // Assert
     assertEquals(expected, result);
   }

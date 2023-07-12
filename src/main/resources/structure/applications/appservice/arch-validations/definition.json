@@ -1,0 +1,10 @@
+{
+  "folders": [],
+  "files": {
+    "structure/applications/appservice/arch-validations/.gitignore.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/.gitignore"
+  },
+  "kotlin" : {},
+  "java" : {
+    "structure/applications/appservice/arch-validations/architecture-test.java.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/ArchitectureTest.java"
+  }
+}

@@ -1,5 +1,124 @@
 # Changelog
 
+## [v3.4.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.4.0) (2023-07-05)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.3.1...v3.4.0)
+
+**Merged pull requests:**
+
+- feat\(performanceTest\): Template colasMQ performa [\#377](https://github.com/bancolombia/scaffold-clean-architecture/pull/377) ([Kathechicae](https://github.com/Kathechicae))
+- Revert "feat\(performanceTest\): Cambio de rama" [\#376](https://github.com/bancolombia/scaffold-clean-architecture/pull/376) ([Kathechicae](https://github.com/Kathechicae))
+- feat\(performanceTest\): Cambio de rama [\#375](https://github.com/bancolombia/scaffold-clean-architecture/pull/375) ([Kathechicae](https://github.com/Kathechicae))
+- update springboot [\#372](https://github.com/bancolombia/scaffold-clean-architecture/pull/372) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.3.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.3.1) (2023-06-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.3.0...v3.3.1)
+
+**Merged pull requests:**
+
+- fix\(type\): missing type parameter [\#371](https://github.com/bancolombia/scaffold-clean-architecture/pull/371) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.3.0) (2023-06-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.2.1...v3.3.0)
+
+**Merged pull requests:**
+
+- feat\(circuit breaker\): Applied to rest consumer [\#370](https://github.com/bancolombia/scaffold-clean-architecture/pull/370) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.2.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.2.1) (2023-06-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.2.0...v3.2.1)
+
+**Merged pull requests:**
+
+- fix\(library release\): library release as job [\#368](https://github.com/bancolombia/scaffold-clean-architecture/pull/368) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.2.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.2.0) (2023-06-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.2...v3.2.0)
+
+**Merged pull requests:**
+
+- feat\(cors-security-headers\): add cors and security headers to rest en… [\#367](https://github.com/bancolombia/scaffold-clean-architecture/pull/367) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.1.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.2) (2023-06-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.1...v3.1.2)
+
+**Merged pull requests:**
+
+- Fix spring plugin in root project [\#364](https://github.com/bancolombia/scaffold-clean-architecture/pull/364) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.1.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.1) (2023-06-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.1.0...v3.1.1)
+
+**Merged pull requests:**
+
+- fix\(refactor\): refactor utils name for clarity, remove lifecycle logs [\#363](https://github.com/bancolombia/scaffold-clean-architecture/pull/363) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.1.0) (2023-05-31)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.9...v3.1.0)
+
+**Merged pull requests:**
+
+- feat\(after task hook\): Add hook that finds a module factory with patt… [\#362](https://github.com/bancolombia/scaffold-clean-architecture/pull/362) ([juancgalvis](https://github.com/juancgalvis))
+- Add archunit tests with default rules [\#355](https://github.com/bancolombia/scaffold-clean-architecture/pull/355) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.0.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.9) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.8...v3.0.9)
+
+## [v3.0.8](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.8) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.7...v3.0.8)
+
+## [v3.0.7](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.7) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.6...v3.0.7)
+
+**Merged pull requests:**
+
+- fix\(actions\) to GitHub repo [\#361](https://github.com/bancolombia/scaffold-clean-architecture/pull/361) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.0.6](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.6) (2023-05-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.5...v3.0.6)
+
+**Merged pull requests:**
+
+- fix\(github actions\): signing dependency removed, remove prefix of v i… [\#360](https://github.com/bancolombia/scaffold-clean-architecture/pull/360) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
+
+**Merged pull requests:**
+
+- Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
+- fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
+
+## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
+
+**Closed issues:**
+
+- Draft [\#354](https://github.com/bancolombia/scaffold-clean-architecture/issues/354)
+
+**Merged pull requests:**
+
+- Fix semantic release [\#357](https://github.com/bancolombia/scaffold-clean-architecture/pull/357) ([santitigaga](https://github.com/santitigaga))
+- Use semantic release [\#356](https://github.com/bancolombia/scaffold-clean-architecture/pull/356) ([santitigaga](https://github.com/santitigaga))
+- add block hound validations to reactive projects [\#353](https://github.com/bancolombia/scaffold-clean-architecture/pull/353) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [3.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/3.0.3) (2023-04-25)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.2...3.0.3)
@@ -428,15 +547,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
-
-## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
 
 ## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+
+## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
 
 **Implemented enhancements:**
 

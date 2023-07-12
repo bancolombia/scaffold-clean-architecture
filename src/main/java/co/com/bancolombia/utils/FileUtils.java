@@ -75,6 +75,14 @@ public class FileUtils {
     }
   }
 
+  public static boolean readBooleanProperty(String variable) {
+    try {
+      return "true".equals(readProperties(".", variable));
+    } catch (IOException ignored) {
+      return false;
+    }
+  }
+
   public static void setGradleProperty(String projectPath, String variable, String value)
       throws IOException {
     try (FileInputStream fis = new FileInputStream(projectPath + GRADLE_PROPERTIES)) {

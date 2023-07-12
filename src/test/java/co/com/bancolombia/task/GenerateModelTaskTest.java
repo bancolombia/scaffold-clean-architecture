@@ -22,7 +22,7 @@ public class GenerateModelTaskTest {
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-    caTask.generateStructureTask();
+    caTask.execute();
 
     project.getTasks().create("test", GenerateModelTask.class);
     task = (GenerateModelTask) project.getTasks().getByName("test");
@@ -30,13 +30,13 @@ public class GenerateModelTaskTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void shouldFailWithoutArgumentsForModel() throws IOException, CleanException {
-    task.generateModelTask();
+    task.execute();
   }
 
   @Test
   public void shouldGenerateModel() throws IOException, ParamNotFoundException {
     task.setName("testModel");
-    task.generateModelTask();
+    task.execute();
     assertTrue(
         new File(
                 "build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java")

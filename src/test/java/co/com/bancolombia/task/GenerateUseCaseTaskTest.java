@@ -22,7 +22,7 @@ public class GenerateUseCaseTaskTest {
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-    caTask.generateStructureTask();
+    caTask.execute();
 
     project.getTasks().create("test", GenerateUseCaseTask.class);
     task = (GenerateUseCaseTask) project.getTasks().getByName("test");
@@ -33,7 +33,7 @@ public class GenerateUseCaseTaskTest {
   public void generateUseCaseException() throws IOException, ParamNotFoundException {
     // Arrange
     // Act
-    task.generateUseCaseTask();
+    task.execute();
   }
 
   @Test
@@ -41,7 +41,7 @@ public class GenerateUseCaseTaskTest {
     // Arrange
     task.setName("business");
     // Act
-    task.generateUseCaseTask();
+    task.execute();
     // Assert
     assertTrue(
         new File(
@@ -55,7 +55,7 @@ public class GenerateUseCaseTaskTest {
     // Arrange
     task.setName("MyUseCase");
     // Act
-    task.generateUseCaseTask();
+    task.execute();
     // Assert
     assertTrue(
         new File(

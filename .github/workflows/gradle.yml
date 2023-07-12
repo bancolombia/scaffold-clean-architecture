@@ -1,18 +1,13 @@
 name: "gradle-actions"
-
 on:
-  release:
-    types: [ published ]
   push:
     branches:
       - master
       - feature/*
       - fix/*
-
   pull_request:
     branches:
       - master
-
 jobs:
   build:
     permissions:
@@ -27,14 +22,14 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 11
-      - uses: actions/setup-node@v2
+      - name: Set up NodeJS 18
+        uses: actions/setup-node@v2
         with:
           node-version: 18
-      - run: npm -g install @semantic-release/git semantic-release && semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: npx semantic-release@21.0.2
-        name: semantic version
+      - name: Set up Semantic Release
+        run: npm -g install @semantic-release/git semantic-release@21.0.3
+      - name: Semantic Release
+        run: npx semantic-release@21.0.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate code formatting
@@ -52,12 +47,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Next steps will only run if generation code templates have been changed
-      - uses: dorny/paths-filter@v2
+      - name: Detect changes in generated code
+        uses: dorny/paths-filter@v2
         id: changes
         with:
           filters: |
             templates:
               - 'src/main/resources/**'
+              - 'src/main/java/co/com/bancolombia/Constants.java'
+              - 'src/main/java/co/com/bancolombia/factory/**'
       # Generated code Analysis
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
@@ -69,86 +67,32 @@ jobs:
           distribution: 'temurin' 
           java-version: 17
       # Generated code reactive
-      - name: Generate project to scan
+      - name: Generate reactive project to scan
         if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh reactive
-      - name: Scan generated project dependencies
+      - name: Scan generated reactive project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
-      - name: Sonar analysis for generated project
+        run: ./gradlew build dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+      - name: Sonar analysis for generated reactive project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # Generated code reactive
-      - name: Generate project to scan [imperative]
+      # Generated code imperative
+      - name: Generate imperative project to scan
         if: steps.changes.outputs.templates == 'true'
         run: ./generate_project.sh imperative
-      - name: Scan generated project dependencies [imperative]
+      - name: Scan generated imperative project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
-      - name: Sonar analysis for generated project [imperative]
+        run: ./gradlew build dependencyCheckAnalyze && ./gradlew it && cat applications/app-service/build/reports/dependency-check-sonar.json
+      - name: Sonar analysis for generated imperative project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
         run: ./gradlew sonarqube --stacktrace
           -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-
-  release:
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' 
-          java-version: 11
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Upgrade README.md
-        run: sed -i 's/version \".*\"/version "${{ env.RELEASE_VERSION }}"/g' README.md
-      - name: Upgrade README.md
-        run: sed -i 's/version \\".*\\"/version \\"${{ env.RELEASE_VERSION }}\\"/g' README.md
-      - name: Upgrade Gradle.properties
-        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
-      - name: Upgrade Constants.java
-        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Generate Changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          pullRequests: true
-          prWoLabels: true
-          issues: true
-          issuesWoLabels: true
-          stripGeneratorNotice: true
-      - name: Save version
-        uses: github-actions-x/commit@v2.9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: "master"
-          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
-          force-add: "true"
-          files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
-          name: Release Bot
-          email: release-bot@bancolombia.com.co
-      - name: Set Analytics Endpoint
-        run: sed -i "s/ENDPOINT = \"\"/ENDPOINT = \"$ANALYTICS_ENDPOINT\"/g" src/main/java/co/com/bancolombia/analytics/AnalyticsExporter.java
-        env:
-          ANALYTICS_ENDPOINT: ${{ secrets.ANALYTICS_ENDPOINT }}
-      - name: Publish plugin in gradle plugins
-        run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
-      - name: Publish plugin in github packages
-        run: ./gradlew publish --info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,9 +1,11 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:{{okhttpVersion}}'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:{{okhttpVersion}}'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{resilience4jVersion}}'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'
     {{/metrics}}
