@@ -1,11 +1,12 @@
 dependencies {
     implementation project(':model')
 
+    implementation 'com.github.bancolombia:aws-secrets-manager-async:4.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}'
 
     {{^example}}
-    runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo' // TODO: remove this dependency to connect to real database
+    runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.6.3' // TODO: remove this dependency to connect to real database
     {{/example}}
     testImplementation 'org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}'
 }

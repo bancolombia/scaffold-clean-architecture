@@ -79,7 +79,7 @@ public class SQSListener implements Runnable {
 
     private Message process(Message message) {
         {{#metrics}}
-        timer.record(() -> consumer.accept(message))
+        timer.record(() -> consumer.accept(message));
         {{/metrics}}
         {{^metrics}}
         consumer.accept(message);

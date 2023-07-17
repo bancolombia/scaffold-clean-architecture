@@ -5,8 +5,10 @@
   "files": {},
   "java": {
     "driven-adapter/mongo-reactive/config/mongo-config.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoConfig.java",
+    "driven-adapter/mongo-reactive/config/mongo-config.unit.test.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/test/{{language}}/{{packagePath}}/mongo/config/MongoConfigTest.java",
     "driven-adapter/mongo-reactive/config/db-secret.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/config/MongoDBSecret.java",
     "driven-adapter/mongo-reactive/helper/adapter-operations.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/helper/AdapterOperations.java",
+    "driven-adapter/mongo-reactive/helper/adapter-operations.unit.test.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/test/{{language}}/{{packagePath}}/mongo/helper/AdapterOperationsTest.java",
     "driven-adapter/mongo-reactive/mongo-repository.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoDBRepository.java",
     "driven-adapter/mongo-reactive/mongo-repository-adapter.java.mustache": "infrastructure/driven-adapters/mongo-repository/src/main/{{language}}/{{packagePath}}/mongo/MongoRepositoryAdapter.java",
     "driven-adapter/mongo-reactive/build.gradle.mustache": "infrastructure/driven-adapters/mongo-repository/build.gradle"
