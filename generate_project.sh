@@ -13,7 +13,7 @@ echo "buildscript {
           }
         }
         dependencies {
-          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.0.0-example'
+          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.4.0'
         }
       }
 
