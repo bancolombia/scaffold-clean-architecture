@@ -7,20 +7,28 @@
     "test/performance-test/jmeter/Jmeter/serenity.properties.mustache": "performance-test/Jmeter/serenity.properties",
 
     "test/performance-test/jmeter/Jmeter/Api/README.md.mustache": "performance-test/Jmeter/Api/README.md",
+    "test/performance-test/jmeter/Jmeter/HTTP2/README.md.mustache": "performance-test/Jmeter/HTTP2/README.md",
     "test/performance-test/jmeter/Jmeter/ColasMQ/README.md.mustache": "performance-test/jmeter/ColasMQ/README.md",
-    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/README.md.mustache": "performance-test/Jmeter/ColasRabbitMQ/README.md.mustache",
+    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/README.md.mustache": "performance-test/Jmeter/ColasRabbitMQ/README.md",
+    "test/performance-test/jmeter/Jmeter/SQSQueue/README.md.mustache": "performance-test/Jmeter/SQSQueue/README.md",
 
     "test/performance-test/jmeter/Jmeter/Api/SC_Template_UDP_Service.jmx.mustache": "performance-test/Jmeter/Api/SC_Template_UDP_Service.jmx",
     "test/performance-test/jmeter/Jmeter/Api/SC_Template_HTTP_Service.jmx.mustache": "performance-test/Jmeter/Api/SC_Template_HTTP_Service.jmx",
+    "test/performance-test/jmeter/Jmeter/HTTP2/SC_Template_HTTP2_Request.jmx.mustache": "performance-test/Jmeter/HTTP2/SC_Template_HTTP2_Request.jmx",
     "test/performance-test/jmeter/Jmeter/ColasMQ/SC_Template_ColasMQ.jmx.mustache": "performance-test/Jmeter/ColasMQ/SC_Template_ColasMQ.jmx",
-    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/SC_Template_RabbitMQ.jmx.mustache": "performance-test/Jmeter/ColasRabbitMQ/SC_Template_RabbitMQ.jmx.mustache",
+    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/SC_Template_RabbitMQ.jmx.mustache": "performance-test/Jmeter/ColasRabbitMQ/SC_Template_RabbitMQ.jmx",
+    "test/performance-test/jmeter/Jmeter/SQSQueue/Template_SQS_Queues.jmx.mustache": "performance-test/Jmeter/SQSQueue/Template_SQS_Queues.jmx",
 
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/Api/DataSet/DT_Example.csv",
     "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/Api/DataSet/DT_Example.txt",
+    "test/performance-test/jmeter/Jmeter/HTTP2/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/HTTP2/DataSet/DT_Example.csv",
+    "test/performance-test/jmeter/Jmeter/HTTP2/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/HTTP2/DataSet/DT_Example.txt",
     "test/performance-test/jmeter/Jmeter/ColasMQ/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/ColasMQ/DataSet/DT_Example.txt",
     "test/performance-test/jmeter/Jmeter/ColasMQ/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/ColasMQ/DataSet/DT_Example.csv",
-    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/ColasRabbitMQ/DataSet/DT_Example.csv.mustache",
-    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt.mustache"
+    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/ColasRabbitMQ/DataSet/DT_Example.csv",
+    "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt",
+    "test/performance-test/jmeter/Jmeter/SQSQueue/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/SQSQueue/DataSet/DT_Example.csv",
+    "test/performance-test/jmeter/Jmeter/SQSQueue/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/SQSQueue/DataSet/DT_Example.txt"
   },
   "java": {
   },
