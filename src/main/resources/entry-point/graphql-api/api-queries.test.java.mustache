@@ -1,0 +1,16 @@
+package {{package}}.graphqlapi;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class ApiQueriesTest {
+
+    @Test
+    void addSomethingTest(){
+        ApiQueries apiQueries = new ApiQueries();
+        var objRequest = "objRequest";
+        var addSomething = apiQueries.getSomething(objRequest);
+
+        Assertions.assertNotNull(addSomething);
+    }
+}

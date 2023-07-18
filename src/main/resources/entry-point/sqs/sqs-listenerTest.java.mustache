@@ -1,0 +1,77 @@
+package {{package}}.sqs.listener.helper;
+
+import co.com.bancolombia.sqs.listener.SQSProcessor;
+import co.com.bancolombia.sqs.listener.config.SQSProperties;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.model.*;
+
+import java.util.concurrent.CompletableFuture;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+public class SQSListenerTest {
+
+    @Mock
+    private SqsAsyncClient asyncClient;
+
+    @BeforeEach
+    void setUp(){
+        MockitoAnnotations.openMocks(this);
+
+        Message message = Message.builder().body("message").build();
+        DeleteMessageResponse deleteMessageResponse = DeleteMessageResponse.builder().build();
+        ReceiveMessageResponse messageResponse = ReceiveMessageResponse.builder().messages(message).build();
+
+        when(asyncClient.receiveMessage(any(ReceiveMessageRequest.class))).thenReturn(CompletableFuture.completedFuture(messageResponse));
+        when(asyncClient.deleteMessage(any(DeleteMessageRequest.class))).thenReturn(CompletableFuture.completedFuture(deleteMessageResponse));
+
+    }
+
+    @Test
+    void startTest(){
+        SQSProperties sqsProperties = new SQSProperties();
+        sqsProperties.setNumberOfThreads(1);
+        sqsProperties.setRegion("Region");
+
+        SQSListener sqsListener =SQSListener.builder()
+            .client(asyncClient)
+            .properties(sqsProperties)
+            .consumer(System.out::println)
+            .timer(Timer.builder("test").register(new SimpleMeterRegistry()))
+            .build();
+
+        SQSListener listener = sqsListener.start();
+
+        Assertions.assertNotNull(listener);
+    }
+
+    @Test
+    void listenerTest() {
+        SQSProperties sqsProperties = new SQSProperties();
+        sqsProperties.setNumberOfThreads(1);
+        sqsProperties.setRegion("Region");
+
+        SQSProcessor sqsProcessor = new SQSProcessor();
+
+        SQSListener sqsListener =SQSListener.builder()
+            .client(asyncClient)
+            .properties(sqsProperties)
+            .consumer(sqsProcessor)
+            .timer(Timer.builder("test").register(new SimpleMeterRegistry()))
+            .build();
+
+        ReflectionTestUtils.invokeMethod(sqsListener, "listen");
+
+        Assertions.assertNotNull(sqsListener);
+
+    }
+}

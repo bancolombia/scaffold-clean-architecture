@@ -1,0 +1,43 @@
+package {{package}}.controller;
+
+import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+public class RsocketControllerTest {
+
+    private final RsocketController rsocketController = new RsocketController();
+
+    @Test
+        void testRequestResponse(){
+        Mono<Object> requestResponse = rsocketController.getRequestResponse("object");
+
+        StepVerifier.create(requestResponse)
+        .verifyComplete();
+    }
+
+    @Test
+    void testRequestStream(){
+        Flux<Object> requestStream = rsocketController.getRequestStream();
+
+        StepVerifier.create(requestStream)
+        .verifyComplete();
+    }
+
+    @Test
+    void testFireforget(){
+        Mono<Void> requetsFireForget = rsocketController.getRequetsFireForget("object");
+
+        StepVerifier.create(requetsFireForget)
+        .verifyComplete();
+    }
+
+    @Test
+    void testChannel(){
+         Flux<Object> channel = rsocketController.getChannel(Flux.just("object"));
+
+         StepVerifier.create(channel)
+         .verifyComplete();
+    }
+}

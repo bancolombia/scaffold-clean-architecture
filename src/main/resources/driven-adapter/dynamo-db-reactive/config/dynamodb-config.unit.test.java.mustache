@@ -1,0 +1,77 @@
+package {{package}}.dynamodb.config;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
+{{#metrics}}
+import software.amazon.awssdk.metrics.MetricPublisher;
+{{/metrics}}
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@ExtendWith(MockitoExtension.class)
+class DynamoDBConfigTest {
+
+    {{#metrics}}
+    @Mock
+    private MetricPublisher publisher;
+    {{/metrics}}
+
+    @Mock
+    private DynamoDbAsyncClient dynamoDbAsyncClient;
+
+    private final DynamoDBConfig dynamoDBConfig = new DynamoDBConfig();
+
+    {{#metrics}}
+    @Test
+    void testAmazonDynamoDB() {
+
+        DynamoDbAsyncClient result = dynamoDBConfig.amazonDynamoDB(
+                "http://aws.dynamo.test",
+                "region",
+                publisher);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testAmazonDynamoDBAsync() {
+
+        DynamoDbAsyncClient result = dynamoDBConfig.amazonDynamoDBAsync(
+                publisher,
+                "region");
+
+        assertNotNull(result);
+    }
+    {{/metrics}}
+
+    {{^metrics}}
+    @Test
+    void testAmazonDynamoDB() {
+
+        DynamoDbAsyncClient result = dynamoDBConfig.amazonDynamoDB(
+                "http://aws.dynamo.test",
+                "region");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void testAmazonDynamoDBAsync() {
+
+        DynamoDbAsyncClient result = dynamoDBConfig.amazonDynamoDBAsync("region");
+
+        assertNotNull(result);
+    }
+    {{/metrics}}
+
+    @Test
+    void testGetDynamoDbEnhancedAsyncClient() {
+        DynamoDbEnhancedAsyncClient result = dynamoDBConfig.getDynamoDbEnhancedAsyncClient(dynamoDbAsyncClient);
+
+        assertNotNull(result);
+    }
+}

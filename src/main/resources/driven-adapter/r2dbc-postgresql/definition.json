@@ -6,7 +6,7 @@
   "files": {},
   "java": {
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/r2dbc/config/PostgreSQLConnectionPool.java",
-    "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.unit.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/{{language}}/{{packagePath}}/r2dbc/PostgreSQLConnectionPoolTest.java",
+    "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.unit.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/{{language}}/{{packagePath}}/r2dbc/config/PostgreSQLConnectionPoolTest.java",
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-properties.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/r2dbc/config/PostgresqlConnectionProperties.java",
     "driven-adapter/r2dbc-postgresql/helper/reactive-adapter-operations.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/r2dbc/helper/ReactiveAdapterOperations.java",
     "driven-adapter/r2dbc-postgresql/my-reactive-repository.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/{{language}}/{{packagePath}}/r2dbc/MyReactiveRepository.java",

@@ -1,0 +1,102 @@
+package {{package}}.jpa.config;
+
+{{#include-secret}}
+import co.com.bancolombia.secretsmanager.api.GenericManager;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+{{/include-secret}}
+{{^include-secret}}
+import org.springframework.core.env.Environment;
+{{/include-secret}}
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+{{^include-secret}}
+import org.mockito.Mockito;
+{{/include-secret}}
+import org.mockito.MockitoAnnotations;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+
+import javax.sql.DataSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
+class JpaConfigTest {
+
+    {{#include-secret}}
+    @Mock
+    private GenericManager manager;
+    {{/include-secret}}
+
+    @Mock
+    DataSource dataSource;
+
+    private DBSecret dbSecretUnderTest;
+    private JpaConfig jpaConfigUnderTest;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        jpaConfigUnderTest = new JpaConfig();
+
+        {{#include-secret}}
+        dbSecretUnderTest = new DBSecret();
+        dbSecretUnderTest.setPassword("sa");
+        dbSecretUnderTest.setUsername("sa");
+        dbSecretUnderTest.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        {{/include-secret}}
+        {{^include-secret}}
+        dbSecretUnderTest = DBSecret.builder()
+                .password("sa")
+                .username("sa")
+                .url("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1")
+                .build();
+        {{/include-secret}}
+
+    }
+
+    {{#include-secret}}
+    @Test
+    void dbSecretTest() throws SecretException {
+        String secretName = "secret";
+
+        when(manager.getSecret(secretName, DBSecret.class)).thenReturn(dbSecretUnderTest);
+
+        assertEquals(dbSecretUnderTest, jpaConfigUnderTest.dbSecret(secretName, manager));
+    }
+    {{/include-secret}}
+    {{^include-secret}}
+    @Test
+    void dbSecretTest() {
+        Environment env = Mockito.mock(Environment.class);
+
+        when(env.getProperty("spring.datasource.url")).thenReturn("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        when(env.getProperty("spring.datasource.username")).thenReturn("sa");
+        when(env.getProperty("spring.datasource.password")).thenReturn("sa");
+
+        DBSecret secretResult = jpaConfigUnderTest.dbSecret(env);
+
+        assertEquals(dbSecretUnderTest.getUrl(), secretResult.getUrl());
+        assertEquals(dbSecretUnderTest.getUsername(), secretResult.getUsername());
+        assertEquals(dbSecretUnderTest.getPassword(), secretResult.getPassword());
+    }
+    {{/include-secret}}
+
+    @Test
+    void datasourceTest() {
+        final DataSource result = jpaConfigUnderTest.datasource(dbSecretUnderTest, "org.h2.Driver");
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void entityManagerFactoryTest() {
+
+        final LocalContainerEntityManagerFactoryBean result =
+                jpaConfigUnderTest.entityManagerFactory(dataSource, "dialect");
+
+        assertNotNull(result);
+    }
+}
