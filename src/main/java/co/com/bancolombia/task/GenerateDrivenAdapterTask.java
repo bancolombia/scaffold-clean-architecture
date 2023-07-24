@@ -43,7 +43,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
 
   @Option(option = "eda", description = "Use EDA variant")
   public void setEda(BooleanOption eda) {
-    this.secret = eda;
+    this.eda = eda;
   }
 
   @OptionValues("eda")
@@ -60,7 +60,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   protected void prepareParams() {
     builder.addParam("task-param-cache-mode", cacheMode);
     builder.addParam("include-secret", secret == BooleanOption.TRUE);
-    builder.addParam("eda", secret == BooleanOption.TRUE);
+    builder.addParam("eda", eda == BooleanOption.TRUE);
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("task-param-url", url);
   }

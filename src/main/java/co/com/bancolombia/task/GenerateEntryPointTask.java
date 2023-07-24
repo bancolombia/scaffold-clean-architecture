@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
 import co.com.bancolombia.Constants.BooleanOption;
+import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private Server server = Server.UNDERTOW;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
+  private BooleanOption eda = BooleanOption.FALSE;
 
   @Option(
       option = "server",
@@ -42,6 +44,16 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.pathGraphql = pathgql;
   }
 
+  @Option(option = "eda", description = "Use EDA variant")
+  public void setEda(BooleanOption eda) {
+    this.eda = eda;
+  }
+
+  @OptionValues("eda")
+  public List<BooleanOption> getEdaOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @OptionValues("server")
   public List<Server> getServerOptions() {
     return Arrays.asList(Server.values());
@@ -63,6 +75,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("task-param-pathgql", pathGraphql);
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
+    builder.addParam("eda", eda == BooleanOption.TRUE);
   }
 
   @Override
