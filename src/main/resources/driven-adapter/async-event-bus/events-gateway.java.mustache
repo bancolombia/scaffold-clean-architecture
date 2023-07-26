@@ -1,7 +1,16 @@
 package {{package}}.model.events.gateways;
 
 import reactor.core.publisher.Mono;
+{{#eda}}
+import com.fasterxml.jackson.core.JsonProcessingException;
+{{/eda}}
 
 public interface EventsGateway {
-    Mono<Void> emit(Object event);
+{{#eda}}
+Mono<Void> emit(Object event) throws JsonProcessingException;
+{{/eda}}
+{{^eda}}
+Mono<Void> emit(Object event);
+{{/eda}}
+
 }

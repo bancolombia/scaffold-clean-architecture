@@ -52,22 +52,19 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     }
     {{/lombok}}
 
-    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) {
+    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) throws JsonProcessingException {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
         {{#eda}}
-        try {
-            CloudEvent commandCloudEvent = CloudEventBuilder.v1() //
-                                    .withId(UUID.randomUUID().toString()) //
-                                    .withSource(URI.create("https://spring.io/foos"))//
-                                    .withType(SOME_COMMAND_NAME) //
-                                    .withTime(OffsetDateTime.now())
-                                    .withData("application/json", om.writeValueAsBytes(command))
-                                    .build();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        CloudEvent commandCloudEvent = CloudEventBuilder.v1() //
+                                .withId(UUID.randomUUID().toString()) //
+                                .withSource(URI.create("https://spring.io/foos"))//
+                                .withType(SOME_COMMAND_NAME) //
+                                .withTime(OffsetDateTime.now())
+                                .withData("application/json", om.writeValueAsBytes(command))
+                                .build();
+
         return gateway.sendCommand(new Command<CloudEvent>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), commandCloudEvent),
                 TARGET_NAME);
         {{/eda}}
@@ -77,7 +74,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         {{/eda}}
     }
 
-    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {
+    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) throws JsonProcessingException {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}
@@ -85,17 +82,15 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         return gateway.requestReply(new AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/);
         {{/eda}}
         {{#eda}}
-        try {
-            CloudEvent queryCloudEvent = CloudEventBuilder.v1() //
-                            .withId(UUID.randomUUID().toString()) //
-                            .withSource(URI.create("https://spring.io/foos"))//
-                            .withType(SOME_QUERY_NAME) //
-                            .withTime(OffsetDateTime.now())
-                            .withData("application/json", om.writeValueAsBytes(query))
-                            .build();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
+        CloudEvent queryCloudEvent = CloudEventBuilder.v1() //
+                        .withId(UUID.randomUUID().toString()) //
+                        .withSource(URI.create("https://spring.io/foos"))//
+                        .withType(SOME_QUERY_NAME) //
+                        .withTime(OffsetDateTime.now())
+                        .withData("application/json", om.writeValueAsBytes(query))
+                        .build();
+
         return gateway.requestReply(new AsyncQuery<CloudEvent>(SOME_QUERY_NAME, queryCloudEvent), TARGET_NAME, Object.class/*change for proper model*/);
         {{/eda}}
     }

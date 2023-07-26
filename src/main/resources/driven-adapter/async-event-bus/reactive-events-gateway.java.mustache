@@ -52,23 +52,21 @@ public class ReactiveEventsGateway implements EventsGateway {
     {{/lombok}}
 
     @Override
-    public Mono<Void> emit(Object event) {
+    public Mono<Void> emit(Object event) throws JsonProcessingException {
         {{#lombok}}
         log.log(Level.INFO, "Sending domain event: {0}: {1}", new String[]{SOME_EVENT_NAME, event.toString()});
         {{/lombok}}
         {{#eda}}
-        try {
-            CloudEvent  eventCloudEvent = CloudEventBuilder.v1() //
-                                           .withId(UUID.randomUUID().toString()) //
-                                           .withSource(URI.create("https://spring.io/foos"))//
-                                           .withType(SOME_EVENT_NAME) //
-                                           .withDataContentType("application/json")
-                                           .withTime(OffsetDateTime.now())
-                                           .withData("application/json", om.writeValueAsBytes(event))
-                                           .build();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
+        CloudEvent  eventCloudEvent = CloudEventBuilder.v1() //
+                                       .withId(UUID.randomUUID().toString()) //
+                                       .withSource(URI.create("https://spring.io/foos"))//
+                                       .withType(SOME_EVENT_NAME) //
+                                       .withDataContentType("application/json")
+                                       .withTime(OffsetDateTime.now())
+                                       .withData("application/json", om.writeValueAsBytes(event))
+                                       .build();
+
          return from(domainEventBus.emit(new DomainEvent<CloudEvent>(SOME_EVENT_NAME, UUID.randomUUID().toString(), eventCloudEvent)));
         {{/eda}}
         {{^eda}}
