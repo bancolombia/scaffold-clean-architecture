@@ -4,6 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.api.domain.Command;
 import reactor.test.StepVerifier;
+{{#eda}}
+import io.cloudevents.CloudEvent;
+import io.cloudevents.core.builder.CloudEventBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.net.URI;
+{{/eda}}
+
 
 import java.util.UUID;
 
@@ -16,12 +24,27 @@ public class CommandsHandlerTest {
         commandsHandler = new CommandsHandler();
     }
 
-    @Test
-    void handleCommandATest(){
-        StepVerifier.create(commandsHandler.handleCommandA(
-            new Command<>("COMMAND",
-                UUID.randomUUID().toString(),
-                    "Data"))).expectComplete();
-    }
-
+    {{#eda}}
+     @Test
+        void handleCommandATest() throws JsonProcessingException{
+        ObjectMapper objectMapper = new ObjectMapper();
+        CloudEvent command = CloudEventBuilder.v1() //
+                        .withId(UUID.randomUUID().toString()) //
+                        .withSource(URI.create("https://spring.io/foos"))//
+                        .withType("command")
+                        .withData("application/json", om.writeValueAsBytes("Data"))
+                        .build();
+            StepVerifier.create(commandsHandler.handleCommandA(
+                new Command<CloudEvent>(command.getType(), command.getId(), command))).expectComplete();
+        }
+    {{/eda}}
+    {{^eda}}
+     @Test
+        void handleCommandATest(){
+            StepVerifier.create(commandsHandler.handleCommandA(
+                new Command<>("COMMAND",
+                    UUID.randomUUID().toString(),
+                        "Data"))).expectComplete();
+        }
+    {{/eda}}
 }

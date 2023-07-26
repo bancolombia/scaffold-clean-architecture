@@ -4,6 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.api.domain.DomainEvent;
 import reactor.test.StepVerifier;
+{{#eda}}
+import com.fasterxml.jackson.core.JsonProcessingException;
+import java.net.URI;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
+import io.cloudevents.core.builder.CloudEventBuilder;
+{{/eda}}
 
 import java.util.UUID;
 
@@ -16,7 +23,23 @@ public class EventsHandlerTest {
         eventsHandler = new EventsHandler();
     }
 
-    @Test
+{{#eda}}
+ @Test
+    void handleEventATest() throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    CloudEvent event = CloudEventBuilder.v1() //
+                    .withId(UUID.randomUUID().toString()) //
+                    .withSource(URI.create("https://spring.io/foos"))//
+                    .withType("event")
+                    .withData("application/json", om.writeValueAsBytes("Data"))
+                    .build();
+        StepVerifier.create(eventsHandler.handleEventA(
+            new DomainEvent<CloudEvent>(event.getType(), event.getId(), event))).expectComplete();
+
+    }
+{{/eda}}
+{{^eda}}
+ @Test
     void handleEventATest(){
         StepVerifier.create(eventsHandler.handleEventA(
             new DomainEvent<>("EVENT",
@@ -24,4 +47,6 @@ public class EventsHandlerTest {
                     "Data"))).expectComplete();
 
     }
+{{/eda}}
+
 }

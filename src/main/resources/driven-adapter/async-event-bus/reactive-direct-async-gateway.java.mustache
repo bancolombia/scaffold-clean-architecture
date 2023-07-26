@@ -4,6 +4,22 @@ package {{package}}.events;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 {{/lombok}}
+{{#eda}}
+import org.reactivecommons.api.domain.Command;
+import org.reactivecommons.async.api.AsyncQuery;
+import org.reactivecommons.async.api.DirectAsyncGateway;
+import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGateway;
+import reactor.core.publisher.Mono;
+import io.cloudevents.CloudEvent;
+import io.cloudevents.core.builder.CloudEventBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.UUID;
+import java.net.URI;
+import java.time.OffsetDateTime;
+{{/eda}}
+{{^eda}}
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.async.api.AsyncQuery;
 import org.reactivecommons.async.api.DirectAsyncGateway;
@@ -11,6 +27,7 @@ import org.reactivecommons.async.impl.config.annotations.EnableDirectAsyncGatewa
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
+{{/eda}}
 {{#lombok}}
 import java.util.logging.Level;
 {{/lombok}}
@@ -25,6 +42,9 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     public static final String SOME_COMMAND_NAME = "some.command.name";
     public static final String SOME_QUERY_NAME = "some.query.name";
     private final DirectAsyncGateway gateway;
+    {{#eda}}
+    private ObjectMapper om = new ObjectMapper();
+    {{/eda}}
 
     {{^lombok}}
     public ReactiveDirectAsyncGateway(DirectAsyncGateway gateway) {
@@ -36,14 +56,47 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
-        return gateway.sendCommand(new Command<>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
+        {{#eda}}
+        try {
+            CloudEvent commandCloudEvent = CloudEventBuilder.v1() //
+                                    .withId(UUID.randomUUID().toString()) //
+                                    .withSource(URI.create("https://spring.io/foos"))//
+                                    .withType(SOME_COMMAND_NAME) //
+                                    .withTime(OffsetDateTime.now())
+                                    .withData("application/json", om.writeValueAsBytes(command))
+                                    .build();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return gateway.sendCommand(new Command<CloudEvent>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), commandCloudEvent),
                 TARGET_NAME);
+        {{/eda}}
+        {{^eda}}
+        return gateway.sendCommand(new Command<>(SOME_COMMAND_NAME, UUID.randomUUID().toString(), command),
+                        TARGET_NAME);
+        {{/eda}}
     }
 
     public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}
+        {{^eda}}
         return gateway.requestReply(new AsyncQuery<>(SOME_QUERY_NAME, query), TARGET_NAME, Object.class/*change for proper model*/);
+        {{/eda}}
+        {{#eda}}
+        try {
+            CloudEvent queryCloudEvent = CloudEventBuilder.v1() //
+                            .withId(UUID.randomUUID().toString()) //
+                            .withSource(URI.create("https://spring.io/foos"))//
+                            .withType(SOME_QUERY_NAME) //
+                            .withTime(OffsetDateTime.now())
+                            .withData("application/json", om.writeValueAsBytes(query))
+                            .build();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return gateway.requestReply(new AsyncQuery<CloudEvent>(SOME_QUERY_NAME, queryCloudEvent), TARGET_NAME, Object.class/*change for proper model*/);
+        {{/eda}}
     }
 }
