@@ -24,7 +24,7 @@ public class CommandsHandler {
 {{/lombok}}
 {{#eda}}
     public Mono<Void> handleCommandA(Command<CloudEvent> command) {
-        System.out.println("command received: " + command.getType() + " ->" + command.getData()); // TODO: Remove this line
+        System.out.println("command received: " + command.getName() + " ->" + command.getData()); // TODO: Remove this line
 //        return sampleUseCase.doSomething(command.getData());
         return Mono.empty();
     }

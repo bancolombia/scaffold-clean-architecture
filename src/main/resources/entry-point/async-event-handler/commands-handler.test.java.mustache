@@ -32,7 +32,7 @@ public class CommandsHandlerTest {
                         .withId(UUID.randomUUID().toString()) //
                         .withSource(URI.create("https://spring.io/foos"))//
                         .withType("command")
-                        .withData("application/json", om.writeValueAsBytes("Data"))
+                        .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                         .build();
             StepVerifier.create(commandsHandler.handleCommandA(
                 new Command<CloudEvent>(command.getType(), command.getId(), command))).expectComplete();

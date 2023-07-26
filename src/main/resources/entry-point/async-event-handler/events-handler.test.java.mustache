@@ -31,7 +31,7 @@ public class EventsHandlerTest {
                     .withId(UUID.randomUUID().toString()) //
                     .withSource(URI.create("https://spring.io/foos"))//
                     .withType("event")
-                    .withData("application/json", om.writeValueAsBytes("Data"))
+                    .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                     .build();
         StepVerifier.create(eventsHandler.handleEventA(
             new DomainEvent<CloudEvent>(event.getType(), event.getId(), event))).expectComplete();

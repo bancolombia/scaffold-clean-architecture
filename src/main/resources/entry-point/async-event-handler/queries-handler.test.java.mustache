@@ -29,7 +29,7 @@ public class QueriesHandlerTest {
                         .withId(UUID.randomUUID().toString()) //
                         .withSource(URI.create("https://spring.io/foos"))//
                         .withType("query")
-                        .withData("application/json", om.writeValueAsBytes("Data"))
+                        .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                         .build();
             StepVerifier.create(queriesHandler
                     .handleQueryA(new AsyncQuery<CloudEvent>(query.getType(), query)))
