@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 {{/lombok}}
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -49,10 +50,10 @@ public class S3Operations {
     }
 
     public InputStream getObject(String bucketName, String objectKey) {
-        return s3Client.getObjectAsBytes(GetObjectRequest.builder()
+        return s3Client.getObject(GetObjectRequest.builder()
                 .key(objectKey)
                 .bucket(bucketName)
-                .build()).asInputStream();
+                .build(), ResponseTransformer.toInputStream());
     }
 
     public boolean deleteObject(String bucketName, String objectKey) {
