@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners;
 import reactor.core.publisher.Mono;
+{{#eda}}
+import io.cloudevents.CloudEvent;
+{{/eda}}
 
 {{#lombok}}
 @AllArgsConstructor
@@ -19,9 +22,20 @@ public class QueriesHandler {
     }
 {{/lombok}}
 
+{{#eda}}
+    public Mono<Object/*change for proper model*/> handleQueryA(CloudEvent query) {
+        System.out.println("query received->" + query); // TODO: Remove this line
+//        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
+        return Mono.just("Response Data");
+    }
+{{/eda}}
+
+{{^eda}}
     public Mono<Object/*change for proper model*/> handleQueryA(Object query/*change for proper model*/) {
         System.out.println("query received->" + query); // TODO: Remove this line
 //        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
         return Mono.just("Response Data");
     }
+{{/eda}}
+
 }
