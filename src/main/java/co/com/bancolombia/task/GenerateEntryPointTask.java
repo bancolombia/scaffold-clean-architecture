@@ -3,7 +3,6 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
 import co.com.bancolombia.Constants.BooleanOption;
-import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
