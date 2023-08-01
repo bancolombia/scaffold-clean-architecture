@@ -19,6 +19,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private DrivenAdapterBinStash.CacheMode cacheMode = DrivenAdapterBinStash.CacheMode.LOCAL;
 
   private BooleanOption secret = BooleanOption.FALSE;
+  private BooleanOption eda = BooleanOption.FALSE;
 
   @Option(option = "url", description = "Set driven adapter url when RESTCONSUMER type")
   public void setUrl(String url) {
@@ -40,6 +41,16 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @Option(option = "eda", description = "Use EDA variant")
+  public void setEda(BooleanOption eda) {
+    this.eda = eda;
+  }
+
+  @OptionValues("eda")
+  public List<BooleanOption> getEdaOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Option(option = "cache-mode", description = "Set value for cache type")
   public void setCacheMode(DrivenAdapterBinStash.CacheMode cacheMode) {
     this.cacheMode = cacheMode;
@@ -49,6 +60,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   protected void prepareParams() {
     builder.addParam("task-param-cache-mode", cacheMode);
     builder.addParam("include-secret", secret == BooleanOption.TRUE);
+    builder.addParam("eda", eda == BooleanOption.TRUE);
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("task-param-url", url);
   }

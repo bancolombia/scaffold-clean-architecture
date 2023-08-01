@@ -1,5 +1,14 @@
 dependencies {
     implementation project(':model')
+    {{^eda}}
     implementation 'org.reactivecommons:async-commons-rabbit-starter:{{asyncCommonsStarterVersion}}'
+    {{/eda}}
+    {{#eda}}
+    implementation 'org.reactivecommons:async-commons-rabbit-starter-eda:{{asyncCommonsStarterVersion}}'
+    implementation 'io.cloudevents:cloudevents-core:2.4.2'
+    implementation 'io.cloudevents:cloudevents-http-basic:2.4.2'
+    implementation 'io.cloudevents:cloudevents-json-jackson:2.4.2'
+    implementation 'io.cloudevents:cloudevents-spring:2.4.2'
+    {{/eda}}
     implementation 'org.springframework:spring-context'
 }
