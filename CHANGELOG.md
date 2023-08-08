@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.6.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.1) (2023-08-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.0...v3.6.1)
+
+**Closed issues:**
+
+- aws s3 driven adapter, generates a OOM when reading a file big enough.  [\#374](https://github.com/bancolombia/scaffold-clean-architecture/issues/374)
+
+**Merged pull requests:**
+
+- Feature/eda [\#383](https://github.com/bancolombia/scaffold-clean-architecture/pull/383) ([juancgalvis](https://github.com/juancgalvis))
+- Fix downloading files from S3. [\#381](https://github.com/bancolombia/scaffold-clean-architecture/pull/381) ([gabheadz](https://github.com/gabheadz))
+
 ## [v3.6.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.0) (2023-07-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.5.0...v3.6.0)
