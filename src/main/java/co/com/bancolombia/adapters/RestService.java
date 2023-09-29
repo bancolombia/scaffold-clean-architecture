@@ -48,6 +48,9 @@ public class RestService {
                     !release.getTagName().contains("alpha")
                         && !release.getTagName().contains("beta"))
             .findFirst()
+            .map(
+                release ->
+                    new Release(release.getTagName().replace("v", ""), release.getPublishedAt()))
             .orElse(null);
       } catch (Exception e) {
         logger.lifecycle(
