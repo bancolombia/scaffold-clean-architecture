@@ -2,6 +2,7 @@ package co.com.bancolombia.factory.adapters;
 
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -21,7 +22,7 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     builder.addParam("include-centralized", cacheMode.equals(CacheMode.CENTRALIZED));
     builder.appendToSettings("bin-stash", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":bin-stash");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
 
     builder.appendToProperties("stash.memory").put("maxSize", "10000");
     builder
