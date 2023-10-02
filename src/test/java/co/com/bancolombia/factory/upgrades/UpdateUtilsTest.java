@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.upgrades;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import co.com.bancolombia.exceptions.InvalidStateException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -87,5 +88,29 @@ public class UpdateUtilsTest {
     String result = UpdateUtils.insertBeforeMatch(currentContent, match, check, file);
     // Assert
     assertEquals(expected, result);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void shouldThrowWhenNoMatch() {
+    // Arrange
+    String file = "build.gradle\n";
+    String check = "jar {enabled = false}";
+    String match = "nomatch";
+    String currentContent = "dependencies {}\n";
+    builder.addFile(file, currentContent);
+    // Act
+    UpdateUtils.insertAfterMatch(currentContent, match, check, file);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void shouldThrowWhenNoMatchBefore() {
+    // Arrange
+    String file = "build.gradle\n";
+    String check = "jar {enabled = false}";
+    String match = "nomatch";
+    String currentContent = "dependencies {}\n";
+    builder.addFile(file, currentContent);
+    // Act
+    UpdateUtils.insertBeforeMatch(currentContent, match, check, file);
   }
 }
