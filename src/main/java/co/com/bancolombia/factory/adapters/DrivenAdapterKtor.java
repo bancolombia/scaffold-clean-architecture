@@ -2,6 +2,7 @@ package co.com.bancolombia.factory.adapters;
 
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -15,7 +16,7 @@ public class DrivenAdapterKtor implements ModuleFactory {
     builder.runValidations(LanguageValidation.class);
     builder.appendToSettings("ktor-client", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":ktor-client");
-    builder.appendDependencyToModule("app-service", dependency);
+    builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
     builder.setupFromTemplate("driven-adapter/ktor-client");
   }
 }

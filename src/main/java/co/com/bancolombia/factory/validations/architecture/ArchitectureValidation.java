@@ -5,6 +5,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -17,9 +18,14 @@ public final class ArchitectureValidation {
 
   public static void inject(Project project, ModuleBuilder builder) {
     if (!FileUtils.readBooleanProperty("skipArchitectureTests")) {
+      String paths =
+          project.getAllprojects().stream()
+              .map(p -> "\"" + p.getProjectDir() + "/\"")
+              .collect(Collectors.joining(","));
       builder.addParam("reactive", builder.isReactive());
+      builder.addParam("modulePaths", paths);
       project.getAllprojects().stream()
-          .filter(p -> p.getName().equals("app-service"))
+          .filter(p -> p.getName().equals(Constants.APP_SERVICE))
           .findFirst()
           .ifPresent(appService -> generateArchUnitFiles(project, appService, builder));
     }
@@ -50,8 +56,10 @@ public final class ArchitectureValidation {
         .lifecycle("Injecting ArchitectureTest in module {}", appService.getProjectDir().getName());
     builder.setupFromTemplate("structure/applications/appservice/arch-validations");
     builder.appendDependencyToModule(
-        "app-service",
+        Constants.APP_SERVICE,
         "testImplementation 'com.tngtech.archunit:archunit:" + Constants.ARCH_UNIT_VERSION + "'");
+    builder.appendDependencyToModule(
+        Constants.APP_SERVICE, "testImplementation 'com.fasterxml.jackson.core:jackson-databind'");
     builder.persist();
   }
 }
