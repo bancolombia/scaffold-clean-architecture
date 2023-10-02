@@ -1,5 +1,28 @@
 # Changelog
 
+## [v3.6.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.2) (2023-10-02)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.1...v3.6.2)
+
+**Closed issues:**
+
+- Add automountServiceAccountToken: false to app.yaml [\#385](https://github.com/bancolombia/scaffold-clean-architecture/issues/385)
+- `jacocoMergedReport` task fails on Gradle 8 when invoked after `test` task [\#384](https://github.com/bancolombia/scaffold-clean-architecture/issues/384)
+- Error with task updateCleanArchitecture  [\#378](https://github.com/bancolombia/scaffold-clean-architecture/issues/378)
+- Error applying update with name 3.0.3-\>3.0.4: Add block hound validations [\#366](https://github.com/bancolombia/scaffold-clean-architecture/issues/366)
+- Fix package name when driven adapter contains '-' [\#351](https://github.com/bancolombia/scaffold-clean-architecture/issues/351)
+- Use new sonar task instead of sonarqube [\#346](https://github.com/bancolombia/scaffold-clean-architecture/issues/346)
+- Prepare for gradle 8 migration [\#345](https://github.com/bancolombia/scaffold-clean-architecture/issues/345)
+- Non Spring modules should not be bootJars also should not be asociated to the framework context [\#269](https://github.com/bancolombia/scaffold-clean-architecture/issues/269)
+
+**Merged pull requests:**
+
+- fix\(jacoco\): Dependency on test task, Closes \#384 [\#390](https://github.com/bancolombia/scaffold-clean-architecture/pull/390) ([juancgalvis](https://github.com/juancgalvis))
+- Fix upgrade blockhound [\#389](https://github.com/bancolombia/scaffold-clean-architecture/pull/389) ([juancgalvis](https://github.com/juancgalvis))
+- fix dash generic modules [\#388](https://github.com/bancolombia/scaffold-clean-architecture/pull/388) ([juancgalvis](https://github.com/juancgalvis))
+- Translate ArchUnit violations to sonar issues [\#387](https://github.com/bancolombia/scaffold-clean-architecture/pull/387) ([juancgalvis](https://github.com/juancgalvis))
+- Fix delete v character of plugin version when update project [\#386](https://github.com/bancolombia/scaffold-clean-architecture/pull/386) ([braduran](https://github.com/braduran))
+
 ## [v3.6.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.1) (2023-08-01)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.0...v3.6.1)
