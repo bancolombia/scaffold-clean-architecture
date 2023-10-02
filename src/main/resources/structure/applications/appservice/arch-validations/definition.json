@@ -5,6 +5,7 @@
   },
   "kotlin" : {},
   "java" : {
-    "structure/applications/appservice/arch-validations/architecture-test.java.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/ArchitectureTest.java"
+    "structure/applications/appservice/arch-validations/architecture-test.java.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/ArchitectureTest.java",
+    "structure/applications/appservice/arch-validations/utils.java.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/Utils.java"
   }
 }

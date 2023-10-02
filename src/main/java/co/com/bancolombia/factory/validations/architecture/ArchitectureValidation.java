@@ -5,6 +5,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,8 +17,13 @@ import org.gradle.api.artifacts.ResolvedDependency;
 public final class ArchitectureValidation {
 
   public static void inject(Project project, ModuleBuilder builder) {
+    String paths =
+        project.getAllprojects().stream()
+            .map(p -> "\"" + p.getProjectDir() + "/\"")
+            .collect(Collectors.joining(","));
     if (!FileUtils.readBooleanProperty("skipArchitectureTests")) {
       builder.addParam("reactive", builder.isReactive());
+      builder.addParam("modulePaths", paths);
       project.getAllprojects().stream()
           .filter(p -> p.getName().equals("app-service"))
           .findFirst()
@@ -52,6 +58,8 @@ public final class ArchitectureValidation {
     builder.appendDependencyToModule(
         "app-service",
         "testImplementation 'com.tngtech.archunit:archunit:" + Constants.ARCH_UNIT_VERSION + "'");
+    builder.appendDependencyToModule(
+        "app-service", "testImplementation 'com.fasterxml.jackson.core:jackson-databind'");
     builder.persist();
   }
 }
