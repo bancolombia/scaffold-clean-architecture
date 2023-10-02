@@ -17,11 +17,11 @@ import org.gradle.api.artifacts.ResolvedDependency;
 public final class ArchitectureValidation {
 
   public static void inject(Project project, ModuleBuilder builder) {
-    String paths =
-        project.getAllprojects().stream()
-            .map(p -> "\"" + p.getProjectDir() + "/\"")
-            .collect(Collectors.joining(","));
     if (!FileUtils.readBooleanProperty("skipArchitectureTests")) {
+      String paths =
+          project.getAllprojects().stream()
+              .map(p -> "\"" + p.getProjectDir() + "/\"")
+              .collect(Collectors.joining(","));
       builder.addParam("reactive", builder.isReactive());
       builder.addParam("modulePaths", paths);
       project.getAllprojects().stream()
