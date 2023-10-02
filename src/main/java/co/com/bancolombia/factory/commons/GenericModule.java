@@ -23,7 +23,7 @@ public class GenericModule {
     }
     String dashName = Utils.toDashName(name);
     builder.addParam("name-dash", dashName);
-    builder.addParam("name-package", name.toLowerCase());
+    builder.addParam("name-package", name.toLowerCase().replaceAll("[-_]*", ""));
     builder.appendToSettings(dashName, baseDir);
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + dashName);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
