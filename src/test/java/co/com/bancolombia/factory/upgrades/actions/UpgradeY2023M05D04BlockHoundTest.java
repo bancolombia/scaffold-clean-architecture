@@ -5,6 +5,7 @@ import static org.gradle.internal.impldep.org.testng.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.exceptions.InvalidStateException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUtils;
@@ -51,5 +52,16 @@ public class UpgradeY2023M05D04BlockHoundTest {
     // Assert
     assertTrue(applied);
     verify(builder, times(1)).addFile(file, expectedText);
+  }
+
+  @Test(expected = InvalidStateException.class)
+  public void shouldThrowErrorWhenApplyUpdate() throws IOException {
+    String file = Constants.MainFiles.MAIN_GRADLE;
+    // Arrange
+    DefaultResolver resolver = new DefaultResolver();
+    String text = FileUtils.getResourceAsString(resolver, "blockhound/before-err.txt");
+    builder.addFile(file, text);
+    // Act
+    boolean applied = updater.up(builder);
   }
 }

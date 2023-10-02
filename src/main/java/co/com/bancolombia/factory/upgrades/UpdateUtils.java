@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.upgrades;
 
+import co.com.bancolombia.exceptions.InvalidStateException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import java.io.IOException;
 import lombok.AccessLevel;
@@ -54,6 +55,9 @@ public class UpdateUtils {
       return main;
     }
     int start = main.indexOf(match);
+    if (start == -1) {
+      throw new InvalidStateException("Match " + match + "was not found");
+    }
     return main.substring(0, start) + concatValue + main.substring(start);
   }
 
@@ -62,7 +66,11 @@ public class UpdateUtils {
     if (main.contains(containsValue)) {
       return main;
     }
-    int start = main.indexOf(match) + match.length();
+    int start = main.indexOf(match);
+    if (start == -1) {
+      throw new InvalidStateException("Match " + match + "was not found");
+    }
+    start = start + match.length();
     return main.substring(0, start) + concatValue + main.substring(start);
   }
 

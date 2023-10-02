@@ -8,7 +8,7 @@ import lombok.SneakyThrows;
 
 public class UpgradeY2023M05D04BlockHound implements UpgradeAction {
   private static final String CHECK = "org.junit.platform:junit-platform-launcher";
-  private static final String MATCH = "compileOnly \"org.projectlombok:lombok";
+  private static final String MATCH = "testImplementation";
   private static final String APPEND =
       "testImplementation 'io.projectreactor.tools:blockhound-junit-platform:"
           + Constants.BLOCK_HOUND_VERSION
