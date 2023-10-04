@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.3...HEAD)
+
+**Closed issues:**
+
+- \[Bug\] Fail in ArchitectureTest Creation [\#391](https://github.com/bancolombia/scaffold-clean-architecture/issues/391)
+
+## [v3.6.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.3) (2023-10-04)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.2...v3.6.3)
+
+**Merged pull requests:**
+
+- fix: scape \ for windows, Closes \#391 [\#394](https://github.com/bancolombia/scaffold-clean-architecture/pull/394) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.6.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.2) (2023-10-02)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.1...v3.6.2)
