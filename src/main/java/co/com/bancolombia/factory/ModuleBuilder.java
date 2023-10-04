@@ -381,19 +381,23 @@ public class ModuleBuilder {
 
   private void loadLatestRelease() {
     Release latestRelease = restService.getLatestPluginVersion();
-    if (latestRelease != null && !latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-      styledLogger
-          .style(Description)
-          .append("You have an old version of the plugin ")
-          .style(Normal)
-          .append("the latest version is: ")
-          .style(Header)
-          .append(latestRelease.getTagName())
-          .style(Normal)
-          .append(" to update it please run: ")
-          .style(Success)
-          .append("gradle u")
-          .println();
+    if (latestRelease != null) {
+      if (latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
+        logger.lifecycle("You have the latest plugin version {}", latestRelease.getTagName());
+      } else {
+        styledLogger
+            .style(Description)
+            .append("You have an old version of the plugin ")
+            .style(Normal)
+            .append("the latest version is: ")
+            .style(Header)
+            .append(latestRelease.getTagName())
+            .style(Normal)
+            .append(" to update it please run: ")
+            .style(Success)
+            .append("gradle u")
+            .println();
+      }
       params.put(LATEST_RELEASE, latestRelease);
     }
   }

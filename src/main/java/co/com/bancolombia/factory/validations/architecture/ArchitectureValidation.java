@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.validations.architecture;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
+import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -18,9 +19,10 @@ public final class ArchitectureValidation {
 
   public static void inject(Project project, ModuleBuilder builder) {
     if (!FileUtils.readBooleanProperty("skipArchitectureTests")) {
+      String os = System.getProperty("os.name");
       String paths =
           project.getAllprojects().stream()
-              .map(p -> "\"" + p.getProjectDir() + "/\"")
+              .map(p -> "\"" + toOSPath(os, p.getProjectDir()) + "/\"")
               .collect(Collectors.joining(","));
       builder.addParam("reactive", builder.isReactive());
       builder.addParam("modulePaths", paths);
@@ -29,6 +31,13 @@ public final class ArchitectureValidation {
           .findFirst()
           .ifPresent(appService -> generateArchUnitFiles(project, appService, builder));
     }
+  }
+
+  private static String toOSPath(String os, File projectDir) {
+    if (os != null && os.contains("Windows")) {
+      return projectDir.toString().replace("\\", "\\\\");
+    }
+    return projectDir.toString();
   }
 
   private static void prepareParams(Project project, Project appService, ModuleBuilder builder) {
