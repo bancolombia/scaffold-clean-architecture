@@ -46,7 +46,7 @@ public class SQSListener {
         {{/metrics}}
         ExecutorService service = Executors.newFixedThreadPool(properties.getNumberOfThreads());
         Flux<Void> flow = listenRetryRepeat().publishOn(Schedulers.fromExecutorService(service));
-        for (int i = 0; i < properties.getNumberOfThreads(); i++) {
+        for (var i = 0; i < properties.getNumberOfThreads(); i++) {
             flow.subscribe();
         }
         return this;

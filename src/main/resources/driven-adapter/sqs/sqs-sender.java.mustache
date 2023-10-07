@@ -2,7 +2,7 @@ package {{package}}.sqs.sender;
 
 import {{package}}.sqs.sender.config.SQSSenderProperties;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 {{/lombok}}
@@ -14,7 +14,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageResponse;
 @Service
 {{#lombok}}
 @Log4j2
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class SQSSender /*implements SomeGateway*/ {
 {{^lombok}}

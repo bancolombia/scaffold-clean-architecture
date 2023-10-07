@@ -1,6 +1,5 @@
 package {{package}}.kms;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -15,20 +14,16 @@ import software.amazon.awssdk.services.kms.model.EncryptionAlgorithmSpec;
 import java.util.Base64;
 
 @Component
-{{#lombok}}
-    @RequiredArgsConstructor
-{{/lombok}}
 public class KmsAdapter // implements ModelRepository from domain
 {
-    @Value("${adapters.aws.kms.keyId}")
-    private String keyId;
+    private final String keyId;
     private final KmsAsyncClient kmsAsyncClient;
 
-{{^lombok}}
-    public KmsAdapter(KmsAsyncClient kmsAsyncClient ) {
-    this.kmsAsyncClient = kmsAsyncClient;
+    public KmsAdapter(@Value("${adapters.aws.kms.keyId}") String keyId, KmsAsyncClient kmsAsyncClient) {
+        this.keyId = keyId;
+        this.kmsAsyncClient = kmsAsyncClient;
     }
-{{/lombok}}
+
     public Mono<byte[]> decrypt(String secretKey) {
         return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
         .map(DecryptResponse::plaintext)
