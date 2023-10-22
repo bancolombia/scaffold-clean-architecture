@@ -1,18 +1,15 @@
 package co.com.bancolombia.r2postgresql.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class PostgresqlConnectionProperties {
+@ConfigurationProperties(prefix = "adapters.postgres")
+public record PostgresqlConnectionProperties(
+        String host,
+        Integer port,
+        String database,
+        String schema,
+        String username,
+        String password
+) {
 
-  private String database;
-  private String schema;
-  private String username;
-  private String password;
-  private String host;
-  private Integer port;
 }

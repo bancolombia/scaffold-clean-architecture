@@ -1,5 +1,6 @@
 package co.com.bancolombia.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Authentication implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 569381541450405501L;
 
   private Integer id;
