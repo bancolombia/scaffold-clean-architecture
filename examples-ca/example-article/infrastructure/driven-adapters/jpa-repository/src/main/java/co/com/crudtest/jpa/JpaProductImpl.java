@@ -4,14 +4,14 @@ import co.com.crudtest.model.product.Product;
 import co.com.crudtest.model.product.gateways.ProductRepository;
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JpaProductImpl implements ProductRepository {
 
-  private JPARepositoryAdapter jpaRepositoryAdapter;
+  private final JPARepositoryAdapter jpaRepositoryAdapter;
 
   @Override
   public void create(Product product) {

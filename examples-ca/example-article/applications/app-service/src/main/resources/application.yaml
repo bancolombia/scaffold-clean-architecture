@@ -18,3 +18,20 @@ spring:
     driverClassName: "org.h2.Driver"
   jpa:
     databasePlatform: "org.hibernate.dialect.H2Dialect"
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: /
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"

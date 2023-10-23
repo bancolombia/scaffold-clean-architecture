@@ -1,20 +1,14 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
-	testImplementation 'com.tngtech.archunit:archunit:1.1.0'
-	implementation project(':r2postgresql')
-	implementation project(':reactive-web')
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testImplementation 'com.tngtech.archunit:archunit:1.1.0'
+    implementation project(':r2postgresql')
+    implementation project(':reactive-web')
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
-    modules {
-        module("org.springframework.boot:spring-boot-starter-logging") {
-            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
-        }
-    }
 }
 
 tasks.register('explodedJar', Copy) {

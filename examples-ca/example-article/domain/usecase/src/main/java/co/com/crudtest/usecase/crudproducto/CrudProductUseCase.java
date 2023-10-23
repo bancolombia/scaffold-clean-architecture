@@ -3,12 +3,12 @@ package co.com.crudtest.usecase.crudproducto;
 import co.com.crudtest.model.product.Product;
 import co.com.crudtest.model.product.gateways.ProductRepository;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CrudProductUseCase {
 
-  private ProductRepository productRepository;
+  private final ProductRepository productRepository;
 
   public void create(Product product) {
     productRepository.create(product);
