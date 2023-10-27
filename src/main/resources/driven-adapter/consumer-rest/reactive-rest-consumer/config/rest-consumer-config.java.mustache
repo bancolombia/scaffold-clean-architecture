@@ -17,10 +17,15 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 @Configuration
 public class RestConsumerConfig {
 
-    @Value("${adapter.restconsumer.url}")
-    private String url;
-    @Value("${adapter.restconsumer.timeout}")
-    private int timeout;
+    private final String url;
+
+    private final int timeout;
+
+    public RestConsumerConfig(@Value("${adapter.restconsumer.url}") String url,
+                              @Value("${adapter.restconsumer.timeout}") int timeout) {
+        this.url = url;
+        this.timeout = timeout;
+    }
 
     @Bean
     public WebClient getWebClient(WebClient.Builder builder) {

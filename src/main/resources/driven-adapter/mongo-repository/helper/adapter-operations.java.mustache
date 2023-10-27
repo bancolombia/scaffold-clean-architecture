@@ -17,6 +17,7 @@ public abstract class AdapterOperations<E, D, I, R extends MongoRepository<D, I>
     protected ObjectMapper mapper;
     private Function<D, E> toEntityFn;
 
+    @SuppressWarnings("unchecked")
     protected AdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {
         this.repository = repository;
         this.mapper = mapper;

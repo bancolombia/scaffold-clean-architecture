@@ -25,7 +25,7 @@ public class DrivenAdapterS3 implements ModuleFactory {
         .appendToProperties("adapter.aws.s3")
         .put("bucketName", "test")
         .put("region", "us-east-1")
-        .put("endpoint", "http://localhost:49153");
+        .put("endpoint", "https://s3.localhost.localstack.cloud:4566");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":s3-repository");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }

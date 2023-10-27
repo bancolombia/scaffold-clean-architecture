@@ -16,6 +16,7 @@ public abstract class ReactiveAdapterOperations<E, D, I, R extends ReactiveCrudR
     private final Class<D> dataClass;
     private final Function<D, E> toEntityFn;
 
+    @SuppressWarnings("unchecked")
     protected ReactiveAdapterOperations(R repository, ObjectMapper mapper, Function<D, E> toEntityFn) {
         this.repository = repository;
         this.mapper = mapper;
