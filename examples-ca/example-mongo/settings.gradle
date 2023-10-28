@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        //maven { url '...' }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'mongoExample'
 
 include ':app-service'
