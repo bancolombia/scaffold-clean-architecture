@@ -2,16 +2,16 @@ package co.com.bancolombia;
 
 import co.com.bancolombia.model.postmodel.PostModel;
 import co.com.bancolombia.model.postmodel.gateways.PostModelRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Component
-@AllArgsConstructor
+@Repository
+@RequiredArgsConstructor
 public class AdapterImpl implements PostModelRepository {
 
-    private MyReactiveRepository myReactiveRepository;
+    private final MyReactiveRepository myReactiveRepository;
 
     @Override
     public Flux<PostModel> getAll() {
