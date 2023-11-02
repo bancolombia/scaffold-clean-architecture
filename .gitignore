@@ -311,3 +311,4 @@ gradle/
 
 # local scripts
 *.sh
+swagger*.yaml

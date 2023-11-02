@@ -6,6 +6,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.utils.swagger.Swagger;
 import java.io.IOException;
 
 public class EntryPointRestMvc implements ModuleFactory {
@@ -37,5 +38,6 @@ public class EntryPointRestMvc implements ModuleFactory {
         .appendToProperties("cors")
         .put("allowed-origins", "http://localhost:4200,http://localhost:8080");
     new EntryPointRestMvcServer().buildModule(builder);
+    Swagger.fromBuilder(builder, "infrastructure/entry-points/api-rest");
   }
 }

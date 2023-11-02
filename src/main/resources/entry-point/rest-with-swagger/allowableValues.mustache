@@ -1,0 +1,6 @@
+{{#useOas2}}
+    {{#allowableValues}}allowableValues="{{#values}}{{{.}}}{{^@last}}, {{/@last}}{{/values}}{{^values}}range=[{{#min}}{{.}}{{/min}}{{^min}}-infinity{{/min}}, {{#max}}{{.}}{{/max}}{{^max}}infinity{{/max}}]{{/values}}"{{/allowableValues}}
+{{/useOas2}}
+{{^useOas2}}
+    {{#allowableValues}}allowableValues={ {{#values}}"{{{.}}}"{{^@last}}, {{/@last}}{{/values}}{{^values}}{{/values}} }{{#min}}, minimum="{{.}}"{{/min}}{{#max}}, maximum="{{.}}"{{/max}}{{/allowableValues}}
+{{/useOas2}}

@@ -1,0 +1,1 @@
+{{#isFormParam}}{{^isBinary}}@RequestParam(value="{{baseName}}"{{#required}}, required=true{{/required}}{{^required}}, required=false{{/required}})  {{{dataType}}} {{paramName}}{{/isBinary}}{{#isBinary}}{{#useBeanValidation}}@Valid{{/useBeanValidation}} @RequestPart("file") MultipartFile {{baseName}}{{/isBinary}}{{/isFormParam}}

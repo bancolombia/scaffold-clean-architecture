@@ -1,0 +1,68 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+import lombok.AllArgsConstructor;
+{{/lombok}}
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
+import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
+import static org.springframework.web.reactive.function.server.RequestPredicates.HEAD;
+import static org.springframework.web.reactive.function.server.RequestPredicates.headers;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.ServerResponse;
+{{#async}}
+import reactor.core.publisher.Mono;
+{{/async}}
+
+{{#useBeanValidation}}
+{{#jakarta}}
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+{{/jakarta}}
+{{^jakarta}}
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+{{/jakarta}}
+{{/useBeanValidation}}
+
+import java.util.List;
+import java.util.Map;
+
+{{#lombok}}
+@Log4j2
+@AllArgsConstructor
+{{/lombok}}
+@Configuration
+{{#operations}}
+public class {{classname}}Router {
+    {{^lombok}}
+    private static final Logger log = LoggerFactory.getLogger({{classname}}Controller.class);
+    {{/lombok}}
+
+    @Bean
+    public RouterFunction<ServerResponse> routerFunction({{classname}}Handler handler) {
+{{#operation}}
+{{#@first}}
+{{#contents}}
+        return route({{httpMethod}}("{{{path}}}"), handler::{{operationId}})
+{{/contents}}
+{{/@first}}
+{{^@first}}
+{{#contents}}
+            .andRoute({{httpMethod}}("{{{path}}}"), handler::{{operationId}}){{/contents}}{{/@first}}{{#@last}};{{/@last}}
+{{/operation}}
+    }
+}
+{{/operations}}
