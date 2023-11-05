@@ -30,4 +30,4 @@ aws:
   access-key: "test"
   secret-key: "test"
   dynamodb:
-    endpoint: "https://localhost.localstack.cloud:4566"
+    endpoint: "https://localhost:8080"

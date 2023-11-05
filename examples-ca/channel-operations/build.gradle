@@ -3,7 +3,7 @@ buildscript {
         cleanArchitectureVersion = '3.6.3'
         springBootVersion = '3.1.5'
         sonarVersion = '4.4.1.3373'
-        jacocoVersion = '0.8.10'
+        jacocoVersion = '0.8.11'
         lombokVersion = '1.18.30'
         mapstructVersion = '1.5.5.Final'
     }

@@ -5,7 +5,7 @@ buildscript {
 		sonarVersion = '4.4.1.3373'
 		jacocoVersion = '0.8.11'
         lombokVersion = '1.18.30'
-        awssdkVersion = '2.21.14'
+        awssdkVersion = '2.21.15'
 	}
 }
 
