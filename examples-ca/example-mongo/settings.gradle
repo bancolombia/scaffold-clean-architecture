@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'mongoExample'
+rootProject.name = 'example-mongo'
 
 include ':app-service'
 include ':model'
