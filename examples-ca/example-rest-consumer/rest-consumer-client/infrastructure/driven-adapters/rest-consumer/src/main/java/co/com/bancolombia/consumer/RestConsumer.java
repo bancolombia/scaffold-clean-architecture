@@ -17,11 +17,14 @@ import java.util.List;
 public class RestConsumer implements UserRepository {
     private final OkHttpClient client;
     private final ObjectMapper mapper;
-    @Value("${adapter.restconsumer.url}")
-    private String url;
-    public RestConsumer(OkHttpClient client, ObjectMapper mapper) {
+    private final String url;
+
+    public RestConsumer(OkHttpClient client,
+                        ObjectMapper mapper,
+                        @Value("${adapter.restconsumer.url}") String url) {
         this.client = client;
         this.mapper = mapper;
+        this.url = url;
     }
 
     // these methods are an example that illustrates the implementation of OKHTTP Client.
