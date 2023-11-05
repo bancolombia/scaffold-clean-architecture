@@ -1,17 +1,17 @@
 package co.com.bancolombia.usecase.file;
 
 import co.com.bancolombia.model.file.gateways.FileRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FIleUseCase {
 
-    FileRepository repository;
+    private final FileRepository repository;
 
     public boolean upload(byte[] bytes, String contentType, String name) {
-        return repository.upload(bytes,contentType,name);
+        return repository.upload(bytes, contentType, name);
     }
 
     public boolean delete(String fileUrl) {
