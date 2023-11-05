@@ -2,28 +2,28 @@ package co.com.bancolombia.usecase.tuple;
 
 import co.com.bancolombia.model.tuple.Tuple;
 import co.com.bancolombia.model.tuple.gateways.TupleRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TupleUseCase {
 
-    private TupleRepository repository;
+    private final TupleRepository repository;
 
-    public Tuple save(Tuple tuple){
+    public Tuple save(Tuple tuple) {
         return repository.save(tuple);
     }
 
-    public List<Tuple> listAll(){
+    public List<Tuple> listAll() {
         return repository.listAll();
     }
 
-    public boolean delete(String id){
+    public boolean delete(String id) {
         return repository.delete(id);
     }
 
-    public Tuple get(String id){
+    public Tuple get(String id) {
         return repository.get(id);
     }
 

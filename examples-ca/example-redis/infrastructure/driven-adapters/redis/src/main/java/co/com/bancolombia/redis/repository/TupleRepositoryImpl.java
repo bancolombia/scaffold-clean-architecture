@@ -2,16 +2,16 @@ package co.com.bancolombia.redis.repository;
 
 import co.com.bancolombia.model.tuple.Tuple;
 import co.com.bancolombia.model.tuple.gateways.TupleRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TupleRepositoryImpl implements TupleRepository {
 
-    private RedisRepositoryAdapter adapter;
+    private final RedisRepositoryAdapter adapter;
 
     @Override
     public Tuple save(Tuple tuple) {

@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class RedisRepositoryAdapter extends RepositoryAdapterOperations<Tuple, TupleRedis, String, RedisRepository>
-{
+public class RedisRepositoryAdapter extends RepositoryAdapterOperations<Tuple, TupleRedis, String, RedisRepository> {
     public RedisRepositoryAdapter(RedisRepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, Tuple.class));
     }
