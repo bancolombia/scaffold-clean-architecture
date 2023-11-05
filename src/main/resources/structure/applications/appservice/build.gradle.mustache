@@ -14,7 +14,7 @@ dependencies {
 
 tasks.register('explodedJar', Copy) {
     with jar
-    into "${buildDir}/exploded"
+    into layout.buildDirectory.dir("exploded")
 }
 
 jar {
