@@ -49,8 +49,8 @@ subprojects {
         reports {
             xml.setRequired true
             xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
-            csv.setRequired = false
-            html.setOutputLocation layout.buildDirectory.file("reports/jacocoHtml.xml")
+            csv.setRequired false
+            html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
         }
     }
 
@@ -81,5 +81,5 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.4'
+    gradleVersion = '8.2.1'
 }
