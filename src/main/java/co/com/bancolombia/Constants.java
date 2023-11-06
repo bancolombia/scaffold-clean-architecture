@@ -27,7 +27,7 @@ public class Constants {
   public static final String OKHTTP_VERSION = "4.11.0";
   public static final String RESILIENCE_4J_VERSION = "2.0.2";
   public static final String BIN_STASH_VERSION = "1.2.0";
-  public static final String SPRING_FOX_VERSION = "3.0.0";
+  public static final String SPRINGDOC_OPENAPI_VERSION = "2.2.0";
   public static final String DEPENDENCY_CHECK_VERSION = "8.2.1";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
       "configurations {\n"
