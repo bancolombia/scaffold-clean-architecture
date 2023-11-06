@@ -48,9 +48,9 @@ subprojects {
         dependsOn test
         reports {
             xml.setRequired true
-            xml.outputLocation = layout.buildDirectory.file("reports/jacoco.xml")
+            xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
             csv.setRequired = false
-            html.outputLocation = layout.buildDirectory.file("reports/jacocoHtml.xml")
+            html.setOutputLocation layout.buildDirectory.file("reports/jacocoHtml.xml")
         }
     }
 
