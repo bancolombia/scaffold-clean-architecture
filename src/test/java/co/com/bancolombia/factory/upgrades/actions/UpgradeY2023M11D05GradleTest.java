@@ -11,10 +11,10 @@ import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
-import co.com.bancolombia.utils.FileUtils;
-import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.junit.Before;
@@ -43,15 +43,10 @@ public class UpgradeY2023M11D05GradleTest {
 
   @Test
   public void shouldApplyUpdate() throws IOException {
-    DefaultResolver resolver = new DefaultResolver();
 
     // Arrange
-    builder.addFile(
-        MAIN_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-8-sample/8.4/main/before.txt"));
-    builder.addFile(
-        APP_BUILD_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-8-sample/8.4/app-service/before.txt"));
+    builder.addFile(MAIN_GRADLE, readResourceFile("gradle-8.4-sample/main-before.txt"));
+    builder.addFile(APP_BUILD_GRADLE, readResourceFile("gradle-8.4-sample/app-service-before.txt"));
 
     // Act
     boolean applied = updater.up(builder);
@@ -59,13 +54,15 @@ public class UpgradeY2023M11D05GradleTest {
     // Assert
     assertTrue(applied);
     verify(builder, times(1))
-        .addFile(
-            MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8-sample/8.4/main/after.txt"));
+        .addFile(MAIN_GRADLE, readResourceFile("gradle-8.4-sample/main-after.txt"));
 
     verify(builder, times(1))
-        .addFile(
-            APP_BUILD_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8-sample/8.4/app-service/after.txt"));
+        .addFile(APP_BUILD_GRADLE, readResourceFile("gradle-8.4-sample/app-service-after.txt"));
+  }
+
+  private String readResourceFile(String location) throws IOException {
+    ClassLoader classLoader = getClass().getClassLoader();
+    return Files.readString(
+        Path.of(Objects.requireNonNull(classLoader.getResource(location)).getPath()));
   }
 }

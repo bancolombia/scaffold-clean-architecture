@@ -44,15 +44,13 @@ public class UpgradeY2022M08D08Test {
   public void shouldApplyUpdate() throws IOException {
     // Arrange
     builder.addFile(
-        Constants.MainFiles.MAIN_GRADLE, readResourceFile("gradle-8-sample/8.0/main/before.txt"));
+        Constants.MainFiles.MAIN_GRADLE, readResourceFile("gradle-8-sample/before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
     verify(builder, times(1))
-        .addFile(
-            Constants.MainFiles.MAIN_GRADLE,
-            readResourceFile("gradle-8-sample/8.0/main/after.txt"));
+        .addFile(Constants.MainFiles.MAIN_GRADLE, readResourceFile("gradle-8-sample/after.txt"));
   }
 
   private String readResourceFile(String location) throws IOException {

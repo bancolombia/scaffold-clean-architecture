@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Constants {
+public final class Constants {
   public static final String PLUGIN_TASK_GROUP = "Clean Architecture";
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
@@ -19,7 +19,7 @@ public class Constants {
   public static final String BLOCK_HOUND_VERSION = "1.0.8.RELEASE";
   public static final String PLUGIN_VERSION = "3.6.3";
   public static final String GRADLE_WRAPPER_VERSION = "8.4";
-  public static final String KOTLIN_VERSION = "1.6.10";
+  public static final String KOTLIN_VERSION = "1.9.20";
   public static final String AWS_BOM_VERSION = "2.20.94";
   public static final String COMMONS_JMS_VERSION = "1.2.0";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.0.0";
