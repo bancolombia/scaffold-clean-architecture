@@ -25,7 +25,7 @@ public class UpgradeY2023M11D05Gradle implements UpgradeAction {
                   UpdateUtils.replace(
                       res,
                       "html.setOutputLocation file(\"${buildDir}/reports/jacocoHtml\")",
-                          "html.setOutputLocation layout.buildDirectory.dir(\"reports/jacocoHtml\")");
+                      "html.setOutputLocation layout.buildDirectory.dir(\"reports/jacocoHtml\")");
               res =
                   UpdateUtils.replace(
                       res,
