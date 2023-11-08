@@ -10,4 +10,8 @@ dependencies {
     implementation 'io.springfox:springfox-boot-starter:{{springfoxVersion}}'
     implementation 'io.springfox:springfox-swagger-ui:{{springfoxVersion}}'
 {{/include-swagger}}
+{{#task-param-authorize}}
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+{{/task-param-authorize}}
 }
