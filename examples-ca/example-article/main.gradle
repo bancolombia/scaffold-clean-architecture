@@ -29,14 +29,6 @@ subprojects {
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    tasks.withType(Test).configureEach {
-        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-            jvmArgs += [
-                    "-XX:+AllowRedefinitionToAddDeleteMethods"
-            ]
-        }
-    }
-
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     jacocoTestReport {
