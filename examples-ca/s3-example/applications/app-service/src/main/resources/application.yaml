@@ -5,15 +5,29 @@ spring:
     name: "s3-example"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
   profiles:
     include: null
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+
 adapter:
   aws:
     s3:
       bucketName: "testbucket"
       region: "us-east-1"
-      endpoint: "http://localhost:49153"
+      endpoint: "https://s3.localhost.localstack.cloud:4566"

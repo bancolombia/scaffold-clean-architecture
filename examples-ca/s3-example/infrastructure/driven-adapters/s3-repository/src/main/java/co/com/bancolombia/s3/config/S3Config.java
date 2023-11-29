@@ -16,27 +16,27 @@ import java.net.URI;
 @Configuration
 public class S3Config {
 
-    @Profile({"dev", "cer", "pdn"})
     @Bean
+    @Profile({"dev", "cer", "pdn"})
     public S3Client s3Client(S3ConnectionProperties s3Properties) {
         return getBuilder(s3Properties).build();
     }
 
-    @Profile("local")
     @Bean
+    @Profile("local")
     public S3Client localS3Client(AwsCredentials awsCredentials, S3ConnectionProperties s3Properties) {
         return getBuilder(s3Properties)
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .endpointOverride(URI.create(s3Properties.endpoint()))
                 .build();
     }
 
     private S3ClientBuilder getBuilder(S3ConnectionProperties s3Properties) {
         return S3Client.builder()
-        .region(Region.of(s3Properties.getRegion()));
+        .region(Region.of(s3Properties.region()));
     }
-    @Profile("local")
     @Bean
+    @Profile("local")
     public AwsBasicCredentials getCredentials(){
         return AwsBasicCredentials.create("test","test");
     }

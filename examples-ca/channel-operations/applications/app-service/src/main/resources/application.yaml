@@ -1,14 +1,44 @@
-##Spring Configuration
 server:
-  port: 8090
+  port: 8080
 spring:
   application:
-    name: r2dbcconnection
+    name: "channel-operations"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: /h2
   profiles:
-    include:
+    include: "local"
+  logging:
+    level:
+      root: INFO
+      reactor:
+        netty: false
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health, liveness, readiness"
+      base-path: /
+      path-mapping:
+        health: "health"
+        liveness: "liveness"
+        readiness: "readiness"
+
+adapters:
+  postgres:
+    database: "channel"
+    host: "localhost"
+    port: 5432
+    username: "postgres"
+    password: "admin"
+    schema: "management"
+    pool:
+      initial-size: 12
+      max-size: 15
+      max-idle-time: 10

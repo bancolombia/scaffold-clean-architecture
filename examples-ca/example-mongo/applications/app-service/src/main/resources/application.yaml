@@ -3,13 +3,9 @@ server:
 
 spring:
   application:
-    name: "Default"
+    name: "mongoExample"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
   profiles:
     include: null
   data:
@@ -20,3 +16,20 @@ spring:
       database: orders
       port: 27017
       host: localhost
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness

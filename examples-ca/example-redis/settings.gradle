@@ -1,4 +1,12 @@
-rootProject.name = 'ExampleRedis'
+pluginManagement {
+    repositories {
+        //mavenLocal()
+        //maven { url '...' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'example-redis'
 
 include ':app-service'
 include ':model'

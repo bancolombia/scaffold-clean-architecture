@@ -1,16 +1,27 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	implementation project(':r2postgresql')
-	implementation project(':reactive-web')
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testImplementation 'com.tngtech.archunit:archunit:1.1.0'
+    implementation project(':r2postgresql')
+    implementation project(':reactive-web')
     implementation project(':model')
     implementation project(':usecase')
-    compile 'org.springframework.boot:spring-boot-starter'
-    compile 'org.reactivecommons.utils:object-mapper:0.1.0'
-    runtime('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 
-task explodedJar(type: Copy) {
+tasks.register('explodedJar', Copy) {
     with jar
-    into "${buildDir}/exploded"
+    into layout.buildDirectory.dir("exploded")
+}
+
+jar {
+    // To disable the *-plain.jar
+    enabled = false
+}
+
+bootJar {
+    // Sets output jar name
+    archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
 }

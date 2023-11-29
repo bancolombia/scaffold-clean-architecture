@@ -1,21 +1,22 @@
 buildscript {
 	ext {
-		cleanArchitectureVersion = '2.2.0'
-		springBootVersion = '2.6.2'
-		sonarVersion = '3.0'
-		jacocoVersion = '0.8.5'
-        lombokVersion = '1.18.22'
+		cleanArchitectureVersion = '3.6.3'
+		springBootVersion = '3.1.5'
+		sonarVersion = '4.4.1.3373'
+		jacocoVersion = '0.8.11'
+        lombokVersion = '1.18.30'
+        awssdkVersion = '2.21.15'
 	}
 }
 
 plugins {
 	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
-	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'org.springframework.boot' version "${springBootVersion}" apply false
 	id 'org.sonarqube' version "${sonarVersion}"
 	id 'jacoco'
 }
 
-sonarqube {
+sonar {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
     properties {
         property "sonar.sourceEnconding", "UTF-8"
@@ -26,6 +27,7 @@ sonarqube {
         property "sonar.junit.reportsPath", ""
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.externalIssuesReportPaths", "build/issues.json"
     }
 }
 

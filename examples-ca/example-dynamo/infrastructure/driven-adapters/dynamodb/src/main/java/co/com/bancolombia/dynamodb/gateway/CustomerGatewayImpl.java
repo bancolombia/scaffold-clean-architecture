@@ -31,6 +31,6 @@ public class CustomerGatewayImpl implements CustomerRepository {
 
     @Override
     public List<Customer> findAll() {
-        return repository.findAll();
+        return repository.scan();
     }
 }
