@@ -13,5 +13,5 @@ tasks.getByName<Jar>("jar") {
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
     // Sets output jar name
-   this.archiveFileName.set("${project.getParent()?.getName()}.${archiveExtension.get()}")
+   archiveFileName = "${project.parent?.name}.${archiveExtension.get()}"
 }

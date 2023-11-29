@@ -1,20 +1,17 @@
 apply plugin: 'org.springframework.boot'
-{{#example}}
-apply plugin: 'org.owasp.dependencycheck'
-{{/example}}
 
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework.boot:spring-boot-starter'
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
-    testImplementation 'com.tngtech.archunit:archunit:{{archUnitVersion}}'
+    testImplementation 'com.tngtech.archunit:archunit:1.1.0'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.register('explodedJar', Copy) {
     with jar
-    into layout.buildDirectory.dir("exploded")
+    into "${buildDir}/exploded"
 }
 
 jar {
@@ -26,9 +23,3 @@ bootJar {
     // Sets output jar name
     archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
 }
-
-{{#example}}
-dependencyCheck {
-    format = 'JSON'
-}
-{{/example}}

@@ -8,42 +8,32 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    {{#jacoco}}
     apply plugin: 'jacoco'
-    {{/jacoco}}
-    {{#cobertura}}
-    apply plugin: 'net.saliman.cobertura'
-    {{/cobertura}}
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.{{javaVersion}}
+    sourceCompatibility = JavaVersion.VERSION_17
 
     test {
         useJUnitPlatform()
     }
 
     dependencies {
-        {{#reactive}}
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
-        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{blockHoundVersion}}'
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.8.RELEASE'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         testImplementation 'io.projectreactor:reactor-test'
-        {{/reactive}}
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        {{#lombok}}
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        {{/lombok}}
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    {{#reactive}}
     tasks.withType(Test).configureEach {
         if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
             jvmArgs += [
@@ -51,35 +41,24 @@ subprojects {
             ]
         }
     }
-    {{/reactive}}
 
-    {{#jacoco}}
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     jacocoTestReport {
         dependsOn test
         reports {
             xml.setRequired true
-            xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
+            xml.setOutputLocation file("${buildDir}/reports/jacoco.xml")
             csv.setRequired false
-            html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
+            html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
         }
     }
-    {{/jacoco}}
-    {{#cobertura}}
-    test.finalizedBy(project.tasks.cobertura)
-
-    cobertura {
-        coverageFormats = [ 'xml', 'html' ]
-    }
-    {{/cobertura}}
 
 }
 
-{{#jacoco}}
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDirectory.set(layout.buildDirectory.dir("reports"))
+    reportsDirectory.set(file("$buildDir/reports"))
 }
 
 tasks.register('jacocoMergedReport', JacocoReport) {
@@ -94,18 +73,6 @@ tasks.register('jacocoMergedReport', JacocoReport) {
         html.setRequired true
     }
 }
-{{/jacoco}}
-{{#cobertura}}
-def files = subprojects.collect { new File(it.projectDir, '/build/cobertura/cobertura.ser') }
-
-cobertura {
-    coverageFormats = ['xml', 'html']
-    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
-    coverageMergeDatafiles = files
-}
-
-test.finalizedBy(project.tasks.cobertura)
-{{/cobertura}}
 
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
@@ -114,5 +81,5 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '{{gradleVersion}}'
+    gradleVersion = '8.2.1'
 }

@@ -1,8 +1,16 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.InvalidTaskOptionException;
@@ -11,7 +19,7 @@ import co.com.bancolombia.factory.ModuleFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import org.gradle.api.Action;
 import org.gradle.api.Project;
@@ -47,8 +55,9 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     // Arrange
     // Act
     OptionReader reader = helperTask.getOptionReader();
+
     // Assert
-    assertEquals(1, reader.getOptions(helperTask).size());
+    assertEquals(0, reader.getOptions(helperTask).size());
   }
 
   @Test
@@ -57,9 +66,9 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     // Act
     OptionReader reader = task.getOptionReader();
     // Assert
-    List<OptionDescriptor> list = reader.getOptions(task);
-    assertEquals(2, list.size());
-    assertEquals("module", list.get(0).getName());
+    Map<String, OptionDescriptor> map = reader.getOptions(task);
+    assertEquals(1, map.size());
+    assertTrue(map.containsKey("module"));
   }
 
   @Test
