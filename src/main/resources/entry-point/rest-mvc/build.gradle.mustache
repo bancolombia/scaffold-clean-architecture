@@ -9,4 +9,8 @@ dependencies {
 {{#include-swagger}}
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:{{springdocopenapiVersion}}'
 {{/include-swagger}}
+{{#task-param-authorize}}
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+{{/task-param-authorize}}
 }

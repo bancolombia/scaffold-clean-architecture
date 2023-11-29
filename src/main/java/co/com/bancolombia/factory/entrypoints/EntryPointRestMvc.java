@@ -32,6 +32,17 @@ public class EntryPointRestMvc implements ModuleFactory {
     } else {
       builder.appendToProperties("management.endpoints.web.exposure").put("include", "health");
     }
+
+    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-authorize"))) {
+      builder.setupFromTemplate("entry-point/rest-mvc/authorization");
+      builder
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("issuer-uri", "https://idp.example.com/issuer");
+      builder
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("client-id", "myclientid");
+      builder.appendToProperties("jwt").put("json-exp-roles", "/roles");
+    }
     builder.appendToProperties("management.endpoint.health.probes").put("enabled", true);
     builder
         .appendToProperties("cors")

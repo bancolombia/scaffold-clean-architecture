@@ -20,6 +20,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
   private BooleanOption eda = BooleanOption.FALSE;
+  private BooleanOption authorization = BooleanOption.FALSE;
 
   @Option(
       option = "server",
@@ -41,6 +42,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   @Option(option = "pathgql", description = "set API GraphQL path")
   public void setPathGraphql(String pathgql) {
     this.pathGraphql = pathgql;
+  }
+
+  @Option(option = "authorization", description = "Enable authorization requests through a JWT")
+  public void setAuthorization(BooleanOption authorization) {
+    this.authorization = authorization;
   }
 
   @Option(option = "eda", description = "Use EDA variant")
@@ -68,11 +74,17 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("authorization")
+  public List<BooleanOption> getAuthorizeOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
     builder.addParam("task-param-pathgql", pathGraphql);
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
+    builder.addParam("task-param-authorize", authorization == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
     builder.addParam("eda", eda == BooleanOption.TRUE);
   }
