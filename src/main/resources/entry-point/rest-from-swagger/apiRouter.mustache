@@ -52,7 +52,7 @@ public class {{classname}}Router {
     {{/lombok}}
 
     @Bean
-    public RouterFunction<ServerResponse> routerFunction({{classname}}Handler handler) {
+    public RouterFunction<ServerResponse> routerFunction{{classname}}({{classname}}Handler handler) {
 {{#operation}}
 {{#@first}}
 {{#contents}}

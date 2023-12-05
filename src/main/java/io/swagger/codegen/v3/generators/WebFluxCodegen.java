@@ -18,7 +18,7 @@ public class WebFluxCodegen extends AbstractJavaCodegen {
 
   @Override
   public String getDefaultTemplateDir() {
-    return "entry-point/rest-with-swagger";
+    return "entry-point/rest-from-swagger";
   }
 
   @Override
@@ -47,6 +47,7 @@ public class WebFluxCodegen extends AbstractJavaCodegen {
     apiTestTemplateFiles.clear(); // TODO: implement it
     apiDocTemplateFiles.clear();
     apiTemplateFiles.clear();
+    importMapping.put("OffsetDateTime", "java.time.OffsetDateTime");
     if (((Boolean) additionalProperties.getOrDefault("router", false))) {
       apiTemplateFiles.put("apiHandler.mustache", "Handler.java");
       apiTemplateFiles.put("apiRouter.mustache", "Router.java");
