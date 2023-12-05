@@ -44,7 +44,7 @@ public class WebFluxCodegen extends AbstractJavaCodegen {
   @Override
   public void processOpts() {
     super.processOpts();
-    apiTestTemplateFiles.clear(); // TODO: implement it
+    apiTestTemplateFiles.clear();
     apiDocTemplateFiles.clear();
     apiTemplateFiles.clear();
     importMapping.put("OffsetDateTime", "java.time.OffsetDateTime");
@@ -68,11 +68,7 @@ public class WebFluxCodegen extends AbstractJavaCodegen {
     additionalProperties.put(
         "lambdaScapeVoid",
         (Mustache.Lambda)
-            (fragment, writer) -> {
-              System.out.println(fragment);
-              System.out.println(fragment.context());
-              writer.write(fragment.execute().replaceAll("\\r|\\n", ""));
-            });
+            (fragment, writer) -> writer.write(fragment.execute().replaceAll("\\r|\\n", "")));
   }
 
   @Override

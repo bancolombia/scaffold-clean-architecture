@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class GenerateEntryPointTaskTest {
+  public static final String SWAGGER_FILE = "src/test/resources/swagger/pet-store.yaml";
   private GenerateEntryPointTask task;
 
   @Before
@@ -185,6 +186,25 @@ public class GenerateEntryPointTaskTest {
   }
 
   @Test
+  public void generateEntryPointApiRestWithDefaultServerFromSwaggerFile()
+      throws IOException, CleanException {
+    // Arrange
+    task.setType("RESTMVC");
+    task.setFromSwagger(SWAGGER_FILE);
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/PetApiController.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/api-rest/src/main/java/co/com/bancolombia/api/model/Pet.java")
+            .exists());
+  }
+
+  @Test
   public void generateEntryPointApiRestWithDefaultServerAndSwagger()
       throws IOException, CleanException {
     // Arrange
@@ -331,6 +351,27 @@ public class GenerateEntryPointTaskTest {
   }
 
   @Test
+  public void generateEntryPointReactiveWebWithoutRouterFunctionsFromSwagger()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType("WEBFLUX");
+    task.setFromSwagger(SWAGGER_FILE);
+    task.setRouter(Constants.BooleanOption.FALSE);
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/PetApiController.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/model/Pet.java")
+            .exists());
+  }
+
+  @Test
   public void generateEntryPointReactiveWebWithoutRouterFunctionsAndSwagger()
       throws IOException, CleanException {
     // Arrange
@@ -389,6 +430,32 @@ public class GenerateEntryPointTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/entry-points/reactive-web/src/test/java/co/com/bancolombia/api/RouterRestTest.java")
+            .exists());
+  }
+
+  @Test
+  public void generateEntryPointReactiveWebWithRouterFunctionsFromSwagger()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType("WEBFLUX");
+    task.setFromSwagger(SWAGGER_FILE);
+    task.setRouter(Constants.BooleanOption.TRUE);
+
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/PetApiRouter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/PetApiHandler.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/model/Pet.java")
             .exists());
   }
 

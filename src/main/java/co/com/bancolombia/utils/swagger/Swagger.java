@@ -7,18 +7,11 @@ import io.swagger.codegen.v3.config.CodegenConfigurator;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import lombok.experimental.UtilityClass;
 import org.gradle.api.logging.Logger;
 
+@UtilityClass
 public class Swagger {
-
-  public static void main(String[] args) { // TODO: Remove this method
-    Map<String, Object> params = Map.of("async", true, "lombok", true, "router", true);
-    generateEntrypoint(
-        "co.com.bancolombia",
-        "swagger3.yaml",
-        "build/clean/infrastructure/entry-points/reactive-web",
-        params);
-  }
 
   public static void fromBuilder(ModuleBuilder builder, String outputDir) {
     String swaggerFile = builder.getStringParam("swagger-file");
@@ -31,7 +24,7 @@ public class Swagger {
               "lombok",
               builder.isEnableLombok(),
               "router",
-              builder.getBooleanParam("task-param-router"));
+              builder.isReactive() && builder.getBooleanParam("task-param-router"));
       Logger logger = builder.getProject().getLogger();
       generateEntrypoint(
               packageName, swaggerFile, builder.getProject().getRootDir() + "/" + outputDir, params)
@@ -48,7 +41,7 @@ public class Swagger {
     configurator.addAdditionalProperty("invokerPackage", packageName + ".api");
     configurator.addAdditionalProperty("fullController", true);
     configurator.addAdditionalProperty("jakarta", true);
-    configurator.addAdditionalProperty("useBeanValidation", false); // TODO: make it to works
+    configurator.addAdditionalProperty("useBeanValidation", false);
     configurator.setInputSpecURL(swagger);
     configurator.setOutputDir(outputDir);
     configurator.setApiPackage(packageName + ".api");
