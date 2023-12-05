@@ -1,7 +1,7 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
-    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.145'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 }

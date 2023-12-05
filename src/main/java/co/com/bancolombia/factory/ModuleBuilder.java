@@ -92,7 +92,7 @@ public class ModuleBuilder {
     params.put("okhttpVersion", Constants.OKHTTP_VERSION);
     params.put("resilience4jVersion", Constants.RESILIENCE_4J_VERSION);
     params.put("binStashVersion", Constants.BIN_STASH_VERSION);
-    params.put("springfoxVersion", Constants.SPRING_FOX_VERSION);
+    params.put("springdocOpenapiVersion", Constants.SPRINGDOC_OPENAPI_VERSION);
     params.put("dependencyCheckVersion", Constants.DEPENDENCY_CHECK_VERSION);
     params.put("lombok", isEnableLombok());
     params.put("metrics", withMetrics());

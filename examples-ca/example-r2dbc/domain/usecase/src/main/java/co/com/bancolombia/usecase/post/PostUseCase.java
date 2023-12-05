@@ -2,27 +2,33 @@ package co.com.bancolombia.usecase.post;
 
 import co.com.bancolombia.model.postmodel.PostModel;
 import co.com.bancolombia.model.postmodel.gateways.PostModelRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PostUseCase {
 
-    private PostModelRepository postModelRepository;
+    private final PostModelRepository postModelRepository;
 
-    public Flux<PostModel> getAll(){return postModelRepository.getAll();}
-    public Mono<PostModel> update(PostModel postModelUpdate){
+    public Flux<PostModel> getAll() {
+        return postModelRepository.getAll();
+    }
+
+    public Mono<PostModel> update(PostModel postModelUpdate) {
         return postModelRepository.update(postModelUpdate);
     }
-    public Mono<Void> delete(Integer idPostModel){
+
+    public Mono<Void> delete(Integer idPostModel) {
         return postModelRepository.delete(idPostModel);
     }
-    public Mono<PostModel> create(PostModel postModel){
+
+    public Mono<PostModel> create(PostModel postModel) {
         return postModelRepository.create(postModel);
     }
-    public Flux<PostModel>findByTitle(String title){
+
+    public Flux<PostModel> findByTitle(String title) {
         return postModelRepository.findByTitle(title);
     }
 }

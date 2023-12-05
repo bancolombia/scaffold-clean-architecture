@@ -5,7 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,22 +29,29 @@ public class Order {
 
     private String totalProducts;
 
+    @Builder.Default
     private OrderStatus status = OrderStatus.SHOPPING_KART;
 
+    @Builder.Default
     private Double costDelivery = 0.0;
 
     private String total;
 
     private String totalDiscounts;
 
-    private Map<String,String> clientInfo = new HashMap<>();
+    @Builder.Default
+    private Map<String, String> clientInfo = new HashMap<>();
 
-    private Map<String,String> paymentInfo = new HashMap<>();
+    @Builder.Default
+    private Map<String, String> paymentInfo = new HashMap<>();
 
-    private Map<String,String> deliveryInfo = new HashMap<>();
+    @Builder.Default
+    private Map<String, String> deliveryInfo = new HashMap<>();
 
-    private Map<String,String> metadata = new HashMap<>();
+    @Builder.Default
+    private Map<String, String> metadata = new HashMap<>();
 
+    @Builder.Default
     private Set<Product> products = new HashSet<>();
 
 }

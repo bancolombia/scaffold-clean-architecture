@@ -7,7 +7,10 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
     {{/metrics}}
 {{#include-swagger}}
-    implementation 'io.springfox:springfox-boot-starter:{{springfoxVersion}}'
-    implementation 'io.springfox:springfox-swagger-ui:{{springfoxVersion}}'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:{{springdocopenapiVersion}}'
 {{/include-swagger}}
+{{#task-param-authorize}}
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+{{/task-param-authorize}}
 }

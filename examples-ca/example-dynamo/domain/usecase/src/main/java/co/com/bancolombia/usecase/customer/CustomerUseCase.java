@@ -9,21 +9,21 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerUseCase {
 
-    CustomerRepository drivenAdapter;
+    private final CustomerRepository drivenAdapter;
 
-    public List<Customer> getALL(){
+    public List<Customer> findAll() {
         return drivenAdapter.findAll();
     }
 
-    public Customer create(Customer customer){
+    public Customer create(Customer customer) {
         return drivenAdapter.save(customer);
     }
 
-    public Customer getByID(String id){
+    public Customer getByID(String id) {
         return drivenAdapter.getById(id);
     }
 
-    public void delete(String id){
+    public void delete(String id) {
         Customer customer = drivenAdapter.getById(id);
         drivenAdapter.delete(customer);
     }

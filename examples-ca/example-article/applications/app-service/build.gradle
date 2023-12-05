@@ -1,24 +1,22 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    implementation 'software.amazon.awssdk:sts'
-    implementation 'org.springframework.boot:spring-boot-starter-undertow:2.6.7'
+	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+	testImplementation 'com.tngtech.archunit:archunit:1.1.0'
     implementation project(':api-rest')
-    implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
     implementation project(':jpa-repository')
     implementation project(':model')
     implementation project(':usecase')
+    implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
+    implementation 'software.amazon.awssdk:sts'
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-undertow'
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 
-task explodedJar(type: Copy) {
+tasks.register('explodedJar', Copy) {
     with jar
-    into "${buildDir}/exploded"
-}
-
-configurations {
-    implementation.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+    into layout.buildDirectory.dir("exploded")
 }
 
 jar {

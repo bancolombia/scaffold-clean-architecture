@@ -4,7 +4,13 @@ import co.com.bancolombia.model.customer.Customer;
 import co.com.bancolombia.usecase.customer.CustomerUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,8 +27,8 @@ public class ApiRest {
     }
 
     @GetMapping(path = "/customer")
-    public List<Customer> getById() {
-        return useCase.getALL();
+    public List<Customer> findAll() {
+        return useCase.findAll();
     }
 
     @PostMapping(path = "/customer")

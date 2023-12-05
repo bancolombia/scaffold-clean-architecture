@@ -98,7 +98,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
     }
     javadoc.failOnError = false
 
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 
@@ -198,7 +198,7 @@ jacocoTestReport {
     dependsOn(tasks.test)
     reports {
         xml.setRequired true
-        xml.setOutputLocation file("${buildDir}/reports/jacoco/report.xml")
+        xml.setOutputLocation layout.buildDirectory.file("reports/jacoco/report.xml")
         html.setRequired true
         csv.setRequired false
     }
@@ -240,5 +240,5 @@ tasks.register('installGitHooks', Copy) {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.1.1'
+    gradleVersion = '8.4'
 }

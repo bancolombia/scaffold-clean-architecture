@@ -2,18 +2,32 @@ server:
   port: 8080
 spring:
   application:
-    name: "dynamoDB"
+    name: "exampleDynamoDB"
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: "/h2"
   profiles:
     include: null
-aws:
-  access-key: ""
-  secret-key: ""
-  dynamodb:
-    endpoint: "http://localhost:8000"
 
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+      probes:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, liveness, readiness
+      base-path: /
+      path-mapping:
+        health: health
+        liveness: liveness
+        readiness: readiness
+
+aws:
+  region: "us-east-1"
+  access-key: "test"
+  secret-key: "test"
+  dynamodb:
+    endpoint: "https://localhost:8080"

@@ -11,11 +11,15 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
 
-    //compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.VERSION_11
+    compileJava.dependsOn validateStructure
+    sourceCompatibility = JavaVersion.VERSION_17
+    
+	test {
+        useJUnitPlatform()
+    }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation platform("software.amazon.awssdk:bom:${awssdkVersion}")
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
@@ -29,10 +33,10 @@ subprojects {
     jacocoTestReport {
         dependsOn test
         reports {
-            xml.enabled true
-            xml.destination file("${buildDir}/reports/jacoco.xml")
-            csv.enabled false
-            html.destination file("${buildDir}/reports/jacocoHtml")
+            xml.setRequired true
+            xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
+            csv.setRequired false
+            html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
         }
     }
 
@@ -40,27 +44,28 @@ subprojects {
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("$buildDir/reports")
+    reportsDirectory.set(layout.buildDirectory.dir("reports"))
 }
 
-task jacocoMergedReport(type: JacocoReport) {
-    dependsOn = subprojects.jacocoTestReport
+tasks.register('jacocoMergedReport', JacocoReport) {
+    dependsOn = [test, subprojects.jacocoTestReport]
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
     executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.enabled true
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
+
 tasks.named('wrapper') {
-  gradleVersion = '6.9.1'
- }
+    gradleVersion = '8.4'
+}
