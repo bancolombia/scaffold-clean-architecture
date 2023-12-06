@@ -367,6 +367,7 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    | asynceventhandler                | Async Event Handler                    |                                                                                                   |&#9745;| &#9745; |
    | mq                               | JMS MQ Client to listen messages       |                                                                                                   |&#9745;| &#9745; |
    | sqs                              | SQS Listener                           |                                                                                                   |&#9745;| &#9745; |
+   | kafka                            | Kafka Consumer                         |                                                                                                   |&#9745;|         |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 

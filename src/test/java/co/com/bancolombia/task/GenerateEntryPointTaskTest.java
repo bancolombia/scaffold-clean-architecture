@@ -565,4 +565,22 @@ public class GenerateEntryPointTaskTest {
                 "build/unitTest/infrastructure/entry-points/sqs-listener/src/main/java/co/com/bancolombia/sqs/listener/SQSProcessor.java")
             .exists());
   }
+
+  @Test
+  public void generateEntryPointKafkaConsumer() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType("KAFKA");
+
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/entry-points/kafka-consumer/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/entry-points/kafka-consumer/src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java")
+            .exists());
+  }
 }
