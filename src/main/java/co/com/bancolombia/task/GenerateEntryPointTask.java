@@ -16,6 +16,7 @@ import org.gradle.api.tasks.options.OptionValues;
     description = "Generate entry point in infrastructure layer")
 public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
+  private String swaggerFile = null;
   private Server server = Server.UNDERTOW;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
@@ -37,6 +38,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   @Option(option = "swagger", description = "Set swagger configuration to rest entry point ")
   public void setSwagger(BooleanOption swagger) {
     this.swagger = swagger;
+  }
+
+  @Option(option = "from-swagger", description = "Generation will be from a swagger.yaml file")
+  public void setFromSwagger(String swaggerFile) {
+    this.swaggerFile = swaggerFile;
   }
 
   @Option(option = "pathgql", description = "set API GraphQL path")
@@ -87,6 +93,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("task-param-authorize", authorization == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
     builder.addParam("eda", eda == BooleanOption.TRUE);
+    builder.addParam("swagger-file", swaggerFile);
   }
 
   @Override

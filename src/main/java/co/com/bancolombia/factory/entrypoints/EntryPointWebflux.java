@@ -7,6 +7,7 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
+import co.com.bancolombia.utils.swagger.Swagger;
 import java.io.IOException;
 
 public class EntryPointWebflux implements ModuleFactory {
@@ -27,6 +28,7 @@ public class EntryPointWebflux implements ModuleFactory {
         }
       }
     }
+    Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web");
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
