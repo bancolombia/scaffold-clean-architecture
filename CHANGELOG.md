@@ -1,12 +1,32 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.7.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.7.0) (2023-12-06)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.3...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.4...v3.7.0)
+
+**Closed issues:**
+
+- \[BUG\] Architecture test fails in the restconsumer [\#395](https://github.com/bancolombia/scaffold-clean-architecture/issues/395)
+
+**Merged pull requests:**
+
+- Generate entry point rest from swagger file [\#404](https://github.com/bancolombia/scaffold-clean-architecture/pull/404) ([juancgalvis](https://github.com/juancgalvis))
+- Add authorization with jwt token in entrypoint restmvc [\#402](https://github.com/bancolombia/scaffold-clean-architecture/pull/402) ([braduran](https://github.com/braduran))
+- Use springdoc-openapi-starter to generate API documentation [\#401](https://github.com/bancolombia/scaffold-clean-architecture/pull/401) ([luisgomez29](https://github.com/luisgomez29))
+- Upgrade to Gradle 8.4 [\#400](https://github.com/bancolombia/scaffold-clean-architecture/pull/400) ([luisgomez29](https://github.com/luisgomez29))
+- Upgrade sample microservices to Java 17 and Spring Boot 3 [\#399](https://github.com/bancolombia/scaffold-clean-architecture/pull/399) ([luisgomez29](https://github.com/luisgomez29))
+
+## [v3.6.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.4) (2023-10-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.3...v3.6.4)
 
 **Closed issues:**
 
 - \[Bug\] Fail in ArchitectureTest Creation [\#391](https://github.com/bancolombia/scaffold-clean-architecture/issues/391)
+
+**Merged pull requests:**
+
+- fix: Add @value annotation in the constructor [\#396](https://github.com/bancolombia/scaffold-clean-architecture/pull/396) ([luisgomez29](https://github.com/luisgomez29))
 
 ## [v3.6.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.6.3) (2023-10-04)
 
@@ -162,20 +182,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
-
 ## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
 
 **Closed issues:**
 
