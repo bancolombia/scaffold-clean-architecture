@@ -40,6 +40,7 @@ jobs:
           push-branch: "master"
           commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
           force-add: "true"
+          force-push: "true"
           files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
           name: Release Bot
           email: release-bot@bancolombia.com.co
