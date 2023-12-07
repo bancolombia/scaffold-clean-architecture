@@ -1,0 +1,13 @@
+{
+  "folders": [
+    "infrastructure/entry-points/kafka-consumer/src/test/{{language}}/{{packagePath}}/kafka/consumer/config"
+  ],
+  "files": {},
+  "java": {
+    "entry-point/kafka-consumer-reactive/build.gradle.mustache": "infrastructure/entry-points/kafka-consumer/build.gradle",
+    "entry-point/kafka-consumer-reactive/kafka-config.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/{{language}}/{{packagePath}}/kafka/consumer/config/KafkaConfig.java",
+    "entry-point/kafka-consumer-reactive/kafka-consumer.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/{{language}}/{{packagePath}}/kafka/consumer/KafkaConsumer.java"
+  },
+  "kotlin": {
+  }
+}
