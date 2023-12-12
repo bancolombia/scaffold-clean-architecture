@@ -66,6 +66,12 @@ public class {{classname}}Handler {
                 .flatMap(body -> {{operationId}}Mock()) // TODO: Call real use case here -> someUseCase.some()
                 .flatMap(response -> ServerResponse.ok().bodyValue(response)); // TODO: Customize response here
         {{/isFormParam}}
+        {{^isBodyParam}}
+        {{^isFormParam}}
+        return {{operationId}}Mock() // TODO: Call real use case here -> someUseCase.some()
+            .flatMap(response -> ServerResponse.ok().bodyValue(response)); // TODO: Customize response here
+        {{/isFormParam}}
+        {{/isBodyParam}}
         {{/parameters}}
         {{^parameters}}
         return {{operationId}}Mock() // TODO: Call real use case here -> someUseCase.some()

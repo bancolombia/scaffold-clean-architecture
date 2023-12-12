@@ -10,30 +10,20 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
-public class WebFluxCodegen extends AbstractJavaCodegen {
+public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
 
-  public WebFluxCodegen() {
+  public AbstractScaffoldCodegen() {
     super();
   }
 
   @Override
   public String getDefaultTemplateDir() {
-    return "entry-point/rest-from-swagger";
+    return "commons/rest-from-swagger";
   }
 
   @Override
   public CodegenType getTag() {
     return CodegenType.SERVER;
-  }
-
-  @Override
-  public String getName() {
-    return "webflux";
-  }
-
-  @Override
-  public String getHelp() {
-    return "Generates an entrypoint rest with WebFlux.";
   }
 
   @Override
@@ -47,13 +37,8 @@ public class WebFluxCodegen extends AbstractJavaCodegen {
     apiTestTemplateFiles.clear();
     apiDocTemplateFiles.clear();
     apiTemplateFiles.clear();
+
     importMapping.put("OffsetDateTime", "java.time.OffsetDateTime");
-    if (((Boolean) additionalProperties.getOrDefault("router", false))) {
-      apiTemplateFiles.put("apiHandler.mustache", "Handler.java");
-      apiTemplateFiles.put("apiRouter.mustache", "Router.java");
-    } else {
-      apiTemplateFiles.put("apiController.mustache", "Controller.java");
-    }
     modelDocTemplateFiles.clear();
     additionalProperties.put(
         "lambdaEscapeDoubleQuote",

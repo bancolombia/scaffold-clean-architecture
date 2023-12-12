@@ -175,6 +175,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.1'
     implementation 'org.reflections:reflections:0.10.2'
 
+    // swagger generators
     implementation 'io.swagger.codegen.v3:swagger-codegen-generators:1.0.43'
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
     implementation 'com.google.googlejavaformat:google-java-format:1.18.1'
