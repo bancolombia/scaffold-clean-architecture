@@ -1,0 +1,65 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+{{^fullJavaUtil}}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+{{/fullJavaUtil}}
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+import lombok.AllArgsConstructor;
+{{/lombok}}
+
+{{#operations}}
+{{#lombok}}
+@Log4j2
+@AllArgsConstructor
+{{/lombok}}
+@Service
+public class {{classname}} {
+    private final WebClient client;
+    {{^lombok}}
+    private static final Logger log = LoggerFactory.getLogger({{classname}}Controller.class);
+
+    public {{classname}}(WebClient client) {
+        this.client = client;
+    }
+    {{/lombok}}
+
+    {{#operation}}
+    {{#contents}}
+    /**
+    * Build call for {{operationId}}{{#parameters}}
+    * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}{{/parameters}}
+    * @return Mono<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}> response
+    {{#externalDocs}}
+        * {{description}}
+        * @see <a href="{{url}}">{{summary}} Documentation</a>
+    {{/externalDocs}}
+    */
+    public Mono<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}> {{operationId}}Request({{#parameters}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/parameters}}) {
+        return client.method(HttpMethod.{{httpMethod}})
+            .uri("{{{path}}}"{{#pathParams}}, {{{paramName}}}{{/pathParams}}){{#headerParams}}
+            .header("{{baseName}}", {{paramName}}){{/headerParams}}{{#consumes}}{{#@first}}
+            .contentType(MediaType.parseMediaType("{{{mediaType}}}")){{/@first}}{{/consumes}}{{^isForm}}{{#bodyParam}}
+            .body(BodyInserters.fromValue({{paramName}})){{/bodyParam}}{{/isForm}}{{#isForm}}{{#formParams}}
+            {{#@first}}.body(BodyInserters.fromFormData("{{baseName}}", {{paramName}}){{/@first}}{{^@first}}        .with("{{baseName}}", {{paramName}}){{/@first}}{{#@last}}){{/@last}}{{/formParams}}{{/isForm}}
+            {{#produces}}{{#@first}}.accept(MediaType.parseMediaType("{{{mediaType}}}"))
+            {{/@first}}{{/produces}}.retrieve()
+            .bodyToMono({{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Void{{/returnType}}.class);
+    }
+    {{/contents}}
+    {{/operation}}
+}
+{{/operations}}

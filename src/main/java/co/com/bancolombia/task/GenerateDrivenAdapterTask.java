@@ -15,6 +15,7 @@ import org.gradle.api.tasks.options.OptionValues;
     description = "Generate driven adapter in infrastructure layer")
 public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private String url = "http://localhost:8080";
+  private String swaggerFile = null;
   private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
   private DrivenAdapterBinStash.CacheMode cacheMode = DrivenAdapterBinStash.CacheMode.LOCAL;
 
@@ -56,6 +57,11 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     this.cacheMode = cacheMode;
   }
 
+  @Option(option = "from-swagger", description = "Generation will be from a swagger.yaml file")
+  public void setFromSwagger(String swaggerFile) {
+    this.swaggerFile = swaggerFile;
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-cache-mode", cacheMode);
@@ -63,6 +69,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     builder.addParam("eda", eda == BooleanOption.TRUE);
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("task-param-url", url);
+    builder.addParam("swagger-file", swaggerFile);
   }
 
   @Override

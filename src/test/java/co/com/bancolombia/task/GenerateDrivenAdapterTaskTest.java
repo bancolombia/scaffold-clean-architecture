@@ -352,6 +352,26 @@ public class GenerateDrivenAdapterTaskTest {
   }
 
   @Test
+  public void generateReactiveRestConsumerFromSwagger() throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setUrl("http://localhost:8080");
+    task.setType("RESTCONSUMER");
+    task.setFromSwagger(GenerateEntryPointTaskTest.SWAGGER_FILE);
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/api/PetApi.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/rest-consumer/src/main/java/co/com/bancolombia/consumer/api/model/Pet.java")
+            .exists());
+  }
+
+  @Test
   public void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);

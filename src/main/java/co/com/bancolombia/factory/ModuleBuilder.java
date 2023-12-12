@@ -290,7 +290,7 @@ public class ModuleBuilder {
   }
 
   public boolean getBooleanParam(String key) {
-    return (Boolean) params.get(key);
+    return (Boolean) params.getOrDefault(key, false);
   }
 
   public boolean isReactive() {

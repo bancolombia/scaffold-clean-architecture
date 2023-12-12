@@ -309,7 +309,7 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    | jpa                                 | JPA Repository                      | --secret [true-false]                              | &#9745; | &#9745; |
    | mongodb                             | Mongo Repository                    | --secret [true-false]                              | &#9745; | &#9745; |
    | asynceventbus                       | Async Event Bus                     |                                                    | &#9745; | &#9745; |
-   | restconsumer                        | Rest Client Consumer                | --url [url]                                        | &#9745; | &#9745; |
+   | restconsumer                        | Rest Client Consumer                | --url [url] --from-swagger swagger.yaml            | &#9745; | &#9745; |
    | redis                               | Redis                               | --mode [template-repository] --secret [true-false] | &#9745; | &#9745; |
    | rsocket                             | RSocket Requester                   |                                                    | &#9745; | &#9745; |
    | r2dbc                               | R2dbc Postgresql Client             |                                                    | &#9745; | &#9745; |
