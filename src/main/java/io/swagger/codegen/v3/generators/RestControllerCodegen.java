@@ -10,17 +10,17 @@ public class RestControllerCodegen extends AbstractScaffoldCodegen {
 
   @Override
   public CodegenType getTag() {
-    return CodegenType.CLIENT;
+    return CodegenType.SERVER;
   }
 
   @Override
   public String getName() {
-    return "WebClient";
+    return "RestController";
   }
 
   @Override
   public String getHelp() {
-    return "Generates a driven adapter rest with WebClient.";
+    return "Generates a entry point rest with RestController.";
   }
 
   @Override

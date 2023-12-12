@@ -8,12 +8,12 @@ public class WebClientCodegen extends AbstractScaffoldCodegen {
 
   @Override
   public String getName() {
-    return "WebFlux";
+    return "WebClient";
   }
 
   @Override
   public String getHelp() {
-    return "Generates an entrypoint rest with WebFlux.";
+    return "Generates an entrypoint rest with WebClient.";
   }
 
   @Override
