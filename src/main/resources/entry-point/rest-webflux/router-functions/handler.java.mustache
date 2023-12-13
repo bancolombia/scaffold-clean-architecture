@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+{{#task-param-authorize}}
+import org.springframework.security.access.prepost.PreAuthorize;
+{{/task-param-authorize}}
 import reactor.core.publisher.Mono;
 
 @Component
@@ -19,16 +22,26 @@ public class Handler {
     public Handler() {
     }
 {{/lombok}}
+
+{{#task-param-authorize}}
+    @PreAuthorize("hasRole('permissionGET')")
+{{/task-param-authorize}}
     public Mono<ServerResponse> listenGETUseCase(ServerRequest serverRequest) {
         // usecase.logic();
         return ServerResponse.ok().bodyValue("");
     }
 
+{{#task-param-authorize}}
+    @PreAuthorize("hasRole('permissionGETOther')")
+{{/task-param-authorize}}
     public Mono<ServerResponse> listenGETOtherUseCase(ServerRequest serverRequest) {
         // useCase2.logic();
         return ServerResponse.ok().bodyValue("");
     }
 
+{{#task-param-authorize}}
+    @PreAuthorize("hasRole('permissionPOST')")
+{{/task-param-authorize}}
     public Mono<ServerResponse> listenPOSTUseCase(ServerRequest serverRequest) {
         // usecase.logic();
         return ServerResponse.ok().bodyValue("");

@@ -361,7 +361,7 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    |----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------|-------|---------|
    | generic                          | Empty Entry Point                      | --name [name]                                                                                     |&#9745;| &#9745; |
    | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true-false] --from-swagger swagger.yaml |&#9745;| &#9745; |
-   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --from-swagger swagger.yaml                                   |&#9745;| &#9745; |
+   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true-false] --from-swagger swagger.yaml      |&#9745;| &#9745; |
    | rsocket                          | Rsocket Controller Entry Point         |                                                                                                   |&#9745;| &#9745; |
    | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                            |&#9745;| &#9745; |
    | asynceventhandler                | Async Event Handler                    |                                                                                                   |&#9745;| &#9745; |
