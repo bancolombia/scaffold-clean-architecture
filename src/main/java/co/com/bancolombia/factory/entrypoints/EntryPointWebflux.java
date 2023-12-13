@@ -32,11 +32,11 @@ public class EntryPointWebflux implements ModuleFactory {
     if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-authorize"))) {
       builder.setupFromTemplate("entry-point/rest-webflux/authorization");
       builder
-              .appendToProperties("spring.security.oauth2.resourceserver.jwt")
-              .put("issuer-uri", "https://idp.example.com/issuer");
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("issuer-uri", "https://idp.example.com/issuer");
       builder
-              .appendToProperties("spring.security.oauth2.resourceserver.jwt")
-              .put("client-id", "myclientid");
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("client-id", "myclientid");
       builder.appendToProperties("jwt").put("json-exp-roles", "/roles");
     }
 
