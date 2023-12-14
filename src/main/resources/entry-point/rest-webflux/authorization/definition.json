@@ -1,0 +1,10 @@
+{
+  "folders": [
+    "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api/config"
+  ],
+  "files": {},
+  "java": {
+    "entry-point/rest-webflux/authorization/authorization-jwt.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/config/AuthorizationJwt.java"
+  },
+  "kotlin": {}
+}

@@ -28,7 +28,20 @@ public class EntryPointWebflux implements ModuleFactory {
         }
       }
     }
+
+    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-authorize"))) {
+      builder.setupFromTemplate("entry-point/rest-webflux/authorization");
+      builder
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("issuer-uri", "https://idp.example.com/issuer");
+      builder
+          .appendToProperties("spring.security.oauth2.resourceserver.jwt")
+          .put("client-id", "myclientid");
+      builder.appendToProperties("jwt").put("json-exp-roles", "/roles");
+    }
+
     Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web", true);
+
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
