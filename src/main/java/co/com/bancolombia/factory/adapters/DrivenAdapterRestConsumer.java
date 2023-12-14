@@ -7,6 +7,7 @@ import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.utils.swagger.Swagger;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
@@ -24,6 +25,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
               builder.isKotlin(), "org.springframework.boot:spring-boot-starter-webflux");
       builder.appendDependencyToModule(APP_SERVICE, implementation);
       builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
+      Swagger.fromBuilder(builder, "infrastructure/driven-adapters/rest-consumer", false);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");

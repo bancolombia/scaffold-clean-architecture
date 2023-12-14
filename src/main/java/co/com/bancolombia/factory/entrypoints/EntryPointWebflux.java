@@ -40,7 +40,8 @@ public class EntryPointWebflux implements ModuleFactory {
       builder.appendToProperties("jwt").put("json-exp-roles", "/roles");
     }
 
-    Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web");
+    Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web", true);
+
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
     builder.appendDependencyToModule(APP_SERVICE, dependency);

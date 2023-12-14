@@ -1,5 +1,16 @@
 # Changelog
 
+## [v3.8.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.8.0) (2023-12-07)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.7.0...v3.8.0)
+
+**Merged pull requests:**
+
+- fix\(actions\): enable push for automatic release [\#408](https://github.com/bancolombia/scaffold-clean-architecture/pull/408) ([juancgalvis](https://github.com/juancgalvis))
+- feat\(kafka\): Add reactive kafka consumer, update archunit and resilience [\#407](https://github.com/bancolombia/scaffold-clean-architecture/pull/407) ([juancgalvis](https://github.com/juancgalvis))
+- Update ArchUnit version [\#406](https://github.com/bancolombia/scaffold-clean-architecture/pull/406) ([juancgalvis](https://github.com/juancgalvis))
+- Add basic reactive kafka consumer [\#405](https://github.com/bancolombia/scaffold-clean-architecture/pull/405) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.7.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.7.0) (2023-12-06)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.6.4...v3.7.0)

@@ -49,6 +49,6 @@ public class EntryPointRestMvc implements ModuleFactory {
         .appendToProperties("cors")
         .put("allowed-origins", "http://localhost:4200,http://localhost:8080");
     new EntryPointRestMvcServer().buildModule(builder);
-    Swagger.fromBuilder(builder, "infrastructure/entry-points/api-rest");
+    Swagger.fromBuilder(builder, "infrastructure/entry-points/api-rest", true);
   }
 }
