@@ -25,7 +25,6 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
               builder.isKotlin(), "org.springframework.boot:spring-boot-starter-webflux");
       builder.appendDependencyToModule(APP_SERVICE, implementation);
       builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
-      Swagger.fromBuilder(builder, "infrastructure/driven-adapters/rest-consumer", false);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
@@ -43,6 +42,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     builder.appendToSettings("rest-consumer", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":rest-consumer");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
+    Swagger.fromBuilder(builder, "infrastructure/driven-adapters/rest-consumer", false);
   }
 
   private void withCircuitBreaker(ObjectNode instance) {

@@ -4,9 +4,13 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import io.swagger.codegen.v3.ClientOptInput;
 import io.swagger.codegen.v3.DefaultGenerator;
 import io.swagger.codegen.v3.config.CodegenConfigurator;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import org.gradle.api.logging.Logger;
 
@@ -14,59 +18,79 @@ import org.gradle.api.logging.Logger;
 public class Swagger {
 
   public static void fromBuilder(ModuleBuilder builder, String outputDir, boolean entryPoint) {
-    String swagger = builder.getStringParam("swagger-file");
-    if (swagger != null) {
-      Logger logger = builder.getProject().getLogger();
-      String realOutputDir = builder.getProject().getRootDir() + "/" + outputDir;
-
-      String packageName = builder.getStringParam("package");
-      if (!entryPoint) {
-        packageName = packageName + ".consumer";
-      }
-
-      // Generator setup
-      CodegenConfigurator configurator = new CodegenConfigurator();
-
-      configurator.addAdditionalProperty("async", builder.isReactive());
-      configurator.addAdditionalProperty("lombok", builder.isEnableLombok());
-      configurator.addAdditionalProperty("invokerPackage", packageName + ".api");
-      configurator.addAdditionalProperty("fullController", true);
-      configurator.addAdditionalProperty("jakarta", true);
-      configurator.addAdditionalProperty("useBeanValidation", false);
-
-      configurator.setInputSpecURL(swagger);
-      configurator.setOutputDir(realOutputDir);
-      configurator.setApiPackage(packageName + ".api");
-      configurator.setModelPackage(packageName + ".api.model");
-
-      configurator.setLang(resolveLang(builder, entryPoint));
-
-      final ClientOptInput clientOptInput = configurator.toClientOptInput();
-      new DefaultGenerator()
-          .opts(clientOptInput)
-          .generate()
-          .forEach(file -> logger.lifecycle("File generated from swagger: {}", file));
-      try {
-        Files.deleteIfExists(Path.of(realOutputDir, ".swagger-codegen-ignore"));
-        Files.deleteIfExists(Path.of(realOutputDir, ".swagger-codegen", "VERSION"));
-        Files.deleteIfExists(Path.of(realOutputDir, ".swagger-codegen"));
-      } catch (IOException e) {
-        logger.info("file not found", e);
-      }
+    if (builder.getStringParam("swagger-file") != null) {
+      generate(
+          SwaggerOptions.builder()
+              .reactive(builder.isReactive())
+              .lombok(builder.isEnableLombok())
+              .entryPoint(entryPoint)
+              .router(builder.getBooleanParam("task-param-router"))
+              .swagger(builder.getStringParam("swagger-file"))
+              .logger(builder.getProject().getLogger())
+              .outputDir(builder.getProject().getRootDir() + "/" + outputDir)
+              .packageName(
+                  entryPoint
+                      ? builder.getStringParam("package")
+                      : builder.getStringParam("package") + ".consumer")
+              .build());
     }
   }
 
-  private String resolveLang(ModuleBuilder builder, boolean entryPoint) {
-    if (entryPoint) {
-      if (builder.isReactive() && builder.getBooleanParam("task-param-router")) {
+  public static void generate(SwaggerOptions options) {
+    CodegenConfigurator configurator = new CodegenConfigurator();
+
+    configurator.addAdditionalProperty("async", options.isReactive());
+    configurator.addAdditionalProperty("lombok", options.isLombok());
+    configurator.addAdditionalProperty("invokerPackage", options.getPackageName() + ".api");
+    configurator.addAdditionalProperty("fullController", true);
+    configurator.addAdditionalProperty("jakarta", true);
+    configurator.addAdditionalProperty("useBeanValidation", false);
+
+    configurator.setInputSpecURL(options.getSwagger());
+    configurator.setOutputDir(options.getOutputDir());
+    configurator.setApiPackage(options.getPackageName() + ".api");
+    configurator.setModelPackage(options.getPackageName() + ".api.model");
+
+    configurator.setLang(resolveLang(options));
+
+    final ClientOptInput clientOptInput = configurator.toClientOptInput();
+    List<File> files = new DefaultGenerator().opts(clientOptInput).generate();
+    if (options.getLogger() != null) {
+      files.forEach(file -> options.getLogger().lifecycle("File generated from swagger: {}", file));
+    }
+    try {
+      Files.deleteIfExists(Path.of(options.getOutputDir(), ".swagger-codegen-ignore"));
+      Files.deleteIfExists(Path.of(options.getOutputDir(), ".swagger-codegen", "VERSION"));
+      Files.deleteIfExists(Path.of(options.getOutputDir(), ".swagger-codegen"));
+    } catch (IOException e) {
+      options.getLogger().info("file not found", e);
+    }
+  }
+
+  private String resolveLang(SwaggerOptions options) {
+    if (options.isEntryPoint()) {
+      if (options.isReactive() && options.isRouter()) {
         return "io.swagger.codegen.v3.generators.WebFluxRouterCodegen";
       } else {
         return "io.swagger.codegen.v3.generators.RestControllerCodegen";
       }
-    } else if (builder.isReactive()) {
+    } else if (options.isReactive()) {
       return "io.swagger.codegen.v3.generators.WebClientCodegen";
     } else {
       return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
     }
+  }
+
+  @Builder
+  @Getter
+  public static class SwaggerOptions {
+    private final boolean entryPoint;
+    private final boolean reactive;
+    private final boolean lombok;
+    private final boolean router;
+    private final String swagger;
+    private final String packageName;
+    private final String outputDir;
+    private final Logger logger;
   }
 }
