@@ -68,17 +68,16 @@ public class Swagger {
   }
 
   private String resolveLang(SwaggerOptions options) {
-    if (options.isEntryPoint()) {
-      if (options.isReactive() && options.isRouter()) {
-        return "io.swagger.codegen.v3.generators.WebFluxRouterCodegen";
-      } else {
-        return "io.swagger.codegen.v3.generators.RestControllerCodegen";
-      }
-    } else if (options.isReactive()) {
-      return "io.swagger.codegen.v3.generators.WebClientCodegen";
-    } else {
-      return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
+    if (options.isEntryPoint() && options.isReactive() && options.isRouter()) {
+      return "io.swagger.codegen.v3.generators.WebFluxRouterCodegen";
     }
+    if (options.isEntryPoint()) {
+      return "io.swagger.codegen.v3.generators.RestControllerCodegen";
+    }
+    if (options.isReactive()) {
+      return "io.swagger.codegen.v3.generators.WebClientCodegen";
+    }
+    return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
   }
 
   @Builder
