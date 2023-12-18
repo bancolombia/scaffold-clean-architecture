@@ -142,7 +142,7 @@ public class GenerateStructureTaskTest {
     task.setStatusLombok(BooleanOption.FALSE);
     task.setMetrics(BooleanOption.FALSE);
     task.setForce(BooleanOption.FALSE);
-    task.setJavaVersion(JavaVersion.VERSION_11);
+    task.setJavaVersion(JavaVersion.VERSION_17);
     // Act
     task.execute();
     // Assert

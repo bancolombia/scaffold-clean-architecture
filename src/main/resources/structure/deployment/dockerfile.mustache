@@ -1,12 +1,9 @@
-{{#java8}}
-FROM adoptopenjdk/openjdk8-openj9:alpine-slim
-{{/java8}}
-{{#java11}}
-FROM adoptopenjdk/openjdk11-openj9:alpine-slim
-{{/java11}}
 {{#java17}}
-FROM amazoncorretto:17-alpine
+FROM eclipse-temurin:17-jdk-alpine
 {{/java17}}
+{{#java21}}
+FROM eclipse-temurin:21-jdk-alpine
+{{/java21}}
 VOLUME /tmp
 COPY *.jar {{projectName}}.jar
 ENV JAVA_OPTS=" -Xshareclasses:name=cacheapp,cacheDir=/cache,nonfatal -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"
