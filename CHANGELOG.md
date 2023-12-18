@@ -1,5 +1,38 @@
 # Changelog
 
+## [v3.10.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.10.1) (2023-12-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.10.0...v3.10.1)
+
+**Implemented enhancements:**
+
+- Add metrics wih micrometer for kotlin [\#260](https://github.com/bancolombia/scaffold-clean-architecture/issues/260)
+- Add entry point SQS for Kotlin imperative [\#258](https://github.com/bancolombia/scaffold-clean-architecture/issues/258)
+- Add entry point SQS for Kotlin reactive [\#257](https://github.com/bancolombia/scaffold-clean-architecture/issues/257)
+- Add driven adapter SQS for Kotlin imperative [\#256](https://github.com/bancolombia/scaffold-clean-architecture/issues/256)
+- Generate Code From curl [\#172](https://github.com/bancolombia/scaffold-clean-architecture/issues/172)
+- Support Projects KTOR [\#166](https://github.com/bancolombia/scaffold-clean-architecture/issues/166)
+- Add Kubernetes resources  [\#163](https://github.com/bancolombia/scaffold-clean-architecture/issues/163)
+
+**Fixed bugs:**
+
+- Fix code scanning alert - Dependency-Update-Tool [\#211](https://github.com/bancolombia/scaffold-clean-architecture/issues/211)
+- Fix code scanning alert - Security-Policy [\#210](https://github.com/bancolombia/scaffold-clean-architecture/issues/210)
+
+**Closed issues:**
+
+- Add a JWT filter [\#350](https://github.com/bancolombia/scaffold-clean-architecture/issues/350)
+- Support Wiki [\#177](https://github.com/bancolombia/scaffold-clean-architecture/issues/177)
+- Use Examples  [\#176](https://github.com/bancolombia/scaffold-clean-architecture/issues/176)
+- Contribution Page [\#175](https://github.com/bancolombia/scaffold-clean-architecture/issues/175)
+- Refactor Code Legacy - Java [\#173](https://github.com/bancolombia/scaffold-clean-architecture/issues/173)
+- Documentation [\#171](https://github.com/bancolombia/scaffold-clean-architecture/issues/171)
+- Several projects in same workspace in Eclipse [\#141](https://github.com/bancolombia/scaffold-clean-architecture/issues/141)
+
+**Merged pull requests:**
+
+- fix\(deps\): Update base dependencies [\#413](https://github.com/bancolombia/scaffold-clean-architecture/pull/413) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.10.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.10.0) (2023-12-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.9.0...v3.10.0)
@@ -664,15 +697,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
-
-## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
 
 ## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+
+## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
 
 **Implemented enhancements:**
 
