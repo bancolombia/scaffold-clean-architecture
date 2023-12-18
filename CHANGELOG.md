@@ -1,5 +1,23 @@
 # Changelog
 
+## [v3.10.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.10.0) (2023-12-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.9.0...v3.10.0)
+
+**Merged pull requests:**
+
+- feat\(okhttp-rest-consumer-from-swagger\): Generates Rest consumer driven adapter for imperative projects [\#411](https://github.com/bancolombia/scaffold-clean-architecture/pull/411) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.9.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.9.0) (2023-12-15)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.8.0...v3.9.0)
+
+**Merged pull requests:**
+
+- Fix Sonar properties [\#412](https://github.com/bancolombia/scaffold-clean-architecture/pull/412) ([JorgeA1206](https://github.com/JorgeA1206))
+- Add authorization with jwt token in entrypoint webflux [\#410](https://github.com/bancolombia/scaffold-clean-architecture/pull/410) ([braduran](https://github.com/braduran))
+- feat\(rest-client-from-swagger\): Generate reactive http client from sw… [\#409](https://github.com/bancolombia/scaffold-clean-architecture/pull/409) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.8.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.8.0) (2023-12-07)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.7.0...v3.8.0)
@@ -193,20 +211,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
-
 ## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
+
+## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
 
 **Closed issues:**
 
