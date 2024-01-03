@@ -12,14 +12,13 @@ import org.gradle.api.tasks.options.OptionValues;
     shortcut = "gpl",
     description = "Generate CI pipeline as a code in deployment layer")
 public class GeneratePipelineTask extends AbstractResolvableTypeTask {
-     private BooleanOption monoRepo = BooleanOption.FALSE;
-
+  private BooleanOption monoRepo = BooleanOption.FALSE;
 
   @Option(option = "monoRepo", description = "is Mono repository")
   public void setMonoRepo(BooleanOption monoRepo) {
     this.monoRepo = monoRepo;
   }
-  
+
   @OptionValues("monoRepo")
   public List<BooleanOption> getMonoRepoOptions() {
     return Arrays.asList(BooleanOption.values());
