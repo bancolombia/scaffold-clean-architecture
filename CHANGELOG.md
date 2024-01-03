@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.11.0...HEAD)
+
+**Closed issues:**
+
+- Add optional property  in task generatePipeline [\#271](https://github.com/bancolombia/scaffold-clean-architecture/issues/271)
+
+## [v3.11.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.11.0) (2024-01-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.10.1...v3.11.0)
+
+**Merged pull requests:**
+
+- feat: add optional parameter in pipeline task [\#414](https://github.com/bancolombia/scaffold-clean-architecture/pull/414) ([santitigaga](https://github.com/santitigaga))
+
 ## [v3.10.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.10.1) (2023-12-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.10.0...v3.10.1)
