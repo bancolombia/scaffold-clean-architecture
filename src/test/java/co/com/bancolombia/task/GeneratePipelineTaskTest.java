@@ -3,18 +3,22 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
 import org.junit.Test;
-
+import co.com.bancolombia.Constants.BooleanOption;
 public class GeneratePipelineTaskTest {
 
   GeneratePipelineTask task;
@@ -50,6 +54,25 @@ public class GeneratePipelineTaskTest {
     task.execute();
 
     assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
+    assertTrue(
+            FileUtils.readFileToString(
+                            new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml"),
+                            StandardCharsets.UTF_8)
+                    .contains("sonar.projectKey=$(Build.Repository.Name)"));
+  }
+  @Test
+  public void generateAzureDevOpsPipelineInMonoRepoTest() throws IOException, CleanException {
+
+    task.setType("AZURE");
+    task.setMonoRepo(BooleanOption.TRUE);
+    task.execute();
+
+    assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());
+    assertTrue(
+            FileUtils.readFileToString(
+                            new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml"),
+                            StandardCharsets.UTF_8)
+                    .contains("sonar.projectKey=$(Build.Repository.Name)_$(projectName)"));
   }
 
   @Test
