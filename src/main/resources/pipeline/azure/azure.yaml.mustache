@@ -34,8 +34,15 @@ stages:
         SonarQube: SonarQube
         scannerMode: Other
         extraProperties: |
+          {{#monoRepo}}
+          sonar.projectKey=$(Build.Repository.Name)_$(projectName)
+          sonar.projectName=$(Build.Repository.Name)_$(projectName)
+          {{/monoRepo}}
+          {{^monoRepo}}
           sonar.projectKey=$(Build.Repository.Name)
           sonar.projectName=$(Build.Repository.Name)
+          {{/monoRepo}}
+
           sonar.projectVersion=$(Build.BuildNumber)
 
     - task: Gradle@3
