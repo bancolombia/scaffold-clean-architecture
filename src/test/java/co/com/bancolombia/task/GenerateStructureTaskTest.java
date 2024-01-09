@@ -1,7 +1,9 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.utils.CAAssert.assertFilesExistsInDir;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
@@ -18,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class GenerateStructureTaskTest {
-  public static final String DIR = "build/unitTest/";
+  public static final String DIR = "build/unitTestCa/";
   private GenerateStructureTask task;
 
   @Before
@@ -26,7 +28,7 @@ public class GenerateStructureTaskTest {
     deleteStructure(Path.of(DIR));
     Project project =
         ProjectBuilder.builder()
-            .withProjectDir(new File("build/unitTest/"))
+            .withProjectDir(new File(DIR))
             .withGradleUserHomeDir(new File(DIR))
             .build();
     project.getTasks().create("test", GenerateStructureTask.class);
@@ -85,54 +87,32 @@ public class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertTrue(new File("build/unitTest/README.md").exists());
-    assertTrue(new File("build/unitTest/.gitignore").exists());
-    assertTrue(new File("build/unitTest/build.gradle").exists());
-    assertTrue(new File("build/unitTest/lombok.config").exists());
-    assertTrue(new File("build/unitTest/main.gradle").exists());
-    assertTrue(new File("build/unitTest/settings.gradle").exists());
-
-    assertTrue(new File("build/unitTest/gradlew").exists());
-    assertTrue(new File("build/unitTest/gradle/wrapper/gradle-wrapper.properties").exists());
-
-    assertTrue(new File("build/unitTest/infrastructure/driven-adapters/").exists());
-    assertTrue(new File("build/unitTest/infrastructure/entry-points").exists());
-    assertTrue(new File("build/unitTest/infrastructure/helpers").exists());
-
-    assertTrue(
-        new File("build/unitTest/domain/model/src/main/java/co/com/bancolombia/model").exists());
-    assertTrue(
-        new File("build/unitTest/domain/model/src/test/java/co/com/bancolombia/model").exists());
-    assertTrue(new File("build/unitTest/domain/model/build.gradle").exists());
-    assertTrue(
-        new File("build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/domain/usecase/src/test/java/co/com/bancolombia/usecase")
-            .exists());
-    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
-
-    assertTrue(new File("build/unitTest/applications/app-service/build.gradle").exists());
-    assertTrue(
-        new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/resources/application.yaml")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/resources/log4j2.properties")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/test/java/co/com/bancolombia")
-            .exists());
+    assertFilesExistsInDir(
+        DIR,
+        "README.md",
+        ".gitignore",
+        "build.gradle",
+        "lombok.config",
+        "main.gradle",
+        "settings.gradle",
+        "gradlew",
+        "gradle/wrapper/gradle-wrapper.properties",
+        "infrastructure/driven-adapters/",
+        "infrastructure/entry-points",
+        "infrastructure/helpers",
+        "domain/model/src/main/java/co/com/bancolombia/model",
+        "domain/model/src/test/java/co/com/bancolombia/model",
+        "domain/model/build.gradle",
+        "domain/usecase/src/main/java/co/com/bancolombia/usecase",
+        "domain/usecase/src/test/java/co/com/bancolombia/usecase",
+        "domain/usecase/build.gradle",
+        "applications/app-service/build.gradle",
+        "applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java",
+        "applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java",
+        "applications/app-service/src/main/java/co/com/bancolombia/config",
+        "applications/app-service/src/main/resources/application.yaml",
+        "applications/app-service/src/main/resources/log4j2.properties",
+        "applications/app-service/src/test/java/co/com/bancolombia");
   }
 
   @Test
@@ -149,41 +129,30 @@ public class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertTrue(new File("build/unitTest/README.md").exists());
-    assertTrue(new File("build/unitTest/.gitignore").exists());
-    assertTrue(new File("build/unitTest/build.gradle").exists());
-    assertFalse(new File("build/unitTest/lombok.config").exists());
-    assertTrue(new File("build/unitTest/main.gradle").exists());
-    assertTrue(new File("build/unitTest/settings.gradle").exists());
-
-    assertTrue(new File("build/unitTest/infrastructure/driven-adapters/").exists());
-    assertTrue(new File("build/unitTest/infrastructure/entry-points").exists());
-    assertTrue(new File("build/unitTest/infrastructure/helpers").exists());
-
-    assertTrue(new File("build/unitTest/domain/model/src/main/java/test/model").exists());
-    assertTrue(new File("build/unitTest/domain/model/src/test/java/test/model").exists());
-    assertTrue(new File("build/unitTest/domain/model/build.gradle").exists());
-    assertTrue(new File("build/unitTest/domain/usecase/src/main/java/test/usecase").exists());
-    assertTrue(new File("build/unitTest/domain/usecase/src/test/java/test/usecase").exists());
-    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
-
-    assertTrue(new File("build/unitTest/applications/app-service/build.gradle").exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/java/test/MainApplication.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/applications/app-service/src/main/java/test/config/UseCasesConfig.java")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/java/test/config").exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/resources/application.yaml")
-            .exists());
-    assertTrue(
-        new File("build/unitTest/applications/app-service/src/main/resources/log4j2.properties")
-            .exists());
-    assertTrue(new File("build/unitTest/applications/app-service/src/test/java/test").exists());
+    assertFalse(new File(DIR + "lombok.config").exists());
+    assertFilesExistsInDir(
+        DIR,
+        "README.md",
+        ".gitignore",
+        "build.gradle",
+        "main.gradle",
+        "settings.gradle",
+        "infrastructure/driven-adapters/",
+        "infrastructure/entry-points",
+        "infrastructure/helpers",
+        "domain/model/src/main/java/test/model",
+        "domain/model/src/test/java/test/model",
+        "domain/model/build.gradle",
+        "domain/usecase/src/main/java/test/usecase",
+        "domain/usecase/src/test/java/test/usecase",
+        "domain/usecase/build.gradle",
+        "applications/app-service/build.gradle",
+        "applications/app-service/src/main/java/test/MainApplication.java",
+        "applications/app-service/src/main/java/test/config/UseCasesConfig.java",
+        "applications/app-service/src/main/java/test/config",
+        "applications/app-service/src/main/resources/application.yaml",
+        "applications/app-service/src/main/resources/log4j2.properties",
+        "applications/app-service/src/test/java/test");
   }
 
   @Test
@@ -193,9 +162,7 @@ public class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertTrue(new File("build/unitTest/build.gradle").exists());
-    assertTrue(new File("build/unitTest/gradle.properties").exists());
-    assertTrue(new File("build/unitTest/main.gradle").exists());
+    assertFilesExistsInDir(DIR, "build.gradle", "gradle.properties", "main.gradle");
   }
 
   @Test
@@ -206,10 +173,8 @@ public class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertTrue(new File("build/unitTest/build.gradle").exists());
-    assertTrue(new File("build/unitTest/gradle.properties").exists());
-    assertTrue(new File("build/unitTest/main.gradle").exists());
-    assertFalse(new File("build/unitTest/lombok.config").exists());
+    assertFilesExistsInDir(DIR, "build.gradle", "gradle.properties", "main.gradle");
+    assertFalse(new File(DIR + "lombok.config").exists());
   }
 
   @Test
