@@ -220,7 +220,7 @@ sonarqube {
 }
 
 googleJavaFormat {
-    toolVersion = "1.9"
+    toolVersion = "1.7"
     exclude '**/examples-ca/**'
 }
 

@@ -66,7 +66,8 @@ public class UpdateDependencies implements UpgradeAction {
   private boolean applyToFile(
       ModuleBuilder builder, List<String> files, DependencyRelease release) {
     boolean applied =
-        files.parallelStream()
+        files
+            .parallelStream()
             .map(file -> update(builder, release, file))
             .reduce(false, (current, itemApplied) -> current || itemApplied);
     if (applied) {
