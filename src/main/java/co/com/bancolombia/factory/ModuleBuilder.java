@@ -368,7 +368,8 @@ public class ModuleBuilder {
       logger.lifecycle("Connected! executing task {}", name);
       connection.newBuild().forTasks(name).run();
     } catch (Exception e) {
-      logger.warn("Error executing 'gradle wrapper', please run it you manually", e);
+      logger.warn(
+          "Error executing 'gradle wrapper', please run it you manually: {}", e.getMessage());
     }
   }
 

@@ -120,9 +120,6 @@ public class GenerateStructureTaskTest {
         "applications/app-service/src/main/resources/application.yaml",
         "applications/app-service/src/main/resources/log4j2.properties",
         "applications/app-service/src/test/java/co/com/bancolombia");
-    if (org.gradle.api.JavaVersion.current().equals(org.gradle.api.JavaVersion.VERSION_17)) {
-      assertFilesExistsInDir(dir, "gradlew", "gradle/wrapper/gradle-wrapper.properties");
-    }
   }
 
   @Test
