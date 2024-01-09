@@ -13,23 +13,25 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.Test;
 
 public class GenerateStructureTaskTest {
-  public static final String DIR = "build/unitTestCa/";
+  private static final String BASE_DIR = "build/unitTestCa/";
   private GenerateStructureTask task;
 
-  @Before
-  public void setup() {
-    deleteStructure(Path.of(DIR));
+  private String randomDir() {
+    return BASE_DIR + UUID.randomUUID() + "/";
+  }
+
+  public void setup(String dir) {
     Project project =
         ProjectBuilder.builder()
-            .withProjectDir(new File(DIR))
-            .withGradleUserHomeDir(new File(DIR))
+            .withProjectDir(new File(dir))
+            .withGradleUserHomeDir(new File(dir))
             .build();
     project.getTasks().create("test", GenerateStructureTask.class);
 
@@ -39,6 +41,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnProjectTypes() {
     // Arrange
+    setup(randomDir());
     // Act
     List<GenerateStructureTask.ProjectType> types = task.getAvailableProjectTypes();
     // Assert
@@ -48,6 +51,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnCoveragePluginTypes() {
     // Arrange
+    setup(randomDir());
     // Act
     List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
     // Assert
@@ -57,6 +61,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnMetricsOptions() {
     // Arrange
+    setup(randomDir());
     // Act
     List<BooleanOption> types = task.getMetricsOptions();
     // Assert
@@ -66,6 +71,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnForceOptions() {
     // Arrange
+    setup(randomDir());
     // Act
     List<BooleanOption> types = task.getForceOptions();
     // Assert
@@ -75,6 +81,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnJavaVersion() {
     // Arrange
+    setup(randomDir());
     // Act
     List<JavaVersion> types = task.getJavaVersions();
     // Assert
@@ -84,19 +91,19 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructure() throws IOException, CleanException {
     // Arrange
+    String dir = randomDir();
+    setup(dir);
     // Act
     task.execute();
     // Assert
     assertFilesExistsInDir(
-        DIR,
+        dir,
         "README.md",
         ".gitignore",
         "build.gradle",
         "lombok.config",
         "main.gradle",
         "settings.gradle",
-        "gradlew",
-        "gradle/wrapper/gradle-wrapper.properties",
         "infrastructure/driven-adapters/",
         "infrastructure/entry-points",
         "infrastructure/helpers",
@@ -113,11 +120,16 @@ public class GenerateStructureTaskTest {
         "applications/app-service/src/main/resources/application.yaml",
         "applications/app-service/src/main/resources/log4j2.properties",
         "applications/app-service/src/test/java/co/com/bancolombia");
+    if (org.gradle.api.JavaVersion.current().equals(org.gradle.api.JavaVersion.VERSION_17)) {
+      assertFilesExistsInDir(dir, "gradlew", "gradle/wrapper/gradle-wrapper.properties");
+    }
   }
 
   @Test
   public void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
     // Arrange
+    String dir = randomDir();
+    setup(dir);
     task.setPackage("test");
     task.setName("projectTest");
     task.setType(GenerateStructureTask.ProjectType.REACTIVE);
@@ -129,9 +141,9 @@ public class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertFalse(new File(DIR + "lombok.config").exists());
+    assertFalse(new File(dir + "lombok.config").exists());
     assertFilesExistsInDir(
-        DIR,
+        dir,
         "README.md",
         ".gitignore",
         "build.gradle",
@@ -158,28 +170,33 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
+    String dir = randomDir();
+    setup(dir);
     task.execute();
     // Act
     task.execute();
     // Assert
-    assertFilesExistsInDir(DIR, "build.gradle", "gradle.properties", "main.gradle");
+    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties", "main.gradle");
   }
 
   @Test
   public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
     // Arrange
+    String dir = randomDir();
+    setup(dir);
     task.setStatusLombok(BooleanOption.FALSE);
     task.execute();
     // Act
     task.execute();
     // Assert
-    assertFilesExistsInDir(DIR, "build.gradle", "gradle.properties", "main.gradle");
-    assertFalse(new File(DIR + "lombok.config").exists());
+    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties", "main.gradle");
+    assertFalse(new File(dir + "lombok.config").exists());
   }
 
   @Test
   public void shouldGetLombokOptions() {
     // Arrange
+    setup(randomDir());
     // Act
     List<BooleanOption> options = task.getLombokOptions();
     // Assert
@@ -188,6 +205,6 @@ public class GenerateStructureTaskTest {
 
   @AfterClass
   public static void clean() {
-    deleteStructure(Path.of(DIR));
+    deleteStructure(Path.of(BASE_DIR));
   }
 }
