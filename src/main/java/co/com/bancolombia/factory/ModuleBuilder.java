@@ -362,6 +362,7 @@ public class ModuleBuilder {
     logger.lifecycle("Connecting to project to run task {}", name);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
+            .useGradleVersion(Constants.GRADLE_WRAPPER_VERSION)
             .forProjectDirectory(getProject().getProjectDir())
             .connect()) {
       logger.lifecycle("Connected! executing task {}", name);
