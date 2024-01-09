@@ -154,6 +154,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     }
 
     builder.persist();
+    builder.runTask("wrapper");
   }
 
   @Override

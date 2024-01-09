@@ -92,6 +92,9 @@ public class GenerateStructureTaskTest {
     assertTrue(new File("build/unitTest/main.gradle").exists());
     assertTrue(new File("build/unitTest/settings.gradle").exists());
 
+    assertTrue(new File("build/unitTest/gradlew").exists());
+    assertTrue(new File("build/unitTest/gradle/wrapper/gradle-wrapper.properties").exists());
+
     assertTrue(new File("build/unitTest/infrastructure/driven-adapters/").exists());
     assertTrue(new File("build/unitTest/infrastructure/entry-points").exists());
     assertTrue(new File("build/unitTest/infrastructure/helpers").exists());

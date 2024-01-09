@@ -38,6 +38,8 @@ import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.internal.logging.text.StyledTextOutput;
+import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.ProjectConnection;
 
 public class ModuleBuilder {
   private static final String DEFINITION_FILES = "definition.json";
@@ -345,6 +347,19 @@ public class ModuleBuilder {
       loadLatestRelease();
     }
     return (Release) params.get(LATEST_RELEASE);
+  }
+
+  public void runTask(String name) {
+    try (ProjectConnection connection =
+        GradleConnector.newConnector()
+            .forProjectDirectory(getProject().getProjectDir())
+            .connect()) {
+
+      connection.newBuild().forTasks(name).setStandardOutput(System.out).run();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   private void loadPackage() {
