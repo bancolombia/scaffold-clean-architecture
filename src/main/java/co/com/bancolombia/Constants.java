@@ -9,7 +9,7 @@ public final class Constants {
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
   public static final String SECRETS_VERSION = "4.1.0";
-  public static final String SPRING_BOOT_VERSION = "3.2.0";
+  public static final String SPRING_BOOT_VERSION = "3.2.1";
   public static final String SONAR_VERSION = "4.4.1.3373";
   public static final String LOMBOK_VERSION = "1.18.30";
   public static final String JACOCO_VERSION = "0.8.10";
@@ -30,11 +30,7 @@ public final class Constants {
   public static final String SPRINGDOC_OPENAPI_VERSION = "2.3.0";
   public static final String DEPENDENCY_CHECK_VERSION = "9.0.7";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
-      "configurations {\n"
-          + "\tall {\n"
-          + "\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n"
-          + "\t}\n"
-          + "}";
+      "configurations {\n\tall {\n\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n\t}\n}";
   public static final String TOMCAT_EXCLUSION =
       "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String AWS_BOM =

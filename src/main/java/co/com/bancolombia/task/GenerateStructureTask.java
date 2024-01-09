@@ -128,9 +128,8 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("example", withExample == BooleanOption.TRUE);
     builder.addParam("language", language.name().toLowerCase());
     builder.addParam("javaVersion", javaVersion);
-    builder.addParam("java8", javaVersion == JavaVersion.VERSION_1_8);
-    builder.addParam("java11", javaVersion == JavaVersion.VERSION_11);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
+    builder.addParam("java21", javaVersion == JavaVersion.VERSION_21);
 
     boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
     if (exists && force == BooleanOption.FALSE) {
@@ -155,6 +154,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     }
 
     builder.persist();
+    builder.runTask("wrapper");
   }
 
   @Override
@@ -189,9 +189,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   }
 
   public enum JavaVersion {
-    @Deprecated
-    VERSION_1_8,
-    VERSION_11,
-    VERSION_17
+    VERSION_17,
+    VERSION_21
   }
 }
