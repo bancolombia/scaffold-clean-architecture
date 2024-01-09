@@ -4,7 +4,10 @@ import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.KTS;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.adapters.RestService;
@@ -27,7 +30,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -350,15 +359,15 @@ public class ModuleBuilder {
   }
 
   public void runTask(String name) {
+    logger.lifecycle("Connecting to project to run task {}", name);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
             .forProjectDirectory(getProject().getProjectDir())
             .connect()) {
-
-      connection.newBuild().forTasks(name).setStandardOutput(System.out).run();
-
+      logger.lifecycle("Connected! executing task {}", name);
+      connection.newBuild().forTasks(name).run();
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.warn("Error executing 'gradle wrapper', please run it you manually", e);
     }
   }
 

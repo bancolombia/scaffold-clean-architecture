@@ -30,11 +30,7 @@ public final class Constants {
   public static final String SPRINGDOC_OPENAPI_VERSION = "2.3.0";
   public static final String DEPENDENCY_CHECK_VERSION = "9.0.7";
   public static final String TOMCAT_EXCLUSION_KOTLIN =
-      "configurations {\n"
-          + "\tall {\n"
-          + "\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n"
-          + "\t}\n"
-          + "}";
+      "configurations {\n\tall {\n\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n\t}\n}";
   public static final String TOMCAT_EXCLUSION =
       "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String AWS_BOM =
