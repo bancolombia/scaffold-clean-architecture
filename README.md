@@ -29,7 +29,7 @@ Gradle plugin to create a java and kotlin application based on Clean Architectur
 
 # Plugin Implementation
 
-To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 7.6.1 or later, to start add the following section into your **build.gradle** file.
+To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 8.2 or later, to start add the following section into your **build.gradle** file.
 
 ```groovy
 plugins {
