@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.12.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.1) (2024-01-10)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.0...v3.12.1)
 
 **Implemented enhancements:**
 
 - \[Feature\] Support  Java 21 [\#397](https://github.com/bancolombia/scaffold-clean-architecture/issues/397)
+
+**Merged pull requests:**
+
+- fix\(gradle\): Fix jackson compilation error and specify gradle version in readme [\#416](https://github.com/bancolombia/scaffold-clean-architecture/pull/416) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [v3.12.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.0) (2024-01-09)
 
