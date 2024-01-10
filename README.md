@@ -80,7 +80,7 @@ If you run this task on an existing project it will override the `main.gradle`, 
 
    - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
 
-   - **`javaVersion`** `= <VERSION_1_8 | VERSION_11 | VERSION_17>`: Java version  . `Default Value = VERSION_17`
+   - **`javaVersion`** `= <VERSION_17 | VERSION_21>`: Java version  . `Default Value = VERSION_17`
    
    ```shell
    gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=NameProject --coverage=jacoco --lombok=true
