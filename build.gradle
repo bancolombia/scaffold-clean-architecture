@@ -170,9 +170,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.11'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
     implementation 'org.reflections:reflections:0.10.2'
 
     // swagger generators

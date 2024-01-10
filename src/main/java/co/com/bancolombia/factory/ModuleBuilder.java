@@ -362,12 +362,14 @@ public class ModuleBuilder {
     logger.lifecycle("Connecting to project to run task {}", name);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
+            .useGradleVersion(Constants.GRADLE_WRAPPER_VERSION)
             .forProjectDirectory(getProject().getProjectDir())
             .connect()) {
       logger.lifecycle("Connected! executing task {}", name);
       connection.newBuild().forTasks(name).run();
     } catch (Exception e) {
-      logger.warn("Error executing 'gradle wrapper', please run it you manually", e);
+      logger.warn(
+          "Error executing 'gradle wrapper', please run it you manually: {}", e.getMessage());
     }
   }
 
