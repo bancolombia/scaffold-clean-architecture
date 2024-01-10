@@ -46,7 +46,7 @@ plugins {
 apply plugin: "co.com.bancolombia.cleanArchitecture"
 {{/example}}
 
-sonarqube {
+sonar {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
     properties {
         {{#example}}
