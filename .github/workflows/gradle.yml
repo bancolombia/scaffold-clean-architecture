@@ -40,10 +40,10 @@ jobs:
         run: cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      - name: Run sonarqube
+      - name: Run sonar
         if: github.event.pull_request.head.repo.fork == false
-        run: ./gradlew sonarqube --stacktrace 
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew sonar --stacktrace 
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Next steps will only run if generation code templates have been changed
@@ -77,8 +77,8 @@ jobs:
       - name: Sonar analysis for generated reactive project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew sonarqube --stacktrace
-          -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED }}
+        run: ./gradlew sonar --stacktrace
+          -Dsonar.token=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # Generated code imperative
@@ -92,7 +92,7 @@ jobs:
       - name: Sonar analysis for generated imperative project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
-        run: ./gradlew sonarqube --stacktrace
-          -Dsonar.login=${{ secrets.SONAR_TOKEN_GENERATED_I }}
+        run: ./gradlew sonar --stacktrace
+          -Dsonar.token=${{ secrets.SONAR_TOKEN_GENERATED_I }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

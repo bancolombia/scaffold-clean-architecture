@@ -202,7 +202,7 @@ jacocoTestReport {
     }
 }
 
-sonarqube {
+sonar {
     properties {
         property "sonar.organization", "grupo-bancolombia"
         property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
