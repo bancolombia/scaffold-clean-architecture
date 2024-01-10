@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.12.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.2) (2024-01-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.1...v3.12.2)
+
+**Merged pull requests:**
+
+- fix\(sonar\): Update deprecated sonarqube task to sonar [\#418](https://github.com/bancolombia/scaffold-clean-architecture/pull/418) ([juancgalvis](https://github.com/juancgalvis))
+- docs\(readme\): Update java version options in readme [\#417](https://github.com/bancolombia/scaffold-clean-architecture/pull/417) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.12.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.1) (2024-01-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.0...v3.12.1)
