@@ -15,11 +15,12 @@ public class DrivenAdapterBinStash implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
 
     CacheMode cacheMode = (CacheMode) builder.getParam("task-param-cache-mode");
-    builder.setupFromTemplate("driven-adapter/bin-stash");
-
     builder.addParam("include-local", cacheMode.equals(CacheMode.LOCAL));
     builder.addParam("include-hybrid", cacheMode.equals(CacheMode.HYBRID));
     builder.addParam("include-centralized", cacheMode.equals(CacheMode.CENTRALIZED));
+
+    builder.setupFromTemplate("driven-adapter/bin-stash");
+
     builder.appendToSettings("bin-stash", "infrastructure/driven-adapters");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":bin-stash");
     builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
