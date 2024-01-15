@@ -22,14 +22,14 @@ jobs:
         with:
           distribution: 'temurin' 
           java-version: 17
-      - name: Set up NodeJS 18
-        uses: actions/setup-node@v2
+      - name: Set up NodeJS
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: '.nvmrc'
       - name: Set up Semantic Release
-        run: npm -g install @semantic-release/git semantic-release@21.0.3
+        run: npm -g install @semantic-release/git semantic-release@23.0.0
       - name: Semantic Release
-        run: npx semantic-release@21.0.3
+        run: npx semantic-release@23.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_P_A_TOKEN }}
       - name: Validate code formatting
@@ -60,12 +60,6 @@ jobs:
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
         run: ./publish_plugin_local.sh
-#      - name: Set up JDK 17
-#        if: steps.changes.outputs.templates == 'true'
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'temurin'
-#          java-version: 17
       # Generated code reactive
       - name: Generate reactive project to scan
         if: steps.changes.outputs.templates == 'true'
