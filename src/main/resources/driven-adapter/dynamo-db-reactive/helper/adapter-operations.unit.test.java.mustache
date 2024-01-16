@@ -61,7 +61,7 @@ class TemplateAdapterOperationsTest {
                 new DynamoDBTemplateAdapter(dynamoDbEnhancedAsyncClient, mapper);
 
         StepVerifier.create(dynamoDBTemplateAdapter.save(modelEntity))
-                .expectNextCount(0)
+                .expectNextCount(1)
                 .verifyComplete();
     }
 

@@ -1,62 +1,95 @@
 package {{package}}.dynamodb.helper
 
 import org.reactivecommons.utils.ObjectMapper
-import java.lang.reflect.ParameterizedType
-import java.util.function.Function
 import reactor.core.publisher.Mono
-import software.amazon.awssdk.enhanced.dynamodb.*
+import software.amazon.awssdk.core.async.SdkPublisher
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncIndex
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
+import software.amazon.awssdk.enhanced.dynamodb.Key
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema
+import software.amazon.awssdk.enhanced.dynamodb.model.Page
 import software.amazon.awssdk.enhanced.dynamodb.model.PagePublisher
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue
-import java.util.stream.Collectors
+import java.lang.reflect.ParameterizedType
+import java.util.function.Function
+
 
 abstract class TemplateAdapterOperations<E, K, V> protected constructor(
-        dynamoDbEnhancedAsyncClient: DynamoDbEnhancedAsyncClient,
-        private var mapper: ObjectMapper,
-        private val toEntityFn: Function<V, E>,
-        tableName: String
+    dynamoDbEnhancedAsyncClient: DynamoDbEnhancedAsyncClient,
+    private var mapper: ObjectMapper,
+    private val toEntityFn: Function<V, E>,
+    tableName: String,
+    vararg index: String
 ) {
     private val dataClass: Class<V>
-    private var customerTable: DynamoDbAsyncTable<V>
-
+    private val table: DynamoDbAsyncTable<V>
+    private val tableByIndex: DynamoDbAsyncIndex<V>?
 
     init {
         val genericSuperclass = this.javaClass.genericSuperclass as ParameterizedType
-        dataClass = genericSuperclass.actualTypeArguments[2] as Class<V>
-        customerTable = dynamoDbEnhancedAsyncClient.table(tableName, TableSchema.fromBean(dataClass))
-
+        this.dataClass = genericSuperclass.actualTypeArguments[2] as Class<V>
+        table = dynamoDbEnhancedAsyncClient.table(tableName, TableSchema.fromBean(dataClass))
+        tableByIndex = if (index.isNotEmpty()) table.index(index[0]) else null
     }
 
-    fun save(model: E): Mono<Void> {
-        return Mono.fromFuture(customerTable.putItem(toEntity(model)))
+    fun save(model: E & Any): Mono<E> {
+        return Mono.fromFuture(table.putItem(toEntity(model))).thenReturn(model)
     }
 
     fun getById(id: K): Mono<E> {
-        return Mono.fromFuture(customerTable.getItem(Key.builder().partitionValue(AttributeValue.builder().s(id.toString()).build()).build())).map(this::toModel)
+        return Mono.fromFuture(
+            table.getItem(
+                Key.builder()
+                    .partitionValue(AttributeValue.builder().s(id as String).build())
+                    .build()
+            )
+        )
+            .map { data: V -> this.toModel(data) }
     }
 
     fun delete(model: E): Mono<E> {
-        return Mono.fromFuture(customerTable.deleteItem(toEntity(model))).map(this::toModel)
+        return Mono.fromFuture(table.deleteItem(toEntity(model))).map { data: V ->
+            this.toModel(
+                data
+            )
+        }
     }
 
     fun query(queryExpression: QueryEnhancedRequest): Mono<List<E>> {
-        var pagePublisher: PagePublisher<V> = customerTable.query(queryExpression)
+        val pagePublisher = table.query(queryExpression)
+        return listOfModel(pagePublisher)
+    }
+
+    fun queryByIndex(queryExpression: QueryEnhancedRequest, vararg index: String?): Mono<List<E>> {
+        val queryIndex = if (index.isNotEmpty()) table.index(index[0]) else tableByIndex!!
+
+        val pagePublisher = queryIndex.query(queryExpression)
         return listOfModel(pagePublisher)
     }
 
     /**
-     * @implNote Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
-     * @return Mono<List<E>>
+     * @return Mono<List></List> < E>>
+     * @implNote Bancolombia does not suggest the Scan function for DynamoDB tables due to the low performance resulting
+     * from the design of the database engine (Key value). Optimize the query using Query, GetItem or BatchGetItem
+     * functions, and if necessary, consider the Single-Table Design pattern for DynamoDB.
      */
     @Deprecated("")
     fun scan(): Mono<List<E>> {
-        var pagePublisher: PagePublisher<V> = customerTable.scan()
-        return listOfModel(pagePublisher)
+        return listOfModel(table.scan())
     }
 
     private fun listOfModel(pagePublisher: PagePublisher<V>): Mono<List<E>> {
-        return Mono.from(pagePublisher)
-                .map { it.items().stream().map { o -> toModel(o) }.collect(Collectors.toList()) as List<E>? }
+        return Mono.from(pagePublisher).map { page: Page<V> ->
+            page.items().stream().map { data: V -> this.toModel(data) }.toList() as List<E>?
+        }
+    }
+
+    private fun listOfModel(pagePublisher: SdkPublisher<Page<V>>): Mono<List<E>> {
+        return Mono.from(pagePublisher).map { page: Page<V> ->
+            page.items().stream().map { data: V -> this.toModel(data) }.toList() as List<E>?
+        }
     }
 
     private fun toEntity(model: E): V {

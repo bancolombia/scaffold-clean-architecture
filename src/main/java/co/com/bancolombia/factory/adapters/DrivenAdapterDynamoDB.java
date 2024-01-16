@@ -23,7 +23,6 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
     builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToProperties("aws.dynamodb").put("endpoint", "http://localhost:8000");
-    builder.appendToProperties("aws.dynamodb").put("threads", "10");
     new ObjectMapperFactory().buildModule(builder);
   }
 

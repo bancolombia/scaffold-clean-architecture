@@ -1,18 +1,40 @@
 package {{package}}.dynamodb
 
 import {{package}}.dynamodb.helper.TemplateAdapterOperations
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import org.reactivecommons.utils.ObjectMapper
 import org.springframework.stereotype.Repository
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import software.amazon.awssdk.enhanced.dynamodb.Key
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest
+import java.util.function.Function
+
 
 @Repository
-class DynamoDBTemplateAdapter(connectionFactory: AmazonDynamoDB, mapper: ObjectMapper) :
-    TemplateAdapterOperations<Any?, String?, Any?>(
-        connectionFactory,
-        mapper,
-        { d ->
+open class DynamoDBTemplateAdapter(connectionFactory: DynamoDbEnhancedClient, mapper: ObjectMapper) :
+    TemplateAdapterOperations<Any /*domain model*/, String, ModelEntity /*adapter model*/>(
+        connectionFactory, mapper,
+        Function<ModelEntity, Any> { d: ModelEntity ->
             mapper.map(
                 d,
-                Any::class.java
+                Any::class.java /*domain model*/
             )
-        })
+        }, "table_name", "secondary_index" /*index is optional*/
+    ) /* implements Gateway from domain */ {
+    fun getEntityBySomeKeys(partitionKey: String, sortKey: String): List<Any> {
+        val queryExpression = generateQueryExpression(partitionKey, sortKey)
+        return query(queryExpression)
+    }
+
+    fun getEntityBySomeKeysByIndex(partitionKey: String, sortKey: String): List<Any> {
+        val queryExpression = generateQueryExpression(partitionKey, sortKey)
+        return queryByIndex(queryExpression, "secondary_index" /*index is optional if you define in constructor*/)
+    }
+
+    private fun generateQueryExpression(partitionKey: String, sortKey: String): QueryEnhancedRequest {
+        return QueryEnhancedRequest.builder()
+            .queryConditional(QueryConditional.keyEqualTo(Key.builder().partitionValue(partitionKey).build()))
+            .queryConditional(QueryConditional.sortGreaterThanOrEqualTo(Key.builder().sortValue(sortKey).build()))
+            .build()
+    }
+}

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Profile
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-
 import java.net.URI
 
 @Configuration
@@ -15,22 +14,23 @@ open class DynamoDBConfig {
     @Bean
     @Profile("local")
     open fun amazonDynamoDB(
-        @Value("\${aws.dynamodb.endpoint}") endpoint: String?
+        @Value("\${aws.dynamodb.endpoint}") endpoint: String
     ): DynamoDbAsyncClient {
         return DynamoDbAsyncClient.builder()
-                .credentialsProvider(ProfileCredentialsProvider.create("default"))
-                .endpointOverride(URI.create(endpoint))
-                .build();
+            .credentialsProvider(ProfileCredentialsProvider.create("default"))
+            .endpointOverride(URI.create(endpoint))
+            .build();
     }
 
     @Bean
     @Profile("dev", "cer", "pdn")
-     open fun amazonDynamoDB(): DynamoDbAsyncClient {
-            return DynamoDbAsyncClient.builder().build()
-        }
+    open fun amazonDynamoDBAsync(): DynamoDbAsyncClient {
+        return DynamoDbAsyncClient.builder().build()
+    }
 
     @Bean
-    fun getDynamoDbEnhancedAsyncClient(client: DynamoDbAsyncClient): DynamoDbEnhancedAsyncClient {
-      return DynamoDbEnhancedAsyncClient.builder().dynamoDbClient(client).build()
-        }
+    open fun getDynamoDbEnhancedAsyncClient(client: DynamoDbAsyncClient): DynamoDbEnhancedAsyncClient {
+        return DynamoDbEnhancedAsyncClient.builder().dynamoDbClient(client).build()
+    }
 }
+
