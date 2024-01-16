@@ -227,14 +227,35 @@ googleJavaFormat {
 ////////////////////////////////////////////////////////////////////////
 //
 //  Google Java Format pre-commit hook installation
+//  Semantic Commit Hook installation
 //
-
-tasks.register('installGitHooks', Copy) {
-    from(file('config/hooks/pre-commit')) {
-        rename 'pre-commit', 'pre-commit'
-    }
-    into file('.git/hooks')
+// 
+tasks.register('copyPreCommit', Copy) {
+    from 'config/hooks/pre-commit'
+    into '.git/hooks'
     fileMode 0777
+}
+
+tasks.register('downloadCommitMessage') {
+    def f = new File('.git/hooks/commit-msg.sample2')
+    if (!f.exists()) {
+        new URL('https://raw.githubusercontent.com/hazcod/semantic-commit-hook/master/commit-msg').withInputStream{ i -> f.withOutputStream{ it << i }}
+    }
+}
+
+tasks.register('fileModeCommitMessage', Copy) {
+    dependsOn 'downloadCommitMessage', 'copyPreCommit'
+    from '.git/hooks/commit-msg.sample2'
+    into '.git/hooks/'
+    rename 'commit-msg.sample2', 'commit-msg'
+    fileMode 0777
+}
+
+tasks.register('installGitHooks'){
+    dependsOn 'copyPreCommit', 'downloadCommitMessage', 'fileModeCommitMessage'
+    doLast {
+        println 'GitHooks installed!'
+    }
 }
 
 tasks.named('wrapper') {
