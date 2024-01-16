@@ -1,5 +1,15 @@
 # Changelog
 
+## [v3.12.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.4) (2024-01-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.3...v3.12.4)
+
+**Merged pull requests:**
+
+- ci\(commits\): Verify commit message with semantic release standard [\#426](https://github.com/bancolombia/scaffold-clean-architecture/pull/426) ([juancgalvis](https://github.com/juancgalvis))
+- ci\(hooks\): add commit message git hook to validate correct commit mes… [\#425](https://github.com/bancolombia/scaffold-clean-architecture/pull/425) ([juancgalvis](https://github.com/juancgalvis))
+- Update Dynamo DB configuration for AWS SDK 2.x [\#424](https://github.com/bancolombia/scaffold-clean-architecture/pull/424) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.12.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.3) (2024-01-16)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.2...v3.12.3)
