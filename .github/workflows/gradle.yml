@@ -17,6 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Verify Conventional Commits
+        uses: amannn/action-semantic-pull-request@v5
+        if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set up NodeJS
         if: github.ref == 'refs/heads/master'
         uses: actions/setup-node@v4
