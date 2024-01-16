@@ -108,15 +108,20 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
         .orElseThrow(
             () ->
                 new InvalidTaskOptionException(
-                    prefix + " of type " + type + " not found, valid values: " + resolveTypes()))
+                    prefix + " of type " + type + " not found, valid values:\n" + formatTypes()))
         .getDeclaredConstructor()
         .newInstance();
+  }
+
+  private String formatTypes() {
+    return resolveTypes().stream().collect(Collectors.joining("\n"));
   }
 
   @SneakyThrows
   protected List<String> resolveTypes() {
     return ReflectionUtils.getModuleFactories(resolvePackage())
         .map(clazz -> clazz.getSimpleName().replace(resolvePrefix(), "").toUpperCase())
+        .sorted()
         .collect(Collectors.toList());
   }
 

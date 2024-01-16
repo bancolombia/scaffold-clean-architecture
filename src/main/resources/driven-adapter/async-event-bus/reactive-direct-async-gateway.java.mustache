@@ -52,7 +52,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     }
     {{/lombok}}
 
-    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) throws JsonProcessingException {
+    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) {{#eda}}throws JsonProcessingException{{/eda}} {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
@@ -74,7 +74,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         {{/eda}}
     }
 
-    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) throws JsonProcessingException {
+    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {{#eda}}throws JsonProcessingException{{/eda}} {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}

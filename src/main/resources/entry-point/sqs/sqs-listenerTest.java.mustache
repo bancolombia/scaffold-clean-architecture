@@ -2,8 +2,10 @@ package {{package}}.sqs.listener.helper;
 
 import co.com.bancolombia.sqs.listener.SQSProcessor;
 import co.com.bancolombia.sqs.listener.config.SQSProperties;
+{{#metrics}}
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+{{/metrics}}
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +48,9 @@ public class SQSListenerTest {
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(System.out::println)
+            {{#metrics}}
             .timer(Timer.builder("test").register(new SimpleMeterRegistry()))
+            {{/metrics}}
             .build();
 
         SQSListener listener = sqsListener.start();
@@ -66,7 +70,9 @@ public class SQSListenerTest {
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(sqsProcessor)
+            {{#metrics}}
             .timer(Timer.builder("test").register(new SimpleMeterRegistry()))
+            {{/metrics}}
             .build();
 
         ReflectionTestUtils.invokeMethod(sqsListener, "listen");

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.autoconfigure.mongo.ReactiveMongoClientFactory;
+import org.springframework.boot.autoconfigure.mongo.MongoConnectionDetails;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +59,7 @@ class MongoConfigTest {
         MongoDBSecret secret = mock(MongoDBSecret.class);
         when(secret.getUri()).thenReturn("uri");
 
-        ReactiveMongoClientFactory result = mongoConfigUnderTest.mongoProperties(secret);
+        MongoConnectionDetails result = mongoConfigUnderTest.mongoProperties(secret);
 
         assertNotNull(result);
     }

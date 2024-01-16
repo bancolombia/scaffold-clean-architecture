@@ -13,7 +13,7 @@ echo "buildscript {
           }
         }
         dependencies {
-          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.4.0'
+          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:CURRENT_LOCAL_VERSION'
         }
       }
 
@@ -25,22 +25,22 @@ gradle wrapper
 
 if [ $TYPE == "reactive" ]
 then
-  for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "r2dbc" "rsocket" "redis" "restconsumer" "mongodb" "asynceventbus"
+  for adapter in "asynceventbus" "binstash" "dynamodb" "kms" "mongodb" "mq" "r2dbc" "redis" "restconsumer" "rsocket" "s3" "secrets" "sqs"
   do
     ./gradlew gda --type $adapter
   done
 
-  for entry in "webflux" "rsocket" "graphql" "mq" "sqs" "asynceventhandler"
+  for entry in "asynceventhandler" "graphql" "kafka" "mq" "rsocket" "sqs" "webflux"
   do
     ./gradlew gep --type $entry
   done
 else
-  for adapter in "sqs" "dynamodb" "mq" "s3" "secrets" "kms" "jpa" "redis" "restconsumer" "mongodb"
+  for adapter in "binstash" "dynamodb" "jpa" "kms" "mongodb" "mq" "redis" "restconsumer" "s3" "secrets" "sqs"
   do
     ./gradlew gda --type $adapter
   done
 
-  for entry in "restmvc" "mq" "sqs"
+  for entry in "mq" "restmvc" "sqs"
   do
     ./gradlew gep --type $entry
   done
