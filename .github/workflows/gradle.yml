@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: influxdata/validate-semantic-github-messages/.github/workflows/semantic.yml@main
+        with:
+          COMMITS_HISTORY: 1
+          CHECK_PR_TITLE_OR_ONE_COMMIT: true
       - name: Set up NodeJS
         if: github.ref == 'refs/heads/master'
         uses: actions/setup-node@v4
