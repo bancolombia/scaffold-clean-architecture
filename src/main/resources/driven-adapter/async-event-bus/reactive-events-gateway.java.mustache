@@ -44,8 +44,8 @@ public class ReactiveEventsGateway implements EventsGateway {
     {{#eda}}
     private ObjectMapper om = new ObjectMapper();
     {{/eda}}
-
     {{^lombok}}
+
     public ReactiveEventsGateway(DomainEventBus domainEventBus) {
         this.domainEventBus = domainEventBus;
     }
@@ -56,10 +56,10 @@ public class ReactiveEventsGateway implements EventsGateway {
         {{#lombok}}
         log.log(Level.INFO, "Sending domain event: {0}: {1}", new String[]{SOME_EVENT_NAME, event.toString()});
         {{/lombok}}
-        CloudEvent  eventCloudEvent = null;
         {{#eda}}
-        try{
-           eventCloudEvent = CloudEventBuilder.v1() //
+        CloudEvent  eventCloudEvent = null;
+        try {
+            eventCloudEvent = CloudEventBuilder.v1() //
                        .withId(UUID.randomUUID().toString()) //
                        .withSource(URI.create("https://spring.io/foos"))//
                        .withType(SOME_EVENT_NAME) //
@@ -71,12 +71,10 @@ public class ReactiveEventsGateway implements EventsGateway {
             throw new RuntimeException(e);
         }
 
-
          return from(domainEventBus.emit(new DomainEvent<CloudEvent>(SOME_EVENT_NAME, UUID.randomUUID().toString(), eventCloudEvent)));
         {{/eda}}
         {{^eda}}
          return from(domainEventBus.emit(new DomainEvent<>(SOME_EVENT_NAME, UUID.randomUUID().toString(), event)));
         {{/eda}}
-
     }
 }
