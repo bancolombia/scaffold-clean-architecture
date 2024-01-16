@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.12.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.3) (2024-01-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.2...v3.12.3)
+
+**Merged pull requests:**
+
+- fix\(scan\): Solves some issues compiling and scanning generated code [\#423](https://github.com/bancolombia/scaffold-clean-architecture/pull/423) ([juancgalvis](https://github.com/juancgalvis))
+- ci\(deps\): Upgrade semantic release and nodejs version [\#422](https://github.com/bancolombia/scaffold-clean-architecture/pull/422) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.12.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.2) (2024-01-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.1...v3.12.2)
