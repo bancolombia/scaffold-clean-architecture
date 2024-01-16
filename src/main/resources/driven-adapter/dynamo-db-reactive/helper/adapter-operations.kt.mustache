@@ -92,11 +92,11 @@ abstract class TemplateAdapterOperations<E, K, V> protected constructor(
         }
     }
 
-    protected fun toEntity(model: E): V {
+    private fun toEntity(model: E): V {
         return mapper.map(model, dataClass)
     }
 
-    protected fun toModel(data: V?): E? {
+    private fun toModel(data: V?): E? {
         return if (data != null) toEntityFn.apply(data) else null
     }
 }
