@@ -17,10 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: influxdata/validate-semantic-github-messages/.github/workflows/semantic.yml@main
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          COMMITS_HISTORY: 1
-          CHECK_PR_TITLE_OR_ONE_COMMIT: true
+          wip: true
       - name: Set up NodeJS
         if: github.ref == 'refs/heads/master'
         uses: actions/setup-node@v4
