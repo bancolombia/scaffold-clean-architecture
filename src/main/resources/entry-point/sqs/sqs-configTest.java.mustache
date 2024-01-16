@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+{{#metrics}}
 import software.amazon.awssdk.metrics.LoggingMetricPublisher;
+{{/metrics}}
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,14 +26,12 @@ public class SQSConfigTest {
         SQSProperties sqsProperties = new SQSProperties();
         sqsProperties.setNumberOfThreads(1);
         sqsProperties.setRegion("Region");
-
+        {{#metrics}}
         LoggingMetricPublisher loggingMetricPublisher = LoggingMetricPublisher.create();
-
+        {{/metrics}}
         SQSConfig sqsConfig = new SQSConfig();
 
         assertNotNull(sqsConfig.sqsListener(asyncClient, sqsProperties, message -> {}));
-        assertNotNull(sqsConfig.configSqs(sqsProperties, loggingMetricPublisher));
-
-
+        assertNotNull(sqsConfig.configSqs(sqsProperties{{#metrics}}, loggingMetricPublisher{{/metrics}}));
     }
 }

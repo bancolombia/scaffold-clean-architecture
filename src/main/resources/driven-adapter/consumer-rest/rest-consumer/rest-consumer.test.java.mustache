@@ -23,9 +23,8 @@ public class RestConsumerTest {
 
         OkHttpClient client = new OkHttpClient.Builder().build();
 
-        restConsumer = new RestConsumer(client, new ObjectMapper());
         String url = mockBackEnd.url("url").toString();
-        ReflectionTestUtils.setField(restConsumer, "url", url);
+        restConsumer = new RestConsumer(url, client, new ObjectMapper());
     }
 
     @AfterAll
@@ -36,9 +35,7 @@ public class RestConsumerTest {
 
     @Test
     @DisplayName("Validate the function testGet.")
-    void validateTestGet() throws IOException{
-
-
+    void validateTestGet() throws IOException {
         mockBackEnd.enqueue(new MockResponse()
                 .setHeader("Content-Type", "application/json")
                 .setResponseCode(200)
@@ -47,22 +44,18 @@ public class RestConsumerTest {
         var response = restConsumer.testGet();
 
         Assertions.assertEquals("ok", response.getState());
-
     }
 
-        @Test
-        @DisplayName("Validate the function testGet.")
-        void validateTestPost() throws IOException{
+    @Test
+    @DisplayName("Validate the function testPost.")
+    void validateTestPost() throws IOException {
+        mockBackEnd.enqueue(new MockResponse()
+                .setHeader("Content-Type", "application/json")
+                .setResponseCode(200)
+                .setBody("{\"state\" : \"ok\"}"));
 
+        var response = restConsumer.testPost();
 
-            mockBackEnd.enqueue(new MockResponse()
-                    .setHeader("Content-Type", "application/json")
-                    .setResponseCode(200)
-                    .setBody("{\"state\" : \"ok\"}"));
-
-            var response = restConsumer.testPost();
-
-            Assertions.assertEquals("ok", response.getState());
-
-        }
+        Assertions.assertEquals("ok", response.getState());
+    }
 }

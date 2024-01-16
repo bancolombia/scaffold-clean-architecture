@@ -29,7 +29,7 @@ public class RestConsumer // implements Gateway from domain
     // You should use the methods that you implement from the Gateway from the domain.
 
     @CircuitBreaker(name = "testGet", fallbackMethod = "testGetOk") // this name should match with settings name in application.yaml
-    public String testGet() throws IOException {
+    public ObjectResponse testGet() throws IOException {
 
         Request request = new Request.Builder()
                 .url(url)
@@ -37,7 +37,7 @@ public class RestConsumer // implements Gateway from domain
                 .addHeader("Content-Type", "application/json")
                 .build();
 
-        return callAndMap(request, String.class);
+        return callAndMap(request, ObjectResponse.class);
     }
 
     public String testGetOk(Exception ignored) {
