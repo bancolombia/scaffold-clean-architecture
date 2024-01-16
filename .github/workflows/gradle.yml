@@ -22,8 +22,6 @@ jobs:
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          wip: true
       - name: Set up NodeJS
         if: github.ref == 'refs/heads/master'
         uses: actions/setup-node@v4
