@@ -1,4 +1,4 @@
-package co.com.bancolombia.analytics;
+package co.com.bancolombia.models;
 
 import co.com.bancolombia.Constants;
 import com.fasterxml.jackson.annotation.JsonProperty;

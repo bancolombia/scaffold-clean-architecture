@@ -7,13 +7,22 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.resolver.DefaultResolver;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -167,6 +176,20 @@ public class FileUtilsTest {
     assertEquals(expected, result);
   }
 
+  @Test
+  public void shouldReadContentFromZip() throws IOException {
+    // Arrange
+    String zipFilePath = "build/sample.zip";
+    String textFileName = "sample.txt";
+    String textContent = "This is the content of the text file.";
+    Path tempFilePath = createTempTextFile("build/" + textFileName, textContent);
+    createZipFile(zipFilePath, tempFilePath);
+    // Act
+    String result = FileUtils.readFileFromZip(Path.of(zipFilePath), textFileName);
+    // Assert
+    assertEquals(textContent, result);
+  }
+
   public static void deleteStructure(Path sourcePath) {
     try {
       Files.walkFileTree(
@@ -187,6 +210,30 @@ public class FileUtilsTest {
           });
     } catch (IOException e) {
       System.out.println("error delete Structure " + e.getMessage());
+    }
+  }
+
+  private static Path createTempTextFile(String fileName, String content) throws IOException {
+    Path tempFilePath = Paths.get(fileName);
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFilePath.toFile()))) {
+      writer.write(content);
+    }
+    return tempFilePath;
+  }
+
+  private static void createZipFile(String zipFilePath, Path fileToAdd) throws IOException {
+    try (ZipOutputStream zipOutputStream =
+        new ZipOutputStream(new java.io.FileOutputStream(zipFilePath))) {
+      // Add the file to the ZIP archive
+      ZipEntry zipEntry = new ZipEntry(fileToAdd.getFileName().toString());
+      zipOutputStream.putNextEntry(zipEntry);
+
+      // Write the file content to the ZIP archive
+      byte[] bytes = java.nio.file.Files.readAllBytes(fileToAdd);
+      zipOutputStream.write(bytes, 0, bytes.length);
+
+      // Close the entry
+      zipOutputStream.closeEntry();
     }
   }
 

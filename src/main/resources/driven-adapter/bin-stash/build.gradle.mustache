@@ -2,12 +2,12 @@ dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
     {{#include-local}}
-    implementation 'com.github.bancolombia:bin-stash-local:{{binStashVersion}}'
+    implementation 'com.github.bancolombia:bin-stash-local:{{BIN_STASH_VERSION}}'
     {{/include-local}}
     {{#include-centralized}}
-    implementation 'com.github.bancolombia:bin-stash-centralized:{{binStashVersion}}'
+    implementation 'com.github.bancolombia:bin-stash-centralized:{{BIN_STASH_VERSION}}'
     {{/include-centralized}}
     {{#include-hybrid}}
-    implementation 'com.github.bancolombia:bin-stash-hybrid:{{binStashVersion}}'
+    implementation 'com.github.bancolombia:bin-stash-hybrid:{{BIN_STASH_VERSION}}'
     {{/include-hybrid}}
 }

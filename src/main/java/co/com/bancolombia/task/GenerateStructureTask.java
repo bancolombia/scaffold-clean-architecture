@@ -2,7 +2,6 @@ package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 
-import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;

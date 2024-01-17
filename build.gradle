@@ -103,10 +103,10 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
     }
 
     def signingTasks = tasks.withType(Sign)
-    signingTasks.forEach {project.logger.lifecycle('task sign: ' + it.name)}
+    signingTasks.forEach { project.logger.lifecycle('task sign: ' + it.name) }
     tasks.withType(PublishToMavenRepository).configureEach { task ->
         project.logger.lifecycle('task publish: ' + task.name)
-        if(task.name == 'publishMavenJavaPublicationToSonatypeRepository') {
+        if (task.name == 'publishMavenJavaPublicationToSonatypeRepository') {
             project.logger.lifecycle('Applied to ' + task.name)
             task.mustRunAfter('signMavenJavaPublication')
             task.mustRunAfter('signPluginMavenPublication')
@@ -144,7 +144,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         }
     }
 
-// Add a source set for the functional test suite
+    // Add a source set for the functional test suite
     sourceSets {
         functionalTest {
         }
@@ -153,7 +153,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
     gradlePlugin.testSourceSets(sourceSets.functionalTest)
     configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
 
-// Add a task to run the functional tests
+    // Add a task to run the functional tests
     tasks.register('functionalTest', Test) {
         description = 'Runs functional tests.'
         group = 'verification'
@@ -166,12 +166,18 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         dependsOn(tasks.functionalTest)
     }
 
+    // Add a task to run the utility class
+    tasks.register('updateDependencies', JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        mainClass = 'co.com.bancolombia.utils.offline.UpdateDependencies'
+    }
 }
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.11'
     api 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
     implementation 'org.reflections:reflections:0.10.2'
 
@@ -214,7 +220,7 @@ sonar {
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
         property "sonar.test", "src/test/java"
-        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/CAAssert.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java"
+        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/utils/**,src/test/**/*Test.java,**/**models**,src/test/**/CAAssert.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java"
         property "sonar.sourceEncoding", "UTF-8"
     }
 }
@@ -239,7 +245,7 @@ tasks.register('copyPreCommit', Copy) {
 tasks.register('downloadCommitMessage') {
     def f = new File('.git/hooks/commit-msg.sample2')
     if (!f.exists()) {
-        new URL('https://raw.githubusercontent.com/hazcod/semantic-commit-hook/master/commit-msg').withInputStream{ i -> f.withOutputStream{ it << i }}
+        new URL('https://raw.githubusercontent.com/hazcod/semantic-commit-hook/master/commit-msg').withInputStream { i -> f.withOutputStream { it << i } }
     }
 }
 
@@ -251,7 +257,7 @@ tasks.register('fileModeCommitMessage', Copy) {
     fileMode 0777
 }
 
-tasks.register('installGitHooks'){
+tasks.register('installGitHooks') {
     dependsOn 'copyPreCommit', 'downloadCommitMessage', 'fileModeCommitMessage'
     doLast {
         println 'GitHooks installed!'

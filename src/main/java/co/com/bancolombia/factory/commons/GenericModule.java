@@ -11,6 +11,13 @@ import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 
 public class GenericModule {
+  public static final String AWS_BOM =
+      "\timplementation platform('software.amazon.awssdk:bom:" + Constants.AWS_BOM_VERSION + "')";
+  public static final String AWS_BOM_KT =
+      "\timplementation(platform(\"software.amazon.awssdk:bom:"
+          + Constants.AWS_BOM_VERSION
+          + "\"))";
+
   private GenericModule() {}
 
   public static void generateGenericModule(
@@ -50,7 +57,7 @@ public class GenericModule {
           if (content.contains("software.amazon.awssdk")) {
             return content;
           }
-          return Utils.addDependency(content, Constants.AWS_BOM);
+          return Utils.addDependency(content, AWS_BOM);
         });
     builder.updateFile(
         APP_BUILD_GRADLE,
@@ -64,7 +71,7 @@ public class GenericModule {
           if (content.contains("software.amazon.awssdk")) {
             return content;
           }
-          return Utils.addDependency(content, Constants.AWS_BOM_KT);
+          return Utils.addDependency(content, AWS_BOM_KT);
         });
     builder.updateFile(
         APP_BUILD_GRADLE_KTS,

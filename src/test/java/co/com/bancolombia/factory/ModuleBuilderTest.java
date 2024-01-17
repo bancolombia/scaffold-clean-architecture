@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.task.GenerateStructureTask;
 import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.http.RestService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

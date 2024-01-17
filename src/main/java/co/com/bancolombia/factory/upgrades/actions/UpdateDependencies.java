@@ -1,9 +1,9 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
+import co.com.bancolombia.utils.http.RestService;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

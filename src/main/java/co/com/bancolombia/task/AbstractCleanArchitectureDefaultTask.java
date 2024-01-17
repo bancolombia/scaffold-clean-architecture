@@ -2,13 +2,13 @@ package co.com.bancolombia.task;
 
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
-import co.com.bancolombia.analytics.AnalyticsBody;
-import co.com.bancolombia.analytics.AnalyticsExporter;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.InvalidTaskOptionException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
+import co.com.bancolombia.models.AnalyticsBody;
 import co.com.bancolombia.utils.ReflectionUtils;
+import co.com.bancolombia.utils.analytics.AnalyticsExporter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -184,5 +184,10 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
       className = className.split("_")[0];
     }
     return className;
+  }
+
+  public enum BooleanOption {
+    TRUE,
+    FALSE
   }
 }

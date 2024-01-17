@@ -2,10 +2,10 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     {{^eda}}
-    implementation 'org.reactivecommons:async-commons-rabbit-starter:{{asyncCommonsStarterVersion}}'
+    implementation 'org.reactivecommons:async-commons-rabbit-starter:{{REACTIVE_COMMONS_VERSION}}'
     {{/eda}}
     {{#eda}}
-    implementation 'org.reactivecommons:async-commons-rabbit-starter-eda:{{asyncCommonsStarterVersion}}'
+    implementation 'org.reactivecommons:async-commons-rabbit-starter-eda:{{REACTIVE_COMMONS_VERSION}}'
     implementation 'io.cloudevents:cloudevents-core:2.4.2'
     implementation 'io.cloudevents:cloudevents-http-basic:2.4.2'
     implementation 'io.cloudevents:cloudevents-json-jackson:2.4.2'

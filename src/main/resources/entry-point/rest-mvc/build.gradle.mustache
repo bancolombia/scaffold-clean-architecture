@@ -7,7 +7,7 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
     {{/metrics}}
 {{#include-swagger}}
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:{{springdocopenapiVersion}}'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:{{SPRING_DOC_OPENAPI_VERSION}}'
 {{/include-swagger}}
 {{#task-param-authorize}}
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'

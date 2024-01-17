@@ -194,7 +194,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
-    task.setSecret(Constants.BooleanOption.TRUE);
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
@@ -355,7 +355,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
   public void shouldGetSecretOptions() {
     // Arrange
     // Act
-    List<Constants.BooleanOption> options = task.getSecretOptions();
+    List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getSecretOptions();
     // Assert
     assertEquals(2, options.size());
   }
@@ -392,7 +392,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
-    task.setSecret(Constants.BooleanOption.TRUE);
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
   }
@@ -448,7 +448,7 @@ public class GenerateDrivenAdapterKotlinTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("REDIS");
-    task.setSecret(Constants.BooleanOption.TRUE);
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert

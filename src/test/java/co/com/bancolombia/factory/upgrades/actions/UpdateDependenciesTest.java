@@ -6,10 +6,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
+import co.com.bancolombia.utils.http.RestService;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;

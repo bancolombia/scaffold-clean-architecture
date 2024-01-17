@@ -1,6 +1,7 @@
 package co.com.bancolombia.utils;
 
 import co.com.bancolombia.models.Release;
+import co.com.bancolombia.utils.http.RestConsumer;
 import java.io.IOException;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -30,7 +31,7 @@ public class RestConsumerTest {
   public void getVersionPlugin() throws Exception {
     HttpUrl baseUrl = server.url("/releases");
 
-    Release result = RestConsumer.callRequest(baseUrl.toString(), Release[].class)[0];
+    Release result = RestConsumer.getRequest(baseUrl.toString(), Release[].class)[0];
     Assert.assertEquals("2.0.0", result.getTagName());
     Assert.assertEquals("2021-11-18T13:30:02Z", result.getPublishedAt().toString());
   }
