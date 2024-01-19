@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.13.0...HEAD)
+
+**Implemented enhancements:**
+
+- Automate project dependecies update. [\#421](https://github.com/bancolombia/scaffold-clean-architecture/issues/421)
+
+## [v3.13.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.13.0) (2024-01-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.4...v3.13.0)
+
+**Merged pull requests:**
+
+- feat\(deps\): Update dependencies and create script to update dependencies [\#427](https://github.com/bancolombia/scaffold-clean-architecture/pull/427) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.12.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.12.4) (2024-01-16)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.12.3...v3.12.4)
