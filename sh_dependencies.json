@@ -1,0 +1,83 @@
+{
+    "maven": [
+        {
+            "name": "SECRETS_VERSION",
+            "packageName": "com.github.bancolombia:aws-secrets-manager-sync"
+        },
+        {
+            "name": "SPRING_BOOT_VERSION",
+            "packageName": "org.springframework.boot:spring-boot-dependencies"
+        },
+        {
+            "name": "LOMBOK_VERSION",
+            "packageName": "org.projectlombok:lombok"
+        },
+        {
+            "name": "REACTIVE_COMMONS_VERSION",
+            "packageName": "org.reactivecommons:async-commons-rabbit-starter"
+        },
+        {
+            "name": "REACTIVE_COMMONS_MAPPER_VERSION",
+            "packageName": "org.reactivecommons.utils:object-mapper-api"
+        },
+        {
+            "name": "BLOCK_HOUND_VERSION",
+            "packageName": "io.projectreactor.tools:blockhound-junit-platform"
+        },
+        {
+            "name": "AWS_BOM_VERSION",
+            "packageName": "software.amazon.awssdk:bom"
+        },
+        {
+            "name": "COMMONS_JMS_VERSION",
+            "packageName": "com.github.bancolombia:commons-jms-mq"
+        },
+        {
+            "name": "GRAPHQL_KICKSTART_VERSION",
+            "packageName": "com.graphql-java-kickstart:graphql-spring-boot-starter"
+        },
+        {
+            "name": "ARCH_UNIT_VERSION",
+            "packageName": "com.tngtech.archunit:archunit"
+        },
+        {
+            "name": "OKHTTP_VERSION",
+            "packageName": "com.squareup.okhttp3:okhttp"
+        },
+        {
+            "name": "RESILIENCE_4J_VERSION",
+            "packageName": "io.github.resilience4j:resilience4j-spring-boot3"
+        },
+        {
+            "name": "BIN_STASH_VERSION",
+            "packageName": "com.github.bancolombia:bin-stash-local"
+        },
+        {
+            "name": "SPRING_DOC_OPENAPI_VERSION",
+            "packageName": "org.springdoc:springdoc-openapi-starter-webmvc-ui"
+        },
+        {
+            "name": "JACOCO_VERSION",
+            "packageName": "org.jacoco:jacoco-maven-plugin"
+        }
+    ],
+    "gradle": [
+        {
+            "name": "SONAR_VERSION",
+            "packageName": "org.sonarqube:org.sonarqube.gradle.plugin"
+        },
+        {
+            "name": "COBERTURA_VERSION",
+            "packageName": "net.saliman.cobertura:net.saliman.cobertura.gradle.plugin"
+        },
+        {
+            "name": "DEPENDENCY_CHECK_VERSION",
+            "packageName": "org.owasp.dependencycheck:org.owasp.dependencycheck.gradle.plugin"
+        }
+    ],
+    "custom": [
+        {
+            "name": "GRADLE_WRAPPER_VERSION"
+        }
+    ]
+}

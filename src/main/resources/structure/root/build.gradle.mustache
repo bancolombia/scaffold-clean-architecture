@@ -1,16 +1,16 @@
 buildscript {
 	ext {
-		cleanArchitectureVersion = '{{pluginVersion}}'
-		springBootVersion = '{{springBootVersion}}'
-		sonarVersion = '{{sonarVersion}}'
+		cleanArchitectureVersion = '{{PLUGIN_VERSION}}'
+		springBootVersion = '{{SPRING_BOOT_VERSION}}'
+		sonarVersion = '{{SONAR_VERSION}}'
 		{{#jacoco}}
-		jacocoVersion = '{{jacocoVersion}}'
+		jacocoVersion = '{{JACOCO_VERSION}}'
 		{{/jacoco}}
 		{{#cobertura}}
-		coberturaVersion = '{{coberturaVersion}}'
+		coberturaVersion = '{{COBERTURA_VERSION}}'
 		{{/cobertura}}
 		{{#lombok}}
-        lombokVersion = '{{lombokVersion}}'
+        lombokVersion = '{{LOMBOK_VERSION}}'
         {{/lombok}}
 	}
 	{{#example}}
@@ -21,7 +21,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:{{pluginVersion}}"
+        classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:{{PLUGIN_VERSION}}"
     }
     {{/example}}
 }
@@ -31,7 +31,7 @@ plugins {
 	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
 	{{/example}}
     {{#example}}
-    id "org.owasp.dependencycheck" version "{{dependencyCheckVersion}}" apply false
+    id "org.owasp.dependencycheck" version "{{DEPENDENCY_CHECK_VERSION}}" apply false
     {{/example}}
 	id 'org.springframework.boot' version "${springBootVersion}" apply false
 	id 'org.sonarqube' version "${sonarVersion}"

@@ -3,7 +3,6 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertTrue;
 
-import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.FileWriter;
@@ -64,7 +63,7 @@ public class GeneratePipelineTaskTest {
   public void generateAzureDevOpsPipelineInMonoRepoTest() throws IOException, CleanException {
 
     task.setType("AZURE");
-    task.setMonoRepo(BooleanOption.TRUE);
+    task.setMonoRepo(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     task.execute();
 
     assertTrue(new File("build/unitTest/deployment/cleanarchitecture_azure_build.yaml").exists());

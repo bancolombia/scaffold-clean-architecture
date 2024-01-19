@@ -10,7 +10,6 @@ import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
 
 import co.com.bancolombia.Constants;
-import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.validations.Validation;
@@ -20,6 +19,8 @@ import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
+import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.OperationsProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -29,7 +30,9 @@ import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,50 +69,44 @@ public class ModuleBuilder {
   private ObjectNode properties;
 
   @Setter private StyledTextOutput styledLogger;
-  private final RestService restService;
+  private final ExternalOperations operations;
 
   public ModuleBuilder(Project project) {
     this.project = project;
     this.logger = getProject().getLogger();
-    this.restService = new RestService();
+    this.operations = OperationsProvider.fromDefault();
     initialize();
   }
 
-  public ModuleBuilder(Project project, RestService restService) {
+  public ModuleBuilder(Project project, ExternalOperations operations) {
     this.project = project;
     this.logger = getProject().getLogger();
-    this.restService = restService;
+    this.operations = operations;
     initialize();
   }
 
   private void initialize() {
     params.put("projectName", getProject().getName());
     params.put("projectNameLower", getProject().getName().toLowerCase());
-    params.put("pluginVersion", Constants.PLUGIN_VERSION);
-    params.put("springBootVersion", Constants.SPRING_BOOT_VERSION);
-    params.put("kotlinVersion", Constants.KOTLIN_VERSION);
-    params.put("sonarVersion", Constants.SONAR_VERSION);
-    params.put("jacocoVersion", Constants.JACOCO_VERSION);
-    params.put("gradleVersion", Constants.GRADLE_WRAPPER_VERSION);
-    params.put("asyncCommonsStarterVersion", Constants.RCOMMONS_ASYNC_COMMONS_STARTER_VERSION);
-    params.put("objectMapperVersion", Constants.RCOMMONS_OBJECT_MAPPER_VERSION);
-    params.put("coberturaVersion", Constants.COBERTURA_VERSION);
-    params.put("lombokVersion", Constants.LOMBOK_VERSION);
-    params.put("commonsJmsVersion", Constants.COMMONS_JMS_VERSION);
-    params.put("graphqlKickStartVersion", Constants.GRAPHQL_KICKSTART_VERSION);
-    params.put("secretsVersion", Constants.SECRETS_VERSION);
-    params.put("blockHoundVersion", Constants.BLOCK_HOUND_VERSION);
-    params.put("archUnitVersion", Constants.ARCH_UNIT_VERSION);
-    params.put("okhttpVersion", Constants.OKHTTP_VERSION);
-    params.put("resilience4jVersion", Constants.RESILIENCE_4J_VERSION);
-    params.put("binStashVersion", Constants.BIN_STASH_VERSION);
-    params.put("springdocOpenapiVersion", Constants.SPRINGDOC_OPENAPI_VERSION);
-    params.put("dependencyCheckVersion", Constants.DEPENDENCY_CHECK_VERSION);
     params.put("lombok", isEnableLombok());
     params.put("metrics", withMetrics());
+    addConstantsFromClassToModuleBuilder(this, Constants.class);
     loadPackage();
     loadLanguage();
     loadIsExample();
+  }
+
+  public static void addConstantsFromClassToModuleBuilder(ModuleBuilder builder, Class<?> clazz) {
+    Arrays.stream(clazz.getDeclaredFields())
+        .filter(
+            field ->
+                Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
+        .forEach(field -> builder.addParam(field.getName(), extract(field)));
+  }
+
+  @SneakyThrows
+  private static Object extract(Field field) {
+    return field.get(field.getType());
   }
 
   public void persist() throws IOException {
@@ -406,7 +403,7 @@ public class ModuleBuilder {
   }
 
   private void loadLatestRelease() {
-    Release latestRelease = restService.getLatestPluginVersion();
+    Release latestRelease = operations.getLatestPluginVersion();
     if (latestRelease != null) {
       if (latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
         logger.lifecycle("You have the latest plugin version {}", latestRelease.getTagName());

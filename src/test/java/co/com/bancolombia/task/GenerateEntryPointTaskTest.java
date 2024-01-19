@@ -3,7 +3,6 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static org.junit.Assert.*;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
 import java.io.File;
@@ -209,7 +208,7 @@ public class GenerateEntryPointTaskTest {
       throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
-    task.setSwagger(Constants.BooleanOption.TRUE);
+    task.setSwagger(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
@@ -326,7 +325,7 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("WEBFLUX");
-    task.setRouter(Constants.BooleanOption.FALSE);
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     // Act
     task.execute();
     // Assert
@@ -357,7 +356,7 @@ public class GenerateEntryPointTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("WEBFLUX");
     task.setFromSwagger(SWAGGER_FILE);
-    task.setRouter(Constants.BooleanOption.FALSE);
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     // Act
     task.execute();
     // Assert
@@ -377,8 +376,8 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("WEBFLUX");
-    task.setRouter(Constants.BooleanOption.FALSE);
-    task.setSwagger(Constants.BooleanOption.TRUE);
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
+    task.setSwagger(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
@@ -412,7 +411,7 @@ public class GenerateEntryPointTaskTest {
     // Arrange
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("WEBFLUX");
-    task.setRouter(Constants.BooleanOption.TRUE);
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
 
     // Act
     task.execute();
@@ -440,7 +439,7 @@ public class GenerateEntryPointTaskTest {
     setup(GenerateStructureTask.ProjectType.REACTIVE);
     task.setType("WEBFLUX");
     task.setFromSwagger(SWAGGER_FILE);
-    task.setRouter(Constants.BooleanOption.TRUE);
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
 
     // Act
     task.execute();
@@ -544,7 +543,7 @@ public class GenerateEntryPointTaskTest {
   public void shouldGetRouterOptions() {
     // Arrange
     // Act
-    List<Constants.BooleanOption> options = task.getRoutersOptions();
+    List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getRoutersOptions();
     // Assert
     assertEquals(2, options.size());
   }

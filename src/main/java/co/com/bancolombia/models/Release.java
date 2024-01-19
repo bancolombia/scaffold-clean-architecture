@@ -17,4 +17,8 @@ public class Release {
 
   @JsonProperty("published_at")
   private OffsetDateTime publishedAt;
+
+  public Release cleanTagName() {
+    return new Release(getTagName().replace("v", ""), getPublishedAt());
+  }
 }

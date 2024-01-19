@@ -45,7 +45,7 @@ jobs:
           name: Release Bot
           email: release-bot@bancolombia.com.co
       - name: Set Analytics Endpoint
-        run: sed -i "s/ENDPOINT = \"\"/ENDPOINT = \"$ANALYTICS_ENDPOINT\"/g" src/main/java/co/com/bancolombia/analytics/AnalyticsExporter.java
+        run: sed -i "s/ENDPOINT = \"\"/ENDPOINT = \"$ANALYTICS_ENDPOINT\"/g" src/main/java/co/com/bancolombia/utils/analytics/AnalyticsExporter.java
         env:
           ANALYTICS_ENDPOINT: ${{ secrets.ANALYTICS_ENDPOINT }}
       - name: Publish plugin in gradle plugins

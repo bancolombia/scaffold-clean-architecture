@@ -5,8 +5,8 @@ import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FIL
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.io.File;
 import java.io.FileWriter;
@@ -62,7 +62,7 @@ public class UpgradeY2022M05D03Test {
         .addFile(
             MAIN_GRADLE,
             "dependencies {\n\t"
-                + Constants.AWS_BOM
+                + GenericModule.AWS_BOM
                 + "\n\tcompile 'some-other:dependency:1.1.1'\n}");
     verify(builder, atLeast(1))
         .addFile(

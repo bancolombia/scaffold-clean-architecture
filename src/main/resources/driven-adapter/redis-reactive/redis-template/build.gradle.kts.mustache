@@ -2,8 +2,8 @@ dependencies {
     implementation(project(":model"))
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.github.bancolombia:aws-secrets-manager-sync:{{secretsVersion}}")
-    implementation("org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}")
+    implementation("com.github.bancolombia:aws-secrets-manager-sync:{{SECRETS_VERSION}}")
+    implementation("org.reactivecommons.utils:object-mapper-api:{{REACTIVE_COMMONS_MAPPER_VERSION}}")
 
-    testImplementation("org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}")
+    testImplementation("org.reactivecommons.utils:object-mapper:{{REACTIVE_COMMONS_MAPPER_VERSION}}")
 }

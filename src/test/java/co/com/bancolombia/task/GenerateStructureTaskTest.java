@@ -5,8 +5,8 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption;
 import co.com.bancolombia.task.GenerateStructureTask.JavaVersion;
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public class GenerateStructureTaskTest {
     // Act
     List<BooleanOption> types = task.getMetricsOptions();
     // Assert
-    assertEquals(Arrays.asList(BooleanOption.values()), types);
+    assertEquals(Arrays.asList(AbstractCleanArchitectureDefaultTask.BooleanOption.values()), types);
   }
 
   @Test
@@ -75,7 +75,7 @@ public class GenerateStructureTaskTest {
     // Act
     List<BooleanOption> types = task.getForceOptions();
     // Assert
-    assertEquals(Arrays.asList(BooleanOption.values()), types);
+    assertEquals(Arrays.asList(AbstractCleanArchitectureDefaultTask.BooleanOption.values()), types);
   }
 
   @Test
@@ -131,9 +131,9 @@ public class GenerateStructureTaskTest {
     task.setName("projectTest");
     task.setType(GenerateStructureTask.ProjectType.REACTIVE);
     task.setCoveragePlugin(GenerateStructureTask.CoveragePlugin.COBERTURA);
-    task.setStatusLombok(BooleanOption.FALSE);
-    task.setMetrics(BooleanOption.FALSE);
-    task.setForce(BooleanOption.FALSE);
+    task.setStatusLombok(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
+    task.setMetrics(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
+    task.setForce(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     task.setJavaVersion(JavaVersion.VERSION_17);
     // Act
     task.execute();
@@ -181,7 +181,7 @@ public class GenerateStructureTaskTest {
     // Arrange
     String dir = randomDir();
     setup(dir);
-    task.setStatusLombok(BooleanOption.FALSE);
+    task.setStatusLombok(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     task.execute();
     // Act
     task.execute();

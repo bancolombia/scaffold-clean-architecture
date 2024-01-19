@@ -1,6 +1,5 @@
 package co.com.bancolombia.task;
 
-import co.com.bancolombia.Constants.BooleanOption;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;

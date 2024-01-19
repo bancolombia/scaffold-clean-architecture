@@ -2,8 +2,8 @@ dependencies {
     implementation(project(":model"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.reactivecommons.utils:object-mapper-api:{{objectMapperVersion}}")
+    implementation("org.reactivecommons.utils:object-mapper-api:{{REACTIVE_COMMONS_MAPPER_VERSION}}")
 
     runtimeOnly("com.h2database:h2")
-    testImplementation("org.reactivecommons.utils:object-mapper:{{objectMapperVersion}}")
+    testImplementation("org.reactivecommons.utils:object-mapper:{{REACTIVE_COMMONS_MAPPER_VERSION}}")
 }

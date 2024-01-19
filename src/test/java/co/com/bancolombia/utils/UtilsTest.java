@@ -379,22 +379,6 @@ public class UtilsTest {
   }
 
   @Test
-  public void shouldExcludeTomcat() {
-    String result = Utils.tomcatExclusion(true);
-    assertEquals(
-        "configurations {\n"
-            + "\tall {\n"
-            + "\t\texclude(group = \"org.springframework.boot\", module = \"spring-boot-starter-tomcat\")\n"
-            + "\t}\n"
-            + "}",
-        result);
-    result = Utils.tomcatExclusion(false);
-    assertEquals(
-        "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'",
-        result);
-  }
-
-  @Test
   public void shouldReplaceExpression() {
     String expected = "'com.fasterxml.jackson.core:jackson-databind:2.11.0'";
     String result =

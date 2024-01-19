@@ -4,7 +4,6 @@ import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.*;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class AnalyticsTaskTest {
   @Test
   public void shouldEnableAnalytics() throws IOException, CleanException {
     // Arrange
-    task.setAnalyticsState(Constants.BooleanOption.TRUE);
+    task.setAnalyticsState(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
@@ -57,7 +56,7 @@ public class AnalyticsTaskTest {
   @Test
   public void shouldDisableAnalytics() throws IOException, CleanException {
     // Arrange
-    task.setAnalyticsState(Constants.BooleanOption.FALSE);
+    task.setAnalyticsState(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     // Act
     task.execute();
     // Assert
@@ -69,7 +68,7 @@ public class AnalyticsTaskTest {
   public void shouldGetOptions() {
     // Arrange
     // Act
-    List<Constants.BooleanOption> options = task.getInputOptions();
+    List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getInputOptions();
     // Assert
     assertEquals(2, options.size());
   }

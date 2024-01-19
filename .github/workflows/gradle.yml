@@ -67,11 +67,11 @@ jobs:
       # Generated code Analysis
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
-        run: ./publish_plugin_local.sh
+        run: ./sh_publish_plugin_local.sh
       # Generated code reactive
       - name: Generate reactive project to scan
         if: steps.changes.outputs.templates == 'true'
-        run: ./generate_project.sh reactive
+        run: ./sh_generate_project.sh reactive
       - name: Scan generated reactive project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan
@@ -86,7 +86,7 @@ jobs:
       # Generated code imperative
       - name: Generate imperative project to scan
         if: steps.changes.outputs.templates == 'true'
-        run: ./generate_project.sh imperative
+        run: ./sh_generate_project.sh imperative
       - name: Scan generated imperative project dependencies
         if: steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan

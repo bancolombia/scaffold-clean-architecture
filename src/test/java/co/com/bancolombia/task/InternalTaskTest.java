@@ -5,7 +5,6 @@ import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.SonarCheck;
@@ -36,7 +35,7 @@ public class InternalTaskTest {
     project.getTasks().create("ca", GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask =
         (GenerateStructureTask) project.getTasks().getByName("ca");
-    generateStructureTask.setWithExample(Constants.BooleanOption.TRUE);
+    generateStructureTask.setWithExample(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     generateStructureTask.execute();
 
     appService =

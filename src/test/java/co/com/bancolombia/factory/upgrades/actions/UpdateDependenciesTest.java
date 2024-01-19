@@ -6,10 +6,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-import co.com.bancolombia.adapters.RestService;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
+import co.com.bancolombia.utils.operations.ExternalOperations;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateDependenciesTest {
 
-  @Mock private RestService restService;
+  @Mock private ExternalOperations operations;
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
@@ -38,7 +38,7 @@ public class UpdateDependenciesTest {
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
     builder = spy(new ModuleBuilder(project));
-    updater = new UpdateDependencies(restService);
+    updater = new UpdateDependencies(operations);
     assertNotNull(updater.name());
     assertNotNull(updater.description());
   }
@@ -56,7 +56,7 @@ public class UpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of(dependency));
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(restService.getTheLastDependencyRelease(any(DependencyRelease.class)))
+    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
         .thenReturn(Optional.of(release));
     // add possible files
     builder.addFile(file, current);
@@ -80,7 +80,7 @@ public class UpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(restService.getTheLastDependencyRelease(any(DependencyRelease.class)))
+    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
         .thenReturn(Optional.of(release));
     // add possible files
     builder.addFile(file, current);

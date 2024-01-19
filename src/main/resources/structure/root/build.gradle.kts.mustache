@@ -1,13 +1,13 @@
 plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "{{pluginVersion}}"
+    id("co.com.bancolombia.cleanArchitecture") version "{{PLUGIN_VERSION}}"
     id("io.spring.dependency-management") version "1.1.3"
-    id("org.springframework.boot") version "{{springBootVersion}}" apply false
-    id("org.sonarqube") version "{{sonarVersion}}" apply true
+    id("org.springframework.boot") version "{{SPRING_BOOT_VERSION}}" apply false
+    id("org.sonarqube") version "{{SONAR_VERSION}}" apply true
 {{#jacoco }}
     id("jacoco") apply true
 {{/jacoco }}
-    kotlin("jvm") version "{{kotlinVersion}}"
-    kotlin("plugin.spring") version "{{kotlinVersion}}"
+    kotlin("jvm") version "{{KOTLIN_VERSION}}"
+    kotlin("plugin.spring") version "{{KOTLIN_VERSION}}"
 }
 
 allprojects {
@@ -65,12 +65,12 @@ subprojects {
         testImplementation("io.projectreactor:reactor-test")
 {{/reactive}}
 {{#lombok}}
-        compileOnly("org.projectlombok:lombok:{{lombokVersion}}")
-        annotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
-        testCompileOnly("org.projectlombok:lombok:{{lombokVersion}}")
-        testAnnotationProcessor("org.projectlombok:lombok:{{lombokVersion}}")
+        compileOnly("org.projectlombok:lombok:{{LOMBOK_VERSION}}")
+        annotationProcessor("org.projectlombok:lombok:{{LOMBOK_VERSION}}")
+        testCompileOnly("org.projectlombok:lombok:{{LOMBOK_VERSION}}")
+        testAnnotationProcessor("org.projectlombok:lombok:{{LOMBOK_VERSION}}")
 {{/lombok}}
-        implementation(platform("org.springframework.boot:spring-boot-dependencies:{{springBootVersion}}"))
+        implementation(platform("org.springframework.boot:spring-boot-dependencies:{{SPRING_BOOT_VERSION}}"))
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.3")
@@ -94,7 +94,7 @@ subprojects {
 
 {{#jacoco}}
 jacoco {
-    toolVersion = "{{jacocoVersion}}"
+    toolVersion = "{{JACOCO_VERSION}}"
     reportsDirectory = layout.buildDirectory.dir("reports")
 }
 
