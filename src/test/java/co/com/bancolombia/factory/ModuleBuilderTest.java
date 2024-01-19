@@ -10,7 +10,7 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.task.GenerateStructureTask;
 import co.com.bancolombia.utils.FileUtils;
-import co.com.bancolombia.utils.http.RestService;
+import co.com.bancolombia.utils.operations.ExternalOperations;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class ModuleBuilderTest {
   private ModuleBuilder builder;
   @Mock private StyledTextOutput styledTextOutput;
-  @Mock private RestService restService;
+  @Mock private ExternalOperations operations;
 
   @Before
   public void init() throws IOException, CleanException {
@@ -51,7 +51,7 @@ public class ModuleBuilderTest {
         (GenerateStructureTask) project.getTasks().getByName("testStructure");
     taskStructure.execute();
 
-    builder = new ModuleBuilder(project, restService);
+    builder = new ModuleBuilder(project, operations);
     when(styledTextOutput.style(any())).thenReturn(styledTextOutput);
     when(styledTextOutput.append(any())).thenReturn(styledTextOutput);
     builder.setStyledLogger(styledTextOutput);
@@ -88,7 +88,7 @@ public class ModuleBuilderTest {
     Release release = new Release();
     release.setTagName("1.1.1");
     release.setPublishedAt(OffsetDateTime.now());
-    when(restService.getLatestPluginVersion()).thenReturn(release);
+    when(operations.getLatestPluginVersion()).thenReturn(release);
     // Act
     Release loaded = builder.getLatestRelease();
     // Assert

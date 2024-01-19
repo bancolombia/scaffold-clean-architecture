@@ -2,7 +2,7 @@ package co.com.bancolombia.utils.analytics;
 
 import co.com.bancolombia.models.AnalyticsBody;
 import co.com.bancolombia.utils.FileUtils;
-import co.com.bancolombia.utils.http.RestConsumer;
+import co.com.bancolombia.utils.operations.http.RestConsumer;
 import java.io.IOException;
 import java.util.Map;
 import lombok.AccessLevel;

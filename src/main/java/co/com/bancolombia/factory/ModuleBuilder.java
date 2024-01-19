@@ -19,7 +19,8 @@ import co.com.bancolombia.models.TemplateDefinition;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
-import co.com.bancolombia.utils.http.RestService;
+import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.OperationsProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -68,19 +69,19 @@ public class ModuleBuilder {
   private ObjectNode properties;
 
   @Setter private StyledTextOutput styledLogger;
-  private final RestService restService;
+  private final ExternalOperations operations;
 
   public ModuleBuilder(Project project) {
     this.project = project;
     this.logger = getProject().getLogger();
-    this.restService = new RestService();
+    this.operations = OperationsProvider.fromDefault();
     initialize();
   }
 
-  public ModuleBuilder(Project project, RestService restService) {
+  public ModuleBuilder(Project project, ExternalOperations operations) {
     this.project = project;
     this.logger = getProject().getLogger();
-    this.restService = restService;
+    this.operations = operations;
     initialize();
   }
 
@@ -402,7 +403,7 @@ public class ModuleBuilder {
   }
 
   private void loadLatestRelease() {
-    Release latestRelease = restService.getLatestPluginVersion();
+    Release latestRelease = operations.getLatestPluginVersion();
     if (latestRelease != null) {
       if (latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
         logger.lifecycle("You have the latest plugin version {}", latestRelease.getTagName());

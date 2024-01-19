@@ -3,7 +3,8 @@ package co.com.bancolombia.factory.upgrades.actions;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
-import co.com.bancolombia.utils.http.RestService;
+import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.OperationsProvider;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,10 +18,10 @@ public class UpdateDependencies implements UpgradeAction {
   public static final String DEPENDENCIES_TO_UPDATE =
       UpdateDependencies.class.getSimpleName() + "dependencies";
   public static final String FILES_TO_UPDATE = UpdateDependencies.class.getSimpleName() + "files";
-  private final RestService restService;
+  private final ExternalOperations operations;
 
   public UpdateDependencies() {
-    restService = new RestService();
+    operations = OperationsProvider.fromDefault();
   }
 
   @Override
@@ -46,7 +47,7 @@ public class UpdateDependencies implements UpgradeAction {
 
     return dependencies.stream()
         .distinct()
-        .map(restService::getTheLastDependencyRelease)
+        .map(operations::getTheLastDependencyRelease)
         .filter(Optional::isPresent)
         .map(Optional::get)
         .map(release -> applyToFile(builder, gradleFiles, release))

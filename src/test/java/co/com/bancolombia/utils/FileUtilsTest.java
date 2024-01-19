@@ -183,12 +183,14 @@ public class FileUtilsTest {
     String textFileName = "sample.txt";
     String textContent = "This is the content of the text file.";
     Path tempFilePath = createTempTextFile("build/" + textFileName, textContent);
-    createZipFile(zipFilePath, tempFilePath);
+    createZipFile(zipFilePath, tempFilePath, textFileName);
     // Act
     String result = FileUtils.readFileFromZip(Path.of(zipFilePath), textFileName);
     // Assert
     assertEquals(textContent, result);
   }
+
+  // Utilities
 
   public static void deleteStructure(Path sourcePath) {
     try {
@@ -213,7 +215,7 @@ public class FileUtilsTest {
     }
   }
 
-  private static Path createTempTextFile(String fileName, String content) throws IOException {
+  public static Path createTempTextFile(String fileName, String content) throws IOException {
     Path tempFilePath = Paths.get(fileName);
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFilePath.toFile()))) {
       writer.write(content);
@@ -221,11 +223,12 @@ public class FileUtilsTest {
     return tempFilePath;
   }
 
-  private static void createZipFile(String zipFilePath, Path fileToAdd) throws IOException {
+  public static void createZipFile(String zipFilePath, Path fileToAdd, String entryName)
+      throws IOException {
     try (ZipOutputStream zipOutputStream =
         new ZipOutputStream(new java.io.FileOutputStream(zipFilePath))) {
       // Add the file to the ZIP archive
-      ZipEntry zipEntry = new ZipEntry(fileToAdd.getFileName().toString());
+      ZipEntry zipEntry = new ZipEntry(entryName);
       zipOutputStream.putNextEntry(zipEntry);
 
       // Write the file content to the ZIP archive

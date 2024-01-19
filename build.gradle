@@ -169,7 +169,8 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
     // Add a task to run the utility class
     tasks.register('updateDependencies', JavaExec) {
         classpath = sourceSets.main.runtimeClasspath
-        mainClass = 'co.com.bancolombia.utils.offline.UpdateDependencies'
+        mainClass = 'co.com.bancolombia.utils.offline.LocalTasks'
+        args 'UPDATE'
     }
 }
 
@@ -220,7 +221,7 @@ sonar {
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
         property "sonar.test", "src/test/java"
-        property "sonar.exclusions", ".github/**,src/function*alTest/*,src/main/**/UpdateDependencies.java,src/test/**/*Test.java,**/**models**,src/test/**/CAAssert.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java"
+        property "sonar.exclusions", ".github/**,src/functionalTest/*,src/main/**/UpdateDependencies.java,src/test/**/*Test.java,**/**models**,src/test/**/CAAssert.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java"
         property "sonar.sourceEncoding", "UTF-8"
     }
 }

@@ -1,4 +1,4 @@
-package co.com.bancolombia.utils.http;
+package co.com.bancolombia.utils.operations.http;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
+@UtilityClass
 public class RestConsumer {
   static ObjectMapper objectMapper = instantiateMapper();
   static ObjectMapper objectXmlMapper = instantiateXmlMapper();
   static OkHttpClient client = new OkHttpClient();
-
-  private RestConsumer() {}
 
   public static <T> T getRequest(String url, Class<T> classModel) throws IOException {
     return getRequest(url, classModel, false);
@@ -63,17 +63,19 @@ public class RestConsumer {
 
   private static ObjectMapper instantiateMapper() {
     ObjectMapper mapper = new ObjectMapper();
-    mapper.findAndRegisterModules();
-    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    customizeMapper(mapper);
     return mapper;
   }
 
   private static ObjectMapper instantiateXmlMapper() {
     ObjectMapper mapper = new XmlMapper();
+    customizeMapper(mapper);
+    return mapper;
+  }
+
+  private static void customizeMapper(ObjectMapper mapper) {
     mapper.findAndRegisterModules();
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    return mapper;
   }
 }
