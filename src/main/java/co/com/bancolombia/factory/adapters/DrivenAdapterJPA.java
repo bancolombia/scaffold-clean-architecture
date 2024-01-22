@@ -1,15 +1,14 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
 import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask;
-
 import java.io.IOException;
-
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 public class DrivenAdapterJPA implements ModuleFactory {
   @Override
@@ -17,16 +16,19 @@ public class DrivenAdapterJPA implements ModuleFactory {
 
     if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
       DrivenAdapterSecrets.SecretsBackend secretsBackend =
-              DrivenAdapterSecrets.SecretsBackend.valueOf(builder.getSecretsBackendEnabled());
+          DrivenAdapterSecrets.SecretsBackend.valueOf(builder.getSecretsBackendEnabled());
       if (secretsBackend.equals(DrivenAdapterSecrets.SecretsBackend.NONE)) {
-          new DrivenAdapterSecrets().buildModule(builder);
-          //when new secrets backend is added, the default is aws
-          builder.addParam("include-awssecrets", AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+        new DrivenAdapterSecrets().buildModule(builder);
+        // when new secrets backend is added, the default is aws
+        builder.addParam(
+            "include-awssecrets", AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
       } else {
-        builder.addParam("include-awssecrets",
-                DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER.equals(secretsBackend));
-        builder.addParam("include-vaultsecrets",
-                DrivenAdapterSecrets.SecretsBackend.VAULT.equals(secretsBackend));
+        builder.addParam(
+            "include-awssecrets",
+            DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER.equals(secretsBackend));
+        builder.addParam(
+            "include-vaultsecrets",
+            DrivenAdapterSecrets.SecretsBackend.VAULT.equals(secretsBackend));
       }
     }
 
@@ -46,5 +48,4 @@ public class DrivenAdapterJPA implements ModuleFactory {
 
     new ObjectMapperFactory().buildModule(builder);
   }
-
 }

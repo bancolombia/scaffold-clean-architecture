@@ -1,5 +1,11 @@
 package co.com.bancolombia.factory;
 
+import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.KTS;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
+import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
@@ -18,15 +24,6 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import org.gradle.api.Project;
-import org.gradle.api.logging.Logger;
-import org.gradle.internal.logging.text.StyledTextOutput;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProjectConnection;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -38,12 +35,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
-import static co.com.bancolombia.Constants.MainFiles.KTS;
-import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
-import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
+import org.gradle.api.Project;
+import org.gradle.api.logging.Logger;
+import org.gradle.internal.logging.text.StyledTextOutput;
+import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.ProjectConnection;
 
 public class ModuleBuilder {
   private static final String DEFINITION_FILES = "definition.json";
@@ -210,15 +209,11 @@ public class ModuleBuilder {
     if (isKotlin()) {
       fileName += ".kts";
     }
-    if (!findExpressions(fileName,
-            "com.github.bancolombia:aws-secrets").isEmpty()) {
+    if (!findExpressions(fileName, "com.github.bancolombia:aws-secrets").isEmpty()) {
       return "AWS_SECRETS_MANAGER";
-    }
-    else if (!findExpressions(fileName,
-            "com.github.bancolombia:vault").isEmpty()) {
+    } else if (!findExpressions(fileName, "com.github.bancolombia:vault").isEmpty()) {
       return "VAULT";
-    }
-    else {
+    } else {
       return "NONE";
     }
   }

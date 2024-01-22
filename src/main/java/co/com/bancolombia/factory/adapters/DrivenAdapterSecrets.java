@@ -1,16 +1,15 @@
 package co.com.bancolombia.factory.adapters;
 
+import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.utils.Utils.buildImplementation;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.GenericModule;
-import org.gradle.api.logging.Logger;
-
 import java.io.IOException;
-
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementation;
+import org.gradle.api.logging.Logger;
 
 public class DrivenAdapterSecrets implements ModuleFactory {
   @Override
@@ -38,12 +37,13 @@ public class DrivenAdapterSecrets implements ModuleFactory {
         secretLibrary = "vault-sync";
         builder.setupFromTemplate("driven-adapter/secrets-vault");
       }
-      builder.appendToProperties("vault")
-              .put("host", "localhost")
-              .put("port", 8200)
-              .put("roleId", "<set your roleId>")
-              .put("secretId", "<set your secretId>")
-              .put("secretName", "my-secret");
+      builder
+          .appendToProperties("vault")
+          .put("host", "localhost")
+          .put("port", 8200)
+          .put("roleId", "<set your roleId>")
+          .put("secretId", "<set your secretId>")
+          .put("secretName", "my-secret");
       logger.lifecycle("Generating mode for vault secrets");
     }
     String dependency =

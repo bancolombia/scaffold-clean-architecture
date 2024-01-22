@@ -16,7 +16,8 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private String url = "http://localhost:8080";
   private String swaggerFile = null;
-  private DrivenAdapterSecrets.SecretsBackend secretsBackend = DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER;
+  private DrivenAdapterSecrets.SecretsBackend secretsBackend =
+      DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER;
 
   private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
   private DrivenAdapterBinStash.CacheMode cacheMode = DrivenAdapterBinStash.CacheMode.LOCAL;

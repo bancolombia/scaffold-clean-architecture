@@ -275,43 +275,43 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_HELPERS).exists());
 
     assertTrue(
-            new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model")
-                    .exists());
+        new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model")
-                    .exists());
+        new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model")
+            .exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_DOMAIN_MODEL_BUILD_GRADLE).exists());
     assertTrue(
-            new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase")
-                    .exists());
+        new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase")
+            .exists());
     assertTrue(
-            new File("build/functionalTest/domain/usecase/src/test/java/co/com/bancolombia/usecase")
-                    .exists());
+        new File("build/functionalTest/domain/usecase/src/test/java/co/com/bancolombia/usecase")
+            .exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_DOMAIN_USECASE_BUILD_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE).exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+            .exists());
     assertTrue(
-            new File(
-                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
-                    .exists());
+        new File(
+                "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
+            .exists());
     assertTrue(
-            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
-                    .exists());
+        new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
+            .exists());
     assertTrue(
-            new File(
-                    BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
-                    .exists());
+        new File(
+                BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
+            .exists());
     assertTrue(
-            new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
-                    .exists());
+        new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
+            .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -719,8 +719,9 @@ public class PluginCleanFunctionalTest {
 
     try {
       runner.build();
-    } catch (Exception e){
-      Assert.assertTrue(e.getMessage().contains("This module is only available for reactive projects"));
+    } catch (Exception e) {
+      Assert.assertTrue(
+          e.getMessage().contains("This module is only available for reactive projects"));
     }
   }
 
@@ -734,11 +735,10 @@ public class PluginCleanFunctionalTest {
     runner.build();
 
     assertTrue(
-            FileUtils.readFileToString(
-                            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
-                            StandardCharsets.UTF_8)
-                    .contains(
-                            "implementation 'com.github.bancolombia:vault-async:"));
+        FileUtils.readFileToString(
+                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                StandardCharsets.UTF_8)
+            .contains("implementation 'com.github.bancolombia:vault-async:"));
   }
 
   @Test
@@ -751,11 +751,10 @@ public class PluginCleanFunctionalTest {
     runner.build();
 
     assertTrue(
-            FileUtils.readFileToString(
-                            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
-                            StandardCharsets.UTF_8)
-                    .contains(
-                            "implementation 'com.github.bancolombia:aws-secrets-manager-async"));
+        FileUtils.readFileToString(
+                new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                StandardCharsets.UTF_8)
+            .contains("implementation 'com.github.bancolombia:aws-secrets-manager-async"));
   }
 
   @Test
