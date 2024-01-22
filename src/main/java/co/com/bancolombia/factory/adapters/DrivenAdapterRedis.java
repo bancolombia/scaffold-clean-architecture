@@ -8,7 +8,6 @@ import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
-import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
 
@@ -26,23 +25,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
 
-    if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
-      DrivenAdapterSecrets.SecretsBackend secretsBackend =
-          DrivenAdapterSecrets.SecretsBackend.valueOf(builder.getSecretsBackendEnabled());
-      if (!secretsBackend.equals(DrivenAdapterSecrets.SecretsBackend.NONE)) {
-        builder.addParam(
-            "include-vaultsecrets",
-            DrivenAdapterSecrets.SecretsBackend.VAULT.equals(secretsBackend));
-        builder.addParam(
-            "include-awssecrets",
-            DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER.equals(secretsBackend));
-      } else {
-        new DrivenAdapterSecrets().buildModule(builder);
-        // when new secrets backend is added, the default is aws
-        builder.addParam(
-            "include-awssecrets", AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
-      }
-    }
+    builder.setUpSecretsInAdapter();
 
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);
     builder.setupFromTemplate("driven-adapter/" + typePath + "/" + modePath);

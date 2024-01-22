@@ -7,12 +7,15 @@ import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
+import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
 import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.models.TemplateDefinition;
+import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
@@ -215,6 +218,22 @@ public class ModuleBuilder {
       return "VAULT";
     } else {
       return "NONE";
+    }
+  }
+
+  public void setUpSecretsInAdapter() throws CleanException, IOException {
+    boolean includeSecrets = Boolean.TRUE.equals(getBooleanParam("include-secret"));
+    if (!includeSecrets) {
+      return;
+    }
+    String secretsBackend = getSecretsBackendEnabled();
+    if (secretsBackend.equals("NONE")) {
+      new DrivenAdapterSecrets().buildModule(this);
+      // when new secrets backend is added, the default is aws
+      addParam("include-awssecrets", AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    } else {
+      addParam("include-awssecrets", "AWS_SECRETS_MANAGER".equalsIgnoreCase(secretsBackend));
+      addParam("include-vaultsecrets", "VAULT".equalsIgnoreCase(secretsBackend));
     }
   }
 
