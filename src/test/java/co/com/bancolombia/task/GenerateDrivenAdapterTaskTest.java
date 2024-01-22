@@ -2,19 +2,21 @@ package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
+import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -25,7 +27,7 @@ public class GenerateDrivenAdapterTaskTest {
 
   @Before
   public void init() throws IOException, CleanException {
-    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
   }
 
   private void setup(GenerateStructureTask.ProjectType type) throws IOException, CleanException {
@@ -95,6 +97,44 @@ public class GenerateDrivenAdapterTaskTest {
         new File(
                 "build/unitTest/infrastructure/driven-adapters/my-driven-adapter/src/test/java/co/com/bancolombia/mydrivenadapter")
             .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterSecrets() throws IOException, CleanException {
+    // Arrange
+    task.setType("SECRETS");
+    task.setSecretsBackend(DrivenAdapterSecrets.SecretsBackend.VAULT);
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/SecretsConfig.java")
+            .exists());
+    assertFalse(
+        FileUtils.readFileToString(
+                new File("build/unitTest/applications/app-service/build.gradle"),
+                StandardCharsets.UTF_8)
+            .contains("implementation 'com.github.bancolombia:aws-secrets-manager-async:"));
+  }
+
+  @Test
+  public void generateDrivenAdapterSecretsWithDefault() throws IOException, CleanException {
+    // Arrange
+    task.setType("SECRETS");
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File(
+                "build/unitTest/applications/app-service/src/main/java/co/com/bancolombia/config/SecretsConfig.java")
+            .exists());
+
+    assertTrue(
+        FileUtils.readFileToString(
+                new File("build/unitTest/applications/app-service/build.gradle"),
+                StandardCharsets.UTF_8)
+            .contains("implementation 'com.github.bancolombia:aws-secrets-manager-async:"));
   }
 
   @Test
@@ -174,6 +214,39 @@ public class GenerateDrivenAdapterTaskTest {
   public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
     // Arrange
     task.setType("JPA");
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/jpa-repository/build.gradle")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepository.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/JPARepositoryAdapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/DBSecret.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterJPARepositoryWithSecrets() throws IOException, CleanException {
+    // Arrange
+    task.setType("JPA");
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
@@ -447,6 +520,62 @@ public class GenerateDrivenAdapterTaskTest {
     assertTrue(
         new File(
                 "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepositoryAdapter.java")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterRedisRepositoryForImperativeWithSecret()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.IMPERATIVE);
+    task.setType("REDIS");
+    task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/helper/RepositoryAdapterOperations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepository.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/repository/RedisRepositoryAdapter.java")
+            .exists());
+  }
+
+  @Test
+  public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
+      throws IOException, CleanException {
+    // Arrange
+    setup(GenerateStructureTask.ProjectType.REACTIVE);
+    task.setType("REDIS");
+    task.setMode(DrivenAdapterRedis.Mode.TEMPLATE);
+    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(
+        new File("build/unitTest/infrastructure/driven-adapters/redis/build.gradle").exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/helper/ReactiveTemplateAdapterOperations.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java")
+            .exists());
+    assertTrue(
+        new File(
+                "build/unitTest/infrastructure/driven-adapters/redis/src/main/java/co/com/bancolombia/redis/config/RedisConfig.java")
             .exists());
   }
 

@@ -1,6 +1,13 @@
 dependencies {
     implementation(project(":model"))
 
+    {{#include-awssecrets}}
+    implementation("com.github.bancolombia:aws-secrets-manager-sync:{{SECRETS_VERSION}}")
+    {{/include-awssecrets}}
+    {{#include-vaultsecrets}}
+    implementation("com.github.bancolombia:vault-sync:{{SECRETS_VERSION}}")
+    {{/include-vaultsecrets}}
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.reactivecommons.utils:object-mapper-api:{{REACTIVE_COMMONS_MAPPER_VERSION}}")
 

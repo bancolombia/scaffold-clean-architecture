@@ -15,21 +15,47 @@ public class DrivenAdapterSecrets implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
+
     String secretLibrary = "";
-    if (Boolean.TRUE.equals(builder.isReactive())) {
-      secretLibrary = "aws-secrets-manager-async";
-      builder.setupFromTemplate("driven-adapter/secrets-reactive");
+    SecretsBackend secretsBackend = (SecretsBackend) builder.getParam("secrets-backend");
+    if (secretsBackend == null || secretsBackend.equals(SecretsBackend.AWS_SECRETS_MANAGER)) {
+      if (Boolean.TRUE.equals(builder.isReactive())) {
+        secretLibrary = "aws-secrets-manager-async";
+        builder.setupFromTemplate("driven-adapter/secrets-reactive");
+      } else {
+        secretLibrary = "aws-secrets-manager-sync";
+        builder.setupFromTemplate("driven-adapter/secrets");
+      }
+      logger.lifecycle("Generating mode for aws secrets");
+      builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
+      GenericModule.addAwsBom(builder);
     } else {
-      secretLibrary = "aws-secrets-manager-sync";
-      builder.setupFromTemplate("driven-adapter/secrets");
+      if (Boolean.TRUE.equals(builder.isReactive())) {
+        secretLibrary = "vault-async";
+        builder.setupFromTemplate("driven-adapter/secrets-vault-reactive");
+      } else {
+        secretLibrary = "vault-sync";
+        builder.setupFromTemplate("driven-adapter/secrets-vault");
+      }
+      builder
+          .appendToProperties("vault")
+          .put("host", "localhost")
+          .put("port", 8200)
+          .put("roleId", "<set your roleId>")
+          .put("secretId", "<set your secretId>")
+          .put("secretName", "my-secret");
+      logger.lifecycle("Generating mode for vault secrets");
     }
-    logger.lifecycle("Generating  mode");
-    GenericModule.addAwsBom(builder);
     String dependency =
         buildImplementation(
             builder.isKotlin(),
             "com.github.bancolombia:" + secretLibrary + ":" + Constants.SECRETS_VERSION);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
-    builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
+  }
+
+  public enum SecretsBackend {
+    AWS_SECRETS_MANAGER,
+    VAULT,
+    NONE
   }
 }

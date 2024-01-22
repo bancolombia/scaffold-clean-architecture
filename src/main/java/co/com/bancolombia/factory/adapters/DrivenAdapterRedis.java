@@ -24,6 +24,9 @@ public class DrivenAdapterRedis implements ModuleFactory {
     Logger logger = builder.getProject().getLogger();
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
+
+    builder.setUpSecretsInAdapter();
+
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);
     builder.setupFromTemplate("driven-adapter/" + typePath + "/" + modePath);
     builder.appendToSettings("redis", "infrastructure/driven-adapters");
@@ -34,9 +37,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
     }
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":redis");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
-    if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
-      new DrivenAdapterSecrets().buildModule(builder);
-    }
+
     new ObjectMapperFactory().buildModule(builder);
   }
 

@@ -4,18 +4,18 @@ import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.KTS;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
+import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
 import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.models.TemplateDefinition;
+import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask;
 import co.com.bancolombia.utils.FileUpdater;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
@@ -33,13 +33,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
@@ -211,6 +205,36 @@ public class ModuleBuilder {
         .map(s -> s.replace("'", ""))
         .map(s -> s.replace("\"", ""))
         .collect(Collectors.toSet());
+  }
+
+  public String getSecretsBackendEnabled() {
+    String fileName = "applications/app-service/build.gradle";
+    if (isKotlin()) {
+      fileName += ".kts";
+    }
+    if (!findExpressions(fileName, "com.github.bancolombia:aws-secrets").isEmpty()) {
+      return "AWS_SECRETS_MANAGER";
+    } else if (!findExpressions(fileName, "com.github.bancolombia:vault").isEmpty()) {
+      return "VAULT";
+    } else {
+      return "NONE";
+    }
+  }
+
+  public void setUpSecretsInAdapter() throws CleanException, IOException {
+    boolean includeSecrets = Boolean.TRUE.equals(getBooleanParam("include-secret"));
+    if (!includeSecrets) {
+      return;
+    }
+    String secretsBackend = getSecretsBackendEnabled();
+    if (secretsBackend.equals("NONE")) {
+      new DrivenAdapterSecrets().buildModule(this);
+      // when new secrets backend is added, the default is aws
+      addParam("include-awssecrets", AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    } else {
+      addParam("include-awssecrets", "AWS_SECRETS_MANAGER".equalsIgnoreCase(secretsBackend));
+      addParam("include-vaultsecrets", "VAULT".equalsIgnoreCase(secretsBackend));
+    }
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {

@@ -319,7 +319,7 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    | restconsumer                        | Rest Client Consumer                | --url [url] --from-swagger swagger.yaml            | &#9745; | &#9745; |
    | rsocket                             | RSocket Requester                   |                                                    | &#9745; | &#9745; |
    | s3                                  | AWS Simple Storage Service          |                                                    | &#9745; | &#9745; |
-   | secrets                             | Secrets Manager Bancolombia         |                                                    | &#9745; | &#9745; |
+   | secrets                             | Secrets Manager Bancolombia         | --secrets-backend [backend] <br> Valid options for backend are "aws_secrets_manager" (default) or "vault". | &#9745; | &#9745; |
    | sqs                                 | SQS message sender                  |                                                    | &#9745; | &#9745; |
 
    

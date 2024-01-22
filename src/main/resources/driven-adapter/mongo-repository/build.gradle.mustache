@@ -4,6 +4,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.reactivecommons.utils:object-mapper-api:{{REACTIVE_COMMONS_MAPPER_VERSION}}'
 
+    {{#include-awssecrets}}
+    implementation("com.github.bancolombia:aws-secrets-manager-sync:{{SECRETS_VERSION}}")
+    {{/include-awssecrets}}
+    {{#include-vaultsecrets}}
+    implementation("com.github.bancolombia:vault-sync:{{SECRETS_VERSION}}")
+    {{/include-vaultsecrets}}
+
     {{^example}}
     runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo' // TODO: remove this dependency to connect to real database
     {{/example}}

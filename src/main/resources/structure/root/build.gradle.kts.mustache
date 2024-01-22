@@ -22,7 +22,7 @@ java {
     sourceCompatibility = JavaVersion.{{javaVersion}}
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = JavaVersion.{{javaVersion}}.toString()

@@ -1,0 +1,10 @@
+{
+  "folders": [],
+  "files": {},
+  "java": {
+    "driven-adapter/secrets-vault-reactive/secrets-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.java"
+  },
+  "kotlin": {
+    "driven-adapter/secrets-vault-reactive/secrets-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.kt"
+  }
+}

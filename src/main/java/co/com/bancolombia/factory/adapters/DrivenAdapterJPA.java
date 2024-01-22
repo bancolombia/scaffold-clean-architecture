@@ -12,6 +12,9 @@ import java.io.IOException;
 public class DrivenAdapterJPA implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+
+    builder.setUpSecretsInAdapter();
+
     builder.setupFromTemplate("driven-adapter/jpa-repository");
     builder.appendToSettings("jpa-repository", "infrastructure/driven-adapters");
     builder
@@ -25,9 +28,7 @@ public class DrivenAdapterJPA implements ModuleFactory {
         .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
     String dependency = buildImplementationFromProject(builder.isKotlin(), ":jpa-repository");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
-    if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
-      new DrivenAdapterSecrets().buildModule(builder);
-    }
+
     new ObjectMapperFactory().buildModule(builder);
   }
 }
