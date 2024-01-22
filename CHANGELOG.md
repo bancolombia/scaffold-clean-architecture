@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.13.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.13.1) (2024-01-22)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.13.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.13.0...v3.13.1)
 
 **Implemented enhancements:**
 
 - Automate project dependecies update. [\#421](https://github.com/bancolombia/scaffold-clean-architecture/issues/421)
+
+**Merged pull requests:**
+
+- fix\(sonar\): exclude dependency and skip compile from sonar task [\#429](https://github.com/bancolombia/scaffold-clean-architecture/pull/429) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [v3.13.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.13.0) (2024-01-19)
 
@@ -773,15 +777,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
-
-## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
 
 ## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+
+## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
 
 **Implemented enhancements:**
 
