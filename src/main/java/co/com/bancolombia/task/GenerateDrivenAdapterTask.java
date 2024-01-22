@@ -2,6 +2,7 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.factory.adapters.DrivenAdapterBinStash;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
+import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private String url = "http://localhost:8080";
   private String swaggerFile = null;
+  private DrivenAdapterSecrets.SecretsBackend secretsBackend = DrivenAdapterSecrets.SecretsBackend.AWS_SECRETS_MANAGER;
+
   private DrivenAdapterRedis.Mode mode = DrivenAdapterRedis.Mode.TEMPLATE;
   private DrivenAdapterBinStash.CacheMode cacheMode = DrivenAdapterBinStash.CacheMode.LOCAL;
 
@@ -61,6 +64,11 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     this.swaggerFile = swaggerFile;
   }
 
+  @Option(option = "secrets-backend", description = "Set secrets backend")
+  public void setSecretsBackend(DrivenAdapterSecrets.SecretsBackend secretsBackend) {
+    this.secretsBackend = secretsBackend;
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-cache-mode", cacheMode);
@@ -69,6 +77,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     builder.addParam(DrivenAdapterRedis.PARAM_MODE, mode);
     builder.addParam("task-param-url", url);
     builder.addParam("swagger-file", swaggerFile);
+    builder.addParam("secrets-backend", secretsBackend);
   }
 
   @Override

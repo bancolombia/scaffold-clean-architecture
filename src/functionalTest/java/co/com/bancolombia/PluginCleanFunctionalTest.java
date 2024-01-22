@@ -20,6 +20,7 @@ import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,6 +67,9 @@ public class PluginCleanFunctionalTest {
       COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT =
           "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'";
   public static final String ASYNCEVENTBUS = "ASYNCEVENTBUS";
+
+  public static final String SECRETS = "SECRETS";
+
   public static final String RESTMVC = "restmvc";
   public static final String SERVER = "--server=";
   public static final String VALIDATE_STRUCTURE = "validateStructure";
@@ -246,6 +250,68 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
             .exists());
+
+    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+  }
+
+  @Test
+  public void canRunTaskGenerateStructureImperative() {
+
+    String task = "ca";
+
+    runner.withArguments(task, TYPE + "imperative");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+    // Verify the result
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_README_MD).exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
+    assertTrue(new File("build/functionalTest/lombok.config").exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
+
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS).exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_HELPERS).exists());
+
+    assertTrue(
+            new File("build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/domain/model/src/test/java/co/com/bancolombia/model")
+                    .exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_DOMAIN_MODEL_BUILD_GRADLE).exists());
+    assertTrue(
+            new File("build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase")
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/domain/usecase/src/test/java/co/com/bancolombia/usecase")
+                    .exists());
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_DOMAIN_USECASE_BUILD_GRADLE).exists());
+
+    assertTrue(new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE).exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/MainApplication.java")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config/UseCasesConfig.java")
+                    .exists());
+    assertTrue(
+            new File(
+                    "build/functionalTest/applications/app-service/src/main/java/co/com/bancolombia/config")
+                    .exists());
+    assertTrue(
+            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_APPLICATION_YAML)
+                    .exists());
+    assertTrue(
+            new File(
+                    BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_SRC_MAIN_RESOURCES_LOG_4_J_2_PROPERTIES)
+                    .exists());
+    assertTrue(
+            new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
+                    .exists());
 
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
@@ -643,15 +709,53 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void shouldFailTaskGenerateDrivenAdapterEventBusForNonReactiveTest() {
-    canRunTaskGenerateStructureWithOutParameters();
+    canRunTaskGenerateStructureImperative();
     String task = GENERATE_DRIVEN_ADAPTER;
     String valueDrivenAdapter = ASYNCEVENTBUS;
-
     runner.withArguments(task, TYPE + valueDrivenAdapter);
     runner.withProjectDir(projectDir);
+
+    try {
+      runner.build();
+    } catch (Exception e){
+      Assert.assertTrue(e.getMessage().contains("This module is only available for reactive projects"));
+    }
+  }
+
+  @Test
+  public void shouldGenerateDrivenAdapterSecretsForVaultInReactiveTest() throws IOException {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = GENERATE_DRIVEN_ADAPTER;
+    String valueDrivenAdapter = SECRETS;
+    runner.withArguments(task, TYPE + valueDrivenAdapter, "--secrets-backend=VAULT");
+    runner.withProjectDir(projectDir);
     runner.build();
+
+    assertTrue(
+            FileUtils.readFileToString(
+                            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                            StandardCharsets.UTF_8)
+                    .contains(
+                            "implementation 'com.github.bancolombia:vault-async:"));
+  }
+
+  @Test
+  public void shouldGenerateDrivenAdapterSecretsForAWSInReactiveTest() throws IOException {
+    canRunTaskGenerateStructureWithOutParameters();
+    String task = GENERATE_DRIVEN_ADAPTER;
+    String valueDrivenAdapter = SECRETS;
+    runner.withArguments(task, TYPE + valueDrivenAdapter, "--secrets-backend=AWS_SECRETS_MANAGER");
+    runner.withProjectDir(projectDir);
+    runner.build();
+
+    assertTrue(
+            FileUtils.readFileToString(
+                            new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
+                            StandardCharsets.UTF_8)
+                    .contains(
+                            "implementation 'com.github.bancolombia:aws-secrets-manager-async"));
   }
 
   @Test
