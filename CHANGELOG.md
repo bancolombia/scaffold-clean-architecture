@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.0...HEAD)
+
+**Closed issues:**
+
+- Add support for vault when generating secrets driven adapter [\#428](https://github.com/bancolombia/scaffold-clean-architecture/issues/428)
+
+## [v3.14.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.14.0) (2024-01-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.13.1...v3.14.0)
+
+**Closed issues:**
+
+- Add option to select secrets backend in secrets driven adapter [\#419](https://github.com/bancolombia/scaffold-clean-architecture/issues/419)
+
+**Merged pull requests:**
+
+- feat\(vault\): Add vault secrets support [\#430](https://github.com/bancolombia/scaffold-clean-architecture/pull/430) ([gabheadz](https://github.com/gabheadz))
+
 ## [v3.13.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.13.1) (2024-01-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.13.0...v3.13.1)
@@ -777,15 +797,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
-
-## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
 
 ## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+
+## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
 
 **Implemented enhancements:**
 
