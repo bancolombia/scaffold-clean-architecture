@@ -2,9 +2,9 @@
   "folders": [],
   "files": {},
   "java": {
-    "driven-adapter/secrets/secrets-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.java"
+    "driven-adapter/secrets-vault/secrets-config.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.java"
   },
   "kotlin": {
-    "driven-adapter/secrets/secrets-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.kt"
+    "driven-adapter/secrets-vault/secrets-config.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/SecretsConfig.kt"
   }
 }
