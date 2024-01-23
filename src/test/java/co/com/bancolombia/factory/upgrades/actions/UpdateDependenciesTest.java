@@ -47,7 +47,7 @@ public class UpdateDependenciesTest {
   }
 
   @Test
-  public void shouldUpdateSpecific() {
+  void shouldUpdateSpecific() {
     // Arrange
     String dependency = "group:dependency-name:1.2.3";
     DependencyRelease release = new DependencyRelease();
@@ -72,7 +72,7 @@ public class UpdateDependenciesTest {
   }
 
   @Test
-  public void shouldUpdateAll() {
+  void shouldUpdateAll() {
     // Arrange
     DependencyRelease release = new DependencyRelease();
     release.setGroup("group");

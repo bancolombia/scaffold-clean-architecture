@@ -42,7 +42,7 @@ public class UpgradeY2023M11D05GradleTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(

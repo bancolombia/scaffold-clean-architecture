@@ -62,7 +62,7 @@ public class DeleteModuleTaskTest {
 
   // Assert
   @Test
-  public void deleteNullModule() {
+  void deleteNullModule() {
     // Arrange
     // Act
     assertThrows(IllegalArgumentException.class, () -> task.execute());
@@ -70,7 +70,7 @@ public class DeleteModuleTaskTest {
 
   // Assert
   @Test
-  public void deleteNonExistentModule() {
+  void deleteNonExistentModule() {
     // Arrange
     task.setModule("non-existent");
     // Act
@@ -78,7 +78,7 @@ public class DeleteModuleTaskTest {
   }
 
   @Test
-  public void generateEntryPoint() throws IOException, CleanException {
+  void generateEntryPoint() throws IOException, CleanException {
     // Arrange
     task.setModule("mongo-repository");
     // Act

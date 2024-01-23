@@ -41,7 +41,7 @@ public class UpgradeY2022M08D08Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     builder.addFile(
         Constants.MainFiles.MAIN_GRADLE, readResourceFile("gradle-8-sample/before.txt"));

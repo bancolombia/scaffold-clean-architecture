@@ -39,7 +39,7 @@ public class UpgradeY2023M02D08JavaTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     builder.addFile(MAIN_GRADLE, "someConfig\nJavaVersion.VERSION_11\nother");
     // Act

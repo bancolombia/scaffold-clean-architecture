@@ -70,7 +70,7 @@ public class ModuleBuilderTest {
   }
 
   @Test
-  public void shouldAppendProperties() throws IOException {
+  void shouldAppendProperties() throws IOException {
     setupMocks();
     builder.appendToProperties("spring.datasource").put("url", "mydburl");
     builder.appendToProperties("").put("test", "myUnitTes");
@@ -86,18 +86,18 @@ public class ModuleBuilderTest {
   }
 
   @Test
-  public void shouldReturnErrorBecauseNoProperty() {
+  void shouldReturnErrorBecauseNoProperty() {
     assertThrows(IOException.class, () -> builder.analyticsEnabled());
   }
 
   @Test
-  public void shouldReturnAnalyticsState() throws IOException {
+  void shouldReturnAnalyticsState() throws IOException {
     FileUtils.setGradleProperty(TEST_DIR, "analytics", "true");
     assertTrue(builder.analyticsEnabled());
   }
 
   @Test
-  public void shouldPrintVersionMissMatch() {
+  void shouldPrintVersionMissMatch() {
     setupMocks();
     Release release = new Release();
     release.setTagName("1.1.1");

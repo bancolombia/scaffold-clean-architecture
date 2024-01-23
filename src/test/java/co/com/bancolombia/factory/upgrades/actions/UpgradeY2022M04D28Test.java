@@ -29,7 +29,7 @@ public class UpgradeY2022M04D28Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     // Act
     updater.up(builder);

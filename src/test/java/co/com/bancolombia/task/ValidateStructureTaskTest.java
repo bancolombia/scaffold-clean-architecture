@@ -222,7 +222,7 @@ public class ValidateStructureTaskTest {
   }
 
   @Test
-  public void validateStructureException() throws IOException, CleanException {
+  void validateStructureException() throws IOException, CleanException {
     // Act
     this.setupException();
     // Assert
@@ -230,7 +230,7 @@ public class ValidateStructureTaskTest {
   }
 
   @Test
-  public void validateStructureModelException() throws IOException, CleanException {
+  void validateStructureModelException() throws IOException, CleanException {
     // Act
     this.setupWithoutModelWhitelistDepException();
     // Assert
@@ -238,7 +238,7 @@ public class ValidateStructureTaskTest {
   }
 
   @Test
-  public void validateStructureImperativeProject() throws IOException, CleanException {
+  void validateStructureImperativeProject() throws IOException, CleanException {
     // Act
     this.prepareImperativeProject();
     task.execute();
@@ -246,7 +246,7 @@ public class ValidateStructureTaskTest {
   }
 
   @Test
-  public void validateStructureReactiveProject() throws IOException, CleanException {
+  void validateStructureReactiveProject() throws IOException, CleanException {
     // Act
     this.prepareReactiveProject();
     task.execute();

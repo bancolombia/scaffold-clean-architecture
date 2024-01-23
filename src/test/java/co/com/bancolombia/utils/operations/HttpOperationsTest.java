@@ -100,7 +100,7 @@ public class HttpOperationsTest {
   }
 
   @Test
-  public void getVersionPlugin() {
+  void getVersionPlugin() {
     // Arrange
     // Act
     Release result = operations.getLatestPluginVersion();
@@ -110,7 +110,7 @@ public class HttpOperationsTest {
   }
 
   @Test
-  public void getGradlePluginVersion() {
+  void getGradlePluginVersion() {
     // Arrange
     DependencyRelease release = DependencyRelease.from("org.sonarqube:org.sonarqube.gradle.plugin");
     // Act
@@ -121,7 +121,7 @@ public class HttpOperationsTest {
   }
 
   @Test
-  public void getDependencyVersion() {
+  void getDependencyVersion() {
     // Arrange
     DependencyRelease release = DependencyRelease.from("some.dependency:name");
     // Act
@@ -132,7 +132,7 @@ public class HttpOperationsTest {
   }
 
   @Test
-  public void getGradleWrapperVersion() throws Exception {
+  void getGradleWrapperVersion() throws Exception {
     // Arrange
     Files.createDirectories(Path.of("build/gradle/wrapper"));
     String zipFilePath = "build/test.zip";
@@ -151,7 +151,7 @@ public class HttpOperationsTest {
   }
 
   @Test
-  public void sendAnalytics() throws Exception {
+  void sendAnalytics() throws Exception {
     // Arrange
     HttpUrl baseUrl = server.url("/analytics");
     String body = "somebody";

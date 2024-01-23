@@ -54,7 +54,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoType() {
+  void shouldHandleErrorWhenNoType() {
     // Arrange
     task.setType(null);
     // Act
@@ -63,7 +63,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoName() {
+  void shouldHandleErrorWhenNoName() {
     // Arrange
     task.setType("GENERIC");
     task.setName(null);
@@ -73,7 +73,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenEmptyName() {
+  void shouldHandleErrorWhenEmptyName() {
     // Arrange
     task.setType("GENERIC");
     task.setName("");
@@ -82,7 +82,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterGeneric() throws IOException, CleanException {
+  void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
     task.setType("GENERIC");
     task.setName("MyDrivenAdapter");
@@ -97,7 +97,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateRestConsumerForKotlin() throws IOException, CleanException {
+  void generateRestConsumerForKotlin() throws IOException, CleanException {
     // Arrange
     task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
@@ -114,7 +114,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
+  void generateDrivenAdapterJPARepository() throws IOException, CleanException {
     // Arrange
     task.setType("JPA");
     // Act
@@ -131,7 +131,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -148,7 +148,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
@@ -169,8 +169,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryForNoProjectType()
-      throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryForNoProjectType() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -187,7 +186,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void shouldGetSecretOptions() {
+  void shouldGetSecretOptions() {
     // Arrange
     // Act
     List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getSecretOptions();
@@ -196,8 +195,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisRepositoryForImperative()
-      throws IOException, CleanException {
+  void generateDrivenAdapterRedisRepositoryForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
@@ -213,7 +211,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.TEMPLATE);
@@ -228,7 +226,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");
     // Act
@@ -243,7 +241,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("S3");
     // Act
@@ -259,7 +257,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterKtor() throws IOException, CleanException {
+  void generateDrivenAdapterKtor() throws IOException, CleanException {
     // Arrange
     task.setType("KTOR");
     // Act
@@ -270,7 +268,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
+  void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
     // Arrange
     task.setType("DYNAMODB");
     // Act
@@ -281,7 +279,7 @@ public class GenerateDrivenAdapterTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterSQSSenderImperative() throws IOException, CleanException {
+  void generateDrivenAdapterSQSSenderImperative() throws IOException, CleanException {
     // Arrange
     task.setType("SQS");
     // Act

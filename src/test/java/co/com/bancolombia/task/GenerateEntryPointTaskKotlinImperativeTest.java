@@ -54,7 +54,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoType() {
+  void shouldHandleErrorWhenNoType() {
     // Arrange
     task.setType(null);
     // Act
@@ -63,7 +63,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoName() {
+  void shouldHandleErrorWhenNoName() {
     // Arrange
     task.setType("GENERIC");
     task.setName(null);
@@ -73,7 +73,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenEmptyName() {
+  void shouldHandleErrorWhenEmptyName() {
     // Arrange
     task.setType("GENERIC");
     task.setName("");
@@ -82,7 +82,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointGeneric() throws IOException, CleanException {
+  void generateEntryPointGeneric() throws IOException, CleanException {
     // Arrange
     task.setType("GENERIC");
     task.setName("MyEntryPoint");
@@ -97,7 +97,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
+  void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
@@ -112,8 +112,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointApiRestWithDefaultServerAndSwagger()
-      throws IOException, CleanException {
+  void generateEntryPointApiRestWithDefaultServerAndSwagger() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
@@ -130,7 +129,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointApiRestWithUndertowServer() throws IOException, CleanException {
+  void generateEntryPointApiRestWithUndertowServer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
@@ -150,7 +149,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointApiRestWithJettyServer() throws IOException, CleanException {
+  void generateEntryPointApiRestWithJettyServer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.JETTY);
@@ -169,7 +168,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void generateEntryPointApiRestWithTomcatServer() throws IOException, CleanException {
+  void generateEntryPointApiRestWithTomcatServer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
     task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
@@ -184,7 +183,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void shouldGetServerOptions() {
+  void shouldGetServerOptions() {
     // Arrange
     // Act
     List<EntryPointRestMvcServer.Server> options = task.getServerOptions();
@@ -193,7 +192,7 @@ public class GenerateEntryPointTaskKotlinImperativeTest {
   }
 
   @Test
-  public void shouldGetRouterOptions() {
+  void shouldGetRouterOptions() {
     // Arrange
     // Act
     List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getRoutersOptions();

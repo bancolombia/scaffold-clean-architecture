@@ -28,7 +28,7 @@ public class UpgradeY2022M04D27Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange\
     builder.addFile(MAIN_GRADLE, "sourceCompatibility = JavaVersion.VERSION_1_8\n");
     builder.addFile(DOCKERFILE, "adoptopenjdk/openjdk8-openj9:alpine-slim\n");

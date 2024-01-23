@@ -15,28 +15,28 @@ public class MockOperationsTest {
   @Mock private DependencyRelease dependencyRelease;
 
   @Test
-  public void getLatestPluginVersion() {
+  void getLatestPluginVersion() {
     // Act
     // Assert
     assertNull(operations.getLatestPluginVersion());
   }
 
   @Test
-  public void getGradleWrapperFromFile() {
+  void getGradleWrapperFromFile() {
     // Act
     // Assert
     assertTrue(operations.getGradleWrapperFromFile().isEmpty());
   }
 
   @Test
-  public void getLatestGradlePluginVersion() {
+  void getLatestGradlePluginVersion() {
     // Act
     // Assert
     assertTrue(operations.getLatestGradlePluginVersion(dependencyRelease).isEmpty());
   }
 
   @Test
-  public void shouldGetReal() {
+  void shouldGetReal() {
     // Act
     // Assert
     assertTrue(operations.getTheLastDependencyRelease(dependencyRelease).isEmpty());

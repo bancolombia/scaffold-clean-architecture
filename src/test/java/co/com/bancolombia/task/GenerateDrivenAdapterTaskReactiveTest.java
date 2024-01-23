@@ -52,7 +52,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateRsocketRequester() throws IOException, CleanException {
+  void generateRsocketRequester() throws IOException, CleanException {
     // Arrange
     task.setType("RSOCKET");
     // Act
@@ -67,7 +67,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -84,7 +84,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateReactiveRestConsumer() throws IOException, CleanException {
+  void generateReactiveRestConsumer() throws IOException, CleanException {
     // Arrange
     task.setUrl("http://localhost:8080");
     task.setType("RESTCONSUMER");
@@ -101,7 +101,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateReactiveRestConsumerFromSwagger() throws IOException, CleanException {
+  void generateReactiveRestConsumerFromSwagger() throws IOException, CleanException {
     // Arrange
     task.setUrl("http://localhost:8080");
     task.setType("RESTCONSUMER");
@@ -116,7 +116,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterEventBus() throws IOException, CleanException {
+  void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
     task.setType("ASYNCEVENTBUS");
     // Act
@@ -133,7 +133,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void shouldHandleErrorBecauseIncompatibility() {
+  void shouldHandleErrorBecauseIncompatibility() {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
@@ -143,7 +143,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
+  void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
     // Arrange
     task.setType("R2DBC");
     // Act
@@ -159,7 +159,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisTemplateForReactiveWithSecret()
+  void generateDrivenAdapterRedisTemplateForReactiveWithSecret()
       throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
@@ -177,7 +177,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
+  void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
       throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
@@ -196,7 +196,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");
     // Act
@@ -209,7 +209,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("S3");
     // Act
@@ -225,7 +225,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateMQSender() throws IOException, CleanException {
+  void generateMQSender() throws IOException, CleanException {
     // Arrange
     task.setType("MQ");
     // Act
@@ -238,7 +238,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateSQSSender() throws IOException, CleanException {
+  void generateSQSSender() throws IOException, CleanException {
     // Arrange
     task.setType("SQS");
     // Act
@@ -251,7 +251,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterSecrets() throws IOException, CleanException {
+  void generateDrivenAdapterSecrets() throws IOException, CleanException {
     // Arrange
     task.setType("SECRETS");
     task.setSecretsBackend(DrivenAdapterSecrets.SecretsBackend.VAULT);
@@ -267,7 +267,7 @@ public class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterSecretsWithDefault() throws IOException, CleanException {
+  void generateDrivenAdapterSecretsWithDefault() throws IOException, CleanException {
     // Arrange
     task.setType("SECRETS");
     // Act

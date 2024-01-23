@@ -47,7 +47,7 @@ public class UpgradeY2022M05D03Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     String drivenFile = "./infrastructure/driven-adapter/some-aws/build.gradle";
     when(builder.getParam(FILES_TO_UPDATE))

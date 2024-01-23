@@ -41,7 +41,7 @@ public class UpdateDependenciesTest {
   }
 
   @Test
-  public void shouldUpdateDependencies() throws IOException {
+  void shouldUpdateDependencies() throws IOException {
     // Arrange
     String newVersion = "TEST_VERSION";
     DependencyRelease dependencyRelease = DependencyRelease.from("a:b:1.0.0");

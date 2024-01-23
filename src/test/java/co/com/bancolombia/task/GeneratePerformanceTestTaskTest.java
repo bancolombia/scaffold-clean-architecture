@@ -48,7 +48,7 @@ public class GeneratePerformanceTestTaskTest {
   }
 
   @Test
-  public void generatePerformanceTest() throws IOException, CleanException {
+  void generatePerformanceTest() throws IOException, CleanException {
     task.setType("JMETER");
     task.execute();
     assertFilesExistsInDir(TEST_DIR + "/performance-test/", "Jmeter", "README.md");

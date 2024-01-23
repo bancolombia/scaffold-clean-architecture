@@ -52,7 +52,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -69,7 +69,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateReactiveRestConsumer() throws IOException, CleanException {
+  void generateReactiveRestConsumer() throws IOException, CleanException {
     // Arrange
     task.setUrl("http://localhost:8080");
     task.setType("RESTCONSUMER");
@@ -86,7 +86,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterEventBus() throws IOException, CleanException {
+  void generateDrivenAdapterEventBus() throws IOException, CleanException {
     // Arrange
     task.setType("ASYNCEVENTBUS");
     // Act
@@ -103,7 +103,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void shouldHandleErrorBecauseIncompatibility() {
+  void shouldHandleErrorBecauseIncompatibility() {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
@@ -113,7 +113,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
+  void generateDrivenAdapterR2dbcReactive() throws IOException, CleanException {
     // Arrange
     task.setType("R2DBC");
     // Act
@@ -128,7 +128,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisTemplateForReactiveWithSecret()
+  void generateDrivenAdapterRedisTemplateForReactiveWithSecret()
       throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
@@ -146,7 +146,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");
     // Act
@@ -159,7 +159,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterS3ForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("S3");
     // Act
@@ -175,7 +175,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateMQSender() throws IOException, CleanException {
+  void generateMQSender() throws IOException, CleanException {
     // Arrange
     task.setType("MQ");
     // Act
@@ -188,7 +188,7 @@ public class GenerateDrivenAdapterTaskKotlinReactiveTest {
   }
 
   @Test
-  public void generateDrivenAdapterSQSSenderForReactive() throws IOException, CleanException {
+  void generateDrivenAdapterSQSSenderForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("SQS");
     // Act

@@ -41,7 +41,7 @@ public class UpgradeY2023M06D01SpringPluginTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     String file = Constants.MainFiles.MAIN_GRADLE;
     // Arrange
     DefaultResolver resolver = new DefaultResolver();

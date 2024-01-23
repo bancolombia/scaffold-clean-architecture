@@ -54,7 +54,7 @@ public class InternalTaskTest {
   }
 
   @Test
-  public void shouldParseDependencyReport() throws IOException {
+  void shouldParseDependencyReport() throws IOException {
     // Arrange
     Files.createDirectories(appService.file(SonarCheck.INPUT).getParentFile().toPath());
     FileUtils.writeString(
@@ -66,7 +66,7 @@ public class InternalTaskTest {
   }
 
   @Test
-  public void shouldGetOptions() {
+  void shouldGetOptions() {
     // Arrange
     // Act
     List<InternalTask.Action> options = task.getInputOptions();

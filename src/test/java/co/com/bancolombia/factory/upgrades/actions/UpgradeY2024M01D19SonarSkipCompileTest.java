@@ -44,7 +44,7 @@ public class UpgradeY2024M01D19SonarSkipCompileTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(

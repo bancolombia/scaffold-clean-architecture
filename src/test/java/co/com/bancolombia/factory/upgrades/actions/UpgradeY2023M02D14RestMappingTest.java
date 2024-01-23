@@ -45,7 +45,7 @@ public class UpgradeY2023M02D14RestMappingTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     String file = new File("Sample.java").getAbsolutePath();
     // Arrange
     DefaultResolver resolver = new DefaultResolver();

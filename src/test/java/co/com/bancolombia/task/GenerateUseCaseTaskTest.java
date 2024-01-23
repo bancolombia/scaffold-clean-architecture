@@ -49,7 +49,7 @@ public class GenerateUseCaseTaskTest {
   }
 
   @Test
-  public void generateUseCaseException() {
+  void generateUseCaseException() {
     // Arrange
     task.setName(null);
     // Act - Assert
@@ -57,7 +57,7 @@ public class GenerateUseCaseTaskTest {
   }
 
   @Test
-  public void generateUseCase() throws IOException, ParamNotFoundException {
+  void generateUseCase() throws IOException, ParamNotFoundException {
     // Arrange
     task.setName("business");
     // Act
@@ -70,7 +70,7 @@ public class GenerateUseCaseTaskTest {
   }
 
   @Test
-  public void generateUseCaseWithCorrectName() throws IOException, ParamNotFoundException {
+  void generateUseCaseWithCorrectName() throws IOException, ParamNotFoundException {
     // Arrange
     task.setName("MyUseCase");
     // Act

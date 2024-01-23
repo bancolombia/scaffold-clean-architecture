@@ -42,7 +42,7 @@ public class ZUpdateGenericDependenciesVersionTest {
   }
 
   @Test
-  public void shouldUpdate() {
+  void shouldUpdate() {
     // Arrange
     builder.addFile(BUILD_GRADLE, "\t\tspringBootVersion = '2.2.4'\n");
     builder.addFile(MAIN_GRADLE, "");
@@ -55,7 +55,7 @@ public class ZUpdateGenericDependenciesVersionTest {
   }
 
   @Test
-  public void shouldUpdateWithQuotationMarks() {
+  void shouldUpdateWithQuotationMarks() {
     // Arrange
     builder.addFile(BUILD_GRADLE, "\t\tlombokVersion = \"1.0.0\"\n");
     builder.addFile(MAIN_GRADLE, "");
@@ -68,7 +68,7 @@ public class ZUpdateGenericDependenciesVersionTest {
   }
 
   @Test
-  public void shouldUpdateGradleVersion() {
+  void shouldUpdateGradleVersion() {
     // Arrange
     builder.addFile(BUILD_GRADLE, "");
     builder.addFile(MAIN_GRADLE, "tasks.named('wrapper') {\n\t\tgradleVersion = \"6.9.1\"\n}");

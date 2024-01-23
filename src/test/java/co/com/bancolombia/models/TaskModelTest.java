@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class TaskModelTest {
 
   @Test
-  public void taskModelToString() {
+  void taskModelToString() {
     TaskModel model = TaskModel.builder().name("").group("").shortcut("").build();
 
     assertNotNull(model.toString());

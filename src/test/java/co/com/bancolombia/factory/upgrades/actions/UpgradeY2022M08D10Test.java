@@ -41,7 +41,7 @@ public class UpgradeY2022M08D10Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     builder.addFile(
         Constants.MainFiles.MAIN_GRADLE, readResourceFile("junit-platform/without.txt"));

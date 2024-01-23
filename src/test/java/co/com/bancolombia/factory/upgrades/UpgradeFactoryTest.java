@@ -53,7 +53,7 @@ public class UpgradeFactoryTest {
   }
 
   @Test
-  public void shouldFetchAndRunAllUpdates() throws CleanException, IOException {
+  void shouldFetchAndRunAllUpdates() throws CleanException, IOException {
     // Arrange
     UpgradeFactory factory = new UpgradeFactory();
     // Act

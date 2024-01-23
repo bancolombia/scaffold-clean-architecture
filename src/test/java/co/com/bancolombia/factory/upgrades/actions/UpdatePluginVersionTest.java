@@ -45,7 +45,7 @@ public class UpdatePluginVersionTest {
   }
 
   @Test
-  public void shouldNotUpdateWhenErrorGettingLatestVersion() {
+  void shouldNotUpdateWhenErrorGettingLatestVersion() {
     // Arrange
     when(builder.getLatestRelease()).thenReturn(null);
     // Act
@@ -55,7 +55,7 @@ public class UpdatePluginVersionTest {
   }
 
   @Test
-  public void shouldNotUpdateBecauseTheCurrentVersion() {
+  void shouldNotUpdateBecauseTheCurrentVersion() {
     // Arrange
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin());
@@ -67,7 +67,7 @@ public class UpdatePluginVersionTest {
   }
 
   @Test
-  public void shouldUpdate() {
+  void shouldUpdate() {
     // Arrange
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");
@@ -85,7 +85,7 @@ public class UpdatePluginVersionTest {
   }
 
   @Test
-  public void shouldUpdateWithQuotationMarks() {
+  void shouldUpdateWithQuotationMarks() {
     // Arrange
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");

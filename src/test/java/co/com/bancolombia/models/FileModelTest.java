@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class FileModelTest {
 
   @Test
-  public void fileModelToStringTest() {
+  void fileModelToStringTest() {
     FileModel model = FileModel.builder().content("x").path("y").build();
     assertNotNull(model.toString());
   }

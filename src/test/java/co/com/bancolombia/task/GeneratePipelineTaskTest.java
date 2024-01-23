@@ -48,7 +48,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
+  void generateAzureDevOpsPipelineTest() throws IOException, CleanException {
     // Arrange
     task.setType("AZURE");
     // Act
@@ -61,7 +61,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generateAzureDevOpsPipelineInMonoRepoTest() throws IOException, CleanException {
+  void generateAzureDevOpsPipelineInMonoRepoTest() throws IOException, CleanException {
     // Arrange
     task.setType("AZURE");
     task.setMonoRepo(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
@@ -75,7 +75,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generateJenkinsPipelineTest() throws IOException, CleanException {
+  void generateJenkinsPipelineTest() throws IOException, CleanException {
     // Arrange
     task.setType("JENKINS");
     // Act
@@ -85,7 +85,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generateCircleCIPipelineTest() throws IOException, CleanException {
+  void generateCircleCIPipelineTest() throws IOException, CleanException {
     // Arrange
     task.setType("CIRCLECI");
     // Act
@@ -95,7 +95,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generateGithubActionTest() throws IOException, CleanException {
+  void generateGithubActionTest() throws IOException, CleanException {
     // Arrange
     task.setType("GITHUB");
     // Act
@@ -106,7 +106,7 @@ public class GeneratePipelineTaskTest {
   }
 
   @Test
-  public void generatePipelineWithoutType() {
+  void generatePipelineWithoutType() {
     // Arrange
     task.setType(null);
     // Act - Assert

@@ -47,7 +47,7 @@ public class GenerateTestTaskTest {
   }
 
   @Test
-  public void generateAcceptanceTest() throws IOException, CleanException {
+  void generateAcceptanceTest() throws IOException, CleanException {
     // Arrange
     task.setName("acceptance-test");
     // Act

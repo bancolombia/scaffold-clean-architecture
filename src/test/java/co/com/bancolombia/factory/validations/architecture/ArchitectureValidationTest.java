@@ -60,7 +60,7 @@ public class ArchitectureValidationTest {
   }
 
   @Test
-  public void shouldInjectTests() throws IOException {
+  void shouldInjectTests() throws IOException {
     // Arrange
     Path testFile = Path.of(BASE_PATH, TEST_FILE);
     Files.deleteIfExists(testFile);

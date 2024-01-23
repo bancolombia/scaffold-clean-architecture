@@ -40,7 +40,7 @@ public class UpgradeY2023M02D08JavaxJakartaTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     String file = new File("Sample.java").getAbsolutePath();
     // Arrange
     builder.addFile(file, "import javax.persistence.Entity;");

@@ -33,7 +33,7 @@ public class PluginCleanTest {
   }
 
   @Test
-  public void pluginRegistersATask() {
+  void pluginRegistersATask() {
     // Arrange
     String taskGroup = "Clean Architecture";
     String descriptionTask1 = "Scaffolding clean architecture project";
@@ -95,7 +95,7 @@ public class PluginCleanTest {
   }
 
   @Test
-  public void shouldApply() throws CleanException, IOException {
+  void shouldApply() throws CleanException, IOException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);

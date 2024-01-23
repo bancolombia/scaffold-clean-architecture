@@ -27,19 +27,19 @@ import org.junit.jupiter.api.Test;
 public class FileUtilsTest {
 
   @Test
-  public void readPropertiesExist() throws Exception {
+  void readPropertiesExist() throws Exception {
     String property = "package";
     assertEquals("co.com.bancolombia", FileUtils.readProperties(".", property));
   }
 
   @Test
-  public void readPropertiesNonExists() {
+  void readPropertiesNonExists() {
     String property = "packageName";
     assertThrows(IOException.class, () -> FileUtils.readProperties("build", property));
   }
 
   @Test
-  public void readFile() throws IOException {
+  void readFile() throws IOException {
     Project project =
         ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
     String response = FileUtils.readFile(project, "temp.txt");
@@ -48,7 +48,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void readFileFromResources() throws IOException {
+  void readFileFromResources() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     String response = FileUtils.getResourceAsString(resolver, "temp.txt");
 
@@ -56,7 +56,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void readYaml() throws IOException {
+  void readYaml() throws IOException {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
 
@@ -64,7 +64,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void parseToYaml() throws IOException {
+  void parseToYaml() throws IOException {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
     ((ObjectNode) yaml.get("server")).put("port", 8081);
@@ -76,7 +76,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void writeString() throws IOException {
+  void writeString() throws IOException {
     Project project = ProjectBuilder.builder().withProjectDir(new File("build/tmp")).build();
     FileUtils.writeString(project, "temp.txt", "hello");
     String response = FileUtils.readFile(project, "temp.txt");
@@ -85,7 +85,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void finderSubProjects() {
+  void finderSubProjects() {
     List<File> files = FileUtils.finderSubProjects("src/test/resources");
 
     assertEquals(0, files.size());
@@ -97,7 +97,7 @@ public class FileUtilsTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNotParamReplacePlaceholders() {
+  void shouldHandleErrorWhenNotParamReplacePlaceholders() {
     // Arrange
     String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
     Map<String, Object> params = new HashMap<>();
@@ -107,7 +107,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldExtractDir() {
+  void shouldExtractDir() {
     // Arrange
     String classPath = "default/driven-adapters/package/src/main/Model.java";
     // Act
@@ -117,7 +117,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldExtractDirWhenNoPath() {
+  void shouldExtractDirWhenNoPath() {
     // Arrange
     String classPath = "Model.java";
     // Act
@@ -127,7 +127,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldFormatTaskOptions() {
+  void shouldFormatTaskOptions() {
     // Arrange
     List<?> options = Arrays.asList(Options.values());
     // Act
@@ -137,7 +137,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldFormatTaskOptionsSingle() {
+  void shouldFormatTaskOptionsSingle() {
     // Arrange
     List<?> options = Collections.singletonList("A");
     // Act
@@ -147,7 +147,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldAddDependency() {
+  void shouldAddDependency() {
     // Arrange
     String build =
         "apply plugin: 'org.springframework.boot'\n"
@@ -173,7 +173,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  public void shouldReadContentFromZip() throws IOException {
+  void shouldReadContentFromZip() throws IOException {
     // Arrange
     String zipFilePath = "build/sample.zip";
     String textFileName = "sample.txt";

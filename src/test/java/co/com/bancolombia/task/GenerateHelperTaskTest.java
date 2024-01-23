@@ -48,7 +48,7 @@ public class GenerateHelperTaskTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoName() {
+  void shouldHandleErrorWhenNoName() {
 
     // Act
     assertThrows(IllegalArgumentException.class, () -> task.execute());
@@ -56,7 +56,7 @@ public class GenerateHelperTaskTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenEmptyName() {
+  void shouldHandleErrorWhenEmptyName() {
     // Arrange
     task.setName("");
     // Act
@@ -64,7 +64,7 @@ public class GenerateHelperTaskTest {
   }
 
   @Test
-  public void generateHelperGeneric() throws IOException, CleanException {
+  void generateHelperGeneric() throws IOException, CleanException {
     // Arrange
     task.setName("MyHelper");
     // Act

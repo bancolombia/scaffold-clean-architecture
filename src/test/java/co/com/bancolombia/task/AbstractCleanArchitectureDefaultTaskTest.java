@@ -56,7 +56,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldGetTaskDescriptor() {
+  void shouldGetTaskDescriptor() {
     // Arrange
     // Act
     OptionReader reader = helperTask.getOptionReader();
@@ -65,7 +65,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldGetTaskDescriptorWithOptions() {
+  void shouldGetTaskDescriptorWithOptions() {
     // Arrange
     // Act
     OptionReader reader = task.getOptionReader();
@@ -76,7 +76,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldGetTextOutputFactory() {
+  void shouldGetTextOutputFactory() {
     // Arrange
     // Act
     StyledTextOutputFactory factory = task.getTextOutputFactory();
@@ -85,7 +85,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldPrintHelp() {
+  void shouldPrintHelp() {
     // Arrange
     // Act
     task.printHelp();
@@ -94,7 +94,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldPrintHelpWhenExisting() {
+  void shouldPrintHelpWhenExisting() {
     // Arrange
     Action<HelperTask> action = mock(Action.class);
     project.getTasks().register("help", HelperTask.class, action);
@@ -105,7 +105,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldExecuteTask() throws CleanException, IOException {
+  void shouldExecuteTask() throws CleanException, IOException {
     // Arrange
     // Act
     helperTask.executeBaseTask();
@@ -114,7 +114,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldExecuteAfterModuleFactory() throws CleanException, IOException {
+  void shouldExecuteAfterModuleFactory() throws CleanException, IOException {
     // Arrange
     doReturn("Custom").when(helperTask).resolvePrefix();
     doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
@@ -126,7 +126,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldHandleCleanException() throws CleanException, IOException {
+  void shouldHandleCleanException() throws CleanException, IOException {
     // Arrange
     doReturn("Custom").when(helperTask).resolvePrefix();
     doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
@@ -139,7 +139,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldHandleException() throws CleanException, IOException {
+  void shouldHandleException() throws CleanException, IOException {
     // Arrange
     doReturn("Custom").when(helperTask).resolvePrefix();
     doReturn("co.com.bancolombia.task").when(helperTask).resolvePackage();
@@ -152,7 +152,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldExecuteAfterTaskModuleFactory() throws CleanException, IOException {
+  void shouldExecuteAfterTaskModuleFactory() throws CleanException, IOException {
     // Arrange
     // Act
     helperTask.executeBaseTask();
@@ -161,7 +161,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldHandleTaskCleanException() throws CleanException, IOException {
+  void shouldHandleTaskCleanException() throws CleanException, IOException {
     // Arrange
     helperTask.setThrow("CleanException");
     // Act
@@ -171,7 +171,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldHandleTaskException() throws CleanException, IOException {
+  void shouldHandleTaskException() throws CleanException, IOException {
     // Arrange
     helperTask.setThrow("Exception");
     // Act
@@ -181,7 +181,7 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  public void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
+  void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
     // Arrange
     helperTask.setThrow("InvalidTaskOptionException");
     // Act

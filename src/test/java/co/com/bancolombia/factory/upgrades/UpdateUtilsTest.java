@@ -37,7 +37,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldAppendIfNotContains() throws IOException {
+  void shouldAppendIfNotContains() throws IOException {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -53,7 +53,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldNotAppendWhenContains() throws IOException {
+  void shouldNotAppendWhenContains() throws IOException {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -68,7 +68,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldNotAppendValidate() {
+  void shouldNotAppendValidate() {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -82,7 +82,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldAppendValidate() {
+  void shouldAppendValidate() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";
@@ -97,7 +97,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldThrowWhenNoMatch() {
+  void shouldThrowWhenNoMatch() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";
@@ -111,7 +111,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldThrowWhenNoMatchBefore() {
+  void shouldThrowWhenNoMatchBefore() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";

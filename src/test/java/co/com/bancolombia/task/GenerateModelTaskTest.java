@@ -48,13 +48,13 @@ public class GenerateModelTaskTest {
   }
 
   @Test
-  public void shouldFailWithoutArgumentsForModel() {
+  void shouldFailWithoutArgumentsForModel() {
     task.setName(null);
     assertThrows(IllegalArgumentException.class, () -> task.execute());
   }
 
   @Test
-  public void shouldGenerateModel() throws IOException, ParamNotFoundException {
+  void shouldGenerateModel() throws IOException, ParamNotFoundException {
     task.setName("testModel");
     task.execute();
     assertFilesExistsInDir(

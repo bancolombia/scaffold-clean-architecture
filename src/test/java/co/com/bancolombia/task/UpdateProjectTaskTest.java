@@ -47,7 +47,7 @@ public class UpdateProjectTaskTest {
   }
 
   @Test
-  public void shouldUpdateProject() throws IOException, CleanException {
+  void shouldUpdateProject() throws IOException, CleanException {
     // Arrange
     // Act
     task.execute();
@@ -56,7 +56,7 @@ public class UpdateProjectTaskTest {
   }
 
   @Test
-  public void shouldUpdateProjectAndSomeDependencies() throws IOException, CleanException {
+  void shouldUpdateProjectAndSomeDependencies() throws IOException, CleanException {
     // Arrange
     task.setDependencies("org.mockito:mockito-core org.projectlombok:lombok");
     // Act
@@ -66,7 +66,7 @@ public class UpdateProjectTaskTest {
   }
 
   @Test
-  public void shouldNotUpdateProjectAndSomeDependencies() throws IOException, CleanException {
+  void shouldNotUpdateProjectAndSomeDependencies() throws IOException, CleanException {
     // Arrange
     task.setDependencies("does_dependency:not_exist");
     // Act
@@ -76,7 +76,7 @@ public class UpdateProjectTaskTest {
   }
 
   @Test
-  public void dependencyIncomplete() throws IOException, CleanException {
+  void dependencyIncomplete() throws IOException, CleanException {
     // Arrange
     task.setDependencies("does_dependency");
     // Act

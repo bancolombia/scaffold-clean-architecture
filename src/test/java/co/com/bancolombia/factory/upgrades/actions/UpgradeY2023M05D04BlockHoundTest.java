@@ -45,7 +45,7 @@ public class UpgradeY2023M05D04BlockHoundTest {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     String file = Constants.MainFiles.MAIN_GRADLE;
     // Arrange
     DefaultResolver resolver = new DefaultResolver();
@@ -60,7 +60,7 @@ public class UpgradeY2023M05D04BlockHoundTest {
   }
 
   @Test
-  public void shouldThrowErrorWhenApplyUpdate() throws IOException {
+  void shouldThrowErrorWhenApplyUpdate() throws IOException {
     String file = Constants.MainFiles.MAIN_GRADLE;
     // Arrange
     DefaultResolver resolver = new DefaultResolver();

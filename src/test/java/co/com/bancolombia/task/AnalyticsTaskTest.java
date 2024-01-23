@@ -46,7 +46,7 @@ public class AnalyticsTaskTest {
   }
 
   @Test
-  public void shouldEnableAnalytics() throws IOException, CleanException {
+  void shouldEnableAnalytics() throws IOException, CleanException {
     // Arrange
     task.setAnalyticsState(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
@@ -56,7 +56,7 @@ public class AnalyticsTaskTest {
   }
 
   @Test
-  public void shouldDisableAnalytics() throws IOException, CleanException {
+  void shouldDisableAnalytics() throws IOException, CleanException {
     // Arrange
     task.setAnalyticsState(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     // Act
@@ -66,7 +66,7 @@ public class AnalyticsTaskTest {
   }
 
   @Test
-  public void shouldGetOptions() {
+  void shouldGetOptions() {
     // Arrange
     // Act
     List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getInputOptions();

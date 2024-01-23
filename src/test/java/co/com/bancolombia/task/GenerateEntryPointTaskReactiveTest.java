@@ -48,7 +48,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointRsocketResponder() throws IOException, CleanException {
+  void generateEntryPointRsocketResponder() throws IOException, CleanException {
     // Arrange
     task.setType("RSOCKET");
     // Act
@@ -62,7 +62,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointApiGraphql() throws IOException, CleanException {
+  void generateEntryPointApiGraphql() throws IOException, CleanException {
     // Arrange
     task.setType("GRAPHQL");
     // Act
@@ -76,8 +76,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithoutRouterFunctions()
-      throws IOException, CleanException {
+  void generateEntryPointReactiveWebWithoutRouterFunctions() throws IOException, CleanException {
     // Arrange
     deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/reactive-web"));
     task.setType("WEBFLUX");
@@ -93,7 +92,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithoutRouterFunctionsFromSwagger()
+  void generateEntryPointReactiveWebWithoutRouterFunctionsFromSwagger()
       throws IOException, CleanException {
     // Arrange
     task.setType("WEBFLUX");
@@ -109,7 +108,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithoutRouterFunctionsAndSwagger()
+  void generateEntryPointReactiveWebWithoutRouterFunctionsAndSwagger()
       throws IOException, CleanException {
     // Arrange
     deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/reactive-web"));
@@ -128,8 +127,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithRouterFunctions()
-      throws IOException, CleanException {
+  void generateEntryPointReactiveWebWithRouterFunctions() throws IOException, CleanException {
     // Arrange
     task.setType("WEBFLUX");
     task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
@@ -146,7 +144,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithRouterFunctionsFromSwagger()
+  void generateEntryPointReactiveWebWithRouterFunctionsFromSwagger()
       throws IOException, CleanException {
     // Arrange
     task.setType("WEBFLUX");
@@ -164,7 +162,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointReactiveWebWithDefaultOptionFunctions()
+  void generateEntryPointReactiveWebWithDefaultOptionFunctions()
       throws IOException, CleanException {
     // Arrange
     task.setType("WEBFLUX");
@@ -181,7 +179,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointAsyncEventHandler() throws IOException, CleanException {
+  void generateEntryPointAsyncEventHandler() throws IOException, CleanException {
     // Arrange
     task.setType("ASYNCEVENTHANDLER");
     // Act
@@ -197,7 +195,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointMQListener() throws IOException, CleanException {
+  void generateEntryPointMQListener() throws IOException, CleanException {
     // Arrange
     task.setType("MQ");
 
@@ -211,7 +209,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointSQSListener() throws IOException, CleanException {
+  void generateEntryPointSQSListener() throws IOException, CleanException {
     // Arrange
     task.setType("SQS");
 
@@ -225,7 +223,7 @@ public class GenerateEntryPointTaskReactiveTest {
   }
 
   @Test
-  public void generateEntryPointKafkaConsumer() throws IOException, CleanException {
+  void generateEntryPointKafkaConsumer() throws IOException, CleanException {
     // Arrange
     task.setType("KAFKA");
 

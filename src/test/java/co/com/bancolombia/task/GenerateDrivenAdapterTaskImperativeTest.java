@@ -52,7 +52,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void shouldHandleErrorWhenNoType() {
+  void shouldHandleErrorWhenNoType() {
     // Arrange
     task.setType(null);
     // Act
@@ -61,7 +61,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenNoName() {
+  void shouldHandleErrorWhenNoName() {
     // Arrange
     task.setType("GENERIC");
     task.setName(null);
@@ -71,7 +71,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
 
   // Assert
   @Test
-  public void shouldHandleErrorWhenEmptyName() {
+  void shouldHandleErrorWhenEmptyName() {
     // Arrange
     task.setType("GENERIC");
     task.setName("");
@@ -80,7 +80,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterGeneric() throws IOException, CleanException {
+  void generateDrivenAdapterGeneric() throws IOException, CleanException {
     // Arrange
     task.setType("GENERIC");
     task.setName("MyDrivenAdapter");
@@ -95,7 +95,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateRestConsumer() throws IOException, CleanException {
+  void generateRestConsumer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
@@ -112,7 +112,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateRestConsumerFromSwagger() throws IOException, CleanException {
+  void generateRestConsumerFromSwagger() throws IOException, CleanException {
     // Arrange
     task.setType("RESTCONSUMER");
     task.setUrl("http://localhost:8080");
@@ -127,7 +127,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterJPARepository() throws IOException, CleanException {
+  void generateDrivenAdapterJPARepository() throws IOException, CleanException {
     // Arrange
     task.setType("JPA");
     // Act
@@ -144,7 +144,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterJPARepositoryWithSecrets() throws IOException, CleanException {
+  void generateDrivenAdapterJPARepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
     task.setType("JPA");
     task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
@@ -162,7 +162,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepository() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -179,7 +179,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryWithSecrets() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
@@ -200,8 +200,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterMongoRepositoryForNoProjectType()
-      throws IOException, CleanException {
+  void generateDrivenAdapterMongoRepositoryForNoProjectType() throws IOException, CleanException {
     // Arrange
     task.setType("MONGODB");
     // Act
@@ -218,7 +217,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void shouldGetSecretOptions() {
+  void shouldGetSecretOptions() {
     // Arrange
     // Act
     List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getSecretOptions();
@@ -227,8 +226,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisRepositoryForImperative()
-      throws IOException, CleanException {
+  void generateDrivenAdapterRedisRepositoryForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
@@ -244,7 +242,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterRedisTemplateForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.TEMPLATE);
@@ -259,7 +257,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterRedisRepositoryForImperativeWithSecret()
+  void generateDrivenAdapterRedisRepositoryForImperativeWithSecret()
       throws IOException, CleanException {
     // Arrange
     task.setType("REDIS");
@@ -278,8 +276,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterBinStashTemplateForImperative()
-      throws IOException, CleanException {
+  void generateDrivenAdapterBinStashTemplateForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("BINSTASH");
     // Act
@@ -292,7 +289,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");
     // Act
@@ -307,7 +304,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
+  void generateDrivenAdapterS3ForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("S3");
     // Act
@@ -323,7 +320,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
+  void generateDrivenAdapterDynamoDB() throws IOException, CleanException {
     // Arrange
     task.setType("DYNAMODB");
     // Act
@@ -333,7 +330,7 @@ public class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  public void generateDrivenAdapterKtorShouldThrowValidationException() {
+  void generateDrivenAdapterKtorShouldThrowValidationException() {
     // Arrange
     task.setType("KTOR");
     // Act

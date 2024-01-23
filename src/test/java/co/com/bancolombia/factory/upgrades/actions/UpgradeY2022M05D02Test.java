@@ -40,7 +40,7 @@ public class UpgradeY2022M05D02Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(MAIN_GRADLE));
     builder.addFile(MAIN_GRADLE, "compile 'org.springframework:spring-context:1.1.1'");

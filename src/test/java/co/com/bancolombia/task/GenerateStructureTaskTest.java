@@ -39,7 +39,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldReturnProjectTypes() {
+  void shouldReturnProjectTypes() {
     // Arrange
     // Act
     List<GenerateStructureTask.ProjectType> types = task.getAvailableProjectTypes();
@@ -48,7 +48,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldReturnCoveragePluginTypes() {
+  void shouldReturnCoveragePluginTypes() {
     // Arrange
     // Act
     List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
@@ -57,7 +57,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldReturnMetricsOptions() {
+  void shouldReturnMetricsOptions() {
     // Arrange
     // Act
     List<BooleanOption> types = task.getMetricsOptions();
@@ -66,7 +66,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldReturnForceOptions() {
+  void shouldReturnForceOptions() {
     // Arrange
     // Act
     List<BooleanOption> types = task.getForceOptions();
@@ -75,7 +75,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldReturnJavaVersion() {
+  void shouldReturnJavaVersion() {
     // Arrange
     // Act
     List<JavaVersion> types = task.getJavaVersions();
@@ -84,7 +84,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void generateStructure() throws IOException, CleanException {
+  void generateStructure() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();
     // Act
@@ -117,7 +117,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
+  void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();
     task.setPackage("test");
@@ -158,7 +158,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void generateStructureOnExistingProject() throws IOException, CleanException {
+  void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();
     task.execute();
@@ -169,7 +169,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
+  void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();
     task.setStatusLombok(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
@@ -182,7 +182,7 @@ public class GenerateStructureTaskTest {
   }
 
   @Test
-  public void shouldGetLombokOptions() {
+  void shouldGetLombokOptions() {
     // Arrange
     // Act
     List<BooleanOption> options = task.getLombokOptions();

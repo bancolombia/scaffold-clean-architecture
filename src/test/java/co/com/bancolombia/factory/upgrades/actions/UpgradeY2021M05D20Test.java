@@ -38,7 +38,7 @@ public class UpgradeY2021M05D20Test {
   }
 
   @Test
-  public void shouldApplyUpdate() {
+  void shouldApplyUpdate() {
     // Arrange\
     builder.addFile(
         MAIN_GRADLE, "\tsourceCompatibility = JavaVersion.VERSION_11\n\n\tdependencies {}");

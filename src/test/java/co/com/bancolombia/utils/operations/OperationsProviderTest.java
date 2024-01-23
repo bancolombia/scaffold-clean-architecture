@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class OperationsProviderTest {
 
   @Test
-  public void shouldGetMockedWhenVariable() {
+  void shouldGetMockedWhenVariable() {
     // Act
     ExternalOperations operations = OperationsProvider.fromDefault();
     // Assert
@@ -15,7 +15,7 @@ public class OperationsProviderTest {
   }
 
   @Test
-  public void shouldGetReal() {
+  void shouldGetReal() {
     // Act
     ExternalOperations operations = OperationsProvider.real();
     // Assert

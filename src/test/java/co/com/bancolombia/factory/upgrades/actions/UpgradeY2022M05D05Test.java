@@ -39,7 +39,7 @@ public class UpgradeY2022M05D05Test {
   }
 
   @Test
-  public void shouldApplyUpdate() {
+  void shouldApplyUpdate() {
     // Arrange
     builder.addFile(
         DOCKERFILE,
