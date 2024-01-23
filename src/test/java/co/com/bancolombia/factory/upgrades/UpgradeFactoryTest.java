@@ -23,7 +23,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class UpgradeFactoryTest {
+class UpgradeFactoryTest {
   private static final String TEST_DIR = getTestDir(UpgradeFactoryTest.class);
   private ModuleBuilder builder;
 

@@ -26,7 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdatePluginVersionTest {
+class UpdatePluginVersionTest {
 
   @Mock private Project project;
   @Mock private Logger logger;

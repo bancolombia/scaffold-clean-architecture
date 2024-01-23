@@ -23,7 +23,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class InternalTaskTest {
+class InternalTaskTest {
   private static final String TEST_DIR = getTestDir(InternalTaskTest.class);
   private static InternalTask task;
   private static Project appService;

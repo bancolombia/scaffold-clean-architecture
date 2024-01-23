@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.validations.architecture.ArchitectureValidationTest;
 import co.com.bancolombia.task.GenerateStructureTask;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +23,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 /** A simple unit test for the 'co.com.bancolombia.greeting' plugin. */
-public class PluginCleanTest {
+class PluginCleanTest {
   private static final String TEST_DIR = getTestDir(PluginCleanTest.class);
 
   @AfterAll
@@ -97,7 +96,7 @@ public class PluginCleanTest {
   @Test
   void shouldApply() throws CleanException, IOException {
     deleteStructure(Path.of(TEST_DIR));
-    Project project = setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class);
+    Project project = setupProject(PluginCleanTest.class, GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.execute();
 

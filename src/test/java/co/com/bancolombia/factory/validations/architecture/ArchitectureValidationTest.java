@@ -30,7 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ArchitectureValidationTest {
+class ArchitectureValidationTest {
   private static final String TEST_DIR = getTestDir(ArchitectureValidationTest.class);
   public static final String BASE_PATH = TEST_DIR + "/applications/app-service";
   public static final String TEST_FILE = "/src/test/java/co/com/bancolombia/ArchitectureTest.java";

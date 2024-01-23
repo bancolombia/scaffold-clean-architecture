@@ -33,7 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ModuleBuilderTest {
+class ModuleBuilderTest {
   private static final String TEST_DIR = getTestDir(ModuleBuilderTest.class);
   private ModuleBuilder builder;
   @Mock private StyledTextOutput styledTextOutput;

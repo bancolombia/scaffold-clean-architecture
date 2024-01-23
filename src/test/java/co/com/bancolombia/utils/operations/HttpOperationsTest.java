@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class HttpOperationsTest {
+class HttpOperationsTest {
 
   private final MockWebServer server = new MockWebServer();
   private HttpOperations operations;

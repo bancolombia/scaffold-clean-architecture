@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateDependenciesTest {
+class UpdateDependenciesTest {
   private static final String TEST_PATH = "build/Constants.java";
 
   @Mock private ExternalOperations operations;

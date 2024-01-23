@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class OperationsProviderTest {
+class OperationsProviderTest {
 
   @Test
   void shouldGetMockedWhenVariable() {

@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UpgradeY2023M01D12Test {
+class UpgradeY2023M01D12Test {
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;

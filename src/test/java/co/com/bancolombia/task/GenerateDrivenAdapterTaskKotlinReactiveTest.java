@@ -20,7 +20,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GenerateDrivenAdapterTaskKotlinReactiveTest {
+class GenerateDrivenAdapterTaskKotlinReactiveTest {
   private static final String TEST_DIR =
       getTestDir(GenerateDrivenAdapterTaskKotlinReactiveTest.class);
   private static GenerateDrivenAdapterTask task;

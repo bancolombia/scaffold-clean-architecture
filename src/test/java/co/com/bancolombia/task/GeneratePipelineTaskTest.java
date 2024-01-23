@@ -19,7 +19,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GeneratePipelineTaskTest {
+class GeneratePipelineTaskTest {
   private static final String TEST_DIR = getTestDir(GeneratePipelineTaskTest.class);
   private static GeneratePipelineTask task;
 

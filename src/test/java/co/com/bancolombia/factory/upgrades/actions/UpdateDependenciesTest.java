@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateDependenciesTest {
+class UpdateDependenciesTest {
 
   @Mock private ExternalOperations operations;
   @Mock private Project project;

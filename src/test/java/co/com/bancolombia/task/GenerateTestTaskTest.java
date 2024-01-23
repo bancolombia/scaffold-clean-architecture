@@ -17,7 +17,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GenerateTestTaskTest {
+class GenerateTestTaskTest {
   private static final String TEST_DIR = getTestDir(GenerateTestTaskTest.class);
 
   private static GenerateAcceptanceTestTask task;

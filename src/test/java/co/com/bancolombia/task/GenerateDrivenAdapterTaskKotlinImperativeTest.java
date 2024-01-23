@@ -21,7 +21,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GenerateDrivenAdapterTaskKotlinImperativeTest {
+class GenerateDrivenAdapterTaskKotlinImperativeTest {
   private static final String TEST_DIR =
       getTestDir(GenerateDrivenAdapterTaskKotlinImperativeTest.class);
   private static GenerateDrivenAdapterTask task;

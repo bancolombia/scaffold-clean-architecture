@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import io.swagger.codegen.v3.CodegenType;
 import org.junit.jupiter.api.Test;
 
-public class AbstractScaffoldCodegenTest {
+class AbstractScaffoldCodegenTest {
 
   @Test
   void shouldGetType() {

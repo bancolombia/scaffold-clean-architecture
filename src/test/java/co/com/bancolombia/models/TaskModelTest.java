@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-public class TaskModelTest {
+class TaskModelTest {
 
   @Test
   void taskModelToString() {

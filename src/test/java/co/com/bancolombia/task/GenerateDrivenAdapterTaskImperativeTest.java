@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GenerateDrivenAdapterTaskImperativeTest {
+class GenerateDrivenAdapterTaskImperativeTest {
   private static final String TEST_DIR = getTestDir(GenerateDrivenAdapterTaskImperativeTest.class);
   private static GenerateDrivenAdapterTask task;
 

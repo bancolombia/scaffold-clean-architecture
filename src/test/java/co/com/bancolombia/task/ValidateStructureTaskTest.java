@@ -24,7 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ValidateStructureTaskTest {
+class ValidateStructureTaskTest {
   private static final String TEST_DIR = getTestDir(ValidateStructureTaskTest.class);
   private ValidateStructureTask task;
 

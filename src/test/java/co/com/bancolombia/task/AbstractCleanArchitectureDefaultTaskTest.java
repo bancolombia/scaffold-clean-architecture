@@ -32,7 +32,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AbstractCleanArchitectureDefaultTaskTest {
+class AbstractCleanArchitectureDefaultTaskTest {
   private static final String TEST_DIR = getTestDir(AbstractCleanArchitectureDefaultTaskTest.class);
   private Project project;
   private AbstractCleanArchitectureDefaultTask task;

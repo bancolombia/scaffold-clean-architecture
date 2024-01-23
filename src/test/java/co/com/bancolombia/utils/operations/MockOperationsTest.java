@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class MockOperationsTest {
+class MockOperationsTest {
   private final ExternalOperations operations = new MockOperations();
   @Mock private DependencyRelease dependencyRelease;
 

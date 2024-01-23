@@ -21,7 +21,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class GenerateStructureTaskTest {
+class GenerateStructureTaskTest {
   private static final String TEST_DIR = getTestDir(GenerateStructureTaskTest.class);
   private GenerateStructureTask task;
   private Project project;

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class GenerateEntryPointTaskKotlinImperativeTest {
+class GenerateEntryPointTaskKotlinImperativeTest {
   private static final String TEST_DIR =
       getTestDir(GenerateEntryPointTaskKotlinImperativeTest.class);
   private static GenerateEntryPointTask task;
