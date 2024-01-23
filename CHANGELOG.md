@@ -1,12 +1,18 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.14.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.14.1) (2024-01-23)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.0...v3.14.1)
 
 **Closed issues:**
 
 - Add support for vault when generating secrets driven adapter [\#428](https://github.com/bancolombia/scaffold-clean-architecture/issues/428)
+- Improve maintainability on unit tests [\#420](https://github.com/bancolombia/scaffold-clean-architecture/issues/420)
+
+**Merged pull requests:**
+
+- fix\(spring\): update spring boot and aws bom [\#432](https://github.com/bancolombia/scaffold-clean-architecture/pull/432) ([juancgalvis](https://github.com/juancgalvis))
+- test\(unit\): Update unit tests to improve maintainability [\#431](https://github.com/bancolombia/scaffold-clean-architecture/pull/431) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [v3.14.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.14.0) (2024-01-22)
 
