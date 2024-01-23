@@ -3,7 +3,10 @@
  */
 package co.com.bancolombia;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,12 +22,12 @@ import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /** A simple functional test for the 'co.com.bancolombia.greeting' plugin. */
+@SuppressWarnings("DataFlowIssue")
 public class PluginCleanFunctionalTest {
 
   public static final String BUILD_FUNCTIONAL_TEST_README_MD = "build/functionalTest/README.md";
@@ -76,7 +79,7 @@ public class PluginCleanFunctionalTest {
   static File projectDir = new File("build/functionalTest");
   GradleRunner runner;
 
-  @Before
+  @BeforeEach
   public void init() throws IOException {
     // Set up the test build
     deleteStructure(projectDir.toPath());
@@ -103,7 +106,7 @@ public class PluginCleanFunctionalTest {
     runner.withPluginClasspath();
   }
 
-  @AfterClass
+  @AfterAll
   public static void clean() {
     deleteStructure(projectDir.toPath());
   }
@@ -720,8 +723,7 @@ public class PluginCleanFunctionalTest {
     try {
       runner.build();
     } catch (Exception e) {
-      Assert.assertTrue(
-          e.getMessage().contains("This module is only available for reactive projects"));
+      assertTrue(e.getMessage().contains("This module is only available for reactive projects"));
     }
   }
 
@@ -755,6 +757,7 @@ public class PluginCleanFunctionalTest {
                 new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains("implementation 'com.github.bancolombia:aws-secrets-manager-async"));
+    assertThrows(Exception.class, () -> runner.build());
   }
 
   @Test
@@ -1009,7 +1012,7 @@ public class PluginCleanFunctionalTest {
     assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void validateStructureReactiveWithInvalidModel() throws IOException {
     canRunTaskGenerateStructureReactiveProject();
     writeString(
@@ -1019,10 +1022,10 @@ public class PluginCleanFunctionalTest {
     // Act
     runner.withArguments(VALIDATE_STRUCTURE);
     runner.withProjectDir(projectDir);
-    runner.build();
+    assertThrows(Exception.class, () -> runner.build());
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void validateStructureReactiveWithInvalidUseCase() throws IOException {
     canRunTaskGenerateStructureReactiveProject();
     writeString(
@@ -1032,7 +1035,7 @@ public class PluginCleanFunctionalTest {
     // Act
     runner.withArguments(VALIDATE_STRUCTURE);
     runner.withProjectDir(projectDir);
-    runner.build();
+    assertThrows(Exception.class, () -> runner.build());
   }
 
   @Test

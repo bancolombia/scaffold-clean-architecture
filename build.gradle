@@ -37,6 +37,11 @@ compileJava {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+test {
+    maxParallelForks = 2
+    useJUnitPlatform()
+}
+
 if (project.hasProperty('signing.keyId')) { // publish as library in maven central
     apply plugin: 'signing'
     publishing {
@@ -180,9 +185,11 @@ dependencies {
     api 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0'
     api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.0'
+    api 'commons-io:commons-io:2.15.1'
+    api gradleApi()
+
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
     implementation 'org.reflections:reflections:0.10.2'
-
     // swagger generators
     implementation ('io.swagger.codegen.v3:swagger-codegen-generators:1.0.46') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
@@ -190,11 +197,11 @@ dependencies {
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
     implementation 'com.google.googlejavaformat:google-java-format:1.19.2'
 
-    api 'commons-io:commons-io:2.15.1'
-    api gradleApi()
-    testImplementation 'org.mockito:mockito-core:4.5.1'
-    testImplementation 'junit:junit:4.13.2'
     testImplementation gradleTestKit()
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.1'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -224,7 +231,7 @@ sonar {
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
         property "sonar.test", "src/test/java"
-        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/CAAssert.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java,**/LocalTasks.java"
+        property "sonar.exclusions", ".github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**,src/test/**/TestUtils.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**,src/test/**/AnUpdate*.java,**/LocalTasks.java"
         property "sonar.sourceEncoding", "UTF-8"
     }
 }

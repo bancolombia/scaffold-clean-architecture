@@ -1,9 +1,15 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.*;
+import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.commons.GenericModule;
@@ -16,20 +22,20 @@ import java.nio.file.Path;
 import java.util.List;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UpgradeY2022M05D03Test {
+@ExtendWith(MockitoExtension.class)
+class UpgradeY2022M05D03Test {
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
@@ -41,7 +47,7 @@ public class UpgradeY2022M05D03Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     String drivenFile = "./infrastructure/driven-adapter/some-aws/build.gradle";
     when(builder.getParam(FILES_TO_UPDATE))

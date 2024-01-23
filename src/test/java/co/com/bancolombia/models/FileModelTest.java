@@ -1,13 +1,14 @@
 package co.com.bancolombia.models;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class FileModelTest {
+import org.junit.jupiter.api.Test;
+
+class FileModelTest {
 
   @Test
-  public void fileModelToStringTest() {
+  void fileModelToStringTest() {
     FileModel model = FileModel.builder().content("x").path("y").build();
-    Assert.assertNotNull(model.toString());
+    assertNotNull(model.toString());
   }
 }

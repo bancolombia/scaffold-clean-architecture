@@ -1,7 +1,12 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
+import static co.com.bancolombia.TestUtils.createTask;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -10,57 +15,70 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class GenerateUseCaseTaskTest {
-  private GenerateUseCaseTask task;
+class GenerateUseCaseTaskTest {
+  private static final String TEST_DIR = getTestDir(GenerateUseCaseTaskTest.class);
 
-  @Before
-  public void setup() throws IOException, CleanException {
-    deleteStructure(Path.of("build/unitTest"));
-    Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-    project.getTasks().create("ca", GenerateStructureTask.class);
-    GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-    caTask.execute();
+  private static GenerateUseCaseTask task;
 
-    project.getTasks().create("test", GenerateUseCaseTask.class);
-    task = (GenerateUseCaseTask) project.getTasks().getByName("test");
+  @BeforeAll
+  public static void setup() throws IOException, CleanException {
+    deleteStructure(Path.of(TEST_DIR));
+    Project project = setupProject(GenerateUseCaseTaskTest.class, GenerateStructureTask.class);
+
+    GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
+    taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
+    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
+    taskStructure.execute();
+
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    task = createTask(project, GenerateUseCaseTask.class);
   }
 
-  // Assert
-  @Test(expected = IllegalArgumentException.class)
-  public void generateUseCaseException() throws IOException, ParamNotFoundException {
-    // Arrange
-    // Act
-    task.execute();
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
   }
 
   @Test
-  public void generateUseCase() throws IOException, ParamNotFoundException {
+  void generateUseCaseException() {
+    // Arrange
+    task.setName(null);
+    // Act - Assert
+    assertThrows(IllegalArgumentException.class, () -> task.execute());
+  }
+
+  @Test
+  void generateUseCase() throws IOException, ParamNotFoundException {
     // Arrange
     task.setName("business");
     // Act
     task.execute();
     // Assert
-    assertTrue(
-        new File(
-                "build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java")
-            .exists());
-    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/usecase/",
+        "src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java",
+        "build.gradle");
   }
 
   @Test
-  public void generateUseCaseWithCorrectName() throws IOException, ParamNotFoundException {
+  void generateUseCaseWithCorrectName() throws IOException, ParamNotFoundException {
     // Arrange
     task.setName("MyUseCase");
     // Act
     task.execute();
     // Assert
-    assertTrue(
-        new File(
-                "build/unitTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/my/MyUseCase.java")
-            .exists());
-    assertTrue(new File("build/unitTest/domain/usecase/build.gradle").exists());
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/usecase/",
+        "src/main/java/co/com/bancolombia/usecase/my/MyUseCase.java",
+        "build.gradle");
   }
 }

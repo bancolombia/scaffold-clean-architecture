@@ -1,6 +1,8 @@
 package co.com.bancolombia.task;
 
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.InvalidTaskOptionException;

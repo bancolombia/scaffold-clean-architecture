@@ -1,10 +1,15 @@
 package co.com.bancolombia.factory.validations.architecture;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -17,32 +22,26 @@ import java.util.Set;
 import org.gradle.api.Project;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ArchitectureValidationTest {
-  public static final String BASE_PATH = "build/unitTest/applications/app-service";
+@ExtendWith(MockitoExtension.class)
+class ArchitectureValidationTest {
+  private static final String TEST_DIR = getTestDir(ArchitectureValidationTest.class);
+  public static final String BASE_PATH = TEST_DIR + "/applications/app-service";
   public static final String TEST_FILE = "/src/test/java/co/com/bancolombia/ArchitectureTest.java";
   @Mock private StyledTextOutput styledTextOutput;
   private Project project;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException, CleanException {
-    deleteStructure(Path.of("build/unitTest"));
-    project =
-        spy(
-            ProjectBuilder.builder()
-                .withName("cleanArchitecture")
-                .withProjectDir(new File("build/unitTest"))
-                .build());
-
-    project.getTasks().create("ca", GenerateStructureTask.class);
-    GenerateStructureTask generateStructureTask =
-        (GenerateStructureTask) project.getTasks().getByName("ca");
+    deleteStructure(Path.of(TEST_DIR));
+    project = spy(setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class));
+    GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.executeBaseTask();
 
     Project appService =
@@ -51,11 +50,17 @@ public class ArchitectureValidationTest {
             .withProjectDir(new File(BASE_PATH))
             .withParent(project)
             .build();
+
     doReturn(Set.of(appService)).when(project).getAllprojects();
   }
 
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
+  }
+
   @Test
-  public void shouldInjectTests() throws IOException {
+  void shouldInjectTests() throws IOException {
     // Arrange
     Path testFile = Path.of(BASE_PATH, TEST_FILE);
     Files.deleteIfExists(testFile);

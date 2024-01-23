@@ -16,20 +16,20 @@ import java.nio.file.Path;
 import java.util.Objects;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UpgradeY2022M08D08Test {
+@ExtendWith(MockitoExtension.class)
+class UpgradeY2022M08D08Test {
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
@@ -41,7 +41,7 @@ public class UpgradeY2022M08D08Test {
   }
 
   @Test
-  public void shouldApplyUpdate() throws IOException {
+  void shouldApplyUpdate() throws IOException {
     // Arrange
     builder.addFile(
         Constants.MainFiles.MAIN_GRADLE, readResourceFile("gradle-8-sample/before.txt"));

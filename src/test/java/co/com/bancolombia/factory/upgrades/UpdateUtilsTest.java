@@ -1,7 +1,13 @@
 package co.com.bancolombia.factory.upgrades;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.exceptions.InvalidStateException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -9,20 +15,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UpdateUtilsTest {
+@ExtendWith(MockitoExtension.class)
+class UpdateUtilsTest {
 
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
@@ -31,7 +37,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldAppendIfNotContains() throws IOException {
+  void shouldAppendIfNotContains() throws IOException {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -47,7 +53,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldNotAppendWhenContains() throws IOException {
+  void shouldNotAppendWhenContains() throws IOException {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -62,7 +68,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldNotAppendValidate() {
+  void shouldNotAppendValidate() {
     // Arrange
     String file = "build.gradle";
     String check = "jar {";
@@ -76,7 +82,7 @@ public class UpdateUtilsTest {
   }
 
   @Test
-  public void shouldAppendValidate() {
+  void shouldAppendValidate() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";
@@ -90,8 +96,8 @@ public class UpdateUtilsTest {
     assertEquals(expected, result);
   }
 
-  @Test(expected = InvalidStateException.class)
-  public void shouldThrowWhenNoMatch() {
+  @Test
+  void shouldThrowWhenNoMatch() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";
@@ -99,11 +105,13 @@ public class UpdateUtilsTest {
     String currentContent = "dependencies {}\n";
     builder.addFile(file, currentContent);
     // Act
-    UpdateUtils.insertAfterMatch(currentContent, match, check, file);
+    assertThrows(
+        InvalidStateException.class,
+        () -> UpdateUtils.insertAfterMatch(currentContent, match, check, file));
   }
 
-  @Test(expected = InvalidStateException.class)
-  public void shouldThrowWhenNoMatchBefore() {
+  @Test
+  void shouldThrowWhenNoMatchBefore() {
     // Arrange
     String file = "build.gradle\n";
     String check = "jar {enabled = false}";
@@ -111,6 +119,8 @@ public class UpdateUtilsTest {
     String currentContent = "dependencies {}\n";
     builder.addFile(file, currentContent);
     // Act
-    UpdateUtils.insertBeforeMatch(currentContent, match, check, file);
+    assertThrows(
+        InvalidStateException.class,
+        () -> UpdateUtils.insertBeforeMatch(currentContent, match, check, file));
   }
 }

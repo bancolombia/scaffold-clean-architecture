@@ -18,7 +18,7 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
 
   @Override
   public void execute() throws IOException, ParamNotFoundException {
-    if (name.isEmpty()) {
+    if (name == null || name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(
           "No model name, usage: gradle generateModel --name [name]");

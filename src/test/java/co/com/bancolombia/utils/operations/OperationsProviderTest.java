@@ -1,13 +1,13 @@
 package co.com.bancolombia.utils.operations;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OperationsProviderTest {
+class OperationsProviderTest {
 
   @Test
-  public void shouldGetMockedWhenVariable() {
+  void shouldGetMockedWhenVariable() {
     // Act
     ExternalOperations operations = OperationsProvider.fromDefault();
     // Assert
@@ -15,7 +15,7 @@ public class OperationsProviderTest {
   }
 
   @Test
-  public void shouldGetReal() {
+  void shouldGetReal() {
     // Act
     ExternalOperations operations = OperationsProvider.real();
     // Assert

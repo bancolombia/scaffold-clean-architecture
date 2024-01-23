@@ -1,9 +1,14 @@
 package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.TestUtils.createTask;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
@@ -11,78 +16,76 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class DeleteModuleTaskTest {
-  private DeleteModuleTask task;
+class DeleteModuleTaskTest {
+  private static final String TEST_DIR = getTestDir(DeleteModuleTaskTest.class);
+  private static DeleteModuleTask task;
 
-  @Before
-  public void setup() throws IOException, CleanException {
-    deleteStructure(Path.of("build/unitTest"));
-    Project project =
-        ProjectBuilder.builder()
-            .withName("cleanArchitecture")
-            .withProjectDir(new File("build/unitTest"))
-            .build();
+  @BeforeAll
+  public static void setup() throws IOException, CleanException {
+    deleteStructure(Path.of(TEST_DIR));
+    Project project = setupProject(DeleteModuleTaskTest.class, GenerateStructureTask.class);
 
-    project.getTasks().create("ca", GenerateStructureTask.class);
-    GenerateStructureTask generateStructureTask =
-        (GenerateStructureTask) project.getTasks().getByName("ca");
+    GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.execute();
 
     ProjectBuilder.builder()
         .withName(APP_SERVICE)
-        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
         .withParent(project)
         .build();
 
-    project.getTasks().create("gda", GenerateDrivenAdapterTask.class);
-    GenerateDrivenAdapterTask generateDriven =
-        (GenerateDrivenAdapterTask) project.getTasks().getByName("gda");
+    GenerateDrivenAdapterTask generateDriven = createTask(project, GenerateDrivenAdapterTask.class);
     generateDriven.setType("MONGODB");
     generateDriven.execute();
 
     ProjectBuilder.builder()
         .withName("mongo-repository")
-        .withProjectDir(new File("build/unitTest/infrastructure/driven-adapters/mongo-repository"))
+        .withProjectDir(new File(TEST_DIR + "/infrastructure/driven-adapters/mongo-repository"))
         .withParent(project)
         .build();
 
     assertTrue(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File(TEST_DIR + "/infrastructure/driven-adapters/mongo-repository/build.gradle")
             .exists());
 
-    project.getTasks().create("test", DeleteModuleTask.class);
-    task = (DeleteModuleTask) project.getTasks().getByName("test");
+    task = createTask(project, DeleteModuleTask.class);
+  }
+
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
   }
 
   // Assert
-  @Test(expected = IllegalArgumentException.class)
-  public void deleteNullModule() throws IOException, CleanException {
+  @Test
+  void deleteNullModule() {
     // Arrange
     // Act
-    task.execute();
+    assertThrows(IllegalArgumentException.class, () -> task.execute());
   }
 
   // Assert
-  @Test(expected = IllegalArgumentException.class)
-  public void deleteNonExistentModule() throws IOException, CleanException {
+  @Test
+  void deleteNonExistentModule() {
     // Arrange
     task.setModule("non-existent");
     // Act
-    task.execute();
+    assertThrows(IllegalArgumentException.class, () -> task.execute());
   }
 
   @Test
-  public void generateEntryPoint() throws IOException, CleanException {
+  void generateEntryPoint() throws IOException, CleanException {
     // Arrange
     task.setModule("mongo-repository");
     // Act
     task.execute();
     // Assert
     assertFalse(
-        new File("build/unitTest/infrastructure/driven-adapters/mongo-repository/build.gradle")
+        new File(TEST_DIR + "/infrastructure/driven-adapters/mongo-repository/build.gradle")
             .exists());
   }
 }
