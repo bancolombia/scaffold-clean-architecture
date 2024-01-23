@@ -1,9 +1,9 @@
 package co.com.bancolombia.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.resolver.DefaultResolver;
@@ -11,11 +11,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,10 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FileUtilsTest {
 
@@ -36,10 +32,10 @@ public class FileUtilsTest {
     assertEquals("co.com.bancolombia", FileUtils.readProperties(".", property));
   }
 
-  @Test(expected = IOException.class)
-  public void readPropertiesNonExists() throws Exception {
+  @Test
+  public void readPropertiesNonExists() {
     String property = "packageName";
-    FileUtils.readProperties("build/unitTest", property);
+    assertThrows(IOException.class, () -> FileUtils.readProperties("build", property));
   }
 
   @Test
@@ -100,14 +96,14 @@ public class FileUtilsTest {
   }
 
   // Assert
-  @Test(expected = ParamNotFoundException.class)
-  public void shouldHandleErrorWhenNotParamReplacePlaceholders() throws CleanException {
+  @Test
+  public void shouldHandleErrorWhenNotParamReplacePlaceholders() {
     // Arrange
     String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
     Map<String, Object> params = new HashMap<>();
     params.put("className", "Redis.java");
     // Act
-    Utils.fillPath(fillablePath, params);
+    assertThrows(ParamNotFoundException.class, () -> Utils.fillPath(fillablePath, params));
   }
 
   @Test
@@ -191,30 +187,6 @@ public class FileUtilsTest {
   }
 
   // Utilities
-
-  public static void deleteStructure(Path sourcePath) {
-    try {
-      Files.walkFileTree(
-          sourcePath,
-          new SimplePathVisitor() {
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-              Files.delete(dir);
-              return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-                throws IOException {
-              Files.delete(file);
-              return FileVisitResult.CONTINUE;
-            }
-          });
-    } catch (IOException e) {
-      System.out.println("error delete Structure " + e.getMessage());
-    }
-  }
-
   public static Path createTempTextFile(String fileName, String content) throws IOException {
     Path tempFilePath = Paths.get(fileName);
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(tempFilePath.toFile()))) {

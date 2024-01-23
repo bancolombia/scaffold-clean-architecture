@@ -3,9 +3,13 @@ package co.com.bancolombia.factory.upgrades.actions;
 import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -15,13 +19,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UpdatePluginVersionTest {
 
   @Mock private Project project;
@@ -29,7 +33,7 @@ public class UpdatePluginVersionTest {
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);

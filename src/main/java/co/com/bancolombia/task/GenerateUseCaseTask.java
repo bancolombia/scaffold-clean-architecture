@@ -22,7 +22,7 @@ public class GenerateUseCaseTask extends AbstractCleanArchitectureDefaultTask {
 
   @Override
   public void execute() throws IOException, ParamNotFoundException {
-    if (name.isEmpty()) {
+    if (name == null || name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(
           "No use case name, usage: gradle generateUseCase --name [name]");

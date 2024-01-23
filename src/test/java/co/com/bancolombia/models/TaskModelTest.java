@@ -1,7 +1,8 @@
 package co.com.bancolombia.models;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 
 public class TaskModelTest {
 
@@ -9,6 +10,6 @@ public class TaskModelTest {
   public void taskModelToString() {
     TaskModel model = TaskModel.builder().name("").group("").shortcut("").build();
 
-    Assert.assertNotNull(model.toString());
+    assertNotNull(model.toString());
   }
 }

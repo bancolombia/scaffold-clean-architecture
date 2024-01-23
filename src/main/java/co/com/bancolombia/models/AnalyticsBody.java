@@ -2,8 +2,14 @@ package co.com.bancolombia.models;
 
 import co.com.bancolombia.Constants;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.*;
-import lombok.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder

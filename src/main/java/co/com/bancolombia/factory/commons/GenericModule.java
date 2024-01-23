@@ -1,7 +1,10 @@
 package co.com.bancolombia.factory.commons;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.Constants.MainFiles.*;
+import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE_KTS;
+import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE_KTS;
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.Constants;

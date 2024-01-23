@@ -1,6 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.*;
+import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;

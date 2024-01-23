@@ -2,7 +2,12 @@ package co.com.bancolombia.factory.upgrades.actions;
 
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
 import static org.gradle.internal.impldep.org.testng.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.InvalidStateException;
@@ -14,20 +19,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UpgradeY2023M05D04BlockHoundTest {
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
@@ -54,7 +59,7 @@ public class UpgradeY2023M05D04BlockHoundTest {
     verify(builder, times(1)).addFile(file, expectedText);
   }
 
-  @Test(expected = InvalidStateException.class)
+  @Test
   public void shouldThrowErrorWhenApplyUpdate() throws IOException {
     String file = Constants.MainFiles.MAIN_GRADLE;
     // Arrange
@@ -62,6 +67,6 @@ public class UpgradeY2023M05D04BlockHoundTest {
     String text = FileUtils.getResourceAsString(resolver, "blockhound/before-err.txt");
     builder.addFile(file, text);
     // Act
-    boolean applied = updater.up(builder);
+    assertThrows(InvalidStateException.class, () -> updater.up(builder));
   }
 }

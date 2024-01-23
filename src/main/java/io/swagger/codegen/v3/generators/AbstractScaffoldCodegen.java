@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
 
   public AbstractScaffoldCodegen() {
@@ -49,11 +50,11 @@ public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
     additionalProperties.put(
         "lambdaRemoveLineBreak",
         (Mustache.Lambda)
-            (fragment, writer) -> writer.write(fragment.execute().replaceAll("\\r|\\n", "")));
+            (fragment, writer) -> writer.write(fragment.execute().replaceAll("[\\r\\n]", "")));
     additionalProperties.put(
         "lambdaScapeVoid",
         (Mustache.Lambda)
-            (fragment, writer) -> writer.write(fragment.execute().replaceAll("\\r|\\n", "")));
+            (fragment, writer) -> writer.write(fragment.execute().replaceAll("[\\r\\n]", "")));
   }
 
   @Override

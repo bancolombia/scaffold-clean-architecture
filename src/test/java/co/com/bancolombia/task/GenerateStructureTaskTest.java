@@ -1,9 +1,12 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.utils.CAAssert.assertFilesExistsInDir;
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption;
@@ -13,35 +16,31 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import org.gradle.api.Project;
-import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.AfterClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GenerateStructureTaskTest {
-  private static final String BASE_DIR = "build/unitTestCa/";
+  private static final String TEST_DIR = getTestDir(GenerateStructureTaskTest.class);
   private GenerateStructureTask task;
+  private Project project;
 
-  private String randomDir() {
-    return BASE_DIR + UUID.randomUUID() + "/";
+  @BeforeEach
+  public void setup() {
+    deleteStructure(Path.of(TEST_DIR));
+    project = setupProject(GenerateStructureTaskTest.class, GenerateStructureTask.class);
+    task = getTask(project, GenerateStructureTask.class);
   }
 
-  public void setup(String dir) {
-    Project project =
-        ProjectBuilder.builder()
-            .withProjectDir(new File(dir))
-            .withGradleUserHomeDir(new File(dir))
-            .build();
-    project.getTasks().create("test", GenerateStructureTask.class);
-
-    task = (GenerateStructureTask) project.getTasks().getByName("test");
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
   }
 
   @Test
   public void shouldReturnProjectTypes() {
     // Arrange
-    setup(randomDir());
     // Act
     List<GenerateStructureTask.ProjectType> types = task.getAvailableProjectTypes();
     // Assert
@@ -51,7 +50,6 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnCoveragePluginTypes() {
     // Arrange
-    setup(randomDir());
     // Act
     List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
     // Assert
@@ -61,7 +59,6 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnMetricsOptions() {
     // Arrange
-    setup(randomDir());
     // Act
     List<BooleanOption> types = task.getMetricsOptions();
     // Assert
@@ -71,7 +68,6 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnForceOptions() {
     // Arrange
-    setup(randomDir());
     // Act
     List<BooleanOption> types = task.getForceOptions();
     // Assert
@@ -81,7 +77,6 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldReturnJavaVersion() {
     // Arrange
-    setup(randomDir());
     // Act
     List<JavaVersion> types = task.getJavaVersions();
     // Assert
@@ -91,8 +86,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructure() throws IOException, CleanException {
     // Arrange
-    String dir = randomDir();
-    setup(dir);
+    String dir = project.getProjectDir().getPath();
     // Act
     task.execute();
     // Assert
@@ -125,8 +119,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
     // Arrange
-    String dir = randomDir();
-    setup(dir);
+    String dir = project.getProjectDir().getPath();
     task.setPackage("test");
     task.setName("projectTest");
     task.setType(GenerateStructureTask.ProjectType.REACTIVE);
@@ -167,8 +160,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
-    String dir = randomDir();
-    setup(dir);
+    String dir = project.getProjectDir().getPath();
     task.execute();
     // Act
     task.execute();
@@ -179,8 +171,7 @@ public class GenerateStructureTaskTest {
   @Test
   public void generateStructureOnExistingProjectNoLombok() throws IOException, CleanException {
     // Arrange
-    String dir = randomDir();
-    setup(dir);
+    String dir = project.getProjectDir().getPath();
     task.setStatusLombok(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
     task.execute();
     // Act
@@ -193,15 +184,9 @@ public class GenerateStructureTaskTest {
   @Test
   public void shouldGetLombokOptions() {
     // Arrange
-    setup(randomDir());
     // Act
     List<BooleanOption> options = task.getLombokOptions();
     // Assert
     assertEquals(2, options.size());
-  }
-
-  @AfterClass
-  public static void clean() {
-    deleteStructure(Path.of(BASE_DIR));
   }
 }

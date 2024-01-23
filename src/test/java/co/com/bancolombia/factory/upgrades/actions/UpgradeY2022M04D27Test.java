@@ -3,23 +3,24 @@ package co.com.bancolombia.factory.upgrades.actions;
 import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UpgradeY2022M04D27Test {
   @Mock private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() {
     updater = new UpgradeY2022M04D27();
     assertNotNull(updater.name());

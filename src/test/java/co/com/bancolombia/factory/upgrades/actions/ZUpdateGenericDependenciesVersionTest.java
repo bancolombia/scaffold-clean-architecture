@@ -3,8 +3,11 @@ package co.com.bancolombia.factory.upgrades.actions;
 import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -13,13 +16,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ZUpdateGenericDependenciesVersionTest {
 
   @Mock private Project project;
@@ -27,7 +30,7 @@ public class ZUpdateGenericDependenciesVersionTest {
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);

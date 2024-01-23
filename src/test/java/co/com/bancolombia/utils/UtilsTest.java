@@ -1,22 +1,26 @@
 package co.com.bancolombia.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
-import java.util.*;
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 public class UtilsTest {
 
   @Test
   public void getVersionPlugin() {
-    Assert.assertEquals(Constants.PLUGIN_VERSION, Utils.getVersionPlugin());
+    assertEquals(Constants.PLUGIN_VERSION, Utils.getVersionPlugin());
   }
 
   @Test
@@ -24,8 +28,8 @@ public class UtilsTest {
     String test1 = "capitalize";
     String test2 = "capitalizeTest";
 
-    Assert.assertEquals("Capitalize", Utils.capitalize(test1));
-    Assert.assertEquals("CapitalizeTest", Utils.capitalize(test2));
+    assertEquals("Capitalize", Utils.capitalize(test1));
+    assertEquals("CapitalizeTest", Utils.capitalize(test2));
   }
 
   @Test
@@ -33,16 +37,16 @@ public class UtilsTest {
     String test1 = "Decapitalize";
     String test2 = "DecapitalizeTest";
     String test3 = "DECAPITALIZE";
-    Assert.assertEquals("decapitalize", Utils.decapitalize(test1));
-    Assert.assertEquals("decapitalizeTest", Utils.decapitalize(test2));
-    Assert.assertEquals("dECAPITALIZE", Utils.decapitalize(test3));
+    assertEquals("decapitalize", Utils.decapitalize(test1));
+    assertEquals("decapitalizeTest", Utils.decapitalize(test2));
+    assertEquals("dECAPITALIZE", Utils.decapitalize(test3));
   }
 
   @Test
   public void shouldJoinPath() {
     String expected = "a/b/c/d";
     String result = Utils.joinPath("a", "b", "c", "d");
-    Assert.assertEquals(expected, result);
+    assertEquals(expected, result);
   }
 
   @Test
@@ -59,14 +63,14 @@ public class UtilsTest {
   }
 
   // Assert
-  @Test(expected = ParamNotFoundException.class)
-  public void shouldHandleErrorWhenNotParamReplacePlaceholders() throws CleanException {
+  @Test
+  public void shouldHandleErrorWhenNotParamReplacePlaceholders() {
     // Arrange
     String fillablePath = "default/driven-adapters/{{name}}/src/main/{{className}}";
     Map<String, Object> params = new HashMap<>();
     params.put("className", "Redis.java");
     // Act
-    Utils.fillPath(fillablePath, params);
+    assertThrows(ParamNotFoundException.class, () -> Utils.fillPath(fillablePath, params));
   }
 
   @Test

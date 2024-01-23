@@ -1,7 +1,12 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
+import static co.com.bancolombia.TestUtils.createTask;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -10,40 +15,51 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class GenerateModelTaskTest {
-  private GenerateModelTask task;
+  private static final String TEST_DIR = getTestDir(GenerateModelTaskTest.class);
+  private static GenerateModelTask task;
 
-  @Before
-  public void setup() throws IOException, CleanException {
-    deleteStructure(Path.of("build/unitTest"));
-    Project project = ProjectBuilder.builder().withProjectDir(new File("build/unitTest")).build();
-    project.getTasks().create("ca", GenerateStructureTask.class);
-    GenerateStructureTask caTask = (GenerateStructureTask) project.getTasks().getByName("ca");
-    caTask.execute();
+  @BeforeAll
+  public static void setup() throws IOException, CleanException {
+    deleteStructure(Path.of(TEST_DIR));
+    Project project = setupProject(GenerateModelTaskTest.class, GenerateStructureTask.class);
 
-    project.getTasks().create("test", GenerateModelTask.class);
-    task = (GenerateModelTask) project.getTasks().getByName("test");
+    GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
+    taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
+    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
+    taskStructure.execute();
+
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    task = createTask(project, GenerateModelTask.class);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void shouldFailWithoutArgumentsForModel() throws IOException, CleanException {
-    task.execute();
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
+  }
+
+  @Test
+  public void shouldFailWithoutArgumentsForModel() {
+    task.setName(null);
+    assertThrows(IllegalArgumentException.class, () -> task.execute());
   }
 
   @Test
   public void shouldGenerateModel() throws IOException, ParamNotFoundException {
     task.setName("testModel");
     task.execute();
-    assertTrue(
-        new File(
-                "build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java")
-            .exists());
-    assertTrue(
-        new File(
-                "build/unitTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java")
-            .exists());
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/model/",
+        "src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java",
+        "src/main/java/co/com/bancolombia/model/testmodel/TestModel.java");
   }
 }

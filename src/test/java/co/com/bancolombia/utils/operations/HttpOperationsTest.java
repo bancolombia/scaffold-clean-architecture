@@ -5,9 +5,9 @@ import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_PLUGINS;
 import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_WRAPPER_PROPERTIES;
 import static co.com.bancolombia.utils.operations.HttpOperations.PLUGIN_RELEASES;
 import static co.com.bancolombia.utils.operations.HttpOperations.SPRING_INITIALIZER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
@@ -27,15 +27,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import org.jetbrains.annotations.NotNull;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class HttpOperationsTest {
 
   private final MockWebServer server = new MockWebServer();
   private HttpOperations operations;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     String releaseResponse = "[{\"tag_name\":\"2.0.0\",\"published_at\":\"2021-11-18T13:30:02Z\"}]";
     String dependencyResponse =

@@ -10,18 +10,18 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUpdater;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UpgradeY2022M04D28Test {
   @Mock private ModuleBuilder builder;
   private UpgradeAction updater;
 
-  @Before
+  @BeforeEach
   public void setup() {
     updater = new UpgradeY2022M04D28();
     assertNotNull(updater.name());

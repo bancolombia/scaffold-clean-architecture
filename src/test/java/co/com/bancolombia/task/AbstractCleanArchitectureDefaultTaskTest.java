@@ -1,10 +1,13 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -16,7 +19,6 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.InvalidTaskOptionException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -26,28 +28,31 @@ import org.gradle.api.Project;
 import org.gradle.api.internal.tasks.options.OptionDescriptor;
 import org.gradle.api.internal.tasks.options.OptionReader;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
-import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AbstractCleanArchitectureDefaultTaskTest {
+  private static final String TEST_DIR = getTestDir(AbstractCleanArchitectureDefaultTaskTest.class);
   private Project project;
   private AbstractCleanArchitectureDefaultTask task;
   private HelperTask helperTask;
 
-  @Before
+  @BeforeEach
   public void setup() {
-    deleteStructure(Path.of("build/unitTest"));
     project =
-        ProjectBuilder.builder()
-            .withName("cleanArchitecture")
-            .withProjectDir(new File("build/unitTest"))
-            .build();
+        setupProject(
+            AbstractCleanArchitectureDefaultTaskTest.class,
+            DeleteModuleTask.class,
+            HelperTask.class);
 
-    project.getTasks().create("dm", DeleteModuleTask.class);
-    project.getTasks().create("cadt", HelperTask.class);
-    task = (AbstractCleanArchitectureDefaultTask) project.getTasks().getByName("dm");
-    helperTask = spy((HelperTask) project.getTasks().getByName("cadt"));
+    task = getTask(project, DeleteModuleTask.class);
+    helperTask = spy(getTask(project, HelperTask.class));
+  }
+
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
   }
 
   @Test
@@ -55,7 +60,6 @@ public class AbstractCleanArchitectureDefaultTaskTest {
     // Arrange
     // Act
     OptionReader reader = helperTask.getOptionReader();
-
     // Assert
     assertEquals(0, reader.getOptions(helperTask).size());
   }
@@ -150,44 +154,40 @@ public class AbstractCleanArchitectureDefaultTaskTest {
   @Test
   public void shouldExecuteAfterTaskModuleFactory() throws CleanException, IOException {
     // Arrange
-    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
     // Act
-    task.executeBaseTask();
+    helperTask.executeBaseTask();
     // Assert
-    assertEquals("OK", task.helperCheck("check2"));
+    assertEquals("OK", helperTask.helperCheck("check2"));
   }
 
   @Test
   public void shouldHandleTaskCleanException() throws CleanException, IOException {
     // Arrange
-    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
-    task.setThrow("CleanException");
+    helperTask.setThrow("CleanException");
     // Act
-    task.executeBaseTask();
+    helperTask.executeBaseTask();
     // Assert
-    assertNull(task.helperCheck("check2"));
+    assertNull(helperTask.helperCheck("check2"));
   }
 
   @Test
   public void shouldHandleTaskException() throws CleanException, IOException {
     // Arrange
-    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
-    task.setThrow("Exception");
+    helperTask.setThrow("Exception");
     // Act
-    task.executeBaseTask();
+    helperTask.executeBaseTask();
     // Assert
-    assertNull(task.helperCheck("check2"));
+    assertNull(helperTask.helperCheck("check2"));
   }
 
   @Test
   public void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
     // Arrange
-    HelperTask task = (HelperTask) project.getTasks().getByName("cadt");
-    task.setThrow("InvalidTaskOptionException");
+    helperTask.setThrow("InvalidTaskOptionException");
     // Act
-    task.executeBaseTask();
+    helperTask.executeBaseTask();
     // Assert
-    assertNull(task.helperCheck("check2"));
+    assertNull(helperTask.helperCheck("check2"));
   }
 
   public static class AfterCustomJPA extends AfterModuleFactory {

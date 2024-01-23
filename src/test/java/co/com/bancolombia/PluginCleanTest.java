@@ -3,12 +3,15 @@
  */
 package co.com.bancolombia;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.FileUtilsTest.deleteStructure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static co.com.bancolombia.TestUtils.deleteStructure;
+import static co.com.bancolombia.TestUtils.getTask;
+import static co.com.bancolombia.TestUtils.getTestDir;
+import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.validations.architecture.ArchitectureValidationTest;
 import co.com.bancolombia.task.GenerateStructureTask;
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +20,17 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 
 /** A simple unit test for the 'co.com.bancolombia.greeting' plugin. */
 public class PluginCleanTest {
+  private static final String TEST_DIR = getTestDir(PluginCleanTest.class);
+
+  @AfterAll
+  public static void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
+  }
 
   @Test
   public void pluginRegistersATask() {
@@ -86,21 +96,14 @@ public class PluginCleanTest {
 
   @Test
   public void shouldApply() throws CleanException, IOException {
-    deleteStructure(Path.of("build/unitTest"));
-    Project project =
-        ProjectBuilder.builder()
-            .withName("cleanArchitecture")
-            .withProjectDir(new File("build/unitTest"))
-            .build();
-
-    project.getTasks().create("other", GenerateStructureTask.class);
-    GenerateStructureTask generateStructureTask =
-        (GenerateStructureTask) project.getTasks().getByName("other");
+    deleteStructure(Path.of(TEST_DIR));
+    Project project = setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class);
+    GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.execute();
 
     ProjectBuilder.builder()
-        .withName(APP_SERVICE)
-        .withProjectDir(new File("build/unitTest/applications/app-service"))
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
         .withParent(project)
         .build();
 
