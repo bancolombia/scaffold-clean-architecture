@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.15.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.15.0) (2024-01-24)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.1...v3.15.0)
+
+**Merged pull requests:**
+
+- feat\(cognito\): Add cognito token provider with cache [\#433](https://github.com/bancolombia/scaffold-clean-architecture/pull/433) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.14.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.14.1) (2024-01-23)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.0...v3.14.1)
