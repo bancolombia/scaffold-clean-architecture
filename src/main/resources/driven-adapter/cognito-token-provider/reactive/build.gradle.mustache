@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.github.bancolombia:secrets-manager-api:{{SECRETS_VERSION}}'
+
+    testImplementation 'com.squareup.okhttp3:okhttp:{{OKHTTP_VERSION}}'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:{{OKHTTP_VERSION}}'
+}

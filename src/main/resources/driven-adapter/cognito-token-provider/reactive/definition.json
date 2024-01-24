@@ -1,0 +1,14 @@
+{
+  "folders": [],
+  "files": {},
+  "java": {
+    "driven-adapter/cognito-token-provider/reactive/build.gradle.mustache": "infrastructure/driven-adapters/cognito-token-provider/build.gradle",
+    "driven-adapter/cognito-token-provider/reactive/cognito-token-provider-config.java.mustache": "infrastructure/driven-adapters/cognito-token-provider/src/main/{{language}}/{{packagePath}}/cognito/config/CognitoTokenProviderConfig.java",
+    "driven-adapter/cognito-token-provider/reactive/cognito-token-provider.test.java.mustache": "infrastructure/driven-adapters/cognito-token-provider/src/test/{{language}}/{{packagePath}}/cognito/CognitoTokenProviderTest.java",
+    "driven-adapter/cognito-token-provider/reactive/cognito-token-provider.java.mustache": "infrastructure/driven-adapters/cognito-token-provider/src/main/{{language}}/{{packagePath}}/cognito/CognitoTokenProvider.java",
+    "driven-adapter/cognito-token-provider/reactive/cognito-credentials.java.mustache": "infrastructure/driven-adapters/cognito-token-provider/src/main/{{language}}/{{packagePath}}/cognito/model/CognitoCredentials.java",
+    "driven-adapter/cognito-token-provider/reactive/cognito-token-response.java.mustache": "infrastructure/driven-adapters/cognito-token-provider/src/main/{{language}}/{{packagePath}}/cognito/model/CognitoTokenResponse.java",
+    "driven-adapter/cognito-token-provider/reactive/token-provider.java.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/gateway/TokenProvider.java"
+  },
+  "kotlin": {}
+}

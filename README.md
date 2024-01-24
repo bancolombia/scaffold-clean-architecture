@@ -303,24 +303,25 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    gradle gda --type [drivenAdapterType]
    ```
 
-   | Reference for **drivenAdapterType** | Name                                | Additional Options                                 | Java    | Kotlin  |
-   |-------------------------------------|-------------------------------------|----------------------------------------------------|---------|---------|
-   | generic                             | Empty Driven Adapter                | --name [name]                                      | &#9745; | &#9745; |
-   | asynceventbus                       | Async Event Bus                     |                                                    | &#9745; | &#9745; |
-   | binstash                            | Bin Stash                           |                                                    | &#9745; | &#9745; |
-   | dynamodb                            | Dynamo DB adapter                   |                                                    | &#9745; | &#9745; |
-   | jpa                                 | JPA Repository                      | --secret [true-false]                              | &#9745; | &#9745; |
-   | kms                                 | AWS Key Management Service          |                                                    | &#9745; | &#9745; |
-   | ktor                                | HTTP client for kotlin              |                                                    | &#9744; | &#9745; |
-   | mongodb                             | Mongo Repository                    | --secret [true-false]                              | &#9745; | &#9745; |
-   | mq                                  | JMS MQ Client to send messages      |                                                    | &#9745; | &#9745; |
-   | r2dbc                               | R2dbc Postgresql Client             |                                                    | &#9745; | &#9745; |
-   | redis                               | Redis                               | --mode [template-repository] --secret [true-false] | &#9745; | &#9745; |
-   | restconsumer                        | Rest Client Consumer                | --url [url] --from-swagger swagger.yaml            | &#9745; | &#9745; |
-   | rsocket                             | RSocket Requester                   |                                                    | &#9745; | &#9745; |
-   | s3                                  | AWS Simple Storage Service          |                                                    | &#9745; | &#9745; |
-   | secrets                             | Secrets Manager Bancolombia         | --secrets-backend [backend] <br> Valid options for backend are "aws_secrets_manager" (default) or "vault". | &#9745; | &#9745; |
-   | sqs                                 | SQS message sender                  |                                                    | &#9745; | &#9745; |
+   | Reference for **drivenAdapterType** | Name                           | Additional Options                                 | Java    | Kotlin  |
+   |-------------------------------------|--------------------------------|----------------------------------------------------|---------|---------|
+   | generic                             | Empty Driven Adapter           | --name [name]                                      | &#9745; | &#9745; |
+   | asynceventbus                       | Async Event Bus                |                                                    | &#9745; | &#9745; |
+   | binstash                            | Bin Stash                      |                                                    | &#9745; | &#9745; |
+   | cognitotokenprovider                | Generador de token de cognito  |                                                    | &#9745; |         |
+   | dynamodb                            | Dynamo DB adapter              |                                                    | &#9745; | &#9745; |
+   | jpa                                 | JPA Repository                 | --secret [true-false]                              | &#9745; | &#9745; |
+   | kms                                 | AWS Key Management Service     |                                                    | &#9745; | &#9745; |
+   | ktor                                | HTTP client for kotlin         |                                                    | &#9744; | &#9745; |
+   | mongodb                             | Mongo Repository               | --secret [true-false]                              | &#9745; | &#9745; |
+   | mq                                  | JMS MQ Client to send messages |                                                    | &#9745; | &#9745; |
+   | r2dbc                               | R2dbc Postgresql Client        |                                                    | &#9745; | &#9745; |
+   | redis                               | Redis                          | --mode [template-repository] --secret [true-false] | &#9745; | &#9745; |
+   | restconsumer                        | Rest Client Consumer           | --url [url] --from-swagger swagger.yaml            | &#9745; | &#9745; |
+   | rsocket                             | RSocket Requester              |                                                    | &#9745; | &#9745; |
+   | s3                                  | AWS Simple Storage Service     |                                                    | &#9745; | &#9745; |
+   | secrets                             | Secrets Manager Bancolombia    | --secrets-backend [backend] <br> Valid options for backend are "aws_secrets_manager" (default) or "vault". | &#9745; | &#9745; |
+   | sqs                                 | SQS message sender             |                                                    | &#9745; | &#9745; |
 
    
    _**This task will generate something like that:**_
