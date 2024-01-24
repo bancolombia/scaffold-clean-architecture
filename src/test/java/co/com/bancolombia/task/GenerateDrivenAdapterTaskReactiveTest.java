@@ -281,4 +281,22 @@ class GenerateDrivenAdapterTaskReactiveTest {
         TEST_DIR + "/applications/app-service/build.gradle",
         "implementation 'com.github.bancolombia:aws-secrets-manager-async:");
   }
+
+  @Test
+  void generateDrivenAdapterCognitoTokenProvider() throws IOException, CleanException {
+    // Arrange
+    task.setType("COGNITOTOKENPROVIDER");
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/model/",
+        "src/main/java/co/com/bancolombia/model/gateway/TokenProvider.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/driven-adapters/cognito-token-provider/",
+        "src/main/java/co/com/bancolombia/cognito/model/CognitoCredentials.java",
+        "src/main/java/co/com/bancolombia/cognito/model/CognitoTokenResponse.java",
+        "src/main/java/co/com/bancolombia/cognito/config/CognitoTokenProviderConfig.java",
+        "src/main/java/co/com/bancolombia/cognito/CognitoTokenProvider.java");
+  }
 }

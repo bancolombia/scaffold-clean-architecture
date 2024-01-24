@@ -1,0 +1,52 @@
+package {{package}}.cognito;
+
+import {{package}}.cognito.config.CognitoTokenProviderConfig;
+import {{package}}.cognito.model.CognitoCredentials;
+import co.com.bancolombia.secretsmanager.api.GenericManagerAsync;
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class CognitoTokenProviderTest {
+    @Mock
+    private GenericManagerAsync manager;
+    private MockWebServer server;
+    private CognitoTokenProvider provider;
+
+    @BeforeEach
+    void setup() throws SecretException {
+        CognitoTokenProviderConfig config = new CognitoTokenProviderConfig();
+        server = new MockWebServer();
+        String endpoint = server.url("/oauth2/token").toString();
+        when(manager.getSecret("secret", CognitoCredentials.class))
+                .thenReturn(Mono.just(new CognitoCredentials()));
+        Mono<CognitoCredentials> credentials = config.cognitoCredentialsProvider("secret", manager);
+        provider = (CognitoTokenProvider) config.cognitoTokenProvider(endpoint, 1000,
+                WebClient.builder(), credentials);
+    }
+
+    @Test
+    void shouldGetToken() {
+        // Arrange
+        String tokenResponse = "{\"access_token\":\"token\",\"expires_in\":3600,\"token_type\":\"Bearer\"}";
+        server.enqueue(new MockResponse()
+                .setHeader("content-type", "application/json")
+                .setBody(tokenResponse));
+        // Act
+        StepVerifier.create(provider.getToken())
+                .expectNext("token")
+                .verifyComplete();
+    }
+
+}
