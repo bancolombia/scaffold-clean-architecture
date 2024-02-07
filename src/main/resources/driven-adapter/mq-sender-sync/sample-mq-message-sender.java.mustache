@@ -1,7 +1,7 @@
 package {{package}}.mq.sender;
 
 import co.com.bancolombia.commons.jms.api.MQMessageSenderSync;
-import co.com.bancolombia.commons.jms.mq.EnableMQMessageSender;
+import co.com.bancolombia.commons.jms.mq.EnableMQGateway;
 {{#metrics}}
 import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.Timer;
@@ -20,12 +20,9 @@ import java.util.concurrent.TimeUnit;
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
-@EnableMQMessageSender
-//@EnableMQSelectorMessageListener // Enable it to retrieve a specific message by correlationId
+@EnableMQGateway(scanBasePackages = "{{package}}")
 public class SampleMQMessageSender /* implements SomeGateway */ {
     private final MQMessageSenderSync sender;
-//    private final MQQueuesContainer container; // Inject it to reference a temporary queue
-//    private final MQMessageSelectorListenerSync listener; // Inject it to retrieve a specific message by correlationId
     {{#metrics}}
     private final Timer timer = Metrics.timer("mq_send_message", "operation", "my-operation"); // TODO: Change operation name
     {{/metrics}}
@@ -55,15 +52,4 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
         });
         {{/metrics}}
     }
-
-    // Enable it to retrieve a specific message by correlationId
-//    public String getResult(String correlationId) {
-//        Message message = listener.getMessage(correlationId);
-//        return extractResponse(message);
-//    }
-//
-//    private String extractResponse(Message message) {
-//        TextMessage textMessage = (TextMessage) message;
-//        return textMessage.getText();
-//    }
 }

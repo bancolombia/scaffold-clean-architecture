@@ -35,7 +35,7 @@ public class SampleMQMessageListener {
 
     {{/lombok}}
     // For fixed queues
-    @MQListener
+    @MQListener("${commons.jms.input-queue}")
     public Mono<Void> process(Message message) throws JMSException {
         {{#metrics}}
         timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
@@ -44,15 +44,4 @@ public class SampleMQMessageListener {
         // return useCase.sample(text);
         return Mono.empty();
     }
-
-    // For an automatic generated temporary queue
-    // @MQListener(tempQueueAlias = "any-custom-value")
-    // public Mono<Void> processFromTemporaryQueue(Message message) throws JMSException {
-    {{#metrics}}
-    //     timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
-    {{/metrics}}
-    //     String text = ((TextMessage) message).getText();
-    //     // return useCase.sample(text);
-    //     return Mono.empty();
-    // }
 }
