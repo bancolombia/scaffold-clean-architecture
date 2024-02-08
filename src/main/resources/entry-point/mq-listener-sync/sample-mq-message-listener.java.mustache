@@ -34,7 +34,7 @@ public class SampleMQMessageListener {
 
     {{/lombok}}
     // For fixed queues
-    @MQListener
+    @MQListener("${commons.jms.input-queue}")
     public void process(Message message) throws JMSException {
         {{#metrics}}
         timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
@@ -42,14 +42,4 @@ public class SampleMQMessageListener {
         String text = ((TextMessage) message).getText();
         // useCase.sample(text);
     }
-
-    // For an automatic generated temporary queue
-    // @MQListener(tempQueueAlias = "any-custom-value")
-    // public void processFromTemporaryQueue(Message message) throws JMSException {
-    {{#metrics}}
-    //     timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
-    {{/metrics}}
-    //     String text = ((TextMessage) message).getText();
-    //     // useCase.sample(text);
-    // }
 }

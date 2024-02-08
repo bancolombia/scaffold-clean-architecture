@@ -1,6 +1,6 @@
 package {{package}}.mq.reqreply;
 
-import co.com.bancolombia.commons.jms.mq.EnableReqReply;
+import co.com.bancolombia.commons.jms.mq.EnableMQGateway;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -15,7 +15,7 @@ import jakarta.jms.TextMessage;
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
-@EnableReqReply
+@EnableMQGateway(scanBasePackages = "{{package}}")
 public class SampleMQReqReply /* implements SomeGateway */ {
     private final ReqReplyGateway sender;
     {{^lombok}}
