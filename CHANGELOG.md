@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.15.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.15.1) (2024-02-08)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.15.0...v3.15.1)
+
+**Merged pull requests:**
+
+- fix\(commonjms\): Update commons jms to 2.0.1 version and generated code [\#434](https://github.com/bancolombia/scaffold-clean-architecture/pull/434) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.15.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.15.0) (2024-01-24)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.14.1...v3.15.0)
