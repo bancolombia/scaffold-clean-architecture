@@ -1,89 +1,15 @@
 package {{package}}.sqs.listener.config;
 
-{{#lombok}}
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-{{/lombok}}
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
-{{#lombok}}
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-{{/lombok}}
-@Configuration
 @ConfigurationProperties(prefix = "entrypoint.sqs")
-public class SQSProperties {
-    private String region;
-    private String queueUrl;
-    private String endpoint;
-    private int waitTimeSeconds;
-    private int maxNumberOfMessages;
-    private int visibilityTimeout;
-    private int numberOfThreads;
-    {{^lombok}}
+public record SQSProperties(
+        String region,
+        String endpoint,
+        String queueUrl,
+        int waitTimeSeconds,
+        int visibilityTimeout,
+        int maxNumberOfMessages,
+        int numberOfThreads) {
 
-    public SQSProperties() {
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
-    }
-
-    public String getQueueUrl() {
-        return queueUrl;
-    }
-
-    public void setQueueUrl(String queueUrl) {
-        this.queueUrl = queueUrl;
-    }
-
-    public int getWaitTimeSeconds() {
-        return waitTimeSeconds;
-    }
-
-    public void setWaitTimeSeconds(int waitTimeSeconds) {
-        this.waitTimeSeconds = waitTimeSeconds;
-    }
-
-    public int getMaxNumberOfMessages() {
-        return maxNumberOfMessages;
-    }
-
-    public void setMaxNumberOfMessages(int maxNumberOfMessages) {
-        this.maxNumberOfMessages = maxNumberOfMessages;
-    }
-
-    public int getVisibilityTimeout() {
-        return visibilityTimeout;
-    }
-
-    public void setVisibilityTimeout(int visibilityTimeout) {
-        this.visibilityTimeout = visibilityTimeout;
-    }
-
-    public int getNumberOfThreads() {
-        return numberOfThreads;
-    }
-
-    public void setNumberOfThreads(int numberOfThreads) {
-        this.numberOfThreads = numberOfThreads;
-    }
-    {{/lombok}}
 }

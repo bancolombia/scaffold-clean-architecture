@@ -23,13 +23,19 @@ public class SQSConfigTest {
 
     @Test
     void configTest() {
-        SQSProperties sqsProperties = new SQSProperties();
-        sqsProperties.setNumberOfThreads(1);
-        sqsProperties.setRegion("Region");
+        var sqsProperties = new SQSProperties(
+            "us-east-1",
+            "http://localhost:4566",
+            "http://localhost:4566/00000000000/queueName",
+            20,
+            30,
+            10,
+            1
+        );
         {{#metrics}}
         LoggingMetricPublisher loggingMetricPublisher = LoggingMetricPublisher.create();
         {{/metrics}}
-        SQSConfig sqsConfig = new SQSConfig();
+        var sqsConfig = new SQSConfig();
 
         assertNotNull(sqsConfig.sqsListener(asyncClient, sqsProperties, message -> {}));
         assertNotNull(sqsConfig.configSqs(sqsProperties{{#metrics}}, loggingMetricPublisher{{/metrics}}));

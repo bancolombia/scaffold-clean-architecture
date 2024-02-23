@@ -34,7 +34,7 @@ public class KmsConfig {
     private KmsAsyncClientBuilder getBuilder(KmsConnectionProperties kmsProperties, MetricPublisher publisher) {
         return KmsAsyncClient.builder()
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
-                .region(Region.of(kmsProperties.getRegion()));
+                .region(Region.of(kmsProperties.region()));
     }
     {{/metrics}}
     {{^metrics}}
@@ -53,7 +53,7 @@ public class KmsConfig {
     }
 
     private KmsAsyncClientBuilder getBuilder(KmsConnectionProperties kmsProperties) {
-        return KmsAsyncClient.builder().region(Region.of(kmsProperties.getRegion()));
+        return KmsAsyncClient.builder().region(Region.of(kmsProperties.region()));
     }
     {{/metrics}}
 
