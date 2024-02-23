@@ -1,6 +1,6 @@
 package {{package}}.sqs.listener.helper;
 
-import {{package}}.sqs.listener.config.SQSProperties;
+import {{package}}.sqs.listener.config.SqsProperties;
 {{#lombok}}
 import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
@@ -21,26 +21,26 @@ import java.util.function.Function;
 @Log4j2
 @Builder
 {{/lombok}}
-public class SQSListener {
+public class SqsListener {
 {{^lombok}}
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(SQSListener.class);
+    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(SqsListener.class);
 {{/lombok}}
     private final SqsAsyncClient client;
-    private final SQSProperties properties;
+    private final SqsProperties properties;
     private final Function<Message, Mono<Void>> processor;
     {{#metrics}}
     private String operation;
     {{/metrics}}
 {{^lombok}}
 
-    public SQSListener(final SqsAsyncClient client, final SQSProperties properties, final Function<Message, Mono<Void>> processor) {
+    public SqsListener(final SqsAsyncClient client, final SqsProperties properties, final Function<Message, Mono<Void>> processor) {
         this.client = client;
         this.properties = properties;
         this.processor = processor;
     }
 {{/lombok}}
 
-    public SQSListener start() {
+    public SqsListener start() {
         {{#metrics}}
         this.operation = "MessageFrom:" + properties.queueUrl();
         {{/metrics}}
@@ -100,37 +100,37 @@ public class SQSListener {
     }
 {{^lombok}}
 
-    public static class SQSListenerBuilder {
+    public static class SqsListenerBuilder {
         private SqsAsyncClient client;
-        private SQSProperties properties;
+        private SqsProperties properties;
         private Function<Message, Mono<Void>> processor;
 
-        SQSListenerBuilder() {
+        SqsListenerBuilder() {
         }
 
-        public SQSListener.SQSListenerBuilder client(final SqsAsyncClient client) {
+        public SqsListener.SqsListenerBuilder client(final SqsAsyncClient client) {
             this.client = client;
             return this;
         }
 
-        public SQSListener.SQSListenerBuilder properties(final SQSProperties properties) {
+        public SqsListener.SqsListenerBuilder properties(final SqsProperties properties) {
             this.properties = properties;
             return this;
         }
 
-        public SQSListener.SQSListenerBuilder processor(final Function<Message, Mono<Void>> processor) {
+        public SqsListener.SqsListenerBuilder processor(final Function<Message, Mono<Void>> processor) {
             this.processor = processor;
             return this;
         }
 
-        public SQSListener build() {
-            return new SQSListener(this.client, this.properties, this.processor);
+        public SqsListener build() {
+            return new SqsListener(this.client, this.properties, this.processor);
         }
 
     }
 
-    public static SQSListener.SQSListenerBuilder builder() {
-        return new SQSListener.SQSListenerBuilder();
+    public static SqsListener.SqsListenerBuilder builder() {
+        return new SqsListener.SqsListenerBuilder();
     }
 {{/lombok}}
 }

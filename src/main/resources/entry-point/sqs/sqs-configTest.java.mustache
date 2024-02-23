@@ -2,6 +2,7 @@ package {{package}}.sqs.listener.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 {{#metrics}}
@@ -9,35 +10,47 @@ import software.amazon.awssdk.metrics.LoggingMetricPublisher;
 {{/metrics}}
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
-public class SQSConfigTest {
+
+class SqsConfigTest {
+
+    @InjectMocks
+    private SqsConfig sqsConfig;
 
     @Mock
     private SqsAsyncClient asyncClient;
 
+    @Mock
+    private SqsProperties sqsProperties;
+
     @BeforeEach
-    void setUp(){
+    void init() {
         MockitoAnnotations.openMocks(this);
+        when(sqsProperties.region()).thenReturn("us-east-1");
+        when(sqsProperties.queueUrl()).thenReturn("http://localhost:4566/00000000000/massive-sqs");
+        when(sqsProperties.waitTimeSeconds()).thenReturn(20);
+        when(sqsProperties.maxNumberOfMessages()).thenReturn(10);
+        when(sqsProperties.numberOfThreads()).thenReturn(1);
     }
 
     @Test
     void configTest() {
-        var sqsProperties = new SQSProperties(
-            "us-east-1",
-            "http://localhost:4566",
-            "http://localhost:4566/00000000000/queueName",
-            20,
-            30,
-            10,
-            1
-        );
         {{#metrics}}
-        LoggingMetricPublisher loggingMetricPublisher = LoggingMetricPublisher.create();
+        var loggingMetricPublisher = LoggingMetricPublisher.create();
         {{/metrics}}
-        var sqsConfig = new SQSConfig();
-
-        assertNotNull(sqsConfig.sqsListener(asyncClient, sqsProperties, message -> {}));
+        when(sqsProperties.endpoint()).thenReturn("http://localhost:4566");
+        assertNotNull(sqsConfig.sqsListener(asyncClient, sqsProperties, message -> {
+        }));
         assertNotNull(sqsConfig.configSqs(sqsProperties{{#metrics}}, loggingMetricPublisher{{/metrics}}));
     }
+
+
+    @Test
+    void resolveEndpointIsNull() {
+        assertThat(sqsConfig.resolveEndpoint(sqsProperties).isNull();
+    }
+
 }

@@ -1,7 +1,7 @@
 package {{package}}.sqs.listener.helper;
 
-import co.com.bancolombia.sqs.listener.SQSProcessor;
-import co.com.bancolombia.sqs.listener.config.SQSProperties;
+import {{package}}.sqs.listener.SqsProcessor;
+import {{package}}.sqs.listener.config.SqsProperties;
 {{#metrics}}
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
@@ -20,26 +20,23 @@ import java.util.concurrent.CompletableFuture;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class SQSListenerTest {
+class SqsListenerTest {
 
     @Mock
     private SqsAsyncClient asyncClient;
 
-    private SQSProperties sqsProperties;
+    @Mock
+    private SqsProperties sqsProperties;
 
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
 
-        var sqsProperties = new SQSProperties(
-            "us-east-1",
-            "http://localhost:4566",
-            "http://localhost:4566/00000000000/queueName",
-            20,
-            30,
-            10,
-            1
-        );
+        when(sqsProperties.region()).thenReturn("us-east-1");
+        when(sqsProperties.queueUrl()).thenReturn("http://localhost:4566/00000000000/massive-sqs");
+        when(sqsProperties.waitTimeSeconds()).thenReturn(20);
+        when(sqsProperties.maxNumberOfMessages()).thenReturn(10);
+        when(sqsProperties.numberOfThreads()).thenReturn(1);
 
         var message = Message.builder().body("message").build();
         var deleteMessageResponse = DeleteMessageResponse.builder().build();
@@ -52,7 +49,7 @@ public class SQSListenerTest {
 
     @Test
     void startTest(){
-        var sqsListener =SQSListener.builder()
+        var sqsListener = SqsListener.builder()
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(System.out::println)
@@ -68,9 +65,9 @@ public class SQSListenerTest {
 
     @Test
     void listenerTest() {
-        var sqsProcessor = new SQSProcessor();
+        var sqsProcessor = new SqsProcessor();
 
-        var sqsListener = SQSListener.builder()
+        var sqsListener = SqsListener.builder()
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(sqsProcessor)

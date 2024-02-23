@@ -1,6 +1,6 @@
 package {{package}}.sqs.listener.config;
 
-import {{package}}.sqs.listener.helper.SQSListener;
+import {{package}}.sqs.listener.helper.SqsListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
@@ -22,11 +22,11 @@ import java.net.URI;
 import java.util.function.Function;
 
 @Configuration
-public class SQSConfig {
+public class SqsConfig {
 
     @Bean
-    public SQSListener sqsListener(SqsAsyncClient client, SQSProperties properties, Function<Message, Mono<Void>> fn) {
-        return SQSListener.builder()
+    public SqsListener sqsListener(SqsAsyncClient client, SqsProperties properties, Function<Message, Mono<Void>> fn) {
+        return SqsListener.builder()
                 .client(client)
                 .properties(properties)
                 .processor(fn)
@@ -36,7 +36,7 @@ public class SQSConfig {
 
     {{#metrics}}
     @Bean
-    public SqsAsyncClient configSqs(SQSProperties properties, MetricPublisher publisher) {
+    public SqsAsyncClient configSqs(SqsProperties properties, MetricPublisher publisher) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
                 .region(Region.of(properties.region()))
@@ -47,7 +47,7 @@ public class SQSConfig {
     {{/metrics}}
     {{^metrics}}
     @Bean
-    public SqsAsyncClient configSqs(SQSProperties properties) {
+    public SqsAsyncClient configSqs(SqsProperties properties) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
                 .region(Region.of(properties.region()))
@@ -67,7 +67,7 @@ public class SQSConfig {
                 .build();
     }
 
-    private URI resolveEndpoint(SQSProperties properties) {
+    protected URI resolveEndpoint(SqsProperties properties) {
         if (properties.endpoint() != null) {
             return URI.create(properties.endpoint());
         }

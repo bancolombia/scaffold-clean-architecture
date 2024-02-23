@@ -3,7 +3,7 @@ package {{package}}.sqs.listener.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "entrypoint.sqs")
-public record SQSProperties(
+public record SqsProperties(
         String region,
         String endpoint,
         String queueUrl,
