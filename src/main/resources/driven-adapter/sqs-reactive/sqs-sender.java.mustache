@@ -1,6 +1,6 @@
 package {{package}}.sqs.sender;
 
-import {{package}}.sqs.sender.config.SQSSenderProperties;
+import {{package}}.sqs.sender.config.SqsSenderProperties;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,15 +16,15 @@ import software.amazon.awssdk.services.sqs.model.SendMessageResponse;
 @Log4j2
 @RequiredArgsConstructor
 {{/lombok}}
-public class SQSSender /*implements SomeGateway*/ {
+public class SqsSender /*implements SomeGateway*/ {
 {{^lombok}}
-    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(SQSSender.class);
+    private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(SqsSender.class);
 {{/lombok}}
-    private final SQSSenderProperties properties;
+    private final SqsSenderProperties properties;
     private final SqsAsyncClient client;
 {{^lombok}}
 
-    public SQSSender(SqsAsyncClient client, SQSSenderProperties properties) {
+    public SqsSender(SqsAsyncClient client, SqsSenderProperties properties) {
         this.client = client;
         this.properties = properties
     }

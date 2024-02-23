@@ -219,7 +219,7 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/sqs-listener/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/sqs/listener/SQSProcessor.java");
+        "src/main/java/co/com/bancolombia/sqs/listener/SqsProcessor.java");
   }
 
   @Test

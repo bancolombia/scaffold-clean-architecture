@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration
 @AllArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "adapter.sqs")
-class SQSSenderProperties @ConstructorBinding constructor(
+class SqsSenderProperties @ConstructorBinding constructor(
     val region: String,
     val queueUrl: String,
     val endpoint: String

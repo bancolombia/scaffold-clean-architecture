@@ -18,9 +18,9 @@ import java.net.URI
 
 @Configuration
 @ConditionalOnMissingBean(SqsAsyncClient::class)
-class SQSSenderConfig {
+class SqsSenderConfig {
     @Bean
-    fun configSqs(properties: SQSSenderProperties, publisher: MetricPublisher?): SqsAsyncClient {
+    fun configSqs(properties: SqsSenderProperties, publisher: MetricPublisher?): SqsAsyncClient {
         return SqsAsyncClient.builder()
             .endpointOverride(resolveEndpoint(properties))
             .region(Region.of(properties.region))
@@ -43,7 +43,7 @@ class SQSSenderConfig {
         .addCredentialsProvider(InstanceProfileCredentialsProvider.create())
         .build()
 
-    private fun resolveEndpoint(properties: SQSSenderProperties): URI? {
+    private fun resolveEndpoint(properties: SqsSenderProperties): URI? {
         return if (properties.endpoint != null) {
             URI.create(properties.endpoint)
         } else null
