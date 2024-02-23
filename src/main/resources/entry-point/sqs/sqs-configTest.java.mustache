@@ -50,7 +50,7 @@ class SqsConfigTest {
 
     @Test
     void resolveEndpointIsNull() {
-        assertThat(sqsConfig.resolveEndpoint(sqsProperties).isNull());
+        assertThat(sqsConfig.resolveEndpoint(sqsProperties)).isNull();
     }
 
 }
