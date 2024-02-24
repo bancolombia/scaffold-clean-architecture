@@ -1,6 +1,7 @@
 package {{package}}.kms;
 
-import org.springframework.beans.factory.annotation.Value;
+import {{package}}.kms.config.model.KmsConnectionProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.core.SdkBytes;
@@ -14,25 +15,21 @@ import software.amazon.awssdk.services.kms.model.EncryptionAlgorithmSpec;
 import java.util.Base64;
 
 @Component
+@RequiredArgsConstructor
 public class KmsAdapter // implements ModelRepository from domain
 {
-    private final String keyId;
     private final KmsAsyncClient kmsAsyncClient;
-
-    public KmsAdapter(@Value("${adapters.aws.kms.keyId}") String keyId, KmsAsyncClient kmsAsyncClient) {
-        this.keyId = keyId;
-        this.kmsAsyncClient = kmsAsyncClient;
-    }
+    private final KmsConnectionProperties kmsProperties;
 
     public Mono<byte[]> decrypt(String secretKey) {
-        return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId)))
+        return Mono.fromFuture(kmsAsyncClient.decrypt(getDecryptRequest(secretKey, kmsProperties.keyId())))
         .map(DecryptResponse::plaintext)
         .map(SdkBytes::asByteArray)
         .switchIfEmpty(Mono.error(new Throwable("Error decrypt secret")));
     }
 
     public Mono<String> encrypt(byte[] secretKey) {
-        return Mono.fromFuture(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId)))
+        return Mono.fromFuture(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, kmsProperties.keyId())))
         .map(EncryptResponse::ciphertextBlob)
         .map(SdkBytes::asByteArray)
         .map(Base64.getEncoder()::encodeToString)

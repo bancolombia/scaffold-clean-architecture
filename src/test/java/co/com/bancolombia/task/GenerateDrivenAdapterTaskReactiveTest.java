@@ -247,7 +247,7 @@ class GenerateDrivenAdapterTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/driven-adapters/sqs-sender/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/sqs/sender/SQSSender.java");
+        "src/main/java/co/com/bancolombia/sqs/sender/SqsSender.java");
   }
 
   @Test

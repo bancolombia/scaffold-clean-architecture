@@ -1,6 +1,6 @@
 package {{package}}.sqs.sender;
 
-import {{package}}.sqs.sender.config.SQSSenderProperties;
+import {{package}}.sqs.sender.config.SqsSenderProperties;
 import lombok.AllArgsConstructor
 import lombok.extern.log4j.Log4j2
 import org.springframework.stereotype.Service
@@ -12,8 +12,8 @@ import software.amazon.awssdk.services.sqs.model.SendMessageResponse
 @Service
 @Log4j2
 @AllArgsConstructor
-class SQSSender /*implements SomeGateway*/ {
-private val properties: SQSSenderProperties? = null
+class SqsSender /*implements SomeGateway*/ {
+private val properties: SqsSenderProperties? = null
 private val client: SqsAsyncClient? = null
 
     fun send(message: String): Mono<String> {

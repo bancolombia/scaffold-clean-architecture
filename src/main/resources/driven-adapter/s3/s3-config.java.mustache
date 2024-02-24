@@ -23,7 +23,7 @@ public class S3Config {
     public S3Client s3Client(S3ConnectionProperties s3Properties) {
         return S3Client.builder()
                 .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .build();
     }
 
@@ -31,9 +31,9 @@ public class S3Config {
     @Bean
     public S3Client localS3Client(S3ConnectionProperties s3Properties) {
         return S3Client.builder()
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .endpointOverride(URI.create(s3Properties.endpoint()))
                 .build();
     }
     {{/metrics}}
@@ -44,7 +44,7 @@ public class S3Config {
         return S3Client.builder()
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .build();
     }
 
@@ -52,7 +52,7 @@ public class S3Config {
     @Bean
     public S3Client localS3Client(S3ConnectionProperties s3Properties, MetricPublisher publisher) {
         return S3Client.builder()
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .endpointOverride(URI.create(s3Properties.endpoint()))
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
                 .build();
