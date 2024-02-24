@@ -47,7 +47,6 @@ class SqsConfigTest {
         assertNotNull(sqsConfig.configSqs(sqsProperties{{#metrics}}, loggingMetricPublisher{{/metrics}}));
     }
 
-
     @Test
     void resolveEndpointIsNull() {
         assertThat(sqsConfig.resolveEndpoint(sqsProperties)).isNull();
