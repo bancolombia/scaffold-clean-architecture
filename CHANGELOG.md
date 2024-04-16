@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.0...HEAD)
+
+**Closed issues:**
+
+- The coverage plugin Cobertura is not being maintained [\#439](https://github.com/bancolombia/scaffold-clean-architecture/issues/439)
+
+## [v3.16.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.0) (2024-04-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.15.1...v3.16.0)
+
+**Closed issues:**
+
+- Arquitectura de Bancolombia  [\#435](https://github.com/bancolombia/scaffold-clean-architecture/issues/435)
+
+**Merged pull requests:**
+
+- feat: remove cobertura plugin [\#440](https://github.com/bancolombia/scaffold-clean-architecture/pull/440) ([santitigaga](https://github.com/santitigaga))
+
 ## [v3.15.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.15.1) (2024-02-08)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.15.0...v3.15.1)
