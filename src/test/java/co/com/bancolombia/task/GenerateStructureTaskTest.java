@@ -47,14 +47,7 @@ class GenerateStructureTaskTest {
     assertEquals(Arrays.asList(GenerateStructureTask.ProjectType.values()), types);
   }
 
-  @Test
-  void shouldReturnCoveragePluginTypes() {
-    // Arrange
-    // Act
-    List<GenerateStructureTask.CoveragePlugin> types = task.getCoveragePlugins();
-    // Assert
-    assertEquals(Arrays.asList(GenerateStructureTask.CoveragePlugin.values()), types);
-  }
+
 
   @Test
   void shouldReturnMetricsOptions() {
@@ -116,46 +109,6 @@ class GenerateStructureTaskTest {
         "applications/app-service/src/test/java/co/com/bancolombia");
   }
 
-  @Test
-  void generateStructureReactiveWithCoberturaNoLombok() throws IOException, CleanException {
-    // Arrange
-    String dir = project.getProjectDir().getPath();
-    task.setPackage("test");
-    task.setName("projectTest");
-    task.setType(GenerateStructureTask.ProjectType.REACTIVE);
-    task.setCoveragePlugin(GenerateStructureTask.CoveragePlugin.COBERTURA);
-    task.setStatusLombok(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
-    task.setMetrics(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
-    task.setForce(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
-    task.setJavaVersion(JavaVersion.VERSION_17);
-    // Act
-    task.execute();
-    // Assert
-    assertFalse(new File(dir + "lombok.config").exists());
-    assertFilesExistsInDir(
-        dir,
-        "README.md",
-        ".gitignore",
-        "build.gradle",
-        "main.gradle",
-        "settings.gradle",
-        "infrastructure/driven-adapters/",
-        "infrastructure/entry-points",
-        "infrastructure/helpers",
-        "domain/model/src/main/java/test/model",
-        "domain/model/src/test/java/test/model",
-        "domain/model/build.gradle",
-        "domain/usecase/src/main/java/test/usecase",
-        "domain/usecase/src/test/java/test/usecase",
-        "domain/usecase/build.gradle",
-        "applications/app-service/build.gradle",
-        "applications/app-service/src/main/java/test/MainApplication.java",
-        "applications/app-service/src/main/java/test/config/UseCasesConfig.java",
-        "applications/app-service/src/main/java/test/config",
-        "applications/app-service/src/main/resources/application.yaml",
-        "applications/app-service/src/main/resources/log4j2.properties",
-        "applications/app-service/src/test/java/test");
-  }
 
   @Test
   void generateStructureOnExistingProject() throws IOException, CleanException {

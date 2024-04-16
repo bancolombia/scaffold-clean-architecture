@@ -54,9 +54,7 @@ sonarqube {
 
 subprojects {
     apply(plugin = "kotlin")
-{{#jacoco}}
     apply(plugin = "jacoco")
-{{/jacoco }}
     apply(plugin = "io.spring.dependency-management")
     dependencies {
 {{#reactive}}
@@ -78,7 +76,6 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
-{{#jacoco}}
    project.tasks.test.get().finalizedBy(project.tasks.jacocoTestReport)
    project.tasks.jacocoTestReport {
        dependsOn(project.tasks.test)
@@ -89,10 +86,9 @@ subprojects {
            html.outputLocation = layout.buildDirectory.dir("reports/jacocoHtml")
        }
    }
-{{/jacoco }}
+
 }
 
-{{#jacoco}}
 jacoco {
     toolVersion = "{{JACOCO_VERSION}}"
     reportsDirectory = layout.buildDirectory.dir("reports")
@@ -114,4 +110,4 @@ tasks.withType<JacocoReport> {
         html.required = true
     }
 }
-{{/jacoco}}
+

@@ -3,12 +3,7 @@ buildscript {
 		cleanArchitectureVersion = '{{PLUGIN_VERSION}}'
 		springBootVersion = '{{SPRING_BOOT_VERSION}}'
 		sonarVersion = '{{SONAR_VERSION}}'
-		{{#jacoco}}
 		jacocoVersion = '{{JACOCO_VERSION}}'
-		{{/jacoco}}
-		{{#cobertura}}
-		coberturaVersion = '{{COBERTURA_VERSION}}'
-		{{/cobertura}}
 		{{#lombok}}
         lombokVersion = '{{LOMBOK_VERSION}}'
         {{/lombok}}
@@ -35,12 +30,7 @@ plugins {
     {{/example}}
 	id 'org.springframework.boot' version "${springBootVersion}" apply false
 	id 'org.sonarqube' version "${sonarVersion}"
-	{{#jacoco}}
 	id 'jacoco'
-	{{/jacoco}}
-	{{#cobertura}}
-	id 'net.saliman.cobertura' version "${coberturaVersion}"
-	{{/cobertura}}
 }
 {{#example}}
 apply plugin: "co.com.bancolombia.cleanArchitecture"

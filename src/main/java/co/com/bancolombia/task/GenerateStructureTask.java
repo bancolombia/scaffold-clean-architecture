@@ -21,7 +21,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";
   private ProjectType type = ProjectType.REACTIVE;
-  private CoveragePlugin coverage = CoveragePlugin.JACOCO;
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
@@ -50,10 +49,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     this.name = projectName;
   }
 
-  @Option(option = "coverage", description = "Set project coverage plugin")
-  public void setCoveragePlugin(CoveragePlugin coverage) {
-    this.coverage = coverage;
-  }
+
 
   @Option(option = "lombok", description = "Switch the status of lombok in this project")
   public void setStatusLombok(BooleanOption lombok) {
@@ -85,10 +81,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     return Arrays.asList(ProjectType.values());
   }
 
-  @OptionValues("coverage")
-  public List<CoveragePlugin> getCoveragePlugins() {
-    return Arrays.asList(CoveragePlugin.values());
-  }
 
   @OptionValues("lombok")
   public List<BooleanOption> getLombokOptions() {
@@ -120,8 +112,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParamPackage(packageName);
     builder.addParam("projectName", name);
     builder.addParam(REACTIVE, type == ProjectType.REACTIVE);
-    builder.addParam("jacoco", coverage == CoveragePlugin.JACOCO);
-    builder.addParam("cobertura", coverage == CoveragePlugin.COBERTURA);
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("metrics", metrics == BooleanOption.TRUE);
     builder.addParam("example", withExample == BooleanOption.TRUE);
@@ -175,11 +165,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   public enum ProjectType {
     REACTIVE,
     IMPERATIVE
-  }
-
-  public enum CoveragePlugin {
-    JACOCO,
-    COBERTURA
   }
 
   public enum Language {
