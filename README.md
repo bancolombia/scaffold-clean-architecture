@@ -72,7 +72,6 @@ If you run this task on an existing project it will override the `main.gradle`, 
 
    - **`name`** `= NameProject`: This parameter is going to specify the name of the project. `Default Value = cleanArchitecture`
 
-   - **`coverage`** `= <jacoco | cobertura>`: This parameter is going to specify the coverage tool for the project. `Default Value = jacoco`
    
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
@@ -83,8 +82,8 @@ If you run this task on an existing project it will override the `main.gradle`, 
    - **`javaVersion`** `= <VERSION_17 | VERSION_21>`: Java version  . `Default Value = VERSION_17`
    
    ```shell
-   gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=NameProject --coverage=jacoco --lombok=true
-   gradle ca --package=co.com.bancolombia --type=reactive --name=NameProject --coverage=jacoco --lombok=true
+   gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=NameProject --lombok=true
+   gradle ca --package=co.com.bancolombia --type=reactive --name=NameProject --lombok=true
    ```
 
    **_The structure will look like this for java:_**
