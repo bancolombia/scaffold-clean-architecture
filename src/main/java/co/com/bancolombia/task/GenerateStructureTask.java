@@ -49,8 +49,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     this.name = projectName;
   }
 
-
-
   @Option(option = "lombok", description = "Switch the status of lombok in this project")
   public void setStatusLombok(BooleanOption lombok) {
     this.lombok = lombok;
@@ -80,7 +78,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   public List<ProjectType> getAvailableProjectTypes() {
     return Arrays.asList(ProjectType.values());
   }
-
 
   @OptionValues("lombok")
   public List<BooleanOption> getLombokOptions() {

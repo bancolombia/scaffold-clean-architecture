@@ -47,8 +47,6 @@ class GenerateStructureTaskTest {
     assertEquals(Arrays.asList(GenerateStructureTask.ProjectType.values()), types);
   }
 
-
-
   @Test
   void shouldReturnMetricsOptions() {
     // Arrange
@@ -108,7 +106,6 @@ class GenerateStructureTaskTest {
         "applications/app-service/src/main/resources/log4j2.properties",
         "applications/app-service/src/test/java/co/com/bancolombia");
   }
-
 
   @Test
   void generateStructureOnExistingProject() throws IOException, CleanException {
