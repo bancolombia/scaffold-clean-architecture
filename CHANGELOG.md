@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.16.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.1) (2024-04-22)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.0...v3.16.1)
 
 **Closed issues:**
 
 - The coverage plugin Cobertura is not being maintained [\#439](https://github.com/bancolombia/scaffold-clean-architecture/issues/439)
+
+**Merged pull requests:**
+
+- fix\(deps\): Update dependencies, add semantic release tasks to use git… [\#441](https://github.com/bancolombia/scaffold-clean-architecture/pull/441) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [v3.16.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.0) (2024-04-16)
 
