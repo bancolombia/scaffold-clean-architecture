@@ -23,20 +23,20 @@ jobs:
           distribution: 'temurin' 
           java-version: 17
       - name: Check for updates
-        run: ./gradlew ci-updater
+        run: ./gradlew ci-updater goJF
       - name: Check for changes
         id: git_changes
         run: |
           git diff --name-only
           if [[ $(git diff --name-only) ]]; then
             echo "Changes detected!"
-            echo "::set-output name=changes::true"
+            echo "HAS_CHANGES=true" >> $GITHUB_ENV
           else
             echo "No changes detected!"
-            echo "::set-output name=changes::false"
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
           fi
       - name: Create Pull Request
-        if: steps.git_changes.outputs.changes == 'true'
+        if: env.HAS_CHANGES == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.generate_token.outputs.token }}
