@@ -4,7 +4,10 @@ import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.KTS;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
 import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
@@ -33,11 +36,15 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -198,13 +205,7 @@ public class ModuleBuilder {
         "{} dependencies found in {}",
         Pattern.compile(regex).matcher(readFile(path)).results().count(),
         path);
-    return Pattern.compile(regex)
-        .matcher(readFile(path))
-        .results()
-        .map(MatchResult::group)
-        .map(s -> s.replace("'", ""))
-        .map(s -> s.replace("\"", ""))
-        .collect(Collectors.toSet());
+    return Utils.findExpressions(readFile(path), regex);
   }
 
   public String getSecretsBackendEnabled() {

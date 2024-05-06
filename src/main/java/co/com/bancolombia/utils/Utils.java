@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -182,5 +184,15 @@ public class Utils {
       m = pattern.matcher(result);
     }
     return result;
+  }
+
+  public static Set<String> findExpressions(String content, String regex) {
+    return Pattern.compile(regex)
+        .matcher(content)
+        .results()
+        .map(MatchResult::group)
+        .map(s -> s.replace("'", ""))
+        .map(s -> s.replace("\"", ""))
+        .collect(Collectors.toSet());
   }
 }

@@ -194,6 +194,11 @@ dependencies {
     implementation ('io.swagger.codegen.v3:swagger-codegen-generators:1.0.46') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
+    constraints { // for previous swagger dependency
+        implementation("commons-codec:commons-codec:1.17.0") {
+            because "This version closes a security vulnerability"
+        }
+    }
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
     implementation 'com.google.googlejavaformat:google-java-format:1.19.2'
 
@@ -282,4 +287,11 @@ tasks.register('installGitHooks') {
 
 tasks.named('wrapper') {
     gradleVersion = '8.5'
+}
+
+tasks.register('ci-updater', JavaExec) {
+    mainClass = 'co.com.bancolombia.utils.offline.LocalTasks' // Replace com.example.MainClass with the fully qualified name of your main class
+    classpath = sourceSets.main.runtimeClasspath
+    // Add any additional JVM arguments if needed
+    // jvmArgs = ['-Xmx512m']
 }
