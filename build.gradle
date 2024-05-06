@@ -181,30 +181,30 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 }
 
 dependencies {
-    api 'com.github.spullara.mustache.java:compiler:0.9.13'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1'
-    api 'commons-io:commons-io:2.16.1'
+    api 'com.github.spullara.mustache.java:compiler:0.9.11'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.0'
+    api 'commons-io:commons-io:2.15.1'
     api gradleApi()
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0'
     implementation 'org.reflections:reflections:0.10.2'
     // swagger generators
-    implementation ('io.swagger.codegen.v3:swagger-codegen-generators:1.0.48') {
+    implementation ('io.swagger.codegen.v3:swagger-codegen-generators:1.0.46') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
-    implementation 'com.google.googlejavaformat:google-java-format:1.22.0'
+    implementation 'com.google.googlejavaformat:google-java-format:1.19.2'
 
     testImplementation gradleTestKit()
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0-M1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.0-M1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.0-M1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.1'
 
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
 }
