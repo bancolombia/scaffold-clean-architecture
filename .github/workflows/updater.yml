@@ -1,8 +1,7 @@
 name: updater
 on:
-  push:
-    branches:
-      - feature/autoupdate
+  schedule:
+    - cron: '0 12 * * 1' # every Monday at 07:00 Colombia Time
 jobs:
   build:
     runs-on: ubuntu-latest
