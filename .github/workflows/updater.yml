@@ -1,0 +1,50 @@
+name: updater
+on:
+  push:
+    branches:
+      - feature/autoupdate
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate a token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' 
+          java-version: 17
+      - name: Check for updates
+        run: ./gradlew ci-updater
+      - name: Check for changes
+        id: git_changes
+        run: |
+          git diff --name-only
+          if [[ $(git diff --name-only) ]]; then
+            echo "Changes detected!"
+            echo "::set-output name=changes::true"
+          else
+            echo "No changes detected!"
+            echo "::set-output name=changes::false"
+          fi
+      - name: Create Pull Request
+        if: steps.git_changes.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          committer: Dependencies Bot <release-bot@bancolombia.com.co>
+          commit-message: 'fix(deps): update dependencies'
+          title: 'fix(deps): update dependencies'
+          body: 'This PR updates dependencies to latest versions'
+          branch: 'feature/autoupdate-deps'
+          base: 'master'
+          labels: 'dependencies'
+          reviewers: 'juancgalvis,santitigaga'
