@@ -1,5 +1,15 @@
 # Changelog
 
+## [v3.16.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.4) (2024-05-06)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.3...v3.16.4)
+
+**Merged pull requests:**
+
+- ci\(deps\): Autoupdate dependencies [\#447](https://github.com/bancolombia/scaffold-clean-architecture/pull/447) ([juancgalvis](https://github.com/juancgalvis))
+- fix\(deps\): update dependencies [\#446](https://github.com/bancolombia/scaffold-clean-architecture/pull/446) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- ci\(autoupdate\): Update build.gradle [\#445](https://github.com/bancolombia/scaffold-clean-architecture/pull/445) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.16.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.3) (2024-05-06)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.2...v3.16.3)
