@@ -46,7 +46,7 @@ jobs:
         with:
           github-token: ${{ steps.generate_token.outputs.token }}
           push-branch: "master"
-          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version'
+          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version [skip ci]'
           force-add: "true"
           force-push: "true"
           files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
