@@ -12,6 +12,7 @@ permissions: read-all
 
 jobs:
   analysis:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     name: Scorecards analysis
     runs-on: ubuntu-latest
     permissions:
