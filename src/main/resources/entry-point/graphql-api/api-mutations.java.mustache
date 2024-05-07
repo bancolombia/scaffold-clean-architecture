@@ -1,22 +1,22 @@
 package {{package}}.graphqlapi;
 
-import graphql.kickstart.tools.GraphQLMutationResolver;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 {{/lombok}}
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
+{{#reactive}}
+import reactor.core.publisher.Mono;
+{{/reactive}}
 
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
 @Controller
-/**
-* To interact with the API make use of Playground in the "/playground" path, but remember,
-* Playground ONLY must be used in dev or qa environments, not in production.
-*/
-public class ApiMutations implements GraphQLMutationResolver {
+public class ApiMutations {
 
-//  private final MyUseCase useCase;
+    //private final MyUseCase useCase;
 
 {{^lombok}}
     //public ApiMutations(MyUseCase useCase){
@@ -24,8 +24,18 @@ public class ApiMutations implements GraphQLMutationResolver {
     //}
 {{/lombok}}
 
-    public String addSomething(String objRequest/* change for object request */) {
-//      return useCase.doAction(objRequest);
+{{#reactive}}
+    @MutationMapping
+    public Mono<String> addSomething(@Argument("objectRequest") String objRequest/* change for object request */) {
+        //return useCase.doAction(objRequest);
+        return Mono.just("Hello world from graphql-api mutations " + objRequest);
+    }
+{{/reactive}}
+{{^reactive}}
+    @MutationMapping
+    public String addSomething(@Argument("objectRequest") String objRequest/* change for object request */) {
+        //return useCase.doAction(objRequest);
         return "Hello world from graphql-api mutations " + objRequest;
     }
+{{/reactive}}
 }
