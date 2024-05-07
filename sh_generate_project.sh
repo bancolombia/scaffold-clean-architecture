@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 TYPE=$1
-echo "Generating project with type $TYPE"
+MY_DIR="build/toscan/$TYPE"
+echo "Generating project with type $TYPE in $MY_DIR"
 
-rm -rf build/toscan
-mkdir build/toscan
+rm -rf $MY_DIR
+mkdir -p $MY_DIR
 echo "buildscript {
         repositories {
           mavenLocal()
@@ -17,9 +18,9 @@ echo "buildscript {
         }
       }
 
-      apply plugin: 'co.com.bancolombia.cleanArchitecture'" >> build/toscan/build.gradle
+      apply plugin: 'co.com.bancolombia.cleanArchitecture'" >> $MY_DIR/build.gradle
 
-cd build/toscan || exit
+cd $MY_DIR || exit
 gradle ca --metrics false --example true --type $TYPE
 gradle wrapper
 
@@ -40,7 +41,7 @@ else
     ./gradlew gda --type $adapter
   done
 
-  for entry in "mq" "restmvc" "sqs"
+  for entry in "mq" "restmvc" "sqs" "graphql"
   do
     ./gradlew gep --type $entry
   done
