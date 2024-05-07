@@ -1,7 +1,5 @@
 {
   "folders": [
-    "infrastructure/entry-points/graphql-api/src/main/{{language}}/{{packagePath}}/graphql-controllers",
-    "infrastructure/entry-points/graphql-api/src/test/{{language}}/{{packagePath}}/graphql-controllers",
     "applications/app-service/src/main/resources/graphql"
   ],
   "files": {},

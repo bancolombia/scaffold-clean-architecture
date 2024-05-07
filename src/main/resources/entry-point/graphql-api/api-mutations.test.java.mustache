@@ -2,9 +2,24 @@ package {{package}}.graphqlapi;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+{{#reactive}}
+import reactor.test.StepVerifier;
+{{/reactive}}
 
 public class ApiMutationsTest {
 
+{{#reactive}}
+    @Test
+    void addSomethingTest(){
+        ApiMutations apiMutations = new ApiMutations();
+        var objRequest = "objRequest";
+        apiMutations.addSomething(objRequest)
+                .as(StepVerifier::create)
+                .assertNext(Assertions::assertNotNull)
+                .verifyComplete();
+    }
+{{/reactive}}
+{{^reactive}}
     @Test
     void addSomethingTest(){
         ApiMutations apiMutations = new ApiMutations();
@@ -13,4 +28,5 @@ public class ApiMutationsTest {
 
         Assertions.assertNotNull(addSomething);
     }
+{{/reactive}}
 }
