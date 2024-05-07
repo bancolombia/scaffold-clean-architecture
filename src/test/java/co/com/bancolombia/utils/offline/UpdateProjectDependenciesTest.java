@@ -10,6 +10,7 @@ import co.com.bancolombia.utils.operations.ExternalOperations;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class UpdateProjectDependenciesTest {
     task =
         UpdateProjectDependencies.builder()
             .withOperations(operations)
-            .withConstantsPath(TEST_PATH)
+            .withFiles(List.of(TEST_PATH))
             .build();
   }
 

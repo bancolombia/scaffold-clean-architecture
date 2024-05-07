@@ -395,9 +395,9 @@ class UtilsTest {
 
   @Test
   void shouldGetAllFilesWithExtension() throws IOException {
-    List<String> result = Utils.getAllFilesWithExtension(true);
+    List<String> result = Utils.getAllFilesWithExtension(".", true);
     assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle.kts")));
-    result = Utils.getAllFilesWithExtension(false);
+    result = Utils.getAllFilesWithExtension(".", false);
     assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
   }
 

@@ -45,8 +45,9 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
       return;
     }
     // Add specific parameters for UpgradeActions
+    String basePath = getProject().getProjectDir().toString();
     builder.addParam(DEPENDENCIES_TO_UPDATE, dependencies);
-    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithExtension(builder.isKotlin()));
+    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithExtension(basePath, builder.isKotlin()));
     UpgradeFactory factory = new UpgradeFactory();
     factory.buildModule(builder);
     builder.persist();
