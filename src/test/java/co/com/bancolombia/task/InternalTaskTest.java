@@ -52,7 +52,7 @@ class InternalTaskTest {
 
   @AfterAll
   public static void tearDown() {
-    //    deleteStructure(Path.of(TEST_DIR));
+    deleteStructure(Path.of(TEST_DIR));
   }
 
   @Test
