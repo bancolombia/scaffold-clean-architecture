@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.17.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.0) (2024-05-07)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.5...v3.17.0)
+
+**Merged pull requests:**
+
+- feat\(updater\): Export updater logic as task for another non clean architecture projects [\#449](https://github.com/bancolombia/scaffold-clean-architecture/pull/449) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.16.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.16.5) (2024-05-07)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.16.4...v3.16.5)
