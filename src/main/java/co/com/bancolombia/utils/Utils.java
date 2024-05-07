@@ -152,10 +152,11 @@ public class Utils {
     return content.replaceAll(regex, replaceValue);
   }
 
-  public static List<String> getAllFilesWithExtension(boolean isKotlin) throws IOException {
+  public static List<String> getAllFilesWithExtension(String base, boolean isKotlin)
+      throws IOException {
     String extension = isKotlin ? "gradle.kts" : "gradle";
     List<String> paths;
-    try (Stream<Path> walk = Files.walk(Paths.get("."))) {
+    try (Stream<Path> walk = Files.walk(Paths.get(base))) {
       paths =
           walk.filter(p -> !Files.isDirectory(p))
               .map(Path::toString)

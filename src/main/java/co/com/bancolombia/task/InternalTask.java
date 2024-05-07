@@ -2,16 +2,20 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.SonarCheck;
+import co.com.bancolombia.utils.Utils;
+import co.com.bancolombia.utils.offline.UpdateProjectDependencies;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 @CATask(name = "internalTask", shortcut = "it", description = "Run non final user task")
 public class InternalTask extends AbstractCleanArchitectureDefaultTask {
-  private Action action = Action.SONARCHECK;
+  private Action action = Action.SONAR_CHECK;
 
   @Option(option = "action", description = "Set task action to run")
   public void setAction(Action action) {
@@ -23,14 +27,27 @@ public class InternalTask extends AbstractCleanArchitectureDefaultTask {
     return Arrays.asList(Action.values());
   }
 
+  @Getter @Internal private boolean success = false;
+
   @Override
   public void execute() throws IOException {
-    if (Objects.requireNonNull(action) == Action.SONARCHECK) {
-      SonarCheck.parse(getProject());
+    switch (Objects.requireNonNull(action)) {
+      case SONAR_CHECK:
+        SonarCheck.parse(getProject());
+        break;
+      case UPDATE_DEPENDENCIES:
+        String basePath = getProject().getProjectDir().toString();
+        List<String> files = Utils.getAllFilesWithExtension(basePath, builder.isKotlin());
+        logger.lifecycle(
+            "Updating project dependencies from root {} in files \n {}", basePath, files);
+        UpdateProjectDependencies.builder().withFiles(files).build().run();
+        break;
     }
+    success = true;
   }
 
   public enum Action {
-    SONARCHECK
+    SONAR_CHECK,
+    UPDATE_DEPENDENCIES
   }
 }

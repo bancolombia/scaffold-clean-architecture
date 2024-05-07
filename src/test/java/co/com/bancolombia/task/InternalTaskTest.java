@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Objects;
 import org.gradle.api.Project;
@@ -66,12 +68,26 @@ class InternalTaskTest {
   }
 
   @Test
+  void shouldRunUpdateAllDependencies() throws IOException {
+    // Arrange
+    Files.write(
+        Paths.get(TEST_DIR, "gradle.properties"),
+        "simulateRest=true".getBytes(),
+        StandardOpenOption.APPEND);
+    task.setAction(InternalTask.Action.UPDATE_DEPENDENCIES);
+    // Act
+    task.execute();
+    // Assert
+    assertTrue(task.isSuccess());
+  }
+
+  @Test
   void shouldGetOptions() {
     // Arrange
     // Act
     List<InternalTask.Action> options = task.getInputOptions();
     // Assert
-    assertEquals(1, options.size());
+    assertEquals(InternalTask.Action.values().length, options.size());
   }
 
   private String readResourceFile(String location) throws IOException {
