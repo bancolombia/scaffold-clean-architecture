@@ -3,6 +3,7 @@ package co.com.bancolombia;
 import co.com.bancolombia.models.TaskModel;
 import co.com.bancolombia.task.ValidateStructureTask;
 import co.com.bancolombia.task.annotations.CATask;
+import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.ReflectionUtils;
 import java.util.stream.Stream;
 import org.gradle.api.Action;
@@ -17,6 +18,19 @@ public class PluginClean implements Plugin<Project> {
   private CleanPluginExtension cleanPluginExtension;
 
   public void apply(Project project) {
+    boolean onlyUpdater = false;
+    try {
+      onlyUpdater = FileUtils.readBooleanProperty("onlyUpdater");
+    } catch (Exception e) {
+      project.getLogger().debug("Property onlyUpdater not found, using default value false", e);
+    }
+    if (onlyUpdater) {
+      TaskContainer taskContainer = project.getTasks();
+      initTasks()
+          .filter(t -> "it".equals(t.getShortcut()))
+          .forEach(task -> this.appendTask(taskContainer, task));
+      return;
+    }
     project.getPluginManager().apply("java");
     cleanPluginExtension =
         project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
