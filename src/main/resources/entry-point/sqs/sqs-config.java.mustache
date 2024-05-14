@@ -1,6 +1,6 @@
 package {{package}}.sqs.listener.config;
 
-import {{package}}.sqs.listener.helper.SQSListener;
+import {{package}}.sqs.listener.helper.SqsListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain;
@@ -21,11 +21,11 @@ import java.net.URI;
 import java.util.function.Consumer;
 
 @Configuration
-public class SQSConfig {
+public class SqsConfig {
 
     @Bean
-    public SQSListener sqsListener(SqsAsyncClient client, SQSProperties properties, Consumer<Message> consumer) {
-        return SQSListener.builder()
+    public SqsListener sqsListener(SqsAsyncClient client, SqsProperties properties, Consumer<Message> consumer) {
+        return SqsListener.builder()
                 .client(client)
                 .properties(properties)
                 .consumer(consumer)
@@ -35,10 +35,10 @@ public class SQSConfig {
 
     {{#metrics}}
     @Bean
-    public SqsAsyncClient configSqs(SQSProperties properties, MetricPublisher publisher) {
+    public SqsAsyncClient configSqs(SqsProperties properties, MetricPublisher publisher) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
+                .region(Region.of(properties.region()))
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .credentialsProvider(getProviderChain())
                 .build();
@@ -46,10 +46,10 @@ public class SQSConfig {
     {{/metrics}}
     {{^metrics}}
     @Bean
-    public SqsAsyncClient configSqs(SQSProperties properties) {
+    public SqsAsyncClient configSqs(SqsProperties properties) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
+                .region(Region.of(properties.region()))
                 .credentialsProvider(getProviderChain())
                 .build();
     }
@@ -66,9 +66,9 @@ public class SQSConfig {
                 .build();
     }
 
-    private URI resolveEndpoint(SQSProperties properties) {
-        if (properties.getEndpoint() != null) {
-            return URI.create(properties.getEndpoint());
+    protected URI resolveEndpoint(SqsProperties properties) {
+        if (properties.endpoint() != null) {
+            return URI.create(properties.endpoint());
         }
         return null;
     }

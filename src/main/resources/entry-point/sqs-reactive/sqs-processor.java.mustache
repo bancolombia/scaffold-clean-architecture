@@ -13,11 +13,11 @@ import java.util.function.Function;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class SQSProcessor implements Function<Message, Mono<Void>> {
+public class SqsProcessor implements Function<Message, Mono<Void>> {
     // private final MyUseCase myUseCase;
 {{^lombok}}
 
-    public SQSProcessor(/*MyUseCase myUseCase*/) {
+    public SqsProcessor(/*MyUseCase myUseCase*/) {
         //this.myUseCase = myUseCase;
     }
 {{/lombok}}

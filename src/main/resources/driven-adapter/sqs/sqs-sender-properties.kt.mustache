@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration
 @AllArgsConstructor
 @Configuration
 @ConfigurationProperties(prefix = "adapter.sqs")
-class SQSSenderProperties {
+class SqsSenderProperties {
     val region: String? = null
     val queueUrl: String? = null
     val endpoint: String? = null

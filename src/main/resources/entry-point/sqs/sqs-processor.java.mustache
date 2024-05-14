@@ -12,11 +12,11 @@ import java.util.function.Consumer;
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
-public class SQSProcessor implements Consumer<Message> {
+public class SqsProcessor implements Consumer<Message> {
     // private final MyUseCase myUseCase;
 {{^lombok}}
 
-    public SQSProcessor(/*MyUseCase myUseCase*/) {
+    public SqsProcessor(/*MyUseCase myUseCase*/) {
         //this.myUseCase = myUseCase;
     }
 {{/lombok}}
