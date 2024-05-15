@@ -35,7 +35,7 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
           "No valid module name is set, usage: gradle deleteModule --module "
               + Utils.formatTaskOptions(getModules()));
     }
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + module);
+    String dependency = buildImplementationFromProject(":" + module);
     builder.deleteModule(module);
     builder.removeFromSettings(module);
     builder.removeDependencyFromModule(APP_SERVICE, dependency);

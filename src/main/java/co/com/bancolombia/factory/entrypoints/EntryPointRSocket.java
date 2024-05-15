@@ -16,7 +16,7 @@ public class EntryPointRSocket implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     builder.appendToSettings("rsocket-responder", "infrastructure/entry-points");
     builder.appendToProperties("spring.rsocket.server").put("port", 7000);
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":rsocket-responder");
+    String dependency = buildImplementationFromProject(":rsocket-responder");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.setupFromTemplate("entry-point/rsocket-responder");
   }

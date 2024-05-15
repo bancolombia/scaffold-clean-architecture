@@ -2,8 +2,6 @@ package co.com.bancolombia.factory.commons;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
-import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE_KTS;
-import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE_KTS;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
@@ -35,21 +33,17 @@ public class GenericModule {
     builder.addParam("name-dash", dashName);
     builder.addParam("name-package", name.toLowerCase().replaceAll("[-_]*", ""));
     builder.appendToSettings(dashName, baseDir);
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":" + dashName);
+    String dependency = buildImplementationFromProject(":" + dashName);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.setupFromTemplate(template);
   }
 
   public static void addAwsBom(ModuleBuilder builder) throws IOException, CleanException {
-    if (builder.isKotlin()) {
-      addAwsBomKotlin(builder);
-    } else {
-      addAwsBomJava(builder);
-      if (builder.withMetrics()) {
-        builder.addParam("task-param-name", "metrics");
-        GenericModule.generateGenericModule(
-            builder, null, "infrastructure/helpers", "helper/metrics/aws");
-      }
+    addAwsBomJava(builder);
+    if (builder.withMetrics()) {
+      builder.addParam("task-param-name", "metrics");
+      GenericModule.generateGenericModule(
+          builder, null, "infrastructure/helpers", "helper/metrics/aws");
     }
   }
 
@@ -65,19 +59,5 @@ public class GenericModule {
     builder.updateFile(
         APP_BUILD_GRADLE,
         content -> Utils.addDependency(content, "implementation 'software.amazon.awssdk:sts'"));
-  }
-
-  private static void addAwsBomKotlin(ModuleBuilder builder) throws IOException {
-    builder.updateFile(
-        BUILD_GRADLE_KTS,
-        content -> {
-          if (content.contains("software.amazon.awssdk")) {
-            return content;
-          }
-          return Utils.addDependency(content, AWS_BOM_KT);
-        });
-    builder.updateFile(
-        APP_BUILD_GRADLE_KTS,
-        content -> Utils.addDependency(content, "implementation(\"software.amazon.awssdk:sts\")"));
   }
 }

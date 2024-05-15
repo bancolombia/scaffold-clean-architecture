@@ -244,6 +244,7 @@ sonar {
 googleJavaFormat {
     toolVersion = "1.7"
     exclude '**/examples-ca/**'
+    exclude '**/UtilsTest.java'
 }
 
 dependencyCheck {

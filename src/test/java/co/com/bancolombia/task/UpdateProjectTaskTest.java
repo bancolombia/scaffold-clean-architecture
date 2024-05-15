@@ -28,7 +28,6 @@ class UpdateProjectTaskTest {
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
-    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
     taskStructure.execute();
 
     ProjectBuilder.builder()

@@ -1,13 +1,9 @@
 {
   "folders": [
-    "infrastructure/entry-points/{{name-dash}}/src/main/{{language}}/{{packagePath}}/{{name-package}}",
-    "infrastructure/entry-points/{{name-dash}}/src/test/{{language}}/{{packagePath}}/{{name-package}}"
+    "infrastructure/entry-points/{{name-dash}}/src/main/java/{{packagePath}}/{{name-package}}",
+    "infrastructure/entry-points/{{name-dash}}/src/test/java/{{packagePath}}/{{name-package}}"
   ],
-  "files": {},
-  "java": {
+  "files": {
     "entry-point/generic/build.gradle.mustache": "infrastructure/entry-points/{{name-dash}}/build.gradle"
-},
-  "kotlin": {
-    "entry-point/generic/build.gradle.kts.mustache": "infrastructure/entry-points/{{name-dash}}/build.gradle.kts"
   }
 }

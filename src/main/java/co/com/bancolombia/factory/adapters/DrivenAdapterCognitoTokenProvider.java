@@ -27,8 +27,7 @@ public class DrivenAdapterCognitoTokenProvider implements ModuleFactory {
         .put("endpoint", "https://<domain>.auth.<region>.amazoncognito.com/oauth2/token");
 
     builder.appendToSettings("cognito-token-provider", "infrastructure/driven-adapters");
-    String dependency =
-        buildImplementationFromProject(builder.isKotlin(), ":cognito-token-provider");
+    String dependency = buildImplementationFromProject(":cognito-token-provider");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }

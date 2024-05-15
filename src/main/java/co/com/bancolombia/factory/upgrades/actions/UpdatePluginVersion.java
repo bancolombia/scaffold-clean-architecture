@@ -46,13 +46,6 @@ public class UpdatePluginVersion implements UpgradeAction {
     }
     logger.lifecycle("Updating the plugin ");
 
-    if (builder.isKotlin()) {
-      builder.updateExpression(
-          "build.gradle.kts",
-          "(id\\(\"co.com.bancolombia.cleanArchitecture\"\\)\\s?version\\s?).+",
-          "$1\"" + lastRelease + "\"");
-      return true;
-    }
     builder.updateExpression(
         GRADLE_PROPERTIES, "(systemProp.version\\s?=\\s?).+", "$1" + lastRelease);
     UpdateUtils.updateVersions(builder, BUILD_GRADLE, "cleanArchitectureVersion", lastRelease);

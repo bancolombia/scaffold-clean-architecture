@@ -21,15 +21,13 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
       logger.lifecycle("Generating rest-consumer for reactive project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");
       String implementation =
-          buildImplementation(
-              builder.isKotlin(), "org.springframework.boot:spring-boot-starter-webflux");
+          buildImplementation("org.springframework.boot:spring-boot-starter-webflux");
       builder.appendDependencyToModule(APP_SERVICE, implementation);
       builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
-      String implementation =
-          buildImplementation(builder.isKotlin(), "com.fasterxml.jackson.core:jackson-databind");
+      String implementation = buildImplementation("com.fasterxml.jackson.core:jackson-databind");
       builder.appendDependencyToModule(APP_SERVICE, implementation);
     }
     builder
@@ -40,7 +38,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     withCircuitBreaker(
         builder.appendToProperties("resilience4j.circuitbreaker.instances.testPost"));
     builder.appendToSettings("rest-consumer", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":rest-consumer");
+    String dependency = buildImplementationFromProject(":rest-consumer");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     Swagger.fromBuilder(builder, "infrastructure/driven-adapters/rest-consumer", false);
   }

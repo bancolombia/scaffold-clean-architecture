@@ -20,7 +20,7 @@ public class EntryPointGraphql implements ModuleFactory {
     builder.appendToProperties("spring.graphql.graphiql").put("enabled", false);
     builder.addParam("reactive", builder.isReactive());
 
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":graphql-api");
+    String dependency = buildImplementationFromProject(":graphql-api");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder.setupFromTemplate("entry-point/graphql-api");

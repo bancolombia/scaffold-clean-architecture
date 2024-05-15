@@ -22,7 +22,7 @@ public class DrivenAdapterBinStash implements ModuleFactory {
     builder.setupFromTemplate("driven-adapter/bin-stash");
 
     builder.appendToSettings("bin-stash", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":bin-stash");
+    String dependency = buildImplementationFromProject(":bin-stash");
     builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
 
     builder.appendToProperties("stash.memory").put("maxSize", "10000");

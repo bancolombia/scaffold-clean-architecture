@@ -164,7 +164,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
                 .with("task_name", getName())
                 .with("type", type)
                 .with("project_type", builder.isReactive() ? "reactive" : "imperative")
-                .with("project_language", builder.isKotlin() ? "kotlin" : "java")
+                .with("project_language", "java")
                 .with("duration", duration);
 
         AnalyticsExporter.collectMetric(

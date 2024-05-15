@@ -15,7 +15,7 @@ public class DrivenAdapterAsyncEventBus implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     builder.setupFromTemplate("driven-adapter/async-event-bus");
     builder.appendToSettings("async-event-bus", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":async-event-bus");
+    String dependency = buildImplementationFromProject(":async-event-bus");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }

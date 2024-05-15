@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +33,6 @@ class GenerateDrivenAdapterTaskImperativeTest {
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.IMPERATIVE);
-    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
     taskStructure.execute();
 
     ProjectBuilder.builder()
@@ -200,23 +198,6 @@ class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  void generateDrivenAdapterMongoRepositoryForNoProjectType() throws IOException, CleanException {
-    // Arrange
-    task.setType("MONGODB");
-    // Act
-    task.execute();
-    // Assert
-    assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/driven-adapters/mongo-repository/",
-        "build.gradle",
-        "src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java",
-        "src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java",
-        "src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java",
-        "src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java",
-        "src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java");
-  }
-
-  @Test
   void shouldGetSecretOptions() {
     // Arrange
     // Act
@@ -327,13 +308,5 @@ class GenerateDrivenAdapterTaskImperativeTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/infrastructure/driven-adapters/dynamo-db/", "build.gradle");
-  }
-
-  @Test
-  void generateDrivenAdapterKtorShouldThrowValidationException() {
-    // Arrange
-    task.setType("KTOR");
-    // Act
-    assertThrows(ValidationException.class, () -> task.execute());
   }
 }

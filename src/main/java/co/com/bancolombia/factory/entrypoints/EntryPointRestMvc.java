@@ -15,16 +15,11 @@ public class EntryPointRestMvc implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.setupFromTemplate("entry-point/rest-mvc");
     builder.appendToSettings("api-rest", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":api-rest");
+    String dependency = buildImplementationFromProject(":api-rest");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
       builder.addParam("module", "api-rest");
       builder.setupFromTemplate("entry-point/swagger");
-      if (builder.isKotlin()) {
-        builder
-            .appendToProperties("spring.mvc.pathmatch")
-            .put("matching-strategy", "ant_path_matcher");
-      }
     }
     if (builder.withMetrics()) {
       builder

@@ -1,20 +1,13 @@
 {
   "folders": [
-    "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api"
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api"
   ],
-  "files": {},
-  "java": {
-    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/RouterRest.java",
-    "entry-point/rest-webflux/router-functions/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/Handler.java",
-    "entry-point/rest-webflux/cors-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/config/CorsConfig.java",
-    "entry-point/rest-webflux/security-headers-filter.java.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/config/SecurityHeadersConfig.java",
-    "entry-point/rest-webflux/router-functions/router.unit.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api/RouterRestTest.java",
+  "files": {
+    "entry-point/rest-webflux/router-functions/router.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/RouterRest.java",
+    "entry-point/rest-webflux/router-functions/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Handler.java",
+    "entry-point/rest-webflux/cors-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/CorsConfig.java",
+    "entry-point/rest-webflux/security-headers-filter.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/SecurityHeadersConfig.java",
+    "entry-point/rest-webflux/router-functions/router.unit.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/RouterRestTest.java",
     "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
-  },
-  "kotlin": {
-    "entry-point/rest-webflux/router-functions/router.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/RouterRest.kt",
-    "entry-point/rest-webflux/router-functions/handler.kt.mustache": "infrastructure/entry-points/reactive-web/src/main/{{language}}/{{packagePath}}/api/Handler.kt",
-    "entry-point/rest-webflux/router-functions/router.unit.test.kt.mustache": "infrastructure/entry-points/reactive-web/src/test/{{language}}/{{packagePath}}/api/RouterRestTest.kt",
-    "entry-point/rest-webflux/build.gradle.kts.mustache": "infrastructure/entry-points/reactive-web/build.gradle.kts"
   }
 }

@@ -21,11 +21,6 @@ public class EntryPointWebflux implements ModuleFactory {
       if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
         builder.addParam("module", "reactive-web");
         builder.setupFromTemplate("entry-point/swagger");
-        if (builder.isKotlin()) {
-          builder
-              .appendToProperties("spring.mvc.pathmatch")
-              .put("matching-strategy", "ant_path_matcher");
-        }
       }
     }
 
@@ -43,7 +38,7 @@ public class EntryPointWebflux implements ModuleFactory {
     Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web", true);
 
     builder.appendToSettings("reactive-web", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":reactive-web");
+    String dependency = buildImplementationFromProject(":reactive-web");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     if (builder.withMetrics()) {
       builder

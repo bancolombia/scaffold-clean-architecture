@@ -1,14 +1,9 @@
 {
   "folders": [
-    "infrastructure/driven-adapters/{{name-dash}}/src/main/{{language}}/{{packagePath}}/{{name-package}}",
-    "infrastructure/driven-adapters/{{name-dash}}/src/test/{{language}}/{{packagePath}}/{{name-package}}"
+    "infrastructure/driven-adapters/{{name-dash}}/src/main/java/{{packagePath}}/{{name-package}}",
+    "infrastructure/driven-adapters/{{name-dash}}/src/test/java/{{packagePath}}/{{name-package}}"
   ],
   "files": {
-  },
-  "java": {
     "driven-adapter/generic/build.gradle.mustache": "infrastructure/driven-adapters/{{name-dash}}/build.gradle"
-  },
-  "kotlin": {
-    "driven-adapter/generic/build.gradle.kts.mustache": "infrastructure/driven-adapters/{{name-dash}}/build.gradle.kts"
   }
 }

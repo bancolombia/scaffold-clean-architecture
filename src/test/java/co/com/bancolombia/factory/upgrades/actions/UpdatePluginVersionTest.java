@@ -72,7 +72,6 @@ class UpdatePluginVersionTest {
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");
     doReturn(release).when(builder).getLatestRelease();
-    doReturn(false).when(builder).isKotlin();
     builder.addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = '2.2.4'\n");
     builder.addFile(GRADLE_PROPERTIES, "systemProp.version=2.2.4");
     // Act
@@ -90,7 +89,6 @@ class UpdatePluginVersionTest {
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");
     doReturn(release).when(builder).getLatestRelease();
-    doReturn(false).when(builder).isKotlin();
     builder.addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = \"2.2.4\"\n");
     builder.addFile(GRADLE_PROPERTIES, "systemProp.version=2.2.4");
     // Act

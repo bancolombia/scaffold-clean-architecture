@@ -19,7 +19,7 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
 
     GenericModule.addAwsBom(builder);
     builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":dynamo-db");
+    String dependency = buildImplementationFromProject(":dynamo-db");
     builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToProperties("aws.dynamodb").put("endpoint", "http://localhost:8000");

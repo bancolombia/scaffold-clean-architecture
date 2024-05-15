@@ -1,10 +1,8 @@
 {
   "folders": [
-    "infrastructure/entry-points/api-rest/src/test/{{language}}/{{packagePath}}/api/config"
+    "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config"
   ],
-  "files": {},
-  "java": {
-    "entry-point/rest-mvc/authorization/authorization-jwt.java.mustache": "infrastructure/entry-points/api-rest/src/main/{{language}}/{{packagePath}}/api/config/AuthorizationJwt.java"
-  },
-  "kotlin": {}
+  "files": {
+    "entry-point/rest-mvc/authorization/authorization-jwt.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/AuthorizationJwt.java"
+  }
 }

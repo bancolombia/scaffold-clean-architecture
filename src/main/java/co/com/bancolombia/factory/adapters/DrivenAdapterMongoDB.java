@@ -27,7 +27,7 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
 
     builder.appendToSettings("mongo-repository", "infrastructure/driven-adapters");
     builder.appendToProperties("spring.data.mongodb").put("uri", "mongodb://localhost:27017/test");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":mongo-repository");
+    String dependency = buildImplementationFromProject(":mongo-repository");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     new ObjectMapperFactory().buildModule(builder);

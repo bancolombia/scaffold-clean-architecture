@@ -1,15 +1,9 @@
 {
   "folders": [
-    "domain/model/src/test/{{language}}/{{packagePath}}/model/{{modelName}}"
+    "domain/model/src/test/java/{{packagePath}}/model/{{modelName}}"
   ],
   "files": {
-  },
-  "java": {
-    "model/model.java.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/{{modelName}}/{{modelClassName}}.java",
-    "model/gateway.java.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/{{modelName}}/gateways/{{modelClassName}}Repository.java"
-  },
-  "kotlin": {
-    "model/model.kt.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/{{modelName}}/{{modelClassName}}.kt",
-    "model/gateway.kt.mustache": "domain/model/src/main/{{language}}/{{packagePath}}/model/{{modelName}}/gateways/{{modelClassName}}Repository.kt"
+    "model/model.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/{{modelName}}/{{modelClassName}}.java",
+    "model/gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/{{modelName}}/gateways/{{modelClassName}}Repository.java"
   }
 }
