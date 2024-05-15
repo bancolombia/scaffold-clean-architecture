@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.3...HEAD)
+
+**Closed issues:**
+
+- \[Deprecate\] - Kotlin Scaffold [\#452](https://github.com/bancolombia/scaffold-clean-architecture/issues/452)
+
+## [v3.17.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.3) (2024-05-15)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.2...v3.17.3)
+
+**Merged pull requests:**
+
+- fix\(kotlin\): Remove kotlin support since 3.17.3 [\#453](https://github.com/bancolombia/scaffold-clean-architecture/pull/453) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.17.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.2) (2024-05-13)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.1...v3.17.2)
