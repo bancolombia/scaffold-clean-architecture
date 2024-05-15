@@ -112,12 +112,8 @@ public class Utils {
     return res;
   }
 
-  public static String buildImplementationFromProject(String content) {
-    return buildImplementation(buildProject(content));
-  }
-
-  private static String buildProject(String module) {
-    return "project('" + module + "')";
+  public static String buildImplementationFromProject(String module) {
+    return "implementation project('" + module + "')";
   }
 
   public static String buildImplementation(String dependency) {

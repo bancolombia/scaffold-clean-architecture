@@ -381,6 +381,12 @@ class UtilsTest {
   }
 
   @Test
+  void ShouldGetBuildImplementationFromProject() {
+    String result = Utils.buildImplementationFromProject(":module");
+    assertEquals("implementation project(':module')", result);
+  }
+
+  @Test
   void shouldReplaceExpression() {
     String expected = "'com.fasterxml.jackson.core:jackson-databind:2.11.0'";
     String result =
@@ -398,7 +404,7 @@ class UtilsTest {
   }
 
   @Test
-  void sample() throws IOException {
+  void sample() {
     assertEquals("my/path/package", "my.path.package".replace('.', '/'));
     assertEquals("mypathpackage", "my'path'package".replace("'", ""));
     assertEquals("mypathpackage", "my\"path\"package".replace("\"", ""));
