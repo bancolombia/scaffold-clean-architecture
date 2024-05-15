@@ -240,12 +240,11 @@ public class ModuleBuilder {
         });
   }
 
-  //    public void appendConfigurationToModule(String module, String configuration) throws
-  // IOException {
-  //        logger.lifecycle("adding configuration {} to module {}", configuration, module);
-  //        String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
-  //        updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
-  //    }
+  public void appendConfigurationToModule(String module, String configuration) throws IOException {
+    logger.lifecycle("adding configuration {} to module {}", configuration, module);
+    String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+    updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
+  }
 
   public void removeDependencyFromModule(String module, String dependency) throws IOException {
     logger.lifecycle("removing dependency {} from module {}", dependency, module);
