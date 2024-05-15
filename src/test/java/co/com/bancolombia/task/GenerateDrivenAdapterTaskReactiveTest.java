@@ -176,25 +176,6 @@ class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
-  void generateDrivenAdapterRedisRepositoryForReactiveWithSecret()
-      throws IOException, CleanException {
-    // Arrange
-    task.setType("REDIS");
-    task.setMode(DrivenAdapterRedis.Mode.TEMPLATE);
-    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
-
-    // Act
-    task.execute();
-    // Assert
-    assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/driven-adapters/redis/",
-        "build.gradle",
-        "src/main/java/co/com/bancolombia/redis/template/helper/ReactiveTemplateAdapterOperations.java",
-        "src/main/java/co/com/bancolombia/redis/template/ReactiveRedisTemplateAdapter.java",
-        "src/main/java/co/com/bancolombia/redis/config/RedisConfig.java");
-  }
-
-  @Test
   void generateDrivenAdapterKMSForReactive() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");

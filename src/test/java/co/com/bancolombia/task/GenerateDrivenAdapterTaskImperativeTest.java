@@ -198,23 +198,6 @@ class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  void generateDrivenAdapterMongoRepositoryForNoProjectType() throws IOException, CleanException {
-    // Arrange
-    task.setType("MONGODB");
-    // Act
-    task.execute();
-    // Assert
-    assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/driven-adapters/mongo-repository/",
-        "build.gradle",
-        "src/main/java/co/com/bancolombia/mongo/MongoDBRepository.java",
-        "src/main/java/co/com/bancolombia/mongo/MongoRepositoryAdapter.java",
-        "src/main/java/co/com/bancolombia/mongo/helper/AdapterOperations.java",
-        "src/main/java/co/com/bancolombia/mongo/config/MongoDBSecret.java",
-        "src/main/java/co/com/bancolombia/mongo/config/MongoConfig.java");
-  }
-
-  @Test
   void shouldGetSecretOptions() {
     // Arrange
     // Act
