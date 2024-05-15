@@ -26,8 +26,6 @@ public class Utils {
   private static final int PARAM_LENGTH = 2;
   public static final String INCLUDE_MODULE_JAVA =
       "\ninclude ':module'\nproject(':module').projectDir = file('./baseDir/module')";
-  public static final String INCLUDE_MODULE_KOTLIN =
-      "\ninclude(\":module\")\nproject(\":module\").projectDir = file(\"./baseDir/module\")";
 
   public static String capitalize(String data) {
     char[] c = data.toCharArray();
@@ -114,24 +112,16 @@ public class Utils {
     return res;
   }
 
-  private static String getStyle(boolean isKotlin) {
-    return isKotlin ? "(\"add\")" : " 'add'";
+  public static String buildImplementationFromProject(String content) {
+    return buildImplementation(buildProject(content));
   }
 
-  public static String buildImplementationFromProject(boolean isKotlin, String content) {
-    return buildImplementation(isKotlin, "project")
-        .replace("'", "")
-        .replace("\"", "")
-        .replace("project", buildProject(isKotlin, content));
+  private static String buildProject(String module) {
+    return "project('" + module + "')";
   }
 
-  private static String buildProject(boolean isKotlin, String content) {
-    String style = getStyle(isKotlin).replace("(", "").replace(")", "");
-    return "project(" + style.replace("add", content) + ")";
-  }
-
-  public static String buildImplementation(boolean isKotlin, String content) {
-    return "implementation" + getStyle(isKotlin).replace("add", content);
+  public static String buildImplementation(String dependency) {
+    return "implementation '" + dependency + "'";
   }
 
   public static String addModule(String settings, String include, String module, String baseDir) {
@@ -152,15 +142,13 @@ public class Utils {
     return content.replaceAll(regex, replaceValue);
   }
 
-  public static List<String> getAllFilesWithExtension(String base, boolean isKotlin)
-      throws IOException {
-    String extension = isKotlin ? "gradle.kts" : "gradle";
+  public static List<String> getAllFilesWithGradleExtension(String base) throws IOException {
     List<String> paths;
     try (Stream<Path> walk = Files.walk(Paths.get(base))) {
       paths =
           walk.filter(p -> !Files.isDirectory(p))
               .map(Path::toString)
-              .filter(f -> f.endsWith(extension) && !f.contains(".git"))
+              .filter(f -> f.endsWith("gradle") && !f.contains(".git"))
               .filter(f -> !f.contains(".git"))
               .filter(f -> !f.contains("settings.gradle"))
               .map(f -> f.replace("\\", "/"))

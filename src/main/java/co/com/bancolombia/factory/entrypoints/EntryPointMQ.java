@@ -14,7 +14,7 @@ public class EntryPointMQ implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.setupFromTemplate(getTemplate(builder.isReactive()));
     builder.appendToSettings("mq-listener", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":mq-listener");
+    String dependency = buildImplementationFromProject(":mq-listener");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder

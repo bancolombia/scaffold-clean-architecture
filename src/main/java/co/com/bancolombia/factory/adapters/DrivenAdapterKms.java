@@ -28,7 +28,7 @@ public class DrivenAdapterKms implements ModuleFactory {
         .put("protocol", "http")
         .put("port", "4566")
         .put("keyId", "add-your-key-here"); // implementation project('kms-repository')
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":kms-repository");
+    String dependency = buildImplementationFromProject(":kms-repository");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     new DrivenAdapterSecrets().buildModule(builder);
   }

@@ -32,18 +32,14 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "9.1.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "8.7";
-  public static final String KOTLIN_VERSION = "1.9.20";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
-    public static final String KTS = ".kts";
     public static final String BUILD_GRADLE = "./build.gradle";
-    public static final String BUILD_GRADLE_KTS = BUILD_GRADLE + KTS;
     public static final String MAIN_GRADLE = "./main.gradle";
     public static final String SETTINGS_GRADLE = "./settings.gradle";
     public static final String DOCKERFILE = "./deployment/Dockerfile";
     public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
-    public static final String APP_BUILD_GRADLE_KTS = APP_BUILD_GRADLE + KTS;
     public static final String APPLICATION_PROPERTIES =
         "applications/app-service/src/main/resources/application.yaml";
     public static final String GRADLE_PROPERTIES = "./gradle.properties";

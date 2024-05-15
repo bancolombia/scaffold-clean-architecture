@@ -34,7 +34,6 @@ class UpgradeFactoryTest {
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.IMPERATIVE);
-    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
     taskStructure.execute();
 
     ProjectBuilder.builder()

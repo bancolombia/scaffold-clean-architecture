@@ -26,7 +26,7 @@ public class DrivenAdapterJPA implements ModuleFactory {
     builder
         .appendToProperties("spring.jpa")
         .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":jpa-repository");
+    String dependency = buildImplementationFromProject(":jpa-repository");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     new ObjectMapperFactory().buildModule(builder);

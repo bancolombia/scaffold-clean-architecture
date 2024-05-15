@@ -14,7 +14,7 @@ public class DrivenAdapterMQ implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.setupFromTemplate(getTemplate(builder.isReactive()));
     builder.appendToSettings("mq-sender", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":mq-sender");
+    String dependency = buildImplementationFromProject(":mq-sender");
 
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 

@@ -1,14 +1,14 @@
 {
   "folders": [
-    "applications/app-service/src/main/{{language}}/{{packagePath}}/config",
-    "applications/app-service/src/test/{{language}}/{{packagePath}}",
+    "applications/app-service/src/main/java/{{packagePath}}/config",
+    "applications/app-service/src/test/java/{{packagePath}}",
     "infrastructure/driven-adapters",
     "infrastructure/entry-points",
     "infrastructure/helpers",
-    "domain/model/src/main/{{language}}/{{packagePath}}/model",
-    "domain/model/src/test/{{language}}/{{packagePath}}/model",
-    "domain/usecase/src/main/{{language}}/{{packagePath}}/usecase",
-    "domain/usecase/src/test/{{language}}/{{packagePath}}/usecase"
+    "domain/model/src/main/java/{{packagePath}}/model",
+    "domain/model/src/test/java/{{packagePath}}/model",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase"
   ],
   "files": {
     "structure/deployment/dockerfile.mustache": "deployment/Dockerfile",
@@ -17,25 +17,14 @@
     "structure/root/.gitignore.mustache": ".gitignore",
     "structure/root/gradle.properties.mustache": "gradle.properties",
     "structure/root/readme.md.mustache": "README.md",
-    "structure/applications/appservice/arch-validations/.gitignore.mustache": "applications/app-service/src/test/{{language}}/{{packagePath}}/.gitignore"
-  },
-  "kotlin" : {
-    "structure/applications/appservice/build.gradle.kts.mustache": "applications/app-service/build.gradle.kts",
-    "structure/domain/model/build.gradle.kts.mustache": "domain/model/build.gradle.kts",
-    "structure/domain/usecase/build.gradle.kts.mustache": "domain/usecase/build.gradle.kts",
-    "structure/root/settings.gradle.kts.mustache": "settings.gradle.kts",
-    "structure/root/build.gradle.kts.mustache": "build.gradle.kts",
-    "structure/applications/appservice/main.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/MainApplication.kt",
-    "structure/applications/appservice/usecases.kt.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/UseCasesConfig.kt"
-  },
-  "java" : {
+    "structure/applications/appservice/arch-validations/.gitignore.mustache": "applications/app-service/src/test/java/{{packagePath}}/.gitignore",
     "structure/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
     "structure/domain/model/build.gradle.mustache": "domain/model/build.gradle",
     "structure/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
     "structure/root/main.gradle.mustache": "main.gradle",
     "structure/root/settings.gradle.mustache": "settings.gradle",
     "structure/root/build.gradle.mustache": "build.gradle",
-    "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/MainApplication.java",
-    "structure/applications/appservice/usecases.java.mustache": "applications/app-service/src/main/{{language}}/{{packagePath}}/config/UseCasesConfig.java"
+    "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
+    "structure/applications/appservice/usecases.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/UseCasesConfig.java"
   }
 }

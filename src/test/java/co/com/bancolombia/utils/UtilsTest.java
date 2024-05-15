@@ -376,9 +376,7 @@ class UtilsTest {
 
   @Test
   void ShouldGetBuildImplementation() {
-    String result = Utils.buildImplementation(true, "module");
-    assertEquals("implementation(\"module\")", result);
-    result = Utils.buildImplementation(false, "module");
+    String result = Utils.buildImplementation("module");
     assertEquals("implementation 'module'", result);
   }
 
@@ -394,10 +392,8 @@ class UtilsTest {
   }
 
   @Test
-  void shouldGetAllFilesWithExtension() throws IOException {
-    List<String> result = Utils.getAllFilesWithExtension(".", true);
-    assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle.kts")));
-    result = Utils.getAllFilesWithExtension(".", false);
+  void shouldGetAllFilesWithGradleExtension() throws IOException {
+    List<String> result = Utils.getAllFilesWithGradleExtension(".");
     assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
   }
 

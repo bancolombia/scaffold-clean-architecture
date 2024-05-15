@@ -1,15 +1,9 @@
 {
   "folders": [
-    "domain/usecase/src/test/{{language}}/{{packagePath}}/usecase/{{useCaseName}}"
+    "domain/usecase/src/test/java/{{packagePath}}/usecase/{{useCaseName}}"
   ],
   "files": {
-  },
-  "java": {
-    "usecase/usecase.java.mustache": "domain/usecase/src/main/{{language}}/{{packagePath}}/usecase/{{useCaseName}}/{{useCaseClassName}}.java",
+    "usecase/usecase.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/{{useCaseName}}/{{useCaseClassName}}.java",
     "usecase/build.gradle.mustache": "domain/usecase/build.gradle"
-  },
-  "kotlin": {
-    "usecase/usecase.kt.mustache": "domain/usecase/src/main/{{language}}/{{packagePath}}/usecase/{{useCaseName}}/{{useCaseClassName}}.kt",
-    "usecase/build.gradle.kts.mustache": "domain/usecase/build.gradle.kts"
   }
 }

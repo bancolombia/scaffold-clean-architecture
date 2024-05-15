@@ -35,7 +35,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
     } else {
       builder.appendToProperties("spring.redis").put("host", "localhost").put("port", 6379);
     }
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":redis");
+    String dependency = buildImplementationFromProject(":redis");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     new ObjectMapperFactory().buildModule(builder);

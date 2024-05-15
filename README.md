@@ -7,14 +7,14 @@
 
 # Scaffolding of Clean Architecture
 
-Gradle plugin to create a java and kotlin application based on Clean Architecture following our best practices!
+Gradle plugin to create a java application based on Clean Architecture following our best practices!
 
 - [Scaffolding of Clean Architecture](#scaffolding-of-clean-architecture)
 - [Plugin Implementation](#plugin-implementation)
 - [Tasks](#tasks)
   - [Generate Project](#generate-project)
-  - [Generate Model for Java and Kotlin](#generate-model-for-java-and-kotlin)
-  - [Generate Use Case for Java and Kotlin](#generate-use-case-for-java-and-kotlin)
+  - [Generate Model for Java](#generate-model-for-java)
+  - [Generate Use Case for Java](#generate-use-case-for-java)
   - [Generate Driven Adapter](#generate-driven-adapter)
   - [Generate Entry Point](#generate-entry-point)
   - [Generate Helper](#generate-helper)
@@ -43,20 +43,6 @@ echo "plugins {
 }" > build.gradle
 ```
 
-To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version 6.9 or later, to start add the following section into your **build.gradle.kts** file.
-
-```kotlin dls
-plugins {
-    id("co.com.bancolombia.cleanArchitecture") version "3.17.2"
-}
-```
-Or if is a new  project execute this script in the root directory of your project.
-```sh
-echo "plugins {
-    id(\"co.com.bancolombia.cleanArchitecture\") version \"3.17.2\"
-}" > build.gradle.kts
-```
-
 # Tasks
 
 The Scaffolding Clean Architecture plugin will allow you run 8 tasks:
@@ -76,8 +62,6 @@ If you run this task on an existing project it will override the `main.gradle`, 
    - **`lombok`** `= <true | false>`: Specify if you want to use this plugin  . `Default Value = true`
 
    - **`metrics`** `= <true | false>`: Specify if you want to enable this feature with micrometer  . `Default Value = true`
-
-   - **`language`** `= <JAVA | KOTLIN>`: Specify if you want to use this plugin  . `Default Value = JAVA`
 
    - **`javaVersion`** `= <VERSION_17 | VERSION_21>`: Java version  . `Default Value = VERSION_17`
    
@@ -140,61 +124,7 @@ If you run this task on an existing project it will override the `main.gradle`, 
    ┗ 📜settings.gradle
    ```
 
-
-**_The structure will look like this for kotlin:_**
-
-   ```bash
-   📦NameProject
-   ┣ 📂applications
-   ┃ ┗ 📂app-service
-   ┃ ┃ ┣ 📂src
-   ┃ ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┃ ┣ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
-   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜[configs and beans]
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜MainApplication.kt
-   ┃ ┃ ┃ ┃ ┗ 📂resources
-   ┃ ┃ ┃ ┃ ┃ ┣ 📜[properties]
-   ┃ ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┗ 📜build.gradle.kts
-   ┣ 📂deployment
-   ┃ ┣ 📜[Dockerfile, Pipelines as a code]
-   ┣ 📂domain
-   ┃ ┣ 📂model
-   ┃ ┃ ┣ 📂src
-   ┃ ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┗ 📜build.gradle.kts
-   ┃ ┗ 📂usecase
-   ┃ ┃ ┣ 📂src
-   ┃ ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
-   ┃ ┃ ┗ 📜build.gradle.kts
-   ┣ 📂infrastructure
-   ┃ ┣ 📂driven-adapters
-   ┃ ┣ 📂entry-points
-   ┃ ┗ 📂helpers
-   ┣ 📜.gitignore
-   ┣ 📜build.gradle.kts
-   ┣ 📜gradle.properties
-   ┣ 📜lombok.config
-   ┣ 📜README.md
-   ┗ 📜settings.gradle.kts
-   ```
-
-## Generate Model for Java and Kotlin
+## Generate Model for Java
 
 The **`generateModel | gm`** task will generate a class and interface in model layer, this task has one required parameter `name`.
 
@@ -223,27 +153,7 @@ The **`generateModel | gm`** task will generate a class and interface in model l
    ┃ ┗ 📜build.gradle
    ```
 
-**_This task will generate something like that for kotlin:_**
-
-   ```bash
-   📦domain
-   ┣ 📂model
-   ┃ ┣ 📂src
-   ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂model
-   ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂gateways
-   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜ModelRepository.kt
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Model.kt
-   ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂model
-   ┃ ┗ 📜build.gradle.kts
-   ```
-
-## Generate Use Case for Java and Kotlin
+## Generate Use Case for Java
 
 The **`generateUseCase | guc`** task will generate a class in model layer, this task has one required parameter `name`.
 
@@ -272,26 +182,6 @@ The **`generateUseCase | guc`** task will generate a class in model layer, this 
    ┃ ┗ 📜build.gradle
    ```
 
-**_This task will generate something like that for kotlin:_**
-
-   ```bash
-   📦domain
-   ┗ 📂usecase
-   ┃ ┣ 📂src
-   ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
-   ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜BusinessUseCase.kt
-   ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┗ 📂kotlin
-   ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂usecase
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂business
-   ┃ ┗ 📜build.gradle.kts
-   ```
-
 ## Generate Driven Adapter
 
 The **`generateDrivenAdapter | gda`** task will generate a module in Infrastructure layer, this task has one required parameter `type`. <br>
@@ -302,25 +192,24 @@ The **`generateDrivenAdapter | gda`** task will generate a module in Infrastruct
    gradle gda --type [drivenAdapterType]
    ```
 
-   | Reference for **drivenAdapterType** | Name                           | Additional Options                                 | Java    | Kotlin  |
-   |-------------------------------------|--------------------------------|----------------------------------------------------|---------|---------|
-   | generic                             | Empty Driven Adapter           | --name [name]                                      | &#9745; | &#9745; |
-   | asynceventbus                       | Async Event Bus                |                                                    | &#9745; | &#9745; |
-   | binstash                            | Bin Stash                      |                                                    | &#9745; | &#9745; |
-   | cognitotokenprovider                | Generador de token de cognito  |                                                    | &#9745; |         |
-   | dynamodb                            | Dynamo DB adapter              |                                                    | &#9745; | &#9745; |
-   | jpa                                 | JPA Repository                 | --secret [true-false]                              | &#9745; | &#9745; |
-   | kms                                 | AWS Key Management Service     |                                                    | &#9745; | &#9745; |
-   | ktor                                | HTTP client for kotlin         |                                                    | &#9744; | &#9745; |
-   | mongodb                             | Mongo Repository               | --secret [true-false]                              | &#9745; | &#9745; |
-   | mq                                  | JMS MQ Client to send messages |                                                    | &#9745; | &#9745; |
-   | r2dbc                               | R2dbc Postgresql Client        |                                                    | &#9745; | &#9745; |
-   | redis                               | Redis                          | --mode [template-repository] --secret [true-false] | &#9745; | &#9745; |
-   | restconsumer                        | Rest Client Consumer           | --url [url] --from-swagger swagger.yaml            | &#9745; | &#9745; |
-   | rsocket                             | RSocket Requester              |                                                    | &#9745; | &#9745; |
-   | s3                                  | AWS Simple Storage Service     |                                                    | &#9745; | &#9745; |
-   | secrets                             | Secrets Manager Bancolombia    | --secrets-backend [backend] <br> Valid options for backend are "aws_secrets_manager" (default) or "vault". | &#9745; | &#9745; |
-   | sqs                                 | SQS message sender             |                                                    | &#9745; | &#9745; |
+   | Reference for **drivenAdapterType** | Name                           | Additional Options                                                                                         |
+   |-------------------------------------|--------------------------------|------------------------------------------------------------------------------------------------------------|
+   | generic                             | Empty Driven Adapter           | --name [name]                                                                                              |
+   | asynceventbus                       | Async Event Bus                |                                                                                                            |
+   | binstash                            | Bin Stash                      |                                                                                                            |
+   | cognitotokenprovider                | Generador de token de cognito  |                                                                                                            |
+   | dynamodb                            | Dynamo DB adapter              |                                                                                                            |
+   | jpa                                 | JPA Repository                 | --secret [true-false]                                                                                      |
+   | kms                                 | AWS Key Management Service     |                                                                                                            |
+   | mongodb                             | Mongo Repository               | --secret [true-false]                                                                                      |
+   | mq                                  | JMS MQ Client to send messages |                                                                                                            |
+   | r2dbc                               | R2dbc Postgresql Client        |                                                                                                            |
+   | redis                               | Redis                          | --mode [template-repository] --secret [true-false]                                                         |
+   | restconsumer                        | Rest Client Consumer           | --url [url] --from-swagger swagger.yaml                                                                    |
+   | rsocket                             | RSocket Requester              |                                                                                                            |
+   | s3                                  | AWS Simple Storage Service     |                                                                                                            |
+   | secrets                             | Secrets Manager Bancolombia    | --secrets-backend [backend] <br> Valid options for backend are "aws_secrets_manager" (default) or "vault". |
+   | sqs                                 | SQS message sender             |                                                                                                            |
 
    
    _**This task will generate something like that:**_
@@ -358,17 +247,17 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
    gradle gep --type [entryPointType]
    ```
 
-   | Reference for **entryPointType** | Name                                   | Additional Options                                                                                |Java   | Kotlin  |
-   |----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------|-------|---------|
-   | generic                          | Empty Entry Point                      | --name [name]                                                                                     |&#9745;| &#9745; |
-   | asynceventhandler                | Async Event Handler                    |                                                                                                   |&#9745;| &#9745; |
-   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                            |&#9745;| &#9745; |
-   | kafka                            | Kafka Consumer                         |                                                                                                   |&#9745;|         |
-   | mq                               | JMS MQ Client to listen messages       |                                                                                                   |&#9745;| &#9745; |
-   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true-false] --from-swagger swagger.yaml |&#9745;| &#9745; |
-   | rsocket                          | Rsocket Controller Entry Point         |                                                                                                   |&#9745;| &#9745; |
-   | sqs                              | SQS Listener                           |                                                                                                   |&#9745;| &#9745; |
-   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true-false] --from-swagger swagger.yaml      |&#9745;| &#9745; |
+   | Reference for **entryPointType** | Name                                   | Additional Options                                                                                |
+   |----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------|
+   | generic                          | Empty Entry Point                      | --name [name]                                                                                     |
+   | asynceventhandler                | Async Event Handler                    |                                                                                                   |
+   | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                            |
+   | kafka                            | Kafka Consumer                         |                                                                                                   |
+   | mq                               | JMS MQ Client to listen messages       |                                                                                                   |
+   | restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true-false] --from-swagger swagger.yaml |
+   | rsocket                          | Rsocket Controller Entry Point         |                                                                                                   |
+   | sqs                              | SQS Listener                           |                                                                                                   |
+   | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true-false] --from-swagger swagger.yaml      |
 
    Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default, undertow.
 
@@ -576,7 +465,7 @@ Usage analytics may include the following information:
 - Java vendor name and version.
 - Java specification and runtime versions.
 - Plugin version.
-- Project language (`kotlin` or `java`)
+- Project language `java`
 - Task name that was run.
 - Workspace information like language, user that is running the task.
 - For generate use case, generate model, generate helper and delete module tasks, the name will be sent.

@@ -48,7 +48,6 @@ public class DrivenAdapterSecrets implements ModuleFactory {
     }
     String dependency =
         buildImplementation(
-            builder.isKotlin(),
             "com.github.bancolombia:" + secretLibrary + ":" + Constants.SECRETS_VERSION);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }

@@ -2,9 +2,5 @@
   "folders": [],
   "files": {
     "pipeline/jenkins/jenkinsfile.mustache": "deployment/Jenkinsfile"
-  },
-  "java": {
-  },
-  "kotlin": {
   }
 }

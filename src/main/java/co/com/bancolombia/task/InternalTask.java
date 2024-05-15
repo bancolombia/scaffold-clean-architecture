@@ -37,7 +37,7 @@ public class InternalTask extends AbstractCleanArchitectureDefaultTask {
         break;
       case UPDATE_DEPENDENCIES:
         String basePath = getProject().getProjectDir().toString();
-        List<String> files = Utils.getAllFilesWithExtension(basePath, builder.isKotlin());
+        List<String> files = Utils.getAllFilesWithGradleExtension(basePath);
         logger.lifecycle(
             "Updating project dependencies from root {} in files \n {}", basePath, files);
         UpdateProjectDependencies.builder().withFiles(files).build().run();

@@ -25,7 +25,7 @@ public class DrivenAdapterSQS implements ModuleFactory {
         .put("region", "us-east-1")
         .put("queueUrl", "http://localhost:4566/000000000000/sample")
         .put("endpoint", "http://localhost:4566 # For localstack only");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":sqs-sender");
+    String dependency = buildImplementationFromProject(":sqs-sender");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }

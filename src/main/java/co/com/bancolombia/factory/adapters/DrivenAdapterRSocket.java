@@ -15,7 +15,7 @@ public class DrivenAdapterRSocket implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.runValidations(ReactiveTypeValidation.class);
     builder.appendToSettings("rsocket-requester", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":rsocket-requester");
+    String dependency = buildImplementationFromProject(":rsocket-requester");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.setupFromTemplate("driven-adapter/rsocket-requester");
   }

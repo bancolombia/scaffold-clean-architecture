@@ -19,7 +19,7 @@ public class DrivenAdapterR2dbc implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     logger.lifecycle("Generating for reactive project");
     builder.setupFromTemplate("driven-adapter/r2dbc-postgresql");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":r2dbc-postgresql");
+    String dependency = buildImplementationFromProject(":r2dbc-postgresql");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
     builder.appendToSettings("r2dbc-postgresql", "infrastructure/driven-adapters");
     new ObjectMapperFactory().buildModule(builder);

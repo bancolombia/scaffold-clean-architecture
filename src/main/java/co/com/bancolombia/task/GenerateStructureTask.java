@@ -26,7 +26,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption metrics = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
-  private Language language = Language.JAVA;
   private JavaVersion javaVersion = JavaVersion.VERSION_17;
 
   @Option(option = "package", description = "Set principal package to use in the project")
@@ -37,11 +36,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   @Option(option = "type", description = "Set project type")
   public void setType(ProjectType type) {
     this.type = type;
-  }
-
-  @Option(option = "language", description = "Set project lang")
-  public void setLanguage(Language language) {
-    this.language = language;
   }
 
   @Option(option = "name", description = "Set project name, by default is cleanArchitecture ")
@@ -112,7 +106,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("metrics", metrics == BooleanOption.TRUE);
     builder.addParam("example", withExample == BooleanOption.TRUE);
-    builder.addParam("language", language.name().toLowerCase());
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21);
@@ -162,11 +155,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   public enum ProjectType {
     REACTIVE,
     IMPERATIVE
-  }
-
-  public enum Language {
-    JAVA,
-    KOTLIN
   }
 
   public enum JavaVersion {

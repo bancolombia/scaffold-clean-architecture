@@ -19,7 +19,7 @@ public class EntryPointSQS implements ModuleFactory {
     }
     builder.setupFromTemplate(template);
     builder.appendToSettings("sqs-listener", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":sqs-listener");
+    String dependency = buildImplementationFromProject(":sqs-listener");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     GenericModule.addAwsBom(builder);

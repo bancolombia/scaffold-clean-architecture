@@ -16,7 +16,6 @@ public class ObjectMapperFactory implements ModuleFactory {
     builder.setupFromTemplate("commons/object-mapper");
     String dependency =
         buildImplementation(
-            builder.isKotlin(),
             "org.reactivecommons.utils:object-mapper:" + Constants.REACTIVE_COMMONS_MAPPER_VERSION);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }

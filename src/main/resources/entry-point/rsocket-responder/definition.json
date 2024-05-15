@@ -1,16 +1,11 @@
 {
   "folders": [
-    "infrastructure/entry-points/rsocket-responder/src/main/{{language}}/{{packagePath}}/controller",
-    "infrastructure/entry-points/rsocket-responder/src/test/{{language}}/{{packagePath}}/controller"
+    "infrastructure/entry-points/rsocket-responder/src/main/java/{{packagePath}}/controller",
+    "infrastructure/entry-points/rsocket-responder/src/test/java/{{packagePath}}/controller"
   ],
-  "files": {},
-  "java": {
-    "entry-point/rsocket-responder/rsocket-responder.java.mustache": "infrastructure/entry-points/rsocket-responder/src/main/{{language}}/{{packagePath}}/controller/RsocketController.java",
+  "files": {
+    "entry-point/rsocket-responder/rsocket-responder.java.mustache": "infrastructure/entry-points/rsocket-responder/src/main/java/{{packagePath}}/controller/RsocketController.java",
     "entry-point/rsocket-responder/build.gradle.mustache": "infrastructure/entry-points/rsocket-responder/build.gradle",
-    "entry-point/rsocket-responder/rsocket-responder.test.java.mustache": "infrastructure/entry-points/rsocket-responder/src/test/{{language}}/{{packagePath}}/controller/RsocketControllerTest.java"
-  },
-  "kotlin": {
-    "entry-point/rsocket-responder/rsocket-responder.kt.mustache": "infrastructure/entry-points/rsocket-responder/src/main/{{language}}/{{packagePath}}/controller/RsocketController.kt",
-    "entry-point/rsocket-responder/build.gradle.kts.mustache": "infrastructure/entry-points/rsocket-responder/build.gradle.kts"
+    "entry-point/rsocket-responder/rsocket-responder.test.java.mustache": "infrastructure/entry-points/rsocket-responder/src/test/java/{{packagePath}}/controller/RsocketControllerTest.java"
   }
 }

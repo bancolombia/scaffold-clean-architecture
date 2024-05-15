@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +33,6 @@ class GenerateDrivenAdapterTaskImperativeTest {
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.IMPERATIVE);
-    taskStructure.setLanguage(GenerateStructureTask.Language.JAVA);
     taskStructure.execute();
 
     ProjectBuilder.builder()
@@ -327,13 +325,5 @@ class GenerateDrivenAdapterTaskImperativeTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/infrastructure/driven-adapters/dynamo-db/", "build.gradle");
-  }
-
-  @Test
-  void generateDrivenAdapterKtorShouldThrowValidationException() {
-    // Arrange
-    task.setType("KTOR");
-    // Act
-    assertThrows(ValidationException.class, () -> task.execute());
   }
 }

@@ -1,9 +1,6 @@
 package co.com.bancolombia.factory;
 
 import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
-import static co.com.bancolombia.Constants.MainFiles.KTS;
-import static co.com.bancolombia.task.GenerateStructureTask.Language.JAVA;
-import static co.com.bancolombia.task.GenerateStructureTask.Language.KOTLIN;
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
 import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
@@ -56,8 +53,8 @@ import org.gradle.tooling.ProjectConnection;
 
 public class ModuleBuilder {
   private static final String DEFINITION_FILES = "definition.json";
-  private static final String LANGUAGE = "language";
   public static final String LATEST_RELEASE = "latestRelease";
+  public static final String SETTINGS_GRADLE = "settings.gradle";
   private final DefaultResolver resolver = new DefaultResolver();
   private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private final Map<String, FileModel> files = new ConcurrentHashMap<>();
@@ -93,7 +90,6 @@ public class ModuleBuilder {
     params.put("metrics", withMetrics());
     addConstantsFromClassToModuleBuilder(this, Constants.class);
     loadPackage();
-    loadLanguage();
     loadIsExample();
   }
 
@@ -165,11 +161,6 @@ public class ModuleBuilder {
       addDir(Utils.fillPath(folder, params));
     }
     Map<String, String> projectFiles = new HashMap<>(definition.getFiles());
-    if (isKotlin()) {
-      projectFiles.putAll(definition.getKotlin());
-    } else {
-      projectFiles.putAll(definition.getJava());
-    }
     for (Map.Entry<String, String> fileEntry : projectFiles.entrySet()) {
       String path = Utils.fillPath(fileEntry.getValue(), params);
       String content = buildFromTemplate(fileEntry.getKey());
@@ -179,16 +170,16 @@ public class ModuleBuilder {
   }
 
   public void appendToSettings(String module, String baseDir) throws IOException {
-    String settingsFile = "settings.gradle" + (isKotlin() ? ".kts" : "");
-    logger.lifecycle("adding module {} to " + settingsFile, module);
-    String include = isKotlin() ? Utils.INCLUDE_MODULE_KOTLIN : Utils.INCLUDE_MODULE_JAVA;
-    updateFile(settingsFile, settings -> Utils.addModule(settings, include, module, baseDir));
+    logger.lifecycle("adding module {} to " + SETTINGS_GRADLE, module);
+    updateFile(
+        SETTINGS_GRADLE,
+        settings -> Utils.addModule(settings, Utils.INCLUDE_MODULE_JAVA, module, baseDir));
   }
 
   public void removeFromSettings(String module) throws IOException {
     logger.lifecycle("removing {} from settings.gradle", module);
     updateFile(
-        "settings.gradle" + (isKotlin() ? ".kts" : ""),
+        SETTINGS_GRADLE,
         settings -> {
           String moduleKey = ":" + module;
           return Utils.removeLinesIncludes(settings, moduleKey);
@@ -210,9 +201,6 @@ public class ModuleBuilder {
 
   public String getSecretsBackendEnabled() {
     String fileName = "applications/app-service/build.gradle";
-    if (isKotlin()) {
-      fileName += ".kts";
-    }
     if (!findExpressions(fileName, "com.github.bancolombia:aws-secrets").isEmpty()) {
       return "AWS_SECRETS_MANAGER";
     } else if (!findExpressions(fileName, "com.github.bancolombia:vault").isEmpty()) {
@@ -241,9 +229,6 @@ public class ModuleBuilder {
   public void appendDependencyToModule(String module, String dependency) throws IOException {
     String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
     buildFilePath = buildFilePath.replace(project.getProjectDir().getPath(), ".");
-    if (isKotlin() && !buildFilePath.endsWith(KTS)) {
-      buildFilePath += KTS;
-    }
     updateFile(
         buildFilePath,
         current -> {
@@ -255,11 +240,12 @@ public class ModuleBuilder {
         });
   }
 
-  public void appendConfigurationToModule(String module, String configuration) throws IOException {
-    logger.lifecycle("adding configuration {} to module {}", configuration, module);
-    String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
-    updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
-  }
+  //    public void appendConfigurationToModule(String module, String configuration) throws
+  // IOException {
+  //        logger.lifecycle("adding configuration {} to module {}", configuration, module);
+  //        String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+  //        updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
+  //    }
 
   public void removeDependencyFromModule(String module, String dependency) throws IOException {
     logger.lifecycle("removing dependency {} from module {}", dependency, module);
@@ -335,10 +321,6 @@ public class ModuleBuilder {
     return "true".equals(value);
   }
 
-  public boolean isKotlin() {
-    return KOTLIN.name().equalsIgnoreCase(params.get(LANGUAGE).toString());
-  }
-
   public boolean isEnableLombok() {
     return getABooleanProperty("lombok", true);
   }
@@ -412,19 +394,6 @@ public class ModuleBuilder {
       logger.debug("cannot read example from gradle.properties");
       this.params.put(param, false);
     }
-  }
-
-  private void loadLanguage() {
-    String language = null;
-    try {
-      language = FileUtils.readProperties(project.getProjectDir().getPath(), LANGUAGE);
-    } catch (IOException e) {
-      logger.debug("cannot read language from gradle.properties");
-    }
-    if (language == null) {
-      language = JAVA.name().toLowerCase();
-    }
-    this.params.put(LANGUAGE, language);
   }
 
   private void loadLatestRelease() {

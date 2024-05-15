@@ -29,9 +29,5 @@
     "test/performance-test/jmeter/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/ColasRabbitMQ/DataSet/DT_Example.txt",
     "test/performance-test/jmeter/Jmeter/SQSQueue/DataSet/DT_Example.csv.mustache": "performance-test/Jmeter/SQSQueue/DataSet/DT_Example.csv",
     "test/performance-test/jmeter/Jmeter/SQSQueue/DataSet/DT_Example.txt.mustache": "performance-test/Jmeter/SQSQueue/DataSet/DT_Example.txt"
-  },
-  "java": {
-  },
-  "kotlin": {
   }
 }

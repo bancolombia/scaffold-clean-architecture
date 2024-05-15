@@ -16,7 +16,7 @@ public class EntryPointKafka implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     builder.setupFromTemplate("entry-point/kafka-consumer-reactive");
     builder.appendToSettings("kafka-consumer", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(builder.isKotlin(), ":kafka-consumer");
+    String dependency = buildImplementationFromProject(":kafka-consumer");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder
