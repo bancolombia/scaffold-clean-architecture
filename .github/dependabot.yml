@@ -1,0 +1,51 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/channel-operations/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-article/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-dynamo/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-mongo/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-r2dbc/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-redis/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-rest-consumer/rest-consumer-client/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/example-rest-consumer/rest-consumer-server/deployment
+    schedule:
+      interval: daily
+
+  - package-ecosystem: docker
+    directory: /examples-ca/s3-example/deployment
+    schedule:
+      interval: daily
