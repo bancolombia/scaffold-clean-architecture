@@ -6,6 +6,7 @@ import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public final class ArchitectureValidation {
   }
 
   private static void prepareParams(Project project, Project appService, ModuleBuilder builder) {
-    Map<String, Boolean> deps = new TreeMap<>();
+    Map<String, Boolean> deps = new ConcurrentHashMap<>();
     appService.getConfigurations().stream()
         .filter(Configuration::isCanBeResolved)
         .flatMap(c -> c.getResolvedConfiguration().getFirstLevelModuleDependencies().stream())
