@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.17.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.5) (2024-05-31)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.4...v3.17.5)
+
+**Closed issues:**
+
+- Error al ejecutar el comando gradle u en la versión 3.16.4 y superiores [\#455](https://github.com/bancolombia/scaffold-clean-architecture/issues/455)
+
+**Merged pull requests:**
+
+- fix\(concurrent\): fix map concurrency error [\#457](https://github.com/bancolombia/scaffold-clean-architecture/pull/457) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.17.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.4) (2024-05-27)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.3...v3.17.4)
