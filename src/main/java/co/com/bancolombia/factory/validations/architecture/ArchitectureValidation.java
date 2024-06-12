@@ -4,15 +4,12 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ResolvedDependency;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ArchitectureValidation {
@@ -41,22 +38,12 @@ public final class ArchitectureValidation {
   }
 
   private static void prepareParams(Project project, Project appService, ModuleBuilder builder) {
-    Stream<DeclaredDependency> deps =
-        appService.getConfigurations().stream()
-            .filter(Configuration::isCanBeResolved)
-            .flatMap(c -> c.getResolvedConfiguration().getFirstLevelModuleDependencies().stream())
-            .map(DeclaredDependency::new);
-
     boolean hasSpringWeb =
-        deps.flatMap(DeclaredDependency::flattened)
-            .anyMatch(
-                dep ->
-                    dep != null
-                        && dep.name != null
-                        && dep.group != null
-                        && dep.group.equals("org.springframework")
-                        && dep.name.equals("spring-web"));
-
+        appService.getConfigurations().stream()
+            .map(Configuration::getIncoming)
+            .flatMap(d -> d.getDependencies().stream())
+            .map(d -> d.getGroup() + ":" + d.getName())
+            .anyMatch(dep -> dep.equals("org.springframework:spring-web"));
     project.getLogger().debug("hasSpringWeb: {}", hasSpringWeb);
     builder.addParam("hasSpringWeb", hasSpringWeb);
   }
@@ -75,25 +62,5 @@ public final class ArchitectureValidation {
     builder.appendDependencyToModule(
         Constants.APP_SERVICE, "testImplementation 'com.fasterxml.jackson.core:jackson-databind'");
     builder.persist();
-  }
-
-  public static class DeclaredDependency {
-    private String group;
-    private String name;
-    private List<DeclaredDependency> children;
-
-    public DeclaredDependency(ResolvedDependency resolvedDependency) {
-      this.group = resolvedDependency.getModuleGroup();
-      this.name = resolvedDependency.getModuleName();
-      this.children =
-          resolvedDependency.getChildren().stream()
-              .map(DeclaredDependency::new)
-              .collect(Collectors.toList());
-    }
-
-    public Stream<DeclaredDependency> flattened() {
-      return Stream.concat(
-          Stream.of(this), children.stream().flatMap(DeclaredDependency::flattened));
-    }
   }
 }

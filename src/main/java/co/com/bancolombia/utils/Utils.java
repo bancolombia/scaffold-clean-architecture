@@ -120,6 +120,10 @@ public class Utils {
     return "implementation '" + dependency + "'";
   }
 
+  public static String buildTestImplementation(String dependency) {
+    return "testImplementation '" + dependency + "'";
+  }
+
   public static String addModule(String settings, String include, String module, String baseDir) {
     String toAppend = include.replace("module", module).replace("baseDir", baseDir);
     if (settings.contains(toAppend)) {
