@@ -2,6 +2,7 @@ package co.com.bancolombia.factory.entrypoints;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+import static co.com.bancolombia.utils.Utils.buildTestImplementation;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -18,6 +19,9 @@ public class EntryPointWebflux implements ModuleFactory {
       builder.setupFromTemplate("entry-point/rest-webflux/router-functions");
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
+      // to run archunit validations
+      builder.appendDependencyToModule(
+              APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
       if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
         builder.addParam("module", "reactive-web");
         builder.setupFromTemplate("entry-point/swagger");
