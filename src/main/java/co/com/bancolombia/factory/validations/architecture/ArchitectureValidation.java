@@ -4,15 +4,12 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
-import org.gradle.api.artifacts.ResolvedDependency;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ArchitectureValidation {
@@ -41,19 +38,14 @@ public final class ArchitectureValidation {
   }
 
   private static void prepareParams(Project project, Project appService, ModuleBuilder builder) {
-    Map<String, Boolean> deps = new ConcurrentHashMap<>();
-    appService.getConfigurations().stream()
-        .filter(Configuration::isCanBeResolved)
-        .flatMap(c -> c.getResolvedConfiguration().getFirstLevelModuleDependencies().stream())
-        .forEach(dependency -> fillDependencyTree(deps, dependency));
-    boolean hasSpringWeb = deps.containsKey("org.springframework:spring-web");
+    boolean hasSpringWeb =
+        appService.getConfigurations().stream()
+            .map(Configuration::getIncoming)
+            .flatMap(d -> d.getDependencies().stream())
+            .map(d -> d.getGroup() + ":" + d.getName())
+            .anyMatch(dep -> dep.equals("org.springframework:spring-web"));
     project.getLogger().debug("hasSpringWeb: {}", hasSpringWeb);
     builder.addParam("hasSpringWeb", hasSpringWeb);
-  }
-
-  private static void fillDependencyTree(Map<String, Boolean> deps, ResolvedDependency dependency) {
-    deps.put(dependency.getModuleGroup() + ":" + dependency.getName(), true);
-    dependency.getChildren().forEach(dep -> fillDependencyTree(deps, dep));
   }
 
   @SneakyThrows
