@@ -21,7 +21,7 @@ public class EntryPointWebflux implements ModuleFactory {
       builder.setupFromTemplate("entry-point/rest-webflux");
       // to run archunit validations
       builder.appendDependencyToModule(
-              APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
+          APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
       if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
         builder.addParam("module", "reactive-web");
         builder.setupFromTemplate("entry-point/swagger");
