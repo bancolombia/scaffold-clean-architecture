@@ -19,6 +19,7 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.DependencySet;
+import org.gradle.api.artifacts.UnknownConfigurationException;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
@@ -47,7 +48,7 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
     logger.lifecycle("Project Package: {}", packageName);
-
+    checkForSpringWebDependency();
     ArchitectureValidation.inject(getProject(), builder);
 
     if (!validateModelLayer()) {
@@ -60,6 +61,20 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
       throw new CleanException("Infrastructure layer is invalid");
     }
     logger.lifecycle("The project is valid");
+  }
+
+  private void checkForSpringWebDependency() {
+    boolean hasSpringWeb = false;
+    try {
+      hasSpringWeb =
+          getProject().getChildProjects().get(APP_SERVICE).getConfigurations()
+              .getByName("testImplementation").getDependencies().stream()
+              .anyMatch(d -> d.getName().equals("spring-web"));
+    } catch (UnknownConfigurationException e) {
+      logger.warn("configuration testImplementation not present");
+    }
+    logger.lifecycle("has spring-web dependency to run validations: {}", hasSpringWeb);
+    builder.addParam("hasSpringWeb", hasSpringWeb);
   }
 
   private boolean validateModelLayer() {
