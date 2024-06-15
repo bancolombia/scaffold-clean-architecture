@@ -4,6 +4,9 @@ buildscript {
 		springBootVersion = '{{SPRING_BOOT_VERSION}}'
 		sonarVersion = '{{SONAR_VERSION}}'
 		jacocoVersion = '{{JACOCO_VERSION}}'
+		{{#mutation}}
+		pitestVersion = '{{PITEST_VERSION}}'
+		{{/mutation}}
 		{{#lombok}}
         lombokVersion = '{{LOMBOK_VERSION}}'
         {{/lombok}}
@@ -29,6 +32,9 @@ plugins {
     id "org.owasp.dependencycheck" version "{{DEPENDENCY_CHECK_VERSION}}" apply false
     {{/example}}
 	id 'org.springframework.boot' version "${springBootVersion}" apply false
+	{{#mutation}}
+	id 'info.solidsoft.pitest' version "${pitestVersion}" apply false
+	{{/mutation}}
 	id 'org.sonarqube' version "${sonarVersion}"
 	id 'jacoco'
 }

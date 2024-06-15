@@ -24,6 +24,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private String name = "cleanArchitecture";
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
+  private BooleanOption mutation = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
   private JavaVersion javaVersion = JavaVersion.VERSION_17;
@@ -51,6 +52,13 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   @Option(option = "metrics", description = "Set if metrics will be enabled in this project")
   public void setMetrics(BooleanOption metrics) {
     this.metrics = metrics;
+  }
+
+  @Option(
+      option = "mutation",
+      description = "Set if this project should include mutation tests configuration")
+  public void setMutation(BooleanOption mutation) {
+    this.mutation = mutation;
   }
 
   @Option(option = "javaVersion", description = "Set Java version")
@@ -106,6 +114,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("lombok", lombok == BooleanOption.TRUE);
     builder.addParam("metrics", metrics == BooleanOption.TRUE);
     builder.addParam("example", withExample == BooleanOption.TRUE);
+    builder.addParam("mutation", mutation == BooleanOption.TRUE);
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21);
@@ -119,6 +128,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
       builder.addParam(REACTIVE, builder.isReactive());
       builder.addParam("lombok", builder.isEnableLombok());
       builder.addParam("metrics", builder.withMetrics());
+      builder.addParam("mutation", builder.withMutation());
       if (builder.isEnableLombok()) {
         builder.setupFromTemplate("structure/restructure");
       } else {

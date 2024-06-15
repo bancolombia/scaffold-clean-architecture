@@ -30,6 +30,7 @@ public final class Constants {
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "3.17.8";
   public static final String DEPENDENCY_CHECK_VERSION = "9.2.0";
+  public static final String PITEST_VERSION = "1.15.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "8.8";
 
