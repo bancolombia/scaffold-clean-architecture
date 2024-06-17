@@ -328,6 +328,10 @@ public class ModuleBuilder {
     return getABooleanProperty("metrics", true);
   }
 
+  public boolean withMutation() {
+    return getABooleanProperty("mutation", false);
+  }
+
   @SafeVarargs
   public final <T extends Validation> void runValidations(Class<T>... validations)
       throws ValidationException {

@@ -9,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.gradle.api.Project;
-import org.gradle.api.artifacts.Configuration;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ArchitectureValidation {
@@ -37,21 +36,9 @@ public final class ArchitectureValidation {
     return projectDir.toString();
   }
 
-  private static void prepareParams(Project project, Project appService, ModuleBuilder builder) {
-    boolean hasSpringWeb =
-        appService.getConfigurations().stream()
-            .map(Configuration::getIncoming)
-            .flatMap(d -> d.getDependencies().stream())
-            .map(d -> d.getGroup() + ":" + d.getName())
-            .anyMatch(dep -> dep.equals("org.springframework:spring-web"));
-    project.getLogger().debug("hasSpringWeb: {}", hasSpringWeb);
-    builder.addParam("hasSpringWeb", hasSpringWeb);
-  }
-
   @SneakyThrows
   private static void generateArchUnitFiles(
       Project project, Project appService, ModuleBuilder builder) {
-    prepareParams(project, appService, builder);
     project
         .getLogger()
         .lifecycle("Injecting ArchitectureTest in module {}", appService.getProjectDir().getName());
