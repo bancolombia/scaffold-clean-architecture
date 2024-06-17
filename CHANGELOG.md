@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.17.10](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.10) (2024-06-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.9...v3.17.10)
+
+**Merged pull requests:**
+
+- feat: add pitest support [\#462](https://github.com/bancolombia/scaffold-clean-architecture/pull/462) ([gabheadz](https://github.com/gabheadz))
+
 ## [v3.17.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.9) (2024-06-17)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.8...v3.17.9)
