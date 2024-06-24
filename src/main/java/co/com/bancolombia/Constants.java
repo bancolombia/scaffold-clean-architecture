@@ -11,12 +11,12 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
   public static final String SECRETS_VERSION = "4.4.7";
-  public static final String SPRING_BOOT_VERSION = "3.3.0";
+  public static final String SPRING_BOOT_VERSION = "3.3.1";
   public static final String LOMBOK_VERSION = "1.18.32";
   public static final String REACTIVE_COMMONS_VERSION = "4.1.1";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.9.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.26.3";
+  public static final String AWS_BOM_VERSION = "2.26.7";
   public static final String COMMONS_JMS_VERSION = "2.2.8";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.1.1";
