@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.17.12](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.12) (2024-07-02)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.11...v3.17.12)
+
+**Closed issues:**
+
+- No se puede ejecutar el jar generado [\#465](https://github.com/bancolombia/scaffold-clean-architecture/issues/465)
+- Problema al generar el jar [\#464](https://github.com/bancolombia/scaffold-clean-architecture/issues/464)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#466](https://github.com/bancolombia/scaffold-clean-architecture/pull/466) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v3.17.11](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.11) (2024-06-24)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.10...v3.17.11)
