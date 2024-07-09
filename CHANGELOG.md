@@ -1,5 +1,34 @@
 # Changelog
 
+## [v3.17.13](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.13) (2024-07-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.12...v3.17.13)
+
+**Merged pull requests:**
+
+- build\(conditions\): Use github app only with main branch [\#487](https://github.com/bancolombia/scaffold-clean-architecture/pull/487) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump actions/dependency-review-action from 2.5.1 to 4.3.3 [\#486](https://github.com/bancolombia/scaffold-clean-architecture/pull/486) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.3.3 to 4.3.4 [\#485](https://github.com/bancolombia/scaffold-clean-architecture/pull/485) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 1.4.3 to 2.8.1 [\#484](https://github.com/bancolombia/scaffold-clean-architecture/pull/484) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 3.6.0 to 4.1.7 [\#483](https://github.com/bancolombia/scaffold-clean-architecture/pull/483) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump heinrichreimer/github-changelog-generator-action from 2.3 to 2.4 [\#482](https://github.com/bancolombia/scaffold-clean-architecture/pull/482) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#481](https://github.com/bancolombia/scaffold-clean-architecture/pull/481) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump peter-evans/create-pull-request from 6.0.5 to 6.1.0 [\#480](https://github.com/bancolombia/scaffold-clean-architecture/pull/480) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 3.13.0 to 4.2.1 [\#479](https://github.com/bancolombia/scaffold-clean-architecture/pull/479) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.25.6 to 3.25.11 [\#478](https://github.com/bancolombia/scaffold-clean-architecture/pull/478) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump amannn/action-semantic-pull-request from 5.4.0 to 5.5.3 [\#477](https://github.com/bancolombia/scaffold-clean-architecture/pull/477) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump tibdex/github-app-token from 1 to 2 [\#476](https://github.com/bancolombia/scaffold-clean-architecture/pull/476) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-article/deployment [\#475](https://github.com/bancolombia/scaffold-clean-architecture/pull/475) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/s3-example/deployment [\#474](https://github.com/bancolombia/scaffold-clean-architecture/pull/474) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/channel-operations/deployment [\#473](https://github.com/bancolombia/scaffold-clean-architecture/pull/473) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-rest-consumer/rest-consumer-server/deployment [\#472](https://github.com/bancolombia/scaffold-clean-architecture/pull/472) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-r2dbc/deployment [\#471](https://github.com/bancolombia/scaffold-clean-architecture/pull/471) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-dynamo/deployment [\#470](https://github.com/bancolombia/scaffold-clean-architecture/pull/470) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-rest-consumer/rest-consumer-client/deployment [\#469](https://github.com/bancolombia/scaffold-clean-architecture/pull/469) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-mongo/deployment [\#468](https://github.com/bancolombia/scaffold-clean-architecture/pull/468) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 17-jdk-alpine to 21-jdk-alpine in /examples-ca/example-redis/deployment [\#467](https://github.com/bancolombia/scaffold-clean-architecture/pull/467) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(scanner\): Update scorecard and secret scanner actions [\#456](https://github.com/bancolombia/scaffold-clean-architecture/pull/456) ([dhfherna](https://github.com/dhfherna))
+
 ## [v3.17.12](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.12) (2024-07-02)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.11...v3.17.12)
@@ -541,20 +570,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
-
 ## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
 
 **Closed issues:**
 
@@ -994,15 +1023,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
-
-## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
 
 ## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+
+## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
 
 **Implemented enhancements:**
 
