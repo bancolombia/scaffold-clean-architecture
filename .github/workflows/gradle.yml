@@ -24,13 +24,18 @@ jobs:
 
       - name: Generate a token of Github APP
         id: generate_token
+        if: github.ref == 'refs/heads/master'
         uses: tibdex/github-app-token@3beb63f4bd073e61482598c45c71c1019b59b73a # v2.1.0
         with:
           app_id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
           private_key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        if: github.ref == 'refs/heads/master'
         with:
           token: ${{ steps.generate_token.outputs.token }}
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        if: github.ref != 'refs/heads/master'
+
       - name: Verify Conventional Commits
         uses: amannn/action-semantic-pull-request@0723387faaf9b38adef4775cd42cfd5155ed6017 # v5.5.3
         if: github.event_name == 'pull_request' || github.event_name == 'pull_request_target'
