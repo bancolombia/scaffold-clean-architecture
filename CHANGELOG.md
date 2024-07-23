@@ -1,5 +1,15 @@
 # Changelog
 
+## [v3.17.15](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.15) (2024-07-23)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.14...v3.17.15)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#496](https://github.com/bancolombia/scaffold-clean-architecture/pull/496) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.25.12 to 3.25.13 [\#495](https://github.com/bancolombia/scaffold-clean-architecture/pull/495) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.8.1 to 2.9.0 [\#493](https://github.com/bancolombia/scaffold-clean-architecture/pull/493) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.17.14](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.14) (2024-07-15)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.13...v3.17.14)
