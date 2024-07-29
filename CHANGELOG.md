@@ -1,5 +1,16 @@
 # Changelog
 
+## [v3.17.16](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.16) (2024-07-29)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.15...v3.17.16)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#501](https://github.com/bancolombia/scaffold-clean-architecture/pull/501) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.25.14 to 3.25.15 [\#500](https://github.com/bancolombia/scaffold-clean-architecture/pull/500) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.3.3 to 2.4.0 [\#499](https://github.com/bancolombia/scaffold-clean-architecture/pull/499) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.25.13 to 3.25.14 [\#498](https://github.com/bancolombia/scaffold-clean-architecture/pull/498) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.17.15](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.15) (2024-07-23)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.14...v3.17.15)
