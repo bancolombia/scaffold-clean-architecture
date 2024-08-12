@@ -27,10 +27,6 @@ jobs:
           java-version: 11
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-      - name: Upgrade README.md
-        run: sed -i 's/version \".*\"/version "${{ env.RELEASE_VERSION }}"/g' README.md
-      - name: Upgrade README.md
-        run: sed -i 's/version \\".*\\"/version \\"${{ env.RELEASE_VERSION }}\\"/g' README.md
       - name: Upgrade Gradle.properties
         run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
       - name: Upgrade Constants.java
@@ -54,7 +50,7 @@ jobs:
           commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version [skip ci]'
           force-add: "true"
           force-push: "true"
-          files: CHANGELOG.md README.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
+          files: CHANGELOG.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
           name: Release Bot
           email: release-bot@bancolombia.com.co
       - name: Set Analytics Endpoint
