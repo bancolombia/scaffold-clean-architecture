@@ -19,7 +19,7 @@ To start add the following section into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id "co.com.bancolombia.cleanArchitecture" version "3.17.17"
+  id "co.com.bancolombia.cleanArchitecture" version "3.17.17"
 }
 ```
 
@@ -35,15 +35,15 @@ echo "plugins {
 
 The Scaffolding Clean Architecture plugin will allow you the next tasks:
 
-- [Generate Project](/scaffold-clean-architecture/docs/generate-project)
-- [Generate Model](/scaffold-clean-architecture/docs/generate-model)
-- [Generate Use Case](/scaffold-clean-architecture/docs/generate-use-case)
-- [Generate Driven Adapter](/scaffold-clean-architecture/docs/generate-driven-adapter)
-- [Generate Entry Point](/scaffold-clean-architecture/docs/generate-entry-point)
-- [Generate Helper](/scaffold-clean-architecture/docs/generate-entry-point)
-- [Generate Pipeline](/scaffold-clean-architecture/docs/generate-pipeline)
-- [Generate Acceptance Test](/scaffold-clean-architecture/docs/generate-acceptance-test)
-- [Generate Performance Test](/scaffold-clean-architecture/docs/generate-performance-test)
-- [Validate Structure](/scaffold-clean-architecture/docs/validate-structure)
-- [Delete Module](/scaffold-clean-architecture/docs/delete-module)
-- [Update Project](/scaffold-clean-architecture/docs/update-project)
+- [Generate Project](tasks/generate-project)
+- [Generate Model](tasks/generate-model)
+- [Generate Use Case](tasks/generate-use-case)
+- [Generate Driven Adapter](tasks/generate-driven-adapter)
+- [Generate Entry Point](tasks/generate-entry-point)
+- [Generate Helper](tasks/generate-entry-point)
+- [Generate Pipeline](tasks/generate-pipeline)
+- [Generate Acceptance Test](tasks/generate-acceptance-test)
+- [Generate Performance Test](tasks/generate-performance-test)
+- [Validate Structure](tasks/validate-structure)
+- [Delete Module](tasks/delete-module)
+- [Update Project](tasks/update-project)

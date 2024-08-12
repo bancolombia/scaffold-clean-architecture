@@ -95,7 +95,7 @@ const config = {
               },
               {
                 label: 'Scaffold Clean Architecture',
-                to: '/docs/bancolombia/getting-started',
+                to: '/docs/getting-started',
               },
             ],
           },
