@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.17.18](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.18) (2024-08-12)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.17...v3.17.18)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#509](https://github.com/bancolombia/scaffold-clean-architecture/pull/509) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump actions/upload-artifact from 4.3.5 to 4.3.6 [\#508](https://github.com/bancolombia/scaffold-clean-architecture/pull/508) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.25.15 to 3.26.0 [\#507](https://github.com/bancolombia/scaffold-clean-architecture/pull/507) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.9.0 to 2.9.1 [\#506](https://github.com/bancolombia/scaffold-clean-architecture/pull/506) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.2.1 to 4.2.2 [\#505](https://github.com/bancolombia/scaffold-clean-architecture/pull/505) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.17.17](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.17) (2024-08-05)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.16...v3.17.17)
