@@ -1,5 +1,31 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.19...HEAD)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.26.4 to 3.26.6 [\#522](https://github.com/bancolombia/scaffold-clean-architecture/pull/522) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.17.19](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.19) (2024-08-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.18...v3.17.19)
+
+**Closed issues:**
+
+- The documentation was deleted [\#514](https://github.com/bancolombia/scaffold-clean-architecture/issues/514)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#521](https://github.com/bancolombia/scaffold-clean-architecture/pull/521) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- fix\(sqs\): Fix visibility timeout value, because set to 10000 seconds [\#519](https://github.com/bancolombia/scaffold-clean-architecture/pull/519) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.26.1 to 3.26.4 [\#518](https://github.com/bancolombia/scaffold-clean-architecture/pull/518) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#516](https://github.com/bancolombia/scaffold-clean-architecture/pull/516) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.26.0 to 3.26.1 [\#513](https://github.com/bancolombia/scaffold-clean-architecture/pull/513) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs\(docusaurus\): fix broken links [\#511](https://github.com/bancolombia/scaffold-clean-architecture/pull/511) ([juancgalvis](https://github.com/juancgalvis))
+- docs\(docusaurus\): Add docusaurus page [\#510](https://github.com/bancolombia/scaffold-clean-architecture/pull/510) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.17.18](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.18) (2024-08-12)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.17...v3.17.18)
