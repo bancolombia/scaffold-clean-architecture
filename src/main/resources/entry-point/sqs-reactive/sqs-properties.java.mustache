@@ -23,7 +23,7 @@ public class SQSProperties {
     private String endpoint;
     private int waitTimeSeconds;
     private int maxNumberOfMessages;
-    private int visibilityTimeout;
+    private int visibilityTimeoutSeconds;
     private int numberOfThreads;
     {{^lombok}}
 
@@ -70,12 +70,12 @@ public class SQSProperties {
         this.maxNumberOfMessages = maxNumberOfMessages;
     }
 
-    public int getVisibilityTimeout() {
-        return visibilityTimeout;
+    public int getVisibilityTimeoutSeconds() {
+        return visibilityTimeoutSeconds;
     }
 
-    public void setVisibilityTimeout(int visibilityTimeout) {
-        this.visibilityTimeout = visibilityTimeout;
+    public void setVisibilityTimeoutSeconds(int visibilityTimeoutSeconds) {
+        this.visibilityTimeoutSeconds = visibilityTimeoutSeconds;
     }
 
     public int getNumberOfThreads() {

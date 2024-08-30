@@ -30,7 +30,7 @@ public class EntryPointSQS implements ModuleFactory {
         .put("queueUrl", "http://localhost:4566/000000000000/sample")
         .put("waitTimeSeconds", 20)
         .put("maxNumberOfMessages", 10)
-        .put("visibilityTimeout", 10000)
+        .put("visibilityTimeoutSeconds", 10)
         .put("numberOfThreads", 1);
   }
 }

@@ -104,7 +104,7 @@ public class SQSListener implements Runnable {
                 .queueUrl(properties.getQueueUrl())
                 .maxNumberOfMessages(properties.getMaxNumberOfMessages())
                 .waitTimeSeconds(properties.getWaitTimeSeconds())
-                .visibilityTimeout(properties.getVisibilityTimeout())
+                .visibilityTimeout(properties.getVisibilityTimeoutSeconds())
                 .build();
     }
 
