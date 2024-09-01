@@ -1,7 +1,7 @@
 package {{package}}.sqs.listener.helper;
 
-import co.com.bancolombia.sqs.listener.SQSProcessor;
-import co.com.bancolombia.sqs.listener.config.SQSProperties;
+import {{package}}.sqs.listener.SQSProcessor;
+import {{package}}.sqs.listener.config.SQSProperties;
 {{#metrics}}
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
@@ -25,13 +25,22 @@ public class SQSListenerTest {
     @Mock
     private SqsAsyncClient asyncClient;
 
+    @Mock
+    private SQSProperties sqsProperties;
+
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
 
-        Message message = Message.builder().body("message").build();
-        DeleteMessageResponse deleteMessageResponse = DeleteMessageResponse.builder().build();
-        ReceiveMessageResponse messageResponse = ReceiveMessageResponse.builder().messages(message).build();
+        when(sqsProperties.region()).thenReturn("us-east-1");
+        when(sqsProperties.queueUrl()).thenReturn("http://localhost:4566/00000000000/massive-sqs");
+        when(sqsProperties.waitTimeSeconds()).thenReturn(20);
+        when(sqsProperties.maxNumberOfMessages()).thenReturn(10);
+        when(sqsProperties.numberOfThreads()).thenReturn(1);
+
+        var message = Message.builder().body("message").build();
+        var deleteMessageResponse = DeleteMessageResponse.builder().build();
+        var messageResponse = ReceiveMessageResponse.builder().messages(message).build();
 
         when(asyncClient.receiveMessage(any(ReceiveMessageRequest.class))).thenReturn(CompletableFuture.completedFuture(messageResponse));
         when(asyncClient.deleteMessage(any(DeleteMessageRequest.class))).thenReturn(CompletableFuture.completedFuture(deleteMessageResponse));
@@ -40,11 +49,7 @@ public class SQSListenerTest {
 
     @Test
     void startTest(){
-        SQSProperties sqsProperties = new SQSProperties();
-        sqsProperties.setNumberOfThreads(1);
-        sqsProperties.setRegion("Region");
-
-        SQSListener sqsListener =SQSListener.builder()
+        var sqsListener = SQSListener.builder()
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(System.out::println)
@@ -53,20 +58,13 @@ public class SQSListenerTest {
             {{/metrics}}
             .build();
 
-        SQSListener listener = sqsListener.start();
-
-        Assertions.assertNotNull(listener);
+        Assertions.assertNotNull(sqsListener.start());
     }
 
     @Test
     void listenerTest() {
-        SQSProperties sqsProperties = new SQSProperties();
-        sqsProperties.setNumberOfThreads(1);
-        sqsProperties.setRegion("Region");
-
-        SQSProcessor sqsProcessor = new SQSProcessor();
-
-        SQSListener sqsListener =SQSListener.builder()
+        var sqsProcessor = new SQSProcessor();
+        var sqsListener = SQSListener.builder()
             .client(asyncClient)
             .properties(sqsProperties)
             .consumer(sqsProcessor)
@@ -76,8 +74,6 @@ public class SQSListenerTest {
             .build();
 
         ReflectionTestUtils.invokeMethod(sqsListener, "listen");
-
         Assertions.assertNotNull(sqsListener);
-
     }
 }
