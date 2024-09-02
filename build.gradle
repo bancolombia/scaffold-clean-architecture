@@ -291,8 +291,8 @@ tasks.named('wrapper') {
 }
 
 tasks.register('ci-updater', JavaExec) {
-    mainClass = 'co.com.bancolombia.utils.offline.LocalTasks'
     // Replace com.example.MainClass with the fully qualified name of your main class
+    mainClass = 'co.com.bancolombia.utils.offline.LocalTasks'
     classpath = sourceSets.main.runtimeClasspath
     // Add any additional JVM arguments if needed
     // jvmArgs = ['-Xmx512m']
