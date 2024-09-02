@@ -1,12 +1,15 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.17.20](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.20) (2024-09-02)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.19...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.19...v3.17.20)
 
 **Merged pull requests:**
 
-- build\(deps\): bump github/codeql-action from 3.26.4 to 3.26.6 [\#522](https://github.com/bancolombia/scaffold-clean-architecture/pull/522) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.3.6 to 4.4.0 [\#527](https://github.com/bancolombia/scaffold-clean-architecture/pull/527) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build: update dependencies [\#526](https://github.com/bancolombia/scaffold-clean-architecture/pull/526) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump webpack from 5.91.0 to 5.94.0 in /docs [\#524](https://github.com/bancolombia/scaffold-clean-architecture/pull/524) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump micromatch from 4.0.5 to 4.0.8 in /docs [\#523](https://github.com/bancolombia/scaffold-clean-architecture/pull/523) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v3.17.19](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.19) (2024-08-30)
 
