@@ -19,7 +19,7 @@ public final class Constants {
   public static final String AWS_BOM_VERSION = "2.27.17";
   public static final String COMMONS_JMS_VERSION = "2.2.18";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
-  public static final String ARCH_UNIT_VERSION = "1.1.1";
+  public static final String ARCH_UNIT_VERSION = "1.3.0";
   public static final String OKHTTP_VERSION = "4.12.0";
   public static final String RESILIENCE_4J_VERSION = "2.2.0";
   public static final String BIN_STASH_VERSION = "1.2.6";
@@ -28,11 +28,11 @@ public final class Constants {
   public static final String JACOCO_VERSION = "0.8.12";
   public static final String SONAR_VERSION = "5.1.0.4882";
   public static final String COBERTURA_VERSION = "4.0.0";
-  public static final String PLUGIN_VERSION = "3.17.19";
+  public static final String PLUGIN_VERSION = "3.17.20";
   public static final String DEPENDENCY_CHECK_VERSION = "10.0.4";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "8.8";
+  public static final String GRADLE_WRAPPER_VERSION = "8.10";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
