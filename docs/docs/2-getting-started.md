@@ -9,7 +9,7 @@ sidebar_position: 2
 - You need Java JRE installed (Java 17 or later).
 
 - To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version
-  8.5 or later.
+  8.8 or later.
 
 ## Using the plugin
 
