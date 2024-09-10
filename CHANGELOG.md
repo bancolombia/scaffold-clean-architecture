@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.17.22](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.22) (2024-09-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.21...v3.17.22)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/setup-java from 4.2.2 to 4.3.0 [\#534](https://github.com/bancolombia/scaffold-clean-architecture/pull/534) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#533](https://github.com/bancolombia/scaffold-clean-architecture/pull/533) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- docs: Update docs version to keep it updated [\#532](https://github.com/bancolombia/scaffold-clean-architecture/pull/532) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.0 to 7.0.1 [\#531](https://github.com/bancolombia/scaffold-clean-architecture/pull/531) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs: Update 2-getting-started.md [\#530](https://github.com/bancolombia/scaffold-clean-architecture/pull/530) ([santitigaga](https://github.com/santitigaga))
+
 ## [v3.17.21](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.21) (2024-09-04)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.20...v3.17.21)
