@@ -15,7 +15,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import lombok.AccessLevel;
@@ -59,18 +59,17 @@ public class FileUtils {
   }
 
   public static String readFileAsString(File file, Logger logger) throws IOException {
-    try {
-      return Files.lines(Paths.get(file.toURI())).collect(Collectors.joining("\n"));
-    } catch (MalformedInputException e) {
-      if (logger != null) {
-        logger.warn(
-            "error '{}' reading file {}, trying to read with ISO_8859_1 charset",
-            e.getMessage(),
-            file.getAbsoluteFile());
-      }
-      return Files.lines(Paths.get(file.toURI()), StandardCharsets.ISO_8859_1)
-          .collect(Collectors.joining("\n"));
+    try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
+      return lines.collect(Collectors.joining("\n"));
+    } catch (Exception e) {
+      logException(e, logger, file, "UTF_8");
     }
+    try (Stream<String> lines = Files.lines(Paths.get(file.toURI()), StandardCharsets.ISO_8859_1)) {
+      return lines.collect(Collectors.joining("\n"));
+    } catch (Exception e) {
+      logException(e, logger, file, "ISO_8859_1");
+    }
+    return new String(Files.readAllBytes(Paths.get(file.toURI())));
   }
 
   public static List<File> finderSubProjects(String dirPath) {
@@ -199,5 +198,15 @@ public class FileUtils {
       }
     }
     throw new IOException("File not found in zip file");
+  }
+
+  private static void logException(Exception e, Logger logger, File file, String charset) {
+    if (logger != null) {
+      logger.warn(
+          "Error '{}' reading file {} with charset '{}'",
+          e.getMessage(),
+          file.getAbsoluteFile(),
+          charset);
+    }
   }
 }
