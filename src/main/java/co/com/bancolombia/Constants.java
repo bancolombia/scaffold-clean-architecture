@@ -16,7 +16,7 @@ public final class Constants {
   public static final String REACTIVE_COMMONS_VERSION = "4.1.4";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.9.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.27.21";
+  public static final String AWS_BOM_VERSION = "2.28.1";
   public static final String COMMONS_JMS_VERSION = "2.2.18";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.3.0";
@@ -32,7 +32,7 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "10.0.4";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "8.10";
+  public static final String GRADLE_WRAPPER_VERSION = "8.10.1";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
