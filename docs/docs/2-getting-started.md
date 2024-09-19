@@ -33,7 +33,7 @@ gradle tasks
 ---
 You can follow one of the next steps to create a quick start project with commands
 
-# Quick Start
+## Quick Start
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

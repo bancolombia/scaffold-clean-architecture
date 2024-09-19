@@ -5,12 +5,14 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.task.GenerateStructureTask;
@@ -40,6 +42,9 @@ class ArchitectureValidationTest {
   @BeforeEach
   public void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
+  }
+
+  public void mocks() throws CleanException, IOException {
     project = spy(setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class));
     GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.executeBaseTask();
@@ -60,8 +65,9 @@ class ArchitectureValidationTest {
   }
 
   @Test
-  void shouldInjectTests() throws IOException {
+  void shouldInjectTests() throws IOException, CleanException {
     // Arrange
+    mocks();
     Path testFile = Path.of(BASE_PATH, TEST_FILE);
     Files.deleteIfExists(testFile);
     when(styledTextOutput.style(any())).thenReturn(styledTextOutput);
@@ -72,5 +78,41 @@ class ArchitectureValidationTest {
     ArchitectureValidation.inject(project, builder);
     // Assert
     assertTrue(Files.exists(testFile));
+  }
+
+  @Test
+  void shouldFailDomainNameHaveTechSuffix() {
+    // Arrange
+    // Assert
+    assertThrows(
+        CleanDomainException.class,
+        () -> {
+          // Act
+          ArchitectureValidation.validateModelName("SampleRequest");
+        });
+  }
+
+  @Test
+  void shouldFailDomainNameHaveTechName() {
+    // Arrange
+    // Assert
+    assertThrows(
+        CleanDomainException.class,
+        () -> {
+          // Act
+          ArchitectureValidation.validateModelName("KafkaModel");
+        });
+  }
+
+  @Test
+  void shouldFailUseCaseNameHaveTechName() {
+    // Arrange
+    // Assert
+    assertThrows(
+        CleanDomainException.class,
+        () -> {
+          // Act
+          ArchitectureValidation.validateModelName("RabbitUseCase");
+        });
   }
 }

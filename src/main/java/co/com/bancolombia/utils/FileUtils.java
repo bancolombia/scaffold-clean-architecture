@@ -84,6 +84,10 @@ public class FileUtils {
     return textFiles;
   }
 
+  public static String readProperties(String variable) throws IOException {
+    return readProperties(".", variable);
+  }
+
   public static String readProperties(String projectPath, String variable) throws IOException {
     Properties properties = new Properties();
     try (BufferedReader br = new BufferedReader(new FileReader(projectPath + GRADLE_PROPERTIES))) {
@@ -98,7 +102,7 @@ public class FileUtils {
 
   public static boolean readBooleanProperty(String variable) {
     try {
-      return "true".equals(readProperties(".", variable));
+      return "true".equals(readProperties(variable));
     } catch (IOException ignored) {
       return false;
     }
