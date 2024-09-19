@@ -3,6 +3,7 @@ package co.com.bancolombia.utils;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,11 +19,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class FileUtilsTest {
 
@@ -38,31 +43,21 @@ public class FileUtilsTest {
     assertThrows(IOException.class, () -> FileUtils.readProperties("build", property));
   }
 
-  @Test
-  void readFile() throws IOException {
+  @ParameterizedTest
+  @MethodSource("encodings")
+  void readFileWithEncodings(String file, String expected) throws IOException {
     Project project =
         ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-    String response = FileUtils.readFile(project, "temp.txt");
+    String response = FileUtils.readFile(project, file);
 
-    assertEquals("hello", response);
+    assertEquals(expected, response);
   }
 
-  @Test
-  void readFileWithEncodingISO8859() throws IOException {
-    Project project =
-        ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-    String response = FileUtils.readFile(project, "temp-iso-8859-1.txt");
-
-    assertEquals("¿cómo funcionará?", response);
-  }
-
-  @Test
-  void readFileWithOtherEncoding() throws IOException {
-    Project project =
-        ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
-    String response = FileUtils.readFile(project, "temp-other.txt");
-
-    assertEquals("*\u00ADx>e\u0001%ËØ´£/!vd\u0007", response);
+  static Stream<Arguments> encodings() {
+    return Stream.of(
+        arguments("temp.txt", "hello"),
+        arguments("temp-iso-8859-1.txt", "¿cómo funcionará?"),
+        arguments("temp-other.txt", "*\u00ADx>e\u0001%ËØ´£/!vd\u0007"));
   }
 
   @Test
