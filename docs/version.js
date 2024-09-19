@@ -35,11 +35,10 @@ function replaceVersion(filePath, newVersion) {
         const data = fs.readFileSync(filePath, 'utf8');
 
         // Define the regular expression to match the version pattern
-        const versionRegex = /version "\d+\.\d+\.\d+"/;
-        const versionRegexEcho = /version \\"\d+\.\d+\.\d+\\"/;
+        const versionRegex = /version '\d+\.\d+\.\d+'/g;
 
         // Replace the old version with the new version
-        const updatedData = data.replace(versionRegex, `version "${newVersion}"`).replace(versionRegexEcho, `version \\"${newVersion}\\"`);
+        const updatedData = data.replace(versionRegex, `version '${newVersion}'`)
 
         // Write the updated content back to the file
         fs.writeFileSync(filePath, updatedData, 'utf8');

@@ -13,23 +13,97 @@ sidebar_position: 2
 
 ## Using the plugin
 
-To start add the following section into your **build.gradle** file.
+To start you need to create a directory for the project, then you should add a `build.gradle` file with following
+content into your **build.gradle** file.
 
 ![Gradle Plugin Portal Version](https://img.shields.io/gradle-plugin-portal/v/co.com.bancolombia.cleanArchitecture)
 
 ```groovy
 plugins {
-  id "co.com.bancolombia.cleanArchitecture" version "3.17.17"
+    id 'co.com.bancolombia.cleanArchitecture' version '3.17.22'
 }
 ```
 
-Or if is a new project execute this script in the root directory of your project.
+Then you can list the tasks available with the command:
+
+```bash
+gradle tasks
+```
+
+---
+You can follow one of the next steps to create a quick start project with commands
+
+# Quick Start
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="mac" label="Mac OS / Linux" default>
 
 ```sh
+mkdir scaffold-quick-start
+cd scaffold-quick-start
 echo "plugins {
-    id \"co.com.bancolombia.cleanArchitecture\" version \"3.17.17\"
+    id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
 }" > build.gradle
+gradle ca --name=ScaffoldQuickStart
+./gradlew gep --type webflux
+./gradlew bootRun
 ```
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+
+> PowerShell
+
+```powershell
+# Create a directory and navigate into it
+New-Item -ItemType Directory -Name "scaffold-quick-start"
+Set-Location -Path "scaffold-quick-start"
+
+# Create the build.gradle file with the specified content
+@"
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
+}
+"@ | Set-Content -Path "build.gradle"
+
+# Run the Gradle commands
+gradle ca --name=ScaffoldQuickStart
+.\gradlew gep --type webflux
+.\gradlew bootRun
+```
+
+> CMD
+
+```cmd
+@echo off
+
+:: Create a directory and navigate into it
+mkdir scaffold-quick-start
+cd scaffold-quick-start
+
+:: Create the build.gradle file with the specified content
+(
+echo plugins {
+echo     id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
+echo }
+) > build.gradle
+
+:: Run the Gradle commands
+gradle ca --name=ScaffoldQuickStart
+gradlew gep --type webflux
+gradlew bootRun
+
+```
+
+  </TabItem>
+</Tabs>
+
+Then open your browser and go to [http://localhost:8080/api/usecase/path](http://localhost:8080/api/usecase/path) and it
+will reply with an empty string, to change the response you can modify the `Handler` class in the
+`entry-points/reactive-web`
 
 # Tasks
 
