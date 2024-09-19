@@ -48,6 +48,24 @@ public class FileUtilsTest {
   }
 
   @Test
+  void readFileWithEncodingISO8859() throws IOException {
+    Project project =
+        ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
+    String response = FileUtils.readFile(project, "temp-iso-8859-1.txt");
+
+    assertEquals("¿cómo funcionará?", response);
+  }
+
+  @Test
+  void readFileWithOtherEncoding() throws IOException {
+    Project project =
+        ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
+    String response = FileUtils.readFile(project, "temp-other.txt");
+
+    assertEquals("*\u00ADx>e\u0001%ËØ´£/!vd\u0007", response);
+  }
+
+  @Test
   void readFileFromResources() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     String response = FileUtils.getResourceAsString(resolver, "temp.txt");
