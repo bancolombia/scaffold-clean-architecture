@@ -1,5 +1,23 @@
 # Changelog
 
+## [v3.17.23](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.23) (2024-09-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.22...v3.17.23)
+
+**Closed issues:**
+
+- Error al arrancar proyecto [\#494](https://github.com/bancolombia/scaffold-clean-architecture/issues/494)
+
+**Merged pull requests:**
+
+- docs\(version\): Update dependencies and docs [\#547](https://github.com/bancolombia/scaffold-clean-architecture/pull/547) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.3 to 7.0.5 [\#546](https://github.com/bancolombia/scaffold-clean-architecture/pull/546) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(charset\): read file with charset or as bytes [\#545](https://github.com/bancolombia/scaffold-clean-architecture/pull/545) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.1 to 7.0.3 [\#544](https://github.com/bancolombia/scaffold-clean-architecture/pull/544) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): update dependencies [\#543](https://github.com/bancolombia/scaffold-clean-architecture/pull/543) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.26.6 to 3.26.7 [\#542](https://github.com/bancolombia/scaffold-clean-architecture/pull/542) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.9.1 to 2.10.1 [\#540](https://github.com/bancolombia/scaffold-clean-architecture/pull/540) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.17.22](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.22) (2024-09-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.21...v3.17.22)
@@ -674,20 +692,20 @@
 
 ## [v3.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.5) (2023-05-29)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v3.0.5)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.5)
 
 **Merged pull requests:**
 
 - Feature/automatic factory type detection [\#359](https://github.com/bancolombia/scaffold-clean-architecture/pull/359) ([juancgalvis](https://github.com/juancgalvis))
 - fix release pipeline [\#358](https://github.com/bancolombia/scaffold-clean-architecture/pull/358) ([santitigaga](https://github.com/santitigaga))
 
-## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v1.0.0...v3.0.4)
-
 ## [v1.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v1.0.0) (2023-05-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v1.0.0)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.0.4...v1.0.0)
+
+## [v3.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.0.4) (2023-05-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/3.0.3...v3.0.4)
 
 **Closed issues:**
 
