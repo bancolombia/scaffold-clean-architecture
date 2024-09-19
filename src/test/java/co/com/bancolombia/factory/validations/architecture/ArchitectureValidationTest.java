@@ -40,7 +40,7 @@ class ArchitectureValidationTest {
   private Project project;
 
   @BeforeEach
-  public void setup() throws IOException, CleanException {
+  public void setup() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

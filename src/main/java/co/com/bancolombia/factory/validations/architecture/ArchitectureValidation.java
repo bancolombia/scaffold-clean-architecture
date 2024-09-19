@@ -90,7 +90,7 @@ public final class ArchitectureValidation {
       if (StringUtils.isNoneEmpty(content)) {
         values = content;
       }
-    } catch (Exception ignored) {
+    } catch (Exception ignored) { // NOSONAR
     }
     return Stream.of(values.split(","))
         .flatMap(tool -> Stream.of(tool, tool.toUpperCase(), classCase(tool)));
@@ -122,7 +122,7 @@ public final class ArchitectureValidation {
     builder.persist();
   }
 
-  public static enum Type {
+  public enum Type {
     CLASS_NAME,
     CLASS_SUFFIX
   }
