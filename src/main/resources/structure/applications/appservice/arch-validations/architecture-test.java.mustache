@@ -11,7 +11,7 @@ import com.tngtech.archunit.lang.ConditionEvent;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.elements.MembersShouldConjunction;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,13 +32,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 // Please do not modify this file
-@Log4j2
+@Log
 class ArchitectureTest {
     private static JavaClasses allClasses;
     private static JavaClasses domainClasses;
@@ -49,7 +50,13 @@ class ArchitectureTest {
 
     @BeforeAll
     static void importClasses() {
-        allClasses = new ClassFileImporter().importPackages("{{package}}");
+        allClasses = new ClassFileImporter().importPackages("{{package}}")
+                .that(new DescribedPredicate<>("is-not-commons-lib") {
+                    @Override
+                    public boolean test(JavaClass javaClass) {
+                        return !javaClass.getPackageName().contains("co.com.bancolombia.commons.jms");
+                    }
+                });
         domainClasses = new ClassFileImporter().importPackages("{{package}}.usecase", "{{package}}.model");
         useCaseClasses = new ClassFileImporter().importPackages("{{package}}.usecase");
     }
@@ -62,11 +69,11 @@ class ArchitectureTest {
                 try {
                     Files.write(Path.of(path, "build/issues.json"), mapper.writeValueAsBytes(issues.getOrDefault(path, new Utils.IssuesReport())));
                 } catch (IOException e) {
-                    log.warn(e.getMessage());
+                    log.log(Level.WARNING, e.getMessage());
                 }
             });
         } catch (Exception e) {
-            log.warn(e.getMessage());
+            log.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -87,8 +94,7 @@ class ArchitectureTest {
     {{/reactive}}
     @Test
     void domainClassesShouldNotBeNamedWithTechSuffixes() {
-        ArchRule rule = Stream.of("dto", "request", "response")
-                .flatMap(tool -> Stream.of(tool, tool.toUpperCase(), classCase(tool)))
+        ArchRule rule = Stream.of({{{forbiddenDomainSuffixes}}})
                 .reduce(classes().should().haveSimpleNameNotEndingWith("Dto"),
                         (cj, tool) -> cj.andShould().haveSimpleNameNotEndingWith(tool),
                         (a, b) -> b)
@@ -100,9 +106,7 @@ class ArchitectureTest {
 
     @Test
     void domainClassesShouldNotBeNamedWithToolNames() {
-        ArchRule rule = Stream.of("rabbit", "sqs", "sns", "ibm", "dynamo", "aws", "mysql", "postgres",
-                        "redis", "mongo", "rsocket", "r2dbc", "http", "kms", "s3", "graphql")
-                .flatMap(tool -> Stream.of(tool, tool.toUpperCase(), classCase(tool)))
+        ArchRule rule = Stream.of({{{forbiddenDomainClassNames}}})
                 .reduce(classes().should().haveSimpleNameNotContaining("rabbit"),
                         (cj, tool) -> cj.andShould().haveSimpleNameNotContaining(tool),
                         (a, b) -> b)
@@ -127,9 +131,7 @@ class ArchitectureTest {
 
     @Test
     void domainClassesShouldNotHaveFieldsNamedWithToolNames() {
-        ArchRule rule = Stream.of("rabbit", "sqs", "sns", "ibm", "dynamo", "aws", "mysql", "postgres",
-                        "redis", "mongo", "rsocket", "r2dbc", "http", "kms", "s3", "graphql")
-                .flatMap(tool -> Stream.of(tool, tool.toUpperCase(), classCase(tool)))
+        ArchRule rule = Stream.of({{{forbiddenDomainClassNames}}})
                 .reduce((MembersShouldConjunction<?>) fields().should().haveNameNotContaining("rabbit"),
                         (cj, tool) -> cj.andShould().haveNameNotContaining(tool),
                         (a, b) -> b)
@@ -162,10 +164,6 @@ class ArchitectureTest {
     }
 
     // Utilities
-
-    private String classCase(String tool) {
-        return tool.substring(0, 1).toUpperCase() + tool.substring(1);
-    }
 
     {{#reactive}}
     private DescribedPredicate<JavaClass> areUsingAnAwsClient() {
@@ -241,7 +239,7 @@ class ArchitectureTest {
                                                     Utils.resolveFinalLocation(file, location))), 5));
                 }
             });
-            log.warn("ARCHITECTURE_RULE_VIOLATED: This will cause a build error in future.\nPlease review our wiki at https://github.com/bancolombia/scaffold-clean-architecture/wiki/Architecture-Rules", e);
+            log.log(Level.WARNING, "ARCHITECTURE_RULE_VIOLATED: This will cause a build error in future.\nPlease review our wiki at https://bancolombia.github.io/scaffold-clean-architecture/docs/advanced/arch-unit-analysis", e);
         }
     }
 }

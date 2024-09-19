@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
           "No model name, usage: gradle generateModel --name [name]");
     }
     name = Utils.capitalize(name);
+    ArchitectureValidation.validateModelName(name);
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Model Name: {}", name);
     builder.addParam("modelName", name.toLowerCase());
