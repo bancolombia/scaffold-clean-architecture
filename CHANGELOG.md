@@ -1,13 +1,18 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.17.26](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.26) (2024-09-23)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.25...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.25...v3.17.26)
 
 **Closed issues:**
 
 - Error applying update with name 3.6.1-\>3.6.2: Add ArchUnit issues export to sonar [\#512](https://github.com/bancolombia/scaffold-clean-architecture/issues/512)
 - Error applying update with name 3.6.1-\>3.6.2: Add ArchUnit issues export to sonar [\#436](https://github.com/bancolombia/scaffold-clean-architecture/issues/436)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#551](https://github.com/bancolombia/scaffold-clean-architecture/pull/551) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.26.7 to 3.26.8 [\#550](https://github.com/bancolombia/scaffold-clean-architecture/pull/550) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v3.17.25](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.25) (2024-09-19)
 
@@ -1175,15 +1180,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
-
-## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
 
 ## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+
+## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
 
 **Implemented enhancements:**
 
