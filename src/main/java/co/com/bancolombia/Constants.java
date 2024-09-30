@@ -32,7 +32,7 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "10.0.4";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "8.10.1";
+  public static final String GRADLE_WRAPPER_VERSION = "8.10.2";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
