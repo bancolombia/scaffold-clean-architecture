@@ -39,7 +39,7 @@ public class SQSSender /*implements SomeGateway*/ {
 
     private SendMessageRequest buildRequest(String message) {
         return SendMessageRequest.builder()
-                .queueUrl(properties.getQueueUrl())
+                .queueUrl(properties.queueUrl())
                 .messageBody(message)
                 .build();
     }

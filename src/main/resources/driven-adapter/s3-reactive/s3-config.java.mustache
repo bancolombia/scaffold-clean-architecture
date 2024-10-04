@@ -22,7 +22,7 @@ public class S3Config {
     @Bean
     public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties) {
         return S3AsyncClient.builder()
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .build();
     }
 
@@ -30,9 +30,9 @@ public class S3Config {
     @Bean
     public S3AsyncClient localS3AsyncClient(S3ConnectionProperties s3Properties) {
         return S3AsyncClient.builder()
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .endpointOverride(URI.create(s3Properties.endpoint()))
                 .build();
     }
     {{/metrics}}
@@ -42,7 +42,7 @@ public class S3Config {
     public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties, MetricPublisher publisher) {
         return S3AsyncClient.builder()
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .build();
     }
 
@@ -52,9 +52,9 @@ public class S3Config {
                                             MetricPublisher publisher) {
         return S3AsyncClient.builder()
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
-                .region(Region.of(s3Properties.getRegion()))
+                .region(Region.of(s3Properties.region()))
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
-                .endpointOverride(URI.create(s3Properties.getEndpoint()))
+                .endpointOverride(URI.create(s3Properties.endpoint()))
                 .build();
     }
     {{/metrics}}
