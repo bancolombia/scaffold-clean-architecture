@@ -16,12 +16,12 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_17
 
     dependencies {
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
         testImplementation 'io.projectreactor:reactor-test'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.10.RELEASE'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

@@ -114,6 +114,13 @@ public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
               partial =
                   UpdateUtils.insertAfterMatch(partial, "dependsOn test", "'pitest'", ", 'pitest'");
 
+              partial =
+                  UpdateUtils.insertAfterMatch(
+                      partial,
+                      "dependencies {",
+                      "junit-platform-launcher",
+                      "\n        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'");
+
               return UpdateUtils.insertBeforeMatch(
                   partial,
                   "tasks.named('wrapper')",
