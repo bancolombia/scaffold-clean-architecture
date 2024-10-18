@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        cleanArchitectureVersion = '3.17.26'
+        springBootVersion = '3.3.4'
+        sonarVersion = '5.1.0.4882'
+        jacocoVersion = '0.8.12'
+        lombokVersion = '1.18.34'
+    }
+}
+
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'org.sonarqube' version "${sonarVersion}"
+    id 'jacoco'
+}
+
+sonar {
+    def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.modules", "${modules.join(',')}"
+        property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
+        property "sonar.test", "src/test"
+        property "sonar.exclusions", ""
+        property "sonar.java.binaries", "build/classes"
+        property "sonar.junit.reportsPath", "build/test-reports"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacocoMergedReport/jacocoMergedReport.xml"
+        property "sonar.externalIssuesReportPaths", "build/issues.json"
+    }
+}
+
+apply from: './main.gradle'

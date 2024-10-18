@@ -1,35 +1,29 @@
 allprojects {
     repositories {
         mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
     }
 }
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.VERSION_17
-    test {
-        useJUnitPlatform()
-    }
+
     dependencies {
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
-
-        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
         testImplementation 'io.projectreactor:reactor-test'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.10.RELEASE'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
@@ -47,21 +41,25 @@ subprojects {
         dependsOn test
         reports {
             xml.setRequired true
-            xml.setOutputLocation file("${buildDir}/reports/jacoco.xml")
+            xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
             csv.setRequired false
-            html.setOutputLocation file("${buildDir}/reports/jacocoHtml")
+            html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
         }
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
 }
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDirectory = file("$buildDir/reports")
+    reportsDirectory.set(layout.buildDirectory.dir("reports"))
 }
 
 tasks.register('jacocoMergedReport', JacocoReport) {
-    dependsOn = subprojects.jacocoTestReport
+    dependsOn subprojects.jacocoTestReport,test
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
@@ -78,7 +76,6 @@ tasks.withType(JavaCompile).configureEach {
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
 }
-
 tasks.named('wrapper') {
-    gradleVersion = '7.6.1'
+    gradleVersion = '8.10.1'
 }

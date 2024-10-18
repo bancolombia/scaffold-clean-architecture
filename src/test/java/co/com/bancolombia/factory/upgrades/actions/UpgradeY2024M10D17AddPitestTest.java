@@ -1,16 +1,13 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.gradle.internal.impldep.org.testng.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
+import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import co.com.bancolombia.Constants;
-import co.com.bancolombia.exceptions.InvalidStateException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUtils;
@@ -26,9 +23,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpgradeY2023M05D04BlockHoundTest {
+class UpgradeY2024M10D17AddPitestTest {
+
   @Mock private Project project;
   @Mock private Logger logger;
+
   private ModuleBuilder builder;
   private UpgradeAction updater;
 
@@ -37,38 +36,28 @@ class UpgradeY2023M05D04BlockHoundTest {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
+
     builder = spy(new ModuleBuilder(project));
-    doReturn(true).when(builder).isReactive();
-    updater = new UpgradeY2023M05D04BlockHound();
+    updater = new UpgradeY2024M10D17AddPitest();
+
     assertNotNull(updater.name());
     assertNotNull(updater.description());
   }
 
   @Test
   void shouldApplyUpdate() throws IOException {
-    String file = Constants.MainFiles.MAIN_GRADLE;
-    // Arrange
     DefaultResolver resolver = new DefaultResolver();
-    String text = FileUtils.getResourceAsString(resolver, "blockhound/before.txt");
-    String expectedText =
-        FileUtils.getResourceAsString(resolver, "blockhound/after.txt")
-            .replace("{{BLOCK_HOUND_VERSION}}", Constants.BLOCK_HOUND_VERSION);
-    builder.addFile(file, text);
+    // Arrange
+    builder.addFile(
+        BUILD_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/main-before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder, times(1)).addFile(file, expectedText);
-  }
-
-  @Test
-  void shouldThrowErrorWhenApplyUpdate() throws IOException {
-    String file = Constants.MainFiles.MAIN_GRADLE;
-    // Arrange
-    DefaultResolver resolver = new DefaultResolver();
-    String text = FileUtils.getResourceAsString(resolver, "blockhound/before-err.txt");
-    builder.addFile(file, text);
-    // Act
-    assertThrows(InvalidStateException.class, () -> updater.up(builder));
+    verify(builder)
+        .addFile(BUILD_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/build-after.txt"));
+    verify(builder)
+        .addFile(MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/main-after.txt"));
   }
 }
