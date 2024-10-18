@@ -171,27 +171,20 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         // Run the functional tests as part of `check`
         dependsOn(tasks.functionalTest)
     }
-
-    // Add a task to run the utility class
-    tasks.register('updateDependencies', JavaExec) {
-        classpath = sourceSets.main.runtimeClasspath
-        mainClass = 'co.com.bancolombia.utils.offline.LocalTasks'
-        args 'UPDATE'
-    }
 }
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.18.0-rc1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0-rc1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.0-rc1'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.0'
     api 'commons-io:commons-io:2.17.0'
     api gradleApi()
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0-rc1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0'
     implementation 'org.reflections:reflections:0.10.2'
     // swagger generators
-    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.52') {
+    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.53') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     constraints { // for previous swagger dependency
@@ -200,14 +193,14 @@ dependencies {
         }
     }
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
-    implementation 'com.google.googlejavaformat:google-java-format:1.23.0'
+    implementation 'com.google.googlejavaformat:google-java-format:1.24.0'
 
     testImplementation gradleTestKit()
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.13.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.11.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.0'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.14.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.11.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.2'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -288,7 +281,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.10.1'
+    gradleVersion = '8.10.2'
 }
 
 tasks.register('ci-updater', JavaExec) {
