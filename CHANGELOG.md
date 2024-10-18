@@ -1,5 +1,22 @@
 # Changelog
 
+## [v3.18.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.0) (2024-10-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.26...v3.18.0)
+
+**Merged pull requests:**
+
+- feat\(pitest\): Add UpgradeAction for pitest settings [\#565](https://github.com/bancolombia/scaffold-clean-architecture/pull/565) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.26.12 to 3.26.13 [\#564](https://github.com/bancolombia/scaffold-clean-architecture/pull/564) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump cookie and express in /docs [\#563](https://github.com/bancolombia/scaffold-clean-architecture/pull/563) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.4.0 to 4.4.3 [\#562](https://github.com/bancolombia/scaffold-clean-architecture/pull/562) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.11 to 3.26.12 [\#560](https://github.com/bancolombia/scaffold-clean-architecture/pull/560) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.10 to 3.26.11 [\#557](https://github.com/bancolombia/scaffold-clean-architecture/pull/557) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.9 to 3.26.10 [\#555](https://github.com/bancolombia/scaffold-clean-architecture/pull/555) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#554](https://github.com/bancolombia/scaffold-clean-architecture/pull/554) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump actions/setup-java from 4.3.0 to 4.4.0 [\#553](https://github.com/bancolombia/scaffold-clean-architecture/pull/553) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.8 to 3.26.9 [\#552](https://github.com/bancolombia/scaffold-clean-architecture/pull/552) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.17.26](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.26) (2024-09-23)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.25...v3.17.26)
