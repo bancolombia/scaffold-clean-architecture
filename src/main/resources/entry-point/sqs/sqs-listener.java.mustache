@@ -47,10 +47,10 @@ public class SQSListener implements Runnable {
     public SQSListener start() {
         {{#metrics}}
         this.timer = Metrics.timer("async_operation_flow_duration",
-                "operation", "MessageFrom:" + properties.getQueueUrl(), "type", "", "status", "");
+                "operation", "MessageFrom:" + properties.queueUrl(), "type", "", "status", "");
         {{/metrics}}
-        ExecutorService service = Executors.newFixedThreadPool(properties.getNumberOfThreads());
-        for (int i = 0; i < properties.getNumberOfThreads(); i++) {
+        ExecutorService service = Executors.newFixedThreadPool(properties.numberOfThreads());
+        for (var i = 0; i < properties.numberOfThreads(); i++) {
             service.submit(this);
         }
         return this;
@@ -101,16 +101,16 @@ public class SQSListener implements Runnable {
 
     private ReceiveMessageRequest getReceiveMessageRequest() {
         return ReceiveMessageRequest.builder()
-                .queueUrl(properties.getQueueUrl())
-                .maxNumberOfMessages(properties.getMaxNumberOfMessages())
-                .waitTimeSeconds(properties.getWaitTimeSeconds())
-                .visibilityTimeout(properties.getVisibilityTimeoutSeconds())
+                .queueUrl(properties.queueUrl())
+                .maxNumberOfMessages(properties.maxNumberOfMessages())
+                .waitTimeSeconds(properties.waitTimeSeconds())
+                .visibilityTimeout(properties.visibilityTimeoutSeconds())
                 .build();
     }
 
     private DeleteMessageRequest getDeleteMessageRequest(String receiptHandle) {
         return DeleteMessageRequest.builder()
-                .queueUrl(properties.getQueueUrl())
+                .queueUrl(properties.queueUrl())
                 .receiptHandle(receiptHandle)
                 .build();
     }
