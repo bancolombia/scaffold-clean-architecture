@@ -10,7 +10,7 @@ import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
 public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
-  private final String pitestConfig =
+  private static final String PITEST_CONFIG =
       "pitest {\n"
           + "        targetClasses = ['{{package}}.*']\n"
           + "        excludedClasses = []\n"
@@ -30,7 +30,7 @@ public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
           + "\n"
           + "    ";
 
-  private final String pitestMergedConfig =
+  private static final String PITEST_MERGED_CONFIG =
       "\npitestReportAggregate {\n"
           + "    doLast {\n"
           + "        def reportDir = layout.buildDirectory.dir(\"reports/pitest\").get().asFile\n"
@@ -99,7 +99,7 @@ public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
               if (packageLoaded == null) {
                 packageLoaded = "your.package";
               }
-              String pitest = pitestConfig.replace("{{package}}", packageLoaded);
+              String pitest = PITEST_CONFIG.replace("{{package}}", packageLoaded);
               partial =
                   UpdateUtils.insertBeforeMatch(
                       partial, "jacocoTestReport {", "pitestVersion", pitest);
@@ -115,7 +115,10 @@ public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
                   UpdateUtils.insertAfterMatch(partial, "dependsOn test", "'pitest'", ", 'pitest'");
 
               return UpdateUtils.insertBeforeMatch(
-                  partial, "tasks.named('wrapper')", "pitestReportAggregate {", pitestMergedConfig);
+                  partial,
+                  "tasks.named('wrapper')",
+                  "pitestReportAggregate {",
+                  PITEST_MERGED_CONFIG);
             });
     return appliedToBuildGradle || appliedToMainGradle;
   }
