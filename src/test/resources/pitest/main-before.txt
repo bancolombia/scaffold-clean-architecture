@@ -1,0 +1,81 @@
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
+
+    compileJava.dependsOn validateStructure
+    sourceCompatibility = JavaVersion.VERSION_17
+
+    dependencies {
+        implementation 'io.projectreactor:reactor-core'
+        implementation 'io.projectreactor.addons:reactor-extra'
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.10.RELEASE'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+    tasks.withType(Test).configureEach {
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+            jvmArgs += [
+                    "-XX:+AllowRedefinitionToAddDeleteMethods"
+            ]
+        }
+    }
+
+    test.finalizedBy(project.tasks.jacocoTestReport)
+
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.setRequired true
+            xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
+            csv.setRequired false
+            html.setOutputLocation layout.buildDirectory.dir("reports/jacocoHtml")
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+}
+
+jacoco {
+    toolVersion = "${jacocoVersion}"
+    reportsDirectory.set(layout.buildDirectory.dir("reports"))
+}
+
+tasks.register('jacocoMergedReport', JacocoReport) {
+    dependsOn subprojects.jacocoTestReport,test
+    additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.setFrom files(subprojects.sourceSets.main.output)
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
+    reports {
+        xml.setRequired true
+        csv.setRequired false
+        html.setRequired true
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs = [
+            '-Amapstruct.suppressGeneratorTimestamp=true'
+    ]
+}
+tasks.named('wrapper') {
+    gradleVersion = '8.10.1'
+}

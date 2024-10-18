@@ -73,6 +73,10 @@
         {
             "name": "DEPENDENCY_CHECK_VERSION",
             "packageName": "org.owasp.dependencycheck:org.owasp.dependencycheck.gradle.plugin"
+        },
+        {
+            "name": "PITEST_VERSION",
+            "packageName": "info.solidsoft.pitest:info.solidsoft.pitest.gradle.plugin"
         }
     ],
     "custom": [

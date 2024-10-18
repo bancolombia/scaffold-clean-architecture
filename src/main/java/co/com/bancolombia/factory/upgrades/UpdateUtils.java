@@ -74,6 +74,14 @@ public class UpdateUtils {
     return main.substring(0, start) + concatValue + main.substring(start);
   }
 
+  public static String addToStartIfNotContains(
+      String main, String containsValue, String concatValue) {
+    if (main.contains(containsValue)) {
+      return main;
+    }
+    return concatValue + main;
+  }
+
   public static String replace(String content, String previous, String next) {
     return content.replace(previous, next);
   }
