@@ -35,10 +35,10 @@ subprojects {
         implementation 'io.projectreactor.addons:reactor-extra'
 
         testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         testImplementation 'io.projectreactor:reactor-test'
         {{/reactive}}
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         {{#lombok}}
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
