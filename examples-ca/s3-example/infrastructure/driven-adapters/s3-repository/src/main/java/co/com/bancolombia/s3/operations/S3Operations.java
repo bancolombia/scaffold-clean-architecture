@@ -20,7 +20,6 @@ public class S3Operations {
 
     private final S3Client s3Client;
 
-
     public boolean uploadObject(String bucketName, String objectKey, byte[] fileContent) {
         return s3Client.putObject(configurePutObject(bucketName, objectKey),
                 RequestBody.fromBytes(fileContent)).sdkHttpResponse().isSuccessful();

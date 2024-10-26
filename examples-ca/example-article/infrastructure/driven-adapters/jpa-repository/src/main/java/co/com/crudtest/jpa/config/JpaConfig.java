@@ -26,9 +26,8 @@ public class JpaConfig {
   }
 
   @Bean
-  public DataSource datasource(
-      DBSecret secret, @Value("${spring.datasource.driverClassName}") String driverClass) {
-    HikariConfig config = new HikariConfig();
+  public DataSource datasource(DBSecret secret, @Value("${spring.datasource.driverClassName}") String driverClass) {
+    var config = new HikariConfig();
     config.setJdbcUrl(secret.getUrl());
     config.setUsername(secret.getUsername());
     config.setPassword(secret.getPassword());
@@ -39,7 +38,7 @@ public class JpaConfig {
   @Bean
   public LocalContainerEntityManagerFactoryBean entityManagerFactory(
       DataSource dataSource, @Value("${spring.jpa.databasePlatform}") String dialect) {
-    LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+    var em = new LocalContainerEntityManagerFactoryBean();
     em.setDataSource(dataSource);
     em.setPackagesToScan("co.com.crudtest.jpa");
 

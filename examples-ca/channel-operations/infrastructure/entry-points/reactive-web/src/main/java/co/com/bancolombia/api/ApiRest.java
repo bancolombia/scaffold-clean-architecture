@@ -35,8 +35,7 @@ public class ApiRest {
     return authUC
         .findByUsernameAndChannelId(username, channelId)
         .map(response -> ResponseEntity.ok().body(response))
-        .onErrorResume(
-            BusinessException.class, error -> Mono.just(ResponseEntity.notFound().build()))
+        .onErrorResume(BusinessException.class, error -> Mono.just(ResponseEntity.notFound().build()))
         .onErrorResume(Mono::error);
   }
 
@@ -46,8 +45,7 @@ public class ApiRest {
         .deleteAuthentication(Authentication.builder().id(id).build())
         .map(response -> ResponseEntity.ok())
         .cast(ResponseEntity.class)
-        .onErrorResume(
-            BusinessException.class, error -> Mono.just(ResponseEntity.notFound().build()))
+        .onErrorResume(BusinessException.class, error -> Mono.just(ResponseEntity.notFound().build()))
         .onErrorResume(Mono::error);
   }
 }

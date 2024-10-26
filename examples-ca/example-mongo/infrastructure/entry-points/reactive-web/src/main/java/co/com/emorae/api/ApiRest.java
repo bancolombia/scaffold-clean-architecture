@@ -3,7 +3,7 @@ package co.com.emorae.api;
 import co.com.emorae.model.order.Order;
 import co.com.emorae.model.order.OrderStatus;
 import co.com.emorae.usecase.orders.OrdersUseCase;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/orders")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiRest {
 
     private final OrdersUseCase service;
@@ -62,7 +62,6 @@ public class ApiRest {
 
     @PostMapping
     public Mono<ResponseEntity<Map<String, Object>>> create(@RequestBody Mono<Order> monoOrder) {
-
         Map<String, Object> response = new HashMap<>();
 
         return monoOrder.flatMap(order -> {

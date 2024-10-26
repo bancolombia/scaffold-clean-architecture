@@ -7,8 +7,13 @@ import reactor.core.publisher.Mono;
 public interface PostModelRepository {
 
     Flux<PostModel> getAll();
+
     Mono<PostModel> update(PostModel postModelUpdate);
+
     Mono<Void> delete(Integer idPostModel);
+
     Mono<PostModel> create(PostModel postModel);
-    Flux<PostModel>findByTitle(String title);
+
+    Flux<PostModel> findByTitle(String title);
+
 }
