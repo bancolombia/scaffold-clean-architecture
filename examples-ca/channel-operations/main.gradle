@@ -75,27 +75,6 @@ subprojects {
 
 }
 
-// Tarea para el report aggregate, con esto tendremos unificados los reportes xml que SonarQube recibe
-pitestReportAggregate {
-    doLast {
-        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
-        def consolidatedReport = new File(reportDir, 'mutations.xml')
-        consolidatedReport.withWriter { writer ->
-            writer.write("<mutations>\n")
-            subprojects.each { subproject ->
-                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
-                if (xmlReport.exists()) {
-                    def xmlContent = xmlReport.text
-                    xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
-                    xmlContent = xmlContent.replaceAll("</?mutations( partial=\"true\")?>", "")
-                    writer.write(xmlContent.trim() + "\n")
-                }
-            }
-            writer.write("</mutations>")  // Cierra la etiqueta <mutations> al final
-        }
-    }
-}
-
 pitestReportAggregate {
     doLast {
         def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile

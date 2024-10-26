@@ -44,6 +44,10 @@ subprojects {
         failWhenNoMutations = false
         useClasspathFile = true
         excludedClasses = ['co.com.bancolombia.model.*']
+        jvmArgs = [
+                // To avoid: BlockHoundTestExecutionListener could not be instantiated
+                '-XX:+AllowRedefinitionToAddDeleteMethods'
+        ]
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
