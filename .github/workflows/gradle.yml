@@ -103,6 +103,7 @@ jobs:
           -Dsonar.token=${{ secrets.SONAR_TOKEN_GENERATED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       # Generated code imperative
       - name: Generate imperative project to scan
         if: steps.changes.outputs.templates == 'true'
