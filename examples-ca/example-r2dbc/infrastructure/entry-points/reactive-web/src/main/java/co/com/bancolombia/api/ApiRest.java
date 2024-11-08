@@ -1,24 +1,29 @@
 package co.com.bancolombia.api;
+
 import co.com.bancolombia.model.postmodel.PostModel;
 import co.com.bancolombia.usecase.post.PostUseCase;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiRest {
     private final PostUseCase postUseCase;
-
 
     @GetMapping(path = "/getAll")
     public Flux<PostModel> commandName() {
     return postUseCase.getAll();
     }
-
 
     @PostMapping(path ="/create")
     public Mono<PostModel> create(@RequestBody PostModel postModel) {

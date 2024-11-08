@@ -2,18 +2,17 @@ package co.com.emorae.mongo;
 
 import co.com.emorae.model.order.Order;
 import co.com.emorae.model.order.gateways.OrderRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepository {
 
-    private MongoRepositoryOrderAdapter dao;
-
-    private MongoDBRepository repository;
+    private final MongoRepositoryOrderAdapter dao;
+    private final MongoDBRepository repository;
 
     @Override
     public Mono<Order> findById(String id) {

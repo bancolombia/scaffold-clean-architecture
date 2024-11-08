@@ -1,7 +1,8 @@
 package co.com.bancolombia.api;
+
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.usecase.consumeservice.ConsumeServiceUseCase;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/client", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiRest {
 
     private final ConsumeServiceUseCase useCase;
@@ -25,9 +26,7 @@ public class ApiRest {
         try {
             return useCase.sum(x, y);
         } catch (IOException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "error on external service"
-            );
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "error on external service");
         }
     }
 
@@ -36,9 +35,7 @@ public class ApiRest {
         try {
             return useCase.getUsers();
         } catch (IOException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "error on external service"
-            );
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "error on external service");
         }
     }
 }

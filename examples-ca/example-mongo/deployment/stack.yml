@@ -1,5 +1,4 @@
 # Use root/example as user/password credentials
-version: '3.7'
 services:
   mongo:
     image: mongo

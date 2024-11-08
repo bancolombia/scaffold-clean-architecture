@@ -22,9 +22,7 @@ public class AuthenticationImpl implements IAuthenticationRepository {
     return repository
         .save(mapper.toData(authentication))
         .map(mapper::toModel)
-        .onErrorMap(
-            Exception.class,
-            e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_SAVE));
+        .onErrorMap(e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_SAVE));
   }
 
   @Override
@@ -32,17 +30,13 @@ public class AuthenticationImpl implements IAuthenticationRepository {
     return repository
         .findByUserNameAndClientId(userName, channel)
         .map(mapper::toModel)
-        .onErrorMap(
-            Exception.class,
-            e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_FIND));
+        .onErrorMap(e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_FIND));
   }
 
   @Override
   public Mono<Void> delete(Authentication authentication) {
     return repository
         .delete(mapper.toData(authentication))
-        .onErrorMap(
-            Exception.class,
-            e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_DELETE));
+        .onErrorMap(e -> new TechnicalException(e, TechnicalErrorMessage.AUTHENTICATION_DELETE));
   }
 }

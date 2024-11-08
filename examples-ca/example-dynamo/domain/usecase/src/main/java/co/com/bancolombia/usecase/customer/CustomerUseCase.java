@@ -2,11 +2,11 @@ package co.com.bancolombia.usecase.customer;
 
 import co.com.bancolombia.model.customer.Customer;
 import co.com.bancolombia.model.customer.gateways.CustomerRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomerUseCase {
 
     private final CustomerRepository drivenAdapter;

@@ -3,13 +3,13 @@ package co.com.bancolombia.dynamodb.gateway;
 import co.com.bancolombia.dynamodb.DynamoDBTemplateAdapter;
 import co.com.bancolombia.model.customer.Customer;
 import co.com.bancolombia.model.customer.gateways.CustomerRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomerGatewayImpl implements CustomerRepository {
 
     private final DynamoDBTemplateAdapter repository;

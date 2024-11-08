@@ -2,7 +2,7 @@ package co.com.bancolombia.api;
 
 import co.com.bancolombia.model.customer.Customer;
 import co.com.bancolombia.usecase.customer.CustomerUseCase;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiRest {
 
     private final CustomerUseCase useCase;
