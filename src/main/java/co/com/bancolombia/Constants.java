@@ -10,13 +10,13 @@ public final class Constants {
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
-  public static final String SECRETS_VERSION = "4.4.22";
-  public static final String SPRING_BOOT_VERSION = "3.3.4";
+  public static final String SECRETS_VERSION = "4.4.23";
+  public static final String SPRING_BOOT_VERSION = "3.3.5";
   public static final String LOMBOK_VERSION = "1.18.34";
   public static final String REACTIVE_COMMONS_VERSION = "4.1.4";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.10.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.28.25";
+  public static final String AWS_BOM_VERSION = "2.29.9";
   public static final String COMMONS_JMS_VERSION = "2.3.4";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.3.0";
@@ -29,7 +29,7 @@ public final class Constants {
   public static final String SONAR_VERSION = "5.1.0.4882";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "3.18.1";
-  public static final String DEPENDENCY_CHECK_VERSION = "10.0.4";
+  public static final String DEPENDENCY_CHECK_VERSION = "11.1.0";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "8.10.2";
