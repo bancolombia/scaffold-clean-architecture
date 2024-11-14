@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.18.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.2) (2024-11-14)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.1...v3.18.2)
+
+**Closed issues:**
+
+- No es posible implementar paginación en un proyecto webflux? [\#574](https://github.com/bancolombia/scaffold-clean-architecture/issues/574)
+- Actualización de ejemplos [\#556](https://github.com/bancolombia/scaffold-clean-architecture/issues/556)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.26.13 to 3.27.3 [\#578](https://github.com/bancolombia/scaffold-clean-architecture/pull/578) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ci\(sonar\): Update gradle.yml [\#576](https://github.com/bancolombia/scaffold-clean-architecture/pull/576) ([santitigaga](https://github.com/santitigaga))
+- build\(deps\): bump actions/dependency-review-action from 4.3.4 to 4.4.0 [\#575](https://github.com/bancolombia/scaffold-clean-architecture/pull/575) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump http-proxy-middleware from 2.0.6 to 2.0.7 in /docs [\#573](https://github.com/bancolombia/scaffold-clean-architecture/pull/573) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(examples-ca\): update dependencies [\#572](https://github.com/bancolombia/scaffold-clean-architecture/pull/572) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump actions/setup-java from 4.4.0 to 4.5.0 [\#571](https://github.com/bancolombia/scaffold-clean-architecture/pull/571) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#567](https://github.com/bancolombia/scaffold-clean-architecture/pull/567) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v3.18.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.1) (2024-10-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.0...v3.18.1)
