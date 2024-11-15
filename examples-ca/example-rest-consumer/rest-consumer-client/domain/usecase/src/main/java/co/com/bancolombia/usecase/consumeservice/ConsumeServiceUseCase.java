@@ -14,7 +14,7 @@ public class ConsumeServiceUseCase {
     private final UserRepository repository;
 
     public String sum(Integer x, Integer y) throws IOException {
-        return repository.sum(x,y);
+        return repository.sum(x, y);
     }
 
     public List<User> getUsers() throws IOException {

@@ -33,12 +33,13 @@ public class S3Config {
 
     private S3ClientBuilder getBuilder(S3ConnectionProperties s3Properties) {
         return S3Client.builder()
-        .region(Region.of(s3Properties.region()));
+                .region(Region.of(s3Properties.region()));
     }
+
     @Bean
     @Profile("local")
-    public AwsBasicCredentials getCredentials(){
-        return AwsBasicCredentials.create("test","test");
+    public AwsBasicCredentials getCredentials() {
+        return AwsBasicCredentials.create("test", "test");
     }
 
 }

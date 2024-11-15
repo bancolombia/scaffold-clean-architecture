@@ -50,7 +50,9 @@ class UpgradeY2023M05D04BlockHoundTest {
     // Arrange
     DefaultResolver resolver = new DefaultResolver();
     String text = FileUtils.getResourceAsString(resolver, "blockhound/before.txt");
-    String expectedText = FileUtils.getResourceAsString(resolver, "blockhound/after.txt");
+    String expectedText =
+        FileUtils.getResourceAsString(resolver, "blockhound/after.txt")
+            .replace("{{BLOCK_HOUND_VERSION}}", Constants.BLOCK_HOUND_VERSION);
     builder.addFile(file, text);
     // Act
     boolean applied = updater.up(builder);

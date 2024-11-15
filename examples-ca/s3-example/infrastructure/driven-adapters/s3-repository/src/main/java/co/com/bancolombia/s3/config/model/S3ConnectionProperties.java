@@ -7,5 +7,4 @@ public record S3ConnectionProperties(
         String bucketName,
         String region,
         String endpoint) {
-
 }

@@ -6,32 +6,53 @@ allprojects {
     }
 }
 
+apply plugin: 'info.solidsoft.pitest.aggregator'
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'info.solidsoft.pitest'
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
     sourceCompatibility = JavaVersion.VERSION_17
 
-    
-	test {
+    test {
         useJUnitPlatform()
     }
 
-	dependencies {
+    dependencies {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    }
+
+    pitest {
+        pitestVersion = '1.17.0'
+        junit5PluginVersion = '1.2.1'
+        targetClasses = ['co.com.bancolombia.*']
+        outputFormats = ['XML', 'HTML']
+        threads = 8
+        verbose = true
+        exportLineCoverage = true
+        timestampedReports = false
+        failWhenNoMutations = false
+        useClasspathFile = true
+        excludedClasses = ['co.com.bancolombia.model.*']
+        jvmArgs = [
+                // To avoid: BlockHoundTestExecutionListener could not be instantiated
+                '-XX:+AllowRedefinitionToAddDeleteMethods'
+        ]
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     jacocoTestReport {
-        dependsOn test
+        dependsOn test, 'pitest'
         reports {
             xml.setRequired true
             xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
@@ -42,13 +63,33 @@ subprojects {
 
 }
 
+pitestReportAggregate {
+    doLast {
+        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
+        def consolidatedReport = new File(reportDir, 'mutations.xml')
+        consolidatedReport.withWriter { writer ->
+            writer.write("<mutations>\n")
+            subprojects.each { subproject ->
+                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
+                if (xmlReport.exists()) {
+                    def xmlContent = xmlReport.text
+                    xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
+                    xmlContent = xmlContent.replaceAll("</?mutations( partial=\"true\")?>", "")
+                    writer.write(xmlContent.trim() + "\n")
+                }
+            }
+            writer.write("</mutations>")  // Cierra la etiqueta <mutations> al final
+        }
+    }
+}
+
 jacoco {
     toolVersion = "${jacocoVersion}"
     reportsDirectory.set(layout.buildDirectory.dir("reports"))
 }
 
 tasks.register('jacocoMergedReport', JacocoReport) {
-    dependsOn = [test, subprojects.jacocoTestReport]
+    dependsOn = [test, subprojects.jacocoTestReport, pitestReportAggregate]
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
@@ -67,5 +108,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.4'
+    gradleVersion = '8.10.2'
+    distributionSha256Sum = '31c55713e40233a8303827ceb42ca48a47267a0ad4bab9177123121e71524c26'
+    validateDistributionUrl = true
 }

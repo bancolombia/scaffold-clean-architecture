@@ -1,20 +1,19 @@
 package co.com.emorae.usecase.orders;
 
 import co.com.emorae.model.order.Order;
-import co.com.emorae.model.order.OrderStatus;
 import co.com.emorae.model.order.Product;
 import co.com.emorae.model.order.gateways.OrderRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrdersUseCase {
 
-    private OrderRepository repository;
+    private final OrderRepository repository;
 
     public Flux<Order> getOrders(){
         return repository.getAll();

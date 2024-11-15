@@ -31,7 +31,7 @@ public class RestConsumer implements UserRepository {
     // You should use the methods that you implement from the Gateway from the domain.
     @Override
     public String sum(Integer x, Integer y) throws IOException {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(url.concat("/sum/").concat(String.valueOf(x)).concat("/").concat(String.valueOf(y)))
                 .get()
                 .addHeader("Content-Type", "application/json")
@@ -42,13 +42,11 @@ public class RestConsumer implements UserRepository {
 
     @Override
     public List<User> getUsers() throws IOException {
-
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(url.concat("/list-users"))
                 .get()
                 .addHeader("Content-Type", "application/json")
                 .build();
-        Response response = null;
 
         return mapper.readValue(client.newCall(request).execute().body().string(), new TypeReference<>() {
         });

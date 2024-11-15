@@ -11,5 +11,4 @@ public record PostgresqlConnectionProperties(
         String schema,
         String username,
         String password) {
-
 }

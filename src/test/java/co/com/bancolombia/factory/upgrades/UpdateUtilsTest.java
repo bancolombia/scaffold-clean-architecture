@@ -97,6 +97,20 @@ class UpdateUtilsTest {
   }
 
   @Test
+  void shouldAddToStartIfNotContains() {
+    // Arrange
+    String file = "apply plugin: 'info.solidsoft.pitest.aggregator'\n\n";
+    String check = "info.solidsoft.pitest.aggregator";
+    String currentContent = "allprojects {}\n";
+    builder.addFile(file, currentContent);
+    // Act
+    String expected = "apply plugin: 'info.solidsoft.pitest.aggregator'\n\nallprojects {}\n";
+    String result = UpdateUtils.addToStartIfNotContains(currentContent, check, file);
+    // Assert
+    assertEquals(expected, result);
+  }
+
+  @Test
   void shouldThrowWhenNoMatch() {
     // Arrange
     String file = "build.gradle\n";

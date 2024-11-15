@@ -20,7 +20,7 @@ subprojects {
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
-        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.9.RELEASE'
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         testImplementation 'io.projectreactor:reactor-test'

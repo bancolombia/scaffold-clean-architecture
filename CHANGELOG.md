@@ -1,12 +1,133 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.18.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.2) (2024-11-14)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.19...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.1...v3.18.2)
+
+**Closed issues:**
+
+- No es posible implementar paginación en un proyecto webflux? [\#574](https://github.com/bancolombia/scaffold-clean-architecture/issues/574)
+- Actualización de ejemplos [\#556](https://github.com/bancolombia/scaffold-clean-architecture/issues/556)
 
 **Merged pull requests:**
 
-- build\(deps\): bump github/codeql-action from 3.26.4 to 3.26.6 [\#522](https://github.com/bancolombia/scaffold-clean-architecture/pull/522) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.13 to 3.27.3 [\#578](https://github.com/bancolombia/scaffold-clean-architecture/pull/578) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ci\(sonar\): Update gradle.yml [\#576](https://github.com/bancolombia/scaffold-clean-architecture/pull/576) ([santitigaga](https://github.com/santitigaga))
+- build\(deps\): bump actions/dependency-review-action from 4.3.4 to 4.4.0 [\#575](https://github.com/bancolombia/scaffold-clean-architecture/pull/575) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump http-proxy-middleware from 2.0.6 to 2.0.7 in /docs [\#573](https://github.com/bancolombia/scaffold-clean-architecture/pull/573) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(examples-ca\): update dependencies [\#572](https://github.com/bancolombia/scaffold-clean-architecture/pull/572) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump actions/setup-java from 4.4.0 to 4.5.0 [\#571](https://github.com/bancolombia/scaffold-clean-architecture/pull/571) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#567](https://github.com/bancolombia/scaffold-clean-architecture/pull/567) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
+## [v3.18.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.1) (2024-10-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.0...v3.18.1)
+
+**Merged pull requests:**
+
+- fix\(deps\): Add junit-platform-launcher if not exists [\#566](https://github.com/bancolombia/scaffold-clean-architecture/pull/566) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.18.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.0) (2024-10-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.26...v3.18.0)
+
+**Merged pull requests:**
+
+- feat\(pitest\): Add UpgradeAction for pitest settings [\#565](https://github.com/bancolombia/scaffold-clean-architecture/pull/565) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.26.12 to 3.26.13 [\#564](https://github.com/bancolombia/scaffold-clean-architecture/pull/564) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump cookie and express in /docs [\#563](https://github.com/bancolombia/scaffold-clean-architecture/pull/563) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.4.0 to 4.4.3 [\#562](https://github.com/bancolombia/scaffold-clean-architecture/pull/562) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.11 to 3.26.12 [\#560](https://github.com/bancolombia/scaffold-clean-architecture/pull/560) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.10 to 3.26.11 [\#557](https://github.com/bancolombia/scaffold-clean-architecture/pull/557) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.9 to 3.26.10 [\#555](https://github.com/bancolombia/scaffold-clean-architecture/pull/555) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#554](https://github.com/bancolombia/scaffold-clean-architecture/pull/554) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump actions/setup-java from 4.3.0 to 4.4.0 [\#553](https://github.com/bancolombia/scaffold-clean-architecture/pull/553) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.26.8 to 3.26.9 [\#552](https://github.com/bancolombia/scaffold-clean-architecture/pull/552) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.17.26](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.26) (2024-09-23)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.25...v3.17.26)
+
+**Closed issues:**
+
+- Error applying update with name 3.6.1-\>3.6.2: Add ArchUnit issues export to sonar [\#512](https://github.com/bancolombia/scaffold-clean-architecture/issues/512)
+- Error applying update with name 3.6.1-\>3.6.2: Add ArchUnit issues export to sonar [\#436](https://github.com/bancolombia/scaffold-clean-architecture/issues/436)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#551](https://github.com/bancolombia/scaffold-clean-architecture/pull/551) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.26.7 to 3.26.8 [\#550](https://github.com/bancolombia/scaffold-clean-architecture/pull/550) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.17.25](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.25) (2024-09-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.24...v3.17.25)
+
+**Closed issues:**
+
+- \[Enhancement\] The architecture naming rules should be configurable [\#393](https://github.com/bancolombia/scaffold-clean-architecture/issues/393)
+- \[Documentation\] Add to documentation how skip Architecture Tests [\#392](https://github.com/bancolombia/scaffold-clean-architecture/issues/392)
+
+**Merged pull requests:**
+
+- fix\(archunitsonar\): Fix UpgradeAction for jacoco merged report adding arch unit issues to sonar [\#549](https://github.com/bancolombia/scaffold-clean-architecture/pull/549) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.17.24](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.24) (2024-09-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.23...v3.17.24)
+
+**Merged pull requests:**
+
+- fix\(archunit\): Update ArchUnit template, validate names when generating model or usecases [\#548](https://github.com/bancolombia/scaffold-clean-architecture/pull/548) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v3.17.23](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.23) (2024-09-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.22...v3.17.23)
+
+**Closed issues:**
+
+- Error al arrancar proyecto [\#494](https://github.com/bancolombia/scaffold-clean-architecture/issues/494)
+
+**Merged pull requests:**
+
+- docs\(version\): Update dependencies and docs [\#547](https://github.com/bancolombia/scaffold-clean-architecture/pull/547) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.3 to 7.0.5 [\#546](https://github.com/bancolombia/scaffold-clean-architecture/pull/546) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(charset\): read file with charset or as bytes [\#545](https://github.com/bancolombia/scaffold-clean-architecture/pull/545) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.1 to 7.0.3 [\#544](https://github.com/bancolombia/scaffold-clean-architecture/pull/544) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): update dependencies [\#543](https://github.com/bancolombia/scaffold-clean-architecture/pull/543) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.26.6 to 3.26.7 [\#542](https://github.com/bancolombia/scaffold-clean-architecture/pull/542) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.9.1 to 2.10.1 [\#540](https://github.com/bancolombia/scaffold-clean-architecture/pull/540) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.17.22](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.22) (2024-09-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.21...v3.17.22)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/setup-java from 4.2.2 to 4.3.0 [\#534](https://github.com/bancolombia/scaffold-clean-architecture/pull/534) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#533](https://github.com/bancolombia/scaffold-clean-architecture/pull/533) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- docs: Update docs version to keep it updated [\#532](https://github.com/bancolombia/scaffold-clean-architecture/pull/532) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.0 to 7.0.1 [\#531](https://github.com/bancolombia/scaffold-clean-architecture/pull/531) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs: Update 2-getting-started.md [\#530](https://github.com/bancolombia/scaffold-clean-architecture/pull/530) ([santitigaga](https://github.com/santitigaga))
+
+## [v3.17.21](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.21) (2024-09-04)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.20...v3.17.21)
+
+**Merged pull requests:**
+
+- build\(deps\): bump peter-evans/create-pull-request from 6.1.0 to 7.0.0 [\#529](https://github.com/bancolombia/scaffold-clean-architecture/pull/529) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#528](https://github.com/bancolombia/scaffold-clean-architecture/pull/528) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
+## [v3.17.20](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.20) (2024-09-02)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.17.19...v3.17.20)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/upload-artifact from 4.3.6 to 4.4.0 [\#527](https://github.com/bancolombia/scaffold-clean-architecture/pull/527) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build: update dependencies [\#526](https://github.com/bancolombia/scaffold-clean-architecture/pull/526) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump webpack from 5.91.0 to 5.94.0 in /docs [\#524](https://github.com/bancolombia/scaffold-clean-architecture/pull/524) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump micromatch from 4.0.5 to 4.0.8 in /docs [\#523](https://github.com/bancolombia/scaffold-clean-architecture/pull/523) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v3.17.19](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.17.19) (2024-08-30)
 

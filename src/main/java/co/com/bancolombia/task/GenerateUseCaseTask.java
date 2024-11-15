@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class GenerateUseCaseTask extends AbstractCleanArchitectureDefaultTask {
           "No use case name, usage: gradle generateUseCase --name [name]");
     }
     name = Utils.capitalize(name);
+    ArchitectureValidation.validateUseCaseName(name);
     String className = refactorName(name);
     String useCaseName = className.replace(USECASE_CLASS_NAME, "").toLowerCase();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());

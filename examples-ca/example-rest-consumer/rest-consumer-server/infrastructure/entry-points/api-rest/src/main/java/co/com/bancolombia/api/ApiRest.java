@@ -1,4 +1,5 @@
 package co.com.bancolombia.api;
+
 import co.com.bancolombia.model.usuario.Usuario;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;

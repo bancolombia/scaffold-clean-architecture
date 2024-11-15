@@ -35,10 +35,10 @@ subprojects {
         implementation 'io.projectreactor.addons:reactor-extra'
 
         testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         testImplementation 'io.projectreactor:reactor-test'
         {{/reactive}}
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         {{#lombok}}
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -66,11 +66,13 @@ subprojects {
         targetClasses = ['{{package}}.*']
         excludedClasses = []
         excludedTestClasses = []
+        pitestVersion = '1.16.1'
         verbose = true
         outputFormats = ['XML', 'HTML']
         threads = 8
         exportLineCoverage = true
         timestampedReports = false
+        //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')
         junit5PluginVersion = '1.2.1'
         failWhenNoMutations = false
@@ -79,7 +81,7 @@ subprojects {
     {{/mutation}}
 
     jacocoTestReport {
-        dependsOn test
+        dependsOn test, 'pitest'
         reports {
             xml.setRequired true
             xml.setOutputLocation layout.buildDirectory.file("reports/jacoco.xml")
@@ -96,7 +98,7 @@ jacoco {
 }
 
 tasks.register('jacocoMergedReport', JacocoReport) {
-    dependsOn = [test, subprojects.jacocoTestReport]
+    dependsOn = [test, subprojects.jacocoTestReport, pitestReportAggregate]
     additionalSourceDirs.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.setFrom files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.setFrom files(subprojects.sourceSets.main.output)
@@ -112,6 +114,26 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs = [
             '-Amapstruct.suppressGeneratorTimestamp=true'
     ]
+}
+
+pitestReportAggregate {
+    doLast {
+        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
+        def consolidatedReport = new File(reportDir, 'mutations.xml')
+        consolidatedReport.withWriter { writer ->
+            writer.write("<mutations>\n")
+            subprojects.each { subproject ->
+                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
+                if (xmlReport.exists()) {
+                    def xmlContent = xmlReport.text
+                    xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
+                    xmlContent = xmlContent.replaceAll("</?mutations( partial=\"true\")?>", "")
+                    writer.write(xmlContent.trim() + "\n")
+                }
+            }
+            writer.write("</mutations>")
+        }
+    }
 }
 
 tasks.named('wrapper') {

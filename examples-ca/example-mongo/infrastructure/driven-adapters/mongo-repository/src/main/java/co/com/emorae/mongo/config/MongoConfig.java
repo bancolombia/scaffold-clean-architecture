@@ -27,10 +27,8 @@ public class MongoConfig {
         return new ReactiveMongoClientFactory(list);
     }
 
-    public MongoClientSettingsBuilderCustomizer mongoDBDefaultSettings(String uri) {
+    private MongoClientSettingsBuilderCustomizer mongoDBDefaultSettings(String uri) {
         return builder -> builder.applyConnectionString(new ConnectionString(uri))
-                .applyToSslSettings(
-                        blockBuilder -> blockBuilder.enabled(false)
-                );
+                .applyToSslSettings(blockBuilder -> blockBuilder.enabled(false));
     }
 }

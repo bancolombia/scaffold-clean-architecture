@@ -54,4 +54,19 @@ class UpgradeY2023M10D02SonarRulesTest {
     assertTrue(applied);
     verify(builder, times(1)).addFile(file, expectedText);
   }
+
+  @Test
+  void shouldApplyUpdateWhenMergedReport() throws IOException {
+    String file = Constants.MainFiles.BUILD_GRADLE;
+    // Arrange
+    DefaultResolver resolver = new DefaultResolver();
+    String text = FileUtils.getResourceAsString(resolver, "sonar-rules/before-merged.txt");
+    String expectedText = FileUtils.getResourceAsString(resolver, "sonar-rules/after-merged.txt");
+    builder.addFile(file, text);
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertTrue(applied);
+    verify(builder, times(1)).addFile(file, expectedText);
+  }
 }
