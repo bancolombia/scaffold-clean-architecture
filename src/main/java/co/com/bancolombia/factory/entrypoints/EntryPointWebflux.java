@@ -1,10 +1,10 @@
 package co.com.bancolombia.factory.entrypoints;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-import static co.com.bancolombia.utils.Utils.buildTestImplementation;
+import static co.com.bancolombia.utils.Utils.*;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
@@ -14,9 +14,13 @@ import java.io.IOException;
 public class EntryPointWebflux implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+    VersioningStrategy versioningStrategy =
+        (VersioningStrategy) builder.getParam("task-param-versioning-strategy");
+
     builder.runValidations(ReactiveTypeValidation.class);
     if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-router"))) {
-      builder.setupFromTemplate("entry-point/rest-webflux/router-functions");
+      setupTemplate(builder, versioningStrategy);
+
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
       // to run archunit validations
@@ -55,5 +59,30 @@ public class EntryPointWebflux implements ModuleFactory {
     builder
         .appendToProperties("cors")
         .put("allowed-origins", "http://localhost:4200,http://localhost:8080");
+  }
+
+  private static void setupTemplate(ModuleBuilder builder, VersioningStrategy versioningStrategy)
+      throws IOException, ParamNotFoundException {
+    String templatePath = "entry-point/rest-webflux/router-functions";
+
+    switch (versioningStrategy) {
+      case HEADER:
+        templatePath += "/header";
+        break;
+      case PATH:
+        templatePath += "/path";
+        break;
+      case NONE:
+      default:
+        break;
+    }
+
+    builder.setupFromTemplate(templatePath);
+  }
+
+  public enum VersioningStrategy {
+    HEADER,
+    PATH,
+    NONE
   }
 }

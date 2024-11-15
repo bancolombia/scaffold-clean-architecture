@@ -3,6 +3,7 @@ package co.com.bancolombia.task;
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
+import co.com.bancolombia.factory.entrypoints.EntryPointWebflux.VersioningStrategy;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
   private String swaggerFile = null;
   private Server server = Server.UNDERTOW;
+  private VersioningStrategy versioning = VersioningStrategy.NONE;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
   private BooleanOption eda = BooleanOption.FALSE;
@@ -42,6 +44,13 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   @Option(option = "from-swagger", description = "Generation will be from a swagger.yaml file")
   public void setFromSwagger(String swaggerFile) {
     this.swaggerFile = swaggerFile;
+  }
+
+  @Option(
+      option = "versioning",
+      description = "define an api versioning strategy available only with router function")
+  public void setVersioning(VersioningStrategy versioning) {
+    this.versioning = versioning;
   }
 
   @Option(option = "pathgql", description = "set API GraphQL path")
@@ -84,9 +93,15 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("versioning")
+  public List<VersioningStrategy> getVersioningOptions() {
+    return Arrays.asList(VersioningStrategy.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
+    builder.addParam("task-param-versioning-strategy", versioning);
     builder.addParam("task-param-pathgql", pathGraphql);
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
     builder.addParam("task-param-authorize", authorization == BooleanOption.TRUE);

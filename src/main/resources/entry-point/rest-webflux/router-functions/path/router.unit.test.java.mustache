@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@ContextConfiguration(classes = {RouterRest.class, HandlerV1.class,HandlerV2.class})
+@ContextConfiguration(classes = {RouterRest.class, Handler.class})
 @WebFluxTest
 class RouterRestTest {
 
@@ -16,7 +16,7 @@ class RouterRestTest {
     private WebTestClient webTestClient;
 
     @Test
-    void testListenGETUseCaseV1() {
+    void testListenGETUseCase() {
         webTestClient.get()
                 .uri("/api/v1/usecase/path")
                 .accept(MediaType.APPLICATION_JSON)
@@ -28,22 +28,9 @@ class RouterRestTest {
                         }
                 );
     }
-    @Test
-    void testListenGETUseCaseV2() {
-        webTestClient.get()
-                .uri("/api/v2/usecase/path")
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEmpty();
-                        }
-                );
-    }
 
     @Test
-    void testListenGETOtherUseCaseV1() {
+    void testListenGETOtherUseCase() {
         webTestClient.get()
                 .uri("/api/v1/otherusercase/path")
                 .accept(MediaType.APPLICATION_JSON)
@@ -55,38 +42,11 @@ class RouterRestTest {
                         }
                 );
     }
-    @Test
-    void testListenGETOtherUseCaseV2() {
-        webTestClient.get()
-                .uri("/api/v2/otherusercase/path")
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEmpty();
-                        }
-                );
-    }
 
     @Test
-    void testListenPOSTUseCaseV1() {
+    void testListenPOSTUseCase() {
         webTestClient.post()
                 .uri("/api/v1/usecase/otherpath")
-                .accept(MediaType.APPLICATION_JSON)
-                .bodyValue("")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody(String.class)
-                .value(userResponse -> {
-                            Assertions.assertThat(userResponse).isEmpty();
-                        }
-                );
-    }
-    @Test
-    void testListenPOSTUseCaseV2() {
-        webTestClient.post()
-                .uri("/api/v2/usecase/otherpath")
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue("")
                 .exchange()

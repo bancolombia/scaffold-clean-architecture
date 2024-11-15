@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@ContextConfiguration(classes = {RouterRest.class, HandlerV1.class,HandlerV2.class})
+@ContextConfiguration(classes = {RouterRest.class, HandlerV1.class, HandlerV2.class})
 @WebFluxTest
 class RouterRestTest {
 
@@ -18,8 +18,8 @@ class RouterRestTest {
     @Test
     void testListenGETUseCaseV1() {
         webTestClient.get()
-                .uri("/api/v1/usecase/path")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/usecase/path")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
@@ -31,8 +31,8 @@ class RouterRestTest {
     @Test
     void testListenGETUseCaseV2() {
         webTestClient.get()
-                .uri("/api/v2/usecase/path")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/usecase/path")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
@@ -45,8 +45,8 @@ class RouterRestTest {
     @Test
     void testListenGETOtherUseCaseV1() {
         webTestClient.get()
-                .uri("/api/v1/otherusercase/path")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/otherusercase/path")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
@@ -58,8 +58,8 @@ class RouterRestTest {
     @Test
     void testListenGETOtherUseCaseV2() {
         webTestClient.get()
-                .uri("/api/v2/otherusercase/path")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/otherusercase/path")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
@@ -72,8 +72,8 @@ class RouterRestTest {
     @Test
     void testListenPOSTUseCaseV1() {
         webTestClient.post()
-                .uri("/api/v1/usecase/otherpath")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/usecase/otherpath")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
                 .bodyValue("")
                 .exchange()
                 .expectStatus().isOk()
@@ -86,8 +86,8 @@ class RouterRestTest {
     @Test
     void testListenPOSTUseCaseV2() {
         webTestClient.post()
-                .uri("/api/v2/usecase/otherpath")
-                .accept(MediaType.APPLICATION_JSON)
+                .uri("/api/usecase/otherpath")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
                 .bodyValue("")
                 .exchange()
                 .expectStatus().isOk()

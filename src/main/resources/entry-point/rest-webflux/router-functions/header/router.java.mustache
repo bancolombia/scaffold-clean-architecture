@@ -1,0 +1,38 @@
+package {{package}}.api;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.server.RequestPredicates;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
+
+@Configuration
+public class RouterRest {
+
+    @Bean
+    public RouterFunction<ServerResponse> route(HandlerV1 handlerV1, HandlerV2 handlerV2) {
+        return RouterFunctions
+                .route()
+                .path("/api", builder -> builder
+                        .nest(RequestPredicates.headers(headers ->
+                                        headers.asHttpHeaders().getAccept().contains(MediaType.valueOf("application/vnd.api.v1+json"))),
+                                nestedBuilder -> nestedBuilder
+                                        .GET("/usecase/path", handlerV1::listenGETUseCase)
+                                        .GET("/otherusercase/path", handlerV1::listenGETOtherUseCase)
+                                        .POST("/usecase/otherpath", handlerV1::listenPOSTUseCase)
+
+                        )
+                        .nest(RequestPredicates.headers(headers ->
+                                        headers.asHttpHeaders().getAccept().contains(MediaType.valueOf("application/vnd.api.v2+json"))),
+                                nestedBuilder -> nestedBuilder
+                                        .GET("/usecase/path", handlerV2::listenGETUseCase)
+                                        .GET("/otherusercase/path", handlerV2::listenGETOtherUseCase)
+                                        .POST("/usecase/otherpath", handlerV2::listenPOSTUseCase)
+                        )
+                )
+                .build();
+    }
+}
+

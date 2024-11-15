@@ -8,6 +8,7 @@ import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -233,5 +234,24 @@ class GenerateEntryPointTaskReactiveTest {
         TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
         "build.gradle",
         "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java");
+  }
+
+  @Test
+  void generateEntryPointReactiveWebWithNoneStrategy() throws IOException, CleanException {
+
+    // Arrange
+    task.setType("WEBFLUX");
+    task.setVersioning(EntryPointWebflux.VersioningStrategy.NONE);
+    task.setSwagger(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
+
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/reactive-web/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/api/Handler.java",
+        "src/main/java/co/com/bancolombia/api/RouterRest.java",
+        "src/test/java/co/com/bancolombia/api/RouterRestTest.java");
   }
 }
