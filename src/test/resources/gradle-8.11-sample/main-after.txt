@@ -15,7 +15,6 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-
     java {
         sourceCompatibility = JavaVersion.VERSION_17
     }
@@ -52,7 +51,7 @@ subprojects {
     test.finalizedBy(project.tasks.jacocoTestReport)
 
     pitest {
-        targetClasses = ['co.com.luisgomez29.*']
+        targetClasses = ['your.package.*']
         excludedClasses = []
         excludedTestClasses = []
         pitestVersion = '1.16.1'
@@ -126,5 +125,5 @@ pitestReportAggregate {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.11'
+    gradleVersion = '8.10.2'
 }
