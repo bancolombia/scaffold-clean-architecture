@@ -18,7 +18,7 @@ class RouterRestTest {
     @Test
     void testListenGETUseCase() {
         webTestClient.get()
-                .uri("/api/v1/usecase/path")
+                .uri("/api/usecase/path")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -32,7 +32,7 @@ class RouterRestTest {
     @Test
     void testListenGETOtherUseCase() {
         webTestClient.get()
-                .uri("/api/v1/otherusercase/path")
+                .uri("/api/otherusercase/path")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -46,7 +46,7 @@ class RouterRestTest {
     @Test
     void testListenPOSTUseCase() {
         webTestClient.post()
-                .uri("/api/v1/usecase/otherpath")
+                .uri("/api/usecase/otherpath")
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue("")
                 .exchange()
