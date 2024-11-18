@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+
+import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -201,6 +203,22 @@ class GenerateEntryPointTaskImperativeTest {
     List<EntryPointRestMvcServer.Server> options = task.getServerOptions();
     // Assert
     assertEquals(3, options.size());
+  }
+  @Test
+  void shouldGetEDAOptions() {
+    // Arrange
+    // Act
+    List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getEdaOptions();
+    // Assert
+    assertEquals(2, options.size());
+  }
+  @Test
+  void shouldGetVersioningOptions() {
+    // Arrange
+    // Act
+    List<EntryPointWebflux.VersioningStrategy> versioningOptions = task.getVersioningOptions();
+    // Assert
+    assertEquals(3, versioningOptions.size());
   }
 
   @Test
