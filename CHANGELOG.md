@@ -1,5 +1,15 @@
 # Changelog
 
+## [v3.19.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.19.0) (2024-11-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.2...v3.19.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump cross-spawn from 7.0.3 to 7.0.5 in /docs [\#583](https://github.com/bancolombia/scaffold-clean-architecture/pull/583) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(gradle\): add UpgradeAction for gradle 8.11 [\#580](https://github.com/bancolombia/scaffold-clean-architecture/pull/580) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump github/codeql-action from 3.27.3 to 3.27.4 [\#579](https://github.com/bancolombia/scaffold-clean-architecture/pull/579) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.18.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.18.2) (2024-11-14)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.1...v3.18.2)
