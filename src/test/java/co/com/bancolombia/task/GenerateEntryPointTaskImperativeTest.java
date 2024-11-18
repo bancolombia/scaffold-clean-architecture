@@ -12,12 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
+import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-
-import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -204,6 +203,7 @@ class GenerateEntryPointTaskImperativeTest {
     // Assert
     assertEquals(3, options.size());
   }
+
   @Test
   void shouldGetEDAOptions() {
     // Arrange
@@ -212,6 +212,7 @@ class GenerateEntryPointTaskImperativeTest {
     // Assert
     assertEquals(2, options.size());
   }
+
   @Test
   void shouldGetVersioningOptions() {
     // Arrange
