@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
+import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -201,6 +202,24 @@ class GenerateEntryPointTaskImperativeTest {
     List<EntryPointRestMvcServer.Server> options = task.getServerOptions();
     // Assert
     assertEquals(3, options.size());
+  }
+
+  @Test
+  void shouldGetEDAOptions() {
+    // Arrange
+    // Act
+    List<AbstractCleanArchitectureDefaultTask.BooleanOption> options = task.getEdaOptions();
+    // Assert
+    assertEquals(2, options.size());
+  }
+
+  @Test
+  void shouldGetVersioningOptions() {
+    // Arrange
+    // Act
+    List<EntryPointWebflux.VersioningStrategy> versioningOptions = task.getVersioningOptions();
+    // Assert
+    assertEquals(3, versioningOptions.size());
   }
 
   @Test
