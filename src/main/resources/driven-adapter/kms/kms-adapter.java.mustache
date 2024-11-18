@@ -1,6 +1,7 @@
 package {{package}}.kms;
 
-import org.springframework.beans.factory.annotation.Value;
+import {{package}}.kms.config.model.KmsConnectionProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.kms.KmsAsyncClient;
@@ -12,27 +13,26 @@ import java.util.Base64;
 import java.util.concurrent.ExecutionException;
 
 @Component
+@RequiredArgsConstructor
 public class KmsAdapter // implements ModelRepository from domain
 {
-    private final String keyId;
     private final KmsAsyncClient kmsAsyncClient;
-
-    public KmsAdapter(@Value("${adapters.aws.kms.keyId}") String keyId, KmsAsyncClient kmsAsyncClient) {
-        this.keyId = keyId;
-        this.kmsAsyncClient = kmsAsyncClient;
-    }
+    private final KmsConnectionProperties kmsProperties;
 
     public byte[] decrypt(String secretKey) throws ExecutionException, InterruptedException {
-        return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, keyId))
+        return kmsAsyncClient.decrypt(getDecryptRequest(secretKey, kmsProperties.keyId()))
                 .get()
                 .plaintext()
                 .asByteArray();
     }
 
     public String encrypt(byte[] secretKey) throws ExecutionException, InterruptedException {
-        return Base64.getEncoder().encodeToString(kmsAsyncClient.encrypt(getEncryptRequest(secretKey, keyId))
+        return Base64.getEncoder().encodeToString(
+                kmsAsyncClient.encrypt(getEncryptRequest(secretKey, kmsProperties.keyId()))
                         .get()
-                        .ciphertextBlob().asByteArray());
+                        .ciphertextBlob()
+                        .asByteArray()
+        );
     }
 
     private DecryptRequest getDecryptRequest(String secretKey, String keyId) {

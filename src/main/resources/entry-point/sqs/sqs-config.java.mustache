@@ -38,7 +38,7 @@ public class SQSConfig {
     public SqsAsyncClient configSqs(SQSProperties properties, MetricPublisher publisher) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
+                .region(Region.of(properties.region()))
                 .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .credentialsProvider(getProviderChain())
                 .build();
@@ -49,7 +49,7 @@ public class SQSConfig {
     public SqsAsyncClient configSqs(SQSProperties properties) {
         return SqsAsyncClient.builder()
                 .endpointOverride(resolveEndpoint(properties))
-                .region(Region.of(properties.getRegion()))
+                .region(Region.of(properties.region()))
                 .credentialsProvider(getProviderChain())
                 .build();
     }
@@ -66,9 +66,9 @@ public class SQSConfig {
                 .build();
     }
 
-    private URI resolveEndpoint(SQSProperties properties) {
-        if (properties.getEndpoint() != null) {
-            return URI.create(properties.getEndpoint());
+    protected URI resolveEndpoint(SQSProperties properties) {
+        if (properties.endpoint() != null) {
+            return URI.create(properties.endpoint());
         }
         return null;
     }
