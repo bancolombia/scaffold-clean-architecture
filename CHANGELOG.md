@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.20.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.0) (2024-11-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.19.0...v3.20.0)
+
+**Merged pull requests:**
+
+- feat\(entry point\): add versioning property to generate entrypoint [\#582](https://github.com/bancolombia/scaffold-clean-architecture/pull/582) ([santitigaga](https://github.com/santitigaga))
+- build\(deps\): update dependencies [\#581](https://github.com/bancolombia/scaffold-clean-architecture/pull/581) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v3.19.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.19.0) (2024-11-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.18.2...v3.19.0)
