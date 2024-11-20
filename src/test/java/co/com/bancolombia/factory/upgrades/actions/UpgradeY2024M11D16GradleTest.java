@@ -1,6 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.spy;
@@ -53,6 +54,22 @@ class UpgradeY2024M11D16GradleTest {
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
+    verify(builder)
+        .addFile(
+            MAIN_GRADLE,
+            FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+  }
+
+  @Test
+  void shouldNotApplyUpdateIfJavaBlockExists() throws IOException {
+    DefaultResolver resolver = new DefaultResolver();
+    // Arrange
+    builder.addFile(
+        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertFalse(applied);
     verify(builder)
         .addFile(
             MAIN_GRADLE,
