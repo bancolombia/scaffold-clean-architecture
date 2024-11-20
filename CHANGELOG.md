@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.20.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.1) (2024-11-20)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.0...v3.20.1)
+
+**Closed issues:**
+
+- No es claro donde debe estar el archivo yaml para el comando de creación de entry point webflux [\#570](https://github.com/bancolombia/scaffold-clean-architecture/issues/570)
+
+**Merged pull requests:**
+
+- fix\(gradle\): fix UpgradeAction for gradle 8.11 [\#586](https://github.com/bancolombia/scaffold-clean-architecture/pull/586) ([luisgomez29](https://github.com/luisgomez29))
+- refactor\(resources\): update configuration properties with records [\#525](https://github.com/bancolombia/scaffold-clean-architecture/pull/525) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.20.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.0) (2024-11-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.19.0...v3.20.0)
