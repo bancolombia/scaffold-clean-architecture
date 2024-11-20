@@ -17,6 +17,10 @@ public class UpgradeY2024M11D16Gradle implements UpgradeAction {
     return builder.updateFile(
         MAIN_GRADLE,
         content -> {
+          if (!builder.findExpressions(MAIN_GRADLE, "java ?\\{").isEmpty()) {
+            return content;
+          }
+
           String sourceCompatibilityLoaded =
               builder
                   .findExpressions(
