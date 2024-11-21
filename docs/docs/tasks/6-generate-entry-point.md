@@ -13,17 +13,17 @@ Whether you'll use generic one also parameter `name` is required.
    gradle gep --type [entryPointType]
    ```
 
-| Reference for **entryPointType** | Name                                   | Additional Options                                                                                                                         |
-   |----------------------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| generic                          | Empty Entry Point                      | --name [name]                                                                                                                              |
-| asynceventhandler                | Async Event Handler                    |                                                                                                                                            |
-| graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                     |
-| kafka                            | Kafka Consumer                         |                                                                                                                                            |
-| mq                               | JMS MQ Client to listen messages       |                                                                                                                                            |
-| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true,false] --from-swagger swagger.yaml                                          |
-| rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                            |
-| sqs                              | SQS Listener                           |                                                                                                                                            |
-| webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE |
+| Reference for **entryPointType** | Name                                   | Additional Options                                                                                                                          |
+|----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| generic                          | Empty Entry Point                      | --name [name]                                                                                                                               |
+| asynceventhandler                | Async Event Handler                    | --eda [true-false] --tech [rabbitmq-kafka-rabbitmq,kafka] Default: rabbitmq                                                                 |
+| graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                      |
+| kafka                            | Kafka Consumer                         |                                                                                                                                             |
+| mq                               | JMS MQ Client to listen messages       |                                                                                                                                             |
+| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true,false] --from-swagger swagger.yaml                                           |
+| rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                             |
+| sqs                              | SQS Listener                           |                                                                                                                                             |
+| webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE  |
 
 Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default,
 undertow.

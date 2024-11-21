@@ -14,7 +14,6 @@ import {{package}}.events.handlers.QueriesHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import io.cloudevents.CloudEvent;
 {{/eda}}
 
 @Configuration
@@ -25,10 +24,10 @@ public class HandlerRegistryConfiguration {
     public HandlerRegistry handlerRegistry(CommandsHandler commands, EventsHandler events, QueriesHandler queries) {
         {{#eda}}
          return HandlerRegistry.register()
-                        .listenNotificationEvent("some.broadcast.event.name", events::handleEventA, CloudEvent.class)
-                        .listenEvent("some.event.name", events::handleEventA, CloudEvent.class)
-                        .handleCommand("some.command.name", commands::handleCommandA, CloudEvent.class)
-                        .serveQuery("some.query.name", queries::handleQueryA, CloudEvent.class);
+                        .listenNotificationCloudEvent("some.broadcast.event.name", events::handleEventA)
+                        .listenCloudEvent("some.event.name", events::handleEventA)
+                        .handleCloudEventCommand("some.command.name", commands::handleCommandA)
+                        .serveCloudEventQuery("some.query.name", queries::handleQueryA);
         {{/eda}}
         {{^eda}}
         return HandlerRegistry.register()

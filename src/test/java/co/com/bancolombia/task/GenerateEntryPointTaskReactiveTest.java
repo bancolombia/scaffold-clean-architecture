@@ -6,6 +6,7 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
@@ -182,6 +183,24 @@ class GenerateEntryPointTaskReactiveTest {
   void generateEntryPointAsyncEventHandler() throws IOException, CleanException {
     // Arrange
     task.setType("ASYNCEVENTHANDLER");
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/async-event-handler/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java",
+        "src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java",
+        "src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java",
+        "src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java");
+  }
+
+  @Test
+  void generateEntryPointAsyncEventHandlerForEda() throws IOException, CleanException {
+    // Arrange
+    task.setType("ASYNCEVENTHANDLER");
+    task.setTech("rabbitmq,kafka");
+    task.setEda(TRUE);
     // Act
     task.execute();
     // Assert

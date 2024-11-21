@@ -2,7 +2,9 @@ package {{package}}.events.handlers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+{{^eda}}
 import org.reactivecommons.api.domain.DomainEvent;
+{{/eda}}
 import reactor.test.StepVerifier;
 {{#eda}}
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,39 +16,32 @@ import io.cloudevents.core.builder.CloudEventBuilder;
 
 import java.util.UUID;
 
-public class EventsHandlerTest {
-
-    EventsHandler eventsHandler;
+class EventsHandlerTest {
+    private EventsHandler eventsHandler;
 
     @BeforeEach
     void setUp() {
         eventsHandler = new EventsHandler();
     }
 
-{{#eda}}
- @Test
+    {{#eda}}
+    @Test
     void handleEventATest() throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    CloudEvent event = CloudEventBuilder.v1() //
-                    .withId(UUID.randomUUID().toString()) //
-                    .withSource(URI.create("https://spring.io/foos"))//
-                    .withType("event")
-                    .withData("application/json", objectMapper.writeValueAsBytes("Data"))
-                    .build();
-        StepVerifier.create(eventsHandler.handleEventA(
-            new DomainEvent<CloudEvent>(event.getType(), event.getId(), event))).expectComplete();
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        CloudEvent event = CloudEventBuilder.v1() //
+                .withId(UUID.randomUUID().toString()) //
+                .withSource(URI.create("https://spring.io/foos"))//
+                .withType("event")
+                .withData("application/json", objectMapper.writeValueAsBytes("Data"))
+                .build();
+        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete();
     }
-{{/eda}}
-{{^eda}}
- @Test
-    void handleEventATest(){
-        StepVerifier.create(eventsHandler.handleEventA(
-            new DomainEvent<>("EVENT",
-                UUID.randomUUID().toString(),
-                    "Data"))).expectComplete();
-
+    {{/eda}}
+    {{^eda}}
+    @Test
+    void handleEventATest() {
+        DomainEvent<Object> event = new DomainEvent<>("EVENT", UUID.randomUUID().toString(), "Data");
+        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete();
     }
-{{/eda}}
-
+    {{/eda}}
 }
