@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 {{/lombok}}
 {{#eda}}
-import org.reactivecommons.api.domain.DomainEvent;
 import org.reactivecommons.api.domain.DomainEventBus;
 import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;
 import reactor.core.publisher.Mono;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
+import io.cloudevents.jackson.JsonCloudEventData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.UUID;
 import java.net.URI;
@@ -42,7 +41,7 @@ public class ReactiveEventsGateway implements EventsGateway {
     public static final String SOME_EVENT_NAME = "some.event.name";
     private final DomainEventBus domainEventBus;
     {{#eda}}
-    private ObjectMapper om = new ObjectMapper();
+    private final ObjectMapper om;
     {{/eda}}
     {{^lombok}}
 
@@ -57,21 +56,15 @@ public class ReactiveEventsGateway implements EventsGateway {
         log.log(Level.INFO, "Sending domain event: {0}: {1}", new String[]{SOME_EVENT_NAME, event.toString()});
         {{/lombok}}
         {{#eda}}
-        CloudEvent  eventCloudEvent = null;
-        try {
-            eventCloudEvent = CloudEventBuilder.v1() //
-                       .withId(UUID.randomUUID().toString()) //
-                       .withSource(URI.create("https://spring.io/foos"))//
-                       .withType(SOME_EVENT_NAME) //
-                       .withDataContentType("application/json")
-                       .withTime(OffsetDateTime.now())
-                       .withData("application/json", om.writeValueAsBytes(event))
-                       .build();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        CloudEvent eventCloudEvent = CloudEventBuilder.v1()
+                .withId(UUID.randomUUID().toString())
+                .withSource(URI.create("https://reactive-commons.org/foos"))
+                .withType(SOME_EVENT_NAME)
+                .withTime(OffsetDateTime.now())
+                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(event)))
+                .build();
 
-         return from(domainEventBus.emit(new DomainEvent<CloudEvent>(SOME_EVENT_NAME, UUID.randomUUID().toString(), eventCloudEvent)));
+         return from(domainEventBus.emit(eventCloudEvent));
         {{/eda}}
         {{^eda}}
          return from(domainEventBus.emit(new DomainEvent<>(SOME_EVENT_NAME, UUID.randomUUID().toString(), event)));

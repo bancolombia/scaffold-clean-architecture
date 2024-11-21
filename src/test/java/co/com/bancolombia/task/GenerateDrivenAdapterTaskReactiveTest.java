@@ -7,6 +7,7 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -132,11 +133,30 @@ class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @Test
+  void generateDrivenAdapterEventBusForEda() throws IOException, CleanException {
+    // Arrange
+    task.setType("ASYNCEVENTBUS");
+    task.setTech("rabbitmq,kafka");
+    task.setEda(TRUE);
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/driven-adapters/async-event-bus/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/events/ReactiveEventsGateway.java",
+        "src/main/java/co/com/bancolombia/events/ReactiveDirectAsyncGateway.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/model/",
+        "src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java");
+  }
+
+  @Test
   void shouldHandleErrorBecauseIncompatibility() {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.REPOSITORY);
-    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    task.setSecret(TRUE);
     // Act
     assertThrows(ValidationException.class, () -> task.execute());
   }
@@ -163,7 +183,7 @@ class GenerateDrivenAdapterTaskReactiveTest {
     // Arrange
     task.setType("REDIS");
     task.setMode(DrivenAdapterRedis.Mode.TEMPLATE);
-    task.setSecret(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    task.setSecret(TRUE);
     // Act
     task.execute();
     // Assert

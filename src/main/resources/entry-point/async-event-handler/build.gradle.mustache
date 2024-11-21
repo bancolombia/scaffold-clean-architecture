@@ -1,16 +1,12 @@
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
-    {{^eda}}
+    {{#rabbitmq}}
     implementation 'org.reactivecommons:async-commons-rabbit-starter:{{REACTIVE_COMMONS_VERSION}}'
-    {{/eda}}
-    {{#eda}}
-    implementation 'org.reactivecommons:async-commons-rabbit-starter-eda:{{REACTIVE_COMMONS_VERSION}}'
-    implementation 'io.cloudevents:cloudevents-core:4.0.1'
-    implementation 'io.cloudevents:cloudevents-http-basic:4.0.1'
-    implementation 'io.cloudevents:cloudevents-json-jackson:4.0.1'
-    implementation 'io.cloudevents:cloudevents-spring:4.0.1'
-    {{/eda}}
+    {{/rabbitmq}}
+    {{#kafka}}
+    implementation 'org.reactivecommons:async-kafka-starter:{{REACTIVE_COMMONS_VERSION}}'
+    {{/kafka}}
     implementation 'org.springframework:spring-context'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'

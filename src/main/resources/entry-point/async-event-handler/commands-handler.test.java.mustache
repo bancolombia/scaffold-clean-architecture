@@ -2,7 +2,9 @@ package {{package}}.events.handlers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+{{^eda}}
 import org.reactivecommons.api.domain.Command;
+{{/eda}}
 import reactor.test.StepVerifier;
 {{#eda}}
 import io.cloudevents.CloudEvent;
@@ -15,9 +17,8 @@ import java.net.URI;
 
 import java.util.UUID;
 
-public class CommandsHandlerTest {
-
-    CommandsHandler commandsHandler;
+class CommandsHandlerTest {
+    private CommandsHandler commandsHandler;
 
     @BeforeEach
     void setUp() {
@@ -25,26 +26,25 @@ public class CommandsHandlerTest {
     }
 
     {{#eda}}
-     @Test
-        void handleCommandATest() throws JsonProcessingException{
+    @Test
+    void handleCommandATest() throws JsonProcessingException{
         ObjectMapper objectMapper = new ObjectMapper();
         CloudEvent command = CloudEventBuilder.v1() //
-                        .withId(UUID.randomUUID().toString()) //
-                        .withSource(URI.create("https://spring.io/foos"))//
-                        .withType("command")
-                        .withData("application/json", objectMapper.writeValueAsBytes("Data"))
-                        .build();
-            StepVerifier.create(commandsHandler.handleCommandA(
-                new Command<CloudEvent>(command.getType(), command.getId(), command))).expectComplete();
-        }
+                .withId(UUID.randomUUID().toString()) //
+                .withSource(URI.create("https://spring.io/foos"))//
+                .withType("command")
+                .withData("application/json", objectMapper.writeValueAsBytes("Data"))
+                .build();
+        StepVerifier.create(commandsHandler.handleCommandA(command)).expectComplete();
+    }
     {{/eda}}
     {{^eda}}
-     @Test
-        void handleCommandATest(){
-            StepVerifier.create(commandsHandler.handleCommandA(
-                new Command<>("COMMAND",
-                    UUID.randomUUID().toString(),
-                        "Data"))).expectComplete();
-        }
+    @Test
+    void handleCommandATest(){
+        StepVerifier.create(commandsHandler.handleCommandA(
+            new Command<>("COMMAND",
+                UUID.randomUUID().toString(),
+                    "Data"))).expectComplete();
+    }
     {{/eda}}
 }

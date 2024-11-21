@@ -3,7 +3,9 @@ package {{package}}.events.handlers;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
+{{^eda}}
 import org.reactivecommons.api.domain.Command;
+{{/eda}}
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
 {{#eda}}
@@ -23,8 +25,8 @@ public class CommandsHandler {
     }
 {{/lombok}}
 {{#eda}}
-    public Mono<Void> handleCommandA(Command<CloudEvent> command) {
-        System.out.println("command received: " + command.getName() + " ->" + command.getData()); // TODO: Remove this line
+    public Mono<Void> handleCommandA(CloudEvent command) {
+        System.out.println("command received: " + command.getType() + " ->" + command.getData()); // TODO: Remove this line
 //        return sampleUseCase.doSomething(command.getData());
         return Mono.empty();
     }

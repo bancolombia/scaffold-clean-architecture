@@ -6,10 +6,13 @@ import co.com.bancolombia.events.handlers.QueriesHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.async.api.HandlerRegistry;
+{{#eda}}
+import org.reactivecommons.async.commons.converters.json.DefaultObjectMapperSupplier;
+{{/eda}}
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class HandlerRegistryConfigurationTest {
+class HandlerRegistryConfigurationTest {
 
     EventsHandler eventsHandler;
     CommandsHandler commandsHandler;
@@ -19,8 +22,7 @@ public class HandlerRegistryConfigurationTest {
     void setUp() {
         eventsHandler = new EventsHandler();
         commandsHandler = new CommandsHandler();
-        queriesHandler = new QueriesHandler();
-
+        queriesHandler = new QueriesHandler({{#eda}}new DefaultObjectMapperSupplier().get(){{/eda}});
     }
 
     @Test
@@ -29,6 +31,5 @@ public class HandlerRegistryConfigurationTest {
         HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(commandsHandler, eventsHandler, queriesHandler);
 
         assertNotNull(handlerRegistry);
-
     }
 }

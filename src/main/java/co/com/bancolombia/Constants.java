@@ -13,7 +13,7 @@ public final class Constants {
   public static final String SECRETS_VERSION = "4.4.23";
   public static final String SPRING_BOOT_VERSION = "3.3.5";
   public static final String LOMBOK_VERSION = "1.18.36";
-  public static final String REACTIVE_COMMONS_VERSION = "4.1.4";
+  public static final String REACTIVE_COMMONS_VERSION = "5.1.0-beta";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.10.RELEASE";
   public static final String AWS_BOM_VERSION = "2.29.15";

@@ -1,12 +1,21 @@
 package {{package}}.events.handlers;
 
+{{#eda}}
+import io.cloudevents.core.builder.CloudEventBuilder;
+import io.cloudevents.jackson.JsonCloudEventData;
+{{/eda}}
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners;
 import reactor.core.publisher.Mono;
 {{#eda}}
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
+
+import java.net.URI;
+import java.time.OffsetDateTime;
+import java.util.UUID;
 {{/eda}}
 
 {{#lombok}}
@@ -15,6 +24,9 @@ import io.cloudevents.CloudEvent;
 @EnableQueryListeners
 public class QueriesHandler {
 //    private final SampleUseCase sampleUseCase;
+{{#eda}}
+    private final ObjectMapper om;
+{{/eda}}
 
 {{^lombok}}
     public QueriesHandler(/*SampleUseCase sampleUseCase*/) {
@@ -23,10 +35,18 @@ public class QueriesHandler {
 {{/lombok}}
 
 {{#eda}}
-    public Mono<Object/*change for proper model*/> handleQueryA(CloudEvent query) {
+    public Mono<CloudEvent> handleQueryA(CloudEvent query) {
         System.out.println("query received->" + query); // TODO: Remove this line
 //        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
-        return Mono.just("Response Data");
+        Object replyData = "Response Data";
+        CloudEvent reply = CloudEventBuilder.v1() //
+                .withId(UUID.randomUUID().toString()) //
+                .withSource(URI.create("https://spring.io/foos"))//
+                .withType("SOME_QUERY_REPLY") //
+                .withTime(OffsetDateTime.now())
+                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(replyData)))
+                .build();
+        return Mono.just(reply);
     }
 {{/eda}}
 

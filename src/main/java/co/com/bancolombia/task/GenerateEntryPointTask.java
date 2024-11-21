@@ -22,6 +22,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
   private BooleanOption eda = BooleanOption.FALSE;
+  private String tech = "rabbitmq";
   private BooleanOption authorization = BooleanOption.FALSE;
 
   @Option(
@@ -73,6 +74,16 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @Option(option = "tech", description = "Reactive Commons Technologies")
+  public void setTech(String tech) {
+    this.tech = tech;
+  }
+
+  @OptionValues("tech")
+  public List<String> getTechOptions() {
+    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq");
+  }
+
   @OptionValues("server")
   public List<Server> getServerOptions() {
     return Arrays.asList(Server.values());
@@ -106,8 +117,17 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("task-param-router", router == BooleanOption.TRUE);
     builder.addParam("task-param-authorize", authorization == BooleanOption.TRUE);
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
-    builder.addParam("eda", eda == BooleanOption.TRUE);
     builder.addParam("swagger-file", swaggerFile);
+    appendRCommonsParams();
+  }
+
+  private void appendRCommonsParams() {
+    String[] techs = tech.split(",");
+
+    for (String tech : techs) {
+      builder.addParam(tech, true);
+    }
+    builder.addParam("eda", eda == BooleanOption.TRUE);
   }
 
   @Override

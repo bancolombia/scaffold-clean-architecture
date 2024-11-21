@@ -3,7 +3,9 @@ package {{package}}.events.handlers;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 {{/lombok}}
+{{^eda}}
 import org.reactivecommons.api.domain.DomainEvent;
+{{/eda}}
 import org.reactivecommons.async.impl.config.annotations.EnableEventListeners;
 import reactor.core.publisher.Mono;
 {{#eda}}
@@ -23,8 +25,8 @@ public class EventsHandler {
     }
 {{/lombok}}
 {{#eda}}
-    public Mono<Void> handleEventA(DomainEvent<CloudEvent> event) {
-        System.out.println("event received: " + event.getName() + " ->" + event.getData()); // TODO: Remove this line
+    public Mono<Void> handleEventA(CloudEvent event) {
+        System.out.println("event received: " + event.getType() + " ->" + event.getData()); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();
     }
