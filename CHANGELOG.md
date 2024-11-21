@@ -1,5 +1,20 @@
 # Changelog
 
+## [v3.20.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.2) (2024-11-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.1...v3.20.2)
+
+**Closed issues:**
+
+- UpgradeAction for gradle 8.11 duplicates java block if this is executed in multiple times [\#585](https://github.com/bancolombia/scaffold-clean-architecture/issues/585)
+
+**Merged pull requests:**
+
+- fix\(build\): Update reactive commons templates [\#589](https://github.com/bancolombia/scaffold-clean-architecture/pull/589) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.27.4 to 3.27.5 [\#588](https://github.com/bancolombia/scaffold-clean-architecture/pull/588) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.4.0 to 4.5.0 [\#587](https://github.com/bancolombia/scaffold-clean-architecture/pull/587) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.10.1 to 2.10.2 [\#584](https://github.com/bancolombia/scaffold-clean-architecture/pull/584) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.20.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.1) (2024-11-20)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.0...v3.20.1)
