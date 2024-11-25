@@ -26,6 +26,7 @@
     "structure/root/settings.gradle.mustache": "settings.gradle",
     "structure/root/build.gradle.mustache": "build.gradle",
     "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",
-    "structure/applications/appservice/usecases.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/UseCasesConfig.java"
+    "structure/applications/appservice/usecases.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/UseCasesConfig.java",
+    "structure/applications/appservice/usecases.test.java.mustache": "applications/app-service/src/test/java/{{packagePath}}/config/UseCasesConfigTest.java"
   }
 }

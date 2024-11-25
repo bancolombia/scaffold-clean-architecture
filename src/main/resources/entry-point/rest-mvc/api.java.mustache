@@ -10,13 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
 {{/task-param-authorize}}
 
+/**
+ * API Rest controller.
+ * 
+ * Example of how to declare and use a use case:
+ * <pre>
+ * private final MyUseCase useCase;
+ * 
+ * public String commandName() {
+ *     return useCase.execute();
+ * }
+ * </pre>
+ */
 @RestController
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
 public class ApiRest {
-//    private final MyUseCase useCase;
 
 {{^lombok}}
     //public ApiRest(MyUseCase useCase){
@@ -29,7 +40,6 @@ public class ApiRest {
 {{/task-param-authorize}}
     @GetMapping(path = "/path")
     public String commandName() {
-//      return useCase.doAction();
         return "Hello World";
     }
 }
