@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.20.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.3) (2024-11-25)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.2...v3.20.3)
+
+**Merged pull requests:**
+
+- fix\(build\): Update commons templates [\#590](https://github.com/bancolombia/scaffold-clean-architecture/pull/590) ([juparog](https://github.com/juparog))
+
 ## [v3.20.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.2) (2024-11-21)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.1...v3.20.2)
