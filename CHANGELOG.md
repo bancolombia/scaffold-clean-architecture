@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.20.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.4) (2024-12-04)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.3...v3.20.4)
+
+**Merged pull requests:**
+
+- fix\(release\): Setup java 17 in release action [\#595](https://github.com/bancolombia/scaffold-clean-architecture/pull/595) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.20.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.3) (2024-11-25)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.2...v3.20.3)
