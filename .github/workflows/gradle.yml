@@ -35,6 +35,8 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         if: github.ref != 'refs/heads/master'
+      - name: Run sonar
+        run: echo ${{ github.event.pull_request.head.ref }}
 
       - name: Verify Conventional Commits
         uses: amannn/action-semantic-pull-request@0723387faaf9b38adef4775cd42cfd5155ed6017 # v5.5.3
