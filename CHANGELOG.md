@@ -1,5 +1,25 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.5...HEAD)
+
+**Merged pull requests:**
+
+- build\(deps\): bump path-to-regexp, serve-handler and express in /docs [\#599](https://github.com/bancolombia/scaffold-clean-architecture/pull/599) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.20.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.5) (2024-12-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.4...v3.20.5)
+
+**Merged pull requests:**
+
+- ci\(pr\): check pull request branch [\#597](https://github.com/bancolombia/scaffold-clean-architecture/pull/597) ([juancgalvis](https://github.com/juancgalvis))
+- ci\(pr\): check pull request branch [\#596](https://github.com/bancolombia/scaffold-clean-architecture/pull/596) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.27.5 to 3.27.6 [\#594](https://github.com/bancolombia/scaffold-clean-architecture/pull/594) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 21-jdk-alpine to 23-jdk-alpine in /examples-ca/channel-operations/deployment [\#593](https://github.com/bancolombia/scaffold-clean-architecture/pull/593) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#591](https://github.com/bancolombia/scaffold-clean-architecture/pull/591) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v3.20.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.4) (2024-12-04)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.3...v3.20.4)
