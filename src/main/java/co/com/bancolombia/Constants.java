@@ -26,13 +26,13 @@ public final class Constants {
   public static final String SPRING_DOC_OPENAPI_VERSION = "2.6.0";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.12";
-  public static final String SONAR_VERSION = "5.1.0.4882";
+  public static final String SONAR_VERSION = "6.0.1.5171";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "3.20.4";
-  public static final String DEPENDENCY_CHECK_VERSION = "11.1.0";
+  public static final String DEPENDENCY_CHECK_VERSION = "11.1.1";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "8.11";
+  public static final String GRADLE_WRAPPER_VERSION = "8.11.1";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
