@@ -1,6 +1,4 @@
-{{#mutation}}
 apply plugin: 'info.solidsoft.pitest.aggregator'
-{{/mutation}}
 
 allprojects {
     repositories {
@@ -11,48 +9,37 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: 'info.solidsoft.pitest'
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
-    {{#mutation}}
-    apply plugin: 'info.solidsoft.pitest'
-    {{/mutation}}
 
     compileJava.dependsOn validateStructure
-
     java {
-        sourceCompatibility = JavaVersion.{{javaVersion}}
+        sourceCompatibility = JavaVersion.VERSION_17
     }
-
-    {{#mutation}}
-    //build.dependsOn 'pitest'
-    {{/mutation}}
 
     test {
         useJUnitPlatform()
     }
 
     dependencies {
-        {{#reactive}}
+		implementation platform('software.amazon.awssdk:bom:2.29.15')
         implementation 'io.projectreactor:reactor-core'
         implementation 'io.projectreactor.addons:reactor-extra'
 
-        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
+        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:1.0.10.RELEASE'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
         testImplementation 'io.projectreactor:reactor-test'
-        {{/reactive}}
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        {{#lombok}}
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
         testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        {{/lombok}}
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    {{#reactive}}
     tasks.withType(Test).configureEach {
         if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
             jvmArgs += [
@@ -60,21 +47,18 @@ subprojects {
             ]
         }
     }
-    {{/reactive}}
 
     test.finalizedBy(project.tasks.jacocoTestReport)
 
-    {{#mutation}}
     pitest {
-        targetClasses = ['{{package}}.*']
+        targetClasses = ['your.package.*']
         excludedClasses = []
         excludedTestClasses = []
-        pitestVersion = '1.17.1'
+        pitestVersion = '1.16.1'
         verbose = false
         outputFormats = ['XML', 'HTML']
         threads = 8
         exportLineCoverage = true
-        useClasspathFile = true
         timestampedReports = false
         //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')
@@ -82,7 +66,6 @@ subprojects {
         failWhenNoMutations = false
         jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
     }
-    {{/mutation}}
 
     jacocoTestReport {
         dependsOn test, 'pitest'
@@ -120,6 +103,7 @@ tasks.withType(JavaCompile).configureEach {
     ]
 }
 
+
 pitestReportAggregate {
     doLast {
         def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
@@ -141,5 +125,5 @@ pitestReportAggregate {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '{{GRADLE_WRAPPER_VERSION}}'
+    gradleVersion = '8.10.2'
 }
