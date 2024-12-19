@@ -59,6 +59,10 @@
         {
             "name": "JACOCO_VERSION",
             "packageName": "org.jacoco:jacoco-maven-plugin"
+        },
+        {
+            "name": "CLOUD_EVENTS_VERSION",
+            "packageName": "io.cloudevents:cloudevents-json-jackson"
         }
     ],
     "gradle": [

@@ -2,7 +2,7 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     {{#eda}}
-    implementation 'io.cloudevents:cloudevents-json-jackson:4.0.1'
+    implementation 'io.cloudevents:cloudevents-json-jackson:{{CLOUD_EVENTS_VERSION}}'
     {{/eda}}
     {{#rabbitmq}}
     implementation 'org.reactivecommons:async-commons-rabbit-starter:{{REACTIVE_COMMONS_VERSION}}'
