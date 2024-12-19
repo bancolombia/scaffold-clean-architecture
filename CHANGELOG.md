@@ -1,5 +1,38 @@
 # Changelog
 
+## [v3.20.6](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.6) (2024-12-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.5...v3.20.6)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/upload-artifact from 4.4.3 to 4.5.0 [\#605](https://github.com/bancolombia/scaffold-clean-architecture/pull/605) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.5.0 to 4.6.0 [\#604](https://github.com/bancolombia/scaffold-clean-architecture/pull/604) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#603](https://github.com/bancolombia/scaffold-clean-architecture/pull/603) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.27.7 to 3.27.9 [\#602](https://github.com/bancolombia/scaffold-clean-architecture/pull/602) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump nanoid from 3.3.7 to 3.3.8 in /docs [\#601](https://github.com/bancolombia/scaffold-clean-architecture/pull/601) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.27.6 to 3.27.7 [\#600](https://github.com/bancolombia/scaffold-clean-architecture/pull/600) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.20.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.5) (2024-12-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.4...v3.20.5)
+
+**Merged pull requests:**
+
+- ci\(pr\): check pull request branch [\#597](https://github.com/bancolombia/scaffold-clean-architecture/pull/597) ([juancgalvis](https://github.com/juancgalvis))
+- ci\(pr\): check pull request branch [\#596](https://github.com/bancolombia/scaffold-clean-architecture/pull/596) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump github/codeql-action from 3.27.5 to 3.27.6 [\#594](https://github.com/bancolombia/scaffold-clean-architecture/pull/594) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump eclipse-temurin from 21-jdk-alpine to 23-jdk-alpine in /examples-ca/channel-operations/deployment [\#593](https://github.com/bancolombia/scaffold-clean-architecture/pull/593) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#591](https://github.com/bancolombia/scaffold-clean-architecture/pull/591) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
+## [v3.20.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.4) (2024-12-04)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.3...v3.20.4)
+
+**Merged pull requests:**
+
+- fix\(release\): Setup java 17 in release action [\#595](https://github.com/bancolombia/scaffold-clean-architecture/pull/595) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.20.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.3) (2024-11-25)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.2...v3.20.3)
