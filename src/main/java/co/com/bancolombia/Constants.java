@@ -24,6 +24,7 @@ public final class Constants {
   public static final String RESILIENCE_4J_VERSION = "2.2.0";
   public static final String BIN_STASH_VERSION = "1.2.6";
   public static final String SPRING_DOC_OPENAPI_VERSION = "2.7.0";
+  public static final String CLOUD_EVENTS_VERSION = "4.0.1";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.12";
   public static final String SONAR_VERSION = "6.0.1.5171";
