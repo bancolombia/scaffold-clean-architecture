@@ -2,6 +2,7 @@ package {{package}}.kafka.consumer.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
@@ -17,14 +18,18 @@ public class KafkaConfig {
     @Bean
     public ReceiverOptions<String, String> kafkaReceiverOptions(
             @Value(value = "${adapters.kafka.consumer.topic}") String topic,
-            KafkaProperties kafkaProperties) throws UnknownHostException {
-        kafkaProperties.setClientId(InetAddress.getLocalHost().getHostName()); // Set id based on hostname, customize here another properties
-        ReceiverOptions<String, String> basicReceiverOptions = ReceiverOptions.create(kafkaProperties.buildConsumerProperties());
+            KafkaProperties kafkaProperties,
+            SslBundles sslBundles) throws UnknownHostException {
+        // Set id based on hostname, customize here another properties
+        kafkaProperties.setClientId(InetAddress.getLocalHost().getHostName());
+        ReceiverOptions<String, String> basicReceiverOptions =
+                ReceiverOptions.create(kafkaProperties.buildConsumerProperties(sslBundles));
         return basicReceiverOptions.subscription(Collections.singletonList(topic));
     }
 
     @Bean
-    public ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate(ReceiverOptions<String, String> kafkaReceiverOptions) {
+    public ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate(
+            ReceiverOptions<String, String> kafkaReceiverOptions) {
         return new ReactiveKafkaConsumerTemplate<>(kafkaReceiverOptions);
     }
 }

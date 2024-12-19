@@ -10,20 +10,20 @@ public final class Constants {
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
-  public static final String SECRETS_VERSION = "4.4.23";
-  public static final String SPRING_BOOT_VERSION = "3.3.5";
+  public static final String SECRETS_VERSION = "4.4.24";
+  public static final String SPRING_BOOT_VERSION = "3.4.0";
   public static final String LOMBOK_VERSION = "1.18.36";
-  public static final String REACTIVE_COMMONS_VERSION = "5.1.0-beta";
+  public static final String REACTIVE_COMMONS_VERSION = "5.1.2-beta";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.10.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.29.15";
-  public static final String COMMONS_JMS_VERSION = "2.3.5";
+  public static final String AWS_BOM_VERSION = "2.29.34";
+  public static final String COMMONS_JMS_VERSION = "2.3.6";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.3.0";
   public static final String OKHTTP_VERSION = "4.12.0";
   public static final String RESILIENCE_4J_VERSION = "2.2.0";
   public static final String BIN_STASH_VERSION = "1.2.6";
-  public static final String SPRING_DOC_OPENAPI_VERSION = "2.6.0";
+  public static final String SPRING_DOC_OPENAPI_VERSION = "2.7.0";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.12";
   public static final String SONAR_VERSION = "6.0.1.5171";
