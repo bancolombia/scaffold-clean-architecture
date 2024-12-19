@@ -1,12 +1,17 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.20.6](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.6) (2024-12-19)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.5...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.5...v3.20.6)
 
 **Merged pull requests:**
 
-- build\(deps\): bump path-to-regexp, serve-handler and express in /docs [\#599](https://github.com/bancolombia/scaffold-clean-architecture/pull/599) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.4.3 to 4.5.0 [\#605](https://github.com/bancolombia/scaffold-clean-architecture/pull/605) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.5.0 to 4.6.0 [\#604](https://github.com/bancolombia/scaffold-clean-architecture/pull/604) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#603](https://github.com/bancolombia/scaffold-clean-architecture/pull/603) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 3.27.7 to 3.27.9 [\#602](https://github.com/bancolombia/scaffold-clean-architecture/pull/602) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump nanoid from 3.3.7 to 3.3.8 in /docs [\#601](https://github.com/bancolombia/scaffold-clean-architecture/pull/601) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.27.6 to 3.27.7 [\#600](https://github.com/bancolombia/scaffold-clean-architecture/pull/600) ([dependabot[bot]](https://github.com/apps/dependabot))
 
 ## [v3.20.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.5) (2024-12-09)
 
