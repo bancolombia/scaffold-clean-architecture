@@ -6,6 +6,7 @@ import {{package}}.events.handlers.QueriesHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 {{/eda}}
 {{#eda}}
 import {{package}}.events.handlers.CommandsHandler;
@@ -14,12 +15,14 @@ import {{package}}.events.handlers.QueriesHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 {{/eda}}
 
 @Configuration
 public class HandlerRegistryConfiguration {
 
     // see more at: https://reactivecommons.org/reactive-commons-java/#_handlerregistry_2
+    @Primary
     @Bean
     public HandlerRegistry handlerRegistry(CommandsHandler commands, EventsHandler events, QueriesHandler queries) {
         {{#eda}}
