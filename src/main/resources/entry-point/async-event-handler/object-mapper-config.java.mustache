@@ -1,0 +1,35 @@
+{{#eda}}
+package co.com.bancolombia.events;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.reactivecommons.async.commons.converters.json.ObjectMapperSupplier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ObjectMapperConfig {
+
+    @Bean
+    public ObjectMapper objectMapper(ObjectMapperSupplier supplier) {
+        return supplier.get();
+    }
+}
+{{/eda}}
+{{^eda}}
+// This configuration is only available when 'eda' is enabled
+// package co.com.bancolombia.events;
+//
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import org.reactivecommons.async.commons.converters.json.ObjectMapperSupplier;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+//
+// @Configuration
+// public class ObjectMapperConfig {
+//
+//     @Bean
+//     public ObjectMapper objectMapper(ObjectMapperSupplier supplier) {
+//         return supplier.get();
+//     }
+// }
+{{/eda}}
