@@ -19,7 +19,7 @@ public final class Constants {
   public static final String AWS_BOM_VERSION = "2.29.45";
   public static final String COMMONS_JMS_VERSION = "2.3.7";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
-  public static final String ARCH_UNIT_VERSION = "1.1.1";
+  public static final String ARCH_UNIT_VERSION = "1.3.0";
   public static final String OKHTTP_VERSION = "4.12.0";
   public static final String RESILIENCE_4J_VERSION = "2.3.0";
   public static final String BIN_STASH_VERSION = "1.2.6";
