@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.20.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.9) (2025-01-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.8...v3.20.9)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/upload-artifact from 4.5.0 to 4.6.0 [\#615](https://github.com/bancolombia/scaffold-clean-architecture/pull/615) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.10.2 to 2.10.3 [\#614](https://github.com/bancolombia/scaffold-clean-architecture/pull/614) ([dependabot[bot]](https://github.com/apps/dependabot))
+- test: add entry points tests to cover cors and security headers [\#613](https://github.com/bancolombia/scaffold-clean-architecture/pull/613) ([santicalleg](https://github.com/santicalleg))
+- fix\(deps\): update dependencies [\#611](https://github.com/bancolombia/scaffold-clean-architecture/pull/611) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.5 to 7.0.6 [\#610](https://github.com/bancolombia/scaffold-clean-architecture/pull/610) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.20.8](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.8) (2024-12-28)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.7...v3.20.8)
