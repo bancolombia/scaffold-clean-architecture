@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.20.10](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.10) (2025-01-13)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.9...v3.20.10)
+
+**Merged pull requests:**
+
+- fix: add config test when router option is true [\#618](https://github.com/bancolombia/scaffold-clean-architecture/pull/618) ([santicalleg](https://github.com/santicalleg))
+
 ## [v3.20.9](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.9) (2025-01-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.8...v3.20.9)
