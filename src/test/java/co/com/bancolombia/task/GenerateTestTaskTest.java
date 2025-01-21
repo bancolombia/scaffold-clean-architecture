@@ -21,11 +21,12 @@ class GenerateTestTaskTest {
   private static final String TEST_DIR = getTestDir(GenerateTestTaskTest.class);
 
   private static GenerateAcceptanceTestTask task;
+  private static Project project;
 
   @BeforeAll
   public static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
-    Project project = setupProject(GenerateTestTaskTest.class, GenerateStructureTask.class);
+    project = setupProject(GenerateTestTaskTest.class, GenerateStructureTask.class);
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
@@ -69,20 +70,25 @@ class GenerateTestTaskTest {
   @Test
   void generateEntryPointAcceptanceTest() throws IOException, CleanException {
     // Arrange
+    ProjectBuilder.builder()
+        .withName("reactive-web")
+        .withProjectDir(new File(TEST_DIR + "/infrastructure/entry-points/reactive-web"))
+        .withParent(project)
+        .build();
+
     task.setName("acceptance-test");
-    task.setToEntryPoint(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
     // Assert
     assertFilesExistsInDir(
-            TEST_DIR + "/deployment/acceptance-test/",
-            "src/test/java/co/com/bancolombia/TestParallel.java",
-            "src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java",
-            "src/test/resources/logback-test.xml",
-            "src/test/resources/karate-config.js",
-            "src/test/resources/co/com/bancolombia/myapp.feature",
-            "settings.gradle",
-            "build.gradle",
-            "README.md");
+        TEST_DIR + "/deployment/acceptance-test/",
+        "src/test/java/co/com/bancolombia/TestParallel.java",
+        "src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java",
+        "src/test/resources/logback-test.xml",
+        "src/test/resources/karate-config.js",
+        "src/test/resources/co/com/bancolombia/myapp.feature",
+        "settings.gradle",
+        "build.gradle",
+        "README.md");
   }
 }
