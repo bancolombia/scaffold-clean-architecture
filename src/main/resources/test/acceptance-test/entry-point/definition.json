@@ -1,0 +1,15 @@
+{
+  "folders": [
+    "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/utils"
+  ],
+  "files": {
+    "test/acceptance-test/resources/logback-test.xml.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/logback-test.xml",
+    "test/acceptance-test/entry-point/resources/karate-config.js.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/karate-config.js",
+    "test/acceptance-test/entry-point/resources/myapp.feature.mustache": "deployment/{{acceptanceTestPath}}/src/test/resources/{{packagePath}}/myapp.feature",
+    "test/acceptance-test/entry-point/readme.md.mustache": "deployment/{{acceptanceTestPath}}/README.md",
+    "test/acceptance-test/TestParallel.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/TestParallel.java",
+    "test/acceptance-test/utils/validator.test.utils.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/utils/ValidatorTestUtils.java",
+    "test/acceptance-test/build.gradle.mustache": "deployment/{{acceptanceTestPath}}/build.gradle",
+    "test/acceptance-test/settings.gradle.mustache": "deployment/{{acceptanceTestPath}}/settings.gradle"
+  }
+}

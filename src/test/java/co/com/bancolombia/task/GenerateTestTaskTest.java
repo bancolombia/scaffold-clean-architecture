@@ -65,4 +65,24 @@ class GenerateTestTaskTest {
         "build.gradle",
         "README.md");
   }
+
+  @Test
+  void generateEntryPointAcceptanceTest() throws IOException, CleanException {
+    // Arrange
+    task.setName("acceptance-test");
+    task.setToEntryPoint(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+            TEST_DIR + "/deployment/acceptance-test/",
+            "src/test/java/co/com/bancolombia/TestParallel.java",
+            "src/test/java/co/com/bancolombia/utils/ValidatorTestUtils.java",
+            "src/test/resources/logback-test.xml",
+            "src/test/resources/karate-config.js",
+            "src/test/resources/co/com/bancolombia/myapp.feature",
+            "settings.gradle",
+            "build.gradle",
+            "README.md");
+  }
 }
