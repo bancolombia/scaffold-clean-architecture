@@ -1,5 +1,6 @@
 package co.com.bancolombia.utils.offline;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.UpdateSettings;
 import co.com.bancolombia.utils.FileUtils;
@@ -33,19 +34,19 @@ public class UpdateDependencies {
     File constantsFile = Paths.get(constantsPath).toFile();
     String content = FileUtils.readFileAsString(constantsFile, null);
     for (UpdateSettings.Dependency dependency : settings.getMaven()) {
-      Optional<DependencyRelease> dep =
-          operations.getTheLastDependencyRelease(
-              DependencyRelease.from(dependency.getPackageName()));
-      if (dep.isPresent()) {
-        content = updateVersion(content, dependency, dep.get().getVersion());
+      DependencyRelease current = DependencyRelease.from(dependency.getPackageName());
+      current.setVersion(Constants.getVersion(dependency.getName()));
+      DependencyRelease newest = operations.getTheLastDependencyRelease(current).orElse(current);
+      if (newest.isNewest(current)) {
+        content = updateVersion(content, dependency, newest.getVersion());
       }
     }
     for (UpdateSettings.Dependency dependency : settings.getGradle()) {
-      Optional<DependencyRelease> dep =
-          operations.getLatestGradlePluginVersion(
-              DependencyRelease.from(dependency.getPackageName()));
-      if (dep.isPresent()) {
-        content = updateVersion(content, dependency, dep.get().getVersion());
+      DependencyRelease current = DependencyRelease.from(dependency.getPackageName());
+      current.setVersion(Constants.getVersion(dependency.getName()));
+      DependencyRelease newest = operations.getLatestGradlePluginVersion(current).orElse(current);
+      if (newest.isNewest(current)) {
+        content = updateVersion(content, dependency, newest.getVersion());
       }
     }
     for (UpdateSettings.Dependency dependency : settings.getCustom()) {

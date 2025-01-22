@@ -1,5 +1,6 @@
 package co.com.bancolombia.models;
 
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
@@ -49,6 +50,10 @@ public class DependencyRelease {
           && rel.getArtifact().equals(getArtifact());
     }
     return super.equals(obj);
+  }
+
+  public boolean isNewest(DependencyRelease current) {
+    return UpdateUtils.isNewerVersion(current.getVersion(), this.getVersion());
   }
 
   public static DependencyRelease from(String dependency) {
