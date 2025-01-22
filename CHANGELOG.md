@@ -1,5 +1,16 @@
 # Changelog
 
+## [v3.20.11](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.11) (2025-01-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.10...v3.20.11)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.28.1 to 3.28.2 [\#621](https://github.com/bancolombia/scaffold-clean-architecture/pull/621) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(acceptance-test\): New acceptance test when reactive-web or api-rest component exists [\#620](https://github.com/bancolombia/scaffold-clean-architecture/pull/620) ([santicalleg](https://github.com/santicalleg))
+- build\(deps\): bump step-security/harden-runner from 2.10.3 to 2.10.4 [\#619](https://github.com/bancolombia/scaffold-clean-architecture/pull/619) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.28.0 to 3.28.1 [\#616](https://github.com/bancolombia/scaffold-clean-architecture/pull/616) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.20.10](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.10) (2025-01-13)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.9...v3.20.10)
