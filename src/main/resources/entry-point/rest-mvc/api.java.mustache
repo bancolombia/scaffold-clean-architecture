@@ -38,8 +38,8 @@ public class ApiRest {
 {{#task-param-authorize}}
     @PreAuthorize("hasRole('permission')")
 {{/task-param-authorize}}
-    @GetMapping(path = "/path")
+    @GetMapping(path = "/usecase/path")
     public String commandName() {
-        return "Hello World";
+        return "";
     }
 }

@@ -9,6 +9,12 @@ public class AcceptanceTestKarate implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.setupFromTemplate("test/acceptance-test");
+    String templatePath = "test/acceptance-test";
+
+    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-exist-api-rest"))) {
+      templatePath += "/api-rest";
+    }
+
+    builder.setupFromTemplate(templatePath);
   }
 }

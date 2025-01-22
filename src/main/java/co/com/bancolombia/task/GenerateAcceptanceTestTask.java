@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.annotations.CATask;
+import java.util.ArrayList;
 
 @CATask(
     name = "generateAcceptanceTest",
@@ -10,6 +11,12 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
   @Override
   protected void prepareParams() {
+    var modules = new ArrayList<>(getProject().getChildProjects().keySet());
+
+    builder.addParam(
+        "task-param-exist-api-rest",
+        modules.stream()
+            .anyMatch(value -> value.equals("reactive-web") || value.equals("api-rest")));
     builder.addParam("acceptanceTestPath", name);
   }
 

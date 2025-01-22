@@ -18,7 +18,7 @@ class ApiRestTest {
     @Test
     void testCommandName() {
         webTestClient.get()
-                .uri("/api/path")
+                .uri("/api/usecase/path")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
