@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.20.12](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.12) (2025-01-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.11...v3.20.12)
+
+**Merged pull requests:**
+
+- build\(deps\): bump path-to-regexp, serve-handler and express in /docs [\#623](https://github.com/bancolombia/scaffold-clean-architecture/pull/623) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(update\): Check versions when updating dependencies to avoid downgrades [\#622](https://github.com/bancolombia/scaffold-clean-architecture/pull/622) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v3.20.11](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.11) (2025-01-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.10...v3.20.11)
