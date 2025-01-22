@@ -137,4 +137,13 @@ class UpdateUtilsTest {
         InvalidStateException.class,
         () -> UpdateUtils.insertBeforeMatch(currentContent, match, check, file));
   }
+
+  @Test
+  void shouldCompareVersions() {
+    assertTrue(UpdateUtils.isNewerVersion("1.2.3", "1.2.4"));
+    assertTrue(UpdateUtils.isNewerVersion("1.2.3", "1.2.3.1"));
+    assertFalse(UpdateUtils.isNewerVersion("1.2.3.4", "1.2.3.4"));
+    assertFalse(UpdateUtils.isNewerVersion("1.3.0", "1.1.1"));
+    assertFalse(UpdateUtils.isNewerVersion("1.1.1.Alpha", "1.1.1.Beta"));
+  }
 }

@@ -64,25 +64,45 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
+    String endpoint = "";
     try {
-      DependencyRelease release =
-          RestConsumer.getRequest(getDependencyEndpoint(dependency), DependencyRelease.class);
-      return release.getVersion() != null ? Optional.of(release) : Optional.empty();
+      endpoint = getDependencyEndpoint(dependency);
+      DependencyRelease release = RestConsumer.getRequest(endpoint, DependencyRelease.class);
+      if (release.isNewest(dependency)) {
+        logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
+        return Optional.of(release);
+      }
+      return Optional.empty();
     } catch (Exception e) {
-      logger.lifecycle("Can't update this dependency {}, reason: {}", dependency, e.getMessage());
+      logger.lifecycle(
+          "Can't update this dependency {} from {}, reason: {}",
+          dependency,
+          endpoint,
+          e.getMessage());
       return Optional.empty();
     }
   }
 
   @Override
   public Optional<DependencyRelease> getLatestGradlePluginVersion(DependencyRelease dependency) {
+    String endpoint = "";
     try {
-      return RestConsumer.getRequest(
-              getGradlePluginEndpoint(dependency), DependencyReleaseXml.class, true)
-          .toDependencyRelease();
+      endpoint = getGradlePluginEndpoint(dependency);
+      DependencyRelease release =
+          RestConsumer.getRequest(endpoint, DependencyReleaseXml.class, true)
+              .toDependencyRelease()
+              .orElse(dependency);
+      if (release.isNewest(dependency)) {
+        logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
+        return Optional.of(release);
+      }
+      return Optional.empty();
     } catch (Exception e) {
       logger.lifecycle(
-          "\tx Can't update this dependency {}, reason: {}", dependency, e.getMessage());
+          "\tx Can't update this dependency {} from {}, reason: {}",
+          dependency,
+          endpoint,
+          e.getMessage());
       return Optional.empty();
     }
   }
@@ -105,12 +125,9 @@ public class HttpOperations implements ExternalOperations {
 
   private String getDependencyEndpoint(DependencyRelease dependency) {
     if (dependency.valid()) {
-      String endpoint =
-          resolve(DEPENDENCY_RELEASES)
-              .replaceFirst("%group", dependency.getGroup())
-              .replaceFirst("%artifact", dependency.getArtifact());
-      logger.lifecycle(endpoint);
-      return endpoint;
+      return resolve(DEPENDENCY_RELEASES)
+          .replaceFirst("%group", dependency.getGroup())
+          .replaceFirst("%artifact", dependency.getArtifact());
     }
     throw new IllegalArgumentException(
         dependency
@@ -121,12 +138,9 @@ public class HttpOperations implements ExternalOperations {
 
   private String getGradlePluginEndpoint(DependencyRelease dependency) {
     if (dependency.valid()) {
-      String endpoint =
-          resolve(GRADLE_PLUGINS)
-              .replaceFirst("%group", dependency.getGroup().replace('.', '/'))
-              .replaceFirst("%artifact", dependency.getArtifact());
-      logger.lifecycle(endpoint);
-      return endpoint;
+      return resolve(GRADLE_PLUGINS)
+          .replaceFirst("%group", dependency.getGroup().replace('.', '/'))
+          .replaceFirst("%artifact", dependency.getArtifact());
     }
     logger.warn("invalid dependency {}", dependency);
     return null;

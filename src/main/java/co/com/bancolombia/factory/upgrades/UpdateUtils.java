@@ -85,4 +85,43 @@ public class UpdateUtils {
   public static String replace(String content, String previous, String next) {
     return content.replace(previous, next);
   }
+
+  public static boolean isNewerVersion(String current, String newer) {
+    if (newer == null) {
+      return false;
+    }
+    if (current == null) {
+      return true;
+    }
+    if (current.equals(newer)) {
+      return false;
+    }
+    String[] v1Parts = current.split("\\.");
+    String[] v2Parts = newer.split("\\.");
+
+    int length = Math.max(v1Parts.length, v2Parts.length);
+
+    for (int i = 0; i < length; i++) {
+      // Get the current part of each version, default to "0" if shorter
+      int part1 = i < v1Parts.length ? asInteger(v1Parts[i]) : 0;
+      int part2 = i < v2Parts.length ? asInteger(v2Parts[i]) : 0;
+
+      if (part1 < part2) {
+        return true;
+      }
+      if (part1 > part2) {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
+  private static int asInteger(String part) {
+    try {
+      return Integer.parseInt(part);
+    } catch (NumberFormatException e) {
+      return 0;
+    }
+  }
 }
