@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.20.13](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.13) (2025-01-23)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.12...v3.20.13)
+
+**Merged pull requests:**
+
+- fix: Add api performance-test when reactive-web or api-rest modules exists [\#625](https://github.com/bancolombia/scaffold-clean-architecture/pull/625) ([santicalleg](https://github.com/santicalleg))
+
 ## [v3.20.12](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.12) (2025-01-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.11...v3.20.12)
