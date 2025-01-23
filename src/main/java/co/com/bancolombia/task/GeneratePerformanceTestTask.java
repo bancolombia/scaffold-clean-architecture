@@ -12,7 +12,7 @@ public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
   @Override
   protected void prepareParams() {
     var modules = new ArrayList<>(getProject().getChildProjects().keySet());
-    System.out.printf("Modules: %s%n", modules);
+
     builder.addParam(
         "task-param-exist-api-rest",
         modules.stream()

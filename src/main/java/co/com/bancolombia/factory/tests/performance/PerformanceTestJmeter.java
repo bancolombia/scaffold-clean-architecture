@@ -15,12 +15,6 @@ public class PerformanceTestJmeter implements ModuleFactory {
       templatePath += "/Jmeter/Api";
     }
 
-    System.out.println(
-        "**** "
-            + builder.getBooleanParam("task-param-exist-api-rest")
-            + " -> "
-            + templatePath
-            + " ****");
     builder.setupFromTemplate(templatePath);
   }
 }
