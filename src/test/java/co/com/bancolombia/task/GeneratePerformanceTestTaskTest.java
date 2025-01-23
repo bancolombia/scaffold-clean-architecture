@@ -13,20 +13,18 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 class GeneratePerformanceTestTaskTest {
   private static final String TEST_DIR = getTestDir(GeneratePerformanceTestTaskTest.class);
+  private static Project project;
 
   private static GeneratePerformanceTestTask task;
 
-  @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  @BeforeEach
+  public void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
-    Project project =
-        setupProject(GeneratePerformanceTestTaskTest.class, GenerateStructureTask.class);
+    project = setupProject(GeneratePerformanceTestTaskTest.class, GenerateStructureTask.class);
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
@@ -41,8 +39,8 @@ class GeneratePerformanceTestTaskTest {
     task = createTask(project, GeneratePerformanceTestTask.class);
   }
 
-  @AfterAll
-  public static void tearDown() {
+  @AfterEach
+  public void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
@@ -51,5 +49,26 @@ class GeneratePerformanceTestTaskTest {
     task.setType("JMETER");
     task.execute();
     assertFilesExistsInDir(TEST_DIR + "/performance-test/", "Jmeter", "README.md");
+  }
+
+  @Test
+  void generateApiPerformanceTest() throws IOException, CleanException {
+    // Arrange
+    ProjectBuilder.builder()
+        .withName("reactive-web")
+        .withProjectDir(new File(TEST_DIR + "/infrastructure/entry-points/reactive-web"))
+        .withParent(project)
+        .build();
+
+    task.setType("JMETER");
+
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/deployment/performance-test/Jmeter/Api/",
+        "README.md",
+        "SC_Template_UDP_Service.jmx",
+        "SC_Template_HTTP_Service.jmx");
   }
 }

@@ -9,6 +9,18 @@ public class PerformanceTestJmeter implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    builder.setupFromTemplate("test/performance-test/jmeter");
+    String templatePath = "test/performance-test/jmeter";
+
+    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-exist-api-rest"))) {
+      templatePath += "/Jmeter/Api";
+    }
+
+    System.out.println(
+        "**** "
+            + builder.getBooleanParam("task-param-exist-api-rest")
+            + " -> "
+            + templatePath
+            + " ****");
+    builder.setupFromTemplate(templatePath);
   }
 }

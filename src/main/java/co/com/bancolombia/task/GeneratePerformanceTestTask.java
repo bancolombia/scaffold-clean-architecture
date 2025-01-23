@@ -1,6 +1,7 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.annotations.CATask;
+import java.util.ArrayList;
 
 @CATask(
     name = "generatePerformanceTest",
@@ -10,7 +11,12 @@ public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
 
   @Override
   protected void prepareParams() {
-    // No additional params required
+    var modules = new ArrayList<>(getProject().getChildProjects().keySet());
+    System.out.printf("Modules: %s%n", modules);
+    builder.addParam(
+        "task-param-exist-api-rest",
+        modules.stream()
+            .anyMatch(value -> value.equals("reactive-web") || value.equals("api-rest")));
   }
 
   @Override

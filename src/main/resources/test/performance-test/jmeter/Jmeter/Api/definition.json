@@ -1,0 +1,12 @@
+{
+  "folders": [],
+  "files": {
+    "test/performance-test/jmeter/Jmeter/Api/README.md.mustache": "deployment/performance-test/Jmeter/Api/README.md",
+
+    "test/performance-test/jmeter/Jmeter/Api/SC_Template_UDP_Service.jmx.mustache": "deployment/performance-test/Jmeter/Api/SC_Template_UDP_Service.jmx",
+    "test/performance-test/jmeter/Jmeter/Api/SC_Template_HTTP_Service.jmx.mustache": "deployment/performance-test/Jmeter/Api/SC_Template_HTTP_Service.jmx",
+
+    "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Example.csv.mustache": "deployment/performance-test/Jmeter/Api/DataSet/DT_Example.csv",
+    "test/performance-test/jmeter/Jmeter/Api/DataSet/DT_Example.txt.mustache": "deployment/performance-test/Jmeter/Api/DataSet/DT_Example.txt"
+  }
+}
