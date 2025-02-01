@@ -9,6 +9,10 @@ import org.reactivecommons.api.domain.DomainEvent;
 import org.reactivecommons.async.api.AsyncQuery;
 import org.reactivecommons.async.commons.communications.Message;
 import reactor.test.StepVerifier;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MetricsReporterTest {
 
@@ -65,5 +69,24 @@ public class MetricsReporterTest {
         StepVerifier
             .create(metricsReporter.reportError(error, message, asyncQuery, true))
             .verifyComplete();
+    }
+    
+    @Test
+    void reportMetricTest() {
+        MeterRegistry registry = new SimpleMeterRegistry();
+        MetricsReporter reporter = new MetricsReporter(registry);
+
+        reporter.reportMetric("command", "handlerPath", 100L, true);
+        reporter.reportMetric("event", "handlerPath", 200L, false);
+
+        Timer successTimer = registry.find("async_operation_flow_duration")
+                                    .tags("type", "command", "operation", "handlerPath", "status", "success")
+                                    .timer();
+        Timer errorTimer = registry.find("async_operation_flow_duration")
+                                .tags("type", "event", "operation", "handlerPath", "status", "error")
+                                .timer();
+
+        assertThat(successTimer).isNotNull();
+        assertThat(errorTimer).isNotNull();
     }
 }

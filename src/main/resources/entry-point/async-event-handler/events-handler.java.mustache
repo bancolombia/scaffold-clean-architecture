@@ -8,10 +8,12 @@ import org.reactivecommons.api.domain.DomainEvent;
 {{/eda}}
 import org.reactivecommons.async.impl.config.annotations.EnableEventListeners;
 import reactor.core.publisher.Mono;
+import lombok.extern.java.Log;
+import java.util.logging.Level;
 {{#eda}}
 import io.cloudevents.CloudEvent;
 {{/eda}}
-
+@Log
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
@@ -26,7 +28,7 @@ public class EventsHandler {
 {{/lombok}}
 {{#eda}}
     public Mono<Void> handleEventA(CloudEvent event) {
-        System.out.println("event received: " + event.getType() + " ->" + event.getData()); // TODO: Remove this line
+        log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getType(), event.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();
     }
@@ -34,7 +36,7 @@ public class EventsHandler {
 
 {{^eda}}
     public Mono<Void> handleEventA(DomainEvent<Object/*change for proper model*/> event) {
-        System.out.println("event received: " + event.getName() + " ->" + event.getData()); // TODO: Remove this line
+        log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getName(), event.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();
     }

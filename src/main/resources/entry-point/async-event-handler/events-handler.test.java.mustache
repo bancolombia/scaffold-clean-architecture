@@ -34,14 +34,14 @@ class EventsHandlerTest {
                 .withType("event")
                 .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                 .build();
-        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete();
+        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete().verify();
     }
     {{/eda}}
     {{^eda}}
     @Test
     void handleEventATest() {
         DomainEvent<Object> event = new DomainEvent<>("EVENT", UUID.randomUUID().toString(), "Data");
-        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete();
+        StepVerifier.create(eventsHandler.handleEventA(event)).expectComplete().verify();
     }
     {{/eda}}
 }
