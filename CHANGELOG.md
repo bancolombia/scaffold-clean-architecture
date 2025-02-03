@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.20.15](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.15) (2025-02-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.14...v3.20.15)
+
+## [v3.20.14](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.14) (2025-02-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.13...v3.20.14)
+
+**Merged pull requests:**
+
+- fix: replace System.out.println with logging in command and even… [\#634](https://github.com/bancolombia/scaffold-clean-architecture/pull/634) ([AndresFelipe11](https://github.com/AndresFelipe11))
+
 ## [v3.20.13](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.13) (2025-01-23)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.12...v3.20.13)
