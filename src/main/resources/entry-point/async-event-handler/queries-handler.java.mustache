@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 {{/lombok}}
 import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners;
 import reactor.core.publisher.Mono;
+import lombok.extern.java.Log;
+import java.util.logging.Level;
 {{#eda}}
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
@@ -17,7 +19,7 @@ import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 {{/eda}}
-
+@Log
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
@@ -36,7 +38,7 @@ public class QueriesHandler {
 
 {{#eda}}
     public Mono<CloudEvent> handleQueryA(CloudEvent query) {
-        System.out.println("query received->" + query); // TODO: Remove this line
+        log.log(Level.INFO, "Query received -> {0}", query); // TODO: Remove this line
 //        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
         Object replyData = "Response Data";
         CloudEvent reply = CloudEventBuilder.v1() //
@@ -52,7 +54,7 @@ public class QueriesHandler {
 
 {{^eda}}
     public Mono<Object/*change for proper model*/> handleQueryA(Object query/*change for proper model*/) {
-        System.out.println("query received->" + query); // TODO: Remove this line
+        log.log(Level.INFO, "Query received -> {0}", query); // TODO: Remove this line
 //        return sampleUseCase.doSomethingReturningNoMonoVoid(query);
         return Mono.just("Response Data");
     }

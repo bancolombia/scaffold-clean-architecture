@@ -35,7 +35,7 @@ class CommandsHandlerTest {
                 .withType("command")
                 .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                 .build();
-        StepVerifier.create(commandsHandler.handleCommandA(command)).expectComplete();
+        StepVerifier.create(commandsHandler.handleCommandA(command)).expectComplete().verify();
     }
     {{/eda}}
     {{^eda}}
@@ -44,7 +44,7 @@ class CommandsHandlerTest {
         StepVerifier.create(commandsHandler.handleCommandA(
             new Command<>("COMMAND",
                 UUID.randomUUID().toString(),
-                    "Data"))).expectComplete();
+                    "Data"))).expectComplete().verify();
     }
     {{/eda}}
 }

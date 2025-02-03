@@ -8,10 +8,12 @@ import org.reactivecommons.api.domain.Command;
 {{/eda}}
 import org.reactivecommons.async.impl.config.annotations.EnableCommandListeners;
 import reactor.core.publisher.Mono;
+import lombok.extern.java.Log;
+import java.util.logging.Level;
 {{#eda}}
 import io.cloudevents.CloudEvent;
 {{/eda}}
-
+@Log
 {{#lombok}}
 @AllArgsConstructor
 {{/lombok}}
@@ -26,14 +28,14 @@ public class CommandsHandler {
 {{/lombok}}
 {{#eda}}
     public Mono<Void> handleCommandA(CloudEvent command) {
-        System.out.println("command received: " + command.getType() + " ->" + command.getData()); // TODO: Remove this line
+        log.log(Level.INFO, "Command received: {0} -> {1}", new Object[]{command.getType(), command.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(command.getData());
         return Mono.empty();
     }
 {{/eda}}
 {{^eda}}
     public Mono<Void> handleCommandA(Command<Object/*change for proper model*/> command) {
-        System.out.println("command received: " + command.getName() + " ->" + command.getData()); // TODO: Remove this line
+        log.log(Level.INFO, "Command received: {0} -> {1}", new Object[]{command.getName(), command.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(command.getData());
         return Mono.empty();
     }

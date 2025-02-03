@@ -32,14 +32,25 @@ class QueriesHandlerTest {
                 .withData("application/json", objectMapper.writeValueAsBytes("Data"))
                 .build();
         StepVerifier.create(queriesHandler.handleQueryA(query))
-                .expectComplete();
+                .expectNextMatches(response ->
+                        response != null &&
+                        "SOME_QUERY_REPLY".equals(response.getType()) &&
+                        response.getData() != null
+                )
+                .verifyComplete();
     }
     {{/eda}}
     {{^eda}}
     @Test
     void queriesHandlerTest() {
-        StepVerifier.create(queriesHandler.handleQueryA("Data"))
-            .expectComplete();
+    // Enviar una consulta con datos específicos
+        String query = "Data";
+        
+        // Verificar que el valor retornado sea el esperado
+        StepVerifier.create(queriesHandler.handleQueryA(query))
+            .expectNext("Response Data") // Verifica que el valor recibido sea "Response Data"
+            .expectComplete()  // Verifica que el Mono se complete
+            .verify();
     }
     {{/eda}}
 }

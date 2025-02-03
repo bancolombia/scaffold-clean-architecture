@@ -33,8 +33,8 @@ public class MetricsReporter implements CustomReporter {
         registry.timer("async_operation_flow_duration",
                         "exception", "", "type",
                         type, "operation", handlerPath,
-                        "status", status)
-                .record(Duration.ofMillis(duration));
+                        "status", status);
+                  // .record(Duration.ofMillis(duration));
     }
 
     @Override
