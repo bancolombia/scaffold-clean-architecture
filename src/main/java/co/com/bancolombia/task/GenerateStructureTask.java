@@ -27,7 +27,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption mutation = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
-  private JavaVersion javaVersion = JavaVersion.VERSION_17;
+  private JavaVersion javaVersion = JavaVersion.VERSION_21;
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
