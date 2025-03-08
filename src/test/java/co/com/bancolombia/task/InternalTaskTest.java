@@ -31,7 +31,7 @@ class InternalTaskTest {
   private static Project appService;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(InternalTaskTest.class, GenerateStructureTask.class);
 
@@ -50,7 +50,7 @@ class InternalTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

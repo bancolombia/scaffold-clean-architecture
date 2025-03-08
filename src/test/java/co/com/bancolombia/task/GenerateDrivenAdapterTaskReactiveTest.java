@@ -28,7 +28,7 @@ class GenerateDrivenAdapterTaskReactiveTest {
   private static GenerateDrivenAdapterTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project =
         setupProject(GenerateDrivenAdapterTaskReactiveTest.class, GenerateStructureTask.class);
@@ -47,7 +47,7 @@ class GenerateDrivenAdapterTaskReactiveTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

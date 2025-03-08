@@ -21,7 +21,7 @@ class UpgradeY2022M04D27Test {
   private UpgradeAction updater;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     updater = new UpgradeY2022M04D27();
     assertNotNull(updater.name());
     assertNotNull(updater.description());

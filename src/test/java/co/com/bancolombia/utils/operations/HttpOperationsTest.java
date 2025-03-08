@@ -36,7 +36,7 @@ class HttpOperationsTest {
   private HttpOperations operations;
 
   @BeforeEach
-  public void setUp() throws IOException {
+  void setup() throws IOException {
     String releaseResponse = "[{\"tag_name\":\"2.0.0\",\"published_at\":\"2021-11-18T13:30:02Z\"}]";
     String dependencyResponse =
         "{\"response\":{\"docs\":[{\"v\":\"2.0.1\",\"g\":\"some.dependency\",\"a\":\"name\"}]}}";

@@ -11,6 +11,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.testing.Test;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,14 +90,14 @@ public class PluginClean implements Plugin<Project> {
   @SuppressWarnings("unchecked")
   private void appendTask(TaskContainer taskContainer, TaskModel t) {
     if (t.getAction() == null) {
-      taskContainer.create(
+      taskContainer.register(
           t.getName(),
           t.getTaskAction(),
           task -> {
             task.setGroup(t.getGroup());
             task.setDescription(t.getDescription());
           });
-      taskContainer.create(
+      taskContainer.register(
           t.getShortcut(),
           t.getTaskAction(),
           task -> {
@@ -104,10 +105,15 @@ public class PluginClean implements Plugin<Project> {
             task.setDescription(t.getDescription());
           });
     } else {
-      Task temp = taskContainer.create(t.getName(), t.getTaskAction(), t.getAction());
+      TaskProvider<Task> taskProvider =
+          taskContainer.register(t.getName(), t.getTaskAction(), t.getAction());
+      Task temp = taskProvider.get();
       temp.setGroup(t.getGroup());
       temp.setDescription(t.getDescription());
-      Task temp2 = taskContainer.create(t.getShortcut(), t.getTaskAction(), t.getAction());
+
+      TaskProvider<Task> taskProvider2 =
+          taskContainer.register(t.getShortcut(), t.getTaskAction(), t.getAction());
+      Task temp2 = taskProvider2.get();
       temp2.setGroup(t.getGroup());
       temp2.setDescription(t.getDescription());
     }

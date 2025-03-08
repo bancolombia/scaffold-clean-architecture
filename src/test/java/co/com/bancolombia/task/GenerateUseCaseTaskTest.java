@@ -25,7 +25,7 @@ class GenerateUseCaseTaskTest {
   private static GenerateUseCaseTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(GenerateUseCaseTaskTest.class, GenerateStructureTask.class);
 
@@ -43,7 +43,7 @@ class GenerateUseCaseTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

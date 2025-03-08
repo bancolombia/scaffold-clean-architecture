@@ -8,12 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
 
-  public AbstractScaffoldCodegen() {
+  protected AbstractScaffoldCodegen() {
     super();
   }
 
@@ -45,8 +44,7 @@ public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
         "lambdaEscapeDoubleQuote",
         (Mustache.Lambda)
             (fragment, writer) ->
-                writer.write(
-                    fragment.execute().replaceAll("\"", Matcher.quoteReplacement("\\\""))));
+                writer.write(fragment.execute().replace("\"", Matcher.quoteReplacement("\\\""))));
     additionalProperties.put(
         "lambdaRemoveLineBreak",
         (Mustache.Lambda)
@@ -82,10 +80,7 @@ public abstract class AbstractScaffoldCodegen extends AbstractJavaCodegen {
   @Override
   public Map<String, Object> postProcessModels(Map<String, Object> objs) {
     List<HashMap<String, String>> imports = (List<HashMap<String, String>>) objs.get("imports");
-    imports =
-        imports.stream()
-            .filter(hash -> !hash.get("import").contains("io.swagger"))
-            .collect(Collectors.toList());
+    imports = imports.stream().filter(hash -> !hash.get("import").contains("io.swagger")).toList();
     objs.put("imports", imports);
     return super.postProcessModels(objs);
   }

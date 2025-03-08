@@ -24,7 +24,7 @@ class GenerateModelTaskTest {
   private static GenerateModelTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(GenerateModelTaskTest.class, GenerateStructureTask.class);
 
@@ -42,7 +42,7 @@ class GenerateModelTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
