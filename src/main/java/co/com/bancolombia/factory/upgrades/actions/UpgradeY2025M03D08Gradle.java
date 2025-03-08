@@ -1,6 +1,5 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 
@@ -15,8 +14,7 @@ public class UpgradeY2025M03D08Gradle implements UpgradeAction {
   public boolean up(ModuleBuilder builder) {
     return builder.updateFile(MAIN_GRADLE, content -> updateUrl(builder, MAIN_GRADLE, content))
         | builder.updateFile(
-            SETTINGS_GRADLE, content -> updateUrl(builder, SETTINGS_GRADLE, content))
-        | builder.updateFile(BUILD_GRADLE, content -> updateUrl(builder, BUILD_GRADLE, content));
+            SETTINGS_GRADLE, content -> updateUrl(builder, SETTINGS_GRADLE, content));
   }
 
   private String updateUrl(ModuleBuilder builder, String file, String content) {
@@ -33,6 +31,6 @@ public class UpgradeY2025M03D08Gradle implements UpgradeAction {
 
   @Override
   public String description() {
-    return "Add java { } configuration block, backed by JavaPluginExtension";
+    return "Assign the url property using the 'propName = value' syntax";
   }
 }
