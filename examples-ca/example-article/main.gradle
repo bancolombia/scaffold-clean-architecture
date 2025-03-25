@@ -37,7 +37,7 @@ subprojects {
     }
 
     pitest {
-        pitestVersion = '1.18.2'
+        pitestVersion = '1.19.0'
         junit5PluginVersion = '1.2.1'
         targetClasses = ['co.com.crudtest.*']
         outputFormats = ['XML', 'HTML']
