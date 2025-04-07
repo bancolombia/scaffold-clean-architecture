@@ -25,7 +25,7 @@ class AnalyticsTaskTest {
   private static AnalyticsTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(AnalyticsTaskTest.class, GenerateStructureTask.class);
     GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
@@ -41,7 +41,7 @@ class AnalyticsTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

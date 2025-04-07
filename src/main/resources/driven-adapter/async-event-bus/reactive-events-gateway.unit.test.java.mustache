@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ReactiveEventsGatewayTest {
+class ReactiveEventsGatewayTest {
 
     {{#eda}}
     @Mock
@@ -39,7 +39,7 @@ public class ReactiveEventsGatewayTest {
     {{/eda}}
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         {{#eda}}
         gateway = new ReactiveEventsGateway(domainEventBus, objectMapper);
@@ -51,7 +51,7 @@ public class ReactiveEventsGatewayTest {
     }
 
     @Test
-    public void testEmitLogsEvent() {
+    void testEmitLogsEvent() {
         Object event = new Object() {
             @Override
             public String toString() {
@@ -77,7 +77,7 @@ public class ReactiveEventsGatewayTest {
 
    {{#eda}}
    @Test
-    public void testEmitConstructsCloudEvent() {
+    void testEmitConstructsCloudEvent() {
         Object event = new Object() {
             public String toString() { return "testEvent"; }
         };
@@ -97,7 +97,7 @@ public class ReactiveEventsGatewayTest {
 
     {{^eda}}
     @Test
-    public void testEmitConstructsDomainEvent() {
+    void testEmitConstructsDomainEvent() {
         Object event = new Object() {
             @Override
             public String toString() {
@@ -117,8 +117,5 @@ public class ReactiveEventsGatewayTest {
         assertEquals(event.toString(), capturedEvent.getData().toString());
     }
     {{/eda}}
-
-
-
 
 }

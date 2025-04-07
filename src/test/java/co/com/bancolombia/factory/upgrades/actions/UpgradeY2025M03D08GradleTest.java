@@ -1,9 +1,11 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,7 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpgradeY2024M11D16GradleTest {
+class UpgradeY2025M03D08GradleTest {
 
   @Mock private Project project;
   @Mock private Logger logger;
@@ -38,7 +40,7 @@ class UpgradeY2024M11D16GradleTest {
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
 
     builder = spy(new ModuleBuilder(project));
-    updater = new UpgradeY2024M11D16Gradle();
+    updater = new UpgradeY2025M03D08Gradle();
 
     assertNotNull(updater.name());
     assertNotNull(updater.description());
@@ -49,30 +51,44 @@ class UpgradeY2024M11D16GradleTest {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
-        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-before.txt"));
+        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/main-before.txt"));
+    builder.addFile(
+        SETTINGS_GRADLE,
+        FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/settings-before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder)
+    verify(builder, atLeast(1))
         .addFile(
             MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+            FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/main-after.txt"));
+    verify(builder, atLeast(1))
+        .addFile(
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/settings-after.txt"));
   }
 
   @Test
-  void shouldNotApplyUpdateIfJavaBlockExists() throws IOException {
+  void shouldNotApplyUpdateIfUrlIsUpdatedExists() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
-        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/main-after.txt"));
+    builder.addFile(
+        SETTINGS_GRADLE,
+        FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/settings-after.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertFalse(applied);
-    verify(builder)
+    verify(builder, atLeast(1))
         .addFile(
             MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+            FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/main-after.txt"));
+    verify(builder, atLeast(1))
+        .addFile(
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(resolver, "gradle-8.13-sample/settings-after.txt"));
   }
 }

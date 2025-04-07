@@ -29,12 +29,12 @@ class ValidateStructureTaskTest {
   private ValidateStructureTask task;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

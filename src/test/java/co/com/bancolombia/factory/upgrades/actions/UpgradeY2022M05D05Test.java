@@ -27,7 +27,7 @@ class UpgradeY2022M05D05Test {
   private UpgradeAction updater;
 
   @BeforeEach
-  public void setup() throws IOException {
+  void setup() throws IOException {
     when(project.getRootProject()).thenReturn(project);
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);

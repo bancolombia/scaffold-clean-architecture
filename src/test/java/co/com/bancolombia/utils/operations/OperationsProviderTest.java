@@ -1,6 +1,6 @@
 package co.com.bancolombia.utils.operations;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +11,7 @@ class OperationsProviderTest {
     // Act
     ExternalOperations operations = OperationsProvider.fromDefault();
     // Assert
-    assertTrue(operations instanceof MockOperations);
+    assertInstanceOf(MockOperations.class, operations);
   }
 
   @Test
@@ -19,6 +19,6 @@ class OperationsProviderTest {
     // Act
     ExternalOperations operations = OperationsProvider.real();
     // Assert
-    assertTrue(operations instanceof HttpOperations);
+    assertInstanceOf(HttpOperations.class, operations);
   }
 }
