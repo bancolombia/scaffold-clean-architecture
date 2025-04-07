@@ -22,7 +22,7 @@ class UpgradeY2022M05D23Test {
   private UpgradeAction updater;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     updater = new UpgradeY2022M05D23();
     assertNotNull(updater.name());
     assertNotNull(updater.description());

@@ -23,7 +23,7 @@ class GenerateHelperTaskTest {
   private static GenerateHelperTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(GenerateHelperTaskTest.class, GenerateStructureTask.class);
 
@@ -41,7 +41,7 @@ class GenerateHelperTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

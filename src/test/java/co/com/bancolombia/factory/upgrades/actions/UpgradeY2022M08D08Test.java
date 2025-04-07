@@ -30,7 +30,7 @@ class UpgradeY2022M08D08Test {
   private UpgradeAction updater;
 
   @BeforeEach
-  public void setup() throws IOException {
+  void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());

@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class ReactiveDirectAsyncGatewayTest {
+class ReactiveDirectAsyncGatewayTest {
 
     @Mock
     private DirectAsyncGateway directAsyncGateway;
@@ -40,13 +40,13 @@ public class ReactiveDirectAsyncGatewayTest {
     private ReactiveDirectAsyncGateway gateway;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
         gateway = new ReactiveDirectAsyncGateway(directAsyncGateway{{#eda}}, objectMapper{{/eda}});
     }
 
     @Test
-    public void testRunRemoteJobSendsCommand() {{#eda}}throws Exception{{/eda}} {
+    void testRunRemoteJobSendsCommand() {{#eda}}throws Exception{{/eda}} {
         Object command = new Object() {
             public String toString() {
                 return "testCommand";
@@ -76,7 +76,7 @@ public class ReactiveDirectAsyncGatewayTest {
     }
 
     @Test
-    public void testRequestForRemoteDataSendsQuery() {{#eda}}throws JsonProcessingException{{/eda}} {
+    void testRequestForRemoteDataSendsQuery() {{#eda}}throws JsonProcessingException{{/eda}} {
         Object query = new Object() {
             public String toString() {
                 return "testQuery";

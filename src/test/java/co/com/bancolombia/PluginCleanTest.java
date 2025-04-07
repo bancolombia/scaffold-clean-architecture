@@ -27,7 +27,7 @@ class PluginCleanTest {
   private static final String TEST_DIR = getTestDir(PluginCleanTest.class);
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

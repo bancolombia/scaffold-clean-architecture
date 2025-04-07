@@ -1,16 +1,9 @@
 package io.swagger.codegen.v3.generators;
 
-import io.swagger.codegen.v3.CodegenType;
-
 public class RestControllerCodegen extends AbstractScaffoldCodegen {
 
   public RestControllerCodegen() {
     super();
-  }
-
-  @Override
-  public CodegenType getTag() {
-    return CodegenType.SERVER;
   }
 
   @Override
