@@ -19,7 +19,7 @@ public class TestParallel {
     private final static int WORKERS = 1;
 
     @Test
-    public void testAll() {
+    void testAll() {
       Results results = Runner.path()
               .outputCucumberJson(true)
               .relativeTo(getClass())
