@@ -1,12 +1,17 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.22.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.1) (2025-04-08)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.21.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.0...v3.22.1)
+
+## [v3.22.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.0) (2025-04-08)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.21.0...v3.22.0)
 
 **Merged pull requests:**
 
-- build\(examples-ca\): update dependencies [\#644](https://github.com/bancolombia/scaffold-clean-architecture/pull/644) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump @babel/runtime from 7.24.4 to 7.27.0 in /docs [\#656](https://github.com/bancolombia/scaffold-clean-architecture/pull/656) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(gradle\): set Java version 21 as default to generate a new project [\#646](https://github.com/bancolombia/scaffold-clean-architecture/pull/646) ([luisgomez29](https://github.com/luisgomez29))
 
 ## [v3.21.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.21.0) (2025-04-07)
 
