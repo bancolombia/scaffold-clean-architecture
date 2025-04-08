@@ -48,7 +48,7 @@ subprojects {
     }
 
     pitest {
-        pitestVersion = '1.19.0'
+        pitestVersion = '1.19.1'
         junit5PluginVersion = '1.2.1'
         targetClasses = ['co.com.bancolombia.*']
         outputFormats = ['XML', 'HTML']
