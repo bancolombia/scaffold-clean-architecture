@@ -228,7 +228,7 @@ For example:
 
 ```properties
 package=co.com.bancolombia
-systemProp.version=3.17.22
+systemProp.version=3.20.15
 reactive=true
 lombok=true
 metrics=true

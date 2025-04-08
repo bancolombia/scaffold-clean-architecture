@@ -22,6 +22,7 @@ subprojects {
 
     java {
         sourceCompatibility = JavaVersion.{{javaVersion}}
+        targetCompatibility = JavaVersion.{{javaVersion}}
     }
 
     {{#mutation}}
@@ -69,7 +70,7 @@ subprojects {
         targetClasses = ['{{package}}.*']
         excludedClasses = []
         excludedTestClasses = []
-        pitestVersion = '1.17.1'
+        pitestVersion = '1.18.2'
         verbose = false
         outputFormats = ['XML', 'HTML']
         threads = 8
