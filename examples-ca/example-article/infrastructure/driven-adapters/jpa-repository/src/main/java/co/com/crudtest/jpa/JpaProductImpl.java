@@ -2,8 +2,11 @@ package co.com.crudtest.jpa;
 
 import co.com.crudtest.model.product.Product;
 import co.com.crudtest.model.product.gateways.ProductRepository;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +28,10 @@ public class JpaProductImpl implements ProductRepository {
     return jpaRepositoryAdapter.findById(id);
   }
 
-  @Override
-  public void update(String id, Product product) throws Exception {
-    Product productDb = jpaRepositoryAdapter.findById(id);
-
-    if (productDb == null) throw new Exception("Product Not Found : " + id);
+    @Override
+    public void update(String id, Product product) throws Exception {
+        Product productDb = Optional.of(jpaRepositoryAdapter.findById(id))
+                .orElseThrow(() -> new Exception("Product Not Found : " + id));
 
     productDb.setName(product.getName());
     productDb.setPrice(product.getPrice());

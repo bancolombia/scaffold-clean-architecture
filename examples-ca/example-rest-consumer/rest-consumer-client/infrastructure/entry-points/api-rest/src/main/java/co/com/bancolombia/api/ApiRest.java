@@ -22,7 +22,7 @@ public class ApiRest {
     private final ConsumeServiceUseCase useCase;
 
     @GetMapping(path = "/test-sum")
-    public String testSum(@RequestParam Integer x, @RequestParam Integer y) {
+    public String testSum(@RequestParam(name = "x") Integer x, @RequestParam(name = "y") Integer y) {
         try {
             return useCase.sum(x, y);
         } catch (IOException e) {

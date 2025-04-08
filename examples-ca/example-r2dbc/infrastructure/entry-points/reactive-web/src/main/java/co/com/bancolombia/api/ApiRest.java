@@ -22,10 +22,10 @@ public class ApiRest {
 
     @GetMapping(path = "/getAll")
     public Flux<PostModel> commandName() {
-    return postUseCase.getAll();
+        return postUseCase.getAll();
     }
 
-    @PostMapping(path ="/create")
+    @PostMapping(path = "/create")
     public Mono<PostModel> create(@RequestBody PostModel postModel) {
         return this.postUseCase.create(postModel);
     }

@@ -18,7 +18,7 @@ public final class Constants {
   public static final String REACTIVE_COMMONS_VERSION = "5.3.1";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.11.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.31.16";
+  public static final String AWS_BOM_VERSION = "2.31.17";
   public static final String COMMONS_JMS_VERSION = "2.3.10";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.4.0";
