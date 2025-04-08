@@ -40,11 +40,11 @@ class ArchitectureValidationTest {
   private Project project;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
-  public void mocks() throws CleanException, IOException {
+  void mocks() throws CleanException, IOException {
     project = spy(setupProject(ArchitectureValidationTest.class, GenerateStructureTask.class));
     GenerateStructureTask generateStructureTask = getTask(project, GenerateStructureTask.class);
     generateStructureTask.executeBaseTask();
@@ -60,7 +60,7 @@ class ArchitectureValidationTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

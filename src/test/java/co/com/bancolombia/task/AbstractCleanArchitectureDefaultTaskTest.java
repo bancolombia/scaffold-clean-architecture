@@ -31,6 +31,8 @@ import org.gradle.internal.logging.text.StyledTextOutputFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class AbstractCleanArchitectureDefaultTaskTest {
   private static final String TEST_DIR = getTestDir(AbstractCleanArchitectureDefaultTaskTest.class);
@@ -39,7 +41,7 @@ class AbstractCleanArchitectureDefaultTaskTest {
   private HelperTask helperTask;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     project =
         setupProject(
             AbstractCleanArchitectureDefaultTaskTest.class,
@@ -51,7 +53,7 @@ class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
@@ -160,30 +162,11 @@ class AbstractCleanArchitectureDefaultTaskTest {
     assertEquals("OK", helperTask.helperCheck("check2"));
   }
 
-  @Test
-  void shouldHandleTaskCleanException() throws CleanException, IOException {
+  @ParameterizedTest
+  @ValueSource(strings = {"CleanException", "Exception", "InvalidTaskOptionException"})
+  void shouldHandleTaskException(String exception) throws CleanException, IOException {
     // Arrange
-    helperTask.setThrow("CleanException");
-    // Act
-    helperTask.executeBaseTask();
-    // Assert
-    assertNull(helperTask.helperCheck("check2"));
-  }
-
-  @Test
-  void shouldHandleTaskException() throws CleanException, IOException {
-    // Arrange
-    helperTask.setThrow("Exception");
-    // Act
-    helperTask.executeBaseTask();
-    // Assert
-    assertNull(helperTask.helperCheck("check2"));
-  }
-
-  @Test
-  void shouldHandleTaskInvalidTaskOptionException() throws CleanException, IOException {
-    // Arrange
-    helperTask.setThrow("InvalidTaskOptionException");
+    helperTask.setThrow(exception);
     // Act
     helperTask.executeBaseTask();
     // Assert

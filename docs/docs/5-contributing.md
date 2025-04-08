@@ -179,8 +179,6 @@ Actually this templates should consider some variables that will impact the temp
   consider implement the vanilla version when lombok is disabled.
 - metrics: Boolean variable enabled by default, that implies that you should implement some metric generator only when
   enabled.
-- language: (java|kotlin) you should use this value if you need to determine when run a custom configuration depending
-  on the language.
 - reactive: Boolean variable disabled by default, this variable should be used to determine the resources directory of
   the templates by following the standard \<module-name> for non reactive and \<module-name>-reactive for reactive
   modules.
@@ -189,9 +187,8 @@ Actually this templates should consider some variables that will impact the temp
 
 - **projectName**: the project name assigned by the user when running the `cleanArchitecture` task.
 - **projectNameLower**: the same value of projectName but in lower case.
-- **package**: package defined by the user when the project was created, for example**: `co.com.bancolombia.sample`
+- **package**: package defined by the user when the project was created, for example: `co.com.bancolombia.sample`
 - **packagePath**: package path of the package defined, for example: `co/com/bancolombia/sample`
-- **language**: language of the project, could be `java` or `kotlin`
 - all constants defined in [
   `Constants`](https://github.com/bancolombia/scaffold-clean-architecture/blob/master/src/main/java/co/com/bancolombia/Constants.java)
   with the same constant name, for example:
@@ -247,12 +244,8 @@ This will load the template definition from the resource directory, this definit
   "folders": [
     "infrastructure/driven-adapters/dynamo-db/src/test/{{language}}/{{packagePath}}/dynamodb/helper"
   ],
-  "files": {},
-  "java": {
+  "files": {
     "driven-adapter/dynamo-db/build.gradle.mustache": "infrastructure/driven-adapters/dynamo-db/build.gradle"
-  },
-  "kotlin": {
-    "driven-adapter/dynamo-db/build.gradle.kts.mustache": "infrastructure/driven-adapters/dynamo-db/build.gradle.kts"
   }
 }
 ```
@@ -260,9 +253,7 @@ This will load the template definition from the resource directory, this definit
 Where:
 
 - folders: new directories to be created, usually are empty test directories.
-- files: file map to be created for both languages `java` and `kotlin`.
-- java: file map to be created only for java projects.
-- kotlin: file map to be created only for kotlin projects.
+- files: file map to be created for java projects.
 
 file map refers to, in the above example for java exists the key: `driven-adapter/dynamo-db/build.gradle.mustache` and
 the value `infrastructure/driven-adapters/dynamo-db/build.gradle`, it means that the file with that key will be

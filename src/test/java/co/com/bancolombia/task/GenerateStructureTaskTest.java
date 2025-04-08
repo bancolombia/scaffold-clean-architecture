@@ -27,14 +27,14 @@ class GenerateStructureTaskTest {
   private Project project;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     deleteStructure(Path.of(TEST_DIR));
     project = setupProject(GenerateStructureTaskTest.class, GenerateStructureTask.class);
     task = getTask(project, GenerateStructureTask.class);
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

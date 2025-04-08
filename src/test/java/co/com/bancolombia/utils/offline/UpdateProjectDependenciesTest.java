@@ -27,7 +27,7 @@ class UpdateProjectDependenciesTest {
   private String originalContent;
 
   @BeforeEach
-  public void setup() throws IOException {
+  void setup() throws IOException {
     Path original = Path.of(UpdateProjectDependencies.BUILD_GRADLE_FILE);
     Path destination = Path.of(TEST_PATH);
     Files.deleteIfExists(destination);

@@ -28,7 +28,7 @@ class UpgradeFactoryTest {
   private ModuleBuilder builder;
 
   @BeforeEach
-  public void setup() throws IOException, CleanException {
+  void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(UpgradeFactoryTest.class, GenerateStructureTask.class);
 
@@ -47,7 +47,7 @@ class UpgradeFactoryTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

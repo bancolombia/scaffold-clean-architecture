@@ -27,7 +27,7 @@ class UpdateDependenciesTest {
   private String originalContent;
 
   @BeforeEach
-  public void setup() throws IOException {
+  void setup() throws IOException {
     Path original = Path.of(UpdateDependencies.CONSTANTS_PATH);
     Path destination = Path.of(TEST_PATH);
     Files.deleteIfExists(destination);

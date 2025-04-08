@@ -22,7 +22,7 @@ class GeneratePerformanceTestTaskTest {
   private static GeneratePerformanceTestTask task;
 
   @BeforeEach
-  public void setup() throws IOException, CleanException {
+  void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     project = setupProject(GeneratePerformanceTestTaskTest.class, GenerateStructureTask.class);
 
@@ -40,7 +40,7 @@ class GeneratePerformanceTestTaskTest {
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

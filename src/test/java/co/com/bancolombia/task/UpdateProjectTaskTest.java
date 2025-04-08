@@ -16,13 +16,15 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class UpdateProjectTaskTest {
   private static final String TEST_DIR = getTestDir(UpdateProjectTaskTest.class);
   private static UpdateProjectTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(UpdateProjectTaskTest.class, GenerateStructureTask.class);
 
@@ -41,7 +43,7 @@ class UpdateProjectTaskTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 
@@ -54,30 +56,17 @@ class UpdateProjectTaskTest {
     assertNull(task.getState().getOutcome());
   }
 
-  @Test
-  void shouldUpdateProjectAndSomeDependencies() throws IOException, CleanException {
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "org.mockito:mockito-core org.projectlombok:lombok",
+        "does_dependency:not_exist",
+        "does_dependency"
+      })
+  void shouldUpdateProjectAndSomeDependencies(String dependency)
+      throws CleanException, IOException {
     // Arrange
-    task.setDependencies("org.mockito:mockito-core org.projectlombok:lombok");
-    // Act
-    task.execute();
-    // Assert
-    assertNull(task.getState().getOutcome());
-  }
-
-  @Test
-  void shouldNotUpdateProjectAndSomeDependencies() throws IOException, CleanException {
-    // Arrange
-    task.setDependencies("does_dependency:not_exist");
-    // Act
-    task.execute();
-    // Assert
-    assertNull(task.getState().getOutcome());
-  }
-
-  @Test
-  void dependencyIncomplete() throws IOException, CleanException {
-    // Arrange
-    task.setDependencies("does_dependency");
+    task.setDependencies(dependency);
     // Act
     task.execute();
     // Assert

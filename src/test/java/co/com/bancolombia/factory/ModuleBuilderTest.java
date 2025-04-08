@@ -40,7 +40,7 @@ class ModuleBuilderTest {
   @Mock private ExternalOperations operations;
 
   @BeforeEach
-  public void setup() throws IOException, CleanException {
+  void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(ModuleBuilderTest.class, GenerateStructureTask.class);
 
@@ -59,7 +59,7 @@ class ModuleBuilderTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

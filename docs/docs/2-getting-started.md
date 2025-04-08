@@ -20,7 +20,7 @@ content into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.17.22'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
 }
 ```
 
@@ -45,7 +45,7 @@ import TabItem from '@theme/TabItem';
 mkdir scaffold-quick-start
 cd scaffold-quick-start
 echo "plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
 }" > build.gradle
 gradle ca --name=ScaffoldQuickStart
 ./gradlew gep --type webflux
@@ -65,7 +65,7 @@ Set-Location -Path "scaffold-quick-start"
 # Create the build.gradle file with the specified content
 @"
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
 }
 "@ | Set-Content -Path "build.gradle"
 
@@ -87,7 +87,7 @@ cd scaffold-quick-start
 :: Create the build.gradle file with the specified content
 (
 echo plugins {
-echo     id 'co.com.bancolombia.cleanArchitecture' version '3.17.21'
+echo     id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
 echo }
 ) > build.gradle
 

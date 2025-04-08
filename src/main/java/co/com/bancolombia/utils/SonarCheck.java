@@ -2,11 +2,9 @@ package co.com.bancolombia.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,7 +22,7 @@ public class SonarCheck {
   public static final String DEFAULT_LOCATION =
       "src/main/java/co/com/bancolombia/MainApplication.java";
 
-  public static void parse(Project project) throws IOException {
+  public static void parse(Project project) {
     final ObjectMapper mapper =
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     parseSingle(project, mapper);
@@ -44,7 +42,7 @@ public class SonarCheck {
                       dependency.getVulnerabilities() != null
                           && !dependency.getVulnerabilities().isEmpty())
               .flatMap(SonarCheck::extractIssues)
-              .collect(Collectors.toList());
+              .toList();
     } else {
       issues = new ArrayList<>();
     }

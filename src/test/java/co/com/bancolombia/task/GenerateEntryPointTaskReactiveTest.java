@@ -25,7 +25,7 @@ class GenerateEntryPointTaskReactiveTest {
   private static GenerateEntryPointTask task;
 
   @BeforeAll
-  public static void setup() throws IOException, CleanException {
+  static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     Project project =
         setupProject(GenerateEntryPointTaskReactiveTest.class, GenerateStructureTask.class);
@@ -44,7 +44,7 @@ class GenerateEntryPointTaskReactiveTest {
   }
 
   @AfterAll
-  public static void tearDown() {
+  static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
   }
 

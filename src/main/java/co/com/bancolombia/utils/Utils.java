@@ -157,7 +157,7 @@ public class Utils {
               .filter(f -> !f.contains("/examples-ca"))
               .map(p -> p.replace("build/functionalTest/", ""))
               .map(p -> p.replace("build/unitTest/", ""))
-              .collect(Collectors.toList());
+              .toList();
     }
     return paths;
   }

@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@cb605e52c26070c328afc4562f0b4ada7618a84e # v2.10.4
+        uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf # v2.11.1
         with:
           egress-policy: audit
 
@@ -54,11 +54,11 @@ jobs:
         run: npx semantic-release@23.0.0
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-      - name: Set up JDK 17
-        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4.6.0
+      - name: Set up JDK 21
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           distribution: 'temurin' 
-          java-version: 17
+          java-version: 21
       - name: Validate code formatting
         run: ./gradlew verGJF
       - name: Execute build test and report

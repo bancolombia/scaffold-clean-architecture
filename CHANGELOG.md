@@ -1,8 +1,46 @@
 # Changelog
 
+## [v3.22.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.1) (2025-04-08)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.0...v3.22.1)
+
+## [v3.22.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.0) (2025-04-08)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.21.0...v3.22.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump @babel/runtime from 7.24.4 to 7.27.0 in /docs [\#656](https://github.com/bancolombia/scaffold-clean-architecture/pull/656) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(gradle\): set Java version 21 as default to generate a new project [\#646](https://github.com/bancolombia/scaffold-clean-architecture/pull/646) ([luisgomez29](https://github.com/luisgomez29))
+
+## [v3.21.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.21.0) (2025-04-07)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.15...v3.21.0)
+
+**Closed issues:**
+
+- Imperative Driven Adapter Generated Instead of Reactive for JPA with gradle gda --type jpa [\#642](https://github.com/bancolombia/scaffold-clean-architecture/issues/642)
+
+**Merged pull requests:**
+
+- build\(deps\): bump image-size from 1.1.1 to 1.2.1 in /docs [\#655](https://github.com/bancolombia/scaffold-clean-architecture/pull/655) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.10.4 to 2.11.1 [\#654](https://github.com/bancolombia/scaffold-clean-architecture/pull/654) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.28.2 to 3.28.13 [\#652](https://github.com/bancolombia/scaffold-clean-architecture/pull/652) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump @babel/helpers from 7.24.4 to 7.26.10 in /docs [\#650](https://github.com/bancolombia/scaffold-clean-architecture/pull/650) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump @babel/runtime-corejs3 from 7.24.4 to 7.26.10 in /docs [\#649](https://github.com/bancolombia/scaffold-clean-architecture/pull/649) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump prismjs from 1.29.0 to 1.30.0 in /docs [\#648](https://github.com/bancolombia/scaffold-clean-architecture/pull/648) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(gradle\): add UpgradeAction for gradle 8.13 [\#645](https://github.com/bancolombia/scaffold-clean-architecture/pull/645) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.6 to 7.0.8 [\#643](https://github.com/bancolombia/scaffold-clean-architecture/pull/643) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.0 to 2.4.1 [\#639](https://github.com/bancolombia/scaffold-clean-architecture/pull/639) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.6.0 to 4.7.0 [\#630](https://github.com/bancolombia/scaffold-clean-architecture/pull/630) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.20.15](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.15) (2025-02-03)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.20.14...v3.20.15)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#628](https://github.com/bancolombia/scaffold-clean-architecture/pull/628) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
 
 ## [v3.20.14](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.20.14) (2025-02-03)
 
