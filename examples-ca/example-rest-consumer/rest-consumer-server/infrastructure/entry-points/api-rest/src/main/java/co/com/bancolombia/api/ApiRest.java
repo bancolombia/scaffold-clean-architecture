@@ -21,16 +21,17 @@ public class ApiRest {
         return Arrays.asList(Usuario.builder()
                 .name("Juan")
                 .age(25)
-                .build(),Usuario.builder()
+                .build(), Usuario.builder()
                 .name("Pedro")
                 .age(35)
-                .build(),Usuario.builder()
+                .build(), Usuario.builder()
                 .name("Santiago")
                 .age(25)
                 .build());
     }
+
     @GetMapping(path = "/sum/{x}/{z}")
     public Integer sum(@PathVariable("x") Integer x, @PathVariable("z") Integer z) {
-        return x+z;
+        return x + z;
     }
 }

@@ -2,55 +2,43 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
 import java.util.List;
 
 @Component
 public class RestConsumer implements UserRepository {
-    private final OkHttpClient client;
-    private final ObjectMapper mapper;
-    private final String url;
+    private final RestClient restClient;
 
-    public RestConsumer(OkHttpClient client,
-                        ObjectMapper mapper,
+    public RestConsumer(ObjectMapper mapper,
                         @Value("${adapter.restconsumer.url}") String url) {
-        this.client = client;
-        this.mapper = mapper;
-        this.url = url;
+        this.restClient = RestClient.builder().baseUrl(url).build();
     }
 
-    // these methods are an example that illustrates the implementation of OKHTTP Client.
-    // You should use the methods that you implement from the Gateway from the domain.
     @Override
     public String sum(Integer x, Integer y) throws IOException {
-        var request = new Request.Builder()
-                .url(url.concat("/sum/").concat(String.valueOf(x)).concat("/").concat(String.valueOf(y)))
+        return restClient
                 .get()
-                .addHeader("Content-Type", "application/json")
-                .build();
-
-        return mapper.readValue(client.newCall(request).execute().body().string(), String.class);
+                .uri("/sum/{x}/{y}", x, y)
+                .retrieve()
+                .body(String.class);
     }
 
     @Override
     public List<User> getUsers() throws IOException {
-        var request = new Request.Builder()
-                .url(url.concat("/list-users"))
+        return restClient
                 .get()
-                .addHeader("Content-Type", "application/json")
-                .build();
-
-        return mapper.readValue(client.newCall(request).execute().body().string(), new TypeReference<>() {
-        });
-
+                .uri("/list-users")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
     }
 
 }

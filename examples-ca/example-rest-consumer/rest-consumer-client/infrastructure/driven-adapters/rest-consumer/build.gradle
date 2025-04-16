@@ -1,7 +1,5 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation "com.squareup.okhttp3:okhttp:${okhttp3Version}"
-    testImplementation "com.squareup.okhttp3:mockwebserver:${okhttp3Version}"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }

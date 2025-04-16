@@ -45,7 +45,7 @@ public class ApiRest {
         .deleteAuthentication(Authentication.builder().id(id).build())
         .map(response -> ResponseEntity.ok())
         .cast(ResponseEntity.class)
-        .onErrorResume(BusinessException.class, error -> Mono.just(ResponseEntity.notFound().build()))
+        .onErrorReturn(BusinessException.class, ResponseEntity.notFound().build())
         .onErrorResume(Mono::error);
   }
 }
