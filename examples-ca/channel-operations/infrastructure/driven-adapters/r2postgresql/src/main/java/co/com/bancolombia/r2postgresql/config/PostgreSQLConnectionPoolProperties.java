@@ -6,6 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record PostgreSQLConnectionPoolProperties(
         int initialSize,
         int maxSize,
-        int maxIdleTime
-) {
+        int maxIdleTime) {
 }
