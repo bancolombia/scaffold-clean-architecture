@@ -1,6 +1,8 @@
 package co.com.bancolombia.task;
 
+import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.annotations.CATask;
+import java.io.IOException;
 import java.util.ArrayList;
 
 @CATask(
@@ -8,6 +10,13 @@ import java.util.ArrayList;
     shortcut = "gat",
     description = "Generate subproject by karate framework in deployment layer")
 public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
+
+  @Override
+  public void execute() throws IOException, CleanException {
+    super.execute();
+    builder.runTask("wrapper", String.format("/deployment/%s", name));
+    logger.lifecycle("persisted acceptance-test task");
+  }
 
   @Override
   protected void prepareParams() {

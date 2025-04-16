@@ -366,17 +366,27 @@ public class ModuleBuilder {
   }
 
   public void runTask(String name) {
+    this.runTask(name, getProject().getProjectDir());
+  }
+
+  public void runTask(String name, String projectPath) {
+    File projectDir = new File(getProject().getProjectDir().getPath().concat(projectPath));
+    this.runTask(name, projectDir);
+  }
+
+  private void runTask(String name, File projectDir) {
     logger.lifecycle("Connecting to project to run task {}", name);
+    logger.lifecycle("Project Directory {}", projectDir);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
             .useGradleVersion(Constants.GRADLE_WRAPPER_VERSION)
-            .forProjectDirectory(getProject().getProjectDir())
+            .forProjectDirectory(projectDir)
             .connect()) {
       logger.lifecycle("Connected! executing task {}", name);
       connection.newBuild().forTasks(name).run();
     } catch (Exception e) {
       logger.warn(
-          "Error executing 'gradle wrapper', please run it you manually: {}", e.getMessage());
+          "Error executing 'gradle {}', please run it you manually: {}", name, e.getMessage());
     }
   }
 
