@@ -15,7 +15,6 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
   public void execute() throws IOException, CleanException {
     super.execute();
     builder.runTask("wrapper", String.format("/deployment/%s", name));
-    logger.lifecycle("persisted acceptance-test task");
   }
 
   @Override
