@@ -370,7 +370,7 @@ public class ModuleBuilder {
   }
 
   public void runTask(String name, String projectPath) {
-    File projectDir = new File(getProject().getProjectDir().getPath().concat(projectPath));
+    File projectDir = new File(projectPath);
     this.runTask(name, projectDir);
   }
 

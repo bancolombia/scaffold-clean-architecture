@@ -14,7 +14,8 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
   @Override
   public void execute() throws IOException, CleanException {
     super.execute();
-    builder.runTask("wrapper", String.format("/deployment/%s", name));
+    builder.runTask(
+        "wrapper", getProject().getProjectDir().getPath().concat("/deployment/" + name));
   }
 
   @Override
