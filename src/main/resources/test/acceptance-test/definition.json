@@ -13,6 +13,7 @@
     "test/acceptance-test/TestParallel.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/TestParallel.java",
     "test/acceptance-test/utils/validator.test.utils.java.mustache": "deployment/{{acceptanceTestPath}}/src/test/java/{{packagePath}}/utils/ValidatorTestUtils.java",
     "test/acceptance-test/build.gradle.mustache": "deployment/{{acceptanceTestPath}}/build.gradle",
-    "test/acceptance-test/settings.gradle.mustache": "deployment/{{acceptanceTestPath}}/settings.gradle"
+    "test/acceptance-test/settings.gradle.mustache": "deployment/{{acceptanceTestPath}}/settings.gradle",
+    "structure/root/.gitignore.mustache": "deployment/{{acceptanceTestPath}}/.gitignore"
   }
 }
