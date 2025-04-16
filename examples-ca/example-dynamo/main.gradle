@@ -1,8 +1,8 @@
 allprojects {
     repositories {
         mavenCentral()
-        maven { url "https://repo.spring.io/snapshot" }
-        maven { url "https://repo.spring.io/milestone" }
+        maven { url = "https://repo.spring.io/snapshot" }
+        maven { url = "https://repo.spring.io/milestone" }
     }
 }
 
@@ -15,7 +15,11 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
 
     compileJava.dependsOn validateStructure
-    sourceCompatibility = JavaVersion.VERSION_17
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
     test {
         useJUnitPlatform()
@@ -33,12 +37,12 @@ subprojects {
     }
 
     pitest {
-        pitestVersion = '1.17.0'
+        pitestVersion = '1.19.1'
         junit5PluginVersion = '1.2.1'
         targetClasses = ['co.com.bancolombia.*']
         outputFormats = ['XML', 'HTML']
         threads = 8
-        verbose = true
+        verbose = false
         exportLineCoverage = true
         timestampedReports = false
         failWhenNoMutations = false
@@ -109,7 +113,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.10.2'
-    distributionSha256Sum = '31c55713e40233a8303827ceb42ca48a47267a0ad4bab9177123121e71524c26'
+    gradleVersion = '8.13'
+    distributionSha256Sum = '20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78'
     validateDistributionUrl = true
 }
