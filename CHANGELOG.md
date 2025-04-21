@@ -1,8 +1,35 @@
 # Changelog
 
+## [v3.22.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.3) (2025-04-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.2...v3.22.3)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#663](https://github.com/bancolombia/scaffold-clean-architecture/pull/663) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
+## [v3.22.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.2) (2025-04-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.1...v3.22.2)
+
+**Merged pull requests:**
+
+- fix\(acceptance-test\): Configure karate and gradle tasks for Acceptance Test project template [\#665](https://github.com/bancolombia/scaffold-clean-architecture/pull/665) ([santicalleg](https://github.com/santicalleg))
+- build\(deps\): bump http-proxy-middleware from 2.0.7 to 2.0.9 in /docs [\#664](https://github.com/bancolombia/scaffold-clean-architecture/pull/664) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.7.0 to 4.7.1 [\#662](https://github.com/bancolombia/scaffold-clean-architecture/pull/662) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.28.13 to 3.28.15 [\#661](https://github.com/bancolombia/scaffold-clean-architecture/pull/661) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.5.0 to 4.6.0 [\#660](https://github.com/bancolombia/scaffold-clean-architecture/pull/660) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.6.0 to 4.6.2 [\#659](https://github.com/bancolombia/scaffold-clean-architecture/pull/659) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump estree-util-value-to-estree from 3.1.2 to 3.3.3 in /docs [\#658](https://github.com/bancolombia/scaffold-clean-architecture/pull/658) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(examples-ca\): update dependencies [\#657](https://github.com/bancolombia/scaffold-clean-architecture/pull/657) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.22.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.1) (2025-04-08)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.0...v3.22.1)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#636](https://github.com/bancolombia/scaffold-clean-architecture/pull/636) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
 
 ## [v3.22.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.0) (2025-04-08)
 
