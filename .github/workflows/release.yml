@@ -1,8 +1,5 @@
 name: "release-actions"
 on:
-  push:
-    branches:
-      - feature/*
   release:
     types: [ released ]
 jobs:
@@ -30,12 +27,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-#      - name: Set env
-#        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-#      - name: Upgrade Gradle.properties
-#        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
-#      - name: Upgrade Constants.java
-#        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      - name: Upgrade Gradle.properties
+        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
+      - name: Upgrade Constants.java
+        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Generate Changelog
@@ -47,23 +44,23 @@ jobs:
           issues: true
           issuesWoLabels: true
           stripGeneratorNotice: true
-#      - name: Save version
-#        uses: github-actions-x/commit@722d56b8968bf00ced78407bbe2ead81062d8baa # v2.9
-#        with:
-#          github-token: ${{ steps.generate_token.outputs.token }}
-#          push-branch: "master"
-#          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version [skip ci]'
-#          force-add: "true"
-#          force-push: "true"
-#          files: CHANGELOG.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
-#          name: Release Bot
-#          email: release-bot@bancolombia.com.co
+      - name: Save version
+        uses: github-actions-x/commit@722d56b8968bf00ced78407bbe2ead81062d8baa # v2.9
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}
+          push-branch: "master"
+          commit-message: 'upgrade version to ${{ env.RELEASE_VERSION }} version [skip ci]'
+          force-add: "true"
+          force-push: "true"
+          files: CHANGELOG.md gradle.properties src/main/java/co/com/bancolombia/Constants.java
+          name: Release Bot
+          email: release-bot@bancolombia.com.co
       - name: Set Analytics Endpoint
         run: sed -i "s/ENDPOINT = \"\"/ENDPOINT = \"$ANALYTICS_ENDPOINT\"/g" src/main/java/co/com/bancolombia/utils/analytics/AnalyticsExporter.java
         env:
           ANALYTICS_ENDPOINT: ${{ secrets.ANALYTICS_ENDPOINT }}
-#      - name: Publish plugin in gradle plugins
-#        run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
+      - name: Publish plugin in gradle plugins
+        run: ./gradlew publishPlugins -Pgradle.publish.key=${{ secrets.KEY_GRADLE }} -Pgradle.publish.secret=${{ secrets.SECRET_GRADLE }}
       - name: Publish plugin in github packages
         run: ./gradlew publish --info
         env:
