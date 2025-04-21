@@ -4,6 +4,11 @@ on:
     types: [ released ]
 jobs:
   release:
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+      packages: write
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
