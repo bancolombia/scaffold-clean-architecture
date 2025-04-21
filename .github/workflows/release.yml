@@ -30,12 +30,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Set env
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-      - name: Upgrade Gradle.properties
-        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
-      - name: Upgrade Constants.java
-        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
+#      - name: Set env
+#        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+#      - name: Upgrade Gradle.properties
+#        run: sed -i 's/version=.*/version=${{ env.RELEASE_VERSION }}/g' gradle.properties
+#      - name: Upgrade Constants.java
+#        run: sed -i 's/PLUGIN_VERSION = .*/PLUGIN_VERSION = "${{ env.RELEASE_VERSION }}";/g' src/main/java/co/com/bancolombia/Constants.java
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Generate Changelog
