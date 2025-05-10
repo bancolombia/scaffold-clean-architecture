@@ -1,0 +1,4 @@
+.idea/**/gradle.xml
+.idea/**/libraries
+/gradle/wrapper/gradle-wrapper.jar
+build-cache
