@@ -17,6 +17,7 @@ import org.gradle.api.Task;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.Assertions;
 
+@SuppressWarnings("unchecked")
 public class TestUtils extends Assertions {
 
   private TestUtils() {}

@@ -161,7 +161,7 @@ class ValidateStructureTaskTest {
         new File(TEST_DIR + "/infrastructure/driven-adapters/mongo-repository/build.gradle")
             .exists());
 
-    project.getTasks().create("validate", ValidateStructureTask.class);
+    project.getTasks().register("validate", ValidateStructureTask.class);
     task = (ValidateStructureTask) project.getTasks().getByName("validate");
   }
 
