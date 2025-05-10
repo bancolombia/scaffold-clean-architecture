@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.api.Project;
@@ -44,11 +43,10 @@ public class TestUtils extends Assertions {
 
   public static void assertFilesExistsInDir(String dir, String... files) {
     final String realDir = dir.endsWith("/") ? dir : dir + "/";
-    //noinspection SimplifyStreamApiCallChains
     assertFilesExists(
         Arrays.stream(files)
             .map(file -> realDir + file)
-            .collect(Collectors.toList())
+            .toList()
             .toArray(new String[files.length]));
   }
 
@@ -64,7 +62,7 @@ public class TestUtils extends Assertions {
             .withProjectDir(dirFile)
             .build();
     for (Class<? extends Task> task : tasks) {
-      project.getTasks().create(task.getSimpleName(), task);
+      project.getTasks().register(task.getSimpleName(), task);
     }
     return project;
   }
@@ -79,7 +77,7 @@ public class TestUtils extends Assertions {
   }
 
   public static <T extends Task> T createTask(Project project, Class<T> taskClass) {
-    project.getTasks().create(taskClass.getSimpleName(), taskClass);
+    project.getTasks().register(taskClass.getSimpleName(), taskClass);
     return getTask(project, taskClass);
   }
 
