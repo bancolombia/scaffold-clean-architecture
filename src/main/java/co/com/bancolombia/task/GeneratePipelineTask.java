@@ -13,6 +13,10 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GeneratePipelineTask extends AbstractResolvableTypeTask {
   private BooleanOption monoRepo = BooleanOption.FALSE;
 
+  public GeneratePipelineTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Option(option = "monoRepo", description = "is Mono repository")
   public void setMonoRepo(BooleanOption monoRepo) {
     this.monoRepo = monoRepo;

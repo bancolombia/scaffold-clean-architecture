@@ -8,6 +8,10 @@ import co.com.bancolombia.task.annotations.CATask;
     description = "Generate helper in infrastructure layer")
 public class GenerateHelperTask extends AbstractResolvableTypeTask {
 
+  public GenerateHelperTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Override
   protected void prepareParams() {
     // no additional params required

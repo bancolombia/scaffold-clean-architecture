@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Getter;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.internal.logging.text.StyledTextOutput;
 
@@ -22,6 +25,14 @@ import org.gradle.internal.logging.text.StyledTextOutput;
 public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   private final Set<String> dependencies = new HashSet<>();
   private BooleanOption git = BooleanOption.TRUE;
+
+  @Input @Getter private final Property<String> projectPath;
+
+  public UpdateProjectTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+    this.projectPath = getProject().getObjects().property(String.class);
+    this.projectPath.set(getProject().getProjectDir().toString());
+  }
 
   @Option(option = "dependencies", description = "Set dependencies to update")
   public void setDependencies(String dependencies) {
@@ -44,10 +55,9 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
                   + " or pass the '--git false' flag");
       return;
     }
-    // Add specific parameters for UpgradeActions
-    String basePath = getProject().getProjectDir().toString();
+
     builder.addParam(DEPENDENCIES_TO_UPDATE, dependencies);
-    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithGradleExtension(basePath));
+    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithGradleExtension(projectPath.get()));
     UpgradeFactory factory = new UpgradeFactory();
     factory.buildModule(builder);
     builder.persist();

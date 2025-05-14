@@ -29,6 +29,10 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption withExample = BooleanOption.FALSE;
   private JavaVersion javaVersion = JavaVersion.VERSION_21;
 
+  public GenerateStructureTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
     this.packageName = packageName;

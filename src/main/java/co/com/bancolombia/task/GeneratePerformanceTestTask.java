@@ -9,6 +9,10 @@ import java.util.ArrayList;
     description = "Generate performance test")
 public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
 
+  public GeneratePerformanceTestTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Override
   protected void prepareParams() {
     var modules = new ArrayList<>(getProject().getChildProjects().keySet());

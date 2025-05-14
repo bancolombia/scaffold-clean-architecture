@@ -11,6 +11,10 @@ import java.util.ArrayList;
     description = "Generate subproject by karate framework in deployment layer")
 public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
+  public GenerateAcceptanceTestTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Override
   public void execute() throws IOException, CleanException {
     super.execute();

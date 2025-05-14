@@ -12,6 +12,10 @@ import org.gradle.api.tasks.options.Option;
 public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   private String name = "";
 
+  public GenerateModelTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Option(option = "name", description = "Set the model name")
   public void setName(String modelName) {
     this.name = modelName;

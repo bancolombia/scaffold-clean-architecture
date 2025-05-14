@@ -2,6 +2,7 @@ package co.com.bancolombia.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.gradle.api.Project;
 
 /** This class should translate the dependency check vulnerabilities to sonar issues */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,19 +22,33 @@ public class SonarCheck {
   public static final String DEFAULT_LOCATION =
       "src/main/java/co/com/bancolombia/MainApplication.java";
 
-  public static void parse(Project project) {
+  @SneakyThrows
+  public static void parse(String projectPath) {
     final ObjectMapper mapper =
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    parseSingle(project, mapper);
-    project.getSubprojects().forEach(p -> parseSingle(p, mapper));
+
+    parseSingle(projectPath, mapper);
+
+    // Procesar los subproyectos
+    File projectDir = new File(projectPath);
+    File[] subProjectDirs = projectDir.listFiles(File::isDirectory);
+    if (subProjectDirs != null) {
+      for (File subDir : subProjectDirs) {
+        // Verificar que sea un subproyecto válido (tiene build.gradle)
+        if (new File(subDir, "build.gradle").exists()) {
+          parseSingle(subDir.getAbsolutePath(), mapper);
+        }
+      }
+    }
   }
 
   @SneakyThrows
-  private static void parseSingle(Project project, ObjectMapper mapper) {
+  private static void parseSingle(String projectPath, ObjectMapper mapper) {
     List<Issue> issues;
-    if (project.file(INPUT).exists()) {
+    File inputFile = new File(projectPath, INPUT);
+    if (inputFile.exists()) {
       issues =
-          Stream.of(FileUtils.readFile(project, INPUT))
+          Stream.of(Files.readString(inputFile.toPath()))
               .map(content -> getReport(content, mapper))
               .flatMap(report -> report.dependencies.stream())
               .filter(
@@ -46,9 +60,13 @@ public class SonarCheck {
     } else {
       issues = new ArrayList<>();
     }
-    Files.createDirectories(project.file("build/reports/").toPath());
-    FileUtils.writeString(
-        project, OUTPUT, mapper.writeValueAsString(SonarReport.builder().issues(issues).build()));
+
+    File outputDir = new File(projectPath, "build/reports/");
+    outputDir.mkdirs();
+    File outputFile = new File(outputDir, "dependency-check-sonar.json");
+    Files.writeString(
+        outputFile.toPath(),
+        mapper.writeValueAsString(SonarReport.builder().issues(issues).build()));
   }
 
   private static Stream<Issue> extractIssues(Dependency dependency) {

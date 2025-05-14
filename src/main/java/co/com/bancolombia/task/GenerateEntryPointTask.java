@@ -25,6 +25,10 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String tech = "rabbitmq";
   private BooleanOption authorization = BooleanOption.FALSE;
 
+  public GenerateEntryPointTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  }
+
   @Option(
       option = "server",
       description = "Set server on which the application will run when RESTMVC type")
