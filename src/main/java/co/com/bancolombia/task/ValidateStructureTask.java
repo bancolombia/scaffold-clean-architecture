@@ -7,14 +7,16 @@ import co.com.bancolombia.factory.validations.architecture.ArchitectureValidatio
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
+import lombok.Getter;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
@@ -22,6 +24,7 @@ import org.gradle.api.artifacts.DependencySet;
 import org.gradle.api.artifacts.UnknownConfigurationException;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.Property;
+import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Optional;
 
@@ -37,44 +40,89 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
   private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
   private static final String AWS_BOM = "bom";
 
+  @Input @Getter private final Property<String> projectPath;
+  @Input @Getter private final SetProperty<String> moduleNames;
+  @Input @Getter private final Property<Boolean> hasSpringWeb;
+  @Input @Getter private final SetProperty<File> projectDirectories;
+  @Input @Getter private final Property<Boolean> isValidateModelLayer;
+  @Input @Getter private final Property<Boolean> isValidateUseCaseLayer;
+  @Input @Getter private final Property<Boolean> isValidateInfrastructureLayer;
+
   @Input
   @Optional
   public abstract Property<String> getWhitelistedDependencies();
 
+  @Inject
+  public ValidateStructureTask() throws IOException {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+    this.projectPath = getProject().getObjects().property(String.class);
+    this.projectPath.set(getProject().getProjectDir().getPath());
+
+    this.moduleNames = getProject().getObjects().setProperty(String.class);
+    this.moduleNames.set(getProject().getChildProjects().keySet());
+
+    this.projectDirectories = getProject().getObjects().setProperty(File.class);
+    this.projectDirectories.set(getProject().provider(this::collectAllProjectDirectories));
+
+    setupArchitectureValidation();
+
+    this.hasSpringWeb = getProject().getObjects().property(Boolean.class);
+    this.hasSpringWeb.set(getProject().provider(this::checkForSpringWebDependency));
+
+    this.isValidateModelLayer = getProject().getObjects().property(Boolean.class);
+    this.isValidateModelLayer.set(getProject().provider(this::validateModelLayer));
+
+    this.isValidateUseCaseLayer = getProject().getObjects().property(Boolean.class);
+    this.isValidateUseCaseLayer.set(getProject().provider(this::validateUseCaseLayer));
+
+    this.isValidateInfrastructureLayer = getProject().getObjects().property(Boolean.class);
+    this.isValidateInfrastructureLayer.set(
+        getProject().provider(this::validateInfrastructureLayer));
+  }
+
   @Override
   public void execute() throws IOException, CleanException {
-    String packageName =
-        FileUtils.readProperties(getProject().getProjectDir().getPath(), "package");
-    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    getModules().forEach(d -> logger.lifecycle("Submodules: " + d.getKey()));
-    logger.lifecycle("Project Package: {}", packageName);
-    checkForSpringWebDependency();
-    ArchitectureValidation.inject(getProject(), builder);
-
-    if (!validateModelLayer()) {
+    if (!isValidateModelLayer.get()) {
       throw new CleanException("Model module is invalid");
     }
-    if (!validateUseCaseLayer()) {
+    if (!isValidateUseCaseLayer.get()) {
       throw new CleanException("Use case module is invalid");
     }
-    if (!validateInfrastructureLayer()) {
+    if (!isValidateInfrastructureLayer.get()) {
       throw new CleanException("Infrastructure layer is invalid");
     }
     logger.lifecycle("The project is valid");
   }
 
-  private void checkForSpringWebDependency() {
-    boolean hasSpringWeb = false;
+  private void setupArchitectureValidation() throws IOException {
+    String packageName = FileUtils.readProperties(projectPath.get(), "package");
+    logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
+    moduleNames.get().forEach(name -> logger.lifecycle("Submodules: " + name));
+    logger.lifecycle("Project Package: {}", packageName);
+    ArchitectureValidation.inject(builder, getLogger(), projectDirectories.get());
+  }
+
+  private Set<File> collectAllProjectDirectories() {
+    return getProject().getAllprojects().stream()
+        .map(Project::getProjectDir)
+        .collect(Collectors.toSet());
+  }
+
+  private boolean checkForSpringWebDependency() {
+    boolean springWebDependencyPresent = false;
     try {
-      hasSpringWeb =
+      springWebDependencyPresent =
           getProject().getChildProjects().get(APP_SERVICE).getConfigurations()
               .getByName("testImplementation").getDependencies().stream()
               .anyMatch(d -> d.getName().equals("spring-web"));
     } catch (UnknownConfigurationException e) {
       logger.warn("configuration testImplementation not present");
     }
-    logger.lifecycle("has spring-web dependency to run validations: {}", hasSpringWeb);
-    builder.addParam("hasSpringWeb", hasSpringWeb);
+
+    logger.lifecycle(
+        "has spring-web dependency to run validations: {}", springWebDependencyPresent);
+    builder.addParam("hasSpringWeb", springWebDependencyPresent);
+    return springWebDependencyPresent;
   }
 
   private boolean validateModelLayer() {
@@ -142,25 +190,23 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
     logger.lifecycle("Validating Infrastructure Layer");
     List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, APP_SERVICE, USE_CASE_MODULE);
     AtomicBoolean valid = new AtomicBoolean(true);
-    Set<Map.Entry<String, Project>> modules = getModules();
 
-    modules.stream()
-        .filter(module -> !modulesExcludes.contains(module.getKey()))
-        .forEach(moduleFiltered -> validateModule(valid, moduleFiltered));
-
+    moduleNames.get().stream()
+        .filter(moduleName -> !modulesExcludes.contains(moduleName))
+        .forEach(moduleName -> validateModule(valid, moduleName));
     return valid.get();
   }
 
-  private void validateModule(AtomicBoolean valid, Map.Entry<String, Project> moduleFiltered) {
-    logger.lifecycle("Validating {} Module", moduleFiltered.getKey());
+  private void validateModule(AtomicBoolean valid, String moduleFiltered) {
+    logger.lifecycle("Validating {} Module", moduleFiltered);
     validateDependencies(valid, moduleFiltered);
     if (!valid.get()) {
-      logger.error("--- {} is violating a rule", moduleFiltered.getKey());
+      logger.error("--- {} is violating a rule", moduleFiltered);
     }
   }
 
   private boolean validateExistingModule(String module) {
-    return (getProject().getChildProjects().containsKey(module));
+    return moduleNames.get().contains(module);
   }
 
   private Configuration getConfiguration(String moduleName) {
@@ -183,8 +229,8 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
         .forEach(dependency -> logger.lifecycle("--- Dependency: " + dependency.getName()));
   }
 
-  private void validateDependencies(AtomicBoolean valid, Map.Entry<String, Project> dependency) {
-    Configuration configuration = getConfiguration(dependency.getKey());
+  private void validateDependencies(AtomicBoolean valid, String dependency) {
+    Configuration configuration = getConfiguration(dependency);
     if (configuration.getDependencies().stream().anyMatch(filterDependenciesInfrastructure())) {
       valid.set(false);
     }
@@ -201,9 +247,5 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
       return crossRefDep
           && !Arrays.asList(MODEL_MODULE, USE_CASE_MODULE).contains(dependency.getName());
     };
-  }
-
-  private Set<Map.Entry<String, Project>> getModules() {
-    return getProject().getChildProjects().entrySet();
   }
 }

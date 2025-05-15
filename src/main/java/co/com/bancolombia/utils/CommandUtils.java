@@ -9,7 +9,7 @@ import org.gradle.api.logging.Logger;
 
 @AllArgsConstructor
 public class CommandUtils {
-  private static final String GIT_STATUS = "git status";
+  private static final String[] GIT_STATUS = {"git", "status"};
   private final Runtime rt;
 
   public static CommandUtils getDefault() {

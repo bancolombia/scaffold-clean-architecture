@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.gradle.api.Project;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -74,8 +75,12 @@ class ArchitectureValidationTest {
     when(styledTextOutput.append(any())).thenReturn(styledTextOutput);
     ModuleBuilder builder = new ModuleBuilder(project);
     builder.setStyledLogger(styledTextOutput);
+
+    var projectDirectories =
+        project.getAllprojects().stream().map(Project::getProjectDir).collect(Collectors.toSet());
+
     // Act
-    ArchitectureValidation.inject(project, builder);
+    ArchitectureValidation.inject(builder, project.getLogger(), projectDirectories);
     // Assert
     assertTrue(Files.exists(testFile));
   }
