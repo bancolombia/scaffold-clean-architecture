@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 
 @CATask(
     name = "generateAcceptanceTest",
@@ -15,7 +16,7 @@ import org.gradle.api.tasks.Input;
     description = "Generate subproject by karate framework in deployment layer")
 public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
-  @Input @Getter private final Property<String> projectPath;
+  @Internal @Getter private final Property<String> projectPath;
   @Input @Getter private final SetProperty<String> moduleNames;
 
   public GenerateAcceptanceTestTask() {

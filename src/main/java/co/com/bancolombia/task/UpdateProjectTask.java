@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.internal.logging.text.StyledTextOutput;
 
@@ -26,7 +26,7 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   private final Set<String> dependencies = new HashSet<>();
   private BooleanOption git = BooleanOption.TRUE;
 
-  @Input @Getter private final Property<String> projectPath;
+  @Internal @Getter private final Property<String> projectPath;
 
   public UpdateProjectTask() {
     notCompatibleWithConfigurationCache("This task performs validations that should always run");

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
@@ -19,7 +18,7 @@ import org.gradle.api.tasks.options.OptionValues;
 public class InternalTask extends AbstractCleanArchitectureDefaultTask {
   private Action action = Action.SONAR_CHECK;
 
-  @Input @Getter private final Property<String> projectPath;
+  @Internal @Getter private final Property<String> projectPath;
 
   public InternalTask() {
     notCompatibleWithConfigurationCache("This task performs validations that should always run");

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.inject.Inject;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.options.Option;
@@ -22,7 +21,6 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
 
   @Input private final ListProperty<String> availableModules;
 
-  @Inject
   public DeleteModuleTask() {
     super();
     notCompatibleWithConfigurationCache("This task performs validations that should always run");
