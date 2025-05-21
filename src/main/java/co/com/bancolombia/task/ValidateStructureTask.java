@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import lombok.Getter;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Configuration;
@@ -52,9 +51,7 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
   @Optional
   public abstract Property<String> getWhitelistedDependencies();
 
-  @Inject
-  public ValidateStructureTask() throws IOException {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
+  public ValidateStructureTask() {
     this.projectPath = getProject().getObjects().property(String.class);
     this.projectPath.set(getProject().getProjectDir().getPath());
 
@@ -63,8 +60,6 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
 
     this.projectDirectories = getProject().getObjects().setProperty(File.class);
     this.projectDirectories.set(getProject().provider(this::collectAllProjectDirectories));
-
-    setupArchitectureValidation();
 
     this.hasSpringWeb = getProject().getObjects().property(Boolean.class);
     this.hasSpringWeb.set(getProject().provider(this::checkForSpringWebDependency));
@@ -82,6 +77,8 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
 
   @Override
   public void execute() throws IOException, CleanException {
+    setupArchitectureValidation();
+
     if (!isValidateModelLayer.get()) {
       throw new CleanException("Model module is invalid");
     }

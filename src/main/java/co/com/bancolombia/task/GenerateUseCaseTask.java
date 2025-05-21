@@ -16,10 +16,6 @@ public class GenerateUseCaseTask extends AbstractCleanArchitectureDefaultTask {
   private static final String USECASE_CLASS_NAME = "UseCase";
   private String name = "";
 
-  public GenerateUseCaseTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
-  }
-
   @Option(option = "name", description = "Set UseCase name")
   public void setName(String useCaseName) {
     this.name = useCaseName;

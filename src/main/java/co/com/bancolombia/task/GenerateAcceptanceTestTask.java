@@ -20,8 +20,6 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
   @Input @Getter private final SetProperty<String> moduleNames;
 
   public GenerateAcceptanceTestTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
-
     this.projectPath = getProject().getObjects().property(String.class);
     this.projectPath.set(getProject().getProjectDir().getPath());
 

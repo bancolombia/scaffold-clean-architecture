@@ -13,10 +13,6 @@ import org.gradle.api.tasks.options.OptionValues;
 public class AnalyticsTask extends AbstractCleanArchitectureDefaultTask {
   private BooleanOption enabled = BooleanOption.TRUE;
 
-  public AnalyticsTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
-  }
-
   @Option(option = "enabled", description = "Set analytics state")
   public void setAnalyticsState(BooleanOption enabled) {
     this.enabled = enabled;

@@ -22,8 +22,6 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   @Input private final ListProperty<String> availableModules;
 
   public DeleteModuleTask() {
-    super();
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
     this.availableModules = getProject().getObjects().listProperty(String.class);
     this.availableModules.set(new ArrayList<>(getProject().getChildProjects().keySet()));
   }

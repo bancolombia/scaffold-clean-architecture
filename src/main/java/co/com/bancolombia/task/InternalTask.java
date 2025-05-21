@@ -21,7 +21,6 @@ public class InternalTask extends AbstractCleanArchitectureDefaultTask {
   @Internal @Getter private final Property<String> projectPath;
 
   public InternalTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
     projectPath = getProject().getObjects().property(String.class);
     projectPath.set(getProject().getProjectDir().getPath());
   }

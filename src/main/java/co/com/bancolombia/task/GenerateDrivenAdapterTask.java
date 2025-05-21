@@ -26,10 +26,6 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private BooleanOption eda = BooleanOption.FALSE;
   private String tech = "rabbitmq";
 
-  public GenerateDrivenAdapterTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
-  }
-
   @Option(option = "url", description = "Set driven adapter url when RESTCONSUMER type")
   public void setUrl(String url) {
     this.url = url;

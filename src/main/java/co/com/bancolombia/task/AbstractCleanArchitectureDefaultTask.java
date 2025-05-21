@@ -29,6 +29,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   protected final Logger logger = getProject().getLogger();
 
   protected AbstractCleanArchitectureDefaultTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
     builder.setStyledLogger(
         getTextOutputFactory().create(AbstractCleanArchitectureDefaultTask.class));
   }

@@ -29,7 +29,6 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   @Internal @Getter private final Property<String> projectPath;
 
   public UpdateProjectTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
     this.projectPath = getProject().getObjects().property(String.class);
     this.projectPath.set(getProject().getProjectDir().toString());
   }
