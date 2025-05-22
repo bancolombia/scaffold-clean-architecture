@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GenerateTestTaskTest {
@@ -23,15 +23,24 @@ class GenerateTestTaskTest {
   private static GenerateAcceptanceTestTask task;
   private static Project project;
 
-  @BeforeAll
-  static void setup() throws IOException, CleanException {
+  @BeforeEach
+  void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
     project = setupProject(GenerateTestTaskTest.class, GenerateStructureTask.class);
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
     taskStructure.execute();
+  }
 
+  @AfterEach
+  void tearDown() {
+    deleteStructure(Path.of(TEST_DIR));
+  }
+
+  @Test
+  void generateAcceptanceTest() throws IOException, CleanException {
+    // Arrange
     ProjectBuilder.builder()
         .withName("app-service")
         .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
@@ -39,16 +48,6 @@ class GenerateTestTaskTest {
         .build();
 
     task = createTask(project, GenerateAcceptanceTestTask.class);
-  }
-
-  @AfterAll
-  static void tearDown() {
-    deleteStructure(Path.of(TEST_DIR));
-  }
-
-  @Test
-  void generateAcceptanceTest() throws IOException, CleanException {
-    // Arrange
     task.setName("acceptance-test");
     // Act
     task.execute();
@@ -76,6 +75,7 @@ class GenerateTestTaskTest {
         .withParent(project)
         .build();
 
+    task = createTask(project, GenerateAcceptanceTestTask.class);
     task.setName("acceptance-test");
     // Act
     task.execute();
