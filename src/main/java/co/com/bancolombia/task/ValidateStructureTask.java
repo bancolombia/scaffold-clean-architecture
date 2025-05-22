@@ -25,6 +25,8 @@ import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Optional;
 
 @CATask(
@@ -39,10 +41,10 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
   private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
   private static final String AWS_BOM = "bom";
 
-  @Input @Getter private final Property<String> projectPath;
+  @Internal @Getter private final Property<String> projectPath;
   @Input @Getter private final SetProperty<String> moduleNames;
   @Input @Getter private final Property<Boolean> hasSpringWeb;
-  @Input @Getter private final SetProperty<File> projectDirectories;
+  @InputFiles @Getter private final SetProperty<File> projectDirectories;
   @Input @Getter private final Property<Boolean> isValidateModelLayer;
   @Input @Getter private final Property<Boolean> isValidateUseCaseLayer;
   @Input @Getter private final Property<Boolean> isValidateInfrastructureLayer;
