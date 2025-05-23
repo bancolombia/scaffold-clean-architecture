@@ -5,13 +5,14 @@ import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
-import org.gradle.api.Project;
+import org.gradle.api.logging.Logger;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ArchitectureValidation {
@@ -23,13 +24,12 @@ public final class ArchitectureValidation {
   private static final String FORBIDDEN_DOMAIN_NAMES =
       "rabbit,sqs,sns,ibm,dynamo,aws,mysql,postgres,redis,mongo,rsocket,r2dbc,http,kms,s3,graphql,kafka";
 
-  public static void inject(Project project, ModuleBuilder builder) {
+  public static void inject(ModuleBuilder builder, Logger logger, Set<File> files) {
     if (!FileUtils.readBooleanProperty(SKIP_PROP)) {
       String os = System.getProperty("os.name");
       String paths =
-          project.getAllprojects().stream()
-              .map(p -> "\"" + toOSPath(os, p.getProjectDir()) + "/\"")
-              .collect(Collectors.joining(","));
+          files.stream().map(f -> "\"" + toOSPath(os, f) + "/\"").collect(Collectors.joining(","));
+
       builder.addParam("reactive", builder.isReactive());
       builder.addParam("modulePaths", paths);
       builder.addParam(
@@ -40,10 +40,11 @@ public final class ArchitectureValidation {
           "forbiddenDomainClassNames",
           loadForbiddenValuesForAsString(
               FORBIDDEN_DOMAIN_CLASS_NAMES_PROP, FORBIDDEN_DOMAIN_NAMES));
-      project.getAllprojects().stream()
-          .filter(p -> p.getName().equals(Constants.APP_SERVICE))
+
+      files.stream()
+          .filter(file -> file.getName().equals(Constants.APP_SERVICE))
           .findFirst()
-          .ifPresent(appService -> generateArchUnitFiles(project, appService, builder));
+          .ifPresent(appService -> generateArchUnitFiles(logger, appService.getName(), builder));
     }
   }
 
@@ -109,10 +110,8 @@ public final class ArchitectureValidation {
 
   @SneakyThrows
   private static void generateArchUnitFiles(
-      Project project, Project appService, ModuleBuilder builder) {
-    project
-        .getLogger()
-        .lifecycle("Injecting ArchitectureTest in module {}", appService.getProjectDir().getName());
+      Logger logger, String appService, ModuleBuilder builder) {
+    logger.lifecycle("Injecting ArchitectureTest in module {}", appService);
     builder.setupFromTemplate("structure/applications/appservice/arch-validations");
     builder.appendDependencyToModule(
         Constants.APP_SERVICE,

@@ -95,8 +95,8 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private void appendRCommonsParams() {
     String[] techs = tech.split(",");
 
-    for (String tech : techs) {
-      builder.addParam(tech, true);
+    for (String t : techs) {
+      builder.addParam(t, true);
     }
     builder.addParam("eda", eda == BooleanOption.TRUE);
   }

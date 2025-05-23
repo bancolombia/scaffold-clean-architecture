@@ -34,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@SuppressWarnings("unchecked")
 class AbstractCleanArchitectureDefaultTaskTest {
   private static final String TEST_DIR = getTestDir(AbstractCleanArchitectureDefaultTaskTest.class);
   private Project project;

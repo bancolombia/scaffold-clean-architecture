@@ -29,14 +29,6 @@ class GeneratePerformanceTestTaskTest {
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
     taskStructure.execute();
-
-    ProjectBuilder.builder()
-        .withName("app-service")
-        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
-        .withParent(project)
-        .build();
-
-    task = createTask(project, GeneratePerformanceTestTask.class);
   }
 
   @AfterEach
@@ -46,6 +38,14 @@ class GeneratePerformanceTestTaskTest {
 
   @Test
   void generatePerformanceTest() throws IOException, CleanException {
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
+        .withParent(project)
+        .build();
+
+    task = createTask(project, GeneratePerformanceTestTask.class);
+
     task.setType("JMETER");
     task.execute();
     assertFilesExistsInDir(TEST_DIR + "/performance-test/", "Jmeter", "README.md");
@@ -59,6 +59,8 @@ class GeneratePerformanceTestTaskTest {
         .withProjectDir(new File(TEST_DIR + "/infrastructure/entry-points/reactive-web"))
         .withParent(project)
         .build();
+
+    task = createTask(project, GeneratePerformanceTestTask.class);
 
     task.setType("JMETER");
 

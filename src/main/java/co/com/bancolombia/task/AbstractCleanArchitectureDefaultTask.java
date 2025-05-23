@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.gradle.api.DefaultTask;
@@ -26,10 +25,11 @@ import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
 
 public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
-  protected final ModuleBuilder builder = new ModuleBuilder(getProject());
+  protected final transient ModuleBuilder builder = new ModuleBuilder(getProject());
   protected final Logger logger = getProject().getLogger();
 
   protected AbstractCleanArchitectureDefaultTask() {
+    notCompatibleWithConfigurationCache("This task performs validations that should always run");
     builder.setStyledLogger(
         getTextOutputFactory().create(AbstractCleanArchitectureDefaultTask.class));
   }
@@ -116,7 +116,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   }
 
   private String formatTypes() {
-    return resolveTypes().stream().collect(Collectors.joining("\n"));
+    return String.join("\n", resolveTypes());
   }
 
   @SneakyThrows
@@ -124,7 +124,7 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
     return ReflectionUtils.getModuleFactories(resolvePackage())
         .map(clazz -> clazz.getSimpleName().replace(resolvePrefix(), "").toUpperCase())
         .sorted()
-        .collect(Collectors.toList());
+        .toList();
   }
 
   protected String resolvePrefix() {

@@ -10,12 +10,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.gradle.api.provider.ListProperty;
+import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 @CATask(name = "deleteModule", shortcut = "dm", description = "Delete gradle module")
 public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   private String module;
+
+  @Input private final ListProperty<String> availableModules;
+
+  public DeleteModuleTask() {
+    this.availableModules = getProject().getObjects().listProperty(String.class);
+    this.availableModules.set(new ArrayList<>(getProject().getChildProjects().keySet()));
+  }
 
   @Option(option = "module", description = "Set module name to delete")
   public void setModule(String module) {
@@ -24,12 +33,12 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
 
   @OptionValues("module")
   public List<String> getModules() {
-    return new ArrayList<>(getProject().getChildProjects().keySet());
+    return availableModules.get();
   }
 
   @Override
   public void execute() throws IOException, CleanException {
-    if (module == null || !getProject().getChildProjects().containsKey(module)) {
+    if (module == null || !availableModules.get().contains(module)) {
       printHelp();
       throw new IllegalArgumentException(
           "No valid module name is set, usage: gradle deleteModule --module "

@@ -1,0 +1,13 @@
+package=co.com.bancolombia
+systemProp.version=3.22.4
+reactive=true
+lombok=true
+metrics=false
+language=java
+skipArchitectureTests=false
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.parallel=true
+org.gradle.configuration-cache.integrity-check=true
+systemProp.sonar.gradle.skipCompile=true
