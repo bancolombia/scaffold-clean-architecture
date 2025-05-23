@@ -6,6 +6,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,23 +24,11 @@ public class SonarCheck {
       "src/main/java/co/com/bancolombia/MainApplication.java";
 
   @SneakyThrows
-  public static void parse(String projectPath) {
+  public static void parse(Set<String> subProjectPath) {
     final ObjectMapper mapper =
         new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    parseSingle(projectPath, mapper);
-
-    // Procesar los subproyectos
-    File projectDir = new File(projectPath);
-    File[] subProjectDirs = projectDir.listFiles(File::isDirectory);
-    if (subProjectDirs != null) {
-      for (File subDir : subProjectDirs) {
-        // Verificar que sea un subproyecto válido (tiene build.gradle)
-        if (new File(subDir, "build.gradle").exists()) {
-          parseSingle(subDir.getAbsolutePath(), mapper);
-        }
-      }
-    }
+    subProjectPath.forEach(p -> parseSingle(p, mapper));
   }
 
   @SneakyThrows
