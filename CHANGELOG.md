@@ -1,13 +1,12 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v3.23.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.0) (2025-05-23)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.4...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.4...v3.23.0)
 
 **Merged pull requests:**
 
-- build\(deps\): bump step-security/harden-runner from 2.11.1 to 2.12.0 [\#668](https://github.com/bancolombia/scaffold-clean-architecture/pull/668) ([dependabot[bot]](https://github.com/apps/dependabot))
-- build\(release\): update release actions permissions [\#667](https://github.com/bancolombia/scaffold-clean-architecture/pull/667) ([juancgalvis](https://github.com/juancgalvis))
+- feat\(gradle\): Add gradle cache upgrade action [\#676](https://github.com/bancolombia/scaffold-clean-architecture/pull/676) ([luisgomez29](https://github.com/luisgomez29))
 
 ## [v3.22.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.22.4) (2025-04-21)
 
