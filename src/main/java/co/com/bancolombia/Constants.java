@@ -31,7 +31,7 @@ public final class Constants {
   public static final String JACOCO_VERSION = "0.8.13";
   public static final String SONAR_VERSION = "6.2.0.5505";
   public static final String COBERTURA_VERSION = "4.0.0";
-  public static final String PLUGIN_VERSION = "3.23.0";
+  public static final String PLUGIN_VERSION = "3.23.1";
   public static final String DEPENDENCY_CHECK_VERSION = "12.1.1";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
