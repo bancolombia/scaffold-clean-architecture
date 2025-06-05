@@ -13,12 +13,12 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
   public static final String SECRETS_VERSION = "4.4.31";
-  public static final String SPRING_BOOT_VERSION = "3.4.6";
+  public static final String SPRING_BOOT_VERSION = "3.5.0";
   public static final String LOMBOK_VERSION = "1.18.38";
   public static final String REACTIVE_COMMONS_VERSION = "5.4.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.11.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.31.48";
+  public static final String AWS_BOM_VERSION = "2.31.56";
   public static final String COMMONS_JMS_VERSION = "2.4.0";
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.4.0";
@@ -35,7 +35,7 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "12.1.1";
   public static final String PITEST_VERSION = "1.15.0";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "8.14.1";
+  public static final String GRADLE_WRAPPER_VERSION = "8.14";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
