@@ -6,10 +6,16 @@ import co.com.bancolombia.secretsmanager.api.GenericManagerAsync;
 {{/include-secret}}
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+{{#include-secret}}
 import org.mockito.Mock;
+{{/include-secret}}
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.autoconfigure.mongo.MongoConnectionDetails;
+import org.springframework.boot.ssl.SslBundles;
+{{#include-secret}}
+
 import reactor.core.publisher.Mono;
+{{/include-secret}}
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -57,9 +63,10 @@ class MongoConfigTest {
     @Test
     void testMongoProperties() {
         MongoDBSecret secret = mock(MongoDBSecret.class);
+        SslBundles sslBundles = mock(SslBundles.class);
         when(secret.getUri()).thenReturn("uri");
 
-        MongoConnectionDetails result = mongoConfigUnderTest.mongoProperties(secret);
+        MongoConnectionDetails result = mongoConfigUnderTest.mongoProperties(secret, sslBundles);
 
         assertNotNull(result);
     }
