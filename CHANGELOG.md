@@ -1,5 +1,17 @@
 # Changelog
 
+## [v3.23.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.1) (2025-06-05)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.0...v3.23.1)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.28.15 to 3.28.19 [\#678](https://github.com/bancolombia/scaffold-clean-architecture/pull/678) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.1 to 2.4.2 [\#677](https://github.com/bancolombia/scaffold-clean-architecture/pull/677) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.6.0 to 4.7.1 [\#674](https://github.com/bancolombia/scaffold-clean-architecture/pull/674) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#671](https://github.com/bancolombia/scaffold-clean-architecture/pull/671) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump step-security/harden-runner from 2.11.1 to 2.12.0 [\#669](https://github.com/bancolombia/scaffold-clean-architecture/pull/669) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.23.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.0) (2025-05-23)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.22.4...v3.23.0)
