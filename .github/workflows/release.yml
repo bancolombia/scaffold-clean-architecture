@@ -96,5 +96,5 @@ jobs:
       - name: Publish Libraries
         run: ./gradlew publishToSonatype --info closeAndReleaseSonatypeStagingRepository -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} -Psigning.password=${{ secrets.SIGNING_KEY_PASSWORD }} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
         env:
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.MAVEN_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.MAVEN_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.SECRET_MAVEN_USER }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SECRET_MAVEN_PASSWORD }}
