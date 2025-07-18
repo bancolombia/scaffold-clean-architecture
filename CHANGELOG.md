@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.23.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.2) (2025-07-18)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.1...v3.23.2)
+
+**Merged pull requests:**
+
+- fix\(release\): Update dependencies and release [\#689](https://github.com/bancolombia/scaffold-clean-architecture/pull/689) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump on-headers and compression in /docs [\#688](https://github.com/bancolombia/scaffold-clean-architecture/pull/688) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.12.1 to 2.13.0 [\#687](https://github.com/bancolombia/scaffold-clean-architecture/pull/687) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.29.0 to 3.29.2 [\#684](https://github.com/bancolombia/scaffold-clean-architecture/pull/684) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump brace-expansion from 1.1.11 to 1.1.12 in /docs [\#682](https://github.com/bancolombia/scaffold-clean-architecture/pull/682) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 3.28.19 to 3.29.0 [\#681](https://github.com/bancolombia/scaffold-clean-architecture/pull/681) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.12.0 to 2.12.1 [\#680](https://github.com/bancolombia/scaffold-clean-architecture/pull/680) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.23.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.1) (2025-06-05)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.0...v3.23.1)
