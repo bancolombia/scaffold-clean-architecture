@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class UpgradeY2022M05D05 implements UpgradeAction {
   @Override
-  @SuppressWarnings("unchecked")
   public boolean up(ModuleBuilder builder) {
     String name = builder.getProject().getRootProject().getName();
     try {

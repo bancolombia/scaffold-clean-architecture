@@ -43,44 +43,42 @@ public class UpgradeY2025M05D10Cache implements UpgradeAction {
         | builder.updateFile(
             GRADLE_PROPERTIES,
             content -> {
-              String modifiedContent = content;
-
-              modifiedContent =
+              content =
                   updateGradleProperties(
                       builder,
-                      modifiedContent,
+                      content,
                       CONFIGURATION_CACHE_INTEGRITY_REGEX,
                       "org.gradle.configuration-cache.integrity-check=false",
                       "org.gradle.configuration-cache.integrity-check=",
                       CONFIGURATION_CACHE_INTEGRITY);
 
-              modifiedContent =
+              content =
                   updateGradleProperties(
                       builder,
-                      modifiedContent,
+                      content,
                       CONFIGURATION_CACHE_PARALLEL_REGEX,
                       "org.gradle.configuration-cache.parallel=false",
                       "org.gradle.configuration-cache.parallel=",
                       CONFIGURATION_CACHE_PARALLEL);
 
-              modifiedContent =
+              content =
                   updateGradleProperties(
                       builder,
-                      modifiedContent,
+                      content,
                       CONFIGURATION_CACHE_REGEX,
                       "org.gradle.configuration-cache=false",
                       "org.gradle.configuration-cache=",
                       CONFIGURATION_CACHE);
-              modifiedContent =
+              content =
                   updateGradleProperties(
                       builder,
-                      modifiedContent,
+                      content,
                       CACHING_REGEX,
                       "org.gradle.caching=false",
                       "org.gradle.caching=",
                       CACHING);
 
-              return modifiedContent;
+              return content;
             })
         | UpdateUtils.appendIfNotContains(builder, "./.gitignore", "build-cache", "\nbuild-cache");
   }
@@ -100,7 +98,7 @@ public class UpgradeY2025M05D10Cache implements UpgradeAction {
 
   @Override
   public String name() {
-    return "3.22.4->3.22.5";
+    return "3.22.4->3.23.0";
   }
 
   @Override

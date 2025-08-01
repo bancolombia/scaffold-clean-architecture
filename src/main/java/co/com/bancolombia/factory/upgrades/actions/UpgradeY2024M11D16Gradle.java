@@ -43,7 +43,7 @@ public class UpgradeY2024M11D16Gradle implements UpgradeAction {
 
   @Override
   public String name() {
-    return "3.18.2->3.18.3";
+    return "3.18.2->3.19.0";
   }
 
   @Override
