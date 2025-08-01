@@ -24,10 +24,18 @@ dependencies {
     testImplementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlJacksonCoreVersion}"
 }
 
+sourceSets {
+    test {
+        resources {
+            srcDir file('src/test/java')
+            exclude '**/*.java'
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
     systemProperty "karate.options", System.properties.getProperty("karate.options")
     systemProperty "karate.env", System.properties.getProperty("karate.env")
     outputs.upToDateWhen { false }
 }
-

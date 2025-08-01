@@ -26,7 +26,7 @@ public class UpgradeY2025M03D08Gradle implements UpgradeAction {
 
   @Override
   public String name() {
-    return "3.18.3->3.20.16";
+    return "3.20.6->3.20.15";
   }
 
   @Override

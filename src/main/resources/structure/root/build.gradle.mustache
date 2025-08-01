@@ -61,9 +61,9 @@ sonar {
         {{^example}}
         property "sonar.exclusions","**/MainApplication.java"
         {{/example}}
-        property "sonar.test", "src/test"
-        property "sonar.java.binaries", "{{sonar.java.binaries}}"
-        property "sonar.junit.reportsPath", "{{sonar.junit.reportsPaths}}"
+        property "sonar.tests", "src/test"
+        property "sonar.java.binaries", "**/build/classes/java/main"
+        property "sonar.junit.reportsPath", "**/build/test-results/test"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacocoMergedReport/jacocoMergedReport.xml"
         property "sonar.pitest.reportPaths", "build/reports/pitest/mutations.xml"

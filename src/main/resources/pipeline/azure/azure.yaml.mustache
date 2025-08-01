@@ -5,6 +5,8 @@ variables:
     value: 'build-{{projectName}}'
   - name: 'Artifact.Name'
     value: '{{projectName}}'
+  - name: 'projectName'
+    value: '{{projectName}}'
 
 resources:
   - repo: self
@@ -19,57 +21,115 @@ trigger:
       - feature/*
 
 stages:
-- stage: CI
-  jobs:
-  - job: build
-    displayName: 'Build'
-    pool:
-      name: Build
-      demands:
-        - java
-    steps:
-    - task: SonarQubePrepare@5
-      displayName: 'Prepare analysis on SonarQube'
-      inputs:
-        SonarQube: SonarQube
-        scannerMode: Other
-        extraProperties: |
-          {{#monoRepo}}
-          sonar.projectKey=$(Build.Repository.Name)_$(projectName)
-          sonar.projectName=$(Build.Repository.Name)_$(projectName)
-          {{/monoRepo}}
-          {{^monoRepo}}
-          sonar.projectKey=$(Build.Repository.Name)
-          sonar.projectName=$(Build.Repository.Name)
-          {{/monoRepo}}
+  - stage: CI
+    jobs:
+      - job: build
+        displayName: 'Build'
+        pool:
+          name: Build
+        steps:
+          - checkout: self
+            fetchDepth: 0
 
-          sonar.projectVersion=$(Build.BuildNumber)
+          - task: JavaToolInstaller@1
+            inputs:
+              versionSpec: '21'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
 
-    - task: Gradle@3
-      displayName: 'Build and Test'
-      inputs:
-        workingDirectory: .
-        gradleWrapperFile: gradlew
-        tasks: 'clean build jacocoMergedReport'
-        publishJUnitResults: true
-        testResultsFiles: '**/TEST-*.xml'
-        sonarQubeRunAnalysis: true
-        sqGradlePluginVersionChoice: 'build'
+          - task: SonarQubePrepare@7
+            displayName: 'Prepare analysis on SonarQube'
+            inputs:
+              SonarQube: SonarQube
+              scannerMode: Other
+              extraProperties: |
+                {{#monoRepo}}
+                sonar.projectKey=$(Build.Repository.Name)_$(projectName)
+                sonar.projectName=$(Build.Repository.Name)_$(projectName)
+                {{/monoRepo}}
+                {{^monoRepo}}
+                sonar.projectKey=$(Build.Repository.Name)
+                sonar.projectName=$(Build.Repository.Name)
+                {{/monoRepo}}
+                sonar.projectVersion=$(Build.BuildNumber)
 
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Publish code coverage'
-      inputs:
-        summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
-        reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/html'
+          - task: Gradle@4
+            displayName: 'Build and Test'
+            condition: succeeded()
+            inputs:
+              {{#monoRepo}}
+              workingDirectory: $(projectName)
+              gradleWrapperFile: $(projectName)/gradlew
+              {{/monoRepo}}
+              {{^monoRepo}}
+              workingDirectory: .
+              gradleWrapperFile: gradlew
+              {{/monoRepo}}
+              tasks: 'clean build jacocoMergedReport'
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              sonarQubeRunAnalysis: true
+              sqGradlePluginVersionChoice: 'build'
+              javaHomeOption: 'JDKVersion'
 
-    - task: Sonar-buildbreaker@8
-      displayName: 'Quality Gate'
-      inputs:
-        SonarQube: SonarQube
+          - task: PublishCodeCoverageResults@2
+            displayName: 'Publish code coverage'
+            inputs:
+              {{#monoRepo}}
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacocoMergedReport/html'
+              {{/monoRepo}}
+              {{^monoRepo}}
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/html'
+              {{/monoRepo}}
 
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
-      inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
-        ArtifactName: '$(Artifact.Name)'
+          - task: publish-report-html@0
+            displayName: 'Publish Mutation Report'
+            inputs:
+              reportName: 'Mutation Report'
+              {{#monoRepo}}
+              htmlPath: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/pitest/index.html'
+              {{/monoRepo}}
+              {{^monoRepo}}
+              htmlPath: '$(System.DefaultWorkingDirectory)/build/reports/pitest/index.html'
+              {{/monoRepo}}
+
+          - task: Sonar-buildbreaker@8
+            displayName: 'Quality Gate'
+            inputs:
+              SonarQube: SonarQube
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact'
+            condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
+            inputs:
+              {{#monoRepo}}
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/$(projectName)/applications/app-service/build/libs/'
+              {{/monoRepo}}
+              {{^monoRepo}}
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
+              {{/monoRepo}}
+              ArtifactName: '$(Artifact.Name)'
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact: test'
+            inputs:
+              {{#monoRepo}}
+              PathtoPublish: $(projectName)/deployment/acceptanceTest
+              {{/monoRepo}}
+              {{^monoRepo}}
+              PathtoPublish: deployment/acceptanceTest
+              {{/monoRepo}}
+              ArtifactName: test
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact: Performance Test'
+            inputs:
+              {{#monoRepo}}
+              PathtoPublish: $(projectName)/deployment/performance-test/Jmeter/{{projectName}}
+              {{/monoRepo}}
+              {{^monoRepo}}
+              PathtoPublish: deployment/performance-test/Jmeter/{{projectName}}
+              {{/monoRepo}}
+              ArtifactName: PerformacerTest
