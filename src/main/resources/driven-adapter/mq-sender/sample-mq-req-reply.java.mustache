@@ -2,7 +2,7 @@ package {{package}}.mq.reqreply;
 
 import co.com.bancolombia.commons.jms.mq.EnableMQGateway;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 {{/lombok}}
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import jakarta.jms.TextMessage;
 
 @Component
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 @EnableMQGateway(scanBasePackages = "{{package}}")
 public class SampleMQReqReply /* implements SomeGateway */ {
