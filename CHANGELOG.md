@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.24.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.24.0) (2025-08-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.2...v3.24.0)
+
+**Merged pull requests:**
+
+- feat: add update action for SonarQube properties [\#694](https://github.com/bancolombia/scaffold-clean-architecture/pull/694) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.23.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.23.2) (2025-07-18)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.1...v3.23.2)
