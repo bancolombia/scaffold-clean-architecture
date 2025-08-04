@@ -85,7 +85,7 @@ jobs:
               - 'src/main/java/co/com/bancolombia/factory/**'
       # Generated code Analysis
       - name: Publish local
-        if: steps.changes.outputs.templates == 'true'
+#        if: steps.changes.outputs.templates == 'true'
         run: ./sh_publish_plugin_local.sh
       # Set up Gradle
       - name: Set up Gradle
@@ -110,7 +110,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       # Generated code imperative
       - name: Generate imperative project to scan
-        if: steps.changes.outputs.templates == 'true'
+#        if: steps.changes.outputs.templates == 'true'
         run: ./sh_generate_project.sh imperative
       - name: Scan generated imperative project dependencies
         if: steps.changes.outputs.templates == 'true'
