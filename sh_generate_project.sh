@@ -21,6 +21,7 @@ echo "buildscript {
       apply plugin: 'co.com.bancolombia.cleanArchitecture'" >> $MY_DIR/build.gradle
 
 cd $MY_DIR || exit
+gradle --version
 gradle ca --metrics false --example true --type $TYPE
 gradle wrapper
 
