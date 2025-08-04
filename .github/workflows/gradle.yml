@@ -63,7 +63,7 @@ jobs:
         run: ./gradlew verGJF
       - name: Execute build test and report
         run: ./gradlew jacocoTestReport --refresh-dependencies --no-daemon --continue
-      - name: copy the reportTest to codeCoverage
+      - name: Copy the reportTest to codeCoverage
         run: cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
@@ -94,7 +94,7 @@ jobs:
           gradle-version: 8.8
       # Generated code reactive
       - name: Generate reactive project to scan
-        if: steps.changes.outputs.templates == 'true'
+#        if: steps.changes.outputs.templates == 'true'
         run: ./sh_generate_project.sh reactive
       - name: Scan generated reactive project dependencies
         if: steps.changes.outputs.templates == 'true'
