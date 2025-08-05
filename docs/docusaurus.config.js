@@ -107,12 +107,12 @@ const config = {
                 href: 'https://github.com/bancolombia/scaffold-clean-architecture/blob/master/CHANGELOG.md',
               },
               {
-                label: 'Contributing',
-                href: 'https://github.com/bancolombia/scaffold-clean-architecture/wiki/Contributing',
-              },
-              {
                 label: 'License',
                 href: 'https://github.com/bancolombia/scaffold-clean-architecture?tab=Apache-2.0-1-ov-file#readme',
+              },
+              {
+                label: 'Contributing',
+                href: '/docs/contributing',
               },
             ],
           },

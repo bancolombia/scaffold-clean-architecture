@@ -159,7 +159,7 @@ Usage analytics may include the following information:
 # Whats Next?
 
 Read
-more  [About Clean Architecture](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
+more [About Clean Architecture](https://medium.com/bancolombia-tech/clean-architecture-aislando-los-detalles-4f9530f35d7a)
 
 We also have an [Elixir](https://bancolombia.github.io/scaffold-clean-architecture-ex/) variant
 

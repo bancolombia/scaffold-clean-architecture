@@ -15,7 +15,7 @@ This task is the created for that, and you can use it by following the next step
 1. Add plugin to your `build.gradle` project file as described in the [Getting Started](/docs/2-getting-started.md)
    section.
 2. Add the following property to your `gradle.properties` file
-   like [commons-jms](https://github.com/bancolombia/commons-jms) project
+   like [commons-jms](https://github.com/bancolombia/commons-jms/blob/main/gradle.properties) project
 
 ```properties
 onlyUpdater=true
