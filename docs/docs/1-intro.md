@@ -129,14 +129,14 @@ To explicitly enable analytics and avoid the notification message
 
 ```shell
 gradle analytics --enabled true
-# o gradle a --enabled true
+# gradle a --enabled true
 ```
 
 To disable analytics
 
 ```shell
 gradle analytics --enabled false
-# # o gradle a --enabled false
+# gradle a --enabled false
 ```
 
 ### What is collected?

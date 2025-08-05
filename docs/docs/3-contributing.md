@@ -230,7 +230,7 @@ When you will implement a new module related to infrastructure layer you should 
    not reactive).
 
    |module type|resources path|
-            |----|---------------|
+                  |----|---------------|
    |Driven Adapter|resources/driven-adapter/\<module-name>(-reactive)|
    |Entry Point|resources/entry-point/\<module-name>(-reactive)|
    |Helper|resources/helper/\<module-name>(-reactive)|
@@ -240,7 +240,7 @@ When you will implement a new module related to infrastructure layer you should 
 2. Implement the ModuleFactory for the new module type in the correct package.
 
    |module type|package|
-            |----|---------------|
+                  |----|---------------|
    |Driven Adapter|co.com.bancolombia.factory.adapters|
    |Entry Point|co.com.bancolombia.factory.entrypoints|
    |Helper|co.com.bancolombia.factory.helpers|
@@ -334,7 +334,7 @@ put("driverClassName","org.h2.Driver");
 3. Add the type of module in the correct enum.
 
    |module type|enum|
-            |----|---------------|
+         |----|---------------|
    |Driven Adapter|co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter.DrivenAdapterType|
    |Entry Point|co.com.bancolombia.factory.entrypoints.ModuleFactory.EntryPoint|
    |Helper|co.com.bancolombia.factory.helpers.ModuleFactoryHelpers.EntryPointType|
@@ -344,7 +344,7 @@ put("driverClassName","org.h2.Driver");
 4. Add the instantiation block in the correct class according to the new type.
 
    |module type|factory class|
-            |----|---------------|
+         |----|---------------|
    |Driven Adapter|co.com.bancolombia.factory.adapters.ModuleFactoryDrivenAdapter|
    |Entry Point|co.com.bancolombia.factory.entrypoints.ModuleFactory|
    |Helper|co.com.bancolombia.factory.helpers.ModuleFactoryHelpers|
