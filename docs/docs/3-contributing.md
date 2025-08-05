@@ -305,9 +305,7 @@ located in Utils class to create the dependency definition depending on the lang
 
 ```java
     String dependency = Utils.buildImplementationFromProject(builder.isKotlin(), ":dynamodb");
-    builder.
-
-appendDependencyToModule(APP_SERVICE, dependency);
+    builder.appendDependencyToModule(APP_SERVICE, dependency);
 ```
 
 - appendToProperties
@@ -323,12 +321,8 @@ The next code adds the property `spring.datasource.url=jdbc:h2:mem:test` and the
 ```java
     builder
         .appendToProperties("spring.datasource")
-        .
-
-put("url","jdbc:h2:mem:test")
-        .
-
-put("driverClassName","org.h2.Driver");
+        .put("url","jdbc:h2:mem:test")
+        .put("driverClassName","org.h2.Driver");
 ```
 
 3. Add the type of module in the correct enum.
