@@ -86,7 +86,7 @@ jobs:
       # Generated code Analysis
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
-        run: ./sh_publish_plugin_local.sh}
+        run: ./sh_publish_plugin_local.sh
       # Set up Gradle
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3.5.0
