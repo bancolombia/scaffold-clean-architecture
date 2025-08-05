@@ -129,8 +129,8 @@ caching capabilities. The `gradle.properties` file already includes the properti
 the Configuration Cache:
 
 :::note[Gradle Version Recommendation]
-To enable all these properties and ensure maximum compatibility, it is recommended to use [**Gradle 8.14.3 or higher
-**](https://gradle.org/releases/).
+To enable all these properties and ensure maximum compatibility, it is recommended to use **[Gradle 8.14.3 or higher
+](https://gradle.org/releases/)**.
 :::
 
 ```properties

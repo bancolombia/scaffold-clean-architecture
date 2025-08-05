@@ -12,7 +12,7 @@ sidebar_position: 2
   8.8 or later.
 
 :::note[Recommended Gradle Version]
-For optimal performance and to enable all [Gradle cache properties](advanced/gradle-cache), it is recommended to use
+For optimal performance and to enable all **[Gradle cache properties](advanced/gradle-cache)**, it is recommended to use
 Gradle [8.14.3 or higher](https://gradle.org/releases/).
 :::
 
