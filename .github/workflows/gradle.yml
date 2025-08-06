@@ -57,19 +57,19 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
-          distribution: 'temurin' 
+          distribution: 'temurin'
           java-version: 21
       - name: Validate code formatting
         run: ./gradlew verGJF
       - name: Execute build test and report
         run: ./gradlew jacocoTestReport --refresh-dependencies --no-daemon --continue
-      - name: copy the reportTest to codeCoverage
+      - name: Copy the reportTest to codeCoverage
         run: cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
       - name: Push codeCoverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Run sonar
         if: github.event.pull_request.head.repo.fork == false && !startsWith(github.event.pull_request.head.ref, 'dependabot/')
-        run: ./gradlew sonar --stacktrace 
+        run: ./gradlew sonar --stacktrace
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,6 +87,11 @@ jobs:
       - name: Publish local
         if: steps.changes.outputs.templates == 'true'
         run: ./sh_publish_plugin_local.sh
+      # Set up Gradle
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3.5.0
+        with:
+          gradle-version: 8.8
       # Generated code reactive
       - name: Generate reactive project to scan
         if: steps.changes.outputs.templates == 'true'
