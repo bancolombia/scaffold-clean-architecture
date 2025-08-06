@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.25.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.25.0) (2025-08-06)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.24.0...v3.25.0)
+
+**Merged pull requests:**
+
+- feat\(docs\): Add Comprehensive Guide to Gradle Caching [\#696](https://github.com/bancolombia/scaffold-clean-architecture/pull/696) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.24.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.24.0) (2025-08-01)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.23.2...v3.24.0)
