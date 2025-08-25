@@ -18,7 +18,7 @@ Whether you'll use generic one also parameter `name` is required.
 | generic                             | Empty Driven Adapter           | --name [name]                                                                                               |
 | asynceventbus                       | Async Event Bus                | --eda [true-false] --tech [rabbitmq-kafka-rabbitmq,kafka] Default: rabbitmq                                 |
 | binstash                            | Bin Stash                      |                                                                                                             |
-| cognitotokenprovider                | Generador de token de cognito  |                                                                                                             |
+| cognitotokenprovider                | Cognito token generator        |                                                                                                             |
 | dynamodb                            | Dynamo DB adapter              |                                                                                                             |
 | jpa                                 | JPA Repository                 | --secret [true-false]                                                                                       |
 | kms                                 | AWS Key Management Service     |                                                                                                             |
