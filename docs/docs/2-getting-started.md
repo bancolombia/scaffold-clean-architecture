@@ -53,8 +53,8 @@ echo "plugins {
     id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
 }" > build.gradle
 gradle ca --name=ScaffoldQuickStart
-./gradlew gep --type webflux
-./gradlew bootRun
+./gradle gep --type webflux
+./gradle bootRun
 ```
 
   </TabItem>
