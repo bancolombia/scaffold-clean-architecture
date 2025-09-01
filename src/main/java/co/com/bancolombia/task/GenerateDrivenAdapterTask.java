@@ -63,7 +63,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
 
   @OptionValues("tech")
   public List<String> getTechOptions() {
-    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq");
+    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq", "secretskafkastrimzi");
   }
 
   @Option(option = "cache-mode", description = "Set value for cache type")
@@ -79,6 +79,11 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   @Option(option = "secrets-backend", description = "Set secrets backend")
   public void setSecretsBackend(DrivenAdapterSecrets.SecretsBackend secretsBackend) {
     this.secretsBackend = secretsBackend;
+  }
+
+  @Option(option = "secretName", description = "Set the name of the secret in AWS Secrets Manager")
+  public void setSecretName(String secretName) {
+    builder.addParam("secretName", secretName);
   }
 
   @Override

@@ -69,6 +69,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.eda = eda;
   }
 
+  @Option(option = "topicConsumer", description = "Set the topic for the Kafka consumer")
+  public void setTopicConsumer(String topicConsumer) {
+    builder.addParam("topicConsumer", topicConsumer);
+  }
+
   @OptionValues("eda")
   public List<BooleanOption> getEdaOptions() {
     return Arrays.asList(BooleanOption.values());
@@ -81,7 +86,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
 
   @OptionValues("tech")
   public List<String> getTechOptions() {
-    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq");
+    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq", "kafkastrimzi");
   }
 
   @OptionValues("server")

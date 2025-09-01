@@ -299,4 +299,17 @@ class GenerateDrivenAdapterTaskReactiveTest {
         "src/main/java/co/com/bancolombia/cognito/config/CognitoTokenProviderConfig.java",
         "src/main/java/co/com/bancolombia/cognito/CognitoTokenProvider.java");
   }
+
+  @Test
+  void generateEntryPointReactiveKafkaStrimzi() throws IOException, CleanException {
+    // Arrange
+    task.setType("SECRETSKAFKASTRIMZI");
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/driven-adapters/secrets/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/secrets/config/KafkaOauthSecretsConfig.java");
+  }
 }

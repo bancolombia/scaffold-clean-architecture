@@ -22,7 +22,7 @@ public final class ArchitectureValidation {
   private static final String FORBIDDEN_DOMAIN_CLASS_NAMES_PROP =
       "arch.unit.forbiddenDomainClassNames";
   private static final String FORBIDDEN_DOMAIN_NAMES =
-      "rabbit,sqs,sns,ibm,dynamo,aws,mysql,postgres,redis,mongo,rsocket,r2dbc,http,kms,s3,graphql,kafka";
+      "rabbit,sqs,sns,ibm,dynamo,aws,mysql,postgres,redis,mongo,rsocket,r2dbc,http,kms,s3,graphql,kafka,kafkastrimzi";
 
   public static void inject(ModuleBuilder builder, Logger logger, Set<File> files) {
     if (!FileUtils.readBooleanProperty(SKIP_PROP)) {
