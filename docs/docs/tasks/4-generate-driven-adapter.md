@@ -30,7 +30,6 @@ Whether you'll use generic one also parameter `name` is required.
 | rsocket                             | RSocket Requester              |                                                                                                             |
 | s3                                  | AWS Simple Storage Service     |                                                                                                             |
 | secrets                             | Secrets Manager Bancolombia    | --secrets-backend [backend] <br/> Valid options for backend are "aws_secrets_manager" (default) or "vault". |
-| secretskafkastrimzi                 | Secrets para Kafka Strimzi     | --secretName [name]                                                                                         |
 | sqs                                 | SQS message sender             |                                                                                                             |
 
 _**This task will generate something like that:**_
