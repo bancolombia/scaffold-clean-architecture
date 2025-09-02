@@ -86,7 +86,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
 
   @OptionValues("tech")
   public List<String> getTechOptions() {
-    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq", "kafkastrimzi");
+    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq");
   }
 
   @OptionValues("server")

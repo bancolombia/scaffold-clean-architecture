@@ -63,7 +63,7 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
 
   @OptionValues("tech")
   public List<String> getTechOptions() {
-    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq", "secretskafkastrimzi");
+    return Arrays.asList("kafka", "rabbitmq", "kafka,rabbitmq");
   }
 
   @Option(option = "cache-mode", description = "Set value for cache type")
