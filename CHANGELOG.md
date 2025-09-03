@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.26.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.0) (2025-09-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.25.0...v3.26.0)
+
+**Merged pull requests:**
+
+- feat\(eda-kaizen\):  subscripcion a topicos con kafka strimzi ep y da [\#712](https://github.com/bancolombia/scaffold-clean-architecture/pull/712) ([HP0281](https://github.com/HP0281))
+- feat\(docs\): improve generate driven adapter [\#709](https://github.com/bancolombia/scaffold-clean-architecture/pull/709) ([santitigaga](https://github.com/santitigaga))
+
 ## [v3.25.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.25.0) (2025-08-06)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.24.0...v3.25.0)
