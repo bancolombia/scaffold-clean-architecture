@@ -24,9 +24,22 @@ Whether you'll use generic one also parameter `name` is required.
 | rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                            |
 | sqs                              | SQS Listener                           |                                                                                                                                            |
 | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE |
+| kafkastrimzi                     | Kafka Strimzi Consumer Entry Point     | --name [name] --topicConsumer [topicName] (optional, for default 'test-with-registries')                                                   |
 
 Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default,
 undertow.
+
+## Ejemplo de uso para Kafka Strimzi Consumer
+```shell
+gradle generateEntryPoint --type=kafkastrimzi 
+gradle gep --type=kafkastrimzi
+```
+```shell
+gradle generateEntryPoint --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic
+gradle gep --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic
+```
+
+This will generate a specialized entry point for consuming Kafka messages using Strimzi, with custom parameters.
 
 ```shell
    gradle generateEntryPoint --type=restmvc --server=[serverOption]

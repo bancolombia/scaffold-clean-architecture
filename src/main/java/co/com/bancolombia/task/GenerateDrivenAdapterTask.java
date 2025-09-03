@@ -81,6 +81,11 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     this.secretsBackend = secretsBackend;
   }
 
+  @Option(option = "secretName", description = "Set the name of the secret in AWS Secrets Manager")
+  public void setSecretName(String secretName) {
+    builder.addParam("secretName", secretName);
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-cache-mode", cacheMode);

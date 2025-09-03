@@ -273,4 +273,18 @@ class GenerateEntryPointTaskReactiveTest {
         "src/main/java/co/com/bancolombia/api/RouterRest.java",
         "src/test/java/co/com/bancolombia/api/RouterRestTest.java");
   }
+
+  @Test
+  void generateEntryPointReactiveKafkaStrimzi() throws IOException, CleanException {
+    // Arrange
+    task.setType("KAFKASTRIMZI");
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfig.java");
+  }
 }

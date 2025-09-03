@@ -27,12 +27,12 @@ gradle wrapper
 
 if [ $TYPE == "reactive" ]
 then
-  for adapter in "asynceventbus" "binstash" "cognitotokenprovider" "dynamodb" "kms" "mongodb" "mq" "r2dbc" "redis" "restconsumer" "rsocket" "s3" "secrets" "sqs"
+  for adapter in "asynceventbus" "binstash" "cognitotokenprovider" "dynamodb" "kms" "mongodb" "mq" "r2dbc" "redis" "restconsumer" "rsocket" "s3" "secrets" "sqs" "secretskafkastrimzi"
   do
     ./gradlew gda --type $adapter
   done
 
-  for entry in "asynceventhandler" "graphql" "kafka" "mq" "rsocket" "sqs" "webflux"
+  for entry in "asynceventhandler" "graphql" "kafka" "mq" "rsocket" "sqs" "webflux" "kafkastrimzi"
   do
     ./gradlew gep --type $entry
   done
