@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.26.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.1) (2025-09-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.0...v3.26.1)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.29.2 to 3.30.0 [\#713](https://github.com/bancolombia/scaffold-clean-architecture/pull/713) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.7.1 to 4.7.3 [\#711](https://github.com/bancolombia/scaffold-clean-architecture/pull/711) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump amannn/action-semantic-pull-request from 5.5.3 to 6.1.1 [\#708](https://github.com/bancolombia/scaffold-clean-architecture/pull/708) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 4 to 5 [\#701](https://github.com/bancolombia/scaffold-clean-architecture/pull/701) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions from 3.5.0 to 4.4.2 [\#697](https://github.com/bancolombia/scaffold-clean-architecture/pull/697) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#690](https://github.com/bancolombia/scaffold-clean-architecture/pull/690) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v3.26.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.0) (2025-09-03)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.25.0...v3.26.0)
