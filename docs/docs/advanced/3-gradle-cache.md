@@ -165,7 +165,7 @@ This combination ensures that your project is optimized for maximum speed from t
 ### Build Performance Comparison
 
 Below is a comparison of a project's build time with and without the Gradle cache enabled. The command executed for this
-comparison was `./gradlew clean jacocoMergedReport`.
+comparison was `./gradlew clean jacocoMergedReport`. These tests were performed locally on a Mac computer.
 
 #### Without Gradle Cache
 
