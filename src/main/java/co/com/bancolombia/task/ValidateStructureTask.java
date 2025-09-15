@@ -61,7 +61,7 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
     // Configure lazy providers - capture information during configuration
     this.projectPath.set(getProject().provider(this::getAbsoluteProjectPath));
     this.moduleNames.set(getProject().provider(() -> getProject().getChildProjects().keySet()));
-    this.hasSpringWeb.set(getProject().provider(this::checkForSpringWebDependencyAtConfig));
+    this.hasSpringWeb.set(getProject().provider(this::checkForSpringWebDependency));
     this.moduleDependencies.set(getProject().provider(this::collectModuleDependencies));
     this.projectDirectories.set(getProject().provider(this::collectAllProjectDirectories));
   }
@@ -103,7 +103,7 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
         .collect(Collectors.toSet());
   }
 
-  private boolean checkForSpringWebDependencyAtConfig() {
+  private boolean checkForSpringWebDependency() {
     boolean springWebDependencyPresent = false;
     try {
       springWebDependencyPresent =
