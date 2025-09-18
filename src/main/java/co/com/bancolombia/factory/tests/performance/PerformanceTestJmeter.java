@@ -11,7 +11,7 @@ public class PerformanceTestJmeter implements ModuleFactory {
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     String templatePath = "test/performance-test/jmeter";
 
-    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-exist-api-rest"))) {
+    if (builder.getBooleanParam("task-param-exist-api-rest")) {
       templatePath += "/Jmeter/Api";
     }
 
