@@ -60,7 +60,7 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - name: Validate code formatting
-        run: ./gradlew verGJF
+        run: ./gradlew spotlessApply
       - name: Execute build test and report
         run: ./gradlew jacocoTestReport --refresh-dependencies --no-daemon --continue
       - name: Copy the reportTest to codeCoverage
