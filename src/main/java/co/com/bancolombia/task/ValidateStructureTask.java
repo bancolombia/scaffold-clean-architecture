@@ -107,8 +107,13 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
     boolean springWebDependencyPresent = false;
     try {
       springWebDependencyPresent =
-          getProject().getChildProjects().get(APP_SERVICE).getConfigurations()
-              .getByName("testImplementation").getDependencies().stream()
+          getProject()
+              .getChildProjects()
+              .get(APP_SERVICE)
+              .getConfigurations()
+              .getByName("testImplementation")
+              .getDependencies()
+              .stream()
               .anyMatch(d -> d.getName().equals("spring-web"));
     } catch (UnknownConfigurationException e) {
       logger.warn("configuration testImplementation not present");
@@ -123,8 +128,11 @@ public abstract class ValidateStructureTask extends AbstractCleanArchitectureDef
                 Map.Entry::getKey,
                 entry -> {
                   try {
-                    return entry.getValue().getConfigurations()
-                        .getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME).getDependencies()
+                    return entry
+                        .getValue()
+                        .getConfigurations()
+                        .getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
+                        .getDependencies()
                         .stream()
                         .map(Dependency::getName)
                         .collect(Collectors.toSet());
