@@ -30,7 +30,9 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
 
   public UpdateProjectTask() {
     this.projectPath = getProject().getObjects().property(String.class);
-    this.projectPath.set(getProject().getProjectDir().toString());
+
+    // Configure lazy providers - capture information during configuration
+    this.projectPath.set(getProject().provider(this::getAbsoluteProjectPath));
   }
 
   @Option(option = "dependencies", description = "Set dependencies to update")
@@ -60,5 +62,9 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
     UpgradeFactory factory = new UpgradeFactory();
     factory.buildModule(builder);
     builder.persist();
+  }
+
+  private String getAbsoluteProjectPath() {
+    return getProject().getLayout().getProjectDirectory().getAsFile().getAbsolutePath();
   }
 }

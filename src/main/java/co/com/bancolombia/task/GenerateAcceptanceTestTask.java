@@ -21,10 +21,11 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
   public GenerateAcceptanceTestTask() {
     this.projectPath = getProject().getObjects().property(String.class);
-    this.projectPath.set(getProject().getProjectDir().getPath());
-
     this.moduleNames = getProject().getObjects().setProperty(String.class);
-    this.moduleNames.set(getProject().getChildProjects().keySet());
+
+    // Configure lazy providers - capture information during configuration
+    this.projectPath.set(getProject().provider(this::getAbsoluteProjectPath));
+    this.moduleNames.set(getProject().provider(() -> getProject().getChildProjects().keySet()));
   }
 
   @Override
@@ -62,5 +63,9 @@ public class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
   @Override
   protected String defaultType() {
     return "karate";
+  }
+
+  private String getAbsoluteProjectPath() {
+    return getProject().getLayout().getProjectDirectory().getAsFile().getAbsolutePath();
   }
 }

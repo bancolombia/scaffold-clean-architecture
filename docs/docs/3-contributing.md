@@ -46,7 +46,7 @@ following command.
 if you will be interest to format the code in any time , execute this command
 
 ```bash
-./gradlew goJF
+./gradlew spotlessApply
 ```
 
 ### Step 3: Branch

@@ -11,7 +11,7 @@ sidebar_position: 2
 - To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version
   8.8 or later.
 
-:::note[Recommended Gradle Version]
+:::tip[Recommended Gradle Version]
 For optimal performance and to enable all **[Gradle cache properties](advanced/gradle-cache)**, it is recommended to use
 Gradle [8.14.3 or higher](https://gradle.org/releases/).
 :::

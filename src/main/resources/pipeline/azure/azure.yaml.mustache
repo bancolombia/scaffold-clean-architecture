@@ -95,11 +95,6 @@ stages:
               htmlPath: '$(System.DefaultWorkingDirectory)/build/reports/pitest/index.html'
               {{/monoRepo}}
 
-          - task: Sonar-buildbreaker@8
-            displayName: 'Quality Gate'
-            inputs:
-              SonarQube: SonarQube
-
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact'
             condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')

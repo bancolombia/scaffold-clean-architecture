@@ -28,7 +28,7 @@ jobs:
           distribution: 'temurin' 
           java-version: 17
       - name: Check for updates
-        run: ./gradlew ci-updater goJF
+        run: ./gradlew ci-updater spotlessApply
       - name: Check for changes
         id: git_changes
         run: |

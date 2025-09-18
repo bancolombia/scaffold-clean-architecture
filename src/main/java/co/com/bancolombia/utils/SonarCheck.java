@@ -88,28 +88,13 @@ public class SonarCheck {
   }
 
   private static String parseSeverity(String severity) {
-    switch (severity) {
-      case "LOW":
-        {
-          return "MINOR";
-        }
-      case "MEDIUM":
-        {
-          return "MAJOR";
-        }
-      case "HIGH":
-        {
-          return "CRITICAL";
-        }
-      case "CRITICAL":
-        {
-          return "BLOCKER";
-        }
-      default:
-        {
-          return "INFO";
-        }
-    }
+    return switch (severity) {
+      case "LOW" -> "MINOR";
+      case "MEDIUM" -> "MAJOR";
+      case "HIGH" -> "CRITICAL";
+      case "CRITICAL" -> "BLOCKER";
+      default -> "INFO";
+    };
   }
 
   @SneakyThrows
