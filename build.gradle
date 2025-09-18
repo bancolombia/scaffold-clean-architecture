@@ -231,7 +231,7 @@ sonar {
         property "sonar.junit.reportPaths", "build/test-results/test"
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
-        property "sonar.test", "src/test/java"
+        property "sonar.tests", "src/test/java"
         property "sonar.exclusions", "docs/**,.github/**,src/functionalTest/**,src/test/**/*Test.java,**/**models**," +
                 "src/test/**/TestUtils.java,src/test/**/*Provider.java,**/**exceptions**,**/examples-ca/**," +
                 "src/test/**/AnUpdate*.java,**/LocalTasks.java"

@@ -13,7 +13,7 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
   public static final String SECRETS_VERSION = "4.4.35";
-  public static final String SPRING_BOOT_VERSION = "3.5.5";
+  public static final String SPRING_BOOT_VERSION = "3.5.6";
   public static final String LOMBOK_VERSION = "1.18.40";
   public static final String REACTIVE_COMMONS_VERSION = "5.6.2";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
