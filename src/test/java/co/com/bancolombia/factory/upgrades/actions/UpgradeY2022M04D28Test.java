@@ -1,6 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
