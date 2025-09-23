@@ -1,6 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.spy;
@@ -42,14 +42,14 @@ class UpgradeY2022M05D05Test {
   void shouldApplyUpdate() {
     // Arrange
     builder.addFile(
-        MAIN_GRADLE,
+        DOCKERFILE,
         "COPY *.jar app.jar\nENTRYPOINT [\"sh\",\"-c\",\"java $JAVA_OPTS -jar app.jar\"]");
     // Act
     updater.up(builder);
     // Assert
     verify(builder, atLeast(1))
         .addFile(
-            MAIN_GRADLE,
+            DOCKERFILE,
             "COPY *.jar UtilsTest.jar\nENTRYPOINT [\"sh\",\"-c\",\"java $JAVA_OPTS -jar UtilsTest.jar\"]");
   }
 }
