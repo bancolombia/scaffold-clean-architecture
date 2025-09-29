@@ -113,9 +113,18 @@ public final class ArchitectureValidation {
       Logger logger, String appService, ModuleBuilder builder) {
     logger.lifecycle("Injecting ArchitectureTest in module {}", appService);
     builder.setupFromTemplate("structure/applications/appservice/arch-validations");
-    builder.appendDependencyToModule(
-        Constants.APP_SERVICE,
-        "testImplementation 'com.tngtech.archunit:archunit:" + Constants.ARCH_UNIT_VERSION + "'");
+    String regexArchUnit = "testImplementation\\s+'com\\.tngtech\\.archunit:archunit:([\\w.-]+)'";
+    String depArchUnit =
+        "testImplementation 'com.tngtech.archunit:archunit:" + Constants.ARCH_UNIT_VERSION + "'";
+    Set<String> builderExpressions =
+        builder.findExpressions(Constants.MainFiles.APP_BUILD_GRADLE, regexArchUnit);
+    if (builderExpressions.isEmpty()) {
+      builder.appendDependencyToModule(Constants.APP_SERVICE, depArchUnit);
+    } else {
+      builder.updateFile(
+          Constants.MainFiles.APP_BUILD_GRADLE,
+          content -> content.replaceAll(regexArchUnit, depArchUnit));
+    }
     builder.appendDependencyToModule(
         Constants.APP_SERVICE, "testImplementation 'com.fasterxml.jackson.core:jackson-databind'");
     builder.persist();
