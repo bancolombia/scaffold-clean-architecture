@@ -33,10 +33,6 @@
             "packageName": "com.github.bancolombia:commons-jms-mq"
         },
         {
-            "name": "GRAPHQL_KICKSTART_VERSION",
-            "packageName": "com.graphql-java-kickstart:graphql-spring-boot-starter"
-        },
-        {
             "name": "ARCH_UNIT_VERSION",
             "packageName": "com.tngtech.archunit:archunit"
         },
