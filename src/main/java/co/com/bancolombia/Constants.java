@@ -15,11 +15,12 @@ public final class Constants {
   public static final String SECRETS_VERSION = "4.4.35";
   public static final String SPRING_BOOT_VERSION = "3.5.6";
   public static final String LOMBOK_VERSION = "1.18.42";
-  public static final String REACTIVE_COMMONS_VERSION = "5.6.2";
+  public static final String REACTIVE_COMMONS_VERSION = "6.0.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.14.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.34.0";
-  public static final String COMMONS_JMS_VERSION = "2.4.8";
+  public static final String AWS_BOM_VERSION = "2.35.0";
+  public static final String COMMONS_JMS_VERSION = "2.5.0";
+  @Deprecated
   public static final String GRAPHQL_KICKSTART_VERSION = "15.1.0";
   public static final String ARCH_UNIT_VERSION = "1.4.1";
   public static final String OKHTTP_VERSION = "5.1.0";
@@ -32,8 +33,8 @@ public final class Constants {
   public static final String SONAR_VERSION = "6.3.1.5724";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "3.26.1";
-  public static final String DEPENDENCY_CHECK_VERSION = "12.1.5";
-  public static final String PITEST_VERSION = "1.19.0-rc.1";
+  public static final String DEPENDENCY_CHECK_VERSION = "12.1.6";
+  public static final String PITEST_VERSION = "1.19.0-rc.2";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "8.14.3";
 
