@@ -2,7 +2,7 @@ package {{package}}.s3.operations;
 
 import org.springframework.stereotype.Component;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class S3Operations {
 
