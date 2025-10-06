@@ -1,7 +1,7 @@
 package {{package}}.sqs.listener;
 
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sqs.model.Message;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 @Service
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class SQSProcessor implements Consumer<Message> {
     // private final MyUseCase myUseCase;

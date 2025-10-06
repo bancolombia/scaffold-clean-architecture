@@ -4,12 +4,12 @@ import org.springframework.stereotype.Repository;
 import {{package}}.s3.config.model.S3ConnectionProperties;
 import {{package}}.s3.operations.S3Operations;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 
 @Repository
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class S3Adapter /* implements Gateway from domain*/ {
 

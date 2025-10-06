@@ -1,7 +1,7 @@
 package {{package}}.events;
 
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 {{/lombok}}
 {{#eda}}
@@ -33,7 +33,7 @@ import java.util.logging.Level;
 
 {{#lombok}}
 @Log
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 @EnableDirectAsyncGateway
 public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
