@@ -6,7 +6,7 @@ import io.micrometer.core.instrument.Metrics;
 import io.micrometer.core.instrument.Timer;
 {{/metrics}}
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class SampleMQMessageListener {
     {{#metrics}}

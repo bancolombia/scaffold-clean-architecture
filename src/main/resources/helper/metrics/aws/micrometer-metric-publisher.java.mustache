@@ -3,7 +3,7 @@ package {{package}}.metrics.aws;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.metrics.MetricCollection;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Component
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class MicrometerMetricPublisher implements MetricPublisher {
     private final ExecutorService service = Executors.newFixedThreadPool(10);

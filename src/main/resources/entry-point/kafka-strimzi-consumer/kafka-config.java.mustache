@@ -15,7 +15,7 @@ import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import {{package}}.model.topiccredentials.ConsumerCredentials;
 import io.apicurio.registry.serde.SerdeConfig;
 import io.apicurio.registry.serde.jsonschema.JsonSchemaKafkaDeserializer;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import reactor.kafka.receiver.ReceiverOptions;
 
@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @Configuration
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Log4j2
 public class KafkaConfig {
 

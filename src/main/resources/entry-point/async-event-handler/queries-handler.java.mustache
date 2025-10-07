@@ -5,7 +5,7 @@ import io.cloudevents.core.builder.CloudEventBuilder;
 import io.cloudevents.jackson.JsonCloudEventData;
 {{/eda}}
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.reactivecommons.async.impl.config.annotations.EnableQueryListeners;
 import reactor.core.publisher.Mono;
@@ -21,7 +21,7 @@ import java.util.UUID;
 {{/eda}}
 @Log
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 @EnableQueryListeners
 public class QueriesHandler {

@@ -1,8 +1,8 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
-import static org.gradle.internal.impldep.org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;

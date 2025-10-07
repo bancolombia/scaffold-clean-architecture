@@ -5,7 +5,7 @@ import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
-import static org.gradle.internal.impldep.org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;

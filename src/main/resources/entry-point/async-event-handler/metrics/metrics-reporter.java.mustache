@@ -2,7 +2,7 @@ package {{package}}.events.metrics;
 
 import io.micrometer.core.instrument.MeterRegistry;
 {{#lombok}}
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.reactivecommons.api.domain.Command;
 import org.reactivecommons.api.domain.DomainEvent;
@@ -16,7 +16,7 @@ import java.time.Duration;
 
 @Service
 {{#lombok}}
-@AllArgsConstructor
+@RequiredArgsConstructor
 {{/lombok}}
 public class MetricsReporter implements CustomReporter {
     private final MeterRegistry registry;

@@ -15,7 +15,9 @@ public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
 
   public GeneratePerformanceTestTask() {
     this.moduleNames = getProject().getObjects().setProperty(String.class);
-    this.moduleNames.set(getProject().getChildProjects().keySet());
+
+    // Configure lazy providers - capture information during configuration
+    this.moduleNames.set(getProject().provider(() -> getProject().getChildProjects().keySet()));
   }
 
   @Override
