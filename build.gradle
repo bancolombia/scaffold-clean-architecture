@@ -14,9 +14,9 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '6.3.1.5724'
     id 'com.gradle.plugin-publish' version '2.0.0'
-    id 'com.diffplug.spotless' version "7.2.1"
+    id 'com.diffplug.spotless' version '8.0.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'org.owasp.dependencycheck' version '12.1.5'
+    id 'org.owasp.dependencycheck' version '12.1.6'
 }
 
 ext {
@@ -187,7 +187,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0'
     implementation 'org.reflections:reflections:0.10.2'
     // swagger generators
-    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.57') {
+    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.58') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     constraints { // for previous swagger dependency
@@ -196,7 +196,6 @@ dependencies {
         }
     }
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
-    implementation 'com.google.googlejavaformat:google-java-format:1.28.0'
 
     testImplementation gradleTestKit()
     testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
