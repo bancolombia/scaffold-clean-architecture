@@ -1,5 +1,21 @@
 # Changelog
 
+## [v3.26.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.2) (2025-10-07)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.1...v3.26.2)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 3.30.0 to 3.30.6 [\#739](https://github.com/bancolombia/scaffold-clean-architecture/pull/739) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions from 4.4.2 to 5.0.0 [\#738](https://github.com/bancolombia/scaffold-clean-architecture/pull/738) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.2 to 2.4.3 [\#737](https://github.com/bancolombia/scaffold-clean-architecture/pull/737) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.7.3 to 4.8.0 [\#734](https://github.com/bancolombia/scaffold-clean-architecture/pull/734) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(gradle\): refactor gradle tasks to use lazy property providers for configuration caching [\#723](https://github.com/bancolombia/scaffold-clean-architecture/pull/723) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump step-security/harden-runner from 2.13.0 to 2.13.1 [\#719](https://github.com/bancolombia/scaffold-clean-architecture/pull/719) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 4 to 5 [\#716](https://github.com/bancolombia/scaffold-clean-architecture/pull/716) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 4.7.1 to 5.0.0 [\#715](https://github.com/bancolombia/scaffold-clean-architecture/pull/715) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-pages-artifact from 3 to 4 [\#714](https://github.com/bancolombia/scaffold-clean-architecture/pull/714) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.26.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.1) (2025-09-03)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.0...v3.26.1)
