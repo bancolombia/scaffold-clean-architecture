@@ -23,6 +23,10 @@ Examples:
 
 ```shell
 gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=NameProject --lombok=true
+```
+
+Short form
+```shell
 gradle ca --package=co.com.bancolombia --type=reactive --name=NameProject --lombok=true
 ```
 
