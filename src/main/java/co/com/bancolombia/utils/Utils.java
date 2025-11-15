@@ -184,4 +184,14 @@ public class Utils {
         .map(s -> s.replace("\"", ""))
         .collect(Collectors.toSet());
   }
+
+  public static boolean isStableVersion(String version) {
+    String lowerCaseVersion = version.toLowerCase();
+    return !(lowerCaseVersion.contains("alpha")
+        || lowerCaseVersion.contains("beta")
+        || lowerCaseVersion.contains("rc")
+        || lowerCaseVersion.contains("snapshot")
+        || lowerCaseVersion.contains("preview")
+        || lowerCaseVersion.contains("-m"));
+  }
 }

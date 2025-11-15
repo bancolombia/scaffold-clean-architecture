@@ -39,9 +39,27 @@ class HttpOperationsTest {
   void setup() throws IOException {
     String releaseResponse = "[{\"tag_name\":\"2.0.0\",\"published_at\":\"2021-11-18T13:30:02Z\"}]";
     String dependencyResponse =
-        "{\"response\":{\"docs\":[{\"v\":\"2.0.1\",\"g\":\"some.dependency\",\"a\":\"name\"}]}}";
+        """
+                <metadata>
+                  <groupId>some.dependency</groupId>
+                  <artifactId>name</artifactId>
+                  <versioning>
+                    <latest>2.0.1</latest>
+                    <release>2.0.1</release>
+                    <versions>
+                      <version>0.0.1</version>
+                    </versions>
+                  </versioning>
+                </metadata>
+                """;
     String xmlResponse =
-        "<metadata><groupId>org.sonarqube</groupId><artifactId>org.sonarqube.gradle.plugin</artifactId><version>4.4.1.3373</version></metadata>";
+        """
+                <metadata>
+                  <groupId>org.sonarqube</groupId>
+                  <artifactId>org.sonarqube.gradle.plugin</artifactId>
+                  <version>4.4.1.3373</version>
+                </metadata>
+                """;
     final Dispatcher dispatcher =
         new Dispatcher() {
           @Override
@@ -51,9 +69,12 @@ class HttpOperationsTest {
                 {
                   return new MockResponse().setResponseCode(200).setBody(releaseResponse);
                 }
-              case "/maven":
+              case "/name/maven-metadata.xml":
                 {
-                  return new MockResponse().setResponseCode(200).setBody(dependencyResponse);
+                  return new MockResponse()
+                      .setResponseCode(200)
+                      .addHeader("Content-Type", "application/xml")
+                      .setBody(dependencyResponse);
                 }
               case "/maven-metadata.xml":
                 {
@@ -92,7 +113,7 @@ class HttpOperationsTest {
                 PLUGIN_RELEASES,
                 server.url("/releases").toString(),
                 DEPENDENCY_RELEASES,
-                server.url("/maven").toString(),
+                server.url("name/maven-metadata.xml").toString(),
                 GRADLE_PLUGINS,
                 server.url("/maven-metadata.xml").toString(),
                 SPRING_INITIALIZER,
