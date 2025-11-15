@@ -12,11 +12,11 @@ plugins {
     id 'jacoco'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id 'org.sonarqube' version '6.3.1.5724'
+    id 'org.sonarqube' version '7.0.1.6134'
     id 'com.gradle.plugin-publish' version '2.0.0'
     id 'com.diffplug.spotless' version '8.0.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'org.owasp.dependencycheck' version '12.1.6'
+    id 'org.owasp.dependencycheck' version '12.1.9'
 }
 
 ext {
@@ -178,20 +178,20 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.20.0'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.0'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.20.0'
-    api 'commons-io:commons-io:2.20.0'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.20.1'
+    api 'commons-io:commons-io:2.21.0'
     api gradleApi()
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1'
     implementation 'org.reflections:reflections:0.10.2'
     // swagger generators
-    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.58') {
+    implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.59') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     constraints { // for previous swagger dependency
-        implementation('commons-codec:commons-codec:1.19.0') {
+        implementation('commons-codec:commons-codec:1.20.0') {
             because "This version closes a security vulnerability"
         }
     }
@@ -199,15 +199,15 @@ dependencies {
 
     testImplementation gradleTestKit()
     testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.4'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.13.4'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.4'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'
 
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
-    implementation 'com.squareup.okhttp3:okhttp:5.1.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:5.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.3.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:5.3.0'
 }
 
 jacocoTestReport {
@@ -297,7 +297,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.1.0'
+    gradleVersion = '8.14.3'
     validateDistributionUrl = true
     distributionSha256Sum = "a17ddd85a26b6a7f5ddb71ff8b05fc5104c0202c6e64782429790c933686c806"
 }

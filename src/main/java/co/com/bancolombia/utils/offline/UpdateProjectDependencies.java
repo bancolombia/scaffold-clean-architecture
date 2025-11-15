@@ -14,7 +14,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 
 @Setter
-@Builder(setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 public class UpdateProjectDependencies {
   public static final String BUILD_GRADLE_FILE = "build.gradle";
 
