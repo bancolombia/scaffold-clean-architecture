@@ -1,5 +1,7 @@
 package co.com.bancolombia.models;
 
+import static co.com.bancolombia.utils.Utils.isStableVersion;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,7 +29,7 @@ public class DependencyReleasesDeserializer extends StdDeserializer<DependencyRe
     while (list.has(i)) {
       JsonNode dependency = list.get(i);
       String version = dependency.get("v").textValue();
-      if (isStable(version)) {
+      if (isStableVersion(version)) {
         dependencyRelease.setGroup(dependency.get("g").textValue());
         dependencyRelease.setArtifact(dependency.get("a").textValue());
         dependencyRelease.setVersion(version);
@@ -36,9 +38,5 @@ public class DependencyReleasesDeserializer extends StdDeserializer<DependencyRe
       i++;
     }
     return dependencyRelease;
-  }
-
-  private boolean isStable(String version) {
-    return !version.contains("alpha") && !version.contains("beta") && !version.contains("RC");
   }
 }

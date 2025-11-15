@@ -2,6 +2,7 @@ package co.com.bancolombia.utils.operations;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.DependencyReleaseXml;
+import co.com.bancolombia.models.MavenMetadata;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
@@ -17,7 +18,7 @@ public class HttpOperations implements ExternalOperations {
   public static final String PLUGIN_RELEASES =
       "https://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
   public static final String DEPENDENCY_RELEASES =
-      "https://search.maven.org/solrsearch/select?q=g:%22%group%22+AND+a:%22%artifact%22&core=gav&rows=5&wt=json";
+      "https://repo1.maven.org/maven2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_PLUGINS =
       "https://plugins.gradle.org/m2/%group/%artifact/maven-metadata.xml";
   public static final String SPRING_INITIALIZER = "https://start.spring.io/starter.zip";
@@ -64,10 +65,11 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
-    String endpoint = "";
+    var endpoint = "";
     try {
       endpoint = getDependencyEndpoint(dependency);
-      DependencyRelease release = RestConsumer.getRequest(endpoint, DependencyRelease.class);
+      var metadata = RestConsumer.getRequest(endpoint, MavenMetadata.class, true);
+      var release = metadata.toDependencyRelease();
       if (release.isNewest(dependency)) {
         logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
         return Optional.of(release);
@@ -125,9 +127,11 @@ public class HttpOperations implements ExternalOperations {
 
   private String getDependencyEndpoint(DependencyRelease dependency) {
     if (dependency.valid()) {
+      var group = String.join("/", dependency.getGroup().split("\\."));
+      var artifact = String.join("/", dependency.getArtifact().split("\\."));
       return resolve(DEPENDENCY_RELEASES)
-          .replaceFirst("%group", dependency.getGroup())
-          .replaceFirst("%artifact", dependency.getArtifact());
+          .replaceFirst("%group", group)
+          .replaceFirst("%artifact", artifact);
     }
     throw new IllegalArgumentException(
         dependency

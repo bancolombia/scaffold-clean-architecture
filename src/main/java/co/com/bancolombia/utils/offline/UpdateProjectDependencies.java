@@ -6,7 +6,6 @@ import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import co.com.bancolombia.utils.operations.OperationsProvider;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 
 @Setter
-@Builder(setterPrefix = "with")
+@Builder(setterPrefix = "with", toBuilder = true)
 public class UpdateProjectDependencies {
   public static final String BUILD_GRADLE_FILE = "build.gradle";
 
@@ -26,7 +25,7 @@ public class UpdateProjectDependencies {
     return UpdateProjectDependencies.builder().build();
   }
 
-  public void run() throws IOException {
+  public void run() {
     files.forEach(this::updateDependency);
   }
 
