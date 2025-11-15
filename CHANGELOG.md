@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.26.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.3) (2025-11-15)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.2...v3.26.3)
+
+**Merged pull requests:**
+
+- build\(deps\): bump step-security/harden-runner from 2.13.1 to 2.13.2 [\#752](https://github.com/bancolombia/scaffold-clean-architecture/pull/752) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs\(ca\): include short form command in project generation docs [\#751](https://github.com/bancolombia/scaffold-clean-architecture/pull/751) ([harlanenciso112](https://github.com/harlanenciso112))
+- build\(deps\): bump github/codeql-action from 3.30.6 to 4.31.2 [\#750](https://github.com/bancolombia/scaffold-clean-architecture/pull/750) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 4.6.2 to 5.0.0 [\#748](https://github.com/bancolombia/scaffold-clean-architecture/pull/748) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 5.0.0 to 6.0.0 [\#745](https://github.com/bancolombia/scaffold-clean-architecture/pull/745) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#744](https://github.com/bancolombia/scaffold-clean-architecture/pull/744) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump actions/dependency-review-action from 4.8.0 to 4.8.1 [\#742](https://github.com/bancolombia/scaffold-clean-architecture/pull/742) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.26.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.2) (2025-10-07)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.1...v3.26.2)
