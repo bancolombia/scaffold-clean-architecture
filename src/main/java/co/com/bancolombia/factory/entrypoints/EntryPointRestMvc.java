@@ -23,7 +23,11 @@ public class EntryPointRestMvc implements ModuleFactory {
 
     if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
       builder.addParam("module", "api-rest");
-      builder.setupFromTemplate("entry-point/swagger");
+      builder
+          .appendToProperties("springdoc")
+          .put("swagger-ui.path", "/v3/swagger-ui.html")
+          .put("api-docs.path", "/v3/api-docs")
+          .put("show-actuator", true);
     }
     if (builder.withMetrics()) {
       builder

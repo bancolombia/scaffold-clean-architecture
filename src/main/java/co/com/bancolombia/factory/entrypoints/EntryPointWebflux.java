@@ -20,16 +20,19 @@ public class EntryPointWebflux implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-router"))) {
       setupTemplate(builder, versioningStrategy);
-
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
       // to run archunit validations
       builder.appendDependencyToModule(
           APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
-      if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
-        builder.addParam("module", "reactive-web");
-        builder.setupFromTemplate("entry-point/swagger");
-      }
+    }
+    if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
+      builder.addParam("module", "reactive-web");
+      builder
+          .appendToProperties("springdoc")
+          .put("swagger-ui.path", "/v3/swagger-ui.html")
+          .put("api-docs.path", "/v3/api-docs")
+          .put("show-actuator", true);
     }
 
     if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-authorize"))) {

@@ -141,8 +141,7 @@ class GenerateEntryPointTaskImperativeTest {
         TEST_DIR + "/infrastructure/entry-points/api-rest/",
         "build.gradle",
         "src/main/java/co/com/bancolombia/api/ApiRest.java",
-        "src/test/java/co/com/bancolombia/api",
-        "src/main/java/co/com/bancolombia/config/SpringFoxConfig.java");
+        "src/test/java/co/com/bancolombia/api");
   }
 
   @Test

@@ -123,8 +123,7 @@ class GenerateEntryPointTaskReactiveTest {
         TEST_DIR + "/infrastructure/entry-points/reactive-web",
         "build.gradle",
         "src/main/java/co/com/bancolombia/api/ApiRest.java",
-        "src/test/java/co/com/bancolombia/api/ApiRestTest.java",
-        "src/main/java/co/com/bancolombia/config/SpringFoxConfig.java");
+        "src/test/java/co/com/bancolombia/api/ApiRestTest.java");
   }
 
   @Test
