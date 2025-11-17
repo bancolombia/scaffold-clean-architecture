@@ -21,7 +21,7 @@ public final class Constants {
   public static final String AWS_BOM_VERSION = "2.38.7";
   public static final String COMMONS_JMS_VERSION = "2.5.3";
   public static final String ARCH_UNIT_VERSION = "1.4.1";
-  public static final String OKHTTP_VERSION = "5.3.0";
+  public static final String OKHTTP_VERSION = "5.3.1";
   public static final String RESILIENCE_4J_VERSION = "2.3.0";
   public static final String BIN_STASH_VERSION = "1.3.2";
   public static final String SPRING_DOC_OPENAPI_VERSION = "2.8.14";
