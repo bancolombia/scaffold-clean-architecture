@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.27.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.27.0) (2025-11-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.4...v3.27.0)
+
+**Merged pull requests:**
+
+- feat\(swagger\): migrate from SpringFox to springdoc-openapi [\#753](https://github.com/bancolombia/scaffold-clean-architecture/pull/753) ([emerdeveloper](https://github.com/emerdeveloper))
+
 ## [v3.26.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.26.4) (2025-11-19)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.3...v3.26.4)
