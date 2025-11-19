@@ -1,7 +1,0 @@
-{
-  "folders": [
-  ],
-  "files": {
-    "entry-point/swagger/spring-fox-config.java.mustache": "infrastructure/entry-points/{{module}}/src/main/java/{{packagePath}}/config/SpringFoxConfig.java"
-  }
-}
