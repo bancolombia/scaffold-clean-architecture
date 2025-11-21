@@ -7,7 +7,7 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
-public class UpgradeY2024M11D16Gradle implements UpgradeAction {
+public class UpgradeY2024M11D16GradleJavaBlock implements UpgradeAction {
   private static final String JAVA_BLOCK_CONFIG =
       "java {\n        {{sourceCompatibilityLoaded}}\n    }";
 

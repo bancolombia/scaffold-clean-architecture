@@ -1,9 +1,10 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,8 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpgradeY2024M11D16GradleTest {
-
+class UpgradeY2025M05D10GradleCacheTest {
   @Mock private Project project;
   @Mock private Logger logger;
 
@@ -38,7 +38,7 @@ class UpgradeY2024M11D16GradleTest {
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
 
     builder = spy(new ModuleBuilder(project));
-    updater = new UpgradeY2024M11D16Gradle();
+    updater = new UpgradeY2025M05D10GradleCache();
 
     assertNotNull(updater.name());
     assertNotNull(updater.description());
@@ -49,30 +49,32 @@ class UpgradeY2024M11D16GradleTest {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
-        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-before.txt"));
+        SETTINGS_GRADLE,
+        FileUtils.getResourceAsString(resolver, "gradle-8.14-gradle-cache/settings-before.txt"));
+    builder.addFile(
+        GRADLE_PROPERTIES,
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.14-gradle-cache/gradle.properties-before.txt"));
+    builder.addFile(
+        "./.gitignore",
+        FileUtils.getResourceAsString(resolver, "gradle-8.14-gradle-cache/.gitignore-before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder)
+    verify(builder, atLeast(1))
         .addFile(
-            MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
-  }
-
-  @Test
-  void shouldNotApplyUpdateIfJavaBlockExists() throws IOException {
-    DefaultResolver resolver = new DefaultResolver();
-    // Arrange
-    builder.addFile(
-        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
-    // Act
-    boolean applied = updater.up(builder);
-    // Assert
-    assertFalse(applied);
-    verify(builder)
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(resolver, "gradle-8.14-gradle-cache/settings-after.txt"));
+    verify(builder, atLeast(1))
         .addFile(
-            MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.11-sample/main-after.txt"));
+            GRADLE_PROPERTIES,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.14-gradle-cache/gradle.properties-after.txt"));
+    verify(builder, atLeast(1))
+        .addFile(
+            "./.gitignore",
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.14-gradle-cache/.gitignore-after.txt"));
   }
 }

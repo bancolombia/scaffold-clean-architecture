@@ -6,13 +6,13 @@ import co.com.bancolombia.models.UpdateSettings;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import co.com.bancolombia.utils.operations.OperationsProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Setter;
+import tools.jackson.databind.json.JsonMapper;
 
 @Setter
 @Builder(setterPrefix = "with")
@@ -20,7 +20,7 @@ public class UpdateDependencies {
   public static final String DEPENDENCIES_CONFIG_FILE = "sh_dependencies.json";
   public static final String CONSTANTS_PATH = "src/main/java/co/com/bancolombia/Constants.java";
 
-  @Builder.Default private ObjectMapper mapper = new ObjectMapper();
+  @Builder.Default private JsonMapper mapper = new JsonMapper();
   @Builder.Default private ExternalOperations operations = OperationsProvider.real();
   @Builder.Default private String constantsPath = CONSTANTS_PATH;
 

@@ -8,7 +8,7 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
-public class UpgradeY2025M05D10Cache implements UpgradeAction {
+public class UpgradeY2025M05D10GradleCache implements UpgradeAction {
   private static final String BUILD_CACHE = "buildCache";
   private static final String MATCH_CACHE = "rootProject.name";
   private static final String APPEND_CACHE =

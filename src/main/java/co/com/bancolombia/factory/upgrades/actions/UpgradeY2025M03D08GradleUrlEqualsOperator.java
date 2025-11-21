@@ -7,7 +7,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
-public class UpgradeY2025M03D08Gradle implements UpgradeAction {
+public class UpgradeY2025M03D08GradleUrlEqualsOperator implements UpgradeAction {
 
   @Override
   @SneakyThrows

@@ -1,7 +1,8 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.atLeast;
@@ -24,7 +25,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpgradeY2025M05D10CacheTest {
+class UpgradeY2025M03D08GradleUrlEqualsOperatorTest {
+
   @Mock private Project project;
   @Mock private Logger logger;
 
@@ -38,7 +40,7 @@ class UpgradeY2025M05D10CacheTest {
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
 
     builder = spy(new ModuleBuilder(project));
-    updater = new UpgradeY2025M05D10Cache();
+    updater = new UpgradeY2025M03D08GradleUrlEqualsOperator();
 
     assertNotNull(updater.name());
     assertNotNull(updater.description());
@@ -49,30 +51,52 @@ class UpgradeY2025M05D10CacheTest {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
+        MAIN_GRADLE,
+        FileUtils.getResourceAsString(resolver, "gradle-8.13-url-equals-operator/main-before.txt"));
+    builder.addFile(
         SETTINGS_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-8.14-cache/settings-before.txt"));
-    builder.addFile(
-        GRADLE_PROPERTIES,
-        FileUtils.getResourceAsString(resolver, "gradle-8.14-cache/gradle.properties-before.txt"));
-    builder.addFile(
-        "./.gitignore",
-        FileUtils.getResourceAsString(resolver, "gradle-8.14-cache/.gitignore-before.txt"));
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.13-url-equals-operator/settings-before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
     verify(builder, atLeast(1))
         .addFile(
-            SETTINGS_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.14-cache/settings-after.txt"));
-    verify(builder, atLeast(1))
-        .addFile(
-            GRADLE_PROPERTIES,
+            MAIN_GRADLE,
             FileUtils.getResourceAsString(
-                resolver, "gradle-8.14-cache/gradle.properties-after.txt"));
+                resolver, "gradle-8.13-url-equals-operator/main-after.txt"));
     verify(builder, atLeast(1))
         .addFile(
-            "./.gitignore",
-            FileUtils.getResourceAsString(resolver, "gradle-8.14-cache/.gitignore-after.txt"));
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.13-url-equals-operator/settings-after.txt"));
+  }
+
+  @Test
+  void shouldNotApplyUpdateIfUrlIsUpdatedExists() throws IOException {
+    DefaultResolver resolver = new DefaultResolver();
+    // Arrange
+    builder.addFile(
+        MAIN_GRADLE,
+        FileUtils.getResourceAsString(resolver, "gradle-8.13-url-equals-operator/main-after.txt"));
+    builder.addFile(
+        SETTINGS_GRADLE,
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.13-url-equals-operator/settings-after.txt"));
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertFalse(applied);
+    verify(builder, atLeast(1))
+        .addFile(
+            MAIN_GRADLE,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.13-url-equals-operator/main-after.txt"));
+    verify(builder, atLeast(1))
+        .addFile(
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.13-url-equals-operator/settings-after.txt"));
   }
 }

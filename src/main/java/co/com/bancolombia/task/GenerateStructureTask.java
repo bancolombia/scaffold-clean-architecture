@@ -27,7 +27,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption mutation = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
-  private JavaVersion javaVersion = JavaVersion.VERSION_21;
+  private JavaVersion javaVersion = JavaVersion.VERSION_25;
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
@@ -118,6 +118,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21);
+    builder.addParam("java25", javaVersion == JavaVersion.VERSION_25);
 
     boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
     if (exists && force == BooleanOption.FALSE) {
@@ -169,6 +170,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
 
   public enum JavaVersion {
     VERSION_17,
-    VERSION_21
+    VERSION_21,
+    VERSION_25
   }
 }

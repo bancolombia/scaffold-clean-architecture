@@ -8,7 +8,7 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
-public class UpgradeY2023M11D05Gradle implements UpgradeAction {
+public class UpgradeY2023M11D05GradleLayoutBuildDirectory implements UpgradeAction {
 
   @Override
   @SneakyThrows

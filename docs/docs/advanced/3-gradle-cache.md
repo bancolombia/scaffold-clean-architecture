@@ -28,12 +28,19 @@ The [Gradle Build Lifecycle](https://docs.gradle.org/current/userguide/build_lif
     - Dependencies between tasks determine execution order.
     - Execution of tasks can occur in parallel.
 
-Gradle caches focus on optimizing the **Configuration** and **Execution** phases.
+:::tip[Learn More About the Build Lifecycle]
+For a visual explanation of the Gradle Build Lifecycle and how each phase works, watch this 
+[video from Gradle](https://youtu.be/AryTb7QxgfA?si=Va9Q-rYiPlSiPg0G&t=49).
+:::
 
-There are two main types of cache in Gradle:
+## Types of Gradle Caches
+
+Gradle caches focus on optimizing the **Configuration** and **Execution** phases. There are two main types:
 
 1. **Build Cache:** Optimizes the **Execution** phase by storing task outputs.
 2. **Configuration Cache:** Optimizes the **Configuration** phase by storing the task graph and project configuration.
+
+Each type of cache serves a specific purpose and can be configured independently to maximize build performance.
 
 ## Build Cache
 
@@ -122,22 +129,41 @@ It is a useful diagnostic tool when cache corruption is suspected. To enable it,
 org.gradle.configuration-cache.integrity-check=true
 ```
 
+:::warning[Usage Recommendation]
+Due to the limitations of integrity checks and the performance overhead they introduce, we recommend enabling them 
+selectively as a troubleshooting measure, rather than leaving them permanently enabled.
+:::
+
+### Cache Read Only
+
+Since Gradle 9.1.0, the [read-only configuration cache mode](https://docs.gradle.org/current/userguide/configuration_cache_enabling.html#config_cache:usage:read_only) 
+is available. In this mode, Gradle uses the cache only when there is a cache hit, without attempting to store new 
+entries. This is useful in ephemeral CI environments where writing to the cache does not make sense.
+
+To enable the configuration cache in read-only mode, add the following property to your `gradle.properties` file:
+
+```properties
+org.gradle.configuration-cache.read-only=true
+```
+
 ## Cache Configuration in Scaffold Projects
 
 Projects generated with the **Scaffold Clean Architecture** come pre-configured to take full advantage of Gradle's
 caching capabilities. The `gradle.properties` file already includes the properties to enable both the Build Cache and
 the Configuration Cache:
 
-:::note[Gradle Version Recommendation]
-To enable all these properties and ensure maximum compatibility, it is recommended to use **[Gradle 8.14.3 or higher
+:::tip[Gradle Version Recommendation]
+To enable all these properties and ensure maximum compatibility, it is recommended to use **[Gradle 9.2.1 or higher
 ](https://gradle.org/releases/)**.
 :::
 
 ```properties
 org.gradle.caching=true
+org.gradle.parallel=true
 org.gradle.configuration-cache=true
-org.gradle.configuration-cache.integrity-check=true
 org.gradle.configuration-cache.parallel=true
+org.gradle.configuration-cache.integrity-check=false
+org.gradle.configuration-cache.read-only=false
 ```
 
 In addition to enabling the caches, the scaffold follows
@@ -164,8 +190,9 @@ This combination ensures that your project is optimized for maximum speed from t
 
 ### Build Performance Comparison
 
-Below is a comparison of a project's build time with and without the Gradle cache enabled. The command executed for this
-comparison was `./gradlew clean jacocoMergedReport`. These tests were performed locally on a Mac computer.
+Below is a comparison of a project's build time with and without the Gradle cache enabled. The command executed was
+`./gradlew clean jacocoMergedReport`. These tests were performed locally on a Mac computer with an M3 Pro processor
+and 16 GB of RAM.
 
 #### Without Gradle Cache
 

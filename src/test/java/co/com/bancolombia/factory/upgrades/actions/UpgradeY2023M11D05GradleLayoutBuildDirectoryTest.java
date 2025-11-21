@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpgradeY2023M11D05GradleTest {
+class UpgradeY2023M11D05GradleLayoutBuildDirectoryTest {
   @Mock private Project project;
   @Mock private Logger logger;
   private ModuleBuilder builder;
@@ -36,7 +36,7 @@ class UpgradeY2023M11D05GradleTest {
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
     builder = spy(new ModuleBuilder(project));
-    updater = new UpgradeY2023M11D05Gradle();
+    updater = new UpgradeY2023M11D05GradleLayoutBuildDirectory();
     assertNotNull(updater.name());
     assertNotNull(updater.description());
   }
@@ -46,10 +46,13 @@ class UpgradeY2023M11D05GradleTest {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
-        MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "gradle-8.4-sample/main-before.txt"));
+        MAIN_GRADLE,
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.4-layout-build-directory/main-before.txt"));
     builder.addFile(
         APP_BUILD_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-8.4-sample/app-service-before.txt"));
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.4-layout-build-directory/app-service-before.txt"));
 
     // Act
     boolean applied = updater.up(builder);
@@ -59,11 +62,13 @@ class UpgradeY2023M11D05GradleTest {
     verify(builder, times(1))
         .addFile(
             MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.4-sample/main-after.txt"));
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.4-layout-build-directory/main-after.txt"));
 
     verify(builder, times(1))
         .addFile(
             APP_BUILD_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.4-sample/app-service-after.txt"));
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.4-layout-build-directory/app-service-after.txt"));
   }
 }
