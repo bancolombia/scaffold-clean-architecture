@@ -179,7 +179,7 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -241,7 +241,7 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -303,7 +303,7 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/bancolombia")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   public void canRunTaskGenerateStructureWithOutParametersValidator() {
@@ -387,7 +387,7 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/applications/app-service/src/test/java/co/com/test")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -409,7 +409,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/testmodel/TestModel.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -427,7 +427,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/domain/usecase/src/main/java/co/com/bancolombia/usecase/business/BusinessUseCase.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -448,7 +448,7 @@ public class PluginCleanFunctionalTest {
         new File("build/functionalTest/infrastructure/driven-adapters/rest-consumer/build.gradle")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -473,7 +473,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/entry-points/graphql-api/src/main/java/co/com/bancolombia/graphqlapi/ApiMutations.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -501,7 +501,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/rsocket-requester/src/test/java/co/com/bancolombia/rsocket/service")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -524,7 +524,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/entry-points/rsocket-responder/src/test/java/co/com/bancolombia/controller")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -543,7 +543,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -575,7 +575,7 @@ public class PluginCleanFunctionalTest {
             .contains(
                 COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -607,7 +607,7 @@ public class PluginCleanFunctionalTest {
             .contains(
                 COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -634,7 +634,7 @@ public class PluginCleanFunctionalTest {
             .contains(
                 COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -667,7 +667,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/driven-adapters/jpa-repository/src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -696,7 +696,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/domain/model/src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -778,7 +778,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/entry-points/async-event-handler/src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -807,7 +807,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/co/com/bancolombia/r2dbc/MyReactiveRepository.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -836,7 +836,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/driven-adapters/kms-repository/src/main/java/co/com/bancolombia/kms/config/model/KmsConnectionProperties.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -869,7 +869,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/driven-adapters/s3-repository/src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -893,7 +893,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/infrastructure/helpers/s3-helper/src/test/java/co/com/bancolombia/s3helper")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -909,7 +909,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/deployment/cleanarchitecture_azure_build.yaml").exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -927,7 +927,7 @@ public class PluginCleanFunctionalTest {
                 "build/functionalTest/.github/workflows/cleanarchitecture_github_action_gradle.yaml")
             .exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -940,7 +940,7 @@ public class PluginCleanFunctionalTest {
     BuildResult result = runner.build();
 
     // Verify the result
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -960,7 +960,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(result.getOutput().contains("generateModel"));
     assertTrue(result.getOutput().contains(VALIDATE_STRUCTURE));
 
-    assertEquals(result.task(":tasks").getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":tasks").getOutcome());
   }
 
   @Test
@@ -974,7 +974,7 @@ public class PluginCleanFunctionalTest {
     // Assert
     assertFalse(
         new File("build/functionalTest/infrastructure/driven-adapters/jpa-repository").exists());
-    assertEquals(result.task(":deleteModule").getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":deleteModule").getOutcome());
   }
 
   @Test
@@ -985,7 +985,7 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
     // Assert
-    assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":validateStructure").getOutcome());
   }
 
   @Test
@@ -996,7 +996,7 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
     // Assert
-    assertEquals(result.task(":validateStructure").getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":validateStructure").getOutcome());
   }
 
   @Test
@@ -1042,7 +1042,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/entry-points/mq-listener/src/main/java/co/com/bancolombia/mq/listener/SampleMQMessageListener.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1062,7 +1062,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1082,7 +1082,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/mq-sender/src/main/java/co/com/bancolombia/mq/sender/SampleMQMessageSender.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1102,7 +1102,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/entry-points/sqs-listener/src/main/java/co/com/bancolombia/sqs/listener/SQSProcessor.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1115,7 +1115,7 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1127,7 +1127,7 @@ public class PluginCleanFunctionalTest {
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1155,7 +1155,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1183,7 +1183,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/dynamo-db/build.gradle")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1203,7 +1203,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1223,7 +1223,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(
         new File("build/functionalTest/infrastructure/driven-adapters/bin-stash/build.gradle")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1243,7 +1243,7 @@ public class PluginCleanFunctionalTest {
         new File(
                 "build/functionalTest/infrastructure/driven-adapters/bin-stash/src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java")
             .exists());
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1259,7 +1259,7 @@ public class PluginCleanFunctionalTest {
         FileUtils.readFileToString(
                 new File("build/functionalTest/gradle.properties"), StandardCharsets.UTF_8)
             .contains("analytics=true"));
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   @Test
@@ -1290,7 +1290,7 @@ public class PluginCleanFunctionalTest {
 
     assertTrue(new File("build/functionalTest/performance-test/README.md").exists());
 
-    assertEquals(result.task(":" + task).getOutcome(), TaskOutcome.SUCCESS);
+    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
   }
 
   private void writeString(File file, String string) throws IOException {
