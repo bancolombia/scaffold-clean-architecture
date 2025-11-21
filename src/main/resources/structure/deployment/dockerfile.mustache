@@ -4,6 +4,9 @@ FROM eclipse-temurin:17-jdk-alpine
 {{#java21}}
 FROM eclipse-temurin:21-jdk-alpine
 {{/java21}}
+{{#java25}}
+FROM eclipse-temurin:25-jdk-alpine
+{{/java25}}
 VOLUME /tmp
 COPY *.jar {{projectName}}.jar
 ENV JAVA_OPTS=" -Xshareclasses:name=cacheapp,cacheDir=/cache,nonfatal -XX:+UseContainerSupport -XX:MaxRAMPercentage=70 -Djava.security.egd=file:/dev/./urandom"

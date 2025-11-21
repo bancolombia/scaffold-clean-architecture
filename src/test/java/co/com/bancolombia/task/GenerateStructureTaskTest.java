@@ -7,10 +7,11 @@ import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption;
-import co.com.bancolombia.task.GenerateStructureTask.JavaVersion;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -68,10 +69,11 @@ class GenerateStructureTaskTest {
   @Test
   void shouldReturnJavaVersion() {
     // Arrange
+    List<Integer> expectedVersions = Arrays.asList(17, 21, 25);
     // Act
-    List<JavaVersion> types = task.getJavaVersions();
+    List<Integer> versions = task.getJavaVersions();
     // Assert
-    assertEquals(Arrays.asList(JavaVersion.values()), types);
+    assertEquals(expectedVersions, versions);
   }
 
   @Test
@@ -138,5 +140,26 @@ class GenerateStructureTaskTest {
     List<BooleanOption> options = task.getLombokOptions();
     // Assert
     assertEquals(2, options.size());
+  }
+
+  @Test
+  void shouldSetJavaVersionFromNumber() {
+    // Arrange
+    String validVersion = "21";
+    // Act
+    task.setJavaVersion(validVersion);
+    // Assert - verify the list contains the version
+    assertTrue(task.getJavaVersions().contains(21));
+  }
+
+  @Test
+  void shouldThrowExceptionForInvalidJavaVersion() {
+    // Arrange
+    String invalidVersion = "19";
+    // Act & Assert
+    IllegalArgumentException exception =
+        assertThrows(IllegalArgumentException.class, () -> task.setJavaVersion(invalidVersion));
+    assertEquals(
+        "Unsupported Java version: 19. Supported versions: 17, 21, 25", exception.getMessage());
   }
 }

@@ -48,10 +48,10 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Set up Semantic Release
         if: github.ref == 'refs/heads/master'
-        run: npm -g install @semantic-release/git semantic-release@23.0.0
+        run: npm -g install semantic-release@25.0.2
       - name: Semantic Release
         if: github.ref == 'refs/heads/master'
-        run: npx semantic-release@23.0.0
+        run: npx semantic-release@25.0.2
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
       - name: Set up JDK 25

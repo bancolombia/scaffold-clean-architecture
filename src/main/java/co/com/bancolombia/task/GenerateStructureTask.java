@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
@@ -27,7 +29,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption mutation = BooleanOption.TRUE;
   private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
-  private JavaVersion javaVersion = JavaVersion.VERSION_25;
+  private Integer javaVersion = JavaVersion.VERSION_25.getNumber();
 
   @Option(option = "package", description = "Set principal package to use in the project")
   public void setPackage(String packageName) {
@@ -62,8 +64,8 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   }
 
   @Option(option = "javaVersion", description = "Set Java version")
-  public void setJavaVersion(JavaVersion javaVersion) {
-    this.javaVersion = javaVersion;
+  public void setJavaVersion(String version) {
+    this.javaVersion = JavaVersion.validateVersion(Integer.parseInt(version));
   }
 
   @Option(option = "force", description = "Force regenerates all files")
@@ -97,8 +99,8 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   }
 
   @OptionValues("javaVersion")
-  public List<JavaVersion> getJavaVersions() {
-    return Arrays.asList(JavaVersion.values());
+  public List<Integer> getJavaVersions() {
+    return Arrays.stream(JavaVersion.values()).map(JavaVersion::getNumber).toList();
   }
 
   @Override
@@ -116,9 +118,9 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("example", withExample == BooleanOption.TRUE);
     builder.addParam("mutation", mutation == BooleanOption.TRUE);
     builder.addParam("javaVersion", javaVersion);
-    builder.addParam("java17", javaVersion == JavaVersion.VERSION_17);
-    builder.addParam("java21", javaVersion == JavaVersion.VERSION_21);
-    builder.addParam("java25", javaVersion == JavaVersion.VERSION_25);
+    builder.addParam("java17", javaVersion == JavaVersion.VERSION_17.getNumber());
+    builder.addParam("java21", javaVersion == JavaVersion.VERSION_21.getNumber());
+    builder.addParam("java25", javaVersion == JavaVersion.VERSION_25.getNumber());
 
     boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
     if (exists && force == BooleanOption.FALSE) {
@@ -168,9 +170,30 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     IMPERATIVE
   }
 
+  @Getter
+  @RequiredArgsConstructor
   public enum JavaVersion {
-    VERSION_17,
-    VERSION_21,
-    VERSION_25
+    VERSION_17(17),
+    VERSION_21(21),
+    VERSION_25(25);
+
+    private final int number;
+
+    public static int validateVersion(int version) {
+      return Arrays.stream(values())
+          .filter(v -> v.number == version)
+          .findFirst()
+          .map(JavaVersion::getNumber)
+          .orElseThrow(
+              () ->
+                  new IllegalArgumentException(
+                      "Unsupported Java version: "
+                          + version
+                          + ". Supported versions: "
+                          + Arrays.stream(values())
+                              .map(v -> String.valueOf(v.number))
+                              .reduce((a, b) -> a + ", " + b)
+                              .orElse("")));
+    }
   }
 }
