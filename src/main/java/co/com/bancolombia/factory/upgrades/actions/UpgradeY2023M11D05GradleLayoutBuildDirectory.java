@@ -16,22 +16,22 @@ public class UpgradeY2023M11D05GradleLayoutBuildDirectory implements UpgradeActi
     return builder.updateFile(
             MAIN_GRADLE,
             content -> {
-              String res =
+              String result =
                   UpdateUtils.replace(
                       content,
                       "xml.setOutputLocation file(\"${buildDir}/reports/jacoco.xml\")",
                       "xml.setOutputLocation layout.buildDirectory.file(\"reports/jacoco.xml\")");
-              res =
+              result =
                   UpdateUtils.replace(
-                      res,
+                      result,
                       "html.setOutputLocation file(\"${buildDir}/reports/jacocoHtml\")",
                       "html.setOutputLocation layout.buildDirectory.dir(\"reports/jacocoHtml\")");
-              res =
+              result =
                   UpdateUtils.replace(
-                      res,
+                      result,
                       "reportsDirectory.set(file(\"$buildDir/reports\"))",
                       "reportsDirectory.set(layout.buildDirectory.dir(\"reports\"))");
-              return res;
+              return result;
             })
         | builder.updateFile(
             APP_BUILD_GRADLE,
