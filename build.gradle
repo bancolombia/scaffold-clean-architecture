@@ -12,9 +12,9 @@ plugins {
     id 'jacoco'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id 'org.sonarqube' version '7.0.1.6134'
+    id 'org.sonarqube' version '7.1.0.6387'
     id 'com.gradle.plugin-publish' version '2.0.0'
-    id 'com.diffplug.spotless' version '8.0.0'
+    id 'com.diffplug.spotless' version '8.1.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.1.9'
 }
@@ -206,8 +206,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
-    implementation 'com.squareup.okhttp3:okhttp:5.3.1'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:5.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:5.3.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:5.3.2'
 }
 
 jacocoTestReport {
@@ -297,7 +297,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.14.3'
+    gradleVersion = '9.2.1'
     validateDistributionUrl = true
     distributionSha256Sum = "a17ddd85a26b6a7f5ddb71ff8b05fc5104c0202c6e64782429790c933686c806"
 }
