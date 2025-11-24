@@ -12,11 +12,14 @@ public class UpgradeY2025M05D10GradleCache implements UpgradeAction {
   private static final String BUILD_CACHE = "buildCache";
   private static final String MATCH_CACHE = "rootProject.name";
   private static final String APPEND_CACHE =
-      "buildCache {\n"
-          + "    local {\n"
-          + "        directory = new File(rootDir, 'build-cache')\n"
-          + "    }\n"
-          + "}\n\n";
+      """
+  buildCache {
+      local {
+          directory = new File(rootDir, 'build-cache')
+      }
+  }
+
+  """;
 
   private static final String PARALLEL_CHECK = "org.gradle.parallel=true";
   private static final String CACHING = "org.gradle.caching=true";

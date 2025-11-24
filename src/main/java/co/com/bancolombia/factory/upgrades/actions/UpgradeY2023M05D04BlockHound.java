@@ -18,15 +18,16 @@ public class UpgradeY2023M05D04BlockHound implements UpgradeAction {
   private static final String CHECK_ARG = "AllowRedefinitionToAddDeleteMethods";
   private static final String MATCH_ARG = "test.finalizedBy";
   private static final String APPEND_ARG =
-      "tasks.withType(Test).configureEach {\n"
-          + "        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {\n"
-          + "            jvmArgs += [\n"
-          + "                    \"-XX:+AllowRedefinitionToAddDeleteMethods\"\n"
-          + "            ]\n"
-          + "        }\n"
-          + "    }\n"
-          + "\n"
-          + "    ";
+      """
+                  tasks.withType(Test).configureEach {
+                          if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+                              jvmArgs += [
+                                      "-XX:+AllowRedefinitionToAddDeleteMethods"
+                              ]
+                          }
+                      }
+
+                     \s""";
 
   @Override
   @SneakyThrows

@@ -10,13 +10,16 @@ import lombok.SneakyThrows;
 public class UpgradeY2023M01D12 implements UpgradeAction {
   private static final String VALIDATION = "pluginManagement";
   private static final String VALUE =
-      "pluginManagement {\n"
-          + "    repositories {\n"
-          + "        //mavenLocal()\n"
-          + "        //maven { url '...' }\n"
-          + "        gradlePluginPortal()\n"
-          + "    }\n"
-          + "}\n\n";
+      """
+  pluginManagement {
+      repositories {
+          //mavenLocal()
+          //maven { url '...' }
+          gradlePluginPortal()
+      }
+  }
+
+  """;
   private static final String MATCH = "";
 
   @Override
