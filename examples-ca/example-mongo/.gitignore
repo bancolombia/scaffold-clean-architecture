@@ -335,3 +335,4 @@ gradle-app.setting
 *.hprof
 
 /deployment/mongo-volume/
+build-cache

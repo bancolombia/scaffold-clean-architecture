@@ -1,8 +1,13 @@
 pluginManagement {
     repositories {
-        //mavenLocal()
-        //maven { url '...' }
+        //maven { url = '...' }
         gradlePluginPortal()
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
     }
 }
 

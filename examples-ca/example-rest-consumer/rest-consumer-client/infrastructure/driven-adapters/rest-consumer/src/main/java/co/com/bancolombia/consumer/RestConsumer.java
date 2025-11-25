@@ -2,7 +2,6 @@ package co.com.bancolombia.consumer;
 
 import co.com.bancolombia.model.user.User;
 import co.com.bancolombia.model.user.gateways.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
@@ -16,8 +15,7 @@ import java.util.List;
 public class RestConsumer implements UserRepository {
     private final RestClient restClient;
 
-    public RestConsumer(ObjectMapper mapper,
-                        @Value("${adapter.restconsumer.url}") String url) {
+    public RestConsumer(@Value("${adapter.restconsumer.url}") String url) {
         this.restClient = RestClient.builder().baseUrl(url).build();
     }
 

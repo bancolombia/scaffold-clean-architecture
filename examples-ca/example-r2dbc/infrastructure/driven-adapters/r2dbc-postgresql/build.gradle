@@ -3,5 +3,6 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.postgresql:r2dbc-postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-r2dbc-test'
 }
 

@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        cleanArchitectureVersion = '3.22.1'
-        springBootVersion = '3.4.4'
-        sonarVersion = '6.1.0.5360'
-        jacocoVersion = '0.8.13'
-        lombokVersion = '1.18.38'
-        pitestVersion = '1.15.0'
+        cleanArchitectureVersion = '3.27.0'
+        springBootVersion = '4.0.0'
+        sonarVersion = '7.1.0.6387'
+        jacocoVersion = '0.8.14'
+        lombokVersion = '1.18.42'
+        pitestVersion = '1.19.0-rc.2'
     }
 }
 
@@ -24,9 +24,9 @@ sonar {
         property "sonar.modules", "${modules.join(',')}"
         property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
         property "sonar.exclusions", "**/MainApplication.java"
-        property "sonar.test", "src/test"
-        property "sonar.java.binaries", ""
-        property "sonar.junit.reportsPath", ""
+        property "sonar.tests", "src/test"
+        property "sonar.java.binaries", "**/build/classes/java/main"
+        property "sonar.junit.reportsPath", "**/build/test-results/test"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacocoMergedReport/jacocoMergedReport.xml"
         property "sonar.pitest.reportPaths", "build/reports/pitest/mutations.xml"
