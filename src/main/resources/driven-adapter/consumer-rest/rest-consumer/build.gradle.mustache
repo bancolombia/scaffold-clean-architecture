@@ -3,8 +3,7 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'com.squareup.okhttp3:okhttp:{{OKHTTP_VERSION}}'
     testImplementation 'com.squareup.okhttp3:mockwebserver:{{OKHTTP_VERSION}}'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'tools.jackson.core:jackson-databind'
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{RESILIENCE_4J_VERSION}}'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'

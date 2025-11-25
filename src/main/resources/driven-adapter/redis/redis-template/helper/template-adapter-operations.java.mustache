@@ -4,7 +4,7 @@ import java.time.Duration;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.function.Function;
@@ -24,7 +24,7 @@ public abstract class TemplateAdapterOperations<E, K, V> {
 
         template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        template.setDefaultSerializer(new Jackson2JsonRedisSerializer<>(dataClass));
+        template.setDefaultSerializer(new JacksonJsonRedisSerializer<>(dataClass));
         template.afterPropertiesSet();
     }
 

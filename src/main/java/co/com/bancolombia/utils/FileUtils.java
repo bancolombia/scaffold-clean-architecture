@@ -1,9 +1,5 @@
 package co.com.bancolombia.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,6 +30,10 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileUtils {
@@ -126,16 +126,16 @@ public class FileUtils {
     return IOUtils.toString(reader);
   }
 
-  public static ObjectNode getFromYaml(File file) throws IOException {
+  public static ObjectNode getFromYaml(File file) {
     ObjectMapper mapper =
-        new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        YAMLMapper.builder().disable(YAMLWriteFeature.WRITE_DOC_START_MARKER).build();
     Object object = mapper.readTree(file);
     return (ObjectNode) object;
   }
 
-  public static String parseToYaml(ObjectNode node) throws IOException {
+  public static String parseToYaml(ObjectNode node) {
     ObjectMapper mapper =
-        new ObjectMapper(new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER));
+        YAMLMapper.builder().disable(YAMLWriteFeature.WRITE_DOC_START_MARKER).build();
     return mapper.writeValueAsString(node);
   }
 

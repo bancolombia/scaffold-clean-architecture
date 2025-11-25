@@ -1,6 +1,5 @@
 package {{package}}.consumer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 {{#metrics}}
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
@@ -8,6 +7,7 @@ import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class RestConsumerConfig {

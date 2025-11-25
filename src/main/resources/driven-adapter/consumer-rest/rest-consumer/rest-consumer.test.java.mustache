@@ -1,13 +1,12 @@
 package {{package}}.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import java.io.IOException;
-
+import tools.jackson.databind.ObjectMapper;
 
 class RestConsumerTest {
 
@@ -29,7 +28,6 @@ class RestConsumerTest {
 
     @AfterAll
     static void tearDown() throws IOException {
-
         mockBackEnd.shutdown();
     }
 

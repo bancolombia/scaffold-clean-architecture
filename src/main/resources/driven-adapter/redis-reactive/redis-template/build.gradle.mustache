@@ -1,7 +1,7 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'tools.jackson.core:jackson-databind'
 
     {{#include-awssecrets}}
     implementation("com.github.bancolombia:aws-secrets-manager-sync:{{SECRETS_VERSION}}")

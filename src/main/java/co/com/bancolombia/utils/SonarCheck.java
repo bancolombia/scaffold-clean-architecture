@@ -1,7 +1,5 @@
 package co.com.bancolombia.utils;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -14,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /** This class should translate the dependency check vulnerabilities to sonar issues */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,7 +27,7 @@ public class SonarCheck {
   @SneakyThrows
   public static void parse(Set<String> subProjectPath) {
     final ObjectMapper mapper =
-        new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        JsonMapper.builder().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
 
     subProjectPath.forEach(p -> parseSingle(p, mapper));
   }

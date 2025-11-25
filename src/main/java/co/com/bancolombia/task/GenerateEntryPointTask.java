@@ -17,7 +17,7 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
   private String swaggerFile = null;
-  private Server server = Server.UNDERTOW;
+  private Server server = Server.TOMCAT;
   private VersioningStrategy versioning = VersioningStrategy.NONE;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;

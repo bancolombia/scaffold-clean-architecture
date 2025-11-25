@@ -20,14 +20,19 @@ Whether you'll use generic one also parameter `name` is required.
 | graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                                             |
 | kafka                            | Kafka Consumer                         |                                                                                                                                                                    |
 | mq                               | JMS MQ Client to listen messages       |                                                                                                                                                                    |
-| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true,false] --from-swagger swagger.yaml --swagger [true,false]                                           |
+| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default tomcat --authorization [true,false] --from-swagger swagger.yaml --swagger [true,false]                                             |
 | rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                                                    |
 | sqs                              | SQS Listener                           |                                                                                                                                                                    |
 | webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE  --swagger [true,false] |
 | kafkastrimzi                     | Kafka Strimzi Consumer Entry Point     | --name [name] --topicConsumer [topicName] (optional, for default 'test-with-registries')                                                                           |
 
-Additionally, if you'll use a restmvc, you can specify the web server on which the application will run. By default,
-undertow.
+Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
+Tomcat.
+
+| Reference for **serverOption** | Name                    |
+   |--------------------------------|-------------------------|
+| tomcat                         | Tomcat server (default) |
+| jetty                          | Jetty server            |
 
 ## Ejemplo de uso para Kafka Strimzi Consumer
 ```shell
@@ -45,12 +50,6 @@ This will generate a specialized entry point for consuming Kafka messages using 
    gradle generateEntryPoint --type=restmvc --server=[serverOption]
    gradle gep --type=restmvc --server=[serverOption]
    ```
-
-| Reference for **serverOption** | Name                      |
-   |--------------------------------|---------------------------|
-| undertow                       | Undertow server (default) |
-| tomcat                         | Tomcat server             |
-| jetty                          | Jetty server              |
 
 _**This task will generate something like that:**_
 

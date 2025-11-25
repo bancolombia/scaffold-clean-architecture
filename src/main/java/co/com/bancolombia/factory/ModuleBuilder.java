@@ -21,8 +21,6 @@ import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import co.com.bancolombia.utils.operations.OperationsProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -50,6 +48,8 @@ import org.gradle.api.logging.Logger;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class ModuleBuilder {
   private static final String DEFINITION_FILES = "definition.json";
@@ -211,7 +211,7 @@ public class ModuleBuilder {
   }
 
   public void setUpSecretsInAdapter() throws CleanException, IOException {
-    boolean includeSecrets = Boolean.TRUE.equals(getBooleanParam("include-secret"));
+    boolean includeSecrets = getBooleanParam("include-secret");
     if (!includeSecrets) {
       return;
     }

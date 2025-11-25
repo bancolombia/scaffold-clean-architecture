@@ -8,16 +8,16 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.utils.swagger.Swagger;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import org.gradle.api.logging.Logger;
+import tools.jackson.databind.node.ObjectNode;
 
 public class DrivenAdapterRestConsumer implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     Logger logger = builder.getProject().getLogger();
-    if (Boolean.TRUE.equals(builder.isReactive())) {
+    if (builder.isReactive()) {
       logger.lifecycle("Generating rest-consumer for reactive project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");
       String implementation =

@@ -9,9 +9,9 @@ import reactor.core.publisher.Mono;
 import org.reactivecommons.api.domain.DomainEventBus;
 
 {{#eda}}
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cloudevents.CloudEvent;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 {{/eda}}
 {{^eda}}
 import org.reactivecommons.api.domain.DomainEvent;
