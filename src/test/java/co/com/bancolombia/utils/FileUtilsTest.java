@@ -69,7 +69,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  void readYaml() throws IOException {
+  void readYaml() {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
 
@@ -77,7 +77,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  void parseToYaml() throws IOException {
+  void parseToYaml() {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
     ((ObjectNode) yaml.get("server")).put("port", 8081);
