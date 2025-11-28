@@ -1,0 +1,61 @@
+package {{package}}.mcp.tools;
+
+{{#lombok}}
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springaicommunity.mcp.annotation.McpTool;
+import org.springaicommunity.mcp.annotation.McpToolParam;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * Example tool demonstrating MCP tool capabilities.
+ * Replace this with your actual business logic tools.
+ */
+@Component
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+public class ExampleTool {
+
+  /**
+   * Example tool that echoes a message.
+   *
+   * @param message the message to echo
+   * @return the echoed message
+   */
+  @McpTool(
+      name = "echo",
+      description = "Echo a message back to the client")
+  public Mono<String> echo(
+      @McpToolParam(description = "The message to echo", required = true) String message) {
+{{#lombok}}
+    log.info("Echo tool called with message: {}", message);
+{{/lombok}}
+    return Mono.fromCallable(() -> {
+      if (message == null || message.trim().isEmpty()) {
+        return "Error: Message cannot be empty";
+      }
+      return "Echo: " + message;
+    });
+  }
+
+  /**
+   * Example tool that adds two numbers.
+   *
+   * @param a first number
+   * @param b second number
+   * @return sum of a and b
+   */
+  @McpTool(
+      name = "add",
+      description = "Add two numbers")
+  public Mono<Integer> add(
+      @McpToolParam(description = "First number", required = true) int a,
+      @McpToolParam(description = "Second number", required = true) int b) {
+{{#lombok}}
+    log.debug("Adding {} + {}", a, b);
+{{/lombok}}
+    return Mono.just(a + b);
+  }
+}

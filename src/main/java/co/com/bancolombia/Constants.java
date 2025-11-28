@@ -26,6 +26,8 @@ public final class Constants {
   public static final String BIN_STASH_VERSION = "1.3.2";
   public static final String SPRING_DOC_OPENAPI_VERSION = "2.8.14";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
+  // Spring AI MCP
+  public static final String SPRING_AI_VERSION = "1.1.0";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.14";
   public static final String SONAR_VERSION = "7.0.1.6134";

@@ -1,0 +1,76 @@
+package {{package}}.mcp.resources;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.modelcontextprotocol.spec.McpSchema.ReadResourceResult;
+import io.modelcontextprotocol.spec.McpSchema.TextResourceContents;
+import java.util.List;
+import java.util.Map;
+{{#lombok}}
+import lombok.SneakyThrows;
+{{/lombok}}
+import org.springaicommunity.mcp.annotation.McpResource;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * System information resource for MCP server.
+ * Resources provide data that can be loaded into the AI model's context.
+ */
+@Component
+public class SystemInfoResource {
+
+  private final ObjectMapper objectMapper;
+
+  public SystemInfoResource(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
+
+  /**
+   * Provides system information as a resource.
+   *
+   * @return system information
+   */
+  @McpResource(
+      uri = "resource://system/info",
+      name = "system-info",
+      description = "Provides system and application information")
+  public Mono<ReadResourceResult> getSystemInfo() {
+    return Mono.fromCallable(() -> {
+      Map<String, Object> info = Map.of(
+          "service", "{{task-param-name}}",
+          "package", "{{package}}",
+          "version", "1.0.0",
+          "status", "UP",
+          "reactive", true,
+          "capabilities", List.of("tools", "resources", "prompts"),
+          "javaVersion", System.getProperty("java.version"),
+          "os", System.getProperty("os.name") + " " + System.getProperty("os.version"),
+          "timestamp", System.currentTimeMillis()
+      );
+
+      return new ReadResourceResult(
+          List.of(new TextResourceContents(
+              "resource://system/info",
+              MediaType.APPLICATION_JSON_VALUE,
+              toJson(info)
+          ))
+      );
+    });
+  }
+
+{{#lombok}}
+  @SneakyThrows
+{{/lombok}}
+  private String toJson(Object object) {
+{{^lombok}}
+    try {
+{{/lombok}}
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+{{^lombok}}
+    } catch (Exception e) {
+      return "{\"error\": \"" + e.getMessage() + "\"}";
+    }
+{{/lombok}}
+  }
+}

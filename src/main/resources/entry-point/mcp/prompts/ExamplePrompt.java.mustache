@@ -1,0 +1,81 @@
+package {{package}}.mcp.prompts;
+
+import io.modelcontextprotocol.spec.McpSchema.GetPromptResult;
+import io.modelcontextprotocol.spec.McpSchema.PromptMessage;
+import io.modelcontextprotocol.spec.McpSchema.Role;
+import io.modelcontextprotocol.spec.McpSchema.TextContent;
+import java.util.List;
+{{#lombok}}
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springaicommunity.mcp.annotation.McpArg;
+import org.springaicommunity.mcp.annotation.McpPrompt;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * Example prompt template for MCP server.
+ * Prompts provide reusable message templates for AI interactions.
+ */
+@Component
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+public class ExamplePrompt {
+
+  /**
+   * Provides a greeting prompt template.
+   *
+   * @param name the name to greet (optional)
+   * @return formatted greeting prompt
+   */
+  @McpPrompt(
+      name = "greeting",
+      description = "Generate a friendly greeting message")
+  public Mono<GetPromptResult> greetingPrompt(
+      @McpArg(name = "name", required = false) String name) {
+{{#lombok}}
+    log.debug("Greeting prompt requested for: {}", name);
+{{/lombok}}
+    
+    return Mono.fromCallable(() -> {
+      String greeting = (name == null || name.isEmpty())
+          ? "Hello! Welcome to {{task-param-name}}."
+          : "Hello, " + name + "! Welcome to {{task-param-name}}.";
+
+      String promptText = greeting + " How can I assist you today?";
+
+      PromptMessage message = new PromptMessage(
+          Role.USER,
+          new TextContent(promptText)
+      );
+
+      return new GetPromptResult("Greeting message", List.of(message));
+    });
+  }
+
+  /**
+   * Provides a help prompt template.
+   *
+   * @param topic the topic to get help with (optional)
+   * @return formatted help prompt
+   */
+  @McpPrompt(
+      name = "help",
+      description = "Generate a help message for a specific topic")
+  public Mono<GetPromptResult> helpPrompt(
+      @McpArg(name = "topic", required = false) String topic) {
+    return Mono.fromCallable(() -> {
+      String helpText = (topic == null || topic.isEmpty())
+          ? "I can help you with various tasks. What would you like to know about?"
+          : "Let me help you with " + topic + ". What specific information do you need?";
+
+      PromptMessage message = new PromptMessage(
+          Role.USER,
+          new TextContent(helpText)
+      );
+
+      return new GetPromptResult("Help message", List.of(message));
+    });
+  }
+}
