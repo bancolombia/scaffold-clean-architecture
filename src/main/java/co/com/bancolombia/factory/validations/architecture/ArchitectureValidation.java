@@ -126,7 +126,7 @@ public final class ArchitectureValidation {
           content -> content.replaceAll(regexArchUnit, depArchUnit));
     }
     builder.appendDependencyToModule(
-        Constants.APP_SERVICE, "testImplementation 'com.fasterxml.jackson.core:jackson-databind'");
+        Constants.APP_SERVICE, "testImplementation 'tools.jackson.core:jackson-databind'");
     builder.persist();
   }
 
