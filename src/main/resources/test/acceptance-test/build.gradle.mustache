@@ -4,11 +4,11 @@ plugins {
 
 ext {
     karateVersion = "1.5.1"
-    cucumberReportVersion = "5.8.4"
-    swaggerRequestValidatorVersion = "2.44.1"
-    commonsCodecVersion = "1.18.0"
+    cucumberReportVersion = "5.10.1"
+    swaggerRequestValidatorVersion = "2.46.0"
+    commonsCodecVersion = "1.20.0"
     rhinoVersion = "1.8.0"
-    fasterxmlJacksonCoreVersion = "2.18.3"
+    fasterxmlJacksonCoreVersion = "3.0.3"
 }
 
 repositories {
@@ -21,7 +21,7 @@ dependencies {
     testImplementation "com.atlassian.oai:swagger-request-validator-core:${swaggerRequestValidatorVersion}"
     testImplementation "commons-codec:commons-codec:${commonsCodecVersion}"
     testImplementation "org.mozilla:rhino:${rhinoVersion}"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlJacksonCoreVersion}"
+    testImplementation "tools.jackson.core:jackson-databind:${fasterxmlJacksonCoreVersion}"
 }
 
 sourceSets {
