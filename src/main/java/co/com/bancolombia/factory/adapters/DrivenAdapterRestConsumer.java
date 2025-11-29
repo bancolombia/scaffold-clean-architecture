@@ -27,7 +27,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
-      String implementation = buildImplementation("com.fasterxml.jackson.core:jackson-databind");
+      String implementation = buildImplementation("tools.jackson.core:jackson-databind");
       builder.appendDependencyToModule(APP_SERVICE, implementation);
     }
     builder

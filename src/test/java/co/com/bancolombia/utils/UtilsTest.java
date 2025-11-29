@@ -16,6 +16,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // @formatter:off
 class UtilsTest {
@@ -392,7 +393,7 @@ class UtilsTest {
 
     @Test
     void shouldReplaceExpression() {
-        String expected = "'com.fasterxml.jackson.core:jackson-databind:2.11.0'";
+        String expected = "'tools.jackson.core:jackson-databind:3.0.3'";
         String result =
                 Utils.replaceExpression(
                         "'com.github.spullara.mustache.java:compiler:0.9.6'",
@@ -404,7 +405,7 @@ class UtilsTest {
     @Test
     void shouldGetAllFilesWithGradleExtension() throws IOException {
         List<String> result = Utils.getAllFilesWithGradleExtension(".");
-        assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
+        assertTrue(result.stream().allMatch(s -> s.endsWith("gradle")));
     }
 
     @Test
