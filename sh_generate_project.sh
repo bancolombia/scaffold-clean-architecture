@@ -2,6 +2,9 @@
 set -e
 TYPE=$1
 MY_DIR="build/toscan/$TYPE"
+SETTINGS_GRADLE="settings.gradle"
+MAIN_GRADLE="main.gradle"
+
 echo "Generating project with type $TYPE in $MY_DIR"
 
 rm -rf $MY_DIR
@@ -24,6 +27,28 @@ cd $MY_DIR || exit
 gradle --version
 gradle ca --metrics false --example true --type $TYPE
 gradle wrapper
+
+echo "Replacing //mavenLocal() with mavenLocal() in $SETTINGS_GRADLE"
+if sed --version >/dev/null 2>&1; then
+  # GNU sed (Linux)
+  sed -i 's|//mavenLocal|mavenLocal|g' "$SETTINGS_GRADLE"
+else
+  # BSD sed (macOS)
+  sed -i '' 's|//mavenLocal|mavenLocal|g' "$SETTINGS_GRADLE"
+fi
+
+echo "Inserting mavenLocal() into the repositories block of $MAIN_GRADLE"
+if sed --version >/dev/null 2>&1; then
+  # GNU sed (Linux)
+  sed -i '/repositories[[:space:]]*{/a\
+        mavenLocal()
+' "$MAIN_GRADLE"
+else
+  # BSD sed (macOS)
+  sed -i '' '/repositories[[:space:]]*{/a\
+        mavenLocal()
+' "$MAIN_GRADLE"
+ fi
 
 if [ $TYPE == "reactive" ]
 then
