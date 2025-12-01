@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ApiRest {
 
-    @GetMapping(path = "/list-users")
+    @GetMapping(path = "/{version}/list-users", version = "1.0")
     public List<Usuario> commandName() {
         return Arrays.asList(Usuario.builder()
                 .name("Juan")
@@ -30,7 +30,21 @@ public class ApiRest {
                 .build());
     }
 
-    @GetMapping(path = "/sum/{x}/{z}")
+    @GetMapping(path = "/{version}/list-users", version = "2.0" )
+    public List<Usuario> commandNameV2() {
+        return Arrays.asList(Usuario.builder()
+                .name("Carlos")
+                .age(21)
+                .build(), Usuario.builder()
+                .name("Andres")
+                .age(20)
+                .build(), Usuario.builder()
+                .name("Diego")
+                .age(40)
+                .build());
+    }
+
+    @GetMapping(path = "/{version}/sum/{x}/{z}", version = "1.0")
     public Integer sum(@PathVariable("x") Integer x, @PathVariable("z") Integer z) {
         return x + z;
     }
