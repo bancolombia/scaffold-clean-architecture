@@ -2,8 +2,8 @@ package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
+import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
-import co.com.bancolombia.factory.entrypoints.EntryPointWebflux.VersioningStrategy;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;

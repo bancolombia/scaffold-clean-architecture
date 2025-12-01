@@ -1,5 +1,8 @@
 package {{package}}.api.config;
 
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +23,7 @@ import tools.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 {{/lombok}}
-{{#lombok}}
-import lombok.extern.log4j.Log4j2;
-{{/lombok}}
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +58,7 @@ public class AuthorizationJwt {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         return http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwtSpec ->
@@ -94,16 +93,10 @@ public class AuthorizationJwt {
     }
 
     private List<String> getRoles(Map<String, Object> claims, String jsonExpClaim){
-        List<String> roles = List.of();
-        try {
-            var json = mapper.writeValueAsString(claims);
-            var chunk = mapper.readTree(json)
-                    .at(jsonExpClaim);
-            return mapper.readerFor(new TypeReference<List<String>>() {})
-                    .readValue(chunk);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return roles;
-        }
+        var json = mapper.writeValueAsString(claims);
+        var chunk = mapper.readTree(json)
+                .at(jsonExpClaim);
+        return mapper.readerFor(new TypeReference<List<String>>() {})
+                .readValue(chunk);
     }
 }

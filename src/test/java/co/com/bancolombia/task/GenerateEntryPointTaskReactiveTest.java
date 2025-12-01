@@ -8,8 +8,8 @@ import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
 
+import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -259,7 +259,7 @@ class GenerateEntryPointTaskReactiveTest {
 
     // Arrange
     task.setType("WEBFLUX");
-    task.setVersioning(EntryPointWebflux.VersioningStrategy.NONE);
+    task.setVersioning(VersioningStrategy.NONE);
     task.setSwagger(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
 
     // Act

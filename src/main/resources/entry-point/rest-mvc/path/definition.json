@@ -1,0 +1,11 @@
+{
+  "folders": [
+    "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config"
+  ],
+  "files": {
+    "entry-point/rest-mvc/path/custom-api-version-parser.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/CustomApiVersionParser.java",
+    "entry-point/rest-mvc/path/custom-api-version-parser.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/CustomApiVersionParserTest.java",
+    "entry-point/rest-mvc/path/api-config.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/ApiConfig.java",
+    "entry-point/rest-mvc/path/api-config.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/ApiConfigTest.java"
+  }
+}

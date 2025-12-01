@@ -9,11 +9,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = CorsConfig.class)
@@ -28,7 +27,7 @@ class CorsConfigTest {
 
     @Test
     void testCorsFilter() {
-        String origins = "http://example.com,http://another.com";
+        List<String> origins = List.of("http://example.com", "http://another.com");
         FilterRegistrationBean<CorsFilter> filterRegistrationBean = corsConfig.corsFilter(origins);
 
         CorsFilter corsFilter = filterRegistrationBean.getFilter();
@@ -36,8 +35,8 @@ class CorsConfigTest {
         // Create a new UrlBasedCorsConfigurationSource to access the configuration
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(origins.split(",")));
-        config.setAllowedMethods(Arrays.asList("POST", "GET")); // TODO: Check others required methods
+        config.setAllowedOrigins(origins);
+        config.setAllowedMethods(List.of("POST", "GET")); // TODO: Check others required methods
         config.setAllowedHeaders(List.of(CorsConfiguration.ALL));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -49,7 +48,7 @@ class CorsConfigTest {
         assertEquals(Ordered.HIGHEST_PRECEDENCE, filterRegistrationBean.getOrder());
         assertNotNull(corsFilter);
         assertNotNull(retrievedConfig);
-        assertTrue(retrievedConfig.getAllowCredentials());
+        assertEquals(Boolean.TRUE, retrievedConfig.getAllowCredentials());
         assertEquals(List.of("http://example.com", "http://another.com"), retrievedConfig.getAllowedOrigins());
         assertEquals(List.of("POST", "GET"), retrievedConfig.getAllowedMethods());
         assertEquals(List.of(CorsConfiguration.ALL), retrievedConfig.getAllowedHeaders());

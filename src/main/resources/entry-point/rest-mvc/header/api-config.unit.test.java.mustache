@@ -1,0 +1,56 @@
+package {{package}}.api.config;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.servlet.config.annotation.ApiVersionConfigurer;
+
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class ApiConfigTest {
+
+    private ApiConfig apiConfig;
+
+    @Mock
+    private ApiVersionConfigurer configurer;
+
+    @BeforeEach
+    void setUp() {
+        apiConfig = new ApiConfig();
+        when(configurer.addSupportedVersions("1", "2")).thenReturn(configurer);
+        when(configurer.setDefaultVersion("1")).thenReturn(configurer);
+        when(configurer.useRequestHeader("X-API-Version")).thenReturn(configurer);
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithSupportedVersions() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).addSupportedVersions("1", "2");
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithDefaultVersion() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).setDefaultVersion("1");
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithPathSegment() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).useRequestHeader("X-API-Version");
+    }
+
+    @Test
+    void shouldSupportExactlyTwoVersions() {
+        apiConfig.configureApiVersioning(configurer);
+
+        verify(configurer, times(1)).addSupportedVersions("1", "2");
+        verify(configurer, never()).addSupportedVersions("3");
+    }
+}

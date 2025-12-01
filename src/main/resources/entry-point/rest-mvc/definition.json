@@ -7,6 +7,7 @@
     "entry-point/rest-mvc/cors-config.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/CorsConfig.java",
     "entry-point/rest-mvc/security-headers-filter.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/SecurityHeadersFilter.java",
     "entry-point/rest-mvc/api.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/ApiRestTest.java",
+    "entry-point/rest-mvc/test-config.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/TestConfig.java",
     "entry-point/rest-mvc/cors-config.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/CorsConfigTest.java",
     "entry-point/rest-mvc/security-headers-filter.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/SecurityHeadersFilterTest.java",
     "entry-point/rest-mvc/build.gradle.mustache": "infrastructure/entry-points/api-rest/build.gradle"

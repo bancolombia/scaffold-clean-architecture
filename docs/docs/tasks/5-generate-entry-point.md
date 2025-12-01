@@ -13,18 +13,18 @@ Whether you'll use generic one also parameter `name` is required.
    gradle gep --type [entryPointType]
    ```
 
-| Reference for **entryPointType** | Name                                   | Additional Options                                                                                                                                                 |
-|----------------------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| generic                          | Empty Entry Point                      | --name [name]                                                                                                                                                      |
-| asynceventhandler                | Async Event Handler                    | --eda [true-false] --tech [rabbitmq-kafka-rabbitmq,kafka] Default: rabbitmq                                                                                        |
-| graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                                             |
-| kafka                            | Kafka Consumer                         |                                                                                                                                                                    |
-| mq                               | JMS MQ Client to listen messages       |                                                                                                                                                                    |
-| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default tomcat --authorization [true,false] --from-swagger swagger.yaml --swagger [true,false]                                             |
-| rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                                                    |
-| sqs                              | SQS Listener                           |                                                                                                                                                                    |
-| webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE  --swagger [true,false] |
-| kafkastrimzi                     | Kafka Strimzi Consumer Entry Point     | --name [name] --topicConsumer [topicName] (optional, for default 'test-with-registries')                                                                           |
+| Reference for **entryPointType** | Name                                   | Additional Options                                                                                                                                                  |
+|----------------------------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| generic                          | Empty Entry Point                      | --name [name]                                                                                                                                                       |
+| asynceventhandler                | Async Event Handler                    | --eda [true,false] --tech [rabbitmq-kafka-rabbitmq,kafka] Default: rabbitmq                                                                                         |
+| graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                                              |
+| kafka                            | Kafka Consumer                         |                                                                                                                                                                     |
+| mq                               | JMS MQ Client to listen messages       |                                                                                                                                                                     |
+| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default tomcat --authorization [true,false] --versioning [HEADER,PATH,NONE] default NONE --swagger [true,false] --from-swagger swagger.yaml |
+| rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                                                     |
+| sqs                              | SQS Listener                           |                                                                                                                                                                     |
+| webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true,false] default true --authorization [true,false] --versioning [HEADER,PATH,NONE] default NONE --swagger [true,false] --from-swagger swagger.yaml     |
+| kafkastrimzi                     | Kafka Strimzi Consumer Entry Point     | --name [name] --topicConsumer [topicName] (optional, for default 'test-with-registries')                                                                            |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.
@@ -35,10 +35,12 @@ Tomcat.
 | jetty                          | Jetty server            |
 
 ## Ejemplo de uso para Kafka Strimzi Consumer
+
 ```shell
 gradle generateEntryPoint --type=kafkastrimzi 
 gradle gep --type=kafkastrimzi
 ```
+
 ```shell
 gradle generateEntryPoint --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic
 gradle gep --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic

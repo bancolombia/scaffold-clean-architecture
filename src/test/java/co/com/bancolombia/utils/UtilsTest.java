@@ -177,7 +177,7 @@ class UtilsTest {
     @DisplayName("Utils.addConfiguration: different insertion scenarios in 'configurations'")
     @ParameterizedTest(name = "{index} ⇒ {0}")
     @MethodSource("addConfigurationCases")
-    void addConfiguration_parametrized(String description, String build, String toAdd, String expected) {
+    void addConfigurationParametrized(String description, String build, String toAdd, String expected) {
         // Act
         String result = Utils.addConfiguration(build, toAdd);
 

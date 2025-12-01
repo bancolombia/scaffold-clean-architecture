@@ -35,11 +35,21 @@ public class ApiRest {
     //}
 {{/lombok}}
 
-{{#task-param-authorize}}
+    {{#task-param-authorize}}
     @PreAuthorize("hasRole('permission')")
-{{/task-param-authorize}}
-    @GetMapping(path = "/usecase/path")
+    {{/task-param-authorize}}
+    @GetMapping(path = "/{{#task-param-versioning-strategy-path}}{version}/{{/task-param-versioning-strategy-path}}usecase/path"{{#task-param-versioning-strategy-source}}, version = "1"{{/task-param-versioning-strategy-source}})
     public String commandName() {
-        return "";
+        return "Value from use case v1";
     }
+
+    {{#task-param-versioning-strategy-source}}
+    {{#task-param-authorize}}
+    @PreAuthorize("hasRole('permission')")
+    {{/task-param-authorize}}
+    @GetMapping(path = "/{{#task-param-versioning-strategy-path}}{version}/{{/task-param-versioning-strategy-path}}usecase/path"{{#task-param-versioning-strategy-source}}, version = "2"{{/task-param-versioning-strategy-source}})
+    public String commandNameV2() {
+        return "Value from use case v2";
+    }
+    {{/task-param-versioning-strategy-source}}
 }

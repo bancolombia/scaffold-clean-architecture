@@ -3,6 +3,7 @@ package co.com.bancolombia.factory.entrypoints;
 import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.utils.Utils.*;
 
+import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -18,7 +19,7 @@ public class EntryPointWebflux implements ModuleFactory {
         (VersioningStrategy) builder.getParam("task-param-versioning-strategy");
 
     builder.runValidations(ReactiveTypeValidation.class);
-    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-router"))) {
+    if (builder.getBooleanParam("task-param-router")) {
       setupTemplate(builder, versioningStrategy);
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
@@ -26,7 +27,7 @@ public class EntryPointWebflux implements ModuleFactory {
       builder.appendDependencyToModule(
           APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
     }
-    if (Boolean.TRUE.equals(builder.getBooleanParam("include-swagger"))) {
+    if (builder.getBooleanParam("include-swagger")) {
       builder.addParam("module", "reactive-web");
       builder
           .appendToProperties("springdoc")
@@ -35,7 +36,7 @@ public class EntryPointWebflux implements ModuleFactory {
           .put("show-actuator", true);
     }
 
-    if (Boolean.TRUE.equals(builder.getBooleanParam("task-param-authorize"))) {
+    if (builder.getBooleanParam("task-param-authorize")) {
       builder.setupFromTemplate("entry-point/rest-webflux/authorization");
       builder
           .appendToProperties("spring.security.oauth2.resourceserver.jwt")
@@ -81,11 +82,5 @@ public class EntryPointWebflux implements ModuleFactory {
     }
 
     builder.setupFromTemplate(templatePath);
-  }
-
-  public enum VersioningStrategy {
-    HEADER,
-    PATH,
-    NONE
   }
 }
