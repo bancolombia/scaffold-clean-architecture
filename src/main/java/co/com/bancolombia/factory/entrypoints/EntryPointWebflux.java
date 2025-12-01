@@ -15,10 +15,10 @@ import java.io.IOException;
 public class EntryPointWebflux implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
+    builder.runValidations(ReactiveTypeValidation.class);
     VersioningStrategy versioningStrategy =
         (VersioningStrategy) builder.getParam("task-param-versioning-strategy");
 
-    builder.runValidations(ReactiveTypeValidation.class);
     if (builder.getBooleanParam("task-param-router")) {
       setupTemplate(builder, versioningStrategy);
     } else {
