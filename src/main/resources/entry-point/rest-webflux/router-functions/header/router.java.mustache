@@ -1,5 +1,10 @@
 package {{package}}.api;
 
+{{#include-swagger}}
+import org.springdoc.core.annotations.RouterOperation;
+import org.springdoc.core.annotations.RouterOperations;
+import org.springframework.web.bind.annotation.RequestMethod;
+{{/include-swagger}}
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -10,7 +15,48 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 public class RouterRest {
-
+    {{#include-swagger}}
+    @RouterOperations({
+            // V1 Endpoints
+            @RouterOperation(
+                    path = "/api/usecase/path",
+                    beanClass = HandlerV1.class,
+                    beanMethod = "listenGETUseCase",
+                    method = RequestMethod.GET
+            ),
+            @RouterOperation(
+                    path = "/api/usecase/otherpath",
+                    beanClass = HandlerV1.class,
+                    beanMethod = "listenPOSTUseCase",
+                    method = RequestMethod.POST
+            ),
+            @RouterOperation(
+                    path = "/api/otherusercase/path",
+                    beanClass = HandlerV1.class,
+                    beanMethod = "listenGETOtherUseCase",
+                    method = RequestMethod.GET
+            ),
+            // V2 Endpoints
+            @RouterOperation(
+                    path = "/api/usecase/path",
+                    beanClass = HandlerV2.class,
+                    beanMethod = "listenGETUseCase",
+                    method = RequestMethod.GET
+            ),
+            @RouterOperation(
+                    path = "/api/usecase/otherpath",
+                    beanClass = HandlerV2.class,
+                    beanMethod = "listenPOSTUseCase",
+                    method = RequestMethod.POST
+            ),
+            @RouterOperation(
+                    path = "/api/otherusercase/path",
+                    beanClass = HandlerV2.class,
+                    beanMethod = "listenGETOtherUseCase",
+                    method = RequestMethod.GET
+            )
+    })
+    {{/include-swagger}}
     @Bean
     public RouterFunction<ServerResponse> route(HandlerV1 handlerV1, HandlerV2 handlerV2) {
         return RouterFunctions

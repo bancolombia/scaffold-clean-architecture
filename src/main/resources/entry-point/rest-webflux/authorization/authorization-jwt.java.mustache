@@ -21,7 +21,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import reactor.core.publisher.Mono;
 import tools.jackson.core.type.TypeReference;
-tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -102,16 +102,10 @@ public class AuthorizationJwt implements WebFluxConfigurer {
         return new ReactiveJwtAuthenticationConverterAdapter(jwtConverter);
     }
 
-    private List<String> getRoles(Map<String, Object> claims, String jsonExpClaim){
-        List<String> roles = List.of();
-        try {
+    private List<String> getRoles(Map<String, Object> claims, String jsonExpClaim) {
             var json = mapper.writeValueAsString(claims);
             var chunk = mapper.readTree(json).at(jsonExpClaim);
             return mapper.readerFor(new TypeReference<List<String>>() {})
                     .readValue(chunk);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return roles;
-        }
     }
 }
