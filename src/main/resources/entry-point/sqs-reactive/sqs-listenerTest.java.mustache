@@ -26,14 +26,13 @@ class SQSListenerTest {
     @Mock
     private SqsAsyncClient asyncClient;
 
-    @Mock
     private SQSProperties sqsProperties;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        var sqsProperties = new SQSProperties(
+        sqsProperties = new SQSProperties(
                 "us-east-1",
                 "http://localhost:4566",
                 "http://localhost:4566/00000000000/queueName",
