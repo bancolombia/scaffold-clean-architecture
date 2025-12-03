@@ -66,6 +66,35 @@ You could follow this [guide](#implementing-or-changing-a-module).
 
 ---
 
+## Commits
+
+Good commit messages serve at least three important purposes:
+
+- To speed up the reviewing process
+- To help us write a good release note
+- To help the future maintainers (it could be you!), say five years into the future, to find out why a particular change was made to the code or why a specific feature was added.
+
+### Rules
+
+1. You should use conventional commits, you can find more information [here](https://www.conventionalcommits.org/en/v1.0.0/)
+2. Write the summary line and description of what you have done in the imperative mood, that is as if you were commanding someone. Start the line with "Fix", "Add", "Change" instead of "Fixed", "Added", "Changed"
+3. Contain a short description of the change (preferably 50 characters or less, and no more than 72 characters)
+4. Be entirely in lowercase with the exception of proper nouns, acronyms, and the words that refer to code, like function/variable names
+5. Keep the second line blank.
+6. If your commit introduces a breaking change (semver-major), it should contain an explanation about the reason of the breaking change, which situation would trigger the breaking change and what is the exact change.
+7. Use the body to explain what and why vs. how
+
+**For example:**
+
+```text
+test: add functional test for non-standard base libraries
+ci: support for Ubuntu 18 & CentOS 7
+deps: upgrade express to 4.17.1
+deps: standardjs as style guide, linter, and formatter
+```
+
+---
+
 ## Pull request criteria
 
 ### Requirements
@@ -81,8 +110,6 @@ You could follow this [guide](#implementing-or-changing-a-module).
 * Please suggest changes to documentation when you find something unclear.
 * You can create a **fork** of Scaffolding project in no time. Go to the **GitHub project** and click **"Create your own fork"**. Create a new branch, commit your changes, and when you're ready, let us know about your **pull request** so we can discuss it and merge the PR!
 
-### More on pull requests
-
 :::warning
 The Scaffolding project has now a continuous release bot, that means that each merged pull request will be automatically released in a newer version of the plugin. For that reason each pull request has to go through a thorough review and/or discussion.
 :::
@@ -92,10 +119,6 @@ Things we pay attention in a PR:
 * On pull requests, please document the change, what it brings, what is the benefit.
 * Clean commit history in the topic branch in your fork of the repository, even during review. That means that commits are rebased and squashed if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups.
 * In the code, always test your feature / change, in unit tests.
-
----
-
-## Special requirements
 
 ### UpgradeAction
 
@@ -161,35 +184,6 @@ If your contribution has a new item of type DrivenAdapter, EntryPoint, Performac
 | PerformaceTest | co.com.bancolombia.factory.tests.performance |
 | Helper         | co.com.bancolombia.factory.helpers           |
 | Pipeline       | co.com.bancolombia.factory.pipelines         |
-
----
-
-## Commits
-
-Good commit messages serve at least three important purposes:
-
-- To speed up the reviewing process
-- To help us write a good release note
-- To help the future maintainers (it could be you!), say five years into the future, to find out why a particular change was made to the code or why a specific feature was added.
-
-### Rules
-
-1. You should use conventional commits, you can find more information [here](https://www.conventionalcommits.org/en/v1.0.0/)
-2. Write the summary line and description of what you have done in the imperative mood, that is as if you were commanding someone. Start the line with "Fix", "Add", "Change" instead of "Fixed", "Added", "Changed"
-3. Contain a short description of the change (preferably 50 characters or less, and no more than 72 characters)
-4. Be entirely in lowercase with the exception of proper nouns, acronyms, and the words that refer to code, like function/variable names
-5. Keep the second line blank.
-6. If your commit introduces a breaking change (semver-major), it should contain an explanation about the reason of the breaking change, which situation would trigger the breaking change and what is the exact change.
-7. Use the body to explain what and why vs. how
-
-**For example:**
-
-```text
-test: add functional test for non-standard base libraries
-ci: support for Ubuntu 18 & CentOS 7
-deps: upgrade express to 4.17.1
-deps: standardjs as style guide, linter, and formatter
-```
 
 ---
 
@@ -291,9 +285,29 @@ This will load the template definition from the resource directory, this definit
 **Where:**
 
 - **folders**: new directories to be created, usually are empty test directories.
-- **files**: file map to be created for java projects.
+- **files**: file map to be created for Java projects.
 
-file map refers to, in the above example for java exists the key: `driven-adapter/dynamo-db/build.gradle.mustache` and the value `infrastructure/driven-adapters/dynamo-db/build.gradle`, it means that the file with that key will be generated in the value path. for paths value you could use variables for example `infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.java`
+file map refers to, in the above example for Java exists the key: `driven-adapter/dynamo-db/build.gradle.mustache` and the value `infrastructure/driven-adapters/dynamo-db/build.gradle`, it means that the file with that key will be generated in the value path. for paths value you could use variables for example `infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.java`
+
+**Template files naming convention:**
+
+When creating template files, follow these standardized naming conventions:
+
+- **Use lowercase with hyphens**: Template file names must be in lowercase and use hyphens to separate words
+  - Example: `handler-registry-configuration.java.mustache`
+  - Example: `mongo-repository-adapter.java.mustache`
+  
+- **Test file suffix**: For test files, append `.test` before the file extension
+  - Example: `handler-registry-configuration.test.java.mustache`
+  - Example: `commands-handler.test.java.mustache`
+
+- **Subdirectories organization**: Group related templates in subdirectories when needed
+  - Example: `async-event-handler/metrics/metrics-reporter.java.mustache`
+  - Example: `mongo-repository/config/mongo-config.java.mustache`
+
+:::tip
+Consistent naming and organization improves maintainability and makes it easier for contributors to locate and understand template files. Always follow this convention when adding new modules.
+:::
 
 ##### appendToSettings
 
