@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.28.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.28.0) (2025-12-03)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.27.0...v3.28.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump step-security/harden-runner from 2.13.2 to 2.13.3 [\#770](https://github.com/bancolombia/scaffold-clean-architecture/pull/770) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 6.0.0 to 6.1.0 [\#769](https://github.com/bancolombia/scaffold-clean-architecture/pull/769) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 5.0.1 to 6.0.1 [\#768](https://github.com/bancolombia/scaffold-clean-architecture/pull/768) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.31.4 to 4.31.6 [\#767](https://github.com/bancolombia/scaffold-clean-architecture/pull/767) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(entrypoint\): add MCP \(Model Context Protocol\) for Spring AI servers [\#765](https://github.com/bancolombia/scaffold-clean-architecture/pull/765) ([kenyodarz](https://github.com/kenyodarz))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.8 to 7.0.9 [\#761](https://github.com/bancolombia/scaffold-clean-architecture/pull/761) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.31.3 to 4.31.4 [\#759](https://github.com/bancolombia/scaffold-clean-architecture/pull/759) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.27.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.27.0) (2025-11-19)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.26.4...v3.27.0)
