@@ -286,4 +286,28 @@ class GenerateEntryPointTaskReactiveTest {
         "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java",
         "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfig.java");
   }
+
+  @Test
+  void generateEntryPointMcp() throws IOException, CleanException {
+    // Arrange
+    task.setType("MCP");
+    task.setMcpEnableTools(TRUE);
+    task.setMcpEnableResources(TRUE);
+    task.setMcpEnablePrompts(TRUE);
+
+    // Assert Options Coverage
+    task.getMcpEnableToolsOptions();
+    task.getMcpEnableResourcesOptions();
+    task.getMcpEnablePromptsOptions();
+
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/mcp-server/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/mcp/tools/HealthTool.java",
+        "src/main/java/co/com/bancolombia/mcp/resources/SystemInfoResource.java",
+        "src/main/java/co/com/bancolombia/mcp/prompts/ExamplePrompt.java");
+  }
 }

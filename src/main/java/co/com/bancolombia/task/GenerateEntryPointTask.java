@@ -24,6 +24,10 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption eda = BooleanOption.FALSE;
   private String tech = "rabbitmq";
   private BooleanOption authorization = BooleanOption.FALSE;
+  // MCP parameters - Capabilities only
+  private BooleanOption mcpEnableTools = BooleanOption.TRUE;
+  private BooleanOption mcpEnableResources = BooleanOption.TRUE;
+  private BooleanOption mcpEnablePrompts = BooleanOption.TRUE;
 
   @Option(
       option = "server",
@@ -114,6 +118,37 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(VersioningStrategy.values());
   }
 
+  // MCP Capability Options
+  @Option(option = "enable-tools", description = "Enable MCP tools capability")
+  public void setMcpEnableTools(BooleanOption enableTools) {
+    this.mcpEnableTools = enableTools;
+  }
+
+  @OptionValues("enable-tools")
+  public List<BooleanOption> getMcpEnableToolsOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @Option(option = "enable-resources", description = "Enable MCP resources capability")
+  public void setMcpEnableResources(BooleanOption enableResources) {
+    this.mcpEnableResources = enableResources;
+  }
+
+  @OptionValues("enable-resources")
+  public List<BooleanOption> getMcpEnableResourcesOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @Option(option = "enable-prompts", description = "Enable MCP prompts capability")
+  public void setMcpEnablePrompts(BooleanOption enablePrompts) {
+    this.mcpEnablePrompts = enablePrompts;
+  }
+
+  @OptionValues("enable-prompts")
+  public List<BooleanOption> getMcpEnablePromptsOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
@@ -124,6 +159,13 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("include-swagger", swagger == BooleanOption.TRUE);
     builder.addParam("swagger-file", swaggerFile);
     appendRCommonsParams();
+    appendMcpParams();
+  }
+
+  private void appendMcpParams() {
+    builder.addParam("mcp-enable-tools", mcpEnableTools == BooleanOption.TRUE);
+    builder.addParam("mcp-enable-resources", mcpEnableResources == BooleanOption.TRUE);
+    builder.addParam("mcp-enable-prompts", mcpEnablePrompts == BooleanOption.TRUE);
   }
 
   private void appendRCommonsParams() {

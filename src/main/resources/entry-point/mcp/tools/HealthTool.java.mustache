@@ -1,0 +1,46 @@
+package {{package}}.mcp.tools;
+
+{{#lombok}}
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springaicommunity.mcp.annotation.McpTool;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * Health check tool for MCP server.
+ * This tool provides basic health status information.
+ */
+@Component
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+public class HealthTool {
+
+  /**
+   * Checks the health status of the MCP server.
+   *
+   * @return health status message
+   */
+  @McpTool(
+      name = "checkHealth",
+      description = "Check the health status of the MCP server")
+  public Mono<String> checkHealth() {
+{{#lombok}}
+    log.debug("Health check requested");
+{{/lombok}}
+    return Mono.just("MCP Server is healthy and running");
+  }
+
+  /**
+   * Gets server information.
+   *
+   * @return server information
+   */
+  @McpTool(
+      name = "getServerInfo",
+      description = "Get MCP server information")
+  public Mono<String> getServerInfo() {
+    return Mono.just("Server: {{task-param-name}} v1.0.0 - Package: {{package}}");
+  }
+}

@@ -59,6 +59,10 @@
         {
             "name": "CLOUD_EVENTS_VERSION",
             "packageName": "io.cloudevents:cloudevents-json-jackson"
+        },
+        {
+            "name": "SPRING_AI_VERSION",
+            "packageName": "org.springframework.ai:spring-ai-bom"
         }
     ],
     "gradle": [

@@ -57,7 +57,7 @@ then
     ./gradlew gda --type $adapter
   done
 
-  for entry in "asynceventhandler" "graphql" "kafka" "mq" "rsocket" "sqs" "webflux" "kafkastrimzi"
+  for entry in "asynceventhandler" "graphql" "kafka" "mcp" "mq" "rsocket" "sqs" "webflux" "kafkastrimzi"
   do
     ./gradlew gep --type $entry
   done

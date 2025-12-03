@@ -26,11 +26,13 @@ public final class Constants {
   public static final String BIN_STASH_VERSION = "1.3.2";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.0";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
+  // Spring AI MCP
+  public static final String SPRING_AI_VERSION = "1.1.0";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.14";
   public static final String SONAR_VERSION = "7.1.0.6387";
   public static final String COBERTURA_VERSION = "4.0.0";
-  public static final String PLUGIN_VERSION = "3.27.0";
+  public static final String PLUGIN_VERSION = "3.28.0";
   public static final String DEPENDENCY_CHECK_VERSION = "12.1.9";
   public static final String PITEST_VERSION = "1.19.0-rc.2";
   // custom
