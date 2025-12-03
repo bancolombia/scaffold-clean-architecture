@@ -52,4 +52,4 @@ jobs:
           branch: 'feature/autoupdate-deps'
           base: 'master'
           labels: 'dependencies'
-          reviewers: 'juancgalvis,santitigaga'
+          reviewers: 'juancgalvis,luisgomez29'
