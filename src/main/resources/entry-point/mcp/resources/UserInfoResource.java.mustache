@@ -1,0 +1,139 @@
+package {{package}}.mcp.resources;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.modelcontextprotocol.spec.McpSchema.ReadResourceResult;
+import io.modelcontextprotocol.spec.McpSchema.TextResourceContents;
+import java.util.List;
+import java.util.Map;
+{{#lombok}}
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springaicommunity.mcp.annotation.McpResource;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+/**
+ * User information resource template using MCP annotations with template URI.
+ * This demonstrates how to use URI parameters to create dynamic resources.
+ */
+@Component
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+public class UserInfoResource {
+
+  private final ObjectMapper objectMapper;
+
+  public UserInfoResource(ObjectMapper objectMapper) {
+    this.objectMapper = objectMapper;
+  }
+
+  /**
+   * Provides user information as a resource template.
+   * URI pattern: resource://users/{userId}
+   *
+   * @param userId the user ID parameter from the URI
+   * @return user information
+   */
+  @McpResource(
+      uri = "resource://users/{userId}",
+      name = "user-info",
+      description = "Provides detailed information about a specific user")
+  public Mono<ReadResourceResult> getUserInfo(String userId) {
+{{#lombok}}
+    log.info("📥 Requesting information for userId: {}", userId);
+{{/lombok}}
+    
+    return parseUserId(userId)
+        .map(id -> createUserInfo(id))
+        .map(userInfo -> createResourceResult(userId, userInfo))
+        .onErrorResume(error -> {
+{{#lombok}}
+          log.error("❌ Error retrieving user information {}: {}", userId, error.getMessage());
+{{/lombok}}
+          return Mono.just(createErrorResult(userId, error));
+        });
+  }
+
+  /**
+   * Parses the userId from String to Integer
+   */
+  private Mono<Integer> parseUserId(String userIdStr) {
+    return Mono.fromCallable(() -> {
+      try {
+        int userId = Integer.parseInt(userIdStr);
+        if (userId <= 0) {
+          throw new IllegalArgumentException("UserId must be a positive number");
+        }
+        return userId;
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("UserId must be a valid number: " + userIdStr);
+      }
+    });
+  }
+
+  /**
+   * Creates mock user information
+   * TODO: Replace with actual use case call
+   */
+  private Map<String, Object> createUserInfo(Integer userId) {
+    return Map.of(
+        "userId", userId,
+        "name", "User " + userId,
+        "email", "user" + userId + "@example.com",
+        "status", "active",
+        "application", "{{task-param-name}}",
+        "package", "{{package}}"
+    );
+  }
+
+  /**
+   * Creates the successful resource result
+   */
+  private ReadResourceResult createResourceResult(String userId, Map<String, Object> userInfo) {
+    return new ReadResourceResult(
+        List.of(new TextResourceContents(
+            "resource://users/" + userId,
+            MediaType.APPLICATION_JSON_VALUE,
+            toJson(userInfo)
+        ))
+    );
+  }
+
+  /**
+   * Creates the error result
+   */
+  private ReadResourceResult createErrorResult(String userId, Throwable error) {
+    Map<String, Object> errorResponse = Map.of(
+        "error", true,
+        "message", error.getMessage(),
+        "type", error.getClass().getSimpleName(),
+        "userId", userId
+    );
+
+    return new ReadResourceResult(
+        List.of(new TextResourceContents(
+            "resource://users/" + userId,
+            MediaType.APPLICATION_JSON_VALUE,
+            toJson(errorResponse)
+        ))
+    );
+  }
+
+{{#lombok}}
+  @SneakyThrows
+{{/lombok}}
+  private String toJson(Object object) {
+{{^lombok}}
+    try {
+{{/lombok}}
+      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+{{^lombok}}
+    } catch (Exception e) {
+      return "{\"error\": \"" + e.getMessage() + "\"}";
+    }
+{{/lombok}}
+  }
+}

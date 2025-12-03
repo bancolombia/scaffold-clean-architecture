@@ -1,0 +1,105 @@
+package {{package}}.mcp.prompts;
+
+import io.modelcontextprotocol.spec.McpSchema.GetPromptResult;
+import io.modelcontextprotocol.spec.McpSchema.PromptMessage;
+import io.modelcontextprotocol.spec.McpSchema.TextContent;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+/**
+ * Unit tests for ExamplePrompt.
+ */
+class ExamplePromptTest {
+
+  private ExamplePrompt examplePrompt;
+
+  @BeforeEach
+  void setUp() {
+    examplePrompt = new ExamplePrompt();
+  }
+
+  @Test
+  @DisplayName("Should generate greeting prompt with name")
+  void testGreetingPromptWithName() {
+    // Given
+    String name = "John";
+
+    // When
+    Mono<GetPromptResult> result = examplePrompt.greetingPrompt(name);
+
+    // Then
+    StepVerifier.create(result)
+        .assertNext(promptResult -> {
+          PromptMessage message = promptResult.messages().get(0);
+          assert message.content() instanceof TextContent;
+
+          TextContent textContent = (TextContent) message.content();
+          String text = textContent.text();
+
+          assert text.contains(name);
+          assert text.contains("{{task-param-name}}");
+        })
+        .verifyComplete();
+  }
+
+  @Test
+  @DisplayName("Should generate greeting prompt without name")
+  void testGreetingPromptWithoutName() {
+    // When
+    Mono<GetPromptResult> result = examplePrompt.greetingPrompt(null);
+
+    // Then
+    StepVerifier.create(result)
+        .assertNext(promptResult -> {
+          PromptMessage message = promptResult.messages().get(0);
+          TextContent textContent = (TextContent) message.content();
+          String text = textContent.text();
+
+          assert text.contains("Hello!");
+          assert text.contains("{{task-param-name}}");
+        })
+        .verifyComplete();
+  }
+
+  @Test
+  @DisplayName("Should generate help prompt with topic")
+  void testHelpPromptWithTopic() {
+    // Given
+    String topic = "authentication";
+
+    // When
+    Mono<GetPromptResult> result = examplePrompt.helpPrompt(topic);
+
+    // Then
+    StepVerifier.create(result)
+        .assertNext(promptResult -> {
+          PromptMessage message = promptResult.messages().get(0);
+          TextContent textContent = (TextContent) message.content();
+          String text = textContent.text();
+
+          assert text.contains(topic);
+        })
+        .verifyComplete();
+  }
+
+  @Test
+  @DisplayName("Should generate help prompt without topic")
+  void testHelpPromptWithoutTopic() {
+    // When
+    Mono<GetPromptResult> result = examplePrompt.helpPrompt(null);
+
+    // Then
+    StepVerifier.create(result)
+        .assertNext(promptResult -> {
+          PromptMessage message = promptResult.messages().get(0);
+          TextContent textContent = (TextContent) message.content();
+          String text = textContent.text();
+
+          assert text.contains("help");
+        })
+        .verifyComplete();
+  }
+}
