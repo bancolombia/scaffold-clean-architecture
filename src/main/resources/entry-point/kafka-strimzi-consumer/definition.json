@@ -7,6 +7,6 @@
     "entry-point/kafka-strimzi-consumer/build.gradle.mustache": "infrastructure/entry-points/kafka-consumer/build.gradle",
     "entry-point/kafka-strimzi-consumer/kafka-config.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config/KafkaConfig.java",
     "entry-point/kafka-strimzi-consumer/kafka-consumer.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/KafkaConsumer.java",
-    "entry-point/kafka-strimzi-consumer/consumerCredentials.java.mustache":"domain/model/src/main/java/{{packagePath}}/model/topiccredentials/ConsumerCredentials.java"
+    "entry-point/kafka-strimzi-consumer/consumer-credentials.java.mustache":"domain/model/src/main/java/{{packagePath}}/model/topiccredentials/ConsumerCredentials.java"
   }
 }

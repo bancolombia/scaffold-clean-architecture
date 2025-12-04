@@ -19,7 +19,7 @@ public class WebFluxRouterCodegen extends AbstractScaffoldCodegen {
   @Override
   public void processOpts() {
     super.processOpts();
-    apiTemplateFiles.put("apiHandler.mustache", "Handler.java");
-    apiTemplateFiles.put("apiRouter.mustache", "Router.java");
+    apiTemplateFiles.put("api-handler.mustache", "Handler.java");
+    apiTemplateFiles.put("api-router.mustache", "Router.java");
   }
 }

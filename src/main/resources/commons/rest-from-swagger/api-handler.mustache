@@ -92,7 +92,7 @@ public class {{classname}}Handler {
         });
     {{/examples}}
     {{^examples}}
-        return Mono.fromSupplier({{>returnTypes}}::new);
+        return Mono.fromSupplier({{>return-types}}::new);
     {{/examples}}
     }
     {{/returnType}}

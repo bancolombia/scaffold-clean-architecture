@@ -19,6 +19,6 @@ public class WebClientCodegen extends AbstractScaffoldCodegen {
   @Override
   public void processOpts() {
     super.processOpts();
-    apiTemplateFiles.put("apiClientReactive.mustache", ".java");
+    apiTemplateFiles.put("api-client-reactive.mustache", ".java");
   }
 }

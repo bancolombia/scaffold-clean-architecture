@@ -1,0 +1,2 @@
+{{#isQueryParam}}{{#useBeanValidation}}{{>bean-validation-query-params}}{{/useBeanValidation}}{{#useBeanValidation}}@Valid{{/useBeanValidation}} @RequestParam(value = "{{baseName}}"{{#required}}, required = true{{/required}}{{^required}}, required = false{{/required}}{{#defaultValue}}, defaultValue="{{{defaultValue}}}"{{/defaultValue}}) {{>optional-data-type}} {{paramName}}{{/isQueryParam}}
+

@@ -52,7 +52,7 @@ public class {{classname}}Controller {
         produces = { {{#produces}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/produces}} }, {{/hasProduces}}{{#hasConsumes}}
         consumes = { {{#consumes}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/consumes}} }, {{/hasConsumes}}{{/singleContentTypes}}
     method = RequestMethod.{{httpMethod}})
-    public {{#async}}Mono<{{/async}}ResponseEntity<{{>returnTypes}}>{{#async}}>{{/async}} {{operationId}}({{#parameters}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{#hasMore}},{{/hasMore}}{{/parameters}}) {
+    public {{#async}}Mono<{{/async}}ResponseEntity<{{>return-types}}>{{#async}}>{{/async}} {{operationId}}({{#parameters}}{{>query-params}}{{>path-params}}{{>header-params}}{{>body-params}}{{>form-params}}{{>cookie-params}}{{#hasMore}},{{/hasMore}}{{/parameters}}) {
         {{^async}}
         String accept = request.getHeader("Accept");
         {{#examples}}
@@ -74,12 +74,12 @@ public class {{classname}}Controller {
         {{/async}}
     }
 
-    private {{#async}}Mono<{{/async}}{{>returnTypes}}{{#async}}>{{/async}} {{operationId}}Mock() { // please call real usecase
+    private {{#async}}Mono<{{/async}}{{>return-types}}{{#async}}>{{/async}} {{operationId}}Mock() { // please call real usecase
         {{#async}}
-        return Mono.fromSupplier({{>returnTypes}}::new);
+        return Mono.fromSupplier({{>return-types}}::new);
         {{/async}}
         {{^async}}
-        return new {{>returnTypes}}();
+        return new {{>return-types}}();
         {{/async}}
     }
 

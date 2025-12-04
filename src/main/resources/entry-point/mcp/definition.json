@@ -9,15 +9,15 @@
   ],
   "files": {
     "entry-point/mcp/build.gradle.mustache": "infrastructure/entry-points/mcp-server/build.gradle",
-    "entry-point/mcp/tools/HealthTool.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/tools/HealthTool.java",
-    "entry-point/mcp/tools/ExampleTool.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/tools/ExampleTool.java",
-    "entry-point/mcp/resources/SystemInfoResource.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/resources/SystemInfoResource.java",
-    "entry-point/mcp/resources/UserInfoResource.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/resources/UserInfoResource.java",
-    "entry-point/mcp/prompts/ExamplePrompt.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/prompts/ExamplePrompt.java",
-    "entry-point/mcp/test/tools/HealthToolTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/tools/HealthToolTest.java",
-    "entry-point/mcp/test/tools/ExampleToolTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/tools/ExampleToolTest.java",
-    "entry-point/mcp/test/resources/SystemInfoResourceTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/resources/SystemInfoResourceTest.java",
-    "entry-point/mcp/test/resources/UserInfoResourceTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/resources/UserInfoResourceTest.java",
-    "entry-point/mcp/test/prompts/ExamplePromptTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/prompts/ExamplePromptTest.java"
+    "entry-point/mcp/tools/health-tool.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/tools/HealthTool.java",
+    "entry-point/mcp/tools/health-tool.test.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/tools/HealthToolTest.java",
+    "entry-point/mcp/tools/example-tool.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/tools/ExampleTool.java",
+    "entry-point/mcp/tools/example-tool.test.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/tools/ExampleToolTest.java",
+    "entry-point/mcp/resources/system-info-resource.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/resources/SystemInfoResource.java",
+    "entry-point/mcp/resources/system-info-resource.test.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/resources/SystemInfoResourceTest.java",
+    "entry-point/mcp/resources/user-info-resource.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/resources/UserInfoResource.java",
+    "entry-point/mcp/resources/user-info-resource.test.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/resources/UserInfoResourceTest.java",
+    "entry-point/mcp/prompts/example-prompt.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/prompts/ExamplePrompt.java",
+    "entry-point/mcp/prompts/example-prompt.test.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/prompts/ExamplePromptTest.java"
   }
 }

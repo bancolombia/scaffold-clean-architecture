@@ -5,6 +5,6 @@
   "files": {
     "helper/metrics/aws/build.gradle.mustache": "infrastructure/helpers/metrics/build.gradle",
     "helper/metrics/aws/micrometer-metric-publisher.java.mustache": "infrastructure/helpers/metrics/src/main/java/{{packagePath}}/metrics/aws/MicrometerMetricPublisher.java",
-    "helper/metrics/aws/micrometer-metric-publisherTest.java.mustache": "infrastructure/helpers/metrics/src/test/java/{{packagePath}}/metrics/aws/MicrometerMetricPublisherTest.java"
+    "helper/metrics/aws/micrometer-metric-publisher.test.java.mustache": "infrastructure/helpers/metrics/src/test/java/{{packagePath}}/metrics/aws/MicrometerMetricPublisherTest.java"
   }
 }

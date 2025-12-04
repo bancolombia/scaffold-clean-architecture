@@ -4,6 +4,6 @@
   ],
   "files": {
     "entry-point/rest-mvc/header/api-config.java.mustache": "infrastructure/entry-points/api-rest/src/main/java/{{packagePath}}/api/config/ApiConfig.java",
-    "entry-point/rest-mvc/header/api-config.unit.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/ApiConfigTest.java"
+    "entry-point/rest-mvc/header/api-config.test.java.mustache": "infrastructure/entry-points/api-rest/src/test/java/{{packagePath}}/api/config/ApiConfigTest.java"
   }
 }
