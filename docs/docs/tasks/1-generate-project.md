@@ -17,7 +17,7 @@ and `gradle.properties` files.
 | lombok      | Specify if you want to use this plugin                                   | `--lombok=<true or false>`         | `true`               |
 | metrics     | Specify if you want to enable this feature with micrometer               | `--metrics=<true or false>`        | `true`               |
 | mutation    | Specify if you want to enable mutation testing framework on this project | `--mutation=<true or false>`       | `true`               |
-| javaVersion | Sets Java version                                                        | `--javaVersion= <17, 21 or 25>`    | `25`                 |
+| java-version | Sets Java version                                                        | `--java-version=<17, 21 or 25>`    | `25`                 |
 
 Examples:
 

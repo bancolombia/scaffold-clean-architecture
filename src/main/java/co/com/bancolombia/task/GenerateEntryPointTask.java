@@ -73,7 +73,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.eda = eda;
   }
 
-  @Option(option = "topicConsumer", description = "Set the topic for the Kafka consumer")
+  @Option(option = "topic-consumer", description = "Set the topic for the Kafka consumer")
   public void setTopicConsumer(String topicConsumer) {
     builder.addParam("topicConsumer", topicConsumer);
   }

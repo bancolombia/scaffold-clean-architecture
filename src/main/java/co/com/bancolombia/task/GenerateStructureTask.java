@@ -63,7 +63,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     this.mutation = mutation;
   }
 
-  @Option(option = "javaVersion", description = "Set Java version")
+  @Option(option = "java-version", description = "Set Java version")
   public void setJavaVersion(String version) {
     this.javaVersion = JavaVersion.validateVersion(Integer.parseInt(version));
   }
@@ -98,7 +98,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     return Arrays.asList(BooleanOption.values());
   }
 
-  @OptionValues("javaVersion")
+  @OptionValues("java-version")
   public List<Integer> getJavaVersions() {
     return Arrays.stream(JavaVersion.values()).map(JavaVersion::getNumber).toList();
   }

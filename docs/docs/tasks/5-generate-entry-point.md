@@ -38,7 +38,7 @@ gradle gep --type [entryPointType]
 |                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
 |                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
 | **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
-|                       |                                        | `--topicConsumer`    | String (topic name)                   | `test-with-registries` |
+|                       |                                        | `--topic-consumer`  | String (topic name)                   | `test-with-registries` |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.
@@ -79,8 +79,8 @@ gradle gep --type=kafkastrimzi
 ```
 
 ```shell
-gradle generateEntryPoint --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic
-gradle gep --type=kafkastrimzi --name=myConsumer --topicConsumer=myTopic
+gradle generateEntryPoint --type=kafkastrimzi --name=myConsumer --topic-consumer=myTopic
+gradle gep --type=kafkastrimzi --name=myConsumer --topic-consumer=myTopic
 ```
 
 This will generate a specialized entry point for consuming Kafka messages using Strimzi, with custom parameters.

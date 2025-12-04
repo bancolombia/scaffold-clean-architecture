@@ -13,12 +13,12 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GeneratePipelineTask extends AbstractResolvableTypeTask {
   private BooleanOption monoRepo = BooleanOption.FALSE;
 
-  @Option(option = "monoRepo", description = "is Mono repository")
+  @Option(option = "mono-repo", description = "is Mono repository")
   public void setMonoRepo(BooleanOption monoRepo) {
     this.monoRepo = monoRepo;
   }
 
-  @OptionValues("monoRepo")
+  @OptionValues("mono-repo")
   public List<BooleanOption> getMonoRepoOptions() {
     return Arrays.asList(BooleanOption.values());
   }

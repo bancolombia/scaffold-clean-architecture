@@ -33,7 +33,7 @@ gradle gda --type [drivenAdapterType]
 | **rsocket**              | RSocket Requester              | -                   | -                                     | -                     |
 | **s3**                   | AWS Simple Storage Service     | -                   | -                                     | -                     |
 | **secrets**              | Secrets Manager Bancolombia    | `--secrets-backend` | `aws_secrets_manager`, `vault`        | `aws_secrets_manager` |
-| **secretskafkastrimzi**  | Secrets for Kafka Strimzi      | `--secretName`      | String                                | -                     |
+| **secretskafkastrimzi**  | Secrets for Kafka Strimzi      | `--secret-name`     | String                                | -                     |
 | **sqs**                  | SQS message sender             | -                   | -                                     | -                     |
 
 _**This task will generate something like that:**_
