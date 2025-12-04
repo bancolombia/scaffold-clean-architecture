@@ -80,14 +80,14 @@ public class {{classname}}Handler {
     }
 
     {{#returnType}}
-    private Mono<{{>returnTypes}}> {{operationId}}Mock() { // TODO: Remove this mock method
+    private Mono<{{>return-types}}> {{operationId}}Mock() { // TODO: Remove this mock method
     {{#examples}}
         return Mono.fromSupplier(() -> {
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             try {
-                return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>exampleReturnTypes}}.class);
+                return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>example-return-types}}.class);
             } catch (Exception e) {
-                throw new RuntimeException("Cannot parse example to {{>returnTypes}}");
+                throw new RuntimeException("Cannot parse example to {{>return-types}}");
             }
         });
     {{/examples}}

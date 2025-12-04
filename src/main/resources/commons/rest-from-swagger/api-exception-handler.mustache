@@ -58,15 +58,15 @@ public class {{classname}}Controller {
         {{#examples}}
         if (accept != null && accept.contains("{{{contentType}}}")) {
             try {
-                return new ResponseEntity<{{>returnTypes}}>(objectMapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>exampleReturnTypes}}.class), HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<{{>return-types}}>(objectMapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>examplereturn-types}}.class), HttpStatus.NOT_IMPLEMENTED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type {{{contentType}}}", e);
-                return new ResponseEntity<{{>returnTypes}}>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<{{>return-types}}>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
         {{/examples}}
-        return new Mono<{{>returnTypes}}>(HttpStatus.NOT_IMPLEMENTED);
+        return new Mono<{{>return-types}}>(HttpStatus.NOT_IMPLEMENTED);
         {{/async}}
         {{#async}}
         return {{operationId}}Mock()

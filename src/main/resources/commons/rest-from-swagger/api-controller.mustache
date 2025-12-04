@@ -59,14 +59,14 @@ public class {{classname}}Controller {
         produces = { {{#produces}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/produces}} }, {{/hasProduces}}{{#hasConsumes}}
         consumes = { {{#consumes}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/consumes}} }, {{/hasConsumes}}{{/singleContentTypes}}
     method = RequestMethod.{{httpMethod}})
-    public {{#async}}Mono<{{/async}}ResponseEntity<{{>returnTypes}}>{{#async}}>{{/async}} {{operationId}}({{#parameters}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{>cookieParams}}{{#hasMore}},{{/hasMore}}{{/parameters}}) {
+    public {{#async}}Mono<{{/async}}ResponseEntity<{{>return-types}}>{{#async}}>{{/async}} {{operationId}}({{#parameters}}{{>query-params}}{{>path-params}}{{>header-params}}{{>body-params}}{{>form-params}}{{>cookie-params}}{{#hasMore}},{{/hasMore}}{{/parameters}}) {
         {{#async}}
         return {{operationId}}Mock() // TODO: Call real use case here -> someUseCase.some()
             .map(response -> ResponseEntity.ok().body(response)); // TODO: Customize response here
         {{/async}}
         {{^async}}
         {{#returnType}}
-    {{>returnTypes}} response = {{operationId}}Mock();
+    {{>return-types}} response = {{operationId}}Mock();
         return ResponseEntity.ok().body(response);
         {{/returnType}}
         {{^returnType}}
@@ -77,19 +77,19 @@ public class {{classname}}Controller {
 
     {{#async}}
     {{#returnType}}
-    private Mono<{{>returnTypes}}> {{operationId}}Mock() { // TODO: Remove this mock method
+    private Mono<{{>return-types}}> {{operationId}}Mock() { // TODO: Remove this mock method
     {{#examples}}
         return Mono.fromSupplier(() -> {
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             try {
-                return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>exampleReturnTypes}}.class);
+                return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>example-return-types}}.class);
             } catch (Exception e) {
-                throw new RuntimeException("Cannot parse example to {{>returnTypes}}");
+                throw new RuntimeException("Cannot parse example to {{>return-types}}");
             }
         });
     {{/examples}}
     {{^examples}}
-        return Mono.fromSupplier({{>returnTypes}}::new);
+        return Mono.fromSupplier({{>return-types}}::new);
     {{/examples}}
     }
     {{/returnType}}
@@ -101,13 +101,13 @@ public class {{classname}}Controller {
     {{/async}}
     {{^async}}
     {{#returnType}}
-    private {{>returnTypes}} {{operationId}}Mock() { // TODO: Remove this mock method
+    private {{>return-types}} {{operationId}}Mock() { // TODO: Remove this mock method
         {{#examples}}
         try {
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>exampleReturnTypes}}.class);
+            return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>example-return-types}}.class);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot parse example to {{>returnTypes}}");
+            throw new RuntimeException("Cannot parse example to {{>return-types}}");
         }
         {{/examples}}
         {{^examples}}
