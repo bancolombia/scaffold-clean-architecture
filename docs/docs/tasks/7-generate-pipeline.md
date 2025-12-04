@@ -13,7 +13,7 @@ required parameter `type` and one optional parameter `monoRepo` by default is fa
    ```
 
 | Reference for **pipelineType** | Name              |
-   |--------------------------------|-------------------|
+|--------------------------------|-------------------|
 | azure                          | Azure Pipeline    |
 | circleci                       | CircleCI Pipeline |
 | github                         | GitHub Action     |

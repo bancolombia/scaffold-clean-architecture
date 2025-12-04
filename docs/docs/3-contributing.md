@@ -287,7 +287,7 @@ This will load the template definition from the resource directory, this definit
 - **folders**: new directories to be created, usually are empty test directories.
 - **files**: file map to be created for Java projects.
 
-file map refers to, in the above example for Java exists the key: `driven-adapter/dynamo-db/build.gradle.mustache` and the value `infrastructure/driven-adapters/dynamo-db/build.gradle`, it means that the file with that key will be generated in the value path. for paths value you could use variables for example `infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.java`
+File map refers to, in the above example for Java exists the key: `driven-adapter/dynamo-db/build.gradle.mustache` and the value `infrastructure/driven-adapters/dynamo-db/build.gradle`, it means that the file with that key will be generated in the value path. for paths value you could use variables for example `infrastructure/driven-adapters/dynamo-db/src/main/{{language}}/{{packagePath}}/dynamodb/config/DynamoDBConfig.java`
 
 **Template files naming convention:**
 

@@ -8,33 +8,71 @@ The **`generateEntryPoint | gep`** task will generate a module in Infrastructure
 parameter `type`. <br/>
 Whether you'll use generic one also parameter `name` is required.
 
-   ```shell
-   gradle generateEntryPoint --type=[entryPointType]
-   gradle gep --type [entryPointType]
-   ```
+```shell
+gradle generateEntryPoint --type=[entryPointType]
+gradle gep --type [entryPointType]
+```
 
-| Reference for **entryPointType** | Name                                   | Additional Options                                                                                                                                                 |
-|----------------------------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| generic                          | Empty Entry Point                      | --name [name]                                                                                                                                                      |
-| asynceventhandler                | Async Event Handler                    | --eda [true-false] --tech [rabbitmq-kafka-rabbitmq,kafka] Default: rabbitmq                                                                                        |
-| graphql                          | API GraphQL                            | --pathgql [name path] default /graphql                                                                                                                             |
-| kafka                            | Kafka Consumer                         |                                                                                                                                                                    |
-| mq                               | JMS MQ Client to listen messages       |                                                                                                                                                                    |
-| restmvc                          | API REST (Spring Boot Starter Web)     | --server [serverOption] default undertow --authorization [true,false] --from-swagger swagger.yaml --swagger [true,false]                                           |
-| rsocket                          | Rsocket Controller Entry Point         |                                                                                                                                                                    |
-| sqs                              | SQS Listener                           |                                                                                                                                                                    |
-| webflux                          | API REST (Spring Boot Starter WebFlux) | --router [true, false] default true --authorization [true,false] --from-swagger swagger.yaml --versioning [HEADER, PATH,NONE] default NONE  --swagger [true,false] |
-| kafkastrimzi                     | Kafka Strimzi Consumer Entry Point     | --name [name] --topicConsumer [topicName] (optional, for default 'test-with-registries')                                                                           |
+| Type                  | Name                                   | Parameter            | Values                                | Default                |
+|-----------------------|----------------------------------------|----------------------|---------------------------------------|------------------------|
+| **generic**           | Empty Entry Point                      | `--name`             | String                                | -                      |
+| **asynceventhandler** | Async Event Handler                    | `--eda`              | `true`, `false`                       | `false`                |
+|                       |                                        | `--tech`             | `rabbitmq`, `kafka`, `rabbitmq,kafka` | `rabbitmq`             |
+| **graphql**           | API GraphQL                            | `--pathgql`          | String (path)                         | `/graphql`             |
+| **kafka**             | Kafka Consumer                         | -                    | -                                     | -                      |
+| **mcp**               | MCP Server (Model Context Protocol)    | `--name`             | String                                | -                      |
+|                       |                                        | `--enable-tools`     | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-resources` | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-prompts`   | `true`, `false`                       | `true`                 |
+| **mq**                | JMS MQ Client to listen messages       | -                    | -                                     | -                      |
+| **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`           | `tomcat`, `jetty`                     | `tomcat`               |
+|                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
+|                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 | 
+|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
+|                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
+| **rsocket**           | Rsocket Controller Entry Point         | -                    | -                                     | -                      |
+| **sqs**               | SQS Listener                           | -                    | -                                     | -                      |
+| **webflux**           | API REST (Spring Boot Starter WebFlux) | `--router`           | `true`, `false`                       | `true`                 |
+|                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
+|                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 |
+|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
+|                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
+| **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
+|                       |                                        | `--topicConsumer`    | String (topic name)                   | `test-with-registries` |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.
 
 | Reference for **serverOption** | Name                    |
-   |--------------------------------|-------------------------|
+|--------------------------------|-------------------------|
 | tomcat                         | Tomcat server (default) |
 | jetty                          | Jetty server            |
 
+```shell
+gradle generateEntryPoint --type=restmvc --server=[serverOption]
+gradle gep --type=restmvc --server=[serverOption]
+```
+
+_**This task will generate something like that:**_
+
+   ```bash
+   📦infrastructure
+   ┣ 📂entry-points
+   ┃ ┗ 📂generic
+   ┃ ┃ ┣ 📂src
+   ┃ ┃ ┃ ┣ 📂main
+   ┃ ┃ ┃ ┃ ┗ 📂java
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂generic
+   ┃ ┃ ┃ ┗ 📂test
+   ┃ ┃ ┃ ┃ ┗ 📂java
+   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
+   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂generic
+   ┃ ┃ ┗ 📜build.gradle
+   ```
+
 ## Usage Example for Kafka Strimzi Consumer
+
 ```shell
 gradle generateEntryPoint --type=kafkastrimzi 
 gradle gep --type=kafkastrimzi
@@ -49,7 +87,8 @@ This will generate a specialized entry point for consuming Kafka messages using 
 
 ## Usage Example for MCP (Model Context Protocol)
 
-The **`mcp`** entry point type generates a reactive MCP server with Tools, Resources, and Prompts capabilities, based on Spring AI 1.1.0+.
+The **`mcp`** entry point type generates a reactive MCP server with Tools, Resources, and Prompts capabilities, based on
+Spring AI.
 
 ### Basic Command
 
@@ -60,12 +99,12 @@ gradle gep --type=mcp
 
 ### Available Parameters
 
-| Parameter | Values | Default | Description |
-|-----------|---------|---------|-------------|
-| `--name` | String | `null` | MCP Server Name |
-| `--enable-tools` | `true`/`false` | `true` | Enable Tools |
-| `--enable-resources` | `true`/`false` | `true` | Enable Resources |
-| `--enable-prompts` | `true`/`false` | `true` | Enable Prompts |
+| Parameter            | Values         | Default | Description      |
+|----------------------|----------------|---------|------------------|
+| `--name`             | String         | `null`  | MCP Server Name  |
+| `--enable-tools`     | `true`/`false` | `true`  | Enable Tools     |
+| `--enable-resources` | `true`/`false` | `true`  | Enable Resources |
+| `--enable-prompts`   | `true`/`false` | `true`  | Enable Prompts   |
 
 ### Usage Examples
 
@@ -109,6 +148,7 @@ infrastructure/
 ### Generated Components
 
 **Java Classes:**
+
 - `HealthTool.java` - Health check tool
 - `ExampleTool.java` - Example tool (echo, add)
 - `SystemInfoResource.java` - System info resource
@@ -116,6 +156,7 @@ infrastructure/
 - `ExamplePrompt.java` - Prompt templates
 
 **Tests:**
+
 - `HealthToolTest.java`
 - `ExampleToolTest.java`
 - `SystemInfoResourceTest.java`
@@ -149,70 +190,50 @@ spring:
 #### Create a Tool
 
 ```java
+
 @Component
 public class CalculatorTool {
-  @McpTool(name = "multiply", description = "Multiplies two numbers")
-  public Mono<Integer> multiply(
-      @McpToolParam(description = "First number", required = true) int a,
-      @McpToolParam(description = "Second number", required = true) int b) {
-    return Mono.just(a * b);
-  }
+    @McpTool(name = "multiply", description = "Multiplies two numbers")
+    public Mono<Integer> multiply(
+            @McpToolParam(description = "First number", required = true) int a,
+            @McpToolParam(description = "Second number", required = true) int b) {
+        return Mono.just(a * b);
+    }
 }
 ```
 
 #### Create a Resource
 
 ```java
+
 @Component
 public class ConfigResource {
-  @McpResource(
-      uri = "resource://config/app",
-      name = "app-config",
-      description = "Application configuration")
-  public Mono<ReadResourceResult> getConfig() {
-    return Mono.fromCallable(() -> {
-      // Implementation
-    });
-  }
+    @McpResource(
+            uri = "resource://config/app",
+            name = "app-config",
+            description = "Application configuration")
+    public Mono<ReadResourceResult> getConfig() {
+        return Mono.fromCallable(() -> {
+            // Implementation
+        });
+    }
 }
 ```
 
 #### Create a Prompt
 
 ```java
+
 @Component
 public class SupportPrompt {
-  @McpPrompt(
-      name = "customer-support",
-      description = "Generates a customer support prompt")
-  public Mono<GetPromptResult> customerSupport(
-      @McpArg(name = "issue", required = true) String issue) {
-    return Mono.fromCallable(() -> {
-      // Implementation
-    });
-  }
+    @McpPrompt(
+            name = "customer-support",
+            description = "Generates a customer support prompt")
+    public Mono<GetPromptResult> customerSupport(
+            @McpArg(name = "issue", required = true) String issue) {
+        return Mono.fromCallable(() -> {
+            // Implementation
+        });
+    }
 }
 ```
-
-```shell
-   gradle generateEntryPoint --type=restmvc --server=[serverOption]
-   gradle gep --type=restmvc --server=[serverOption]
-   ```
-
-_**This task will generate something like that:**_
-
-   ```bash
-   📦infrastructure
-   ┣ 📂entry-points
-   ┃ ┗ 📂generic
-   ┃ ┃ ┣ 📂src
-   ┃ ┃ ┃ ┣ 📂main
-   ┃ ┃ ┃ ┃ ┗ 📂java
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂generic
-   ┃ ┃ ┃ ┗ 📂test
-   ┃ ┃ ┃ ┃ ┗ 📂java
-   ┃ ┃ ┃ ┃ ┃ ┗ 📂[package]
-   ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂generic
-   ┃ ┃ ┗ 📜build.gradle
-   ```
