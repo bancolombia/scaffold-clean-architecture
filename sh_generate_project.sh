@@ -17,7 +17,7 @@ echo "buildscript {
           }
         }
         dependencies {
-          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:CURRENT_LOCAL_VERSION'
+          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.28.1'
         }
       }
 
@@ -62,7 +62,7 @@ then
     ./gradlew gep --type $entry
   done
 else
-  for adapter in "binstash" "dynamodb" "jpa" "kms" "mongodb" "mq" "redis" "restconsumer" "s3" "secrets" "sqs"
+  for adapter in "dynamodb" "jpa" "kms" "mongodb" "mq" "redis" "restconsumer" "s3" "secrets" "sqs"
   do
     ./gradlew gda --type $adapter
   done
@@ -73,10 +73,11 @@ else
   done
 fi
 
-branch=${GITHUB_REF##*/}
-git init
-git checkout -b $branch
-git add .
-git config user.email "github@actions.bot"
-git config user.name "Github Actions Bot"
-git commit -am "to scan"
+./graddlew build
+#branch=${GITHUB_REF##*/}
+#git init
+#git checkout -b $branch
+#git add .
+#git config user.email "github@actions.bot"
+#git config user.name "Github Actions Bot"
+#git commit -am "to scan"
