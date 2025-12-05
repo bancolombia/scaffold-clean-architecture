@@ -434,6 +434,7 @@ Create a build.gradle file in an empty folder with the next content:
 buildscript {
     repositories {
        mavenLocal()
+       mavenCentral()
     }
     dependencies {
        classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:2.4.1.1"
