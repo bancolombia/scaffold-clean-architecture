@@ -17,7 +17,7 @@ echo "buildscript {
           }
         }
         dependencies {
-          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:3.28.1'
+          classpath 'co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:CURRENT_LOCAL_VERSION'
         }
       }
 
