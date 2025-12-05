@@ -73,11 +73,10 @@ else
   done
 fi
 
-./graddlew build
-#branch=${GITHUB_REF##*/}
-#git init
-#git checkout -b $branch
-#git add .
-#git config user.email "github@actions.bot"
-#git config user.name "Github Actions Bot"
-#git commit -am "to scan"
+branch=${GITHUB_REF##*/}
+git init
+git checkout -b $branch
+git add .
+git config user.email "github@actions.bot"
+git config user.name "Github Actions Bot"
+git commit -am "to scan"
