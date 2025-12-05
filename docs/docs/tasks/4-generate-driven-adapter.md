@@ -18,7 +18,7 @@ gradle gda --type [drivenAdapterType]
 | **generic**              | Empty Driven Adapter           | `--name`            | String                                | -                     |
 | **asynceventbus**        | Async Event Bus                | `--eda`             | `true`, `false`                       | `false`               |
 |                          |                                | `--tech`            | `rabbitmq`, `kafka`, `rabbitmq,kafka` | `rabbitmq`            |
-| **binstash**             | Bin Stash                      | -                   | -                                     | -                     |
+| **binstash**             | Bin Stash                      | `--cache-mode`      | `LOCAL`, `CENTRALIZED`, `HYBRID`      | `LOCAL`               |
 | **cognitotokenprovider** | Cognito token generator        | -                   | -                                     | -                     |
 | **dynamodb**             | Dynamo DB adapter              | -                   | -                                     | -                     |
 | **jpa**                  | JPA Repository                 | `--secret`          | `true`, `false`                       | `false`               | 
