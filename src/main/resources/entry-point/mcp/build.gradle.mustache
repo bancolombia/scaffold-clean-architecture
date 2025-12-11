@@ -2,17 +2,9 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework:spring-context'
-
-    // Spring AI BOM - stable version
     implementation platform("org.springframework.ai:spring-ai-bom:{{SPRING_AI_VERSION}}")
-
-    // MCP Server WebFlux (reactive)
     implementation "org.springframework.ai:spring-ai-mcp"
     implementation "org.springframework.ai:spring-ai-starter-mcp-server-webflux"
-
-    // Reactive
     implementation "org.springframework.boot:spring-boot-starter-webflux"
-    
-    // Jackson for JSON serialization
     implementation 'tools.jackson.core:jackson-databind'
 }

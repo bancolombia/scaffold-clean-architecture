@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -44,11 +43,7 @@ class SystemInfoResourceTest {
 
           // Validate valid JSON
           JsonNode jsonNode;
-          try {
-            jsonNode = mapper.readTree(text.text());
-          } catch (JacksonException e) {
-            throw new RuntimeException(e);
-          }
+          jsonNode = mapper.readTree(text.text());
 
           // Validate expected fields
           assert jsonNode.has("service");
