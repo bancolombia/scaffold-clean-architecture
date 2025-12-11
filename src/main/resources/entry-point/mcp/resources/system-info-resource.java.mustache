@@ -1,6 +1,5 @@
 package {{package}}.mcp.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.modelcontextprotocol.spec.McpSchema.ReadResourceResult;
 import io.modelcontextprotocol.spec.McpSchema.TextResourceContents;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.springaicommunity.mcp.annotation.McpResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * System information resource for MCP server.
