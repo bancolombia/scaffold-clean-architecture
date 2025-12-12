@@ -12,25 +12,25 @@ public final class Constants {
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
-  public static final String SECRETS_VERSION = "4.4.36";
+  public static final String SECRETS_VERSION = "4.5.0";
   public static final String SPRING_BOOT_VERSION = "4.0.0";
   public static final String LOMBOK_VERSION = "1.18.42";
-  public static final String REACTIVE_COMMONS_VERSION = "6.1.0";
+  public static final String REACTIVE_COMMONS_VERSION = "7.0.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.15.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.39.3";
-  public static final String COMMONS_JMS_VERSION = "2.5.3";
+  public static final String AWS_BOM_VERSION = "2.40.7";
+  public static final String COMMONS_JMS_VERSION = "3.0.0";
   public static final String ARCH_UNIT_VERSION = "1.4.1";
   public static final String OKHTTP_VERSION = "5.3.2";
   public static final String RESILIENCE_4J_VERSION = "2.3.0";
-  public static final String BIN_STASH_VERSION = "1.3.2";
+  public static final String BIN_STASH_VERSION = "2.0.0";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.0";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
   // Spring AI MCP
-  public static final String SPRING_AI_VERSION = "1.1.0";
+  public static final String SPRING_AI_VERSION = "1.1.2";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.14";
-  public static final String SONAR_VERSION = "7.1.0.6387";
+  public static final String SONAR_VERSION = "7.2.0.6526";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "3.28.0";
   public static final String DEPENDENCY_CHECK_VERSION = "12.1.9";

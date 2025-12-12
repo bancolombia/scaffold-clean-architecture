@@ -1,11 +1,10 @@
 package {{package}}.events.handlers;
 
 {{#eda}}
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
 import org.reactivecommons.async.commons.converters.json.DefaultObjectMapperSupplier;
+import tools.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.UUID;
 {{/eda}}
@@ -23,7 +22,7 @@ class QueriesHandlerTest {
 
     {{#eda}}
     @Test
-    void queriesHandlerTest() throws JsonProcessingException {
+    void queriesHandlerTest() {
         ObjectMapper objectMapper = new ObjectMapper();
         CloudEvent query = CloudEventBuilder.v1() //
                 .withId(UUID.randomUUID().toString()) //

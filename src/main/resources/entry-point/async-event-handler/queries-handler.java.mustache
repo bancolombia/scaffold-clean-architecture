@@ -12,12 +12,13 @@ import reactor.core.publisher.Mono;
 import lombok.extern.java.Log;
 import java.util.logging.Level;
 {{#eda}}
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+
 {{/eda}}
 @Log
 {{#lombok}}
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class QueriesHandler {
 //    private final SampleUseCase sampleUseCase;
 {{#eda}}
-    private final ObjectMapper om;
+    private final ObjectMapper mapper;
 {{/eda}}
 
 {{^lombok}}
@@ -46,7 +47,7 @@ public class QueriesHandler {
                 .withSource(URI.create("https://spring.io/foos"))//
                 .withType("SOME_QUERY_REPLY") //
                 .withTime(OffsetDateTime.now())
-                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(replyData)))
+                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(replyData)))
                 .build();
         return Mono.just(reply);
     }

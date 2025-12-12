@@ -7,11 +7,10 @@ import org.reactivecommons.api.domain.DomainEvent;
 {{/eda}}
 import reactor.test.StepVerifier;
 {{#eda}}
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.net.URI;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
+import tools.jackson.databind.ObjectMapper;
+import java.net.URI;
 {{/eda}}
 
 import java.util.UUID;
@@ -26,7 +25,7 @@ class EventsHandlerTest {
 
     {{#eda}}
     @Test
-    void handleEventATest() throws JsonProcessingException {
+    void handleEventATest() {
         ObjectMapper objectMapper = new ObjectMapper();
         CloudEvent event = CloudEventBuilder.v1() //
                 .withId(UUID.randomUUID().toString()) //

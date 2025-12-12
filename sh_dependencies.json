@@ -58,7 +58,7 @@
         },
         {
             "name": "CLOUD_EVENTS_VERSION",
-            "packageName": "io.cloudevents:cloudevents-json-jackson"
+            "packageName": "io.cloudevents:cloudevents-core"
         },
         {
             "name": "SPRING_AI_VERSION",

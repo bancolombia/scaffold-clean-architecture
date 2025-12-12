@@ -41,7 +41,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     public static final String SOME_QUERY_NAME = "some.query.name";
     private final DirectAsyncGateway gateway;
     {{#eda}}
-    private final ObjectMapper om;
+    private final ObjectMapper mapper;
     {{/eda}}
 
     {{^lombok}}
@@ -60,7 +60,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
                                 .withSource(URI.create("https://spring.io/foos"))//
                                 .withType(SOME_COMMAND_NAME) //
                                 .withTime(OffsetDateTime.now())
-                                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(command)))
+                                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(command)))
                                 .build();
 
         return gateway.sendCommand(commandCloudEvent, TARGET_NAME);
@@ -85,7 +85,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
                 .withSource(URI.create("https://spring.io/foos"))//
                 .withType(SOME_QUERY_NAME) //
                 .withTime(OffsetDateTime.now())
-                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(query)))
+                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(query)))
                 .build();
 
         return gateway.requestReply(queryCloudEvent, TARGET_NAME, CloudEvent.class)
