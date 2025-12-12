@@ -1,7 +1,7 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+	testImplementation 'tools.jackson.core:jackson-databind'
 	testImplementation 'com.tngtech.archunit:archunit:1.4.1'
 	implementation project(':api-rest')
 	implementation project(':rest-consumer')

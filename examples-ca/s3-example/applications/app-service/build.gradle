@@ -2,7 +2,7 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
 	testImplementation 'com.tngtech.archunit:archunit:1.4.1'
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
+	testImplementation 'tools.jackson.core:jackson-databind'
 	implementation project(':api-rest')
 	implementation project(':s3-repository')
     implementation project(':model')
