@@ -49,7 +49,7 @@ class SystemInfoResourceTest {
           assert jsonNode.has("service");
           assert jsonNode.has("version");
           assert jsonNode.has("status");
-          assert jsonNode.get("status").asText().equals("UP");
+          assert jsonNode.get("status").asString().equals("UP");
           assert jsonNode.has("reactive");
           assert jsonNode.get("reactive").asBoolean();
         })

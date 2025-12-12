@@ -47,7 +47,7 @@ public class UserInfoResource {
 {{/lombok}}
     
     return parseUserId(userId)
-        .map(id -> createUserInfo(id))
+        .map(this::createUserInfo)
         .map(userInfo -> createResourceResult(userId, userInfo))
         .onErrorResume(error -> {
 {{#lombok}}
