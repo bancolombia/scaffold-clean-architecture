@@ -7,13 +7,11 @@ import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import lombok.SneakyThrows;
 import org.gradle.api.logging.Logger;
 
 public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
 
   @Override
-  @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     Logger logger = builder.getProject().getLogger();
     File root = builder.getProject().getRootDir();
