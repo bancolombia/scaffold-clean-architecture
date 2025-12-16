@@ -74,7 +74,7 @@ public class UpgradeY2025M12D01GradleJavaToolchain implements UpgradeAction {
 
   @Override
   public String name() {
-    return "3.27.0->4.0.0";
+    return "3.28.0->4.0.0";
   }
 
   @Override
