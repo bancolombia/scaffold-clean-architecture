@@ -48,7 +48,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Set up Semantic Release
         if: github.ref == 'refs/heads/master'
-        run: npm -g install semantic-release@25.0.2
+        run: npm -g install @semantic-release/git semantic-release@25.0.2
       - name: Semantic Release
         if: github.ref == 'refs/heads/master'
         run: npx semantic-release@25.0.2
