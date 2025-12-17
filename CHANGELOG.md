@@ -1,5 +1,14 @@
 # Changelog
 
+## [v4.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.0) (2025-12-17)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.28.0...v4.0.0)
+
+**Merged pull requests:**
+
+- build: add git dependency for semantic release [\#780](https://github.com/bancolombia/scaffold-clean-architecture/pull/780) ([juancgalvis](https://github.com/juancgalvis))
+- feat!: Support for Java 25 and Spring Boot 4 [\#777](https://github.com/bancolombia/scaffold-clean-architecture/pull/777) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v3.28.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v3.28.0) (2025-12-03)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.27.0...v3.28.0)
