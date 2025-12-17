@@ -1,9 +1,8 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
-	testImplementation 'com.tngtech.archunit:archunit:1.4.0'
-	implementation 'org.springframework.boot:spring-boot-starter-undertow'
+	testImplementation 'tools.jackson.core:jackson-databind'
+	testImplementation 'com.tngtech.archunit:archunit:1.4.1'
 	implementation project(':api-rest')
 	implementation project(':rest-consumer')
     implementation project(':model')

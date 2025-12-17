@@ -12,7 +12,7 @@ dependencies {
     implementation 'org.reactivecommons.utils:object-mapper-api:{{REACTIVE_COMMONS_MAPPER_VERSION}}'
 
     {{^example}}
-    runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.17.0' // TODO: remove this dependency to connect to real database
+    runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:4.21.0' // TODO: remove this dependency to connect to real database
     {{/example}}
     testImplementation 'org.reactivecommons.utils:object-mapper:{{REACTIVE_COMMONS_MAPPER_VERSION}}'
 }

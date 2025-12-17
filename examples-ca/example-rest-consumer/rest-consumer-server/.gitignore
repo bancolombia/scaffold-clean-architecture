@@ -334,3 +334,4 @@ gradle-app.setting
 # -----
 *.hprof
 
+build-cache

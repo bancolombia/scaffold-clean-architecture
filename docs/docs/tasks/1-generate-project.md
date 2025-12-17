@@ -9,15 +9,15 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
 **Caution**: If you run this task on an existing project it will override the `main.gradle`, `build.gradle`
 and `gradle.properties` files.
 
-| Parameter   | Description                                                              | Usage                                        | Default Value        |
-|-------------|--------------------------------------------------------------------------|----------------------------------------------|----------------------|
-| package     | You can specify the main or default package of your project              | `--package=<desired.base.package>`           | `co.com.bancolombia` |
-| type        | Define if project shoud be created around reactive or imperative aproach | `--type=<imperative or reactive>`            | `reactive`           |
-| name        | Sets projects name                                                       | `--name=<Project name>`                      | `cleanArchitecture`  |
-| lombok      | Specify if you want to use this plugin                                   | `--lombok=<true or false>`                   | `true`               |
-| metrics     | Specify if you want to enable this feature with micrometer               | `--metrics=<true or false>`                  | `true`               |
-| mutation    | Specify if you want to enable mutation testing framework on this project | `--mutation=<true or false>`                 | `true`               |
-| javaVersion | Sets Java version                                                        | `--javaVersion= <VERSION_17  or VERSION_21>` | `VERSION_21`         |
+| Parameter   | Description                                                              | Usage                              | Default Value        |
+|-------------|--------------------------------------------------------------------------|------------------------------------|----------------------|
+| package     | You can specify the main or default package of your project              | `--package=<desired.base.package>` | `co.com.bancolombia` |
+| type        | Define if project shoud be created around reactive or imperative aproach | `--type=<imperative or reactive>`  | `reactive`           |
+| name        | Sets projects name                                                       | `--name=<Project name>`            | `cleanArchitecture`  |
+| lombok      | Specify if you want to use this plugin                                   | `--lombok=<true or false>`         | `true`               |
+| metrics     | Specify if you want to enable this feature with micrometer               | `--metrics=<true or false>`        | `true`               |
+| mutation    | Specify if you want to enable mutation testing framework on this project | `--mutation=<true or false>`       | `true`               |
+| java-version | Sets Java version                                                        | `--java-version=<17, 21 or 25>`    | `25`                 |
 
 Examples:
 

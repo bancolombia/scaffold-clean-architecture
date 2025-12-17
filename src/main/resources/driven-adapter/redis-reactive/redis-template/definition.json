@@ -6,6 +6,6 @@
     "driven-adapter/redis-reactive/redis-template/helper/reactive-template-adapter-operations.java.mustache": "infrastructure/driven-adapters/redis/src/main/java/{{packagePath}}/redis/template/helper/ReactiveTemplateAdapterOperations.java",
     "driven-adapter/redis-reactive/redis-template/reactive-redis-template-adapter.java.mustache": "infrastructure/driven-adapters/redis/src/main/java/{{packagePath}}/redis/template/ReactiveRedisTemplateAdapter.java",
     "driven-adapter/redis-reactive/redis-template/build.gradle.mustache": "infrastructure/driven-adapters/redis/build.gradle",
-    "driven-adapter/redis-reactive/redis-template/helper/reactive-template-adapter-operations.unit.test.java.mustache": "infrastructure/driven-adapters/redis/src/test/java/{{packagePath}}/redis/template/ReactiveTemplateAdapterOperationsTest.java"
+    "driven-adapter/redis-reactive/redis-template/helper/reactive-template-adapter-operations.test.java.mustache": "infrastructure/driven-adapters/redis/src/test/java/{{packagePath}}/redis/template/ReactiveTemplateAdapterOperationsTest.java"
   }
 }

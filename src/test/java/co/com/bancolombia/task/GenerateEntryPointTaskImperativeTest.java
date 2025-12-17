@@ -1,6 +1,5 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.TestUtils.assertFileContains;
 import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
 import static co.com.bancolombia.TestUtils.createTask;
 import static co.com.bancolombia.TestUtils.deleteStructure;
@@ -10,9 +9,9 @@ import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer;
-import co.com.bancolombia.factory.entrypoints.EntryPointWebflux;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -100,7 +99,7 @@ class GenerateEntryPointTaskImperativeTest {
   void generateEntryPointApiRestWithDefaultServer() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
-    task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
+    task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
     // Act
     task.execute();
     // Assert
@@ -117,7 +116,7 @@ class GenerateEntryPointTaskImperativeTest {
       throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
-    task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
+    task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
     task.setFromSwagger(SWAGGER_FILE);
     // Act
     task.execute();
@@ -132,7 +131,7 @@ class GenerateEntryPointTaskImperativeTest {
   void generateEntryPointApiRestWithDefaultServerAndSwagger() throws IOException, CleanException {
     // Arrange
     task.setType("RESTMVC");
-    task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
+    task.setServer(EntryPointRestMvcServer.Server.TOMCAT);
     task.setSwagger(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
     // Act
     task.execute();
@@ -142,26 +141,6 @@ class GenerateEntryPointTaskImperativeTest {
         "build.gradle",
         "src/main/java/co/com/bancolombia/api/ApiRest.java",
         "src/test/java/co/com/bancolombia/api");
-  }
-
-  @Test
-  void generateEntryPointApiRestWithUndertowServer() throws IOException, CleanException {
-    // Arrange
-    task.setType("RESTMVC");
-    task.setServer(EntryPointRestMvcServer.Server.UNDERTOW);
-    // Act
-    task.execute();
-    // Assert
-    assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/entry-points/api-rest/",
-        "build.gradle",
-        "src/main/java/co/com/bancolombia/api/ApiRest.java",
-        "src/test/java/co/com/bancolombia/api");
-
-    assertFileContains(
-        TEST_DIR + "/infrastructure/entry-points/api-rest/build.gradle",
-        "spring-boot-starter-undertow",
-        "implementation.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'");
   }
 
   @Test
@@ -195,12 +174,60 @@ class GenerateEntryPointTaskImperativeTest {
   }
 
   @Test
+  void generateEntryPointApiRestWithNoneStrategy() throws IOException, CleanException {
+    // Arrange
+    task.setType("RESTMVC");
+    task.setVersioning(VersioningStrategy.NONE);
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/api-rest/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/api/ApiRest.java",
+        "src/test/java/co/com/bancolombia/api");
+  }
+
+  @Test
+  void generateEntryPointApiRestWithPathStrategy() throws IOException, CleanException {
+    // Arrange
+    task.setType("RESTMVC");
+    task.setVersioning(VersioningStrategy.PATH);
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/api-rest/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/api/ApiRest.java",
+        "src/main/java/co/com/bancolombia/api/config/ApiConfig.java",
+        "src/main/java/co/com/bancolombia/api/config/CustomApiVersionParser.java",
+        "src/test/java/co/com/bancolombia/api");
+  }
+
+  @Test
+  void generateEntryPointApiRestWithHeaderStrategy() throws IOException, CleanException {
+    // Arrange
+    task.setType("RESTMVC");
+    task.setVersioning(VersioningStrategy.HEADER);
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/api-rest/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/api/ApiRest.java",
+        "src/main/java/co/com/bancolombia/api/config/ApiConfig.java",
+        "src/test/java/co/com/bancolombia/api");
+  }
+
+  @Test
   void shouldGetServerOptions() {
     // Arrange
     // Act
     List<EntryPointRestMvcServer.Server> options = task.getServerOptions();
     // Assert
-    assertEquals(3, options.size());
+    assertEquals(2, options.size());
   }
 
   @Test
@@ -216,7 +243,7 @@ class GenerateEntryPointTaskImperativeTest {
   void shouldGetVersioningOptions() {
     // Arrange
     // Act
-    List<EntryPointWebflux.VersioningStrategy> versioningOptions = task.getVersioningOptions();
+    List<VersioningStrategy> versioningOptions = task.getVersioningOptions();
     // Assert
     assertEquals(3, versioningOptions.size());
   }

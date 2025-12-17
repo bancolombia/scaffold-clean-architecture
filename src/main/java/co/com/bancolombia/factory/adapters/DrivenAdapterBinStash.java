@@ -7,13 +7,14 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.commons.ObjectMapperFactory;
+import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 
 public class DrivenAdapterBinStash implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-
+    builder.runValidations(ReactiveTypeValidation.class);
     CacheMode cacheMode = (CacheMode) builder.getParam("task-param-cache-mode");
     builder.addParam("include-local", cacheMode.equals(CacheMode.LOCAL));
     builder.addParam("include-hybrid", cacheMode.equals(CacheMode.HYBRID));

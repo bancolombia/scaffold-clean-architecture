@@ -1,41 +1,27 @@
 package {{package}}.consumer.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-{{#metrics}}
-import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.okhttp3.OkHttpMetricsEventListener;
-{{/metrics}}
-import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestClient;
 
 @Configuration
 public class RestConsumerConfig {
 
-    {{^metrics}}
-    @Bean
-    public OkHttpClient getHttpClient() {
-        return new OkHttpClient();
+    private final String url;
+
+    public RestConsumerConfig(@Value("${adapter.restconsumer.url}") String url) {
+        this.url = url;
     }
-    {{/metrics}}
-    {{#metrics}}
+
     @Bean
-    public OkHttpClient getHttpClient(OkHttpMetricsEventListener listener) {
-        return new OkHttpClient.Builder()
-                .eventListener(listener)
+    public RestClient getRestClient(RestClient.Builder builder) {
+        return builder
+                .baseUrl(url)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
-    }
-
-    @Bean
-    public OkHttpMetricsEventListener okHttpMetricsListener(MeterRegistry registry) {
-        return OkHttpMetricsEventListener.builder(registry, "http-outgoing")
-                .uriMapper(req -> req.url().encodedPath()).build();
-    }
-    {{/metrics}}
-
-    @Bean
-    public ObjectMapper getObjectMapper() {
-        return new ObjectMapper();
     }
 
 }

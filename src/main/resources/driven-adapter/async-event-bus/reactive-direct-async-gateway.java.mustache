@@ -11,8 +11,7 @@ import reactor.core.publisher.Mono;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
 import io.cloudevents.jackson.JsonCloudEventData;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 import java.net.URI;
@@ -42,7 +41,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     public static final String SOME_QUERY_NAME = "some.query.name";
     private final DirectAsyncGateway gateway;
     {{#eda}}
-    private final ObjectMapper om;
+    private final ObjectMapper mapper;
     {{/eda}}
 
     {{^lombok}}
@@ -51,7 +50,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     }
     {{/lombok}}
 
-    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) {{#eda}}throws JsonProcessingException{{/eda}} {
+    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
@@ -61,7 +60,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
                                 .withSource(URI.create("https://spring.io/foos"))//
                                 .withType(SOME_COMMAND_NAME) //
                                 .withTime(OffsetDateTime.now())
-                                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(command)))
+                                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(command)))
                                 .build();
 
         return gateway.sendCommand(commandCloudEvent, TARGET_NAME);
@@ -72,7 +71,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         {{/eda}}
     }
 
-    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {{#eda}}throws JsonProcessingException{{/eda}} {
+    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}
@@ -86,7 +85,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
                 .withSource(URI.create("https://spring.io/foos"))//
                 .withType(SOME_QUERY_NAME) //
                 .withTime(OffsetDateTime.now())
-                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(query)))
+                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(query)))
                 .build();
 
         return gateway.requestReply(queryCloudEvent, TARGET_NAME, CloudEvent.class)

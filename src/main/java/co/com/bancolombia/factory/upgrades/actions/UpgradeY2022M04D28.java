@@ -10,14 +10,22 @@ import lombok.SneakyThrows;
 public class UpgradeY2022M04D28 implements UpgradeAction {
   public static final String DISABLE_PLAIN_JAR_CHECK = "jar {";
   public static final String DISABLE_PLAIN_JAR =
-      "\n\n" + "jar {\n" + "    // To disable the *-plain.jar\n" + "    enabled = false\n" + "}";
+      """
+
+  jar {
+      // To disable the *-plain.jar
+      enabled = false
+  }
+  """;
   public static final String SET_JAR_NAME_CHECK = "bootJar {";
   public static final String SET_JAR_NAME =
-      "\n\n"
-          + "bootJar {\n"
-          + "    // Sets output jar name\n"
-          + "    archiveFileName = \"${project.getParent().getName()}.${archiveExtension.get()}\"\n"
-          + "}";
+      """
+
+  bootJar {
+      // Sets output jar name
+      archiveFileName = "${project.getParent().getName()}.${archiveExtension.get()}"
+  }
+  """;
 
   @Override
   @SneakyThrows

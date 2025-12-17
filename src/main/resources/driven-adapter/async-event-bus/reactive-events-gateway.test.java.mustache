@@ -1,0 +1,121 @@
+package {{package}}.events;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Mono;
+import org.reactivecommons.api.domain.DomainEventBus;
+
+{{#eda}}
+import io.cloudevents.CloudEvent;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+{{/eda}}
+{{^eda}}
+import org.reactivecommons.api.domain.DomainEvent;
+{{/eda}}
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class ReactiveEventsGatewayTest {
+
+    {{#eda}}
+    @Mock
+    private DomainEventBus domainEventBus;
+
+    @Mock
+    private ObjectMapper objectMapper;
+
+    private ReactiveEventsGateway gateway;
+    {{/eda}}
+    {{^eda}}
+    @Mock
+    private DomainEventBus domainEventBus;
+
+    private ReactiveEventsGateway reactiveEventsGateway;
+    {{/eda}}
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        {{#eda}}
+        gateway = new ReactiveEventsGateway(domainEventBus, objectMapper);
+        when(domainEventBus.emit(any(CloudEvent.class))).thenReturn(Mono.empty());
+        {{/eda}}
+        {{^eda}}
+        reactiveEventsGateway = new ReactiveEventsGateway(domainEventBus);
+        {{/eda}}
+    }
+
+    @Test
+    void testEmitLogsEvent() {
+        Object event = new Object() {
+            @Override
+            public String toString() {
+                return "testEvent";
+            }
+        };
+
+        {{#eda}}
+        when(objectMapper.valueToTree(event)).thenReturn(mock(ObjectNode.class));
+
+        gateway.emit(event).block();
+
+        verify(domainEventBus, times(1)).emit(any(CloudEvent.class));
+        {{/eda}}
+        {{^eda}}
+        when(domainEventBus.emit(any(DomainEvent.class))).thenReturn(Mono.empty());
+
+        reactiveEventsGateway.emit(event).block();
+
+        verify(domainEventBus, times(1)).emit(any(DomainEvent.class));
+        {{/eda}}
+    }
+
+   {{#eda}}
+   @Test
+    void testEmitConstructsCloudEvent() {
+        Object event = new Object() {
+            public String toString() { return "testEvent"; }
+        };
+
+        when(objectMapper.valueToTree(event)).thenReturn(mock(ObjectNode.class));
+
+        gateway.emit(event).block();
+
+        ArgumentCaptor<CloudEvent> eventCaptor = ArgumentCaptor.forClass(CloudEvent.class);
+        verify(domainEventBus, times(1)).emit(eventCaptor.capture());
+
+        CloudEvent cloudEvent = eventCaptor.getValue();
+        assertEquals(ReactiveEventsGateway.SOME_EVENT_NAME, cloudEvent.getType());
+        assertEquals("https://reactive-commons.org/foos", cloudEvent.getSource().toString());
+    }
+    {{/eda}}
+
+    {{^eda}}
+    @Test
+    void testEmitConstructsDomainEvent() {
+        Object event = new Object() {
+            @Override
+            public String toString() {
+                return "testEvent";
+            }
+        };
+
+        when(domainEventBus.emit(any(DomainEvent.class))).thenReturn(Mono.empty());
+
+        reactiveEventsGateway.emit(event).block();
+
+        ArgumentCaptor<DomainEvent> eventCaptor = ArgumentCaptor.forClass(DomainEvent.class);
+        verify(domainEventBus, times(1)).emit(eventCaptor.capture());
+
+        DomainEvent capturedEvent = eventCaptor.getValue();
+        assertEquals(ReactiveEventsGateway.SOME_EVENT_NAME, capturedEvent.getName());
+        assertEquals(event.toString(), capturedEvent.getData().toString());
+    }
+    {{/eda}}
+
+}

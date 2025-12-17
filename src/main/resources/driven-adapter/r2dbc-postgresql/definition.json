@@ -5,13 +5,13 @@
   ],
   "files": {
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}/r2dbc/config/PostgreSQLConnectionPool.java",
-    "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.unit.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}/r2dbc/config/PostgreSQLConnectionPoolTest.java",
+    "driven-adapter/r2dbc-postgresql/config/postgresql-connection-pool.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}/r2dbc/config/PostgreSQLConnectionPoolTest.java",
     "driven-adapter/r2dbc-postgresql/config/postgresql-connection-properties.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}/r2dbc/config/PostgresqlConnectionProperties.java",
     "driven-adapter/r2dbc-postgresql/helper/reactive-adapter-operations.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}/r2dbc/helper/ReactiveAdapterOperations.java",
     "driven-adapter/r2dbc-postgresql/helper/reactive-adapter-operations.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}/r2dbc/helper/ReactiveAdapterOperationsTest.java",
     "driven-adapter/r2dbc-postgresql/my-reactive-repository.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}/r2dbc/MyReactiveRepository.java",
     "driven-adapter/r2dbc-postgresql/my-reactive-repository-adapter.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/main/java/{{packagePath}}/r2dbc/MyReactiveRepositoryAdapter.java",
-    "driven-adapter/r2dbc-postgresql/my-reactive-repository-adapter.unit.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}/r2dbc/MyReactiveRepositoryAdapterTest.java",
+    "driven-adapter/r2dbc-postgresql/my-reactive-repository-adapter.test.java.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/src/test/java/{{packagePath}}/r2dbc/MyReactiveRepositoryAdapterTest.java",
     "driven-adapter/r2dbc-postgresql/build.gradle.mustache": "infrastructure/driven-adapters/r2dbc-postgresql/build.gradle"
   }
 }

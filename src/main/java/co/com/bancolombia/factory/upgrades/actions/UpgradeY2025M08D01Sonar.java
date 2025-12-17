@@ -34,7 +34,7 @@ public class UpgradeY2025M08D01Sonar implements UpgradeAction {
 
   @Override
   public String name() {
-    return "3.23.2->3.23.3";
+    return "3.23.2->3.24.0";
   }
 
   @Override

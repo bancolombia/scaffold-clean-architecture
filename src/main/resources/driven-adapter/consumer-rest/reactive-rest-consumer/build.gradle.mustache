@@ -2,13 +2,13 @@ dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{RESILIENCE_4J_VERSION}}'
     implementation 'io.github.resilience4j:resilience4j-reactor:{{RESILIENCE_4J_VERSION}}'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'
     {{/metrics}}
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
     testImplementation 'com.squareup.okhttp3:okhttp:{{OKHTTP_VERSION}}'
     testImplementation 'com.squareup.okhttp3:mockwebserver:{{OKHTTP_VERSION}}'
 

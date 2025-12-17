@@ -1,7 +1,7 @@
 dependencies {
     implementation project(':model')
     {{#eda}}
-    implementation 'io.cloudevents:cloudevents-json-jackson:{{CLOUD_EVENTS_VERSION}}'
+    implementation 'io.cloudevents:cloudevents-core:{{CLOUD_EVENTS_VERSION}}'
     {{/eda}}
     {{#rabbitmq}}
     implementation 'org.reactivecommons:async-commons-rabbit-starter:{{REACTIVE_COMMONS_VERSION}}'

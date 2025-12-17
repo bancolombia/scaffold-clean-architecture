@@ -9,12 +9,12 @@ sidebar_position: 2
 - You need Java JRE installed (Java 17 or later).
 
 - To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version
-  8.8 or later.
+  9.2.1 or later.
 
-:::tip[Recommended Gradle Version]
+<!-- :::tip[Recommended Gradle Version]
 For optimal performance and to enable all **[Gradle cache properties](advanced/gradle-cache)**, it is recommended to use
-Gradle [8.14.3 or higher](https://gradle.org/releases/).
-:::
+Gradle [9.2.1 or higher](https://gradle.org/releases/).
+::: -->
 
 ## Using the plugin
 
@@ -25,7 +25,7 @@ content into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.28.0'
 }
 ```
 
@@ -50,9 +50,10 @@ import TabItem from '@theme/TabItem';
 mkdir scaffold-quick-start
 cd scaffold-quick-start
 echo "plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.28.0'
 }" > build.gradle
-gradle ca --name=ScaffoldQuickStart
+gradle wrapper
+./gradlew ca --name=ScaffoldQuickStart
 ./gradlew gep --type webflux
 ./gradlew bootRun
 ```
@@ -70,12 +71,13 @@ Set-Location -Path "scaffold-quick-start"
 # Create the build.gradle file with the specified content
 @"
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
+    id 'co.com.bancolombia.cleanArchitecture' version '3.28.0'
 }
 "@ | Set-Content -Path "build.gradle"
 
 # Run the Gradle commands
-gradle ca --name=ScaffoldQuickStart
+gradle wrapper
+.\gradlew ca --name=ScaffoldQuickStart
 .\gradlew gep --type webflux
 .\gradlew bootRun
 ```
@@ -92,12 +94,13 @@ cd scaffold-quick-start
 :: Create the build.gradle file with the specified content
 (
 echo plugins {
-echo     id 'co.com.bancolombia.cleanArchitecture' version '3.20.15'
+echo     id 'co.com.bancolombia.cleanArchitecture' version '3.28.0'
 echo }
 ) > build.gradle
 
 :: Run the Gradle commands
-gradle ca --name=ScaffoldQuickStart
+gradle wrapper
+gradlew ca --name=ScaffoldQuickStart
 gradlew gep --type webflux
 gradlew bootRun
 

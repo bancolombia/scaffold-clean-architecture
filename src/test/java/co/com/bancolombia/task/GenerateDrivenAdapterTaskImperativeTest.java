@@ -257,19 +257,6 @@ class GenerateDrivenAdapterTaskImperativeTest {
   }
 
   @Test
-  void generateDrivenAdapterBinStashTemplateForImperative() throws IOException, CleanException {
-    // Arrange
-    task.setType("BINSTASH");
-    // Act
-    task.execute();
-    // Assert
-    assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/driven-adapters/bin-stash/",
-        "build.gradle",
-        "src/main/java/co/com/bancolombia/binstash/config/BinStashCacheConfig.java");
-  }
-
-  @Test
   void generateDrivenAdapterKMSForImperative() throws IOException, CleanException {
     // Arrange
     task.setType("KMS");

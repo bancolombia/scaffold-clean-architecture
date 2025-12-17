@@ -1,8 +1,8 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
-	testImplementation 'com.tngtech.archunit:archunit:1.4.0'
+	testImplementation 'tools.jackson.core:jackson-databind'
+	testImplementation 'com.tngtech.archunit:archunit:1.4.1'
     implementation project(':api-rest')
     implementation project(':jpa-repository')
     implementation project(':model')
@@ -10,7 +10,6 @@ dependencies {
     implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
     implementation 'software.amazon.awssdk:sts'
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-undertow'
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
 }
 

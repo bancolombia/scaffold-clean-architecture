@@ -3,5 +3,6 @@ dependencies {
     implementation 'jakarta.persistence:jakarta.persistence-api'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.reactivecommons.utils:object-mapper-api:0.1.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
     testImplementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 }

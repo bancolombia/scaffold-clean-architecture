@@ -3,7 +3,7 @@ package {{package}}.redis.template.helper;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +25,7 @@ public abstract class ReactiveTemplateAdapterOperations<E, K, V> {
         this.toEntityFn = toEntityFn;
 
         RedisSerializationContext<K, V> serializationContext =
-                RedisSerializationContext.<K, V>newSerializationContext(new Jackson2JsonRedisSerializer<>(dataClass))
+                RedisSerializationContext.<K, V>newSerializationContext(new JacksonJsonRedisSerializer<>(dataClass))
                         .build();
 
         template = new ReactiveRedisTemplate<>(connectionFactory, serializationContext);

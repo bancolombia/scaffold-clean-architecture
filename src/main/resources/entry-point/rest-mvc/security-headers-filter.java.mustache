@@ -20,7 +20,7 @@ public class SecurityHeadersFilter implements Filter {
             throws IOException, ServletException {
         HttpServletResponse header = (HttpServletResponse) response;
         header.setHeader("Content-Security-Policy", "default-src 'self'; frame-ancestors 'self'; form-action 'self'");
-        header.setHeader("Strict-Transport-Security", "max-age=31536000;");
+        header.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
         header.setHeader("X-Content-Type-Options", "nosniff");
         header.setHeader("Server", "");
         header.setHeader("Cache-Control", "no-store");

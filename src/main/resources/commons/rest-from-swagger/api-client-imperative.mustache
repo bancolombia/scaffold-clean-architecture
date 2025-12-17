@@ -1,0 +1,92 @@
+package {{package}};
+
+{{#imports}}import {{import}};
+{{/imports}}
+
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+tools.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+{{^fullJavaUtil}}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+{{/fullJavaUtil}}
+
+{{#operations}}
+{{#lombok}}
+@Log4j2
+{{/lombok}}
+@Service
+public class {{classname}} {
+{{^lombok}}
+    private static final Logger log = LoggerFactory.getLogger({{classname}}Controller.class);
+{{/lombok}}
+    private final String url;
+    private final OkHttpClient client;
+    private final ObjectMapper mapper;
+
+    public {{classname}}(@Value("${adapter.restconsumer.url}") String url, OkHttpClient client, ObjectMapper mapper) {
+        this.url = url;
+        this.client = client;
+        this.mapper = mapper;
+    }
+
+    {{#operation}}
+    {{#contents}}
+    /**
+    * Build call for {{operationId}}{{#parameters}}
+    * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}{{/parameters}}{{#returnType}}
+    * @return {{{returnType}}} response{{/returnType}}
+    {{#externalDocs}}
+        * {{description}}
+        * @see <a href="{{url}}">{{summary}} Documentation</a>
+    {{/externalDocs}}
+    */
+    public {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}} {{operationId}}Request({{#parameters}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/parameters}}) throws IOException {
+        Request okhttpRequest = new Request.Builder()
+            .url(url + "{{{path}}}"{{#pathParams}}
+                .replaceAll("\\{" + "{{baseName}}" + "\\}", {{localVariablePrefix}}{{{paramName}}}.toString()){{/pathParams}}){{#headerParams}}
+            .addHeader("{{baseName}}", {{paramName}}){{/headerParams}}{{#consumes}}{{#@first}}
+            .addHeader("content-type", "{{{mediaType}}}"){{/@first}}{{/consumes}}{{#produces}}{{#@first}}
+            .addHeader("accept", "{{{mediaType}}}"){{/@first}}{{/produces}}{{^isForm}}{{#bodyParam}}
+            .method("{{httpMethod}}", RequestBody.create(mapper.writeValueAsString({{paramName}}), MediaType.parse({{#consumes}}{{#@first}}"{{{mediaType}}}"{{/@first}}{{/consumes}}))){{/bodyParam}}{{^bodyParam}}
+            .method("{{httpMethod}}", null){{/bodyParam}}{{/isForm}}{{#isForm}}{{#formParams}}
+            {{#@first}}.method("{{httpMethod}}", new FormBody.Builder().add("{{baseName}}", {{paramName}}){{/@first}}{{^@first}}        .add("{{baseName}}", {{paramName}}){{/@first}}{{#@last}}.build()){{/@last}}{{/formParams}}{{/isForm}}
+            .build();
+
+        {{#returnType}}return {{/returnType}}callAndMap(okhttpRequest{{#returnType}}, {{{returnType}}}.class{{/returnType}});
+    }
+    {{/contents}}
+    {{/operation}}
+
+    private void callAndMap(Request request) throws IOException {
+        callAndMap(request, Void.class);
+    }
+
+    private <T> T callAndMap(Request request, Class<T> clazz) throws IOException {
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                ResponseBody body = response.body();
+                if (body != null) {
+                    return mapper.readValue(body.toString(), clazz);
+                }
+                return null;
+            }
+            throw new IOException(response.toString());
+        }
+    }
+}
+{{/operations}}

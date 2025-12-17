@@ -1,0 +1,73 @@
+package {{package}}.mongo.config;
+
+{{#include-secret}}
+import co.com.bancolombia.secretsmanager.api.exceptions.SecretException;
+import co.com.bancolombia.secretsmanager.api.GenericManagerAsync;
+{{/include-secret}}
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+{{#include-secret}}
+import org.mockito.Mock;
+{{/include-secret}}
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.mongodb.autoconfigure.MongoConnectionDetails;
+import org.springframework.boot.ssl.SslBundles;
+{{#include-secret}}
+
+import reactor.core.publisher.Mono;
+{{/include-secret}}
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class MongoConfigTest {
+
+    {{#include-secret}}
+    @Mock
+    private GenericManagerAsync manager;
+    {{/include-secret}}
+
+    private MongoConfig mongoConfigUnderTest;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+        mongoConfigUnderTest = new MongoConfig();
+    }
+
+    {{#include-secret}}
+    @Test
+    void dbSecretTest() throws SecretException {
+        String secretName = "secret";
+        MongoDBSecret dbSecretUnderTest = new MongoDBSecret();
+        dbSecretUnderTest.setUri("uri");
+
+        when(manager.getSecret(secretName, MongoDBSecret.class)).thenReturn(Mono.just(dbSecretUnderTest));
+
+        final MongoDBSecret result = mongoConfigUnderTest.dbSecret("secret", manager);
+
+        assertEquals(dbSecretUnderTest, result);
+    }
+    {{/include-secret}}
+    {{^include-secret}}
+    @Test
+    void dbSecretTest() {
+        final MongoDBSecret result = mongoConfigUnderTest.dbSecret("uri");
+
+        assertEquals("uri", result.getUri());
+    }
+    {{/include-secret}}
+
+    @Test
+    void testMongoProperties() {
+        MongoDBSecret secret = mock(MongoDBSecret.class);
+        SslBundles sslBundles = mock(SslBundles.class);
+        when(secret.getUri()).thenReturn("uri");
+
+        MongoConnectionDetails result = mongoConfigUnderTest.mongoProperties(secret, sslBundles);
+
+        assertNotNull(result);
+    }
+}

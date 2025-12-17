@@ -19,6 +19,6 @@ public class RestConsumerCodegen extends AbstractScaffoldCodegen {
   @Override
   public void processOpts() {
     super.processOpts();
-    apiTemplateFiles.put("apiClientImperative.mustache", ".java");
+    apiTemplateFiles.put("api-client-imperative.mustache", ".java");
   }
 }

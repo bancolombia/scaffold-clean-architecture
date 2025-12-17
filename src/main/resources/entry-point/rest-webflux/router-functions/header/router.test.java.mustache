@@ -1,0 +1,100 @@
+package {{package}}.api;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+@ContextConfiguration(classes = {RouterRest.class, HandlerV1.class, HandlerV2.class})
+@WebFluxTest
+class RouterRestTest {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @Test
+    void testListenGETUseCaseV1() {
+        webTestClient.get()
+                .uri("/api/usecase/path")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+    @Test
+    void testListenGETUseCaseV2() {
+        webTestClient.get()
+                .uri("/api/usecase/path")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+
+    @Test
+    void testListenGETOtherUseCaseV1() {
+        webTestClient.get()
+                .uri("/api/otherusercase/path")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+    @Test
+    void testListenGETOtherUseCaseV2() {
+        webTestClient.get()
+                .uri("/api/otherusercase/path")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+
+    @Test
+    void testListenPOSTUseCaseV1() {
+        webTestClient.post()
+                .uri("/api/usecase/otherpath")
+                .accept( new MediaType("application", "vnd.api.v1+json"))
+                .bodyValue("")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+    @Test
+    void testListenPOSTUseCaseV2() {
+        webTestClient.post()
+                .uri("/api/usecase/otherpath")
+                .accept( new MediaType("application", "vnd.api.v2+json"))
+                .bodyValue("")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(userResponse -> {
+                            Assertions.assertThat(userResponse).isEmpty();
+                        }
+                );
+    }
+}

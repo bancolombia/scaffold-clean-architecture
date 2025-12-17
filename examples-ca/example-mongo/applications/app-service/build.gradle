@@ -1,8 +1,8 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind'
-	testImplementation 'com.tngtech.archunit:archunit:1.4.0'
+	testImplementation 'tools.jackson.core:jackson-databind'
+	testImplementation 'com.tngtech.archunit:archunit:1.4.1'
 	implementation 'org.reactivecommons.utils:object-mapper:0.1.0'
 	implementation project(':reactive-web')
 	implementation project( ':mongo-repository')

@@ -33,7 +33,7 @@ stages:
 
           - task: JavaToolInstaller@1
             inputs:
-              versionSpec: '21'
+              versionSpec: '25'
               jdkArchitectureOption: 'x64'
               jdkSourceOption: 'PreInstalled'
 
@@ -65,7 +65,7 @@ stages:
               workingDirectory: .
               gradleWrapperFile: gradlew
               {{/monoRepo}}
-              tasks: 'clean build jacocoMergedReport'
+              tasks: 'clean build jacocoMergedReport sonar -x'
               publishJUnitResults: true
               testResultsFiles: '**/TEST-*.xml'
               sonarQubeRunAnalysis: true

@@ -19,6 +19,6 @@ public class RestControllerCodegen extends AbstractScaffoldCodegen {
   @Override
   public void processOpts() {
     super.processOpts();
-    apiTemplateFiles.put("apiController.mustache", "Controller.java");
+    apiTemplateFiles.put("api-controller.mustache", "Controller.java");
   }
 }

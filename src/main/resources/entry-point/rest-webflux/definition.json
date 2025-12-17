@@ -6,8 +6,8 @@
     "entry-point/rest-webflux/api.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/ApiRest.java",
     "entry-point/rest-webflux/cors-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/CorsConfig.java",
     "entry-point/rest-webflux/security-headers-filter.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/SecurityHeadersConfig.java",
-    "entry-point/rest-webflux/api.unit.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/ApiRestTest.java",
-    "entry-point/rest-webflux/config.unit.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config/ConfigTest.java",
+    "entry-point/rest-webflux/api.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/ApiRestTest.java",
+    "entry-point/rest-webflux/config.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config/ConfigTest.java",
     "entry-point/rest-webflux/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle"
   }
 }

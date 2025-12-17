@@ -11,45 +11,50 @@ import lombok.SneakyThrows;
 
 public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
   private static final String PITEST_CONFIG =
-      "pitest {\n"
-          + "        targetClasses = ['{{package}}.*']\n"
-          + "        excludedClasses = []\n"
-          + "        excludedTestClasses = []\n"
-          + "        pitestVersion = '1.16.1'\n"
-          + "        verbose = true\n"
-          + "        outputFormats = ['XML', 'HTML']\n"
-          + "        threads = 8\n"
-          + "        exportLineCoverage = true\n"
-          + "        timestampedReports = false\n"
-          + "        //mutators = ['STRONGER', 'DEFAULTS']\n"
-          + "        fileExtensionsToFilter.addAll('xml', 'orbit')\n"
-          + "        junit5PluginVersion = '1.2.1'\n"
-          + "        failWhenNoMutations = false\n"
-          + "        jvmArgs = [\"-XX:+AllowRedefinitionToAddDeleteMethods\"]\n"
-          + "    }\n"
-          + "\n"
-          + "    ";
+      """
+                  pitest {
+                          targetClasses = ['{{package}}.*']
+                          excludedClasses = []
+                          excludedTestClasses = []
+                          pitestVersion = '1.16.1'
+                          verbose = true
+                          outputFormats = ['XML', 'HTML']
+                          threads = 8
+                          exportLineCoverage = true
+                          timestampedReports = false
+                          //mutators = ['STRONGER', 'DEFAULTS']
+                          fileExtensionsToFilter.addAll('xml', 'orbit')
+                          junit5PluginVersion = '1.2.1'
+                          failWhenNoMutations = false
+                          jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
+                      }
+
+                     \s""";
 
   private static final String PITEST_MERGED_CONFIG =
-      "\npitestReportAggregate {\n"
-          + "    doLast {\n"
-          + "        def reportDir = layout.buildDirectory.dir(\"reports/pitest\").get().asFile\n"
-          + "        def consolidatedReport = new File(reportDir, 'mutations.xml')\n"
-          + "        consolidatedReport.withWriter { writer ->\n"
-          + "            writer.write(\"<mutations>\\n\")\n"
-          + "            subprojects.each { subproject ->\n"
-          + "                def xmlReport = subproject.layout.buildDirectory.file(\"reports/pitest/mutations.xml\").get().asFile\n"
-          + "                if (xmlReport.exists()) {\n"
-          + "                    def xmlContent = xmlReport.text\n"
-          + "                    xmlContent = xmlContent.replaceAll(\"<\\\\?xml[^>]*>\", \"\")\n"
-          + "                    xmlContent = xmlContent.replaceAll(\"</?mutations( partial=\\\"true\\\")?>\", \"\")\n"
-          + "                    writer.write(xmlContent.trim() + \"\\n\")\n"
-          + "                }\n"
-          + "            }\n"
-          + "            writer.write(\"</mutations>\")\n"
-          + "        }\n"
-          + "    }\n"
-          + "}\n\n";
+      """
+
+                  pitestReportAggregate {
+                      doLast {
+                          def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
+                          def consolidatedReport = new File(reportDir, 'mutations.xml')
+                          consolidatedReport.withWriter { writer ->
+                              writer.write("<mutations>\\n")
+                              subprojects.each { subproject ->
+                                  def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
+                                  if (xmlReport.exists()) {
+                                      def xmlContent = xmlReport.text
+                                      xmlContent = xmlContent.replaceAll("<\\\\?xml[^>]*>", "")
+                                      xmlContent = xmlContent.replaceAll("</?mutations( partial=\\"true\\")?>", "")
+                                      writer.write(xmlContent.trim() + "\\n")
+                                  }
+                              }
+                              writer.write("</mutations>")
+                          }
+                      }
+                  }
+
+                  """;
 
   @Override
   @SneakyThrows

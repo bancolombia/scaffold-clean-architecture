@@ -9,7 +9,7 @@
     "entry-point/sqs/sqs-listener.java.mustache": "infrastructure/entry-points/sqs-listener/src/main/java/{{packagePath}}/sqs/listener/helper/SQSListener.java",
     "entry-point/sqs/sqs-processor.java.mustache": "infrastructure/entry-points/sqs-listener/src/main/java/{{packagePath}}/sqs/listener/SQSProcessor.java",
     "entry-point/sqs/sqs-properties.java.mustache": "infrastructure/entry-points/sqs-listener/src/main/java/{{packagePath}}/sqs/listener/config/SQSProperties.java",
-    "entry-point/sqs/sqs-configTest.java.mustache": "infrastructure/entry-points/sqs-listener/src/test/java/{{packagePath}}/sqs/listener/config/SQSConfigTest.java",
-    "entry-point/sqs/sqs-listenerTest.java.mustache": "infrastructure/entry-points/sqs-listener/src/test/java/{{packagePath}}/sqs/listener/helper/SQSListenerTest.java"
+    "entry-point/sqs/sqs-config.test.java.mustache": "infrastructure/entry-points/sqs-listener/src/test/java/{{packagePath}}/sqs/listener/config/SQSConfigTest.java",
+    "entry-point/sqs/sqs-listener.test.java.mustache": "infrastructure/entry-points/sqs-listener/src/test/java/{{packagePath}}/sqs/listener/helper/SQSListenerTest.java"
   }
 }

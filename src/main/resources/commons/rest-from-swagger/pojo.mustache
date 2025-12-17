@@ -12,7 +12,7 @@ public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializ
 {{#vars}}
     {{#baseItems this}}
     {{#isEnum}}
-    {{>enumClass}}
+    {{>enum-class}}
     {{/isEnum}}
     {{/baseItems}}
     {{#isContainer}}
@@ -70,7 +70,7 @@ public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializ
     {{/maximum}}
     * @return {{name}}
     **/
-    {{#useBeanValidation}}{{>beanValidation}}{{/useBeanValidation}}
+    {{#useBeanValidation}}{{>bean-validation}}{{/useBeanValidation}}
     public {{{datatypeWithEnum}}} {{getter}}() {
         return {{name}};
     }

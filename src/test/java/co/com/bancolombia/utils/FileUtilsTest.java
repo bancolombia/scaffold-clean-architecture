@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -28,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.databind.node.ObjectNode;
 
 public class FileUtilsTest {
 
@@ -69,7 +69,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  void readYaml() throws IOException {
+  void readYaml() {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
 
@@ -77,7 +77,7 @@ public class FileUtilsTest {
   }
 
   @Test
-  void parseToYaml() throws IOException {
+  void parseToYaml() {
     File file = new File("src/test/resources/application.yaml");
     ObjectNode yaml = FileUtils.getFromYaml(file);
     ((ObjectNode) yaml.get("server")).put("port", 8081);
@@ -163,22 +163,27 @@ public class FileUtilsTest {
   void shouldAddDependency() {
     // Arrange
     String build =
-        "apply plugin: 'org.springframework.boot'\n"
-            + "\n"
-            + "dependencies {\n"
-            + "\timplementation project(':model')\n"
-            + "\timplementation project(':usecase')\n"
-            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
-            + "}";
+        """
+        apply plugin: 'org.springframework.boot'
+
+        dependencies {
+        	implementation project(':model')
+        	implementation project(':usecase')
+        	implementation 'org.springframework.boot:spring-boot-starter'
+        }
+        """;
+
     String expected =
-        "apply plugin: 'org.springframework.boot'\n"
-            + "\n"
-            + "dependencies {\n"
-            + "\timplementation project(':my-module')\n"
-            + "\timplementation project(':model')\n"
-            + "\timplementation project(':usecase')\n"
-            + "\timplementation 'org.springframework.boot:spring-boot-starter'\n"
-            + "}";
+        """
+            apply plugin: 'org.springframework.boot'
+
+            dependencies {
+            	implementation project(':my-module')
+            	implementation project(':model')
+            	implementation project(':usecase')
+            	implementation 'org.springframework.boot:spring-boot-starter'
+            }
+            """;
     // Act
     String result = Utils.addDependency(build, "implementation project(':my-module')");
     // Assert

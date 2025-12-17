@@ -12,9 +12,9 @@ plugins {
     id 'jacoco'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id 'org.sonarqube' version '7.0.1.6134'
+    id 'org.sonarqube' version '7.2.1.6560'
     id 'com.gradle.plugin-publish' version '2.0.0'
-    id 'com.diffplug.spotless' version '8.0.0'
+    id 'com.diffplug.spotless' version '8.1.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.1.9'
 }
@@ -178,13 +178,12 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1'
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.20.1'
+    api 'tools.jackson.core:jackson-databind:3.0.3'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.0.3'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.3'
     api 'commons-io:commons-io:2.21.0'
     api gradleApi()
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1'
     implementation 'org.reflections:reflections:0.10.2'
     // swagger generators
     implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.59') {
@@ -198,7 +197,7 @@ dependencies {
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
 
     testImplementation gradleTestKit()
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.21.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
@@ -206,8 +205,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
-    implementation 'com.squareup.okhttp3:okhttp:5.3.1'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:5.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:5.3.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:5.3.2'
 }
 
 jacocoTestReport {
@@ -224,7 +223,6 @@ sonar {
     properties {
         property "sonar.organization", "grupo-bancolombia"
         property "sonar.projectKey", "bancolombia_scaffold-clean-architecture"
-        property "sonar.host.url", "https://sonarcloud.io/"
 
         property "sonar.sources", "."
         property "sonar.java.binaries", "build/classes"
@@ -297,9 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '8.14.3'
-    validateDistributionUrl = true
-    distributionSha256Sum = "a17ddd85a26b6a7f5ddb71ff8b05fc5104c0202c6e64782429790c933686c806"
+    gradleVersion = '9.2.1'
 }
 
 tasks.register('ci-updater', JavaExec) {

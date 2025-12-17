@@ -1,0 +1,79 @@
+package {{package}}.api;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.client.RestTestClient;
+import org.springframework.web.context.WebApplicationContext;
+
+@SpringBootTest(classes = TestConfig.class)
+class ApiRestTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private RestTestClient client;
+
+    @BeforeEach
+    void setup() {
+        client = RestTestClient.bindToApplicationContext(context).build();
+    }
+
+    @Test
+    void shouldReturnValueFromUseCaseVersion1() {
+        client.get()
+                {{^task-param-versioning-strategy-path}}
+                .uri("/api/usecase/path")
+                {{/task-param-versioning-strategy-path}}
+                {{#task-param-versioning-strategy-path}}
+                .uri("/api/v1/usecase/path")
+                {{/task-param-versioning-strategy-path}}
+                .accept(MediaType.APPLICATION_JSON)
+                {{#task-param-versioning-strategy-header}}
+                .header("X-API-VERSION", "1")
+                {{/task-param-versioning-strategy-header}}
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(String.class)
+                .isEqualTo("Value from use case v1");
+    }
+
+    {{#task-param-versioning-strategy-source}}
+    @Test
+    void shouldReturnValueFromUseCaseVersion2() {
+        client.get()
+                {{#task-param-versioning-strategy-path}}
+                .uri("/api/v2/usecase/path")
+                {{/task-param-versioning-strategy-path}}
+                {{#task-param-versioning-strategy-header}}
+                .uri("/api/usecase/path")
+                {{/task-param-versioning-strategy-header}}
+                .accept(MediaType.APPLICATION_JSON)
+                {{#task-param-versioning-strategy-header}}
+                .header("X-API-VERSION", "2")
+                {{/task-param-versioning-strategy-header}}
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(String.class)
+                .isEqualTo("Value from use case v2");
+    }
+    {{/task-param-versioning-strategy-source}}
+
+    @Test
+    void shouldReturnNotFoundForInvalidPath() {
+        client.get()
+                {{^task-param-versioning-strategy-path}}
+                .uri("/api/usecase/invalid")
+                {{/task-param-versioning-strategy-path}}
+                {{#task-param-versioning-strategy-path}}
+                .uri("/api/v2/usecase/invalid")
+                {{/task-param-versioning-strategy-path}}
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+}

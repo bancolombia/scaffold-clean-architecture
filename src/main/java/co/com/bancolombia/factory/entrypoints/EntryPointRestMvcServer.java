@@ -18,14 +18,6 @@ public class EntryPointRestMvcServer implements ModuleFactory {
     Server server = (Server) builder.getParam("task-param-server");
 
     switch (server) {
-      case UNDERTOW:
-        String undertowDependency =
-            buildImplementation("org.springframework.boot:spring-boot-starter-undertow");
-        builder.updateFile(
-            BUILD_GRADLE, current -> Utils.addDependency(current, undertowDependency));
-        builder.updateFile(
-            BUILD_GRADLE, current -> Utils.addConfiguration(current, TOMCAT_EXCLUSION));
-        return;
       case JETTY:
         String jettyDependency =
             buildImplementation("org.springframework.boot:spring-boot-starter-jetty");
@@ -41,7 +33,6 @@ public class EntryPointRestMvcServer implements ModuleFactory {
   }
 
   public enum Server {
-    UNDERTOW,
     TOMCAT,
     JETTY
   }

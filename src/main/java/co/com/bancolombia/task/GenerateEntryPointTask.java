@@ -2,8 +2,8 @@ package co.com.bancolombia.task;
 
 import static co.com.bancolombia.Constants.PATH_GRAPHQL;
 
+import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.factory.entrypoints.EntryPointRestMvcServer.Server;
-import co.com.bancolombia.factory.entrypoints.EntryPointWebflux.VersioningStrategy;
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.gradle.api.tasks.options.OptionValues;
 public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
   private String swaggerFile = null;
-  private Server server = Server.UNDERTOW;
+  private Server server = Server.TOMCAT;
   private VersioningStrategy versioning = VersioningStrategy.NONE;
   private BooleanOption router = BooleanOption.TRUE;
   private BooleanOption swagger = BooleanOption.FALSE;
@@ -73,7 +73,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.eda = eda;
   }
 
-  @Option(option = "topicConsumer", description = "Set the topic for the Kafka consumer")
+  @Option(option = "topic-consumer", description = "Set the topic for the Kafka consumer")
   public void setTopicConsumer(String topicConsumer) {
     builder.addParam("topicConsumer", topicConsumer);
   }

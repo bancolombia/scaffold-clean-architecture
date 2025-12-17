@@ -1,0 +1,101 @@
+package {{package}}.api.config;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.servlet.config.annotation.ApiVersionConfigurer;
+
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class ApiConfigTest {
+
+    private ApiConfig apiConfig;
+
+    @Mock
+    private ApiVersionConfigurer configurer;
+
+    @BeforeEach
+    void setUp() {
+        apiConfig = new ApiConfig();
+        when(configurer.addSupportedVersions("1", "2")).thenReturn(configurer);
+        when(configurer.setDefaultVersion("1")).thenReturn(configurer);
+        when(configurer.usePathSegment(1)).thenReturn(configurer);
+        when(configurer.setVersionParser(any(CustomApiVersionParser.class))).thenReturn(configurer);
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithSupportedVersions() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).addSupportedVersions("1", "2");
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithDefaultVersion() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).setDefaultVersion("1");
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithPathSegment() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).usePathSegment(1);
+    }
+
+    @Test
+    void shouldConfigureApiVersioningWithCustomParser() {
+        apiConfig.configureApiVersioning(configurer);
+
+        ArgumentCaptor<CustomApiVersionParser> captor = ArgumentCaptor.forClass(CustomApiVersionParser.class);
+        verify(configurer).setVersionParser(captor.capture());
+        assertNotNull(captor.getValue());
+        assertInstanceOf(CustomApiVersionParser.class, captor.getValue());
+    }
+
+    @Test
+    void shouldConfigureAllApiVersioningSettings() {
+        apiConfig.configureApiVersioning(configurer);
+
+        verify(configurer).addSupportedVersions("1", "2");
+        verify(configurer).setDefaultVersion("1");
+        verify(configurer).usePathSegment(1);
+        verify(configurer).setVersionParser(any(CustomApiVersionParser.class));
+        verifyNoMoreInteractions(configurer);
+    }
+
+    @Test
+    void shouldCallConfigurerMethodsInCorrectOrder() {
+        apiConfig.configureApiVersioning(configurer);
+
+        var inOrder = inOrder(configurer);
+        inOrder.verify(configurer).addSupportedVersions("1", "2");
+        inOrder.verify(configurer).setDefaultVersion("1");
+        inOrder.verify(configurer).usePathSegment(1);
+        inOrder.verify(configurer).setVersionParser(any(CustomApiVersionParser.class));
+    }
+
+    @Test
+    void shouldUsePathSegmentAtPositionOne() {
+        apiConfig.configureApiVersioning(configurer);
+        verify(configurer).usePathSegment(1);
+    }
+
+    @Test
+    void shouldSupportExactlyTwoVersions() {
+        apiConfig.configureApiVersioning(configurer);
+
+        verify(configurer, times(1)).addSupportedVersions("1", "2");
+        verify(configurer, never()).addSupportedVersions("3");
+    }
+}

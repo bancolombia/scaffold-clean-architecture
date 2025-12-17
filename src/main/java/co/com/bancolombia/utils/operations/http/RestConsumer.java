@@ -1,9 +1,5 @@
 package co.com.bancolombia.utils.operations.http;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +9,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 @UtilityClass
 public class RestConsumer {
@@ -62,20 +61,10 @@ public class RestConsumer {
   }
 
   private static ObjectMapper instantiateMapper() {
-    ObjectMapper mapper = new ObjectMapper();
-    customizeMapper(mapper);
-    return mapper;
+    return JsonMapper.builder().findAndAddModules().build();
   }
 
   private static ObjectMapper instantiateXmlMapper() {
-    ObjectMapper mapper = new XmlMapper();
-    customizeMapper(mapper);
-    return mapper;
-  }
-
-  private static void customizeMapper(ObjectMapper mapper) {
-    mapper.findAndRegisterModules();
-    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    return XmlMapper.builder().findAndAddModules().build();
   }
 }

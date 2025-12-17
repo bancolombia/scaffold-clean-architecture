@@ -45,9 +45,10 @@ public class SQSListener {
         this.operation = "MessageFrom:" + properties.queueUrl();
         {{/metrics}}
         ExecutorService service = Executors.newFixedThreadPool(properties.numberOfThreads());
-        Flux<Void> flow = listenRetryRepeat().publishOn(Schedulers.fromExecutorService(service));
         for (var i = 0; i < properties.numberOfThreads(); i++) {
-            flow.subscribe();
+            listenRetryRepeat()
+                    .subscribeOn(Schedulers.fromExecutorService(service))
+                    .subscribe();
         }
         return this;
     }
@@ -66,7 +67,8 @@ public class SQSListener {
                         .tag("operation", operation)
                         .metrics()
                          {{/metrics}}
-                        .then(confirm(message)))
+                        .then(confirm(message)),
+                        properties.maxNumberOfMessages())
                 .onErrorContinue((e, o) -> log.error("Error listening sqs message", e));
     }
 

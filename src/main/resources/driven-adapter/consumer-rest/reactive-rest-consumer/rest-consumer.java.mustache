@@ -21,9 +21,9 @@ public class RestConsumer /* implements Gateway from domain */{
     }
 {{/lombok}}
 
-    // these methods are an example that illustrates the implementation of WebClient.
+    // These methods are an example that illustrates the implementation of WebClient.
     // You should use the methods that you implement from the Gateway from the domain.
-    @CircuitBreaker(name = "testGet" /*, fallbackMethod = "testGetOk"*/)
+    @CircuitBreaker(name = "testGet" /*, fallbackMethod = "testGetOk"*/) // This name should match with settings name in application.yaml
     public Mono<ObjectResponse> testGet() {
         return client
                 .get()
@@ -39,7 +39,7 @@ public class RestConsumer /* implements Gateway from domain */{
 //                .bodyToMono(String.class);
 //    }
 
-    @CircuitBreaker(name = "testPost")
+    @CircuitBreaker(name = "testPost") // This name should match with settings name in application.yaml
     public Mono<ObjectResponse> testPost() {
     {{#lombok}}
         ObjectRequest request = ObjectRequest.builder()

@@ -6,21 +6,19 @@ import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.boot.ssl.SslBundles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 
 import {{package}}.model.topiccredentials.ConsumerCredentials;
 import io.apicurio.registry.serde.SerdeConfig;
 import io.apicurio.registry.serde.jsonschema.JsonSchemaKafkaDeserializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 
-import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -32,24 +30,22 @@ public class KafkaConfig {
 
     @Bean
     ReceiverOptions<String, String> kafkaReceiverOptions(
-            @Value(value = "${adapters.kafka.consumer.topic}") String topic,
-            KafkaProperties kafkaProperties,
-            SslBundles sslBundles) throws UnknownHostException {
+            @Value(value = "${adapters.kafka.consumer.topic}") String topic) {
 
         ReceiverOptions<String, String> basicReceiverOptions =
-                ReceiverOptions.create(buildJaasConfig(kafkaProperties, sslBundles));
+                ReceiverOptions.create(buildJaasConfig());
 
         return basicReceiverOptions.subscription(Collections.singletonList(topic));
     }
 
     @Bean
-    ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate(
+    KafkaReceiver<String, String> reactiveKafkaConsumer(
             ReceiverOptions<String, String> kafkaReceiverOptions) {
-        return new ReactiveKafkaConsumerTemplate<>(kafkaReceiverOptions);
+        return KafkaReceiver.create(kafkaReceiverOptions);
     }
 
-    public Map<String, Object> buildJaasConfig(KafkaProperties kafkaProperties, SslBundles sslBundles) {
-        Map<String, Object> props = kafkaProperties.buildConsumerProperties(sslBundles);
+    public Map<String, Object> buildJaasConfig() {
+        Map<String, Object> props = new HashMap<>();
         String jaasConfig = String.format(
             "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required "
             + "oauth.client.id=\"%s\" "

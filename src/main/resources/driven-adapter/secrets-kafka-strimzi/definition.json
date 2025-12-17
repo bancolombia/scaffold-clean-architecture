@@ -3,7 +3,7 @@
     "infrastructure/driven-adapters/secrets/src/main/java/{{packagePath}}/secrets/config"
   ],
   "files": {
-    "driven-adapter/secrets-kafka-strimzi/kafkaOauthSecretsConfig.java.mustache": "infrastructure/driven-adapters/secrets/src/main/java/{{packagePath}}/secrets/config/KafkaOauthSecretsConfig.java",
+    "driven-adapter/secrets-kafka-strimzi/kafka-oauth-secrets-config.java.mustache": "infrastructure/driven-adapters/secrets/src/main/java/{{packagePath}}/secrets/config/KafkaOauthSecretsConfig.java",
     "driven-adapter/secrets-kafka-strimzi/build.gradle.mustache": "infrastructure/driven-adapters/secrets/build.gradle"
   }
 }

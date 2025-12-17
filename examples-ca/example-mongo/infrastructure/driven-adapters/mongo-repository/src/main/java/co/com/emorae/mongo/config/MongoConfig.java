@@ -1,8 +1,8 @@
 package co.com.emorae.mongo.config;
 
 import com.mongodb.ConnectionString;
-import org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer;
-import org.springframework.boot.autoconfigure.mongo.ReactiveMongoClientFactory;
+import org.springframework.boot.mongodb.autoconfigure.MongoClientSettingsBuilderCustomizer;
+import org.springframework.boot.mongodb.autoconfigure.ReactiveMongoClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;

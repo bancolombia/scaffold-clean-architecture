@@ -21,8 +21,9 @@ subprojects {
     compileJava.dependsOn validateStructure
 
     java {
-        sourceCompatibility = JavaVersion.{{javaVersion}}
-        targetCompatibility = JavaVersion.{{javaVersion}}
+        toolchain {
+            languageVersion = JavaLanguageVersion.of({{javaVersion}})
+        }
     }
 
     {{#mutation}}
@@ -70,12 +71,13 @@ subprojects {
         targetClasses = ['{{package}}.*']
         excludedClasses = []
         excludedTestClasses = []
-        pitestVersion = '1.20.6'
+        pitestVersion = '1.22.0'
         verbose = false
         outputFormats = ['XML', 'HTML']
         threads = 8
         exportLineCoverage = true
         useClasspathFile = true
+        withHistory = true
         timestampedReports = false
         //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')

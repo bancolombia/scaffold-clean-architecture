@@ -4,7 +4,11 @@ import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.github.mustachejava.resolver.DefaultResolver;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,10 +16,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // @formatter:off
 class UtilsTest {
@@ -168,108 +174,89 @@ class UtilsTest {
         assertEquals(expected, result);
     }
 
-    @Test
-    void shouldAddConfigurationAndConfigurationsBlock() {
-        // Arrange
-        String build = """
-                apply plugin: 'org.springframework.boot'
-
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }""";
-        String expected = """
-                apply plugin: 'org.springframework.boot'
-
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }
-
-                configurations{
-                \tcompile.exclude group: "org.springframework.boot", module:"spring-boot-starter-tomcat"
-                }""";
+    @DisplayName("Utils.addConfiguration: different insertion scenarios in 'configurations'")
+    @ParameterizedTest(name = "{index} ⇒ {0}")
+    @MethodSource("addConfigurationCases")
+    void addConfigurationParametrized(String description, String build, String toAdd, String expected) {
         // Act
-        String result =
-                Utils.addConfiguration(
-                        build,
-                        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"");
+        String result = Utils.addConfiguration(build, toAdd);
+
         // Assert
-        assertEquals(expected, result);
+        assertEquals(expected, result, description);
     }
 
-    @Test
-    void shouldAddConfiguration() {
-        // Arrange
-        String build = """
-                apply plugin: 'org.springframework.boot'
+    private static Stream<Arguments> addConfigurationCases() {
+        String baseBlock = """
+            apply plugin: 'org.springframework.boot'
 
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }
+            dependencies {
+                implementation project(':model')
+                implementation project(':usecase')
+                implementation 'org.springframework.boot:spring-boot-starter'
+            }""";
 
-                configurations {
-                    compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-                }""";
-        String expected = """
-                apply plugin: 'org.springframework.boot'
+        // Case 1: 'configurations' does not exist and the block + line must be created
+        String expectedCase1 = """
+            apply plugin: 'org.springframework.boot'
 
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }
+            dependencies {
+                implementation project(':model')
+                implementation project(':usecase')
+                implementation 'org.springframework.boot:spring-boot-starter'
+            }
 
-                configurations {
-                \tcompile.exclude group: "co.com.bancolombia", module: "excluded-module"
-                    compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-                }""";
-        // Act
-        String result =
-                Utils.addConfiguration(
-                        build, "compile.exclude group: \"co.com.bancolombia\", module: \"excluded-module\"");
-        // Assert
-        assertEquals(expected, result);
-    }
+            configurations{
+            \tcompile.exclude group: "org.springframework.boot", module:"spring-boot-starter-tomcat"
+            }""";
 
-    @Test
-    void shouldNotAddConfigurationWhenExists() {
-        // Arrange
-        String build = """
-                apply plugin: 'org.springframework.boot'
+        // Case 2: 'configurations' exists and a new line is added before the existing one
+        String buildCase2 = """
+            apply plugin: 'org.springframework.boot'
 
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }
+            dependencies {
+                implementation project(':model')
+                implementation project(':usecase')
+                implementation 'org.springframework.boot:spring-boot-starter'
+            }
 
-                configurations {
-                    compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-                }""";
-        String expected = """
-                apply plugin: 'org.springframework.boot'
+            configurations {
+                compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+            }""";
 
-                dependencies {
-                    implementation project(':model')
-                    implementation project(':usecase')
-                    implementation 'org.springframework.boot:spring-boot-starter'
-                }
+        String expectedCase2 = """
+            apply plugin: 'org.springframework.boot'
 
-                configurations {
-                    compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
-                }""";
-        // Act
-        String result =
-                Utils.addConfiguration(
-                        build,
-                        "compile.exclude group: \"org.springframework.boot\", module: \"spring-boot-starter-tomcat\"");
-        // Assert
-        assertEquals(expected, result);
+            dependencies {
+                implementation project(':model')
+                implementation project(':usecase')
+                implementation 'org.springframework.boot:spring-boot-starter'
+            }
+
+            configurations {
+            \tcompile.exclude group: "co.com.bancolombia", module: "excluded-module"
+                compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
+            }""";
+
+        return Stream.of(
+                Arguments.of(
+                        "Create 'configurations' block and add line",
+                        baseBlock,
+                        "compile.exclude group: \"org.springframework.boot\", module:\"spring-boot-starter-tomcat\"",
+                        expectedCase1
+                ),
+                Arguments.of(
+                        "Add new line within existing block",
+                        buildCase2,
+                        "compile.exclude group: \"co.com.bancolombia\", module: \"excluded-module\"",
+                        expectedCase2
+                ),
+                Arguments.of(
+                        "Do not add when the line already exists (idempotent)",
+                        buildCase2,
+                        "compile.exclude group: \"org.springframework.boot\", module: \"spring-boot-starter-tomcat\"",
+                        buildCase2
+                )
+        );
     }
 
     @Test
@@ -392,7 +379,7 @@ class UtilsTest {
 
     @Test
     void shouldReplaceExpression() {
-        String expected = "'com.fasterxml.jackson.core:jackson-databind:2.11.0'";
+        String expected = "'tools.jackson.core:jackson-databind:3.0.3'";
         String result =
                 Utils.replaceExpression(
                         "'com.github.spullara.mustache.java:compiler:0.9.6'",
@@ -404,7 +391,7 @@ class UtilsTest {
     @Test
     void shouldGetAllFilesWithGradleExtension() throws IOException {
         List<String> result = Utils.getAllFilesWithGradleExtension(".");
-        assertEquals(true, result.stream().allMatch(s -> s.endsWith("gradle")));
+        assertTrue(result.stream().allMatch(s -> s.endsWith("gradle")));
     }
 
     @Test

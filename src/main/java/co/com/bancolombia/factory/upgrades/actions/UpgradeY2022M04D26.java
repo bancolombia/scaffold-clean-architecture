@@ -11,7 +11,11 @@ import lombok.SneakyThrows;
 public class UpgradeY2022M04D26 implements UpgradeAction {
   public static final String TASKS_NAMED_WRAPPER = "tasks.named('wrapper')";
   public static final String GRADLE_VERSION_WRAPPER =
-      "\n\n" + "tasks.named('wrapper') {" + "gradleVersion = '7.4.2'\n" + "}\n";
+      """
+
+                  tasks.named('wrapper') {gradleVersion = '7.4.2'
+                  }
+                  """;
   public static final String LANGUAGE_PROPERTY = "language";
   public static final String LANGUAGE_PROPERTY_VALUER = "\nlanguage=java";
 
