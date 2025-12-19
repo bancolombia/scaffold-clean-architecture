@@ -136,7 +136,7 @@ class ArchitectureTest {
                         (cj, tool) -> cj.andShould().haveNameNotContaining(tool),
                         (a, b) -> b)
                 .allowEmptyShould(true)
-                .as("Rule_2.7: Domain classes should not have fields named with technology names");
+                .as("Rule_2.6: Domain classes should not have fields named with technology names");
 
         checkWithWarning(() -> rule.check(domainClasses));
     }
@@ -233,7 +233,7 @@ class ArchitectureTest {
                 Utils.JavaFile file = files.get(location.getClassName());
                 if (file != null) {
                     issues.computeIfAbsent(file.getModulePath(), key -> new Utils.IssuesReport())
-                            .add(Utils.Issue.from(rule.getRuleId(), Utils.Issue.Severity.MAJOR, Utils.Issue.Type.CODE_SMELL,
+                            .add(Utils.Issue.from(rule.getRuleId(),
                                     Utils.Issue.Location.from(rule.getDescription() + location.getDescription(),
                                             file.getPath(), Utils.Issue.TextRange.from(
                                                     Utils.resolveFinalLocation(file, location))), 5));

@@ -60,7 +60,7 @@ public class HttpOperations implements ExternalOperations {
   }
 
   private static boolean filterValidVersions(Release release) {
-    return Stream.of("alpha", "beta").noneMatch(invalid -> release.getTagName().contains(invalid));
+    return Stream.of("alpha", "beta", "-M", "-RC").noneMatch(invalid -> release.getTagName().contains(invalid));
   }
 
   @Override

@@ -19,8 +19,83 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
+import static co.com.bancolombia.Utils.Rule.CleanCodeAttribute.EFFICIENT;
+import static co.com.bancolombia.Utils.Rule.CleanCodeAttribute.IDENTIFIABLE;
+import static co.com.bancolombia.Utils.Rule.CleanCodeAttribute.TRUSTWORTHY;
+import static co.com.bancolombia.Utils.Rule.Severity.HIGH;
+import static co.com.bancolombia.Utils.Rule.Severity.LOW;
+import static co.com.bancolombia.Utils.Rule.Severity.MEDIUM;
+import static co.com.bancolombia.Utils.Rule.SoftwareQuality.MAINTAINABILITY;
+import static co.com.bancolombia.Utils.Rule.SoftwareQuality.RELIABILITY;
+
 @Log
 public class Utils {
+    private static final Map<String, Rule> RULES = new HashMap<>();
+
+    static {
+        RULES.put(
+                "Rule_1.5",
+                Rule.from(
+                                "Rule_1.5",
+                                "Reactive flows must leverage AWS async clients",
+                                "Reactive flows should use AWS asynchronous clients to preserve non-blocking behavior" +
+                                        " and throughput guarantees.",
+                                EFFICIENT)
+                        .with(new Rule.Impact(MAINTAINABILITY, HIGH))
+                        .with(new Rule.Impact(RELIABILITY, MEDIUM)));
+        RULES.put(
+                "Rule_2.2",
+                Rule.from(
+                                "Rule_2.2",
+                                "Domain names avoid technology suffixes",
+                                "Domain classes should not be named with technology-specific suffixes to keep the " +
+                                        "ubiquitous language clear.",
+                                IDENTIFIABLE)
+                        .with(new Rule.Impact(MAINTAINABILITY, HIGH))
+                        .with(new Rule.Impact(RELIABILITY, LOW)));
+        RULES.put(
+                "Rule_2.4",
+                Rule.from(
+                                "Rule_2.4",
+                                "Domain names avoid technology labels",
+                                "Domain classes should not include technology names to prevent coupling domain " +
+                                        "terminology to infrastructure.",
+                                IDENTIFIABLE)
+                        .with(new Rule.Impact(MAINTAINABILITY, HIGH))
+                        .with(new Rule.Impact(RELIABILITY, LOW)));
+        RULES.put(
+                "Rule_2.5",
+                Rule.from(
+                                "Rule_2.5",
+                                "UseCase attributes must be final",
+                                "UseCase classes should declare only final attributes so concurrent executions cannot" +
+                                        " mutate shared state.",
+                                TRUSTWORTHY)
+                        .with(new Rule.Impact(RELIABILITY, HIGH))
+                        .with(new Rule.Impact(MAINTAINABILITY, MEDIUM)));
+        RULES.put(
+                "Rule_2.6",
+                Rule.from(
+                                "Rule_2.6",
+                                "Domain fields avoid technology names",
+                                "Fields in domain classes should not be named after technologies to keep intent " +
+                                        "focused on business meaning.",
+                                IDENTIFIABLE)
+                        .with(new Rule.Impact(MAINTAINABILITY, MEDIUM))
+                        .with(new Rule.Impact(RELIABILITY, LOW)));
+        RULES.put(
+                "Rule_2.7",
+                Rule.from(
+                                "Rule_2.7",
+                                "Bean attributes must be final",
+                                "Bean classes should use constructor injection with final attributes to avoid mutable" +
+                                        " shared state under concurrency.",
+                                TRUSTWORTHY)
+                        .with(new Rule.Impact(RELIABILITY, HIGH))
+                        .with(new Rule.Impact(MAINTAINABILITY, MEDIUM)));
+    }
+
+
     public static ArchitectureRule parseToRule(String message) {
         String ruleId = extractRuleId(message);
         String description = extractRuleDescription(message);
@@ -231,39 +306,103 @@ public class Utils {
         }
     }
 
+    public static class Rule {
+        private final String id;
+        private final String name;
+        private final String description;
+        private final String engineId = "scaffold";
+        private final CleanCodeAttribute cleanCodeAttribute;
+        private final List<Impact> impacts = new ArrayList<>();
+
+        public static Rule from(String id, String name, String description, CleanCodeAttribute cleanCodeAttribute) {
+            return new Rule(id, name, description, cleanCodeAttribute);
+        }
+
+        public Rule(String id, String name, String description, CleanCodeAttribute cleanCodeAttribute) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.cleanCodeAttribute = cleanCodeAttribute;
+        }
+
+        public Rule with(Impact impact) {
+            this.impacts.add(impact);
+            return this;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getEngineId() {
+            return engineId;
+        }
+
+        public CleanCodeAttribute getCleanCodeAttribute() {
+            return cleanCodeAttribute;
+        }
+
+        public List<Impact> getImpacts() {
+            return impacts;
+        }
+
+        public enum SoftwareQuality {
+            SECURITY, RELIABILITY, MAINTAINABILITY
+        }
+
+        public enum Severity {
+            BLOCKER, HIGH, MEDIUM, LOW, INFO
+        }
+
+        public enum CleanCodeAttribute {
+            FORMATTED, CONVENTIONAL, IDENTIFIABLE, CLEAR, LOGICAL, COMPLETE, EFFICIENT, FOCUSED, DISTINCT, MODULAR,
+            TESTED, LAWFUL, TRUSTWORTHY, RESPECTFUL
+        }
+
+        public static class Impact {
+            private final SoftwareQuality softwareQuality;
+            private final Severity severity;
+
+            public Impact(SoftwareQuality softwareQuality, Severity severity) {
+                this.softwareQuality = softwareQuality;
+                this.severity = severity;
+            }
+
+            public SoftwareQuality getSoftwareQuality() {
+                return softwareQuality;
+            }
+
+            public Severity getSeverity() {
+                return severity;
+            }
+        }
+    }
+
     public static class Issue {
         private final String ruleId;
-        private final Severity severity;
-        private final Type type;
         private final Location primaryLocation;
         private final int effortMinutes;
 
-        public static Issue from(String ruleId, Severity severity, Type type, Location location, int effortMinutes) {
-            return new Issue(ruleId, severity, type, location, effortMinutes);
+        public static Issue from(String ruleId, Location location, int effortMinutes) {
+            return new Issue(ruleId, location, effortMinutes);
         }
 
-        private Issue(String ruleId, Severity severity, Type type, Location primaryLocation, int effortMinutes) {
+        private Issue(String ruleId, Location primaryLocation, int effortMinutes) {
             this.ruleId = ruleId;
-            this.severity = severity;
-            this.type = type;
             this.primaryLocation = primaryLocation;
             this.effortMinutes = effortMinutes;
         }
 
-        public String getEngineId() {
-            return "scaffold";
-        }
-
         public String getRuleId() {
             return ruleId;
-        }
-
-        public Severity getSeverity() {
-            return severity;
-        }
-
-        public Type getType() {
-            return type;
         }
 
         public Location getPrimaryLocation() {
@@ -272,20 +411,6 @@ public class Utils {
 
         public int getEffortMinutes() {
             return effortMinutes;
-        }
-
-        enum Type {
-            BUG,
-            VULNERABILITY,
-            CODE_SMELL
-        }
-
-        enum Severity {
-            BLOCKER,
-            CRITICAL,
-            MAJOR,
-            MINOR,
-            INFO
         }
 
         public static class Location {
@@ -336,13 +461,22 @@ public class Utils {
 
     public static class IssuesReport {
         private final ConcurrentLinkedQueue<Issue> issues = new ConcurrentLinkedQueue<>();
+        private final ConcurrentLinkedQueue<Rule> rules = new ConcurrentLinkedQueue<>();
 
         public void add(Issue issue) {
             this.issues.add(issue);
+            var rule = RULES.get(issue.getRuleId());
+            if (rule != null && !this.rules.contains(rule)) {
+                this.rules.add(rule);
+            }
         }
 
         public ConcurrentLinkedQueue<Issue> getIssues() {
             return issues;
+        }
+
+        public ConcurrentLinkedQueue<Rule> getRules() {
+            return rules;
         }
     }
 }
