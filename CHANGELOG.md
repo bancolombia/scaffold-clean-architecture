@@ -1,5 +1,18 @@
 # Changelog
 
+## [v4.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.1) (2025-12-19)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.0...v4.0.1)
+
+**Closed issues:**
+
+- Update generic issue format for external issues of ArchUnit [\#606](https://github.com/bancolombia/scaffold-clean-architecture/issues/606)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#782](https://github.com/bancolombia/scaffold-clean-architecture/pull/782) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action from 4.31.6 to 4.31.9 [\#781](https://github.com/bancolombia/scaffold-clean-architecture/pull/781) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.0) (2025-12-17)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v3.28.0...v4.0.0)
