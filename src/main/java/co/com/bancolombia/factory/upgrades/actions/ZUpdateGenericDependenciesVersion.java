@@ -23,12 +23,16 @@ public class ZUpdateGenericDependenciesVersion implements UpgradeAction {
         | UpdateUtils.updateVersions(
             builder, BUILD_GRADLE, "lombokVersion", Constants.LOMBOK_VERSION)
         | UpdateUtils.updateVersions(
-            builder, MAIN_GRADLE, "gradleVersion", Constants.GRADLE_WRAPPER_VERSION);
+            builder, MAIN_GRADLE, "gradleVersion", Constants.GRADLE_WRAPPER_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "pitestVersion", Constants.GRADLE_PITEST_VERSION)
+        | UpdateUtils.updateVersions(
+            builder, MAIN_GRADLE, "pitestVersion", Constants.PITEST_VERSION);
   }
 
   @Override
   public String name() {
-    return "Spring|Sonar|Jacoco|Cobertura|Lombok|Gradle update";
+    return "Spring|Sonar|Jacoco|Cobertura|Lombok|Gradle|Pitest update";
   }
 
   @Override

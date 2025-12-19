@@ -63,6 +63,10 @@
         {
             "name": "SPRING_AI_VERSION",
             "packageName": "org.springframework.ai:spring-ai-bom"
+        },
+        {
+            "name": "PITEST_VERSION",
+            "packageName": "org.pitest:pitest"
         }
     ],
     "gradle": [
@@ -79,7 +83,7 @@
             "packageName": "org.owasp.dependencycheck:org.owasp.dependencycheck.gradle.plugin"
         },
         {
-            "name": "PITEST_VERSION",
+            "name": "GRADLE_PITEST_VERSION",
             "packageName": "info.solidsoft.pitest:info.solidsoft.pitest.gradle.plugin"
         }
     ],
