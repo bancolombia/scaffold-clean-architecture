@@ -8,6 +8,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUtils;
@@ -56,7 +57,10 @@ class UpgradeY2024M10D17AddPitestTest {
     // Assert
     assertTrue(applied);
     verify(builder)
-        .addFile(BUILD_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/build-after.txt"));
+        .addFile(
+            BUILD_GRADLE,
+            FileUtils.getResourceAsString(resolver, "pitest/build-after.txt")
+                .replace("GRADLE_PITEST_VERSION", Constants.GRADLE_PITEST_VERSION));
     verify(builder)
         .addFile(MAIN_GRADLE, FileUtils.getResourceAsString(resolver, "pitest/main-after.txt"));
   }

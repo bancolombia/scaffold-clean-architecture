@@ -152,9 +152,9 @@ public class Utils {
               .filter(f -> !f.contains(".git"))
               .filter(f -> !f.contains("settings.gradle"))
               .map(f -> f.replace("\\", "/"))
-              .filter(f -> !f.contains("/bin"))
-              .filter(f -> !f.contains("/resources"))
-              .filter(f -> !f.contains("/examples-ca"))
+              .filter(f -> !f.contains("/bin/"))
+              .filter(f -> !f.contains("/resources/"))
+              .filter(f -> !f.contains("/examples-ca/"))
               .map(p -> p.replace("build/functionalTest/", ""))
               .map(p -> p.replace("build/unitTest/", ""))
               .toList();

@@ -68,7 +68,7 @@ public class UpgradeY2024M10D17AddPitest implements UpgradeAction {
                       content,
                       "ext {",
                       "pitestVersion",
-                      "\n        pitestVersion = '" + Constants.PITEST_VERSION + "'");
+                      "\n        pitestVersion = '" + Constants.GRADLE_PITEST_VERSION + "'");
 
               partial =
                   UpdateUtils.insertAfterMatch(

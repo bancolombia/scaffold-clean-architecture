@@ -187,6 +187,9 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
 
                 // Jackson package changes (com.fasterxml moved to tools)
                 updatedContent = UpdateUtils.replace(updatedContent, "com.fasterxml", "tools");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent, "JsonProcessingException", "JacksonException");
 
                 // Validation package changes
                 updatedContent =
