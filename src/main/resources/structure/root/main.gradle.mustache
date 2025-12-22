@@ -4,9 +4,8 @@ apply plugin: 'info.solidsoft.pitest.aggregator'
 
 allprojects {
     repositories {
+        {{^example}}//{{/example}}mavenLocal()
         mavenCentral()
-        maven { url = "https://repo.spring.io/snapshot" }
-        maven { url = "https://repo.spring.io/milestone" }
     }
 }
 
