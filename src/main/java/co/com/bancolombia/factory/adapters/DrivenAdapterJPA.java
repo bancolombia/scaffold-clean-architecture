@@ -21,7 +21,7 @@ public class DrivenAdapterJPA implements ModuleFactory {
         .appendToProperties("spring.datasource")
         .put("url", "jdbc:h2:mem:test")
         .put("username", "sa")
-        .put("password", "pass")
+        .put("password", "")
         .put("driverClassName", "org.h2.Driver");
     builder
         .appendToProperties("spring.jpa")
