@@ -1,5 +1,13 @@
 # Changelog
 
+## [v4.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.3) (2025-12-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.2...v4.0.3)
+
+**Merged pull requests:**
+
+- fix\(upgradeAction\): update package references for Spring Boot 4 compatibility [\#784](https://github.com/bancolombia/scaffold-clean-architecture/pull/784) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v4.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.2) (2025-12-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.1...v4.0.2)
