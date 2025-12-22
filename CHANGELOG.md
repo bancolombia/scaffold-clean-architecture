@@ -1,5 +1,13 @@
 # Changelog
 
+## [v4.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.2) (2025-12-22)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.1...v4.0.2)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#783](https://github.com/bancolombia/scaffold-clean-architecture/pull/783) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v4.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.1) (2025-12-19)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.0...v4.0.1)
