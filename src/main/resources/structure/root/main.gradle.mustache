@@ -4,9 +4,8 @@ apply plugin: 'info.solidsoft.pitest.aggregator'
 
 allprojects {
     repositories {
+        {{^example}}//{{/example}}mavenLocal()
         mavenCentral()
-        maven { url = "https://repo.spring.io/snapshot" }
-        maven { url = "https://repo.spring.io/milestone" }
     }
 }
 
@@ -81,7 +80,7 @@ subprojects {
         timestampedReports = false
         //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')
-        junit5PluginVersion = '1.2.3'
+        junit5PluginVersion = '{{PITEST_JUNIT5_VERSION}}'
         failWhenNoMutations = false
         jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
     }

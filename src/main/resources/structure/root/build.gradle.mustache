@@ -11,23 +11,10 @@ buildscript {
         lombokVersion = '{{LOMBOK_VERSION}}'
         {{/lombok}}
 	}
-	{{#example}}
-    repositories {
-        mavenLocal()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "co.com.bancolombia.cleanArchitecture:scaffold-clean-architecture:{{PLUGIN_VERSION}}"
-    }
-    {{/example}}
 }
 
 plugins {
-    {{^example}}
 	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
-	{{/example}}
     {{#example}}
     id "org.owasp.dependencycheck" version "{{DEPENDENCY_CHECK_VERSION}}" apply false
     {{/example}}
@@ -38,9 +25,6 @@ plugins {
 	id 'org.sonarqube' version "${sonarVersion}"
 	id 'jacoco'
 }
-{{#example}}
-apply plugin: "co.com.bancolombia.cleanArchitecture"
-{{/example}}
 
 sonar {
     def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }

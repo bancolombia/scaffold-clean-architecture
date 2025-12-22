@@ -33,33 +33,8 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                 String updatedContent =
                     UpdateUtils.replace(
                         content,
-                        "org.springframework.boot.actuate.health.Health",
-                        "org.springframework.boot.health.contributor.Health");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.actuate.health.HealthIndicator",
-                        "org.springframework.boot.health.contributor.HealthIndicator");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.actuate.health.Status",
-                        "org.springframework.boot.health.contributor.Status");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.actuate.health.HealthComponent",
-                        "org.springframework.boot.health.contributor.HealthComponent");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.actuate.health.ReactiveHealthIndicator",
-                        "org.springframework.boot.health.contributor.ReactiveHealthIndicator");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.actuate.health.HealthContributor",
-                        "org.springframework.boot.health.contributor.HealthContributor");
+                        "org.springframework.boot.actuate.health",
+                        "org.springframework.boot.health.contributor");
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
@@ -88,39 +63,36 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         "'org.springframework.boot:spring-boot-starter-web-services'",
                         "'org.springframework.boot:spring-boot-starter-webservices'");
 
+                // Reactive Web changes
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.test.autoconfigure.web.reactive",
+                        "org.springframework.boot.webflux.test.autoconfigure");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.autoconfigure.web.reactive",
+                        "org.springframework.boot.webflux.autoconfigure");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.web.reactive",
+                        "org.springframework.boot.webflux");
+
                 // JMS package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.jms.JmsProperties",
-                        "org.springframework.boot.jms.autoconfigure.JmsProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration",
-                        "org.springframework.boot.jms.autoconfigure.JmsAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.jms",
+                        "org.springframework.boot.jms.autoconfigure");
 
                 // MongoDB package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.mongo.MongoClientSettingsBuilderCustomizer",
-                        "org.springframework.boot.mongodb.autoconfigure.MongoClientSettingsBuilderCustomizer");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.mongo.ReactiveMongoClientFactory",
-                        "org.springframework.boot.mongodb.autoconfigure.ReactiveMongoClientFactory");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.mongo.MongoProperties",
-                        "org.springframework.boot.mongodb.autoconfigure.MongoProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration",
-                        "org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.mongo",
+                        "org.springframework.boot.mongodb.autoconfigure");
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
@@ -131,13 +103,8 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.data.redis.RedisProperties",
-                        "org.springframework.boot.redis.autoconfigure.RedisProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration",
-                        "org.springframework.boot.redis.autoconfigure.RedisAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.data.redis",
+                        "org.springframework.boot.redis.autoconfigure");
 
                 // Security package changes
                 updatedContent =
@@ -165,25 +132,15 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.kafka.KafkaProperties",
-                        "org.springframework.boot.kafka.autoconfigure.KafkaProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration",
-                        "org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.kafka",
+                        "org.springframework.boot.kafka.autoconfigure");
 
                 // AMQP/RabbitMQ package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.amqp.RabbitProperties",
-                        "org.springframework.boot.amqp.autoconfigure.RabbitProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration",
-                        "org.springframework.boot.amqp.autoconfigure.RabbitAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.amqp",
+                        "org.springframework.boot.amqp.autoconfigure");
 
                 // Jackson package changes (com.fasterxml moved to tools)
                 updatedContent = UpdateUtils.replace(updatedContent, "com.fasterxml", "tools");
@@ -195,39 +152,29 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration",
-                        "org.springframework.boot.validation.autoconfigure.ValidationAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.validation",
+                        "org.springframework.boot.validation.autoconfigure");
 
                 // Cache package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.cache.CacheProperties",
-                        "org.springframework.boot.cache.autoconfigure.CacheProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.cache.CacheAutoConfiguration",
-                        "org.springframework.boot.cache.autoconfigure.CacheAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.cache",
+                        "org.springframework.boot.cache.autoconfigure");
 
                 // JDBC package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
-                        "org.springframework.boot.jdbc.autoconfigure.DataSourceProperties");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
-                        "org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration");
+                        "org.springframework.boot.autoconfigure.jdbc",
+                        "org.springframework.boot.jdbc.autoconfigure");
 
                 // Elasticsearch package changes
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent,
-                        "org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchProperties",
-                        "org.springframework.boot.elasticsearch.autoconfigure.ElasticsearchProperties");
+                        "org.springframework.boot.autoconfigure.elasticsearch",
+                        "org.springframework.boot.elasticsearch.autoconfigure");
 
                 return updatedContent;
               });
