@@ -67,6 +67,10 @@
         {
             "name": "PITEST_VERSION",
             "packageName": "org.pitest:pitest"
+        },
+        {
+            "name": "PITEST_JUNIT5_PLUGIN_VERSION",
+            "packageName": "org.pitest:pitest-junit5-plugin"
         }
     ],
     "gradle": [

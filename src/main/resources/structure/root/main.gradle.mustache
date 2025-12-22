@@ -81,7 +81,7 @@ subprojects {
         timestampedReports = false
         //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')
-        junit5PluginVersion = '1.2.3'
+        junit5PluginVersion = '{{PITEST_JUNIT5_PLUGIN_VERSION}}'
         failWhenNoMutations = false
         jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
     }
