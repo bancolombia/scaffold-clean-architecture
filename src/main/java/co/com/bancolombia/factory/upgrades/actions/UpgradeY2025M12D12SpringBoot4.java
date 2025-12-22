@@ -64,21 +64,21 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         "'org.springframework.boot:spring-boot-starter-webservices'");
 
                 // Reactive Web changes
-                  updatedContent =
-                          UpdateUtils.replace(
-                                  updatedContent,
-                                  "org.springframework.boot.test.autoconfigure.web.reactive",
-                                  "org.springframework.boot.webflux.test.autoconfigure");
-                  updatedContent =
-                          UpdateUtils.replace(
-                                  updatedContent,
-                                  "org.springframework.boot.autoconfigure.web.reactive",
-                                  "org.springframework.boot.webflux.autoconfigure");
-                  updatedContent =
-                          UpdateUtils.replace(
-                                  updatedContent,
-                                  "org.springframework.boot.web.reactive",
-                                  "org.springframework.boot.webflux");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.test.autoconfigure.web.reactive",
+                        "org.springframework.boot.webflux.test.autoconfigure");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.autoconfigure.web.reactive",
+                        "org.springframework.boot.webflux.autoconfigure");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.web.reactive",
+                        "org.springframework.boot.webflux");
 
                 // JMS package changes
                 updatedContent =
