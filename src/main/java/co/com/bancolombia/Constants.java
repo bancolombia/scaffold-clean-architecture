@@ -18,12 +18,12 @@ public final class Constants {
   public static final String REACTIVE_COMMONS_VERSION = "7.0.1";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.15.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.40.12";
+  public static final String AWS_BOM_VERSION = "2.40.13";
   public static final String COMMONS_JMS_VERSION = "3.0.1";
   public static final String ARCH_UNIT_VERSION = "1.4.1";
   public static final String OKHTTP_VERSION = "5.3.2";
   public static final String RESILIENCE_4J_VERSION = "2.3.0";
-  public static final String BIN_STASH_VERSION = "2.0.0";
+  public static final String BIN_STASH_VERSION = "2.0.1";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.0";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
   public static final String SPRING_AI_VERSION = "2.0.0-M1";
