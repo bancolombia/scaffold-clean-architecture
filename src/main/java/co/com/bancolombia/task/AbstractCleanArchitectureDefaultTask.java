@@ -25,7 +25,7 @@ import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
 
 public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
-  protected final transient ModuleBuilder builder = new ModuleBuilder(getProject());
+  protected final transient ModuleBuilder builder = new ModuleBuilder(getProject()); // NOSONAR
   protected final Logger logger = getProject().getLogger();
 
   protected AbstractCleanArchitectureDefaultTask() {

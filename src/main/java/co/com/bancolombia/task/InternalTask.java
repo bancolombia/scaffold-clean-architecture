@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -60,17 +59,14 @@ public class InternalTask extends AbstractCleanArchitectureDefaultTask {
 
   @Override
   public void execute() throws IOException {
-    switch (Objects.requireNonNull(action)) {
-      case SONAR_CHECK:
-        SonarCheck.parse(subProjectPath.get());
-        break;
-      case UPDATE_DEPENDENCIES:
-        String basePath = projectPath.get();
-        List<String> files = Utils.getAllFilesWithGradleExtension(basePath);
-        logger.lifecycle(
-            "Updating project dependencies from root {} in files \n {}", basePath, files);
-        UpdateProjectDependencies.builder().withFiles(files).build().run();
-        break;
+    if (action == Action.UPDATE_DEPENDENCIES) {
+      String basePath = projectPath.get();
+      List<String> files = Utils.getAllFilesWithGradleExtension(basePath);
+      logger.lifecycle(
+          "Updating project dependencies from root {} in files \n {}", basePath, files);
+      UpdateProjectDependencies.builder().withFiles(files).build().run();
+    } else {
+      SonarCheck.parse(subProjectPath.get());
     }
     success = true;
   }
