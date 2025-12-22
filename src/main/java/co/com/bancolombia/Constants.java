@@ -28,7 +28,7 @@ public final class Constants {
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
   public static final String SPRING_AI_VERSION = "2.0.0-M1";
   public static final String PITEST_VERSION = "1.22.0";
-  public static final String PITEST_JUNIT5_PLUGIN_VERSION = "1.2.3";
+  public static final String PITEST_JUNIT5_VERSION = "1.2.3";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.14";
   public static final String SONAR_VERSION = "7.2.2.6593";
