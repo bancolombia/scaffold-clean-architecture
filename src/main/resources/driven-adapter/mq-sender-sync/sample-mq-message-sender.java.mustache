@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
 
-import jakarta.jms.Message;
 {{#metrics}}
 import java.util.concurrent.TimeUnit;
 {{/metrics}}
@@ -36,20 +35,20 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
     public String send(String message) {
         {{#metrics}}
         long start = System.currentTimeMillis();
-        String messageId = sender.send(context -> {
+        String messageId = sender.send(context ->
 //          Message textMessage = context.createTextMessage(message);
 //          textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
-            return context.createTextMessage(message);
-        });
+            context.createTextMessage(message)
+        );
         timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return messageId;
         {{/metrics}}
         {{^metrics}}
-        return sender.send(context -> {
+        return sender.send(context ->
 //          Message textMessage = context.createTextMessage(message);
 //          textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
-            return context.createTextMessage(message);
-        });
+            context.createTextMessage(message)
+        );
         {{/metrics}}
     }
 }

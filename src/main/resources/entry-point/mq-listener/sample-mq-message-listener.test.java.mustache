@@ -22,8 +22,6 @@ class SampleMQMessageListenerTest {
 
     @Test
     void processTest() throws JMSException {
-        when(textMessage.getText()).thenReturn("message");
-
         SampleMQMessageListener sampleMQMessageListener = new SampleMQMessageListener();
 
         StepVerifier.create(sampleMQMessageListener.process(textMessage)).verifyComplete();

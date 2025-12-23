@@ -40,8 +40,7 @@ public class SampleMQMessageListener {
         {{#metrics}}
         timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
         {{/metrics}}
-        String text = ((TextMessage) message).getText();
-        // return useCase.sample(text);
+        // return useCase.sample(((TextMessage) message).getText());
         return Mono.empty();
     }
 }
