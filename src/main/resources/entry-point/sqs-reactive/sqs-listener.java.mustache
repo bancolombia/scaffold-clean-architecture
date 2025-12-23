@@ -7,14 +7,13 @@ import lombok.extern.log4j.Log4j2;
 {{/lombok}}
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Function;
 
 {{#lombok}}
@@ -44,10 +43,10 @@ public class SQSListener {
         {{#metrics}}
         this.operation = "MessageFrom:" + properties.queueUrl();
         {{/metrics}}
-        ExecutorService service = Executors.newFixedThreadPool(properties.numberOfThreads());
+        Scheduler scheduler = Schedulers.newParallel("sqs-pool", properties.numberOfThreads());
         for (var i = 0; i < properties.numberOfThreads(); i++) {
             listenRetryRepeat()
-                    .subscribeOn(Schedulers.fromExecutorService(service))
+                    .subscribeOn(scheduler)
                     .subscribe();
         }
         return this;

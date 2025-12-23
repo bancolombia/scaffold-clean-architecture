@@ -21,19 +21,19 @@ public class KafkaConsumer {
 {{^lombok}}
     private static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager.getLogger(KafkaConsumer.class);
 {{/lombok}}
-    private final ReactiveKafkaConsumerTemplate<String, String> kafkaConsumer;
+    private final ReactiveKafkaConsumerTemplate<String, String> kafkaReceiver;
     //private final SomeUseCase useCase;
 {{^lombok}}
 
-    public KafkaConsumer(final ReactiveKafkaConsumerTemplate<String, String> kafkaConsumer/*, final SomeUseCase useCase*/) {
-        this.kafkaConsumer = kafkaConsumer;
+    public KafkaConsumer(final ReactiveKafkaConsumerTemplate<String, String> kafkaReceiver/*, final SomeUseCase useCase*/) {
+        this.kafkaReceiver = kafkaReceiver;
         // this.useCase = useCase;
     }
 {{/lombok}}
 
     @EventListener(ApplicationStartedEvent.class)
     public Flux<Object> listenMessages() {
-        return kafkaConsumer
+        return kafkaReceiver
                 .receiveAutoAck()
                 .publishOn(Schedulers.newBoundedElastic(Schedulers.DEFAULT_BOUNDED_ELASTIC_SIZE, Schedulers.DEFAULT_BOUNDED_ELASTIC_QUEUESIZE, "kafka"))
                 .flatMap(record -> {

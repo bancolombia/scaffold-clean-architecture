@@ -27,9 +27,9 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
 
     public Mono<String> send(String message) {
         return sender.send(context -> {
-                    Message textMessage = context.createTextMessage(message);
-//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
-                    return textMessage;
+//                  Message textMessage = context.createTextMessage(message);
+//                  textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+                    return context.createTextMessage(message);
                 }){{^metrics}};{{/metrics}}
                 {{#metrics}}
                 .name("mq_send_message")

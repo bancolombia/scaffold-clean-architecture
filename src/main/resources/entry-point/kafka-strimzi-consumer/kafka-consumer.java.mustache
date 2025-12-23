@@ -15,12 +15,12 @@ import reactor.kafka.receiver.KafkaReceiver;
 @Log4j2
 @RequiredArgsConstructor
 public class KafkaConsumer {
-    private final KafkaReceiver<String, String> kafkaConsumer;
+    private final KafkaReceiver<String, String> kafkaReceiver;
     //private final SomeUseCase useCase;
 
     @EventListener(ApplicationStartedEvent.class)
     public Flux<Object> listenMessages() {
-        return kafkaConsumer
+        return kafkaReceiver
                 .receive()
                 .publishOn(Schedulers.newBoundedElastic(
                         Schedulers.DEFAULT_BOUNDED_ELASTIC_SIZE,

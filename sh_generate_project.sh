@@ -53,7 +53,8 @@ else
   done
 fi
 
-branch=${GITHUB_REF##*/}
+branch="${GITHUB_REF##*/}"
+branch="${branch:-main}"
 git init
 git checkout -b $branch
 git add .

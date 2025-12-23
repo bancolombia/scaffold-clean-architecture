@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
 {{#metrics}}
 import software.amazon.awssdk.metrics.MetricPublisher;
 {{/metrics}}
@@ -23,6 +24,8 @@ public class S3Config {
     public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties) {
         return S3AsyncClient.builder()
                 .region(Region.of(s3Properties.region()))
+                // or any other provider suitable for your environment
+                .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
                 .build();
     }
 
@@ -41,8 +44,10 @@ public class S3Config {
     @Bean
     public S3AsyncClient s3AsyncClient(S3ConnectionProperties s3Properties, MetricPublisher publisher) {
         return S3AsyncClient.builder()
-                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .region(Region.of(s3Properties.region()))
+                // or any other provider suitable for your environment
+                .credentialsProvider(WebIdentityTokenFileCredentialsProvider.create())
+                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .build();
     }
 
@@ -51,9 +56,9 @@ public class S3Config {
     public S3AsyncClient localS3AsyncClient(S3ConnectionProperties s3Properties,
                                             MetricPublisher publisher) {
         return S3AsyncClient.builder()
-                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .region(Region.of(s3Properties.region()))
                 .credentialsProvider(ProfileCredentialsProvider.create("default"))
+                .overrideConfiguration(o -> o.addMetricPublisher(publisher))
                 .endpointOverride(URI.create(s3Properties.endpoint()))
                 .build();
     }

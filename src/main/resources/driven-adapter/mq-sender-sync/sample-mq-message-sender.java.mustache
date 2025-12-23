@@ -37,18 +37,18 @@ public class SampleMQMessageSender /* implements SomeGateway */ {
         {{#metrics}}
         long start = System.currentTimeMillis();
         String messageId = sender.send(context -> {
-            Message textMessage = context.createTextMessage(message);
-//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
-            return textMessage;
+//          Message textMessage = context.createTextMessage(message);
+//          textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+            return context.createTextMessage(message);
         });
         timer.record(System.currentTimeMillis() - start, TimeUnit.MILLISECONDS);
         return messageId;
         {{/metrics}}
         {{^metrics}}
         return sender.send(context -> {
-            Message textMessage = context.createTextMessage(message);
-//            textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
-            return textMessage;
+//          Message textMessage = context.createTextMessage(message);
+//          textMessage.setJMSReplyTo(container.get("any-custom-value")); // Inject the reply to queue from container
+            return context.createTextMessage(message);
         });
         {{/metrics}}
     }
