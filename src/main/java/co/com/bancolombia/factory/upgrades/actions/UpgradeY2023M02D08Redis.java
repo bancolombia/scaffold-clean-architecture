@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
+import static co.com.bancolombia.factory.upgrades.UpdateUtils.oneOfAll;
+
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -24,7 +26,7 @@ public class UpgradeY2023M02D08Redis implements UpgradeAction {
         && builder.getProject().file(repositoryAdapter).getAbsoluteFile().exists()) {
       builder.appendDependencyToModule(
           "redis", "implementation 'jakarta.persistence:jakarta.persistence-api'");
-      return apply(builder, repository) | apply(builder, repositoryAdapter);
+      return oneOfAll(apply(builder, repository), apply(builder, repositoryAdapter));
     }
     return false;
   }

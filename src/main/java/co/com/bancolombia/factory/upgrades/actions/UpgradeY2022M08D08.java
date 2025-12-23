@@ -1,5 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
+import static co.com.bancolombia.factory.upgrades.UpdateUtils.oneOfAll;
+
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -10,14 +12,15 @@ public class UpgradeY2022M08D08 implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    return builder.updateExpression(
-            Constants.MainFiles.MAIN_GRADLE, "reportsDir\\s?=", "reportsDirectory =")
-        | builder.updateExpression(
-            Constants.MainFiles.MAIN_GRADLE, "(xml|csv|html)\\.enabled", "$1.setRequired")
-        | builder.updateExpression(
+    return oneOfAll(
+        builder.updateExpression(
+            Constants.MainFiles.MAIN_GRADLE, "reportsDir\\s?=", "reportsDirectory ="),
+        builder.updateExpression(
+            Constants.MainFiles.MAIN_GRADLE, "(xml|csv|html)\\.enabled", "$1.setRequired"),
+        builder.updateExpression(
             Constants.MainFiles.MAIN_GRADLE,
             "(xml|csv|html)\\.destination",
-            "$1.setOutputLocation");
+            "$1.setOutputLocation"));
   }
 
   @Override

@@ -117,6 +117,15 @@ public class UpdateUtils {
     return false;
   }
 
+  public static boolean oneOfAll(boolean... values) {
+    for (boolean value : values) {
+      if (value) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private static int asInteger(String part) {
     try {
       return Integer.parseInt(part);

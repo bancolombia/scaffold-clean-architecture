@@ -68,8 +68,8 @@ public class UserInfoResource {
           throw new IllegalArgumentException("UserId must be a positive number");
         }
         return userId;
-      } catch (NumberFormatException e) {
-        throw new IllegalArgumentException("UserId must be a valid number: " + userIdStr);
+      } catch (NumberFormatException exception) {
+        throw new IllegalArgumentException("UserId must be a valid number: " + userIdStr, exception);
       }
     });
   }

@@ -49,7 +49,10 @@ class UpgradeY2021M05D20Test {
     verify(builder, atLeast(1))
         .addFile(
             MAIN_GRADLE,
-            "\tsourceCompatibility = JavaVersion.VERSION_11\n\n\t"
-                + "compileJava.dependsOn validateStructure\n\tdependencies {}");
+            """
+                                \tsourceCompatibility = JavaVersion.VERSION_11
+
+                                \tcompileJava.dependsOn validateStructure
+                                \tdependencies {}""");
   }
 }

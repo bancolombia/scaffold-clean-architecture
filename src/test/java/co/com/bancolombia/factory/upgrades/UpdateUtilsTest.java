@@ -146,4 +146,11 @@ class UpdateUtilsTest {
     assertFalse(UpdateUtils.isNewerVersion("1.3.0", "1.1.1"));
     assertFalse(UpdateUtils.isNewerVersion("1.1.1.Alpha", "1.1.1.Beta"));
   }
+
+  @Test
+  void shouldCheckOneOfAll() {
+    assertTrue(UpdateUtils.oneOfAll(true, true, true));
+    assertTrue(UpdateUtils.oneOfAll(false, false, true));
+    assertFalse(UpdateUtils.oneOfAll(false, false, false));
+  }
 }

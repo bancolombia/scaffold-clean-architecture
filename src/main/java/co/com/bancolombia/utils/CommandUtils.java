@@ -18,7 +18,7 @@ public class CommandUtils {
 
   public boolean hasGitPendingChanges(Logger logger) {
     try {
-      Process process = rt.exec(GIT_STATUS);
+      Process process = rt.exec(GIT_STATUS); // NOSONAR
       String output = processCommandOutput(process);
       boolean hasPending =
           !(output.contains("nothing to commit") || output.contains("nada para hacer commit"));

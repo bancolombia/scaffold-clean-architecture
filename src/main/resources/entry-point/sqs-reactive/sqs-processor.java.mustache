@@ -24,7 +24,6 @@ public class SQSProcessor implements Function<Message, Mono<Void>> {
 
     @Override
     public Mono<Void> apply(Message message) {
-        System.out.println(message.body());
         return Mono.empty();
         // return myUseCase.doAny(message.body());
     }

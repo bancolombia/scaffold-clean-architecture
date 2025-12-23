@@ -32,7 +32,8 @@ import org.gradle.api.tasks.Optional;
     shortcut = "vs",
     description = "Validate that project references are not violated")
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class ValidateStructureTask extends AbstractCleanArchitectureDefaultTask {
+public abstract class ValidateStructureTask
+    extends AbstractCleanArchitectureDefaultTask { // NOSONAR
   private static final String MODEL_MODULE = "model";
   private static final String USE_CASE_MODULE = "usecase";
   private static final String REACTOR_CORE = "reactor-core";

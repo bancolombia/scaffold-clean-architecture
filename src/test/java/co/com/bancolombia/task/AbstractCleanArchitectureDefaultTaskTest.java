@@ -231,6 +231,8 @@ class AbstractCleanArchitectureDefaultTaskTest {
     }
 
     @Override
-    public void execute() throws IOException, CleanException {}
+    public void execute() throws IOException, CleanException {
+      // nothing to do
+    }
   }
 }

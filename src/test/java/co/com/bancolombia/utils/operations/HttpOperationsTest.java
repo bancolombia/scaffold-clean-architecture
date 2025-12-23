@@ -101,8 +101,9 @@ class HttpOperationsTest {
                     return new MockResponse().setResponseCode(500);
                   }
                 }
+              default:
+                return new MockResponse().setResponseCode(404);
             }
-            return new MockResponse().setResponseCode(404);
           }
         };
     server.setDispatcher(dispatcher);

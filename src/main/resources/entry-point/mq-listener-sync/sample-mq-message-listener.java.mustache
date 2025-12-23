@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 {{/lombok}}
 import org.springframework.stereotype.Component;
 
-import jakarta.jms.JMSException;
+{{#metrics}}import jakarta.jms.JMSException;{{/metrics}}
 import jakarta.jms.Message;
-import jakarta.jms.TextMessage;
 {{#metrics}}
 import java.util.concurrent.TimeUnit;
 {{/metrics}}
@@ -35,11 +34,10 @@ public class SampleMQMessageListener {
     {{/lombok}}
     // For fixed queues
     @MQListener("${commons.jms.input-queue}")
-    public void process(Message message) throws JMSException {
+    public void process(Message message) {{#metrics}}throws JMSException{{/metrics}} {
         {{#metrics}}
         timer.record(System.currentTimeMillis() - message.getJMSTimestamp(), TimeUnit.MILLISECONDS);
         {{/metrics}}
-        String text = ((TextMessage) message).getText();
-        // useCase.sample(text);
+        // useCase.sample(((TextMessage) message).getText());
     }
 }
