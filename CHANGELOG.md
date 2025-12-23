@@ -1,5 +1,13 @@
 # Changelog
 
+## [v4.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.4) (2025-12-23)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.3...v4.0.4)
+
+**Merged pull requests:**
+
+- fix\(sonar\): project and generated projects issues [\#785](https://github.com/bancolombia/scaffold-clean-architecture/pull/785) ([juancgalvis](https://github.com/juancgalvis))
+
 ## [v4.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.3) (2025-12-22)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.2...v4.0.3)
