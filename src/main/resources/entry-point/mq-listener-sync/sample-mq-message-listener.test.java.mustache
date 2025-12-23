@@ -25,7 +25,7 @@ class SampleMQMessageListenerTest {
         SampleMQMessageListener sampleMQMessageListener = new SampleMQMessageListener();
         sampleMQMessageListener.process(textMessage);
 
-        verify(textMessage, times(0)).getJMSTimestamp();
+        verify(textMessage, times({{#metrics}}1{{/metrics}}{{^metrics}}0{{/metrics}})).getJMSTimestamp();
     }
 
 

@@ -23,7 +23,6 @@ public class SQSProcessor implements Consumer<Message> {
 
     @Override
     public void accept(Message message) {
-        System.out.println(message.body());
         // myUseCase.doAny(message.body());
     }
 }

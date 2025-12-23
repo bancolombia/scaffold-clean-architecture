@@ -1,14 +1,12 @@
 package {{package}}.mq.listener;
 
-import jakarta.jms.JMSException;
+{{#metrics}}import jakarta.jms.JMSException;{{/metrics}}
 import jakarta.jms.TextMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import reactor.test.StepVerifier;
-
-import static org.mockito.Mockito.when;
 
 class SampleMQMessageListenerTest {
 
@@ -21,7 +19,7 @@ class SampleMQMessageListenerTest {
     }
 
     @Test
-    void processTest() throws JMSException {
+    void processTest() {{#metrics}}throws JMSException{{/metrics}} {
         SampleMQMessageListener sampleMQMessageListener = new SampleMQMessageListener();
 
         StepVerifier.create(sampleMQMessageListener.process(textMessage)).verifyComplete();

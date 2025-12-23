@@ -106,6 +106,12 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         "org.springframework.boot.autoconfigure.data.redis",
                         "org.springframework.boot.redis.autoconfigure");
 
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer",
+                        "org.springframework.data.redis.serializer.JacksonJsonRedisSerializer");
+
                 // Security package changes
                 updatedContent =
                     UpdateUtils.replace(
