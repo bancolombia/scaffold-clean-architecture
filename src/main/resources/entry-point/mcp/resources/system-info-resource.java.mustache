@@ -11,7 +11,7 @@ import org.springaicommunity.mcp.annotation.McpResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * System information resource for MCP server.
@@ -20,10 +20,10 @@ import tools.jackson.databind.ObjectMapper;
 @Component
 public class SystemInfoResource {
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
-  public SystemInfoResource(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public SystemInfoResource(JsonMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
   }
 
   /**
@@ -66,7 +66,7 @@ public class SystemInfoResource {
 {{^lombok}}
     try {
 {{/lombok}}
-      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+      return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
 {{^lombok}}
     } catch (Exception e) {
       return "{\"error\": \"" + e.getMessage() + "\"}";

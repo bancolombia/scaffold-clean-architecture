@@ -1,0 +1,53 @@
+package {{package}}.config;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.oauth2.jwt.Jwt;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+import tools.jackson.databind.json.JsonMapper;
+
+class McpSecurityConfigTest {
+
+    private McpSecurityConfig config;
+
+    @BeforeEach
+    void setUp() {
+        config = new McpSecurityConfig(
+                "https://issuer.test",
+                "test-client-id",
+                "/roles",
+                new JsonMapper()
+        );
+    }
+
+    @Test
+    void jwtAuthenticationConverter_shouldExtractRoles() {
+        // Arrange
+        Converter<Jwt, Mono<AbstractAuthenticationToken>> converter =
+                config.jwtAuthenticationConverter();
+
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("alg", "none")
+                .claim("roles", List.of("User", "Admin"))
+                .build();
+
+        // Act & Assert
+        StepVerifier.create(converter.convert(jwt))
+                .assertNext(token -> {
+                    assertTrue(token.getAuthorities()
+                            .stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_User")));
+
+                    assertTrue(token.getAuthorities()
+                            .stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_Admin")));
+                })
+                .verifyComplete();
+    }
+}

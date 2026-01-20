@@ -1,0 +1,93 @@
+package {{package}}.mcp.audit;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+@ExtendWith(MockitoExtension.class)
+class McpAuditAspectTest {
+
+    @Mock
+    private ProceedingJoinPoint joinPoint;
+
+    @Mock
+    private MethodSignature methodSignature;
+
+    private McpAuditAspect aspect;
+
+    @BeforeEach
+    void setUp() {
+        aspect = new McpAuditAspect();
+    }
+
+    @Test
+    void auditToolCall_withSecurityContext() throws Throwable {
+        // Arrange
+        when(joinPoint.getSignature()).thenReturn(methodSignature);
+        when(methodSignature.getName()).thenReturn("testTool");
+        when(joinPoint.getArgs()).thenReturn(new Object[]{"arg1"});
+        when(joinPoint.getTarget()).thenReturn(this);
+        when(joinPoint.proceed()).thenReturn(Mono.just("Result"));
+
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("alg", "none")
+                .claim("appid", "test-client-id")
+                .build();
+
+        JwtAuthenticationToken authentication =
+                new JwtAuthenticationToken(jwt);
+
+        Mono<Object> result =
+                (Mono<Object>) aspect.auditToolCall(joinPoint);
+
+        // Injectar SecurityContext reactivo
+        Mono<Object> resultWithContext =
+                result.contextWrite(
+                        ReactiveSecurityContextHolder.withSecurityContext(
+                                Mono.just(new SecurityContextImpl(authentication))
+                        )
+                );
+
+        // Assert
+        StepVerifier.create(resultWithContext)
+                .expectNext("Result")
+                .verifyComplete();
+
+        verify(joinPoint, times(1)).proceed();
+    }
+
+    @Test
+    void auditToolCall_withoutSecurityContext() throws Throwable {
+        // Arrange
+        when(joinPoint.getSignature()).thenReturn(methodSignature);
+        when(methodSignature.getName()).thenReturn("testTool");
+        when(joinPoint.getArgs()).thenReturn(new Object[]{});
+        when(joinPoint.getTarget()).thenReturn(this);
+        when(joinPoint.proceed()).thenReturn(Mono.just("Result"));
+
+        // Act
+        Mono<Object> result =
+                (Mono<Object>) aspect.auditToolCall(joinPoint);
+
+        // Assert (sin contexto de seguridad)
+        StepVerifier.create(result)
+                .expectNext("Result")
+                .verifyComplete();
+
+        verify(joinPoint, times(1)).proceed();
+    }
+}

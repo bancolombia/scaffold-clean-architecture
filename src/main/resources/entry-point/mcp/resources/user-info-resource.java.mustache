@@ -12,7 +12,7 @@ import org.springaicommunity.mcp.annotation.McpResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * User information resource template using MCP annotations with template URI.
@@ -24,10 +24,10 @@ import tools.jackson.databind.ObjectMapper;
 {{/lombok}}
 public class UserInfoResource {
 
-  private final ObjectMapper objectMapper;
+  private final JsonMapper jsonMapper;
 
-  public UserInfoResource(ObjectMapper objectMapper) {
-    this.objectMapper = objectMapper;
+  public UserInfoResource(JsonMapper jsonMapper) {
+    this.jsonMapper = jsonMapper;
   }
 
   /**
@@ -129,7 +129,7 @@ public class UserInfoResource {
 {{^lombok}}
     try {
 {{/lombok}}
-      return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+      return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
 {{^lombok}}
     } catch (Exception e) {
       return "{\"error\": \"" + e.getMessage() + "\"}";

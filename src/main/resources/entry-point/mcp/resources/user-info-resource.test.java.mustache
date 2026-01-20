@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Unit tests for UserInfoResource.
@@ -18,7 +18,7 @@ import tools.jackson.databind.ObjectMapper;
 class UserInfoResourceTest {
 
   private UserInfoResource userInfoResource;
-  private final ObjectMapper mapper = new ObjectMapper();
+private final JsonMapper mapper = new JsonMapper();
 
   @BeforeEach
   void setUp() {
