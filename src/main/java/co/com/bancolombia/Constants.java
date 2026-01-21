@@ -35,9 +35,9 @@ public final class Constants {
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "4.0.5";
   public static final String DEPENDENCY_CHECK_VERSION = "12.1.9";
-  public static final String GRADLE_PITEST_VERSION = "1.19.0-rc.2";
+  public static final String GRADLE_PITEST_VERSION = "1.19.0-rc.3";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "9.2.1";
+  public static final String GRADLE_WRAPPER_VERSION = "9.3.0";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
