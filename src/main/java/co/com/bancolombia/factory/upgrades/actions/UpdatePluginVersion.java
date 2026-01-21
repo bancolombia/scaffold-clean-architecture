@@ -47,7 +47,7 @@ public class UpdatePluginVersion implements UpgradeAction {
     logger.lifecycle("Updating the plugin ");
 
     builder.updateExpression(
-        GRADLE_PROPERTIES, "(systemProp.version\\s?=\\s?).+", "$1" + lastRelease);
+        GRADLE_PROPERTIES, "(systemProp\\.version\\s?=\\s?).+", "$1" + lastRelease);
     UpdateUtils.updateVersions(builder, BUILD_GRADLE, "cleanArchitectureVersion", lastRelease);
     logger.lifecycle("Plugin updated");
     return true;

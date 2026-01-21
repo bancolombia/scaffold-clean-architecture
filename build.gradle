@@ -26,7 +26,7 @@ ext {
 }
 
 group = 'co.com.bancolombia.cleanArchitecture'
-version = System.getProperty('version')
+version = providers.systemProperty('version').get()
 
 repositories {
     mavenCentral()
@@ -237,9 +237,9 @@ sonar {
     }
 }
 
-def filesToFormat = project.hasProperty('files')
-        ? project.property('files').toString().split(',')
-        : ['src/**/*.java']
+def filesToFormat = providers.gradleProperty('files')
+        .map { it.split(',') as List }
+        .getOrElse(['src/**/*.java'])
 
 spotless {
     java {
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.2.1'
+    gradleVersion = '9.3.0'
 }
 
 tasks.register('ci-updater', JavaExec) {
