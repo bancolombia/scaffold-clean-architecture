@@ -42,7 +42,7 @@ jobs:
           fi
       - name: Create Pull Request
         if: env.HAS_CHANGES == 'true'
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           token: ${{ steps.generate_token.outputs.token }}
           committer: Dependencies Bot <release-bot@bancolombia.com.co>
