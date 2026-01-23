@@ -22,7 +22,7 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
           private_key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           token: ${{ steps.generate_token.outputs.token }}
       - name: Set up JDK 17
@@ -78,7 +78,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: 'master'
       - name: Set up JDK 17
