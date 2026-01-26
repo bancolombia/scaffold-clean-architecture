@@ -26,7 +26,7 @@ public final class Constants {
   public static final String BIN_STASH_VERSION = "2.1.0";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.1";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
-  public static final String SPRING_AI_VERSION = "2.0.0-M1";
+  public static final String SPRING_AI_VERSION = "2.0.0-M2";
   public static final String PITEST_VERSION = "1.22.0";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
   // gradle plugins
@@ -37,7 +37,7 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "12.2.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0-rc.3";
   // custom
-  public static final String GRADLE_WRAPPER_VERSION = "9.2.1";
+  public static final String GRADLE_WRAPPER_VERSION = "9.3.0";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {

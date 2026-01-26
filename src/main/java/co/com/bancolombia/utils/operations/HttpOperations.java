@@ -6,13 +6,14 @@ import co.com.bancolombia.models.MavenMetadata;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
+
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.gradle.api.logging.Logger;
-import org.gradle.api.logging.Logging;
 
 public class HttpOperations implements ExternalOperations {
   public static final String PLUGIN_RELEASES =
