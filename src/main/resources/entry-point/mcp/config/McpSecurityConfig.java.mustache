@@ -1,0 +1,186 @@
+package co.com.bancolombia.config;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+{{#lombok}}
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
+
+
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+@Configuration
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+public class McpSecurityConfig {
+
+    private static final String ROLE_PREFIX = "ROLE_";
+    private final String issuerUri;
+    private final String clientId;
+    private final String jsonExpRoles;
+    private final JsonMapper mapper;
+
+    public McpSecurityConfig(
+            @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuerUri,
+            @Value("${spring.security.oauth2.resourceserver.jwt.client-id}") String clientId,
+            @Value("${jwt.json-exp-roles}") String jsonExpRoles, JsonMapper mapper) {
+        this.issuerUri = issuerUri;
+        this.clientId = clientId;
+        this.jsonExpRoles = jsonExpRoles;
+        this.mapper = mapper;
+    }
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
+            ReactiveJwtDecoder jwtDecoder) {
+        {{#lombok}}
+        log.info("Configurando MCP Security con OAuth2 Resource Server y CORS");
+        {{/lombok}}
+
+        return http
+                .csrf(CsrfSpec::disable)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler((exchange, ex) -> exchange.getPrincipal()
+                                .map(java.security.Principal::getName)
+                                .defaultIfEmpty("anonymous")
+                                .flatMap(user -> {
+                                    {{#lombok}}
+                                    log.error("⛔ Acceso Denegado: {} | Usuario: {} | Path: {}",
+                                            ex.getMessage(), user, exchange.getRequest().getPath());
+                                    {{/lombok}}
+                                    exchange.getResponse()
+                                            .setStatusCode(
+                                                    org.springframework.http.HttpStatus.FORBIDDEN);
+                                    return exchange.getResponse().setComplete();
+                                })))
+                // Usar configuración de CORS definida en CorsConfig.java (CorsWebFilter)
+                // .cors(CorsSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .authorizeExchange(exchanges -> exchanges
+                        // Endpoints públicos para actuator
+                        .pathMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .pathMatchers("/h2-console/**").permitAll()
+                        // Resto requiere autenticación
+                        .anyExchange().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtDecoder(jwtDecoder)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .build();
+    }
+
+    @Bean
+    public ReactiveJwtDecoder jwtDecoder() {
+        {{#lombok}}
+        log.info("Configurando JWT Decoder con issuer: {}", issuerUri);
+        {{/lombok}}
+
+        // Crear el decoder usando el issuer URI
+        var jwtDecoder = NimbusReactiveJwtDecoder.withIssuerLocation(issuerUri).build();
+
+        // 1. Usar validadores por defecto de Spring (timestamp, etc.) pero SIN issuer
+        // estricto
+        var defaultValidator = JwtValidators.createDefault();
+
+        // 2. Custom Validator para Audience y AppID (flexible para Graph/Azure AD)
+        OAuth2TokenValidator<Jwt> customValidator = jwt -> {
+            if (clientId == null || clientId.isBlank()) {
+                return OAuth2TokenValidatorResult.success();
+            }
+
+            // Validar Audience ('aud')
+            List<String> audience = jwt.getAudience();
+            if (audience != null) {
+                for (String aud : audience) {
+                    if (aud.contains(clientId)) {
+                        {{#lombok}}
+                        log.debug("Token aceptado por 'aud': {}", aud);
+                        {{/lombok}}
+                        return OAuth2TokenValidatorResult.success();
+                    }
+                }
+            }
+
+            // Validar App ID ('appid') - Fallback
+            String appid = jwt.getClaimAsString("appid");
+            if (clientId.equals(appid)) {
+                {{#lombok}}
+                log.debug("Token aceptado por 'appid': {}", clientId);
+                {{/lombok}}
+                return OAuth2TokenValidatorResult.success();
+            }
+
+            {{#lombok}}
+            log.warn(
+                    "Token rechazado por mismatch. Esperado ClientID: {}. Recibido aud: {}, appid: {}",
+                    clientId,
+                    audience, appid);
+            {{/lombok}}
+            return OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token",
+                    "El token no está destinado a esta aplicación (aud/appid mismatch)", null));
+        };
+
+        // 3. Combinar validadores
+        var combinedValidator = new DelegatingOAuth2TokenValidator<>(defaultValidator,
+                customValidator);
+        jwtDecoder.setJwtValidator(combinedValidator);
+
+        return jwtDecoder;
+    }
+
+    @Bean
+    public Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
+        var jwtConverter = new JwtAuthenticationConverter();
+        jwtConverter.setJwtGrantedAuthoritiesConverter(jwt -> extractRoles(jwt.getClaims()));
+
+        return new ReactiveJwtAuthenticationConverterAdapter(jwtConverter);
+    }
+
+    private Collection<GrantedAuthority> extractRoles(Map<String, Object> claims) {
+        try {
+            var json = mapper.writeValueAsString(claims);
+            var chunk = mapper.readTree(json).at(jsonExpRoles);
+            List<String> roles = mapper.readerFor(new TypeReference<List<String>>() {
+            }).readValue(chunk);
+
+            return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role))
+                    .collect(Collectors.toList());
+        } catch (JacksonException e) {
+            {{#lombok}}
+            log.error("Error extrayendo roles del token JWT: {}", e.getMessage());
+            {{/lombok}}
+            return List.of();
+        }
+    }
+}

@@ -65,6 +65,10 @@
             "packageName": "org.springframework.ai:spring-ai-bom"
         },
         {
+            "name": "SPRING_MCP_SECURITY_VERSION",
+            "packageName": "org.springaicommunity:mcp-server-security"
+        },
+        {
             "name": "PITEST_VERSION",
             "packageName": "org.pitest:pitest"
         },

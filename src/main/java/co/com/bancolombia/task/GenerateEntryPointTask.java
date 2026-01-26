@@ -24,10 +24,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption eda = BooleanOption.FALSE;
   private String tech = "rabbitmq";
   private BooleanOption authorization = BooleanOption.FALSE;
-  // MCP parameters - Capabilities only
   private BooleanOption mcpEnableTools = BooleanOption.TRUE;
   private BooleanOption mcpEnableResources = BooleanOption.TRUE;
   private BooleanOption mcpEnablePrompts = BooleanOption.TRUE;
+  private BooleanOption mcpEnableSecurity = BooleanOption.TRUE;
+  private BooleanOption mcpEnableAudit = BooleanOption.TRUE;
 
   @Option(
       option = "server",
@@ -149,6 +150,26 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @Option(option = "enable-security", description = "Enable MCP security (Entra ID)")
+  public void setMcpEnableSecurity(BooleanOption enableSecurity) {
+    this.mcpEnableSecurity = enableSecurity;
+  }
+
+  @OptionValues("enable-security")
+  public List<BooleanOption> getMcpEnableSecurityOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @Option(option = "enable-audit", description = "Enable MCP audit (AOP)")
+  public void setMcpEnableAudit(BooleanOption enableAudit) {
+    this.mcpEnableAudit = enableAudit;
+  }
+
+  @OptionValues("enable-audit")
+  public List<BooleanOption> getMcpEnableAuditOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
@@ -166,6 +187,8 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("mcp-enable-tools", mcpEnableTools == BooleanOption.TRUE);
     builder.addParam("mcp-enable-resources", mcpEnableResources == BooleanOption.TRUE);
     builder.addParam("mcp-enable-prompts", mcpEnablePrompts == BooleanOption.TRUE);
+    builder.addParam("mcp-enable-security", mcpEnableSecurity == BooleanOption.TRUE);
+    builder.addParam("mcp-enable-audit", mcpEnableAudit == BooleanOption.TRUE);
   }
 
   private void appendRCommonsParams() {

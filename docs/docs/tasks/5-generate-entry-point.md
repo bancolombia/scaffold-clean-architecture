@@ -24,6 +24,8 @@ gradle gep --type [entryPointType]
 |                       |                                        | `--enable-tools`     | `true`, `false`                       | `true`                 |
 |                       |                                        | `--enable-resources` | `true`, `false`                       | `true`                 |
 |                       |                                        | `--enable-prompts`   | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-security`  | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-audit`     | `true`, `false`                       | `true`                 |
 | **mq**                | JMS MQ Client to listen messages       | -                    | -                                     | -                      |
 | **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`           | `tomcat`, `jetty`                     | `tomcat`               |
 |                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
@@ -99,17 +101,19 @@ gradle gep --type=mcp
 
 ### Available Parameters
 
-| Parameter            | Values         | Default | Description      |
-|----------------------|----------------|---------|------------------|
-| `--name`             | String         | `null`  | MCP Server Name  |
-| `--enable-tools`     | `true`/`false` | `true`  | Enable Tools     |
-| `--enable-resources` | `true`/`false` | `true`  | Enable Resources |
-| `--enable-prompts`   | `true`/`false` | `true`  | Enable Prompts   |
+| Parameter            | Values         | Default | Description                          |
+|----------------------|----------------|---------|--------------------------------------|
+| `--name`             | String         | `null`  | MCP Server Name                      |
+| `--enable-tools`     | `true`/`false` | `true`  | Enable Tools                         |
+| `--enable-resources` | `true`/`false` | `true`  | Enable Resources                     |
+| `--enable-prompts`   | `true`/`false` | `true`  | Enable Prompts                       |
+| `--enable-security`  | `true`/`false` | `true`  | Enable OAuth2/Entra ID Security      |
+| `--enable-audit`     | `true`/`false` | `true`  | Enable Audit Logging (requires AOP)  |
 
 ### Usage Examples
 
 ```shell
-# Generate with all capabilities enabled (default)
+# Generate with all capabilities enabled (default: includes security and audit)
 gradle generateEntryPoint --type=mcp
 
 # Only Tools
@@ -120,6 +124,12 @@ gradle generateEntryPoint --type=mcp --enable-tools=false --enable-resources=tru
 
 # With custom name
 gradle generateEntryPoint --type=mcp --name=BancolombiaAssistant
+
+# Without security (development mode only)
+gradle generateEntryPoint --type=mcp --enable-security=false
+
+# Without audit logging
+gradle generateEntryPoint --type=mcp --enable-audit=false
 ```
 
 ### Generated Structure
@@ -137,12 +147,24 @@ infrastructure/
             │   ├── resources/
             │   │   ├── SystemInfoResource.java
             │   │   └── UserInfoResource.java
-            │   └── prompts/
-            │       └── ExamplePrompt.java
+            │   ├── prompts/
+            │   │   └── ExamplePrompt.java
+            │   └── audit/                      # If audit enabled
+            │       └── McpAuditAspect.java
             └── test/java/[package]/mcp/
                 ├── tools/
                 ├── resources/
-                └── prompts/
+                ├── prompts/
+                └── audit/                      # If audit enabled
+                    └── McpAuditAspectTest.java
+
+applications/
+└── app-service/
+    └── src/
+        ├── main/java/co/com/bancolombia/config/
+        │   └── McpSecurityConfig.java         # If security enabled
+        └── test/java/co/com/bancolombia/config/
+            └── McpSecurityConfigTest.java     # If security enabled
 ```
 
 ### Generated Components
@@ -163,6 +185,13 @@ infrastructure/
 - `UserInfoResourceTest.java`
 - `ExamplePromptTest.java`
 
+**Security & Audit (if enabled):**
+
+- `McpSecurityConfig.java` - OAuth2/Entra ID configuration
+- `McpSecurityConfigTest.java`
+- `McpAuditAspect.java` - Automatic audit logging
+- `McpAuditAspectTest.java`
+
 ### Automatic Configuration
 
 The command also automatically updates `application.yaml` with the MCP configuration:
@@ -176,6 +205,13 @@ spring:
         name: "${spring.application.name}"
         version: "1.0.0"
         type: "ASYNC"
+        instructions: |
+          Reactive MCP Server with capabilities:
+          - Tools: Executable tools
+          - Resources: Access to system and user data
+          - Prompts: Custom conversation templates
+          
+          Security: Authenticated via Entra ID (Bearer Token)
         streamable-http:
           mcp-endpoint: "/mcp/${spring.application.name}"
         capabilities:
@@ -183,6 +219,60 @@ spring:
           resource: true
           prompt: true
         request-timeout: "30s"
+  # Security configuration (if --enable-security=true)
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/${TENANT_ID}/v2.0
+          client-id: ${CLIENT_ID}
+
+jwt:
+  json-exp-roles: /roles  # JSON path for role extraction
+```
+
+### Security and Audit Features
+
+**By default, the MCP entry point is generated with security and audit enabled.**
+
+#### Security (`McpSecurityConfig`)
+
+When `--enable-security=true` (default), the generator creates a complete OAuth2/Entra ID security configuration:
+
+- **OAuth2 Resource Server**: Validates JWT tokens from Entra ID
+- **JWT Validation**: Validates audience (`aud`), app ID (`appid`), and issuer
+- **Role Extraction**: Extracts roles from JWT claims using configurable JSON path
+- **Method Security**: Enables `@PreAuthorize` annotations for RBAC
+- **Public Endpoints**: Actuator health and info endpoints remain public
+- **Access Denied Logging**: Explicitly logs security rejections with user and path details
+
+**Dependencies added to `app-service`:**
+- `spring-boot-starter-security`
+- `spring-boot-starter-oauth2-resource-server`
+- `spring-boot-starter-actuator`
+- `spring-boot-starter-webflux`
+
+#### Audit Logging (`McpAuditAspect`)
+
+When `--enable-audit=true` (default), the generator creates an AOP aspect that automatically logs all MCP operations:
+
+- **What is audited**: All calls to `@Tool`, `@McpResource`, and `@McpPrompt` methods
+- **Information logged**:
+  - **Who**: Client ID extracted from JWT token (`appid`, `azp`, or `aud`)
+  - **What**: Class, method name, and arguments
+  - **When**: Timestamp (automatic via logging framework)
+  - **Result**: Success or failure
+  - **Performance**: Execution time in milliseconds
+- **Reactive Support**: Integrates seamlessly with `Mono` return types
+- **Security Context**: Extracts authentication details from `ReactiveSecurityContextHolder`
+
+**Dependency added to `mcp-server`:**
+- `spring-boot-starter-aop` (conditionally added only if audit is enabled)
+
+**Example audit log output:**
+```
+📊 [AUDIT] TOOL llamado por: a1b2c3d4-client-id | Método: ExampleTool.echo | Args: ["hello"]
+✅ [AUDIT] TOOL exitoso | Client: a1b2c3d4-client-id | Método: ExampleTool.echo | Tiempo: 45ms
 ```
 
 ### Component Development
