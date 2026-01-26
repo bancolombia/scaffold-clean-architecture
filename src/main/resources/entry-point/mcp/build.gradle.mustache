@@ -2,6 +2,9 @@ dependencies {
     implementation project(':model')
     implementation project(':usecase')
     implementation 'org.springframework:spring-context'
+    implementation 'tools.jackson.core:jackson-databind'
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     // Spring AI BOM
     implementation platform("org.springframework.ai:spring-ai-bom:{{SPRING_AI_VERSION}}")
@@ -9,16 +12,6 @@ dependencies {
     // MCP Server WebFlux
     implementation "org.springframework.ai:spring-ai-mcp"
     implementation "org.springframework.ai:spring-ai-starter-mcp-server-webflux"
-
-
-    // Jackson
-    implementation 'tools.jackson.core:jackson-databind'
-
-    // Validation
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    
-    // Actuator
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
 
     {{#mcp-enable-audit}}
     // AOP for Audit
