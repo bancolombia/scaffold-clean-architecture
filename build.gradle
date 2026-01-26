@@ -14,9 +14,9 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.2.2.6593'
     id 'com.gradle.plugin-publish' version '2.0.0'
-    id 'com.diffplug.spotless' version '8.1.0'
+    id 'com.diffplug.spotless' version '8.2.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'org.owasp.dependencycheck' version '12.1.9'
+    id 'org.owasp.dependencycheck' version '12.2.0'
 }
 
 ext {
@@ -178,9 +178,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'tools.jackson.core:jackson-databind:3.0.3'
-    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.0.3'
-    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.3'
+    api 'tools.jackson.core:jackson-databind:3.0.4'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.0.4'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.4'
     api 'commons-io:commons-io:2.21.0'
     api gradleApi()
 
@@ -198,10 +198,10 @@ dependencies {
 
     testImplementation gradleTestKit()
     testImplementation 'org.mockito:mockito-junit-jupiter:5.21.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.0.2'
 
     compileOnly 'org.projectlombok:lombok:1.18.42'
     annotationProcessor 'org.projectlombok:lombok:1.18.42'
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.3.0'
+    gradleVersion = '9.2.1'
 }
 
 tasks.register('ci-updater', JavaExec) {
