@@ -1,5 +1,22 @@
 # Changelog
 
+## [v4.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.1.0) (2026-01-26)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.5...v4.1.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump github/codeql-action from 4.31.10 to 4.31.11 [\#798](https://github.com/bancolombia/scaffold-clean-architecture/pull/798) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 6.0.1 to 6.0.2 [\#797](https://github.com/bancolombia/scaffold-clean-architecture/pull/797) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(entrypoint\): Add MCP Security and Audit capabilities, configuration, and dependencies [\#796](https://github.com/bancolombia/scaffold-clean-architecture/pull/796) ([kenyodarz](https://github.com/kenyodarz))
+- build\(deps\): bump peter-evans/create-pull-request from 7.0.9 to 8.1.0 [\#795](https://github.com/bancolombia/scaffold-clean-architecture/pull/795) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.0.0 to 5.2.0 [\#794](https://github.com/bancolombia/scaffold-clean-architecture/pull/794) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): fix update plugin version [\#792](https://github.com/bancolombia/scaffold-clean-architecture/pull/792) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump actions/setup-node from 6.1.0 to 6.2.0 [\#791](https://github.com/bancolombia/scaffold-clean-architecture/pull/791) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.31.9 to 4.31.10 [\#790](https://github.com/bancolombia/scaffold-clean-architecture/pull/790) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): update dependencies [\#789](https://github.com/bancolombia/scaffold-clean-architecture/pull/789) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump qs and express in /docs [\#788](https://github.com/bancolombia/scaffold-clean-architecture/pull/788) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.0.5) (2025-12-29)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.4...v4.0.5)
