@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.2.2.6593'
     id 'com.gradle.plugin-publish' version '2.0.0'
-    id 'com.diffplug.spotless' version '8.2.0'
+    id 'com.diffplug.spotless' version '8.2.1'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.2.0'
 }
@@ -190,7 +190,7 @@ dependencies {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     constraints { // for previous swagger dependency
-        implementation('commons-codec:commons-codec:1.20.0') {
+        implementation('commons-codec:commons-codec:1.21.0') {
             because "This version closes a security vulnerability"
         }
     }
