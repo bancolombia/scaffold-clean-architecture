@@ -167,31 +167,6 @@ applications/
             └── McpSecurityConfigTest.java     # If security enabled
 ```
 
-### Generated Components
-
-**Java Classes:**
-
-- `HealthTool.java` - Health check tool
-- `ExampleTool.java` - Example tool (echo, add)
-- `SystemInfoResource.java` - System info resource
-- `UserInfoResource.java` - Resource template with parameters
-- `ExamplePrompt.java` - Prompt templates
-
-**Tests:**
-
-- `HealthToolTest.java`
-- `ExampleToolTest.java`
-- `SystemInfoResourceTest.java`
-- `UserInfoResourceTest.java`
-- `ExamplePromptTest.java`
-
-**Security & Audit (if enabled):**
-
-- `McpSecurityConfig.java` - OAuth2/Entra ID configuration
-- `McpSecurityConfigTest.java`
-- `McpAuditAspect.java` - Automatic audit logging
-- `McpAuditAspectTest.java`
-
 ### Automatic Configuration
 
 The command also automatically updates `application.yaml` with the MCP configuration:
@@ -246,12 +221,6 @@ When `--enable-security=true` (default), the generator creates a complete OAuth2
 - **Public Endpoints**: Actuator health and info endpoints remain public
 - **Access Denied Logging**: Explicitly logs security rejections with user and path details
 
-**Dependencies added to `app-service`:**
-- `spring-boot-starter-security`
-- `spring-boot-starter-oauth2-resource-server`
-- `spring-boot-starter-actuator`
-- `spring-boot-starter-webflux`
-
 #### Audit Logging (`McpAuditAspect`)
 
 When `--enable-audit=true` (default), the generator creates an AOP aspect that automatically logs all MCP operations:
@@ -265,9 +234,6 @@ When `--enable-audit=true` (default), the generator creates an AOP aspect that a
   - **Performance**: Execution time in milliseconds
 - **Reactive Support**: Integrates seamlessly with `Mono` return types
 - **Security Context**: Extracts authentication details from `ReactiveSecurityContextHolder`
-
-**Dependency added to `mcp-server`:**
-- `spring-boot-starter-aop` (conditionally added only if audit is enabled)
 
 **Example audit log output:**
 ```
