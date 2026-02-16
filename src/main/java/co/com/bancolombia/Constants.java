@@ -15,10 +15,10 @@ public final class Constants {
   public static final String SECRETS_VERSION = "4.5.1";
   public static final String SPRING_BOOT_VERSION = "4.0.2";
   public static final String LOMBOK_VERSION = "1.18.42";
-  public static final String REACTIVE_COMMONS_VERSION = "7.0.3";
+  public static final String REACTIVE_COMMONS_VERSION = "7.0.4";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.16.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.41.14";
+  public static final String AWS_BOM_VERSION = "2.41.29";
   public static final String COMMONS_JMS_VERSION = "3.0.2";
   public static final String ARCH_UNIT_VERSION = "1.4.1";
   public static final String OKHTTP_VERSION = "5.3.2";
@@ -27,8 +27,8 @@ public final class Constants {
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.1";
   public static final String CLOUD_EVENTS_VERSION = "4.0.1";
   public static final String SPRING_AI_VERSION = "2.0.0-M2";
-  public static final String SPRING_MCP_SECURITY_VERSION = "0.1.0";
-  public static final String PITEST_VERSION = "1.22.0";
+  public static final String SPRING_MCP_SECURITY_VERSION = "0.1.1";
+  public static final String PITEST_VERSION = "1.22.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
   // gradle plugins
   public static final String JACOCO_VERSION = "0.8.14";
