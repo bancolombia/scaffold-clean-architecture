@@ -16,8 +16,8 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
-          app_id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
+          app-id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: master
