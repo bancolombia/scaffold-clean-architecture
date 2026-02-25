@@ -1,5 +1,32 @@
 # Changelog
 
+## [v4.1.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.1.1) (2026-02-25)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.1.0...v4.1.1)
+
+**Closed issues:**
+
+- Hardcoded package name in Utils.java.mustache [\#810](https://github.com/bancolombia/scaffold-clean-architecture/issues/810)
+
+**Merged pull requests:**
+
+- build\(deps\): bump step-security/harden-runner from 2.14.2 to 2.15.0 [\#817](https://github.com/bancolombia/scaffold-clean-architecture/pull/817) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions from 5.0.1 to 5.0.2 [\#816](https://github.com/bancolombia/scaffold-clean-architecture/pull/816) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.32.3 to 4.32.4 [\#815](https://github.com/bancolombia/scaffold-clean-architecture/pull/815) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.8.2 to 4.8.3 [\#813](https://github.com/bancolombia/scaffold-clean-architecture/pull/813) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ci: update GitHub app token action [\#812](https://github.com/bancolombia/scaffold-clean-architecture/pull/812) ([luisgomez29](https://github.com/luisgomez29))
+- chore\(utils\): update import statements to use package placeholder [\#811](https://github.com/bancolombia/scaffold-clean-architecture/pull/811) ([luisgomez29](https://github.com/luisgomez29))
+- docs: update package-lock.json [\#809](https://github.com/bancolombia/scaffold-clean-architecture/pull/809) ([luisgomez29](https://github.com/luisgomez29))
+- chore: update GitHub app token action and clean up documentation [\#808](https://github.com/bancolombia/scaffold-clean-architecture/pull/808) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump github/codeql-action from 4.32.2 to 4.32.3 [\#807](https://github.com/bancolombia/scaffold-clean-architecture/pull/807) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.14.1 to 2.14.2 [\#806](https://github.com/bancolombia/scaffold-clean-architecture/pull/806) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.32.1 to 4.32.2 [\#805](https://github.com/bancolombia/scaffold-clean-architecture/pull/805) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.32.0 to 4.32.1 [\#803](https://github.com/bancolombia/scaffold-clean-architecture/pull/803) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#802](https://github.com/bancolombia/scaffold-clean-architecture/pull/802) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump gradle/actions from 5.0.0 to 5.0.1 [\#801](https://github.com/bancolombia/scaffold-clean-architecture/pull/801) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.13.3 to 2.14.1 [\#800](https://github.com/bancolombia/scaffold-clean-architecture/pull/800) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.31.11 to 4.32.0 [\#799](https://github.com/bancolombia/scaffold-clean-architecture/pull/799) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.1.0) (2026-01-26)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.0.5...v4.1.0)
