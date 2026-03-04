@@ -1,0 +1,70 @@
+package {{package}}.chat;
+
+import {{package}}.model.chat.gateways.ChatGateway;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.ai.chat.client.ChatClient;
+import reactor.test.StepVerifier;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class SpringAiChatAdapterTest {
+
+    private static final String SYSTEM_PROMPT = "You are a helpful agent. Use the available MCP tools.";
+    private static final String SAMPLE_RESPONSE = "{\"status\":\"ok\",\"data\":\"result\"}";
+
+    private ChatClient.Builder chatClientBuilder;
+    private ChatClient chatClient;
+    private ChatClient.ChatClientRequestSpec requestSpec;
+    private ChatClient.CallResponseSpec callResponseSpec;
+    private SpringAiChatAdapter adapter;
+
+    @BeforeEach
+    void setUp() {
+        chatClientBuilder = mock(ChatClient.Builder.class);
+        chatClient = mock(ChatClient.class);
+        requestSpec = mock(ChatClient.ChatClientRequestSpec.class);
+        callResponseSpec = mock(ChatClient.CallResponseSpec.class);
+
+        when(chatClientBuilder.defaultSystem(anyString())).thenReturn(chatClientBuilder);
+        when(chatClientBuilder.build()).thenReturn(chatClient);
+
+        adapter = new SpringAiChatAdapter(chatClientBuilder, SYSTEM_PROMPT);
+    }
+
+    // DA-01 — LLM responds normally → Mono<String> with content
+    @Test
+    void sendMessageShouldReturnContent_whenLLMResponds() {
+        when(chatClient.prompt()).thenReturn(requestSpec);
+        when(requestSpec.user(anyString())).thenReturn(requestSpec);
+        when(requestSpec.call()).thenReturn(callResponseSpec);
+        when(callResponseSpec.content()).thenReturn(SAMPLE_RESPONSE);
+
+        StepVerifier.create(adapter.sendMessage("Search clients with name: Juan Perez"))
+                .assertNext(content -> {
+                    assertThat(content).isEqualTo(SAMPLE_RESPONSE);
+                    assertThat(content).contains("ok");
+                })
+                .verifyComplete();
+    }
+
+    // DA-02 — LLM throws exception → Mono.error propagated
+    @Test
+    void sendMessageShouldReturnError_whenLLMFails() {
+        when(chatClient.prompt()).thenThrow(new RuntimeException("LLM connection refused"));
+
+        StepVerifier.create(adapter.sendMessage("any prompt"))
+                .expectErrorMatches(e -> e instanceof RuntimeException
+                        && e.getMessage().contains("LLM connection refused"))
+                .verify();
+    }
+
+    // DA-03 — Adapter is a ChatGateway (compile-time contract check)
+    @Test
+    void adapterShouldImplementChatGatewayContract() {
+        assertThat(adapter).isInstanceOf(ChatGateway.class);
+    }
+}

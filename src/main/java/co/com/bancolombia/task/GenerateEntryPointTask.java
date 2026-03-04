@@ -29,6 +29,8 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption mcpEnablePrompts = BooleanOption.TRUE;
   private BooleanOption mcpEnableSecurity = BooleanOption.TRUE;
   private BooleanOption mcpEnableAudit = BooleanOption.TRUE;
+  private BooleanOption agentEnableKafka = BooleanOption.TRUE;
+  private BooleanOption agentEnableMcpClient = BooleanOption.TRUE;
 
   @Option(
       option = "server",
@@ -170,6 +172,31 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  // Agent Options
+  @Option(
+      option = "agent-enable-kafka",
+      description = "Enable Kafka consumer + producer transport for the agent")
+  public void setAgentEnableKafka(BooleanOption agentEnableKafka) {
+    this.agentEnableKafka = agentEnableKafka;
+  }
+
+  @OptionValues("agent-enable-kafka")
+  public List<BooleanOption> getAgentEnableKafkaOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @Option(
+      option = "agent-enable-mcp-client",
+      description = "Enable MCP client for tool-calling capabilities in the agent")
+  public void setAgentEnableMcpClient(BooleanOption agentEnableMcpClient) {
+    this.agentEnableMcpClient = agentEnableMcpClient;
+  }
+
+  @OptionValues("agent-enable-mcp-client")
+  public List<BooleanOption> getAgentEnableMcpClientOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
@@ -181,6 +208,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("swagger-file", swaggerFile);
     appendRCommonsParams();
     appendMcpParams();
+    appendAgentParams();
   }
 
   private void appendMcpParams() {
@@ -189,6 +217,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("mcp-enable-prompts", mcpEnablePrompts == BooleanOption.TRUE);
     builder.addParam("mcp-enable-security", mcpEnableSecurity == BooleanOption.TRUE);
     builder.addParam("mcp-enable-audit", mcpEnableAudit == BooleanOption.TRUE);
+  }
+
+  private void appendAgentParams() {
+    builder.addParam("agent-enable-kafka", agentEnableKafka == BooleanOption.TRUE);
+    builder.addParam("agent-enable-mcp-client", agentEnableMcpClient == BooleanOption.TRUE);
   }
 
   private void appendRCommonsParams() {

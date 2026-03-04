@@ -1,0 +1,56 @@
+package {{package}}.chat;
+
+import {{package}}.model.chat.gateways.ChatGateway;
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+/**
+ * Driven adapter that implements {@link ChatGateway} using Spring AI's {@link ChatClient}.
+ *
+ * <p>Supports any LLM backend compatible with the Spring AI OpenAI client:
+ * OpenAI, Azure OpenAI, LM Studio (local), Ollama, etc.
+ *
+ * <p>The LLM call is blocking and is wrapped in {@code Schedulers.boundedElastic()}
+ * to avoid blocking the reactor thread pool.
+ */
+@Repository
+{{#lombok}}
+@Log4j2
+{{/lombok}}
+public class SpringAiChatAdapter implements ChatGateway {
+
+    private final ChatClient chatClient;
+
+    public SpringAiChatAdapter(ChatClient.Builder chatClientBuilder,
+            @Value("${agent.system-prompt}") String systemPrompt) {
+        this.chatClient = chatClientBuilder
+                .defaultSystem(systemPrompt)
+                .build();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>Sends the prompt to the LLM; executes on the bounded-elastic scheduler
+     * to avoid reactor thread starvation on blocking I/O.
+     */
+    @Override
+    public Mono<String> sendMessage(String message) {
+        log.info("Sending prompt to LLM ({} chars)", message.length());
+        return Mono.fromCallable(() -> chatClient.prompt()
+                        .user(message)
+                        .call()
+                        .content())
+                .subscribeOn(Schedulers.boundedElastic())
+                .doOnSuccess(response ->
+                        log.info("LLM responded ({} chars)", response != null ? response.length() : 0))
+                .doOnError(error ->
+                        log.error("LLM call failed: {}", error.getMessage()));
+    }
+}

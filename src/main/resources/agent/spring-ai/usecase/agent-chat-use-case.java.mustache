@@ -1,0 +1,176 @@
+package {{package}}.usecase;
+
+import static java.util.logging.Level.SEVERE;
+
+import {{package}}.model.a2a.A2AError;
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.model.a2a.A2AResult;
+import {{package}}.model.chat.gateways.AgentResponseGateway;
+import {{package}}.model.chat.gateways.ChatGateway;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.UUID;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import reactor.core.publisher.Mono;
+
+/**
+ * Core use case for the agent. Receives an A2ACommand, maps the intent to a prompt,
+ * sends it to the LLM via ChatGateway, and returns an A2AResult.
+ *
+ * <p>Two transport variants are provided:
+ * <ul>
+ *   <li>{@link #chat(A2ACommand)} — Kafka transport: publishes the response via AgentResponseGateway.</li>
+ *   <li>{@link #chatAndRespond(A2ACommand)} — REST transport: returns the response directly as Mono.</li>
+ * </ul>
+ *
+ * <p>To add a new intent, add a case to {@link #mapIntentToTool(String)} and a prompt builder method.
+ */
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+public class AgentChatUseCase {
+
+    private final ChatGateway chatGateway;
+    private final AgentResponseGateway agentResponseGateway;
+
+    // ── Intent constants ──────────────────────────────────────────────────────
+
+    /** Add your supported intent constants here. */
+    private static final String INTENT_EXAMPLE = "EXAMPLE_INTENT";
+
+    // ── Public API ────────────────────────────────────────────────────────────
+
+    /**
+     * Kafka transport entry point.
+     * Executes the intent and publishes the result via {@link AgentResponseGateway}.
+     *
+     * @param request the A2A command received from Kafka
+     * @return a Mono that completes when the response has been published
+     */
+    public Mono<Void> chat(A2ACommand request) {
+        long startTime = System.currentTimeMillis();
+        String toolName = mapIntentToTool(request.getIntent());
+
+        if (toolName == null) {
+            return agentResponseGateway.sendResponse(
+                    createErrorResponse(request, startTime, "UNSUPPORTED_INTENT",
+                            "Unsupported intent: " + request.getIntent()));
+        }
+
+        return chatGateway.sendMessage(buildPrompt(toolName, request.getPayload()))
+                .flatMap(llmResponse -> {
+                    long execTimeMs = System.currentTimeMillis() - startTime;
+                    return agentResponseGateway.sendResponse(
+                            createSuccessResponse(request, llmResponse, execTimeMs));
+                })
+                .onErrorResume(error -> {
+                    log.log(SEVERE, "Error in chat()", error);
+                    return agentResponseGateway.sendResponse(
+                            createErrorResponse(request, startTime, "INTERNAL_ERROR",
+                                    error.getMessage()));
+                });
+    }
+
+    /**
+     * REST transport entry point.
+     * Executes the intent and returns the result directly as a Mono.
+     *
+     * @param request the A2A command received via HTTP
+     * @return a Mono emitting the A2AResult (never errors — errors are encoded in the response)
+     */
+    public Mono<A2AResult> chatAndRespond(A2ACommand request) {
+        long startTime = System.currentTimeMillis();
+        String toolName = mapIntentToTool(request.getIntent());
+
+        if (toolName == null) {
+            return Mono.just(createErrorResponse(request, startTime, "UNSUPPORTED_INTENT",
+                    "Unsupported intent: " + request.getIntent()));
+        }
+
+        return chatGateway.sendMessage(buildPrompt(toolName, request.getPayload()))
+                .map(llmResponse -> createSuccessResponse(request, llmResponse,
+                        System.currentTimeMillis() - startTime))
+                .onErrorResume(error -> {
+                    log.log(SEVERE, "Error in chatAndRespond()", error);
+                    return Mono.just(createErrorResponse(request, startTime,
+                            "INTERNAL_ERROR", error.getMessage()));
+                });
+    }
+
+    // ── Intent routing ────────────────────────────────────────────────────────
+
+    /**
+     * Maps a business intent string to the tool name used in the LLM prompt.
+     * Returns {@code null} for unknown or unsupported intents.
+     *
+     * <p>Extend this switch expression to support additional intents.
+     */
+    private String mapIntentToTool(String intent) {
+        if (intent == null) {
+            return null;
+        }
+        return switch (intent) {
+            case INTENT_EXAMPLE -> "example_tool";
+            // Add more intent mappings here
+            default -> null;
+        };
+    }
+
+    // ── Prompt building ───────────────────────────────────────────────────────
+
+    /**
+     * Builds the LLM prompt for a given tool and payload.
+     * Override or extend this method to customise prompt templates per intent.
+     */
+    private String buildPrompt(String toolName, Object payload) {
+        String parametersStr = (payload != null) ? payload.toString() : "{}";
+        return String.format(
+                "Execute the tool '%s' using the following parameters: %s. "
+                        + "Return ONLY the execution result in JSON format.",
+                toolName, parametersStr);
+    }
+
+    // ── Response factories ────────────────────────────────────────────────────
+
+    private A2AResult createSuccessResponse(A2ACommand request, String llmResponse,
+            long executionTimeMs) {
+        return A2AResult.builder()
+                .schemaVersion(request.getSchemaVersion())
+                .messageId(UUID.randomUUID().toString())
+                .correlationId(request.getCorrelationId())
+                .traceId(request.getTraceId())
+                .timestamp(Instant.now().atOffset(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ISO_INSTANT))
+                .sourceAgent("{{projectName}}")
+                .status("SUCCESS")
+                .executionTimeMs(executionTimeMs)
+                .result(Map.of("data", llmResponse))
+                .build();
+    }
+
+    private A2AResult createErrorResponse(A2ACommand request, long startTime,
+            String code, String message) {
+        return A2AResult.builder()
+                .schemaVersion(request != null ? request.getSchemaVersion() : null)
+                .messageId(UUID.randomUUID().toString())
+                .correlationId(request != null ? request.getCorrelationId() : "unknown")
+                .traceId(request != null ? request.getTraceId() : null)
+                .timestamp(Instant.now().atOffset(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ISO_INSTANT))
+                .sourceAgent("{{projectName}}")
+                .status("ERROR")
+                .executionTimeMs(System.currentTimeMillis() - startTime)
+                .error(A2AError.builder()
+                        .code(code)
+                        .message(message)
+                        .retryable(false)
+                        .build())
+                .build();
+    }
+}

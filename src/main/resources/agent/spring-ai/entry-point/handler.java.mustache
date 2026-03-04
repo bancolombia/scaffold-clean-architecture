@@ -1,0 +1,73 @@
+package {{package}}.api;
+
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.usecase.AgentChatUseCase;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+@Component
+{{#lombok}}
+@Log4j2
+@RequiredArgsConstructor
+{{/lombok}}
+public class Handler {
+
+    private static final String HEADER_CORRELATION_ID = "X-Correlation-Id";
+    private static final String HEADER_TRACE_ID = "X-Trace-Id";
+
+    private final AgentChatUseCase agentChatUseCase;
+
+{{^lombok}}
+    public Handler(AgentChatUseCase agentChatUseCase) {
+        this.agentChatUseCase = agentChatUseCase;
+    }
+{{/lombok}}
+
+    public Mono<ServerResponse> handleA2ACommand(ServerRequest serverRequest) {
+{{#lombok}}
+        log.info("A2A REST command received — correlationId: {}, traceId: {}",
+                serverRequest.headers().firstHeader(HEADER_CORRELATION_ID),
+                serverRequest.headers().firstHeader(HEADER_TRACE_ID));
+{{/lombok}}
+
+        return serverRequest.bodyToMono(A2ACommand.class)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Request body is required")))
+                .flatMap(request -> agentChatUseCase.chatAndRespond(
+                        enrichWithHeaders(request, serverRequest)))
+                .flatMap(response -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(response))
+                .onErrorResume(e -> {
+{{#lombok}}
+                    log.error("Error processing A2A REST command", e);
+{{/lombok}}
+                    return ServerResponse.badRequest()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue("{\"error\":\"" + e.getMessage() + "\"}");
+                });
+    }
+
+    private A2ACommand enrichWithHeaders(A2ACommand request, ServerRequest serverRequest) {
+        String headerCorrelationId = serverRequest.headers().firstHeader(HEADER_CORRELATION_ID);
+        String headerTraceId = serverRequest.headers().firstHeader(HEADER_TRACE_ID);
+
+        boolean needsCorrelationId = request.getCorrelationId() == null
+                && headerCorrelationId != null;
+        boolean needsTraceId = request.getTraceId() == null && headerTraceId != null;
+
+        if (!needsCorrelationId && !needsTraceId) {
+            return request;
+        }
+        return request.toBuilder()
+                .correlationId(needsCorrelationId ? headerCorrelationId : request.getCorrelationId())
+                .traceId(needsTraceId ? headerTraceId : request.getTraceId())
+                .build();
+    }
+}

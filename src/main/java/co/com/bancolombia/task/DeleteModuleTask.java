@@ -19,18 +19,23 @@ import org.gradle.api.tasks.options.OptionValues;
 public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   private String module;
 
-  @Internal private final ListProperty<String> availableModules;
+  private final ListProperty<String> availableModules;
 
   public DeleteModuleTask() {
     this.availableModules = getProject().getObjects().listProperty(String.class);
 
     // Configure lazy providers - capture information during configuration
-    this.availableModules.set(getProject().provider(this::getChildProjectNames));
+    this.availableModules.set(getProject().provider(this::loadChildProjectNames));
   }
 
   @Option(option = "module", description = "Set module name to delete")
   public void setModule(String module) {
     this.module = module;
+  }
+
+  @Internal
+  public ListProperty<String> getAvailableModules() {
+    return availableModules;
   }
 
   @OptionValues("module")
@@ -58,7 +63,7 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
     return Optional.of(module);
   }
 
-  public List<String> getChildProjectNames() {
+  public List<String> loadChildProjectNames() {
     return new ArrayList<>(getProject().getChildProjects().keySet());
   }
 }

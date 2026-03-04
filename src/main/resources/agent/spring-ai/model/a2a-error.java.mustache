@@ -1,0 +1,35 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * Structured error descriptor carried inside an A2AResult when status is ERROR.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2AError {
+
+    /**
+     * Machine-readable error code.
+     * Standard codes: UNSUPPORTED_INTENT, INTERNAL_ERROR, TIMEOUT, VALIDATION_ERROR.
+     */
+    private String code;
+
+    /** Human-readable description of the error. */
+    private String message;
+
+    /**
+     * Whether the orchestrator may retry the command.
+     * Set to true only for transient failures (e.g. TIMEOUT).
+     */
+    private Boolean retryable;
+}

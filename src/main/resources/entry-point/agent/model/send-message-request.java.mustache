@@ -1,0 +1,34 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+@SuppressWarnings("java:S116")
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class SendMessageRequest {
+    private Message message;
+    private String task_id;
+
+{{^lombok}}
+    public SendMessageRequest() {}
+
+    public SendMessageRequest(Message message, String task_id) {
+        this.message = message;
+        this.task_id = task_id;
+    }
+
+    public Message getMessage() { return message; }
+    public void setMessage(Message message) { this.message = message; }
+    public String getTask_id() { return task_id; }
+    public void setTask_id(String task_id) { this.task_id = task_id; }
+{{/lombok}}
+}

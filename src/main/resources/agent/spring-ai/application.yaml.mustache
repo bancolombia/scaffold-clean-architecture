@@ -1,0 +1,81 @@
+## Spring Boot Configuration for {{projectName}}
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: {{projectName}}
+  devtools:
+    add-properties: false
+
+  ## Spring AI — LLM configuration
+  ## Compatible with: OpenAI, Azure OpenAI, LM Studio (local), Ollama
+  ai:
+    openai:
+      api-key: ${LLM_API_KEY:lm-studio}
+      base-url: ${LLM_URL:http://localhost:1234}
+      chat:
+        options:
+          model: ${LLM_MODEL:local-model}
+          temperature: 0.0
+
+    {{#agent-enable-mcp-client}}
+    ## MCP client — connects to one or more MCP servers
+    mcp:
+      client:
+        streamable-http:
+          connections:
+            mcp-server-1:
+              url: ${MCP_SERVER_1_URL:http://localhost:8080}
+              endpoint: ${MCP_SERVER_1_ENDPOINT:/mcp/stream}
+            ## Add more connections as needed
+            # mcp-server-2:
+            #   url: ${MCP_SERVER_2_URL:http://localhost:8081}
+            #   endpoint: ${MCP_SERVER_2_ENDPOINT:/mcp/stream}
+
+  ## Security properties for MCP Client (OAuth2 WebFlux Backend-to-Backend)
+  security:
+    oauth2:
+      client:
+        registration:
+          mcp-client:
+            provider: entra-id
+            client-id: ${OAUTH_CLIENT_ID:your-client-id}
+            client-secret: ${OAUTH_CLIENT_SECRET:your-client-secret}
+            authorization-grant-type: client_credentials
+            scope: ${OAUTH_SCOPE:your-scope}
+        provider:
+          entra-id:
+            token-uri: ${OAUTH_TOKEN_URI:https://login.microsoftonline.com/tenant-id/oauth2/v2.0/token}
+    {{/agent-enable-mcp-client}}
+
+  {{#agent-enable-kafka}}
+  ## Kafka — async A2A transport
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
+      group-id: {{projectName}}-group
+      topic: ${KAFKA_CONSUMER_TOPIC:{{projectName}}-commands}
+    producer:
+      bootstrap-servers: ${KAFKA_SERVERS:localhost:9092}
+      topic: ${KAFKA_PRODUCER_TOPIC:{{projectName}}-responses}
+  {{/agent-enable-kafka}}
+
+## Agent identity and behaviour
+agent:
+  ## System prompt sent to the LLM on every request.
+  ## Edit this to define the agent's role, constraints, and available tools.
+  system-prompt: |
+    You are a specialised agent called '{{projectName}}'.
+    You MUST use the available MCP tools to answer requests. Do not make up information.
+    Always respond in JSON format with the structure: {"result": "...", "toolsUsed": [...]}.
+
+## CORS — allowed origins for browser clients
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
+
+## Logging
+logging:
+  level:
+    root: INFO
+    {{package}}: DEBUG

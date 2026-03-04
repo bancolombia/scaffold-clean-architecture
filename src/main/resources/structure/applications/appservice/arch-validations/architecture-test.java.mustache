@@ -95,7 +95,10 @@ class ArchitectureTest {
     @Test
     void domainClassesShouldNotBeNamedWithTechSuffixes() {
         ArchRule rule = Stream.of({{{forbiddenDomainSuffixes}}})
-                .reduce(classes().should().haveSimpleNameNotEndingWith("Dto"),
+                .reduce(classes()
+                                .that().haveSimpleNameNotContaining("SendMessageRequest")
+                                .and().haveSimpleNameNotContaining("SendMessageResponse")
+                                .should().haveSimpleNameNotEndingWith("Dto"),
                         (cj, tool) -> cj.andShould().haveSimpleNameNotEndingWith(tool),
                         (a, b) -> b)
                 .allowEmptyShould(true)

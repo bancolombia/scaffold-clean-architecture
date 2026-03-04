@@ -1,0 +1,75 @@
+package {{package}}.api.config;
+
+import {{package}}.api.Handler;
+import {{package}}.api.RouterRest;
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.model.a2a.A2APayload;
+import {{package}}.model.a2a.A2AResult;
+import {{package}}.usecase.AgentChatUseCase;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@WebFluxTest
+@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+@Import({CorsConfig.class, SecurityHeadersConfig.class})
+class ConfigTest {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockitoBean
+    private AgentChatUseCase agentChatUseCase;
+
+    // EP-05 — security headers must be present on every response
+    @Test
+    void securityHeadersShouldBePresentOnA2AEndpoint() {
+        A2AResult mockResponse = A2AResult.builder()
+                .schemaVersion("1.0")
+                .messageId("resp-config-test")
+                .correlationId("corr-config")
+                .sourceAgent("{{projectName}}")
+                .status("SUCCESS")
+                .executionTimeMs(10L)
+                .result(Map.of("data", "ok"))
+                .build();
+
+        when(agentChatUseCase.chatAndRespond(any())).thenReturn(Mono.just(mockResponse));
+
+        webTestClient.post()
+                .uri("/a2a/v1/commands")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(A2ACommand.builder()
+                        .schemaVersion("1.0")
+                        .messageId("msg-config-test")
+                        .correlationId("corr-config")
+                        .intent("EXAMPLE_INTENT")
+                        .sourceAgent("agente-orquestador")
+                        .targetAgent("{{projectName}}")
+                        .payload(A2APayload.builder()
+                                .parameters(Map.of("param1", "value1"))
+                                .build())
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals("Content-Security-Policy",
+                        "default-src 'self'; frame-ancestors 'self'; form-action 'self'")
+                .expectHeader().valueEquals("Strict-Transport-Security",
+                        "max-age=31536000; includeSubDomains; preload")
+                .expectHeader().valueEquals("X-Content-Type-Options", "nosniff")
+                .expectHeader().valueEquals("Cache-Control", "no-store")
+                .expectHeader().valueEquals("Pragma", "no-cache")
+                .expectHeader().valueEquals("Referrer-Policy", "strict-origin-when-cross-origin");
+    }
+}
