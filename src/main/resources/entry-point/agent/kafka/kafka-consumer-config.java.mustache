@@ -1,0 +1,37 @@
+package {{package}}.kafka.consumer.config;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import reactor.kafka.receiver.KafkaReceiver;
+import reactor.kafka.receiver.ReceiverOptions;
+
+@Configuration
+public class KafkaConfig {
+
+    private final String topic;
+    private final KafkaProperties kafkaProperties;
+
+    public KafkaConfig(@Value("${adapters.kafka.consumer.topic}") String topic, KafkaProperties kafkaProperties) {
+        this.topic = topic;
+        this.kafkaProperties = kafkaProperties;
+    }
+
+    @Bean
+    public ReceiverOptions<String, String> kafkaReceiverOptions() throws UnknownHostException {
+        kafkaProperties.setClientId(InetAddress.getLocalHost().getHostName());
+        ReceiverOptions<String, String> basicReceiverOptions =
+                ReceiverOptions.create(kafkaProperties.buildConsumerProperties());
+        return basicReceiverOptions.subscription(Collections.singletonList(topic));
+    }
+
+    @Bean
+    public KafkaReceiver<String, String> kafkaReceiver(
+            ReceiverOptions<String, String> kafkaReceiverOptions) {
+        return KafkaReceiver.create(kafkaReceiverOptions);
+    }
+}

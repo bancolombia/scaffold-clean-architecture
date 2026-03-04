@@ -1,0 +1,107 @@
+package {{package}}.usecase;
+
+import static java.util.logging.Level.SEVERE;
+
+import {{package}}.model.a2a.Error;
+import {{package}}.model.a2a.Message;
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.model.a2a.SendMessageResponse;
+import {{package}}.model.a2a.Task;
+import {{package}}.model.chat.gateways.AgentResponseGateway;
+import {{package}}.model.chat.gateways.ChatGateway;
+import java.util.UUID;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import reactor.core.publisher.Mono;
+
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+public class AgentChatUseCase {
+
+{{^lombok}}
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(AgentChatUseCase.class.getName());
+{{/lombok}}
+
+    private final ChatGateway chatGateway;
+    private final AgentResponseGateway agentResponseGateway;
+
+{{^lombok}}
+    public AgentChatUseCase(ChatGateway chatGateway, AgentResponseGateway agentResponseGateway) {
+        this.chatGateway = chatGateway;
+        this.agentResponseGateway = agentResponseGateway;
+    }
+{{/lombok}}
+
+    public Mono<Void> chat(SendMessageRequest request) {
+        long startTime = System.currentTimeMillis();
+        String prompt = buildPrompt(request.getMessage());
+
+        return chatGateway.sendMessage(prompt)
+                .flatMap(llmResponse -> {
+                    long execTimeMs = System.currentTimeMillis() - startTime;
+                    return agentResponseGateway.sendResponse(
+                            createSuccessResponse(request, llmResponse, execTimeMs));
+                })
+                .onErrorResume(error -> {
+                    log.log(SEVERE, "Error in chat()", error);
+                    return agentResponseGateway.sendResponse(
+                            createErrorResponse(request, startTime, "INTERNAL_ERROR", error.getMessage()));
+                });
+    }
+
+    public Mono<SendMessageResponse> chatAndRespond(SendMessageRequest request) {
+        long startTime = System.currentTimeMillis();
+        String prompt = buildPrompt(request.getMessage());
+
+        return chatGateway.sendMessage(prompt)
+                .map(llmResponse -> createSuccessResponse(request, llmResponse,
+                        System.currentTimeMillis() - startTime))
+                .onErrorResume(error -> {
+                    log.log(SEVERE, "Error in chatAndRespond()", error);
+                    return Mono.just(createErrorResponse(request, startTime,
+                            "INTERNAL_ERROR", error.getMessage()));
+                });
+    }
+
+    private String buildPrompt(Message message) {
+        if (message != null && message.getContent() != null) {
+            return message.getContent();
+        }
+        return "";
+    }
+
+    private SendMessageResponse createSuccessResponse(SendMessageRequest request, String llmResponse,
+            long executionTimeMs) {
+        return SendMessageResponse.builder()
+                .message(Message.builder()
+                        .role("ASSISTANT")
+                        .content(llmResponse)
+                        .build())
+                .task(Task.builder()
+                        .id(request != null && request.getTask_id() != null ? request.getTask_id() : UUID.randomUUID().toString())
+                        .status("COMPLETED")
+                        .execution_time_ms(executionTimeMs)
+                        .build())
+                .build();
+    }
+
+    private SendMessageResponse createErrorResponse(SendMessageRequest request, long startTime,
+            String code, String message) {
+        return SendMessageResponse.builder()
+                .task(Task.builder()
+                        .id(request != null && request.getTask_id() != null ? request.getTask_id() : UUID.randomUUID().toString())
+                        .status("FAILED")
+                        .execution_time_ms(System.currentTimeMillis() - startTime)
+                        .error(Error.builder()
+                                .code(code)
+                                .message(message)
+                                .build())
+                        .build())
+                .build();
+    }
+}
+

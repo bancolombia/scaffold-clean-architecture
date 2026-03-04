@@ -1,0 +1,30 @@
+package {{package}}.api;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.ServerResponse;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+
+/**
+ * WebFlux functional router that registers the A2A standard endpoints.
+ *
+ * <p>Endpoints: 
+ * <ul>
+ *   <li>{@code POST /message:send}</li>
+ *   <li>{@code GET /.well-known/agent-card.json}</li>
+ * </ul>
+ * <p>See {@link Handler} for request/response details.
+ */
+@Configuration
+public class RouterRest {
+
+    @Bean
+    public RouterFunction<ServerResponse> routerFunction(Handler handler) {
+        return route(POST("/message:send"), handler::handleSendMessage)
+                .andRoute(GET("/.well-known/agent-card.json"), handler::handleAgentCard);
+    }
+}

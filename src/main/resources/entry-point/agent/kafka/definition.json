@@ -1,0 +1,16 @@
+{
+  "folders": [
+    "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer",
+    "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config",
+    "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/producer",
+    "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/producer/config"
+  ],
+  "files": {
+    "entry-point/agent/kafka/kafka-consumer.build.gradle.mustache": "infrastructure/entry-points/kafka-consumer/build.gradle",
+    "entry-point/agent/kafka/kafka-consumer.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/KafkaConsumer.java",
+    "entry-point/agent/kafka/kafka-consumer-config.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config/KafkaConfig.java",
+    "entry-point/agent/kafka/kafka-producer.build.gradle.mustache": "infrastructure/driven-adapters/kafka-producer/build.gradle",
+    "entry-point/agent/kafka/kafka-producer-adapter.java.mustache": "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/producer/KafkaProducerAdapter.java",
+    "entry-point/agent/kafka/kafka-producer-config.java.mustache": "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/producer/config/KafkaProducerConfig.java"
+  }
+}

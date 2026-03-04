@@ -1,0 +1,54 @@
+package {{package}}.kafka.producer;
+
+import {{package}}.model.a2a.SendMessageResponse;
+import {{package}}.model.chat.gateways.AgentResponseGateway;
+import tools.jackson.databind.json.JsonMapper;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderRecord;
+
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+@Component
+public class KafkaProducerAdapter implements AgentResponseGateway {
+
+    private final KafkaSender<String, String> kafkaSender;
+    private final JsonMapper jsonMapper;
+    private final String topic;
+
+    public KafkaProducerAdapter(KafkaSender<String, String> kafkaSender,
+                                JsonMapper jsonMapper,
+                                @Value("${adapters.kafka.producer.topic}") String topic) {
+        this.kafkaSender = kafkaSender;
+        this.jsonMapper = jsonMapper;
+        this.topic = topic;
+    }
+
+    @Override
+    public Mono<Void> sendResponse(SendMessageResponse response) {
+        return Mono.fromCallable(() -> jsonMapper.writeValueAsString(response))
+                .flatMap(responseStr -> {
+                    log.info("Sending response to kafka topic {}: {}", topic, responseStr);
+                    var producerRecord = new ProducerRecord<String, String>(topic, responseStr);
+                    var senderRecord = SenderRecord.create(producerRecord, responseStr);
+                    return kafkaSender.send(Mono.just(senderRecord))
+                            .doOnNext(
+                                    result -> log.info("Message sent successfully to partition {}",
+                                            result.recordMetadata().partition()))
+                            .doOnError(error -> log.error("Error sending message to kafka", error))
+                            .then();
+                })
+                .onErrorResume(e -> {
+                    log.error("Failed to serialize or send SendMessageResponse", e);
+                    return Mono.empty();
+                });
+    }
+}

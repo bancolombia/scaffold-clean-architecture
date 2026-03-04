@@ -1,0 +1,64 @@
+package {{package}}.api;
+
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.model.a2a.AgentCard;
+import {{package}}.usecase.AgentChatUseCase;
+{{#lombok}}
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
+
+@Component
+{{#lombok}}
+@Log4j2
+{{/lombok}}
+public class Handler {
+
+    private static final String HEADER_CORRELATION_ID = "X-Correlation-Id";
+    private static final String HEADER_TRACE_ID = "X-Trace-Id";
+
+    private final AgentChatUseCase agentChatUseCase;
+    private final AgentCard agentCard;
+
+    public Handler(AgentChatUseCase agentChatUseCase,
+                   @Value("${agent.id:agent-1}") String agentId,
+                   @Value("${agent.name:Agent}") String name,
+                   @Value("${agent.description:Agent Description}") String description) {
+        this.agentChatUseCase = agentChatUseCase;
+        this.agentCard = new AgentCard(agentId, name, description);
+    }
+
+    public Mono<ServerResponse> handleSendMessage(ServerRequest serverRequest) {
+{{#lombok}}
+        log.info("A2A REST message received — correlationId: {}, traceId: {}",
+                serverRequest.headers().firstHeader(HEADER_CORRELATION_ID),
+                serverRequest.headers().firstHeader(HEADER_TRACE_ID));
+{{/lombok}}
+
+        return serverRequest.bodyToMono(SendMessageRequest.class)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Request body is required")))
+                .flatMap(agentChatUseCase::chatAndRespond)
+                .flatMap(response -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(response))
+                .onErrorResume(e -> {
+{{#lombok}}
+                    log.error("Error processing A2A REST message", e);
+{{/lombok}}
+                    return ServerResponse.badRequest()
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .bodyValue("{\"error\":\"" + e.getMessage() + "\"}");
+                });
+    }
+
+    public Mono<ServerResponse> handleAgentCard(ServerRequest serverRequest) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(agentCard);
+    }
+}

@@ -1,0 +1,36 @@
+package {{package}}.kafka.producer.config;
+
+import org.springframework.boot.kafka.autoconfigure.KafkaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
+
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+@Configuration
+public class KafkaProducerConfig {
+
+    private final KafkaProperties kafkaProperties;
+
+{{^lombok}}
+    public KafkaProducerConfig(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
+{{/lombok}}
+
+    @Bean
+    public SenderOptions<String, String> senderOptions() {
+        return SenderOptions.create(kafkaProperties.buildProducerProperties());
+    }
+
+    @Bean
+    public KafkaSender<String, String> kafkaSender(
+            SenderOptions<String, String> senderOptions) {
+        return KafkaSender.create(senderOptions);
+    }
+}

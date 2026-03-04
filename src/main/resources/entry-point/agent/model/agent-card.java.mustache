@@ -1,0 +1,38 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+@SuppressWarnings("java:S116")
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AgentCard {
+    private String agent_id;
+    private String name;
+    private String description;
+
+{{^lombok}}
+    public AgentCard() {}
+
+    public AgentCard(String agent_id, String name, String description) {
+        this.agent_id = agent_id;
+        this.name = name;
+        this.description = description;
+    }
+
+    public String getAgent_id() { return agent_id; }
+    public void setAgent_id(String agent_id) { this.agent_id = agent_id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+{{/lombok}}
+}

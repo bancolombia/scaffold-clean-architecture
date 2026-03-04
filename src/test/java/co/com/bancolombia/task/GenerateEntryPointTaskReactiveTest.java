@@ -7,11 +7,14 @@ import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -309,5 +312,39 @@ class GenerateEntryPointTaskReactiveTest {
         "src/main/java/co/com/bancolombia/mcp/tools/HealthTool.java",
         "src/main/java/co/com/bancolombia/mcp/resources/SystemInfoResource.java",
         "src/main/java/co/com/bancolombia/mcp/prompts/ExamplePrompt.java");
+  }
+
+  @Test
+  void generateEntryPointAgentWithKafkaUsesJackson3Imports() throws IOException, CleanException {
+    // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/kafka-consumer"));
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/driven-adapters/kafka-producer"));
+    task.setType("AGENT");
+    task.setAgentEnableKafka(TRUE);
+    task.setAgentEnableMcpClient(TRUE);
+
+    // Assert Options Coverage
+    task.getAgentEnableKafkaOptions();
+    task.getAgentEnableMcpClientOptions();
+
+    // Act
+    task.execute();
+
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java");
+
+    String kafkaConsumer =
+        Files.readString(
+            Path.of(
+                TEST_DIR,
+                "infrastructure/entry-points/kafka-consumer/src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java"));
+
+    assertTrue(kafkaConsumer.contains("import tools.jackson.core.JacksonException;"));
+    assertTrue(kafkaConsumer.contains("import tools.jackson.databind.json.JsonMapper;"));
+    assertTrue(kafkaConsumer.contains("catch (JacksonException e)"));
+    assertFalse(kafkaConsumer.contains("com.fasterxml.jackson"));
   }
 }
