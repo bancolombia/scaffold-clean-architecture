@@ -159,12 +159,9 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         "org.springframework.boot.amqp.autoconfigure");
 
                 // Jackson package changes (com.fasterxml moved to tools)
-                updatedContent = UpdateUtils.replace(updatedContent, "com.fasterxml", "tools");
-                updatedContent =
-                    UpdateUtils.replace(
-                        updatedContent,
-                        "tools.jackson.annotation.JsonProperty",
-                        "com.fasterxml.jackson.annotation.JsonProperty");
+                updatedContent = UpdateUtils.replace(updatedContent, "com.fasterxml.jackson.core", "tools.jackson.core");
+                updatedContent = UpdateUtils.replace(updatedContent, "com.fasterxml.jackson.databind", "tools.jackson.databind");
+                updatedContent = UpdateUtils.replace(updatedContent, "tools.jackson.core:jackson-annotations", "com.fasterxml.jackson.core:jackson-annotations");
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent, "JsonProcessingException", "JacksonException");
