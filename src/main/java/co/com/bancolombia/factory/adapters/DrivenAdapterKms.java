@@ -14,7 +14,7 @@ public class DrivenAdapterKms implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     String typePath = getPathType(builder.isReactive());
     logger.lifecycle("Generating {}", typePath);
 

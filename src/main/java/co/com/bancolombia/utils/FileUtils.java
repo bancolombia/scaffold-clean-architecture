@@ -39,10 +39,23 @@ import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 public class FileUtils {
   private static final String GRADLE_PROPERTIES = "/gradle.properties";
 
+  public static File resolveFile(File projectDir, String filePath) {
+    File file = new File(filePath);
+    if (file.isAbsolute()) {
+      return file;
+    }
+    return new File(projectDir, filePath);
+  }
+
   public static void writeString(Project project, String filePath, String content)
       throws IOException {
-    project.getLogger().debug(project.file(filePath).getAbsolutePath());
-    File file = project.file(filePath).getAbsoluteFile();
+    writeString(project.getProjectDir(), filePath, content, project.getLogger());
+  }
+
+  public static void writeString(File projectDir, String filePath, String content, Logger logger)
+      throws IOException {
+    File file = resolveFile(projectDir, filePath).getAbsoluteFile();
+    logger.debug(file.getAbsolutePath());
     writeContentToFile(content, file);
   }
 
@@ -53,9 +66,14 @@ public class FileUtils {
   }
 
   public static String readFile(Project project, String filePath) throws IOException {
-    File file = project.file(filePath).getAbsoluteFile();
-    project.getLogger().debug(file.getAbsolutePath());
-    return readFileAsString(file, project.getLogger());
+    return readFile(project.getProjectDir(), filePath, project.getLogger());
+  }
+
+  public static String readFile(File projectDir, String filePath, Logger logger)
+      throws IOException {
+    File file = resolveFile(projectDir, filePath).getAbsoluteFile();
+    logger.debug(file.getAbsolutePath());
+    return readFileAsString(file, logger);
   }
 
   public static String readFileAsString(File file, Logger logger) throws IOException {

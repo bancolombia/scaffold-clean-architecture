@@ -55,7 +55,7 @@ class InternalTaskTest {
   }
 
   @Test
-  void shouldParseDependencyReport() throws IOException {
+  void shouldParseDependencyReport() throws IOException, CleanException {
     // Arrange
     Files.createDirectories(appService.file(SonarCheck.INPUT).getParentFile().toPath());
     FileUtils.writeString(
@@ -67,7 +67,7 @@ class InternalTaskTest {
   }
 
   @Test
-  void shouldRunUpdateAllDependencies() throws IOException {
+  void shouldRunUpdateAllDependencies() throws IOException, CleanException {
     // Arrange
     Files.write(
         Paths.get(TEST_DIR, "gradle.properties"),

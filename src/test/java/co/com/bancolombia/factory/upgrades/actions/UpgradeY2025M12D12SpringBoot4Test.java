@@ -27,12 +27,14 @@ class UpgradeY2025M12D12SpringBoot4Test {
   @Mock private Logger logger;
   private ModuleBuilder builder;
   private UpgradeAction updater;
+  private File tempDir;
 
   @BeforeEach
   void setup() throws IOException {
+    tempDir = Files.createTempDirectory("sample").toFile();
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
-    when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
+    when(project.getProjectDir()).thenReturn(tempDir);
 
     updater = new UpgradeY2025M12D12SpringBoot4();
     assertNotNull(updater.name());
@@ -40,13 +42,12 @@ class UpgradeY2025M12D12SpringBoot4Test {
   }
 
   @Test
-  void shouldApplyUpdateJava() {
-    when(project.getRootDir()).thenReturn(new File("Sample.java"));
+  void shouldApplyUpdateJava() throws IOException {
     builder = spy(new ModuleBuilder(project));
-
-    String file = new File("Sample.java").getAbsolutePath();
-    // Arrange
-    builder.addFile(file, "import org.springframework.boot.actuate.health.Health;");
+    File sampleFile = new File(tempDir, "Sample.java");
+    Files.writeString(
+        sampleFile.toPath(), "import org.springframework.boot.actuate.health.Health;");
+    String file = sampleFile.getAbsolutePath();
     // Act
     boolean applied = updater.up(builder);
     // Assert
@@ -56,13 +57,12 @@ class UpgradeY2025M12D12SpringBoot4Test {
   }
 
   @Test
-  void shouldApplyUpdateGradle() {
-    when(project.getRootDir()).thenReturn(new File("build.gradle"));
+  void shouldApplyUpdateGradle() throws IOException {
     builder = spy(new ModuleBuilder(project));
-
-    String file = new File("build.gradle").getAbsolutePath();
-    // Arrange
-    builder.addFile(file, "testImplementation \"com.fasterxml.jackson.core:jackson-databind\"");
+    File gradleFile = new File(tempDir, "build.gradle");
+    Files.writeString(
+        gradleFile.toPath(), "testImplementation \"com.fasterxml.jackson.core:jackson-databind\"");
+    String file = gradleFile.getAbsolutePath();
     // Act
     boolean applied = updater.up(builder);
     // Assert

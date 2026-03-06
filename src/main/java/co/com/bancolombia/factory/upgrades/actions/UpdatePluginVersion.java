@@ -16,7 +16,7 @@ public class UpdatePluginVersion implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     Release latestRelease = builder.getLatestRelease();
     if (latestRelease == null) {

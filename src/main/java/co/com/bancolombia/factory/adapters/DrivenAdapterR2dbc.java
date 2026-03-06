@@ -15,7 +15,7 @@ public class DrivenAdapterR2dbc implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     builder.runValidations(ReactiveTypeValidation.class);
     logger.lifecycle("Generating for reactive project");
     builder.setupFromTemplate("driven-adapter/r2dbc-postgresql");

@@ -18,7 +18,7 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   }
 
   @Override
-  public void execute() throws IOException, ParamNotFoundException {
+  protected void doExecute() throws IOException, ParamNotFoundException {
     if (name == null || name.isEmpty()) {
       printHelp();
       throw new IllegalArgumentException(

@@ -11,8 +11,11 @@ import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.models.AnalyticsBody;
 import co.com.bancolombia.utils.ReflectionUtils;
 import co.com.bancolombia.utils.analytics.AnalyticsExporter;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import javax.inject.Inject;
@@ -20,31 +23,51 @@ import lombok.SneakyThrows;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.internal.tasks.options.OptionReader;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
 
 public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
-  protected final transient ModuleBuilder builder = new ModuleBuilder(getProject()); // NOSONAR
-  protected final Logger logger = getProject().getLogger();
+  protected ModuleBuilder builder;
+  protected final Logger logger = getLogger();
+  protected final File projectDir;
+  protected final String projectName;
+  protected final Map<String, String> childBuildFiles;
+  protected final Map<String, String> childProjectDirs;
 
   protected AbstractCleanArchitectureDefaultTask() {
-    notCompatibleWithConfigurationCache("This task performs validations that should always run");
-    builder.setStyledLogger(
-        getTextOutputFactory().create(AbstractCleanArchitectureDefaultTask.class));
+    this.projectDir = getProject().getProjectDir();
+    this.projectName = getProject().getName();
+    this.childBuildFiles = new HashMap<>();
+    this.childProjectDirs = new HashMap<>();
+    getProject()
+        .getChildProjects()
+        .forEach(
+            (name, child) -> {
+              childBuildFiles.put(name, child.getBuildFile().getPath());
+              childProjectDirs.put(name, child.getProjectDir().getPath());
+            });
+  }
+
+  protected ModuleBuilder createBuilder() {
+    ModuleBuilder b = new ModuleBuilder(projectDir, projectName, getLogger());
+    b.setChildProjects(childBuildFiles, childProjectDirs);
+    return b;
+  }
+
+  @Internal
+  protected ModuleBuilder getOrCreateBuilder() {
+    if (builder == null) {
+      builder = createBuilder();
+      builder.setStyledLogger(
+          getTextOutputFactory().create(AbstractCleanArchitectureDefaultTask.class));
+    }
+    return builder;
   }
 
   protected void printHelp() {
-    Optional.ofNullable(getProject().getTasks().findByPath("help"))
-        .ifPresent(
-            task ->
-                task.getActions().stream()
-                    .findFirst()
-                    .ifPresent(
-                        action -> {
-                          task.setProperty("taskPath", getName());
-                          action.execute(task);
-                        }));
+    logger.lifecycle("Run 'gradle help --task {}' for more information", getName());
   }
 
   @TaskAction
@@ -64,7 +87,12 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
             () -> sendAnalytics(System.currentTimeMillis() - start));
   }
 
-  public abstract void execute() throws IOException, CleanException;
+  public void execute() throws IOException, CleanException {
+    getOrCreateBuilder();
+    doExecute();
+  }
+
+  protected abstract void doExecute() throws IOException, CleanException;
 
   private void afterExecute(Supplier<ModuleFactory> factorySupplier) {
     try {

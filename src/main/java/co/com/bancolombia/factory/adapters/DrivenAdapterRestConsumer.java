@@ -16,7 +16,7 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     if (builder.isReactive()) {
       logger.lifecycle("Generating rest-consumer for reactive project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");

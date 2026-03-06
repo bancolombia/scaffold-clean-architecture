@@ -20,29 +20,25 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 @CATask(name = "internalTask", shortcut = "it", description = "Run non final user task")
-public class InternalTask extends AbstractCleanArchitectureDefaultTask {
+public abstract class InternalTask extends AbstractCleanArchitectureDefaultTask {
   private Action action = Action.SONAR_CHECK;
 
-  @Internal @Getter private final Property<String> projectPath;
-  @Input @Getter private final SetProperty<String> subProjectPath;
+  @Internal
+  public abstract Property<String> getProjectPath();
+
+  @Input
+  public abstract SetProperty<String> getSubProjectPath();
 
   public InternalTask() {
-    projectPath = getProject().getObjects().property(String.class);
-    projectPath.set(getProject().getProjectDir().getPath());
+    getProjectPath().set(projectDir.getAbsolutePath());
 
-    this.subProjectPath = getProject().getObjects().setProperty(String.class);
-    this.subProjectPath.set(getProject().provider(this::getAllSubProjectPaths));
-  }
-
-  private Set<String> getAllSubProjectPaths() {
     Set<String> projectPaths =
         getProject().getSubprojects().stream()
             .map(Project::getProjectDir)
             .map(File::getPath)
             .collect(Collectors.toSet());
-
-    projectPaths.add(projectPath.get());
-    return projectPaths;
+    projectPaths.add(projectDir.getAbsolutePath());
+    getSubProjectPath().set(projectPaths);
   }
 
   @Option(option = "action", description = "Set task action to run")
@@ -58,15 +54,15 @@ public class InternalTask extends AbstractCleanArchitectureDefaultTask {
   @Getter @Internal private boolean success = false;
 
   @Override
-  public void execute() throws IOException {
+  protected void doExecute() throws IOException {
     if (action == Action.UPDATE_DEPENDENCIES) {
-      String basePath = projectPath.get();
+      String basePath = getProjectPath().get();
       List<String> files = Utils.getAllFilesWithGradleExtension(basePath);
       logger.lifecycle(
           "Updating project dependencies from root {} in files \n {}", basePath, files);
       UpdateProjectDependencies.builder().withFiles(files).build().run();
     } else {
-      SonarCheck.parse(subProjectPath.get());
+      SonarCheck.parse(getSubProjectPath().get());
     }
     success = true;
   }

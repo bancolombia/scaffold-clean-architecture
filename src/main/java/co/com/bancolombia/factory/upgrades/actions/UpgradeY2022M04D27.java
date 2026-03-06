@@ -24,7 +24,7 @@ public class UpgradeY2022M04D27 implements UpgradeAction {
               "adoptopenjdk/openjdk11-openj9:alpine-slim",
               "eclipse-temurin:17-alpine"));
     } catch (IOException e) {
-      builder.getProject().getLogger().debug("Could not update Dockerfile", e);
+      builder.getLogger().debug("Could not update Dockerfile", e);
     }
     return false;
   }

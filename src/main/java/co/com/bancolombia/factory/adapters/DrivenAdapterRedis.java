@@ -21,7 +21,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
       throw new ValidationException(
           "This mode is only available for imperative projects, please use `template` mode");
     }
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     String typePath = getPathType(builder.isReactive());
     String modePath = getPathMode((Mode) builder.getParam(PARAM_MODE));
 
@@ -30,7 +30,7 @@ public class DrivenAdapterRedis implements ModuleFactory {
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);
     builder.setupFromTemplate("driven-adapter/" + typePath + "/" + modePath);
     builder.appendToSettings("redis", "infrastructure/driven-adapters");
-    if (Boolean.TRUE.equals(builder.getBooleanParam("include-secret"))) {
+    if (builder.getBooleanParam("include-secret")) {
       builder.setupFromTemplate("driven-adapter/" + typePath + "/secret");
     } else {
       builder.appendToProperties("spring.redis").put("host", "localhost").put("port", 6379);

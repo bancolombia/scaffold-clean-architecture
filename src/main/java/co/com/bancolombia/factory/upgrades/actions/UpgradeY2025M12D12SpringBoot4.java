@@ -13,8 +13,8 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
 
   @Override
   public boolean up(ModuleBuilder builder) {
-    Logger logger = builder.getProject().getLogger();
-    File root = builder.getProject().getRootDir();
+    Logger logger = builder.getLogger();
+    File root = builder.getProjectDir();
     AtomicBoolean applied = new AtomicBoolean(false);
     FileUtils.allFiles(
         root,

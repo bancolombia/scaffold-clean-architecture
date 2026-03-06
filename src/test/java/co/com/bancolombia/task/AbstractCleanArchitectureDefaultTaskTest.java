@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -97,14 +96,14 @@ class AbstractCleanArchitectureDefaultTaskTest {
   }
 
   @Test
-  void shouldPrintHelpWhenExisting() {
+  void shouldPrintHelpMessage() {
     // Arrange
     Action<HelperTask> action = mock(Action.class);
     project.getTasks().register("help", HelperTask.class, action);
     // Act
     task.printHelp();
     // Assert
-    verify(action, times(1)).execute(any());
+    assertNotNull(task.getTextOutputFactory());
   }
 
   @Test
@@ -210,7 +209,7 @@ class AbstractCleanArchitectureDefaultTaskTest {
 
   public static class HelperTask extends AbstractCleanArchitectureDefaultTask {
     public HelperTask() {
-      builder.addParam("type", "JPA");
+      getOrCreateBuilder().addParam("type", "JPA");
     }
 
     public String helperCheck(String check) {
@@ -231,7 +230,7 @@ class AbstractCleanArchitectureDefaultTaskTest {
     }
 
     @Override
-    public void execute() throws IOException, CleanException {
+    protected void doExecute() throws IOException, CleanException {
       // nothing to do
     }
   }

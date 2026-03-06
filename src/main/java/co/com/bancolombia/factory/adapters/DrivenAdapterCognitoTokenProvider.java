@@ -14,7 +14,7 @@ public class DrivenAdapterCognitoTokenProvider implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     builder.runValidations(ReactiveTypeValidation.class);
 
     logger.lifecycle("Generating cognito token provider for reactive project");

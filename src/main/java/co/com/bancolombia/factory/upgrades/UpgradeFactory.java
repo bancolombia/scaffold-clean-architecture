@@ -20,7 +20,7 @@ public class UpgradeFactory implements ModuleFactory {
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     String basePackage =
         builder.getStringParam(UPGRADES) != null
             ? builder.getStringParam(UPGRADES)

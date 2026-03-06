@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.UnknownConfigurationException;
@@ -42,42 +41,44 @@ public abstract class ValidateStructureTask
   private static final String AWS_BOM = "bom";
   private static final String DEPENDENCY = "--- Dependency: ";
 
-  @Internal @Getter private final Property<String> projectPath;
-  @Internal @Getter private final SetProperty<String> moduleNames;
-  @Internal @Getter private final Property<Boolean> hasSpringWeb;
-  @Internal @Getter private final MapProperty<String, Set> moduleDependencies;
-  @Input @Getter private final SetProperty<File> projectDirectories;
+  @Internal
+  public abstract Property<String> getProjectPath();
+
+  @Internal
+  public abstract SetProperty<String> getModuleNames();
+
+  @Internal
+  public abstract Property<Boolean> getHasSpringWeb();
+
+  @Internal
+  public abstract MapProperty<String, Set> getModuleDependencies();
+
+  @Input
+  public abstract SetProperty<File> getProjectDirectories();
 
   @Input
   @Optional
   public abstract Property<String> getWhitelistedDependencies();
 
   public ValidateStructureTask() {
-    this.projectPath = getProject().getObjects().property(String.class);
-    this.moduleNames = getProject().getObjects().setProperty(String.class);
-    this.hasSpringWeb = getProject().getObjects().property(Boolean.class);
-    this.moduleDependencies = getProject().getObjects().mapProperty(String.class, Set.class);
-    this.projectDirectories = getProject().getObjects().setProperty(File.class);
-
-    // Configure lazy providers - capture information during configuration
-    this.projectPath.set(getProject().provider(this::getAbsoluteProjectPath));
-    this.moduleNames.set(getProject().provider(() -> getProject().getChildProjects().keySet()));
-    this.hasSpringWeb.set(getProject().provider(this::checkForSpringWebDependency));
-    this.moduleDependencies.set(getProject().provider(this::collectModuleDependencies));
-    this.projectDirectories.set(getProject().provider(this::collectAllProjectDirectories));
+    getProjectPath().set(projectDir.getAbsolutePath());
+    getModuleNames().set(getProject().getChildProjects().keySet());
+    getHasSpringWeb().set(getProject().provider(this::checkForSpringWebDependency));
+    getModuleDependencies().set(getProject().provider(this::collectModuleDependencies));
+    getProjectDirectories().set(getProject().provider(this::collectAllProjectDirectories));
   }
 
   @Override
-  public void execute() throws IOException, CleanException {
-    String packageName = FileUtils.readProperties(projectPath.get(), "package");
+  protected void doExecute() throws IOException, CleanException {
+    String packageName = FileUtils.readProperties(getProjectPath().get(), "package");
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
-    moduleNames.get().forEach(name -> logger.lifecycle("Submodules: " + name));
+    getModuleNames().get().forEach(name -> logger.lifecycle("Submodules: " + name));
     logger.lifecycle("Project Package: {}", packageName);
 
-    logger.lifecycle("has spring-web dependency to run validations: {}", hasSpringWeb.get());
-    builder.addParam("hasSpringWeb", hasSpringWeb.get());
+    logger.lifecycle("has spring-web dependency to run validations: {}", getHasSpringWeb().get());
+    builder.addParam("hasSpringWeb", getHasSpringWeb().get());
 
-    ArchitectureValidation.inject(builder, getLogger(), projectDirectories.get());
+    ArchitectureValidation.inject(builder, getLogger(), getProjectDirectories().get());
     boolean isValidateModelLayer = validateModelLayer();
     boolean isValidateUseCaseLayer = validateUseCaseLayer();
     boolean isValidateInfrastructureLayer = validateInfrastructureLayer();
@@ -92,10 +93,6 @@ public abstract class ValidateStructureTask
       throw new CleanException("Infrastructure layer is invalid");
     }
     logger.lifecycle("The project is valid");
-  }
-
-  private String getAbsoluteProjectPath() {
-    return getProject().getLayout().getProjectDirectory().getAsFile().getAbsolutePath();
   }
 
   private Set<File> collectAllProjectDirectories() {
@@ -146,7 +143,7 @@ public abstract class ValidateStructureTask
   private boolean validateModelLayer() {
     if (validateExistingModule(MODEL_MODULE)) {
       logger.lifecycle("Validating Model Module");
-      Set<String> dependencies = moduleDependencies.get().get(MODEL_MODULE);
+      Set<String> dependencies = getModuleDependencies().get().get(MODEL_MODULE);
       if (dependencies != null) {
         dependencies.forEach(dep -> logger.lifecycle(DEPENDENCY + dep));
         return dependencies.stream()
@@ -169,7 +166,7 @@ public abstract class ValidateStructureTask
     boolean isValid = true;
     if (validateExistingModule(USE_CASE_MODULE)) {
       logger.lifecycle("Validating Use Case Module");
-      Set<String> dependencies = moduleDependencies.get().get(USE_CASE_MODULE);
+      Set<String> dependencies = getModuleDependencies().get().get(USE_CASE_MODULE);
       if (dependencies != null) {
         dependencies.forEach(dep -> logger.lifecycle(DEPENDENCY + dep));
         Set<String> filteredDeps =
@@ -210,7 +207,7 @@ public abstract class ValidateStructureTask
     List<String> modulesExcludes = Arrays.asList(MODEL_MODULE, APP_SERVICE, USE_CASE_MODULE);
     AtomicBoolean valid = new AtomicBoolean(true);
 
-    moduleNames.get().stream()
+    getModuleNames().get().stream()
         .filter(moduleName -> !modulesExcludes.contains(moduleName))
         .forEach(moduleName -> validateModule(valid, moduleName));
     return valid.get();
@@ -218,7 +215,7 @@ public abstract class ValidateStructureTask
 
   private void validateModule(AtomicBoolean valid, String moduleFiltered) {
     logger.lifecycle("Validating {} Module", moduleFiltered);
-    Set<String> dependencies = moduleDependencies.get().get(moduleFiltered);
+    Set<String> dependencies = getModuleDependencies().get().get(moduleFiltered);
     if (dependencies != null) {
       dependencies.forEach(dep -> logger.lifecycle(DEPENDENCY + dep));
       boolean hasInvalidDep =
@@ -242,6 +239,6 @@ public abstract class ValidateStructureTask
   }
 
   private boolean validateExistingModule(String module) {
-    return moduleNames.get().contains(module);
+    return getModuleNames().get().contains(module);
   }
 }

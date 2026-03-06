@@ -22,8 +22,8 @@ public class UpgradeY2023M02D08Redis implements UpgradeAction {
             + builder.getParam("packagePath")
             + "/redis/repository/helper/RepositoryAdapterOperations.java";
 
-    if (builder.getProject().file(repository).getAbsoluteFile().exists()
-        && builder.getProject().file(repositoryAdapter).getAbsoluteFile().exists()) {
+    if (builder.resolveFile(repository).getAbsoluteFile().exists()
+        && builder.resolveFile(repositoryAdapter).getAbsoluteFile().exists()) {
       builder.appendDependencyToModule(
           "redis", "implementation 'jakarta.persistence:jakarta.persistence-api'");
       return oneOfAll(apply(builder, repository), apply(builder, repositoryAdapter));
