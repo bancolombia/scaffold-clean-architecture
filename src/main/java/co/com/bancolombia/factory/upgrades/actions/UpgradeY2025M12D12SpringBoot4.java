@@ -79,6 +79,16 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         updatedContent,
                         "org.springframework.boot.web.reactive",
                         "org.springframework.boot.webflux");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.web.codec",
+                        "org.springframework.boot.http.codec");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "org.springframework.boot.webflux.context",
+                        "org.springframework.boot.web.context.reactive");
 
                 // JMS package changes
                 updatedContent =
