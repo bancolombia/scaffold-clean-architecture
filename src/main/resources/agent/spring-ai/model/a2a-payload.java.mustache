@@ -1,0 +1,28 @@
+package {{package}}.model.a2a;
+
+import java.util.Map;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * Intent-specific parameters carried inside an A2ACommand.
+ * Keys and value types are defined per intent contract.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2APayload {
+
+    /**
+     * Named parameters for the intent.
+     * Example: {"name": "Juan Perez", "documentType": "CC", "documentNumber": "123456"}
+     */
+    private Map<String, Object> parameters;
+}

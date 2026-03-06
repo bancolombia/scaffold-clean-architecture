@@ -1,0 +1,149 @@
+package {{package}}.usecase;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import {{package}}.model.a2a.A2APayload;
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.model.a2a.A2AResult;
+import {{package}}.model.chat.gateways.AgentResponseGateway;
+import {{package}}.model.chat.gateways.ChatGateway;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+class AgentChatUseCaseTest {
+
+    private ChatGateway chatGateway;
+    private AgentResponseGateway agentResponseGateway;
+    private AgentChatUseCase agentChatUseCase;
+
+    @BeforeEach
+    void setUp() {
+        chatGateway = mock(ChatGateway.class);
+        agentResponseGateway = mock(AgentResponseGateway.class);
+        agentChatUseCase = new AgentChatUseCase(chatGateway, agentResponseGateway);
+    }
+
+    // ── chatAndRespond (REST transport) ───────────────────────────────────────
+
+    @Test
+    void chatAndRespondShouldReturnSuccess_whenIntentIsValid() {
+        // Arrange
+        A2ACommand request = buildRequest("EXAMPLE_INTENT");
+        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("{\"result\":\"ok\"}"));
+
+        // Act & Assert
+        StepVerifier.create(agentChatUseCase.chatAndRespond(request))
+                .assertNext(response -> {
+                    assertEquals("SUCCESS", response.getStatus());
+                    assertEquals("1.0", response.getSchemaVersion());
+                    assertEquals("corr-001", response.getCorrelationId());
+                    assertNotNull(response.getResult());
+                })
+                .verifyComplete();
+
+        // AgentResponseGateway must NOT be called for REST transport
+        verifyNoInteractions(agentResponseGateway);
+    }
+
+    @Test
+    void chatAndRespondShouldReturnError_whenIntentIsUnsupported() {
+        // Arrange
+        A2ACommand request = buildRequest("UNKNOWN_INTENT");
+
+        // Act & Assert
+        StepVerifier.create(agentChatUseCase.chatAndRespond(request))
+                .assertNext(response -> {
+                    assertEquals("ERROR", response.getStatus());
+                    assertEquals("corr-001", response.getCorrelationId());
+                    assertNotNull(response.getError());
+                    assertEquals("UNSUPPORTED_INTENT", response.getError().getCode());
+                })
+                .verifyComplete();
+
+        verifyNoInteractions(chatGateway);
+        verifyNoInteractions(agentResponseGateway);
+    }
+
+    @Test
+    void chatAndRespondShouldReturnError_whenChatGatewayFails() {
+        // Arrange
+        A2ACommand request = buildRequest("EXAMPLE_INTENT");
+        when(chatGateway.sendMessage(anyString()))
+                .thenReturn(Mono.error(new RuntimeException("LLM unavailable")));
+
+        // Act & Assert
+        StepVerifier.create(agentChatUseCase.chatAndRespond(request))
+                .assertNext(response -> {
+                    assertEquals("ERROR", response.getStatus());
+                    assertNotNull(response.getError());
+                    assertEquals("INTERNAL_ERROR", response.getError().getCode());
+                    assertEquals("LLM unavailable", response.getError().getMessage());
+                })
+                .verifyComplete();
+
+        verifyNoInteractions(agentResponseGateway);
+    }
+
+    // ── chat (Kafka transport) ────────────────────────────────────────────────
+
+    @Test
+    void chatShouldPublishSuccessResponse_whenIntentIsValid() {
+        // Arrange
+        A2ACommand request = buildRequest("EXAMPLE_INTENT");
+        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("{\"result\":\"ok\"}"));
+        when(agentResponseGateway.sendResponse(any(A2AResult.class))).thenReturn(Mono.empty());
+
+        // Act & Assert
+        StepVerifier.create(agentChatUseCase.chat(request))
+                .verifyComplete();
+
+        ArgumentCaptor<A2AResult> captor = ArgumentCaptor.forClass(A2AResult.class);
+        verify(agentResponseGateway).sendResponse(captor.capture());
+        assertEquals("SUCCESS", captor.getValue().getStatus());
+    }
+
+    @Test
+    void chatShouldPublishErrorResponse_whenIntentIsUnsupported() {
+        // Arrange
+        A2ACommand request = buildRequest("UNKNOWN_INTENT");
+        when(agentResponseGateway.sendResponse(any(A2AResult.class))).thenReturn(Mono.empty());
+
+        // Act & Assert
+        StepVerifier.create(agentChatUseCase.chat(request))
+                .verifyComplete();
+
+        ArgumentCaptor<A2AResult> captor = ArgumentCaptor.forClass(A2AResult.class);
+        verify(agentResponseGateway).sendResponse(captor.capture());
+        assertEquals("ERROR", captor.getValue().getStatus());
+        assertEquals("UNSUPPORTED_INTENT", captor.getValue().getError().getCode());
+        verifyNoInteractions(chatGateway);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private A2ACommand buildRequest(String intent) {
+        return A2ACommand.builder()
+                .schemaVersion("1.0")
+                .messageId("msg-test-001")
+                .correlationId("corr-001")
+                .traceId("trace-001")
+                .sourceAgent("agente-orquestador")
+                .targetAgent("{{projectName}}")
+                .intent(intent)
+                .payload(A2APayload.builder()
+                        .parameters(Map.of("param1", "value1"))
+                        .build())
+                .build();
+    }
+}

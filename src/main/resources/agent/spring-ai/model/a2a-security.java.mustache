@@ -1,0 +1,28 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * Security requirements declared by the originating agent.
+ * The receiving agent validates that the caller holds the required scopes.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2ASecurity {
+
+    /**
+     * OAuth2 scopes required to execute the intent.
+     * Example: ["clients.read", "terms.read"]
+     */
+    private List<String> requiredScopes;
+}

@@ -1,0 +1,36 @@
+{
+  "folders": [
+    "domain/model/src/main/java/{{packagePath}}/model/a2a",
+    "domain/model/src/main/java/{{packagePath}}/model/chat/gateways",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase",
+    "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api",
+    "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config",
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api",
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config",
+    "infrastructure/driven-adapters/spring-ai-adapter/src/main/java/{{packagePath}}/chat",
+    "infrastructure/driven-adapters/spring-ai-adapter/src/test/java/{{packagePath}}/chat"
+  ],
+  "files": {
+    "entry-point/agent/model/message.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/Message.java",
+    "entry-point/agent/model/task.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/Task.java",
+    "entry-point/agent/model/error.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/Error.java",
+    "entry-point/agent/model/agent-card.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/AgentCard.java",
+    "entry-point/agent/model/send-message-request.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/SendMessageRequest.java",
+    "entry-point/agent/model/send-message-response.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/SendMessageResponse.java",
+    "entry-point/agent/gateways/chat-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/chat/gateways/ChatGateway.java",
+    "entry-point/agent/gateways/agent-response-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/chat/gateways/AgentResponseGateway.java",
+    "entry-point/agent/usecase/agent-chat-use-case.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/AgentChatUseCase.java",
+    "entry-point/agent/usecase/agent-chat-use-case.test.java.mustache": "domain/usecase/src/test/java/{{packagePath}}/usecase/AgentChatUseCaseTest.java",
+    "entry-point/agent/entry-point/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Handler.java",
+    "entry-point/agent/entry-point/router-rest.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/RouterRest.java",
+    "entry-point/agent/entry-point/cors-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/CorsConfig.java",
+    "entry-point/agent/entry-point/security-headers-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/SecurityHeadersConfig.java",
+    "entry-point/agent/entry-point/handler.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/RouterRestTest.java",
+    "entry-point/agent/entry-point/config.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config/ConfigTest.java",
+    "entry-point/agent/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle",
+    "entry-point/agent/driven-adapter/spring-ai-adapter.build.gradle.mustache": "infrastructure/driven-adapters/spring-ai-adapter/build.gradle",
+    "entry-point/agent/driven-adapter/spring-ai-chat-adapter.java.mustache": "infrastructure/driven-adapters/spring-ai-adapter/src/main/java/{{packagePath}}/chat/SpringAiChatAdapter.java",
+    "entry-point/agent/driven-adapter/spring-ai-chat-adapter.test.java.mustache": "infrastructure/driven-adapters/spring-ai-adapter/src/test/java/{{packagePath}}/chat/SpringAiChatAdapterTest.java"
+  }
+}

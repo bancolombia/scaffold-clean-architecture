@@ -1,0 +1,53 @@
+{
+  "folders": [
+    "domain/model/src/main/java/{{packagePath}}/model/a2a",
+    "domain/model/src/main/java/{{packagePath}}/model/chat/gateways",
+    "domain/model/src/test/java/{{packagePath}}/model/a2a",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase",
+    "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api",
+    "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config",
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api",
+    "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config",
+    "infrastructure/driven-adapters/spring-ai-adapter/src/main/java/{{packagePath}}/chat",
+    "infrastructure/driven-adapters/spring-ai-adapter/src/test/java/{{packagePath}}/chat"
+  ],
+  "files": {
+    "agent/spring-ai/model/a2a-command.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2ACommand.java",
+    "agent/spring-ai/model/a2a-result.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2AResult.java",
+    "agent/spring-ai/model/a2a-payload.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2APayload.java",
+    "agent/spring-ai/model/a2a-security.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2ASecurity.java",
+    "agent/spring-ai/model/a2a-retry-policy.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2ARetryPolicy.java",
+    "agent/spring-ai/model/a2a-error.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/a2a/A2AError.java",
+    "agent/spring-ai/gateways/chat-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/chat/gateways/ChatGateway.java",
+    "agent/spring-ai/gateways/agent-response-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/chat/gateways/AgentResponseGateway.java",
+    "agent/spring-ai/usecase/agent-chat-use-case.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/AgentChatUseCase.java",
+    "agent/spring-ai/usecase/agent-chat-use-case.test.java.mustache": "domain/usecase/src/test/java/{{packagePath}}/usecase/AgentChatUseCaseTest.java",
+    "agent/spring-ai/entry-point/handler.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/Handler.java",
+    "agent/spring-ai/entry-point/router-rest.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/RouterRest.java",
+    "agent/spring-ai/entry-point/cors-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/CorsConfig.java",
+    "agent/spring-ai/entry-point/security-headers-config.java.mustache": "infrastructure/entry-points/reactive-web/src/main/java/{{packagePath}}/api/config/SecurityHeadersConfig.java",
+    "agent/spring-ai/entry-point/handler.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/RouterRestTest.java",
+    "agent/spring-ai/entry-point/config.test.java.mustache": "infrastructure/entry-points/reactive-web/src/test/java/{{packagePath}}/api/config/ConfigTest.java",
+    "agent/spring-ai/build.gradle.mustache": "infrastructure/entry-points/reactive-web/build.gradle",
+    "agent/spring-ai/driven-adapter/spring-ai/spring-ai-chat-adapter.java.mustache": "infrastructure/driven-adapters/spring-ai-adapter/src/main/java/{{packagePath}}/chat/SpringAiChatAdapter.java",
+    "agent/spring-ai/driven-adapter/spring-ai/spring-ai-chat-adapter.test.java.mustache": "infrastructure/driven-adapters/spring-ai-adapter/src/test/java/{{packagePath}}/chat/SpringAiChatAdapterTest.java",
+    "agent/spring-ai/application.yaml.mustache": "applications/app-service/src/main/resources/application.yaml"
+  },
+  "conditionalFolders": {
+    "agent-enable-kafka": [
+      "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka",
+      "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/config",
+      "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka",
+      "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/config"
+    ]
+  },
+  "conditionalFiles": {
+    "agent-enable-kafka": {
+      "agent/spring-ai/driven-adapter/kafka/kafka-producer.java.mustache": "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/KafkaProducer.java",
+      "agent/spring-ai/driven-adapter/kafka/kafka-producer-config.java.mustache": "infrastructure/driven-adapters/kafka-producer/src/main/java/{{packagePath}}/kafka/config/KafkaProducerConfig.java",
+      "agent/spring-ai/driven-adapter/kafka/kafka-consumer.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/KafkaConsumer.java",
+      "agent/spring-ai/driven-adapter/kafka/kafka-consumer-config.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/config/KafkaConsumerConfig.java"
+    }
+  }
+}

@@ -1,0 +1,164 @@
+package {{package}}.api;
+
+import {{package}}.model.a2a.A2APayload;
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.model.a2a.A2AResult;
+import {{package}}.usecase.AgentChatUseCase;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@WebFluxTest
+@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+class RouterRestTest {
+
+    private static final String ENDPOINT = "/a2a/v1/commands";
+    private static final String HEADER_CORRELATION = "X-Correlation-Id";
+    private static final String HEADER_TRACE = "X-Trace-Id";
+    private static final String CORRELATION_ID = "corr-test-001";
+    private static final String TRACE_ID = "trace-test-001";
+    private static final String STATUS_SUCCESS = "SUCCESS";
+    private static final String STATUS_ERROR = "ERROR";
+    private static final String SOURCE_AGENT = "{{projectName}}";
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockitoBean
+    private AgentChatUseCase agentChatUseCase;
+
+    // EP-01 — happy path: valid request → 200 SUCCESS
+    @Test
+    void shouldReturn200WithSuccessStatus_whenRequestIsValid() {
+        A2AResult mockResponse = buildMockResponse(STATUS_SUCCESS, null);
+        when(agentChatUseCase.chatAndRespond(any(A2ACommand.class)))
+                .thenReturn(Mono.just(mockResponse));
+
+        webTestClient.post()
+                .uri(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HEADER_CORRELATION, CORRELATION_ID)
+                .header(HEADER_TRACE, TRACE_ID)
+                .bodyValue(buildRequest("EXAMPLE_INTENT"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(A2AResult.class)
+                .value(response -> {
+                    assertThat(response.getStatus()).isEqualTo(STATUS_SUCCESS);
+                    assertThat(response.getCorrelationId()).isEqualTo(CORRELATION_ID);
+                    assertThat(response.getSourceAgent()).isEqualTo(SOURCE_AGENT);
+                });
+    }
+
+    // EP-02 — unsupported intent → HTTP 200, body status ERROR (A2A protocol rule)
+    @Test
+    void shouldReturn200WithErrorStatus_whenIntentIsUnsupported() {
+        A2AResult errorResponse = buildMockResponse(STATUS_ERROR, "UNSUPPORTED_INTENT");
+        when(agentChatUseCase.chatAndRespond(any(A2ACommand.class)))
+                .thenReturn(Mono.just(errorResponse));
+
+        webTestClient.post()
+                .uri(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HEADER_CORRELATION, CORRELATION_ID)
+                .header(HEADER_TRACE, TRACE_ID)
+                .bodyValue(buildRequest("UNKNOWN_INTENT"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(A2AResult.class)
+                .value(response -> {
+                    assertThat(response.getStatus()).isEqualTo(STATUS_ERROR);
+                    assertThat(response.getError()).isNotNull();
+                    assertThat(response.getError().getCode()).isEqualTo("UNSUPPORTED_INTENT");
+                });
+    }
+
+    // EP-03 — missing body → 400 Bad Request
+    @Test
+    void shouldReturn400_whenBodyIsMissing() {
+        webTestClient.post()
+                .uri(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    // EP-04 — correlationId/traceId fall back to HTTP headers when absent in body
+    @Test
+    void shouldEnrichRequest_fromHeaders_whenBodyLacksCorrelationFields() {
+        A2AResult mockResponse = buildMockResponse(STATUS_SUCCESS, null);
+        when(agentChatUseCase.chatAndRespond(any(A2ACommand.class)))
+                .thenReturn(Mono.just(mockResponse));
+
+        A2ACommand requestWithoutCorrelation = A2ACommand.builder()
+                .schemaVersion("1.0")
+                .messageId("msg-no-corr")
+                .sourceAgent("agente-orquestador")
+                .targetAgent(SOURCE_AGENT)
+                .intent("EXAMPLE_INTENT")
+                .payload(A2APayload.builder()
+                        .parameters(Map.of("param1", "value1"))
+                        .build())
+                .build();
+
+        webTestClient.post()
+                .uri(ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HEADER_CORRELATION, "header-corr-001")
+                .header(HEADER_TRACE, "header-trace-001")
+                .bodyValue(requestWithoutCorrelation)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private A2ACommand buildRequest(String intent) {
+        return A2ACommand.builder()
+                .schemaVersion("1.0")
+                .messageId("msg-test-001")
+                .correlationId(CORRELATION_ID)
+                .traceId(TRACE_ID)
+                .sourceAgent("agente-orquestador")
+                .targetAgent(SOURCE_AGENT)
+                .intent(intent)
+                .payload(A2APayload.builder()
+                        .parameters(Map.of("param1", "value1"))
+                        .build())
+                .build();
+    }
+
+    private A2AResult buildMockResponse(String status, String errorCode) {
+        A2AResult.A2AResultBuilder builder = A2AResult.builder()
+                .schemaVersion("1.0")
+                .messageId("resp-test-001")
+                .correlationId(CORRELATION_ID)
+                .traceId(TRACE_ID)
+                .sourceAgent(SOURCE_AGENT)
+                .status(status)
+                .executionTimeMs(50L);
+
+        if (STATUS_SUCCESS.equals(status)) {
+            builder.result(Map.of("data", "test result"));
+        } else {
+            builder.error({{package}}.model.a2a.A2AError.builder()
+                    .code(errorCode)
+                    .message("Error: " + errorCode)
+                    .retryable(false)
+                    .build());
+        }
+        return builder.build();
+    }
+}

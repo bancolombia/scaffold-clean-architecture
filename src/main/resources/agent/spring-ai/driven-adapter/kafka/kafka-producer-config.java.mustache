@@ -1,0 +1,32 @@
+package {{package}}.kafka.config;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
+
+import java.util.Map;
+
+/**
+ * Kafka producer configuration for publishing A2A responses.
+ */
+@Configuration
+public class KafkaProducerConfig {
+
+    @Value("${spring.kafka.producer.bootstrap-servers:localhost:9092}")
+    private String bootstrapServers;
+
+    @Bean
+    public KafkaSender<String, String> kafkaSender() {
+        SenderOptions<String, String> options = SenderOptions.create(Map.of(
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
+                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+                ProducerConfig.ACKS_CONFIG, "all",
+                ProducerConfig.RETRIES_CONFIG, 3));
+        return KafkaSender.create(options);
+    }
+}

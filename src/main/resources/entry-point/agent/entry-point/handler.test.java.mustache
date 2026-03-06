@@ -1,0 +1,118 @@
+package {{package}}.api;
+
+import {{package}}.model.a2a.AgentCard;
+import {{package}}.model.a2a.Message;
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.model.a2a.SendMessageResponse;
+import {{package}}.model.a2a.Task;
+import {{package}}.usecase.AgentChatUseCase;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@WebFluxTest(properties = {
+        "agent.id=test-agent",
+        "agent.name=Test Agent",
+        "agent.description=Test Description"
+})
+@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+class RouterRestTest {
+
+    private static final String SEND_MESSAGE_ENDPOINT = "/message:send";
+    private static final String AGENT_CARD_ENDPOINT = "/.well-known/agent-card.json";
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockitoBean
+    private AgentChatUseCase agentChatUseCase;
+
+    // EP-01 — happy path: valid request → 200 SUCCESS
+    @Test
+    void shouldReturn200WithSuccessStatus_whenRequestIsValid() {
+        SendMessageResponse mockResponse = buildMockResponse("COMPLETED", null);
+        when(agentChatUseCase.chatAndRespond(any(SendMessageRequest.class)))
+                .thenReturn(Mono.just(mockResponse));
+
+        webTestClient.post()
+                .uri(SEND_MESSAGE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(buildRequest("Hello test"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(SendMessageResponse.class)
+                .value(response -> {
+                    assertThat(response.getTask().getStatus()).isEqualTo("COMPLETED");
+                    assertThat(response.getTask().getId()).isEqualTo("test-task-123");
+                });
+    }
+
+    // EP-02 — missing body → 400 Bad Request
+    @Test
+    void shouldReturn400_whenBodyIsMissing() {
+        webTestClient.post()
+                .uri(SEND_MESSAGE_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    // EP-03 — agent card
+    @Test
+    void shouldReturnAgentCard() {
+        webTestClient.get()
+                .uri(AGENT_CARD_ENDPOINT)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(AgentCard.class)
+                .value(card -> {
+                    assertThat(card.getAgent_id()).isEqualTo("test-agent");
+                    assertThat(card.getName()).isEqualTo("Test Agent");
+                    assertThat(card.getDescription()).isEqualTo("Test Description");
+                });
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private SendMessageRequest buildRequest(String content) {
+        return SendMessageRequest.builder()
+                .task_id("test-task-123")
+                .message(Message.builder()
+                        .role("USER")
+                        .content(content)
+                        .build())
+                .build();
+    }
+
+    private SendMessageResponse buildMockResponse(String status, String errorCode) {
+        SendMessageResponse.SendMessageResponseBuilder builder = SendMessageResponse.builder()
+                .message(Message.builder().role("ASSISTANT").content("test result").build())
+                .task(Task.builder()
+                        .id("test-task-123")
+                        .status(status)
+                        .execution_time_ms(50L)
+                        .build());
+
+        if (!"COMPLETED".equals(status)) {
+            builder.task(Task.builder()
+                    .id("test-task-123")
+                    .status(status)
+                    .error({{package}}.model.a2a.Error.builder()
+                            .code(errorCode)
+                            .message("Error: " + errorCode)
+                            .build())
+                    .build());
+        }
+        return builder.build();
+    }
+}

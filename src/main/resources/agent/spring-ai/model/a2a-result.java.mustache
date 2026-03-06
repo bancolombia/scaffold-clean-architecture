@@ -1,0 +1,28 @@
+package {{package}}.model.a2a;
+
+import java.util.Map;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2AResult {
+    private String schemaVersion;
+    private String messageId;
+    private String correlationId;
+    private String traceId;
+    private String timestamp;
+    private String sourceAgent;
+    private String status;
+    private Long executionTimeMs;
+    private Map<String, Object> result;
+    private A2AError error;
+}

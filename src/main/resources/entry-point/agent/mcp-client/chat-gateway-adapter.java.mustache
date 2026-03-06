@@ -1,0 +1,72 @@
+package {{package}}.mcpclient.adapter;
+
+import {{package}}.model.chat.gateways.ChatGateway;
+{{#lombok}}
+import lombok.extern.slf4j.Slf4j;
+{{/lombok}}
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+{{#lombok}}
+@Slf4j
+{{/lombok}}
+@Component
+public class ChatGatewayAdapter implements ChatGateway {
+
+    private final ChatClient chatClient;
+
+    public ChatGatewayAdapter(ChatClient chatClient) {
+{{#lombok}}
+        log.info("=== Initializing ChatGatewayAdapter ===");
+{{/lombok}}
+        this.chatClient = chatClient;
+{{#lombok}}
+        log.info("=== ChatClient configured (auto-configured by Spring AI with MCP tools) ===");
+{{/lombok}}
+    }
+
+    @Override
+    public Mono<String> sendMessage(String message) {
+{{#lombok}}
+        log.info("Received message: {}", message);
+{{/lombok}}
+        return Mono.fromCallable(() -> {
+{{#lombok}}
+            log.debug("Building chat prompt with user message");
+{{/lombok}}
+            String response = chatClient.prompt()
+                    .user(message)
+                    .call()
+                    .content();
+{{#lombok}}
+            log.info("Received response from AI model (length: {} chars)",
+                    response != null ? response.length() : 0);
+            log.debug("Response content: {}", response);
+{{/lombok}}
+            return filterReasoning(response);
+        })
+                .subscribeOn(Schedulers.boundedElastic())
+{{#lombok}}
+                .doOnError(error -> log.error("Error during chat interaction", error));
+{{/lombok}}
+{{^lombok}}
+                ;
+{{/lombok}}
+    }
+
+    private String filterReasoning(String response) {
+        if (response == null) {
+            return null;
+        }
+        String filtered = response.replaceAll("(?s)<think>.*?</think>", "").trim();
+{{#lombok}}
+        if (filtered.length() != response.length()) {
+            log.info("Reasoning block filtered out. Original length: {}, Filtered length: {}",
+                    response.length(), filtered.length());
+        }
+{{/lombok}}
+        return filtered;
+    }
+}

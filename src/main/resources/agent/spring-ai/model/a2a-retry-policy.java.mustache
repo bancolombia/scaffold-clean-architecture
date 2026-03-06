@@ -1,0 +1,33 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * Retry configuration for transient failures in A2A command processing.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2ARetryPolicy {
+
+    /** Maximum number of retry attempts before giving up. */
+    private Integer maxRetries;
+
+    /** Initial backoff delay in milliseconds between retry attempts. */
+    private Long backoffMs;
+
+    /**
+     * Error codes that are eligible for retry.
+     * Example: ["TIMEOUT", "TEMPORARY_FAILURE"]
+     */
+    private List<String> retryableErrors;
+}

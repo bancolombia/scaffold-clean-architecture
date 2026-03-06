@@ -1,0 +1,19 @@
+package {{package}}.model.chat.gateways;
+
+import {{package}}.model.a2a.A2AResult;
+import reactor.core.publisher.Mono;
+
+/**
+ * Output port to publish an A2AResult to the async transport (e.g. Kafka).
+ * Used only by the Kafka transport path; REST transport returns the response directly.
+ */
+public interface AgentResponseGateway {
+
+    /**
+     * Publishes the agent response to the configured output topic or channel.
+     *
+     * @param response the fully-built A2AResult to publish
+     * @return a Mono that completes when the response has been sent
+     */
+    Mono<Void> sendResponse(A2AResult response);
+}

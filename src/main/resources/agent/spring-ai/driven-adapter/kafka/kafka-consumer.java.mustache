@@ -1,0 +1,61 @@
+package {{package}}.kafka;
+
+import {{package}}.model.a2a.A2ACommand;
+import {{package}}.usecase.AgentChatUseCase;
+import com.fasterxml.jackson.databind.ObjectMapper;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+import reactor.kafka.receiver.KafkaReceiver;
+import reactor.kafka.receiver.ReceiverRecord;
+import jakarta.annotation.PostConstruct;
+
+/**
+ * Kafka entry-point that consumes A2A commands from the configured topic.
+ *
+ * <p>Each incoming message is deserialised into an {@link A2ACommand} and
+ * forwarded to {@link AgentChatUseCase#chat(A2ACommand)} (Kafka transport path).
+ * Processing errors are logged and do not interrupt the consumer stream.
+ *
+ * <p>Generated only when the {@code agent-enable-kafka} flag is active.
+ */
+@Component
+{{#lombok}}
+@Log4j2
+@RequiredArgsConstructor
+{{/lombok}}
+public class KafkaConsumer {
+
+    private final KafkaReceiver<String, String> kafkaReceiver;
+    private final AgentChatUseCase agentChatUseCase;
+    private final ObjectMapper objectMapper;
+
+    @PostConstruct
+    public void startListening() {
+        kafkaReceiver.receive()
+                .flatMap(this::processRecord)
+                .subscribe(
+                        __ -> {},
+                        error -> log.error("Unrecoverable Kafka consumer error", error));
+    }
+
+    private Mono<Void> processRecord(ReceiverRecord<String, String> record) {
+        log.info("A2A Kafka command received — offset: {}, partition: {}",
+                record.offset(), record.partition());
+        return Mono.fromCallable(() -> objectMapper.readValue(record.value(), A2ACommand.class))
+                .flatMap(agentChatUseCase::chat)
+                .doOnSuccess(__ -> {
+                    record.receiverOffset().acknowledge();
+                    log.info("A2A command processed successfully — offset: {}", record.offset());
+                })
+                .onErrorResume(error -> {
+                    log.error("Failed to process A2A command — offset: {}, error: {}",
+                            record.offset(), error.getMessage());
+                    record.receiverOffset().acknowledge(); // commit to avoid reprocessing poison messages
+                    return Mono.empty();
+                });
+    }
+}

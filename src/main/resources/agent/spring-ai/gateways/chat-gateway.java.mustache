@@ -1,0 +1,18 @@
+package {{package}}.model.chat.gateways;
+
+import reactor.core.publisher.Mono;
+
+/**
+ * Output port to send a natural-language prompt to the LLM and receive a text response.
+ * Implemented by the Spring AI driven adapter.
+ */
+public interface ChatGateway {
+
+    /**
+     * Sends a prompt to the configured LLM and returns its text response.
+     *
+     * @param message the prompt text, including intent parameters
+     * @return a Mono emitting the LLM's text response
+     */
+    Mono<String> sendMessage(String message);
+}

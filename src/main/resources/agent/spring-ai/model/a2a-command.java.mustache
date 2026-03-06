@@ -1,0 +1,31 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class A2ACommand {
+    private String schemaVersion;
+    private String messageId;
+    private String correlationId;
+    private String traceId;
+    private String idempotencyKey;
+    private String timestamp;
+    private String sourceAgent;
+    private String targetAgent;
+    private String intent;
+    private String priority;
+    private A2APayload payload;
+    private A2ASecurity security;
+    private A2ARetryPolicy retryPolicy;
+}
