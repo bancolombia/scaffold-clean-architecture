@@ -28,7 +28,7 @@ public class UpdateDependencies implements UpgradeAction {
   @SneakyThrows
   @SuppressWarnings("unchecked")
   public boolean up(ModuleBuilder builder) {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
     List<String> gradleFiles = (List<String>) builder.getParam(FILES_TO_UPDATE);
     Set<String> deps = (Set<String>) builder.getParam(DEPENDENCIES_TO_UPDATE);
 
@@ -71,7 +71,7 @@ public class UpdateDependencies implements UpgradeAction {
             .map(file -> update(builder, release, file))
             .reduce(false, (current, itemApplied) -> current || itemApplied);
     if (applied) {
-      builder.getProject().getLogger().lifecycle("Dependency updated: {}", release);
+      builder.getLogger().lifecycle("Dependency updated: {}", release);
     }
     return applied;
   }

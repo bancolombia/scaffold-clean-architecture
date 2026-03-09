@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
@@ -22,17 +21,15 @@ import org.gradle.internal.logging.text.StyledTextOutput;
     name = "updateCleanArchitecture",
     shortcut = "u",
     description = "Update project dependencies")
-public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
+public abstract class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   private final Set<String> dependencies = new HashSet<>();
   private BooleanOption git = BooleanOption.TRUE;
 
-  @Internal @Getter private final Property<String> projectPath;
+  @Internal
+  public abstract Property<String> getProjectPath();
 
   public UpdateProjectTask() {
-    this.projectPath = getProject().getObjects().property(String.class);
-
-    // Configure lazy providers - capture information during configuration
-    this.projectPath.set(getProject().provider(this::getAbsoluteProjectPath));
+    getProjectPath().set(projectDir.getAbsolutePath());
   }
 
   @Option(option = "dependencies", description = "Set dependencies to update")
@@ -46,7 +43,7 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   }
 
   @Override
-  public void execute() throws IOException, CleanException {
+  protected void doExecute() throws IOException, CleanException {
     if (git == BooleanOption.TRUE && CommandUtils.getDefault().hasGitPendingChanges(logger)) {
       getTextOutputFactory()
           .create(UpdateProjectTask.class)
@@ -58,13 +55,9 @@ public class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
     }
 
     builder.addParam(DEPENDENCIES_TO_UPDATE, dependencies);
-    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithGradleExtension(projectPath.get()));
+    builder.addParam(FILES_TO_UPDATE, Utils.getAllFilesWithGradleExtension(getProjectPath().get()));
     UpgradeFactory factory = new UpgradeFactory();
     factory.buildModule(builder);
     builder.persist();
-  }
-
-  private String getAbsoluteProjectPath() {
-    return getProject().getLayout().getProjectDirectory().getAsFile().getAbsolutePath();
   }
 }

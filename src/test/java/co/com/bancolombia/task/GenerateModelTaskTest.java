@@ -9,7 +9,6 @@ import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ParamNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -53,7 +52,7 @@ class GenerateModelTaskTest {
   }
 
   @Test
-  void shouldGenerateModel() throws IOException, ParamNotFoundException {
+  void shouldGenerateModel() throws IOException, CleanException {
     task.setName("testModel");
     task.execute();
     assertFilesExistsInDir(

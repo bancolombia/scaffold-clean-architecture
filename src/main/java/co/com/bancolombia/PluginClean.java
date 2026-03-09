@@ -9,9 +9,7 @@ import java.util.stream.Stream;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
-import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskContainer;
-import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.testing.Test;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +40,8 @@ public class PluginClean implements Plugin<Project> {
     project.getSubprojects().forEach(this::listenTest);
 
     taskContainer
-        .getByName("compileJava")
-        .getDependsOn()
-        .add(taskContainer.getByName("validateStructure"));
+        .named("compileJava")
+        .configure(task -> task.getDependsOn().add(taskContainer.named("validateStructure")));
   }
 
   private void listenTest(Project project) {
@@ -105,17 +102,22 @@ public class PluginClean implements Plugin<Project> {
             task.setDescription(t.getDescription());
           });
     } else {
-      TaskProvider<Task> taskProvider =
-          taskContainer.register(t.getName(), t.getTaskAction(), t.getAction());
-      Task temp = taskProvider.get();
-      temp.setGroup(t.getGroup());
-      temp.setDescription(t.getDescription());
-
-      TaskProvider<Task> taskProvider2 =
-          taskContainer.register(t.getShortcut(), t.getTaskAction(), t.getAction());
-      Task temp2 = taskProvider2.get();
-      temp2.setGroup(t.getGroup());
-      temp2.setDescription(t.getDescription());
+      taskContainer.register(
+          t.getName(),
+          t.getTaskAction(),
+          task -> {
+            t.getAction().execute(task);
+            task.setGroup(t.getGroup());
+            task.setDescription(t.getDescription());
+          });
+      taskContainer.register(
+          t.getShortcut(),
+          t.getTaskAction(),
+          task -> {
+            t.getAction().execute(task);
+            task.setGroup(t.getGroup());
+            task.setDescription(t.getDescription());
+          });
     }
   }
 }

@@ -10,12 +10,12 @@ import java.io.IOException;
 public class UpgradeY2022M05D05 implements UpgradeAction {
   @Override
   public boolean up(ModuleBuilder builder) {
-    String name = builder.getProject().getRootProject().getName();
+    String name = builder.getProjectName();
     try {
       return builder.updateFile(
           DOCKERFILE, content -> Utils.replaceExpression(content, "app.jar", name + ".jar"));
     } catch (IOException e) {
-      builder.getProject().getLogger().debug("Error reading Dockerfile", e);
+      builder.getLogger().debug("Error reading Dockerfile", e);
     }
     return false;
   }

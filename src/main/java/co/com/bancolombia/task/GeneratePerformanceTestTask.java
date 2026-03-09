@@ -2,7 +2,6 @@ package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.annotations.CATask;
 import java.util.ArrayList;
-import lombok.Getter;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
 
@@ -10,19 +9,17 @@ import org.gradle.api.tasks.Input;
     name = "generatePerformanceTest",
     shortcut = "gpt",
     description = "Generate performance test")
-public class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
-  @Input @Getter private final SetProperty<String> moduleNames;
+public abstract class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
+  @Input
+  public abstract SetProperty<String> getModuleNames();
 
   public GeneratePerformanceTestTask() {
-    this.moduleNames = getProject().getObjects().setProperty(String.class);
-
-    // Configure lazy providers - capture information during configuration
-    this.moduleNames.set(getProject().provider(() -> getProject().getChildProjects().keySet()));
+    getModuleNames().set(new ArrayList<>(childProjectDirs.keySet()));
   }
 
   @Override
   protected void prepareParams() {
-    var modules = new ArrayList<>(moduleNames.get());
+    var modules = new ArrayList<>(getModuleNames().get());
 
     builder.addParam(
         "task-param-exist-api-rest",

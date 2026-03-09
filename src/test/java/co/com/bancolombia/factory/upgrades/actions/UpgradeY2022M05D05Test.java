@@ -28,7 +28,6 @@ class UpgradeY2022M05D05Test {
 
   @BeforeEach
   void setup() throws IOException {
-    when(project.getRootProject()).thenReturn(project);
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());

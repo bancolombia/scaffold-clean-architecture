@@ -62,30 +62,61 @@ public class ModuleBuilder {
   private final List<String> dirsToDelete = new ArrayList<>();
   private final Map<String, Object> params = new HashMap<>();
   private final ObjectMapper mapper = new ObjectMapper();
-  private final Logger logger;
-  @Getter private final Project project;
+  @Getter private final Logger logger;
+  @Getter private final File projectDir;
+  @Getter private final String projectName;
+  private Map<String, String> childBuildFiles = new HashMap<>();
+  private Map<String, String> childProjectDirs = new HashMap<>();
   private ObjectNode properties;
 
   @Setter private StyledTextOutput styledLogger;
   private final ExternalOperations operations;
 
   public ModuleBuilder(Project project) {
-    this.project = project;
-    this.logger = getProject().getLogger();
-    this.operations = OperationsProvider.fromDefault();
-    initialize();
+    this(project, OperationsProvider.fromDefault());
   }
 
   public ModuleBuilder(Project project, ExternalOperations operations) {
-    this.project = project;
-    this.logger = getProject().getLogger();
+    this(project.getProjectDir(), project.getName(), project.getLogger(), operations);
+    project
+        .getChildProjects()
+        .forEach(
+            (name, child) -> {
+              childBuildFiles.put(name, child.getBuildFile().getPath());
+              childProjectDirs.put(name, child.getProjectDir().getPath());
+            });
+  }
+
+  public ModuleBuilder(File projectDir, String projectName, Logger logger) {
+    this(projectDir, projectName, logger, OperationsProvider.fromDefault());
+  }
+
+  public ModuleBuilder(
+      File projectDir, String projectName, Logger logger, ExternalOperations operations) {
+    this.projectDir = projectDir;
+    this.projectName = projectName;
+    this.logger = logger;
     this.operations = operations;
     initialize();
   }
 
+  public void setChildProjects(Map<String, String> buildFiles, Map<String, String> projectDirs) {
+    if (buildFiles != null) this.childBuildFiles = buildFiles;
+    if (projectDirs != null) this.childProjectDirs = projectDirs;
+  }
+
+  public File resolveFile(String path) {
+    return FileUtils.resolveFile(projectDir, path);
+  }
+
+  public File getChildProjectDir(String name) {
+    String path = childProjectDirs.get(name);
+    return path != null ? new File(path) : null;
+  }
+
   private void initialize() {
-    params.put("projectName", getProject().getName());
-    params.put("projectNameLower", getProject().getName().toLowerCase());
+    params.put("projectName", projectName);
+    params.put("projectNameLower", projectName.toLowerCase());
     params.put("lombok", isEnableLombok());
     params.put("metrics", withMetrics());
     addConstantsFromClassToModuleBuilder(this, Constants.class);
@@ -106,7 +137,7 @@ public class ModuleBuilder {
     return field.get(field.getType());
   }
 
-  public void persist() throws IOException {
+  public void persist() {
     styledLogger.style(Header).println("Applying changes on disk");
 
     styledLogger
@@ -126,7 +157,7 @@ public class ModuleBuilder {
 
     dirs.forEach(
         dir -> {
-          getProject().mkdir(dir);
+          resolveFile(dir).mkdirs();
           logger.debug("creating dir {}", dir);
         });
     if (properties != null) {
@@ -137,7 +168,7 @@ public class ModuleBuilder {
     files.forEach(
         (key, file) -> {
           try {
-            FileUtils.writeString(getProject(), file.getPath(), file.getContent());
+            FileUtils.writeString(projectDir, file.getPath(), file.getContent(), logger);
           } catch (IOException e) {
             logger.error("error to write file {}", file.getPath());
             throw new RuntimeException(e.getMessage(), e);
@@ -147,7 +178,7 @@ public class ModuleBuilder {
 
     dirsToDelete.forEach(
         dir -> {
-          getProject().delete(dir);
+          deleteFileOrDir(dir);
           logger.debug("deleting dir {}", dir);
         });
     styledLogger.style(Success).println("Changes successfully applied");
@@ -227,8 +258,8 @@ public class ModuleBuilder {
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {
-    String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
-    buildFilePath = buildFilePath.replace(project.getProjectDir().getPath(), ".");
+    String buildFilePath = childBuildFiles.get(module);
+    buildFilePath = buildFilePath.replace(projectDir.getPath(), ".");
     updateFile(
         buildFilePath,
         current -> {
@@ -242,28 +273,28 @@ public class ModuleBuilder {
 
   public void appendConfigurationToModule(String module, String configuration) throws IOException {
     logger.lifecycle("adding configuration {} to module {}", configuration, module);
-    String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+    String buildFilePath = childBuildFiles.get(module);
     updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
   }
 
   public void removeDependencyFromModule(String module, String dependency) throws IOException {
     logger.lifecycle("removing dependency {} from module {}", dependency, module);
-    String buildFilePath = project.getChildProjects().get(module).getBuildFile().getPath();
+    String buildFilePath = childBuildFiles.get(module);
     updateFile(buildFilePath, current -> Utils.removeLinesIncludes(current, dependency));
   }
 
   public void deleteModule(String module) {
-    String projectDir = project.getChildProjects().get(module).getProjectDir().getPath();
+    String moduleProjectDir = childProjectDirs.get(module);
     logger.lifecycle(
         "deleting module {} from dir {}",
         module,
-        projectDir.replace(project.getProjectDir().getPath(), ""));
-    removeDir(projectDir);
+        moduleProjectDir.replace(projectDir.getPath(), ""));
+    removeDir(moduleProjectDir);
   }
 
-  public ObjectNode appendToProperties(String path) throws IOException {
+  public ObjectNode appendToProperties(String path) {
     if (properties == null) {
-      File yamlFile = project.file(APPLICATION_PROPERTIES);
+      File yamlFile = resolveFile(APPLICATION_PROPERTIES);
       properties = FileUtils.getFromYaml(yamlFile);
     }
     if (path.isEmpty()) {
@@ -316,7 +347,7 @@ public class ModuleBuilder {
   }
 
   public boolean analyticsEnabled() throws IOException {
-    String value = FileUtils.readProperties(project.getProjectDir().getPath(), "analytics");
+    String value = FileUtils.readProperties(projectDir.getPath(), "analytics");
     return "true".equals(value);
   }
 
@@ -366,21 +397,21 @@ public class ModuleBuilder {
   }
 
   public void runTask(String name) {
-    this.runTask(name, getProject().getProjectDir());
-  }
-
-  public void runTask(String name, String projectPath) {
-    File projectDir = new File(projectPath);
     this.runTask(name, projectDir);
   }
 
-  private void runTask(String name, File projectDir) {
+  public void runTask(String name, String projectPath) {
+    File taskProjectDir = new File(projectPath);
+    this.runTask(name, taskProjectDir);
+  }
+
+  private void runTask(String name, File taskProjectDir) {
     logger.lifecycle("Connecting to project to run task {}", name);
-    logger.lifecycle("Project Directory {}", projectDir);
+    logger.lifecycle("Project Directory {}", taskProjectDir);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
             .useGradleVersion(Constants.GRADLE_WRAPPER_VERSION)
-            .forProjectDirectory(projectDir)
+            .forProjectDirectory(taskProjectDir)
             .connect()) {
       logger.lifecycle("Connected! executing task {}", name);
       connection.newBuild().forTasks(name).run();
@@ -392,7 +423,7 @@ public class ModuleBuilder {
 
   private void loadPackage() {
     try {
-      addParamPackage(FileUtils.readProperties(project.getProjectDir().getPath(), "package"));
+      addParamPackage(FileUtils.readProperties(projectDir.getPath(), "package"));
     } catch (IOException e) {
       logger.debug("cannot read package from gradle.properties");
     }
@@ -401,8 +432,7 @@ public class ModuleBuilder {
   private void loadIsExample() {
     final String param = "example";
     try {
-      this.params.put(
-          param, "true".equals(FileUtils.readProperties(project.getProjectDir().getPath(), param)));
+      this.params.put(param, "true".equals(FileUtils.readProperties(projectDir.getPath(), param)));
     } catch (IOException e) {
       logger.debug("cannot read example from gradle.properties");
       this.params.put(param, false);
@@ -434,18 +464,15 @@ public class ModuleBuilder {
 
   private boolean getABooleanProperty(String property, boolean defaultValue) {
     try {
-      String value = FileUtils.readProperties(project.getProjectDir().getPath(), property);
+      String value = FileUtils.readProperties(projectDir.getPath(), property);
       return "true".equals(value);
     } catch (IOException e) {
       logger.info(e.getMessage());
       logger.info(
-          "WARN: variable "
-              + property
-              + " not present, if your project use "
-              + property
-              + " please add "
-              + property
-              + "=true to gradle.properties and relaunch this task");
+          "WARN: variable {} not present, if your project use {} please add {}=true to gradle.properties and relaunch this task",
+          property,
+          property,
+          property);
       return defaultValue;
     }
   }
@@ -455,11 +482,36 @@ public class ModuleBuilder {
     FileModel current = files.get(finalPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(getProject(), finalPath);
+      content = FileUtils.readFile(projectDir, finalPath, logger);
     } else {
       content = current.getContent();
     }
     return content;
+  }
+
+  private void deleteFileOrDir(String path) {
+    File file = resolveFile(path);
+    if (file.isDirectory()) {
+      deleteDirectory(file, path);
+    } else {
+      deleteFile(file, path);
+    }
+  }
+
+  private void deleteDirectory(File dir, String path) {
+    try {
+      org.apache.commons.io.FileUtils.deleteDirectory(dir);
+    } catch (IOException e) {
+      logger.error("Error deleting directory {}: {}", path, e.getMessage());
+    }
+  }
+
+  private void deleteFile(File file, String path) {
+    try {
+      java.nio.file.Files.delete(file.toPath());
+    } catch (IOException e) {
+      logger.debug("Could not delete file {}: {}", path, e.getMessage());
+    }
   }
 
   private ObjectNode getNode(ObjectNode node, List<String> attributes) {

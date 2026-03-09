@@ -9,7 +9,6 @@ import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.exceptions.ParamNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -56,7 +55,7 @@ class GenerateUseCaseTaskTest {
   }
 
   @Test
-  void generateUseCase() throws IOException, ParamNotFoundException {
+  void generateUseCase() throws IOException, CleanException {
     // Arrange
     task.setName("business");
     // Act
@@ -69,7 +68,7 @@ class GenerateUseCaseTaskTest {
   }
 
   @Test
-  void generateUseCaseWithCorrectName() throws IOException, ParamNotFoundException {
+  void generateUseCaseWithCorrectName() throws IOException, CleanException {
     // Arrange
     task.setName("MyUseCase");
     // Act

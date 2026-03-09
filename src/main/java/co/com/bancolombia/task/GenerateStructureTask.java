@@ -104,7 +104,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   }
 
   @Override
-  public void execute() throws IOException, CleanException {
+  protected void doExecute() throws IOException, CleanException {
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     logger.lifecycle("Package: {}", packageName);
     logger.lifecycle("Project Type: {}", type);
@@ -122,7 +122,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21.getNumber());
     builder.addParam("java25", javaVersion == JavaVersion.VERSION_25.getNumber());
 
-    boolean exists = FileUtils.exists(builder.getProject().getProjectDir().getPath(), MAIN_GRADLE);
+    boolean exists = FileUtils.exists(builder.getProjectDir().getPath(), MAIN_GRADLE);
     if (exists && force == BooleanOption.FALSE) {
       logger.lifecycle(
           "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");

@@ -16,16 +16,14 @@ import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
 
 @CATask(name = "deleteModule", shortcut = "dm", description = "Delete gradle module")
-public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
+public abstract class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   private String module;
 
-  @Internal private final ListProperty<String> availableModules;
+  @Internal
+  public abstract ListProperty<String> getAvailableModules();
 
   public DeleteModuleTask() {
-    this.availableModules = getProject().getObjects().listProperty(String.class);
-
-    // Configure lazy providers - capture information during configuration
-    this.availableModules.set(getProject().provider(this::getChildProjectNames));
+    getAvailableModules().set(new ArrayList<>(childProjectDirs.keySet()));
   }
 
   @Option(option = "module", description = "Set module name to delete")
@@ -35,12 +33,12 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
 
   @OptionValues("module")
   public List<String> getModules() {
-    return availableModules.get();
+    return getAvailableModules().get();
   }
 
   @Override
-  public void execute() throws IOException, CleanException {
-    if (module == null || !availableModules.get().contains(module)) {
+  protected void doExecute() throws IOException, CleanException {
+    if (module == null || !getAvailableModules().get().contains(module)) {
       printHelp();
       throw new IllegalArgumentException(
           "No valid module name is set, usage: gradle deleteModule --module "
@@ -56,9 +54,5 @@ public class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   @Override
   protected Optional<String> resolveAnalyticsType() {
     return Optional.of(module);
-  }
-
-  public List<String> getChildProjectNames() {
-    return new ArrayList<>(getProject().getChildProjects().keySet());
   }
 }

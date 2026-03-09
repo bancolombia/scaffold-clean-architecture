@@ -22,7 +22,7 @@ public class EntryPointKafka implements ModuleFactory {
     builder
         .appendToProperties("spring.kafka.consumer")
         .put("bootstrap-servers", "localhost:9092")
-        .put("group-id", builder.getProject().getName());
+        .put("group-id", builder.getProjectName());
     builder.appendToProperties("adapters.kafka.consumer").put("topic", "test");
   }
 }

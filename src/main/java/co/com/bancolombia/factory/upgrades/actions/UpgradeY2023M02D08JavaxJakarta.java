@@ -15,8 +15,8 @@ public class UpgradeY2023M02D08JavaxJakarta implements UpgradeAction {
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    Logger logger = builder.getProject().getLogger();
-    File root = builder.getProject().getRootDir();
+    Logger logger = builder.getLogger();
+    File root = builder.getProjectDir();
     AtomicBoolean applied = new AtomicBoolean(false);
     FileUtils.allFiles(
         root, file -> apply(builder, file, applied, logger), (dir, name) -> name.endsWith(".java"));

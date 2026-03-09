@@ -29,7 +29,7 @@ public abstract class AbstractResolvableTypeTask extends AbstractCleanArchitectu
   }
 
   @Override
-  public void execute() throws IOException, CleanException {
+  protected void doExecute() throws IOException, CleanException {
     type = type == null ? defaultType() : type;
     name = name == null ? defaultName() : name;
     if (type == null) {

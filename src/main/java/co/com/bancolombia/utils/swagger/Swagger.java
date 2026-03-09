@@ -26,8 +26,8 @@ public class Swagger {
               .entryPoint(entryPoint)
               .router(builder.getBooleanParam("task-param-router"))
               .swagger(builder.getStringParam("swagger-file"))
-              .logger(builder.getProject().getLogger())
-              .outputDir(builder.getProject().getRootDir() + "/" + outputDir)
+              .logger(builder.getLogger())
+              .outputDir(builder.getProjectDir() + "/" + outputDir)
               .packageName(
                   entryPoint
                       ? builder.getStringParam("package")

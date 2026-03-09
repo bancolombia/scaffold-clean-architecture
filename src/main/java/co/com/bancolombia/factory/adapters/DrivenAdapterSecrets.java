@@ -14,12 +14,12 @@ import org.gradle.api.logging.Logger;
 public class DrivenAdapterSecrets implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
 
     String secretLibrary = "";
     SecretsBackend secretsBackend = (SecretsBackend) builder.getParam("secrets-backend");
     if (secretsBackend == null || secretsBackend.equals(SecretsBackend.AWS_SECRETS_MANAGER)) {
-      if (Boolean.TRUE.equals(builder.isReactive())) {
+      if (builder.isReactive()) {
         secretLibrary = "aws-secrets-manager-async";
         builder.setupFromTemplate("driven-adapter/secrets-reactive");
       } else {
@@ -30,7 +30,7 @@ public class DrivenAdapterSecrets implements ModuleFactory {
       builder.appendToProperties("aws").put("region", "us-east-1").put("secretName", "my-secret");
       GenericModule.addAwsBom(builder);
     } else {
-      if (Boolean.TRUE.equals(builder.isReactive())) {
+      if (builder.isReactive()) {
         secretLibrary = "vault-async";
         builder.setupFromTemplate("driven-adapter/secrets-vault-reactive");
       } else {

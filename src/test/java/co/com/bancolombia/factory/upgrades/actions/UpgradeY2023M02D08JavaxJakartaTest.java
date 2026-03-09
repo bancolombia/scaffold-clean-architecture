@@ -26,13 +26,14 @@ class UpgradeY2023M02D08JavaxJakartaTest {
   @Mock private Logger logger;
   private ModuleBuilder builder;
   private UpgradeAction updater;
+  private File tempDir;
 
   @BeforeEach
   void setup() throws IOException {
+    tempDir = Files.createTempDirectory("sample").toFile();
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
-    when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
-    when(project.getRootDir()).thenReturn(new File("Sample.java"));
+    when(project.getProjectDir()).thenReturn(tempDir);
     builder = spy(new ModuleBuilder(project));
     updater = new UpgradeY2023M02D08JavaxJakarta();
     assertNotNull(updater.name());
@@ -40,10 +41,10 @@ class UpgradeY2023M02D08JavaxJakartaTest {
   }
 
   @Test
-  void shouldApplyUpdate() {
-    String file = new File("Sample.java").getAbsolutePath();
-    // Arrange
-    builder.addFile(file, "import javax.persistence.Entity;");
+  void shouldApplyUpdate() throws IOException {
+    File sampleFile = new File(tempDir, "Sample.java");
+    Files.writeString(sampleFile.toPath(), "import javax.persistence.Entity;");
+    String file = sampleFile.getAbsolutePath();
     // Act
     boolean applied = updater.up(builder);
     // Assert

@@ -5,10 +5,11 @@ import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.File;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
-import org.gradle.api.Project;
 
 public class UpgradeY2023M02D14RestMapping implements UpgradeAction {
 
@@ -17,17 +18,18 @@ public class UpgradeY2023M02D14RestMapping implements UpgradeAction {
   public boolean up(ModuleBuilder builder) {
     String regex =
         "(Get|Post|Put|Delete|Patch|Request)Mapping\\((.*(path|value)\\s*=\\s*|)\\\".*(/)\\\".*\\)";
-    Optional<Project> project =
-        builder.getProject().getSubprojects().stream()
-            .filter(p -> "api-rest".equals(p.getName()) || "reactive-web".equals(p.getName()))
+    Optional<File> subProjectDir =
+        Stream.of("api-rest", "reactive-web")
+            .map(builder::getChildProjectDir)
+            .filter(Objects::nonNull)
             .findFirst();
     AtomicBoolean applied = new AtomicBoolean(false);
-    project.ifPresent(
-        subProject ->
+    subProjectDir.ifPresent(
+        dir ->
             FileUtils.allFiles(
-                subProject.getRootDir(),
+                dir,
                 file -> apply(builder, regex, applied, file),
-                (dir, name) -> name.endsWith(".java")));
+                (d, name) -> name.endsWith(".java")));
     return applied.get();
   }
 
@@ -40,7 +42,7 @@ public class UpgradeY2023M02D14RestMapping implements UpgradeAction {
         applied.set(true);
       }
     } catch (Exception e) {
-      builder.getProject().getLogger().warn("Error updating file {}", file.getName(), e);
+      builder.getLogger().warn("Error updating file {}", file.getName(), e);
     }
   }
 

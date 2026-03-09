@@ -13,11 +13,11 @@ import org.gradle.api.logging.Logger;
 public class DrivenAdapterMongoDB implements ModuleFactory {
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
-    Logger logger = builder.getProject().getLogger();
+    Logger logger = builder.getLogger();
 
     builder.setUpSecretsInAdapter();
 
-    if (Boolean.TRUE.equals(builder.isReactive())) {
+    if (builder.isReactive()) {
       logger.lifecycle("Generating for reactive project");
       builder.setupFromTemplate("driven-adapter/mongo-reactive");
     } else {
