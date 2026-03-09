@@ -401,17 +401,17 @@ public class ModuleBuilder {
   }
 
   public void runTask(String name, String projectPath) {
-    File projectDir = new File(projectPath);
-    this.runTask(name, projectDir);
+    File taskProjectDir = new File(projectPath);
+    this.runTask(name, taskProjectDir);
   }
 
-  private void runTask(String name, File projectDir) {
+  private void runTask(String name, File taskProjectDir) {
     logger.lifecycle("Connecting to project to run task {}", name);
-    logger.lifecycle("Project Directory {}", projectDir);
+    logger.lifecycle("Project Directory {}", taskProjectDir);
     try (ProjectConnection connection =
         GradleConnector.newConnector()
             .useGradleVersion(Constants.GRADLE_WRAPPER_VERSION)
-            .forProjectDirectory(projectDir)
+            .forProjectDirectory(taskProjectDir)
             .connect()) {
       logger.lifecycle("Connected! executing task {}", name);
       connection.newBuild().forTasks(name).run();
@@ -492,15 +492,25 @@ public class ModuleBuilder {
   private void deleteFileOrDir(String path) {
     File file = resolveFile(path);
     if (file.isDirectory()) {
-      try {
-        org.apache.commons.io.FileUtils.deleteDirectory(file);
-      } catch (IOException e) {
-        logger.error("Error deleting directory {}: {}", path, e.getMessage());
-      }
+      deleteDirectory(file, path);
     } else {
-      if (!file.delete()) {
-        logger.debug("Could not delete file {}", path);
-      }
+      deleteFile(file, path);
+    }
+  }
+
+  private void deleteDirectory(File dir, String path) {
+    try {
+      org.apache.commons.io.FileUtils.deleteDirectory(dir);
+    } catch (IOException e) {
+      logger.error("Error deleting directory {}: {}", path, e.getMessage());
+    }
+  }
+
+  private void deleteFile(File file, String path) {
+    try {
+      java.nio.file.Files.delete(file.toPath());
+    } catch (IOException e) {
+      logger.debug("Could not delete file {}: {}", path, e.getMessage());
     }
   }
 
