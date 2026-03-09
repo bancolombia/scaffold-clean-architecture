@@ -1,5 +1,19 @@
 # Changelog
 
+## [v4.2.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.2.0) (2026-03-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.1.1...v4.2.0)
+
+**Merged pull requests:**
+
+- feat: Add support for Gradle Configuration Cache [\#828](https://github.com/bancolombia/scaffold-clean-architecture/pull/828) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump github/codeql-action from 4.32.5 to 4.32.6 [\#827](https://github.com/bancolombia/scaffold-clean-architecture/pull/827) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.15.0 to 2.15.1 [\#826](https://github.com/bancolombia/scaffold-clean-architecture/pull/826) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.8.3 to 4.9.0 [\#822](https://github.com/bancolombia/scaffold-clean-architecture/pull/822) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 6.2.0 to 6.3.0 [\#821](https://github.com/bancolombia/scaffold-clean-architecture/pull/821) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.32.4 to 4.32.5 [\#820](https://github.com/bancolombia/scaffold-clean-architecture/pull/820) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 5.0.0 to 7.0.0 [\#818](https://github.com/bancolombia/scaffold-clean-architecture/pull/818) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.1.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.1.1) (2026-02-25)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.1.0...v4.1.1)
