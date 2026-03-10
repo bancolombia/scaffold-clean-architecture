@@ -1,5 +1,6 @@
 package {{package}}.events;
 
+import {{package}}.model.events.gateways.DirectGateway;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -35,8 +36,8 @@ import java.util.logging.Level;
 @RequiredArgsConstructor
 {{/lombok}}
 @EnableDirectAsyncGateway
-public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
-    public static final String TARGET_NAME = "cleanArchitecture";// refers to remote spring.application.name property
+public class ReactiveDirectAsyncGateway  implements DirectGateway {
+    public static final String TARGET_NAME = "cleanArchitecture";// refers to remote spring.application.name property for this case {{projectName}}
     public static final String SOME_COMMAND_NAME = "some.command.name";
     public static final String SOME_QUERY_NAME = "some.query.name";
     private final DirectAsyncGateway gateway;
@@ -50,7 +51,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
     }
     {{/lombok}}
 
-    public Mono<Void> runRemoteJob(Object command/*change for proper model*/) {
+    public Mono<Void> sendCommand(Object command/*change for proper model*/) {
         {{#lombok}}
         log.log(Level.INFO, "Sending command: {0}: {1}", new String[]{SOME_COMMAND_NAME, command.toString()});
         {{/lombok}}
@@ -71,7 +72,7 @@ public class ReactiveDirectAsyncGateway /* implements Gateway from domain */ {
         {{/eda}}
     }
 
-    public Mono<Object> requestForRemoteData(Object query/*change for proper model*/) {
+    public Mono<Object> requestReply(Object query/*change for proper model*/) {
         {{#lombok}}
         log.log(Level.INFO, "Sending query request: {0}: {1}", new String[]{SOME_QUERY_NAME, query.toString()});
         {{/lombok}}
