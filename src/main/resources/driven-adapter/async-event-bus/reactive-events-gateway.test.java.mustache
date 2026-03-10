@@ -10,7 +10,7 @@ import org.reactivecommons.api.domain.DomainEventBus;
 
 {{#eda}}
 import io.cloudevents.CloudEvent;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 {{/eda}}
 {{^eda}}
@@ -27,7 +27,7 @@ class ReactiveEventsGatewayTest {
     private DomainEventBus domainEventBus;
 
     @Mock
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     private ReactiveEventsGateway gateway;
     {{/eda}}

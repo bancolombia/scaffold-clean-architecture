@@ -28,7 +28,7 @@ public class NotificationsHandler {
     }
 {{/lombok}}
 {{#eda}}
-    public Mono<Void> handleNotificacionA(CloudEvent event) {
+    public Mono<Void> handleNotificationA(CloudEvent event) {
         log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getType(), event.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();
@@ -36,7 +36,7 @@ public class NotificationsHandler {
 {{/eda}}
 
 {{^eda}}
-    public Mono<Void> handleNotificacionA(DomainEvent<Object/*change for proper model*/> event) {
+    public Mono<Void> handleNotificationA(DomainEvent<Object/*change for proper model*/> event) {
         log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getName(), event.getData()}); // TODO: Remove this line
 //        return sampleUseCase.doSomething(event.getData());
         return Mono.empty();

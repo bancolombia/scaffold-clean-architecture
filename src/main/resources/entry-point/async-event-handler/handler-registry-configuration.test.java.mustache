@@ -18,20 +18,21 @@ class HandlerRegistryConfigurationTest {
     EventsHandler eventsHandler;
     CommandsHandler commandsHandler;
     QueriesHandler queriesHandler;
-    NotificationsHandler notificacionHandler;
+    NotificationsHandler notificationHandler;
 
     @BeforeEach
     void setUp() {
         eventsHandler = new EventsHandler();
         commandsHandler = new CommandsHandler();
         queriesHandler = new QueriesHandler({{#eda}}new DefaultObjectMapperSupplier().get(){{/eda}});
-        notificacionHandler = new NotificationsHandler();
+        notificationHandler = new NotificationsHandler();
     }
 
     @Test
     void testHandlerRegistry() {
         HandlerRegistryConfiguration handlerRegistryConfiguration = new HandlerRegistryConfiguration();
-        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(commandsHandler, eventsHandler, queriesHandler,notificacionHandler);
+        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(commandsHandler, eventsHandler, queriesHandler,
+        notificationHandler);
 
         assertNotNull(handlerRegistry);
     }

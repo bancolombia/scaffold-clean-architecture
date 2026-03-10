@@ -12,7 +12,7 @@
     "entry-point/async-event-handler/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/HandlerRegistryConfigurationTest.java",
     "entry-point/async-event-handler/commands-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers/CommandsHandlerTest.java",
     "entry-point/async-event-handler/events-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers/EventsHandlerTest.java",
-    "entry-point/async-event-handler/notifications-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers/NotificacionsHandlerTest.java",
+    "entry-point/async-event-handler/notifications-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers/NotificationsHandlerTest.java",
     "entry-point/async-event-handler/queries-handler.test.java.mustache": "infrastructure/entry-points/async-event-handler/src/test/java/{{packagePath}}/events/handlers/QueriesHandlerTest.java"
   }
 }
