@@ -1,11 +1,17 @@
 package co.com.bancolombia.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import co.com.bancolombia.exceptions.ParamNotFoundException;
+import co.com.bancolombia.models.TemplateDefinition;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,7 +34,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 public class FileUtilsTest {
 
@@ -202,6 +211,144 @@ public class FileUtilsTest {
     String result = FileUtils.readFileFromZip(Path.of(zipFilePath), textFileName);
     // Assert
     assertEquals(textContent, result);
+  }
+
+  @Test
+  void shouldDeleteFile() throws IOException {
+    // Arrange
+    File tempDir = new File("build/tmp/test-delete");
+    tempDir.mkdirs();
+    File tempFile = new File(tempDir, "to-delete.txt");
+    tempFile.createNewFile();
+    assertTrue(tempFile.exists());
+    // Act
+    FileUtils.deleteFile(tempFile, tempFile.getPath(), null);
+    // Assert
+    assertFalse(tempFile.exists());
+  }
+
+  @Test
+  void shouldDeleteDirectory() throws IOException {
+    // Arrange
+    File tempDir = new File("build/tmp/test-delete-dir");
+    tempDir.mkdirs();
+    new File(tempDir, "inner.txt").createNewFile();
+    assertTrue(tempDir.exists());
+    // Act
+    FileUtils.deleteDirectory(tempDir, tempDir.getPath(), null);
+    // Assert
+    assertFalse(tempDir.exists());
+  }
+
+  @Test
+  void shouldDeleteFileOrDirWhenFile() throws IOException {
+    // Arrange
+    new File("build/tmp").mkdirs();
+    File tempFile = new File("build/tmp/test-delete-for-dir.txt");
+    tempFile.createNewFile();
+    assertTrue(tempFile.exists());
+    // Act
+    FileUtils.deleteFileOrDir(new File("build/tmp"), "test-delete-for-dir.txt", null);
+    // Assert
+    assertFalse(tempFile.exists());
+  }
+
+  @Test
+  void shouldDeleteFileOrDirWhenDirectory() {
+    // Arrange
+    File tempDir = new File("build/tmp/test-delete-for-dir");
+    tempDir.mkdirs();
+    assertTrue(tempDir.exists());
+    // Act
+    FileUtils.deleteFileOrDir(new File("build/tmp"), "test-delete-for-dir", null);
+    // Assert
+    assertFalse(tempDir.exists());
+  }
+
+  @Test
+  void shouldGetOrCreateNode() {
+    // Arrange
+    YAMLMapper mapper = new YAMLMapper();
+    ObjectNode root = mapper.createObjectNode();
+    List<String> attributes = new ArrayList<>(Arrays.asList("spring", "datasource"));
+    // Act
+    ObjectNode result = FileUtils.getOrCreateNode(root, attributes);
+    // Assert
+    assertNotNull(result);
+    assertTrue(root.has("spring"));
+    assertTrue(root.get("spring").has("datasource"));
+  }
+
+  @Test
+  void shouldGetOrCreateNodeReturnsRootWhenEmptyAttributes() {
+    // Arrange
+    YAMLMapper mapper = new YAMLMapper();
+    ObjectNode root = mapper.createObjectNode();
+    List<String> attributes = new ArrayList<>();
+    // Act
+    ObjectNode result = FileUtils.getOrCreateNode(root, attributes);
+    // Assert
+    assertEquals(root, result);
+  }
+
+  @Test
+  void shouldBuildFromTemplate() {
+    // Arrange
+    Map<String, Object> params = new HashMap<>();
+    params.put("name", "World");
+    MustacheFactory factory = new DefaultMustacheFactory();
+    // Act
+    String result = FileUtils.buildFromTemplate("template-test/hello.mustache", params, factory);
+    // Assert
+    assertTrue(result.contains("World"));
+  }
+
+  @Test
+  void shouldBuildFromTemplateWithDefaultFactory() {
+    // Arrange
+    Map<String, Object> params = new HashMap<>();
+    params.put("name", "Copilot");
+    // Act
+    String result = FileUtils.buildFromTemplate("template-test/hello.mustache", params);
+    // Assert
+    assertTrue(result.contains("Copilot"));
+  }
+
+  @Test
+  void shouldLoadTemplateDefinition() throws IOException {
+    // Arrange
+    DefaultResolver resolver = new DefaultResolver();
+    JsonMapper mapper = new JsonMapper();
+    // Act
+    TemplateDefinition definition =
+        FileUtils.loadTemplateDefinition(
+            resolver, mapper, "template-test", "definition.json", TemplateDefinition.class);
+    // Assert
+    assertNotNull(definition);
+    assertNotNull(definition.getFolders());
+    assertFalse(definition.getFolders().isEmpty());
+    assertNotNull(definition.getFiles());
+    assertFalse(definition.getFiles().isEmpty());
+  }
+
+  @Test
+  void shouldGetBooleanPropertyReturnsTrueWhenSet() throws IOException {
+    // Arrange
+    FileUtils.setGradleProperty(".", "testBoolProp", "true");
+    // Act
+    boolean result = FileUtils.getBooleanProperty(".", "testBoolProp", false, null);
+    // Assert
+    assertTrue(result);
+    // Cleanup
+    FileUtils.setGradleProperty(".", "testBoolProp", "false");
+  }
+
+  @Test
+  void shouldGetBooleanPropertyReturnsDefaultWhenMissing() {
+    // Act
+    boolean result = FileUtils.getBooleanProperty("nonexistent-path", "anyProp", true, null);
+    // Assert
+    assertTrue(result);
   }
 
   // Utilities

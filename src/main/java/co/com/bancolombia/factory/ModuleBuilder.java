@@ -22,12 +22,10 @@ import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import co.com.bancolombia.utils.operations.OperationsProvider;
 import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -65,8 +63,8 @@ public class ModuleBuilder {
   @Getter private final Logger logger;
   @Getter private final File projectDir;
   @Getter private final String projectName;
-  private Map<String, String> childBuildFiles = new HashMap<>();
-  private Map<String, String> childProjectDirs = new HashMap<>();
+  @Getter private Map<String, String> childBuildFiles = new HashMap<>();
+  @Getter private Map<String, String> childProjectDirs = new HashMap<>();
   private ObjectNode properties;
 
   @Setter private StyledTextOutput styledLogger;
@@ -178,7 +176,7 @@ public class ModuleBuilder {
 
     dirsToDelete.forEach(
         dir -> {
-          deleteFileOrDir(dir);
+          FileUtils.deleteFileOrDir(projectDir, dir, logger);
           logger.debug("deleting dir {}", dir);
         });
     styledLogger.style(Success).println("Changes successfully applied");
@@ -186,7 +184,9 @@ public class ModuleBuilder {
   }
 
   public void setupFromTemplate(String resourceGroup) throws IOException, ParamNotFoundException {
-    TemplateDefinition definition = loadTemplateDefinition(resourceGroup);
+    TemplateDefinition definition =
+        FileUtils.loadTemplateDefinition(
+            resolver, mapper, resourceGroup, DEFINITION_FILES, TemplateDefinition.class);
 
     for (String folder : definition.getFolders()) {
       addDir(Utils.fillPath(folder, params));
@@ -194,7 +194,7 @@ public class ModuleBuilder {
     Map<String, String> projectFiles = new HashMap<>(definition.getFiles());
     for (Map.Entry<String, String> fileEntry : projectFiles.entrySet()) {
       String path = Utils.fillPath(fileEntry.getValue(), params);
-      String content = buildFromTemplate(fileEntry.getKey());
+      String content = FileUtils.buildFromTemplate(fileEntry.getKey(), params, mustacheFactory);
       addDir(Utils.extractDir(path));
       addFile(path, content);
     }
@@ -301,7 +301,7 @@ public class ModuleBuilder {
       return properties;
     }
     List<String> attributes = new ArrayList<>(Arrays.asList(path.split("\\.")));
-    return getNode(properties, attributes);
+    return FileUtils.getOrCreateNode(properties, attributes);
   }
 
   public void addParam(String key, Object value) {
@@ -463,18 +463,7 @@ public class ModuleBuilder {
   }
 
   private boolean getABooleanProperty(String property, boolean defaultValue) {
-    try {
-      String value = FileUtils.readProperties(projectDir.getPath(), property);
-      return "true".equals(value);
-    } catch (IOException e) {
-      logger.info(e.getMessage());
-      logger.info(
-          "WARN: variable {} not present, if your project use {} please add {}=true to gradle.properties and relaunch this task",
-          property,
-          property,
-          property);
-      return defaultValue;
-    }
+    return FileUtils.getBooleanProperty(projectDir.getPath(), property, defaultValue, logger);
   }
 
   private String readFile(String path) throws IOException {
@@ -487,54 +476,5 @@ public class ModuleBuilder {
       content = current.getContent();
     }
     return content;
-  }
-
-  private void deleteFileOrDir(String path) {
-    File file = resolveFile(path);
-    if (file.isDirectory()) {
-      deleteDirectory(file, path);
-    } else {
-      deleteFile(file, path);
-    }
-  }
-
-  private void deleteDirectory(File dir, String path) {
-    try {
-      org.apache.commons.io.FileUtils.deleteDirectory(dir);
-    } catch (IOException e) {
-      logger.error("Error deleting directory {}: {}", path, e.getMessage());
-    }
-  }
-
-  private void deleteFile(File file, String path) {
-    try {
-      java.nio.file.Files.delete(file.toPath());
-    } catch (IOException e) {
-      logger.debug("Could not delete file {}: {}", path, e.getMessage());
-    }
-  }
-
-  private ObjectNode getNode(ObjectNode node, List<String> attributes) {
-    if (attributes.isEmpty()) {
-      return node;
-    } else {
-      String attribute = attributes.remove(0);
-      ObjectNode current =
-          node.has(attribute) ? (ObjectNode) node.get(attribute) : node.putObject(attribute);
-      return getNode(current, attributes);
-    }
-  }
-
-  private String buildFromTemplate(String resource) {
-    Mustache mustache = mustacheFactory.compile(resource);
-    StringWriter stringWriter = new StringWriter();
-    mustache.execute(stringWriter, params);
-    return stringWriter.toString();
-  }
-
-  private TemplateDefinition loadTemplateDefinition(String resourceGroup) throws IOException {
-    String targetString =
-        FileUtils.getResourceAsString(resolver, Utils.joinPath(resourceGroup, DEFINITION_FILES));
-    return mapper.readValue(targetString, TemplateDefinition.class);
   }
 }
