@@ -27,14 +27,14 @@ public class HandlerRegistryConfiguration {
     NotificationsHandler notification) {
         {{#eda}}
          return HandlerRegistry.register()
-                        .listenNotificationCloudEvent("some.broadcast.event.name", notification::handleNotificacionA)
+                        .listenNotificationCloudEvent("some.broadcast.event.name", notification::handleNotificationA)
                         .listenCloudEvent("some.event.name", events::handleEventA)
                         .handleCloudEventCommand("some.command.name", commands::handleCommandA)
                         .serveCloudEventQuery("some.query.name", queries::handleQueryA);
         {{/eda}}
         {{^eda}}
         return HandlerRegistry.register()
-                .listenNotificationEvent("some.broadcast.event.name", notification::handleNotificacionA, Object.class/*change for proper model*/)
+                .listenNotificationEvent("some.broadcast.event.name", notification::handleNotificationA, Object.class/*change for proper model*/)
                 .listenEvent("some.event.name", events::handleEventA, Object.class/*change for proper model*/)
                 .handleCommand("some.command.name", commands::handleCommandA, Object.class/*change for proper model*/)
                 .serveQuery("some.query.name", queries::handleQueryA, Object.class/*change for proper model*/);
