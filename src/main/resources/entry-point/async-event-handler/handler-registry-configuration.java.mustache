@@ -3,6 +3,7 @@ package {{package}}.events;
 import {{package}}.events.handlers.CommandsHandler;
 import {{package}}.events.handlers.EventsHandler;
 import {{package}}.events.handlers.QueriesHandler;
+import {{package}}.events.handlers.NotificationsHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import {{package}}.events.handlers.CommandsHandler;
 import {{package}}.events.handlers.EventsHandler;
 import {{package}}.events.handlers.QueriesHandler;
+import {{package}}.events.handlers.NotificationsHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,17 +23,17 @@ public class HandlerRegistryConfiguration {
 
     // see more at: https://reactivecommons.org/reactive-commons-java/#_handlerregistry_2
     @Bean
-    public HandlerRegistry handlerRegistry(CommandsHandler commands, EventsHandler events, QueriesHandler queries) {
+    public HandlerRegistry handlerRegistry(CommandsHandler commands, EventsHandler events, QueriesHandler queries,NotificationsHandler notificacion) {
         {{#eda}}
          return HandlerRegistry.register()
-                        .listenNotificationCloudEvent("some.broadcast.event.name", events::handleEventA)
+                        .listenNotificationCloudEvent("some.broadcast.event.name", notificacion::handleNotificacionA)
                         .listenCloudEvent("some.event.name", events::handleEventA)
                         .handleCloudEventCommand("some.command.name", commands::handleCommandA)
                         .serveCloudEventQuery("some.query.name", queries::handleQueryA);
         {{/eda}}
         {{^eda}}
         return HandlerRegistry.register()
-                .listenNotificationEvent("some.broadcast.event.name", events::handleEventA, Object.class/*change for proper model*/)
+                .listenNotificationEvent("some.broadcast.event.name", notificacion::handleNotificacionA, Object.class/*change for proper model*/)
                 .listenEvent("some.event.name", events::handleEventA, Object.class/*change for proper model*/)
                 .handleCommand("some.command.name", commands::handleCommandA, Object.class/*change for proper model*/)
                 .serveQuery("some.query.name", queries::handleQueryA, Object.class/*change for proper model*/);
