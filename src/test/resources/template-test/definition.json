@@ -1,0 +1,6 @@
+{
+  "folders": ["output/folder"],
+  "files": {
+    "template-test/hello.mustache": "output/hello.txt"
+  }
+}

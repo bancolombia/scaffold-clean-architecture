@@ -1,5 +1,8 @@
 package co.com.bancolombia.utils;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +14,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -220,6 +225,87 @@ public class FileUtils {
       }
     }
     throw new IOException("File not found in zip file");
+  }
+
+  public static void deleteFileOrDir(File projectDir, String path, Logger logger) {
+    File file = resolveFile(projectDir, path);
+    if (file.isDirectory()) {
+      deleteDirectory(file, path, logger);
+    } else {
+      deleteFile(file, path, logger);
+    }
+  }
+
+  public static void deleteDirectory(File dir, String path, Logger logger) {
+    try {
+      org.apache.commons.io.FileUtils.deleteDirectory(dir);
+    } catch (IOException e) {
+      if (logger != null) {
+        logger.error("Error deleting directory {}: {}", path, e.getMessage());
+      }
+    }
+  }
+
+  public static void deleteFile(File file, String path, Logger logger) {
+    try {
+      Files.delete(file.toPath());
+    } catch (IOException e) {
+      if (logger != null) {
+        logger.debug("Could not delete file {}: {}", path, e.getMessage());
+      }
+    }
+  }
+
+  public static ObjectNode getOrCreateNode(ObjectNode node, List<String> attributes) {
+    if (attributes.isEmpty()) {
+      return node;
+    }
+    String attribute = attributes.remove(0);
+    ObjectNode current =
+        node.has(attribute) ? (ObjectNode) node.get(attribute) : node.putObject(attribute);
+    return getOrCreateNode(current, attributes);
+  }
+
+  public static <T> T loadTemplateDefinition(
+      DefaultResolver resolver,
+      ObjectMapper mapper,
+      String resourceGroup,
+      String definitionFile,
+      Class<T> type)
+      throws IOException {
+    String targetString =
+        getResourceAsString(resolver, Utils.joinPath(resourceGroup, definitionFile));
+    return mapper.readValue(targetString, type);
+  }
+
+  public static String buildFromTemplate(
+      String resource, Map<String, Object> params, MustacheFactory mustacheFactory) {
+    Mustache mustache = mustacheFactory.compile(resource);
+    StringWriter stringWriter = new StringWriter();
+    mustache.execute(stringWriter, params);
+    return stringWriter.toString();
+  }
+
+  public static String buildFromTemplate(String resource, Map<String, Object> params) {
+    return buildFromTemplate(resource, params, new DefaultMustacheFactory());
+  }
+
+  public static boolean getBooleanProperty(
+      String projectPath, String property, boolean defaultValue, Logger logger) {
+    try {
+      String value = readProperties(projectPath, property);
+      return "true".equals(value);
+    } catch (IOException e) {
+      if (logger != null) {
+        logger.info(e.getMessage());
+        logger.info(
+            "WARN: variable {} not present, if your project use {} please add {}=true to gradle.properties and relaunch this task",
+            property,
+            property,
+            property);
+      }
+      return defaultValue;
+    }
   }
 
   private static void logException(Exception e, Logger logger, File file, String charset) {
