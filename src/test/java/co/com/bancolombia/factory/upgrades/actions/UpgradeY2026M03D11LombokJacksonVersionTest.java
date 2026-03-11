@@ -14,16 +14,22 @@ import co.com.bancolombia.utils.FileUtils;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.stream.Stream;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class UpgradeY2026M03D11LombokJacksonVersionTest {
+
+  private static final String JACKSON_PROP = "lombok.jacksonized.jacksonVersion += 3";
 
   @Mock private Project project;
   @Mock private Logger logger;
@@ -70,5 +76,36 @@ class UpgradeY2026M03D11LombokJacksonVersionTest {
     boolean applied = updater.up(builder);
     // Assert
     assertFalse(applied);
+  }
+
+  static Stream<Arguments> variantCases() {
+    return Stream.of(
+        Arguments.of(
+            "value = false",
+            "config.stopBubbling = true\nlombok.addLombokGeneratedAnnotation = false",
+            "config.stopBubbling = true\nlombok.addLombokGeneratedAnnotation = false\n"
+                + JACKSON_PROP),
+        Arguments.of(
+            "value = true with leading spaces",
+            "config.stopBubbling = true\n  lombok.addLombokGeneratedAnnotation  =  true",
+            "config.stopBubbling = true\n  lombok.addLombokGeneratedAnnotation  =  true\n"
+                + JACKSON_PROP),
+        Arguments.of(
+            "value = custom",
+            "config.stopBubbling =true\nlombok.addLombokGeneratedAnnotation=false",
+            "config.stopBubbling =true\nlombok.addLombokGeneratedAnnotation=false\n"
+                + JACKSON_PROP));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("variantCases")
+  void shouldApplyUpdateForVariants(String description, String before, String expectedAfter) {
+    // Arrange
+    builder.addFile(LOMBOK_CONFIG, before);
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertTrue(applied, "Expected update to be applied for case: " + description);
+    verify(builder).addFile(LOMBOK_CONFIG, expectedAfter);
   }
 }
