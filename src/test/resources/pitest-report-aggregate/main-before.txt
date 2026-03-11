@@ -1,76 +1,42 @@
-{{#mutation}}
 apply plugin: 'info.solidsoft.pitest.aggregator'
-{{/mutation}}
 
 allprojects {
     repositories {
-        {{^example}}//{{/example}}mavenLocal()
         mavenCentral()
     }
 }
 
 subprojects {
+    apply plugin: 'info.solidsoft.pitest'
     apply plugin: 'java'
     apply plugin: 'jacoco'
     apply plugin: 'io.spring.dependency-management'
-    {{#mutation}}
-    apply plugin: 'info.solidsoft.pitest'
-    {{/mutation}}
 
     compileJava.dependsOn validateStructure
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of({{javaVersion}})
+            languageVersion = JavaLanguageVersion.of(21)
         }
     }
-
-    {{#mutation}}
-    //build.dependsOn 'pitest'
-    {{/mutation}}
 
     test {
         useJUnitPlatform()
     }
 
     dependencies {
-        {{#reactive}}
-        implementation 'io.projectreactor:reactor-core'
-        implementation 'io.projectreactor.addons:reactor-extra'
-
-        testImplementation 'io.projectreactor.tools:blockhound-junit-platform:{{BLOCK_HOUND_VERSION}}'
-
-        testImplementation 'io.projectreactor:reactor-test'
-        {{/reactive}}
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        {{#lombok}}
-        compileOnly "org.projectlombok:lombok:${lombokVersion}"
-        annotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
-        testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
-        {{/lombok}}
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
-    {{#reactive}}
-    tasks.withType(Test).configureEach {
-        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-            jvmArgs += [
-                    "-XX:+AllowRedefinitionToAddDeleteMethods"
-            ]
-        }
-    }
-    {{/reactive}}
-
     test.finalizedBy(project.tasks.jacocoTestReport)
 
-    {{#mutation}}
     pitest {
-        targetClasses = ['{{package}}.*']
+        targetClasses = ['your.package.*']
         excludedClasses = []
         excludedTestClasses = []
-        pitestVersion = '{{PITEST_VERSION}}'
+        pitestVersion = '1.22.1'
         verbose = false
         outputFormats = ['XML', 'HTML']
         threads = 8
@@ -80,11 +46,10 @@ subprojects {
         timestampedReports = false
         //mutators = ['STRONGER', 'DEFAULTS']
         fileExtensionsToFilter.addAll('xml', 'orbit')
-        junit5PluginVersion = '{{PITEST_JUNIT5_VERSION}}'
+        junit5PluginVersion = '1.2.3'
         failWhenNoMutations = false
         jvmArgs = ["-XX:+AllowRedefinitionToAddDeleteMethods"]
     }
-    {{/mutation}}
 
     jacocoTestReport {
         dependsOn test, 'pitest'
@@ -123,18 +88,13 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 pitestReportAggregate {
-    def rootReportDir = layout.buildDirectory.dir("reports/pitest")
-    def subprojectReports = subprojects.collect { subproject ->
-        subproject.layout.buildDirectory.file("reports/pitest/mutations.xml")
-    }
-
     doLast {
-        def reportDir = rootReportDir.get().asFile
+        def reportDir = layout.buildDirectory.dir("reports/pitest").get().asFile
         def consolidatedReport = new File(reportDir, 'mutations.xml')
         consolidatedReport.withWriter { writer ->
             writer.write("<mutations>\n")
-            subprojectReports.each { reportProvider ->
-                def xmlReport = reportProvider.get().asFile
+            subprojects.each { subproject ->
+                def xmlReport = subproject.layout.buildDirectory.file("reports/pitest/mutations.xml").get().asFile
                 if (xmlReport.exists()) {
                     def xmlContent = xmlReport.text
                     xmlContent = xmlContent.replaceAll("<\\?xml[^>]*>", "")
@@ -148,5 +108,6 @@ pitestReportAggregate {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '{{GRADLE_WRAPPER_VERSION}}'
+    gradleVersion = '9.4.0'
 }
+
