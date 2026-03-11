@@ -10,8 +10,6 @@ import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
-import co.com.bancolombia.utils.FileUtils;
-import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.stream.Stream;
@@ -51,27 +49,25 @@ class UpgradeY2026M03D11LombokJacksonVersionTest {
   }
 
   @Test
-  void shouldApplyUpdate() throws IOException {
-    DefaultResolver resolver = new DefaultResolver();
+  void shouldApplyUpdate() {
     // Arrange
-    builder.addFile(
-        LOMBOK_CONFIG, FileUtils.getResourceAsString(resolver, "lombok-jackson/lombok-before.txt"));
+    String before = "config.stopBubbling = true\nlombok.addLombokGeneratedAnnotation = true";
+    String expectedAfter =
+        "config.stopBubbling = true\nlombok.addLombokGeneratedAnnotation = true\n" + JACKSON_PROP;
+    builder.addFile(LOMBOK_CONFIG, before);
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder)
-        .addFile(
-            LOMBOK_CONFIG,
-            FileUtils.getResourceAsString(resolver, "lombok-jackson/lombok-after.txt"));
+    verify(builder).addFile(LOMBOK_CONFIG, expectedAfter);
   }
 
   @Test
-  void shouldNotApplyWhenAlreadyContainsProperty() throws IOException {
-    DefaultResolver resolver = new DefaultResolver();
+  void shouldNotApplyWhenAlreadyContainsProperty() {
     // Arrange
-    builder.addFile(
-        LOMBOK_CONFIG, FileUtils.getResourceAsString(resolver, "lombok-jackson/lombok-after.txt"));
+    String expectedAfter =
+        "config.stopBubbling = true\nlombok.addLombokGeneratedAnnotation = true\n" + JACKSON_PROP;
+    builder.addFile(LOMBOK_CONFIG, expectedAfter);
     // Act
     boolean applied = updater.up(builder);
     // Assert
