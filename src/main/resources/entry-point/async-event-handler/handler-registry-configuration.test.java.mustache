@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.async.api.HandlerRegistry;
 {{#eda}}
-import org.reactivecommons.async.commons.converters.json.DefaultObjectMapperSupplier;
+import tools.jackson.databind.json.JsonMapper;
 {{/eda}}
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,7 +24,7 @@ class HandlerRegistryConfigurationTest {
     void setUp() {
         eventsHandler = new EventsHandler();
         commandsHandler = new CommandsHandler();
-        queriesHandler = new QueriesHandler({{#eda}}new DefaultObjectMapperSupplier().get(){{/eda}});
+        queriesHandler = new QueriesHandler({{#eda}}new JsonMapper(){{/eda}});
         notificationHandler = new NotificationsHandler();
     }
 

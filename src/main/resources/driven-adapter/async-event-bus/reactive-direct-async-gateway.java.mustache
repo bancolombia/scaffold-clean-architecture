@@ -37,7 +37,7 @@ import java.util.logging.Level;
 {{/lombok}}
 @EnableDirectAsyncGateway
 public class ReactiveDirectAsyncGateway  implements DirectGateway {
-    public static final String TARGET_NAME = "cleanArchitecture";// refers to remote spring.application.name property for this case is {{projectName}} to process the commands and async queries
+    public static final String TARGET_NAME = "cleanArchitecture";// refers to remote spring.application.name property
     public static final String SOME_COMMAND_NAME = "some.command.name";
     public static final String SOME_QUERY_NAME = "some.query.name";
     private final DirectAsyncGateway gateway;
