@@ -1,3 +1,2 @@
 config.stopBubbling = true
 lombok.addLombokGeneratedAnnotation = true
-lombok.jacksonized.jacksonVersion += 3

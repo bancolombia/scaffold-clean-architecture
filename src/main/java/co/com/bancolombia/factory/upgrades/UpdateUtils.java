@@ -40,15 +40,7 @@ public class UpdateUtils {
     return appliedA || appliedB;
   }
 
-  /**
-   * Inserts concatValue before match if main does not containsValue
-   *
-   * @param main
-   * @param match
-   * @param containsValue
-   * @param concatValue
-   * @return
-   */
+  /** Inserts concatValue before match if main does not containsValue */
   public static String insertBeforeMatch(
       String main, String match, String containsValue, String concatValue) {
     if (main.contains(containsValue)) {
