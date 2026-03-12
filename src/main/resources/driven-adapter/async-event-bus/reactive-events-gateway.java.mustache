@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.core.builder.CloudEventBuilder;
 import io.cloudevents.jackson.JsonCloudEventData;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.UUID;
 import java.net.URI;
@@ -39,9 +39,11 @@ import static reactor.core.publisher.Mono.from;
 @EnableDomainEventBus
 public class ReactiveEventsGateway implements EventsGateway {
     public static final String SOME_EVENT_NAME = "some.event.name";
+    public static final String SOME_NOTIFICATION_NAME = "some.broadcast.event.name";
+
     private final DomainEventBus domainEventBus;
     {{#eda}}
-    private final ObjectMapper om;
+    private final JsonMapper mapper;
     {{/eda}}
     {{^lombok}}
 
@@ -61,7 +63,7 @@ public class ReactiveEventsGateway implements EventsGateway {
                 .withSource(URI.create("https://reactive-commons.org/foos"))
                 .withType(SOME_EVENT_NAME)
                 .withTime(OffsetDateTime.now())
-                .withData("application/json", JsonCloudEventData.wrap(om.valueToTree(event)))
+                .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(event)))
                 .build();
 
          return from(domainEventBus.emit(eventCloudEvent));
@@ -70,4 +72,26 @@ public class ReactiveEventsGateway implements EventsGateway {
          return from(domainEventBus.emit(new DomainEvent<>(SOME_EVENT_NAME, UUID.randomUUID().toString(), event)));
         {{/eda}}
     }
+
+      @Override
+      public Mono<Void> notify(Object event) {
+          {{#lombok}}
+          log.log(Level.INFO, "Sending domain notification: {0}: {1}", new String[]{SOME_NOTIFICATION_NAME, event.toString()});
+          {{/lombok}}
+          {{#eda}}
+          CloudEvent eventCloudEvent = CloudEventBuilder.v1()
+                  .withId(UUID.randomUUID().toString())
+                  .withSource(URI.create("https://reactive-commons.org/foos"))
+                  .withType(SOME_NOTIFICATION_NAME)
+                  .withTime(OffsetDateTime.now())
+                  .withData("application/json", JsonCloudEventData.wrap(mapper.valueToTree(event)))
+                  .build();
+
+           return from(domainEventBus.emit(eventCloudEvent));
+          {{/eda}}
+          {{^eda}}
+           return from(domainEventBus.emit(new DomainEvent<>(SOME_NOTIFICATION_NAME, UUID.randomUUID().toString(), event)));
+          {{/eda}}
+      }
+
 }

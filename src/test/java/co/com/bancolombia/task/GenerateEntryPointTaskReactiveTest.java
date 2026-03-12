@@ -190,6 +190,7 @@ class GenerateEntryPointTaskReactiveTest {
         "build.gradle",
         "src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java",
         "src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java",
+        "src/main/java/co/com/bancolombia/events/handlers/NotificationsHandler.java",
         "src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java",
         "src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java");
   }
@@ -208,6 +209,7 @@ class GenerateEntryPointTaskReactiveTest {
         "build.gradle",
         "src/main/java/co/com/bancolombia/events/HandlerRegistryConfiguration.java",
         "src/main/java/co/com/bancolombia/events/handlers/EventsHandler.java",
+        "src/main/java/co/com/bancolombia/events/handlers/NotificationsHandler.java",
         "src/main/java/co/com/bancolombia/events/handlers/CommandsHandler.java",
         "src/main/java/co/com/bancolombia/events/handlers/QueriesHandler.java");
   }

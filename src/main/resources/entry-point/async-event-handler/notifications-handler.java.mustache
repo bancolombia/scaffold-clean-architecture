@@ -1,0 +1,45 @@
+package {{package}}.events.handlers;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+{{^eda}}
+import org.reactivecommons.api.domain.DomainEvent;
+{{/eda}}
+import org.reactivecommons.async.impl.config.annotations.EnableNotificationListener;
+import reactor.core.publisher.Mono;
+import lombok.extern.java.Log;
+import java.util.logging.Level;
+{{#eda}}
+import io.cloudevents.CloudEvent;
+{{/eda}}
+
+@Log
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+@EnableNotificationListener
+public class NotificationsHandler {
+//    private final SampleUseCase sampleUseCase;
+
+{{^lombok}}
+    public NotificationsHandler(/*SampleUseCase sampleUseCase*/) {
+        //this.sampleUseCase = sampleUseCase;
+    }
+{{/lombok}}
+{{#eda}}
+    public Mono<Void> handleNotificationA(CloudEvent event) {
+        log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getType(), event.getData()}); // TODO: Remove this line
+//        return sampleUseCase.doSomething(event.getData());
+        return Mono.empty();
+    }
+{{/eda}}
+
+{{^eda}}
+    public Mono<Void> handleNotificationA(DomainEvent<Object/*change for proper model*/> event) {
+        log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getName(), event.getData()}); // TODO: Remove this line
+//        return sampleUseCase.doSomething(event.getData());
+        return Mono.empty();
+    }
+{{/eda}}
+}

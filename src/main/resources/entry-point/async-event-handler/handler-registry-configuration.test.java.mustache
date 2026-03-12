@@ -3,11 +3,12 @@ package {{package}}.events;
 import co.com.bancolombia.events.handlers.CommandsHandler;
 import co.com.bancolombia.events.handlers.EventsHandler;
 import co.com.bancolombia.events.handlers.QueriesHandler;
+import co.com.bancolombia.events.handlers.NotificationsHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.async.api.HandlerRegistry;
 {{#eda}}
-import org.reactivecommons.async.commons.converters.json.DefaultObjectMapperSupplier;
+import tools.jackson.databind.json.JsonMapper;
 {{/eda}}
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,18 +18,21 @@ class HandlerRegistryConfigurationTest {
     EventsHandler eventsHandler;
     CommandsHandler commandsHandler;
     QueriesHandler queriesHandler;
+    NotificationsHandler notificationHandler;
 
     @BeforeEach
     void setUp() {
         eventsHandler = new EventsHandler();
         commandsHandler = new CommandsHandler();
-        queriesHandler = new QueriesHandler({{#eda}}new DefaultObjectMapperSupplier().get(){{/eda}});
+        queriesHandler = new QueriesHandler({{#eda}}new JsonMapper(){{/eda}});
+        notificationHandler = new NotificationsHandler();
     }
 
     @Test
     void testHandlerRegistry() {
         HandlerRegistryConfiguration handlerRegistryConfiguration = new HandlerRegistryConfiguration();
-        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(commandsHandler, eventsHandler, queriesHandler);
+        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(commandsHandler, eventsHandler, queriesHandler,
+        notificationHandler);
 
         assertNotNull(handlerRegistry);
     }
