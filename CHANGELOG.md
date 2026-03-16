@@ -1,5 +1,22 @@
 # Changelog
 
+## [v4.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.3.0) (2026-03-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.2.0...v4.3.0)
+
+**Merged pull requests:**
+
+- refactor\(gradle\): implement Gradle version retrieval from API [\#836](https://github.com/bancolombia/scaffold-clean-architecture/pull/836) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump dorny/paths-filter from 4.0.0 to 4.0.1 [\#835](https://github.com/bancolombia/scaffold-clean-architecture/pull/835) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/create-github-app-token from 2.2.1 to 3.0.0 [\#834](https://github.com/bancolombia/scaffold-clean-architecture/pull/834) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump dorny/paths-filter from 3.0.2 to 4.0.0 [\#833](https://github.com/bancolombia/scaffold-clean-architecture/pull/833) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(upgradeAction\): update Lombok and Jackson versions for compatiblity [\#832](https://github.com/bancolombia/scaffold-clean-architecture/pull/832) ([luisgomez29](https://github.com/luisgomez29))
+- chore\(upgradeAction\): update pitestReportAggregate for Gradle configuration cache compatibility [\#831](https://github.com/bancolombia/scaffold-clean-architecture/pull/831) ([luisgomez29](https://github.com/luisgomez29))
+- refactor\(ModuleBuilder\): streamline file and directory operations in FileUtils [\#830](https://github.com/bancolombia/scaffold-clean-architecture/pull/830) ([luisgomez29](https://github.com/luisgomez29))
+- chore\(templates\): handle notifications in AsyncEventHandler and introduce DirectGateway for ReactiveDirectAsyncGateway [\#829](https://github.com/bancolombia/scaffold-clean-architecture/pull/829) ([andres620x](https://github.com/andres620x))
+- feat\(agent\): add Kafka producer and consumer configurations, implement chat gateway and response handling [\#824](https://github.com/bancolombia/scaffold-clean-architecture/pull/824) ([kenyodarz](https://github.com/kenyodarz))
+- build\(deps\): update dependencies [\#819](https://github.com/bancolombia/scaffold-clean-architecture/pull/819) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v4.2.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.2.0) (2026-03-09)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.1.1...v4.2.0)
@@ -1709,15 +1726,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
-
-## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
 
 ## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+
+## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
 
 **Implemented enhancements:**
 
