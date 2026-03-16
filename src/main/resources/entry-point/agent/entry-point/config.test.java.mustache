@@ -1,0 +1,73 @@
+package {{package}}.api.config;
+
+import {{package}}.api.Handler;
+import {{package}}.api.RouterRest;
+import {{package}}.model.a2a.Message;
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.model.a2a.SendMessageResponse;
+import {{package}}.model.a2a.Task;
+import {{package}}.usecase.AgentChatUseCase;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webflux.test.autoconfigure.WebFluxTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@WebFluxTest(properties = {
+        "agent.id=test-agent",
+        "agent.name=Test Agent",
+        "agent.description=Test Description"
+})
+@ContextConfiguration(classes = {RouterRest.class, Handler.class})
+@Import({CorsConfig.class, SecurityHeadersConfig.class})
+@DisplayName("Agent Configuration Tests")
+class ConfigTest {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockitoBean
+    private AgentChatUseCase agentChatUseCase;
+
+    // security headers must be present on every response
+    @Test
+    @DisplayName("Should contain security headers on all responses")
+    void securityHeadersShouldBePresentOnA2AEndpoint() {
+        SendMessageResponse mockResponse = SendMessageResponse.builder()
+                .message(Message.builder().role("ASSISTANT").content("ok").build())
+                .task(Task.builder()
+                        .id("task-123")
+                        .status("COMPLETED")
+                        .execution_time_ms(10L)
+                        .build())
+                .build();
+
+        when(agentChatUseCase.chatAndRespond(any())).thenReturn(Mono.just(mockResponse));
+
+        webTestClient.post()
+                .uri("/message:send")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(SendMessageRequest.builder()
+                        .task_id("task-123")
+                        .message(Message.builder().role("USER").content("hello").build())
+                        .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().valueEquals("Content-Security-Policy",
+                        "default-src 'self'; frame-ancestors 'self'; form-action 'self'")
+                .expectHeader().valueEquals("Strict-Transport-Security",
+                        "max-age=31536000; includeSubDomains; preload")
+                .expectHeader().valueEquals("X-Content-Type-Options", "nosniff")
+                .expectHeader().valueEquals("Cache-Control", "no-store")
+                .expectHeader().valueEquals("Pragma", "no-cache")
+                .expectHeader().valueEquals("Referrer-Policy", "strict-origin-when-cross-origin");
+    }
+}

@@ -61,6 +61,10 @@
             "packageName": "io.cloudevents:cloudevents-core"
         },
         {
+            "name": "REACTOR_KAFKA_VERSION",
+            "packageName": "io.projectreactor.kafka:reactor-kafka"
+        },
+        {
             "name": "SPRING_AI_VERSION",
             "packageName": "org.springframework.ai:spring-ai-bom"
         },

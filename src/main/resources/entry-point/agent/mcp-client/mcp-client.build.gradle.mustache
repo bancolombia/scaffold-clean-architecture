@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(':model')
+    
+    // Spring AI BOM for dependent versions
+    implementation platform("org.springframework.ai:spring-ai-bom:{{SPRING_AI_VERSION}}")
+    
+    implementation 'org.springframework.ai:spring-ai-mcp'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.ai:spring-ai-client-chat'
+    implementation 'org.springframework.ai:spring-ai-starter-model-chat-memory'
+    implementation 'org.springframework.ai:spring-ai-model'
+    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
+}

@@ -41,6 +41,9 @@ gradle gep --type [entryPointType]
 |                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
 | **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
 |                       |                                        | `--topic-consumer`  | String (topic name)                   | `test-with-registries` |
+| **agent**             | Spring AI A2A Reactive Agent           | `--name`             | String                                | project name           |
+|                       |                                        | `--agent-enable-kafka` | `true`, `false`                     | `true`                 |
+|                       |                                        | `--agent-enable-mcp-client` | `true`, `false`                | `true`                 |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.
@@ -292,4 +295,147 @@ public class SupportPrompt {
         });
     }
 }
+```
+
+---
+
+## Usage Example for Agent (Spring AI A2A)
+
+The **`agent`** entry point type generates a full reactive **A2A (Agent-to-Agent)** skeleton based on Spring AI and
+WebFlux. It exposes two standard A2A REST endpoints (`POST /message:send` and `GET /.well-known/agent-card.json`)
+and optionally Kafka transport, using the **A2A protocol** with correlation and trace identifiers for observability.
+
+The generated chat adapter is **mutually exclusive**:
+- with `--agent-enable-mcp-client=true` the scaffold adds `mcp-client`
+- with `--agent-enable-mcp-client=false` the scaffold adds `spring-ai-adapter`
+
+
+### Basic Command
+
+```shell
+gradle generateEntryPoint --type=agent
+gradle gep --type=agent
+```
+
+### Available Parameters
+
+| Parameter                   | Values         | Default        | Description                                                  |
+|-----------------------------|----------------|----------------|--------------------------------------------------------------|
+| `--name`                    | String         | project name   | Agent name (used in `spring.application.name`)               |
+| `--agent-enable-kafka`      | `true`/`false` | `true`         | Add Kafka consumer + producer transport                      |
+| `--agent-enable-mcp-client` | `true`/`false` | `true`         | Add `mcp-client` instead of `spring-ai-adapter` for tool use |
+
+### Usage Examples
+
+```shell
+# Full agent: REST + Kafka + MCP client (Default behavior)
+gradle generateEntryPoint --type=agent --name=my-agent
+
+# Minimal REST-only agent without async transport and without MCP
+# Generates spring-ai-adapter as the ChatGateway implementation
+gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-kafka=false --agent-enable-mcp-client=false
+
+# Agent with Kafka only
+# Generates spring-ai-adapter and Kafka modules
+gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-mcp-client=false
+
+# Agent with MCP client only (REST + MCP)
+gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-kafka=false
+```
+
+### Generated Structure
+
+```bash
+domain/
+├── model/src/main/java/[package]/model/
+│   ├── a2a/
+│   │   ├── SendMessageRequest.java   # Inbound A2A request envelope
+│   │   ├── SendMessageResponse.java  # Outbound A2A response envelope
+│   │   ├── Message.java              # Message content (role + content)
+│   │   ├── Task.java                 # Task result with status and timing
+│   │   ├── Error.java                # Structured error model
+│   │   └── AgentCard.java            # Agent metadata for /.well-known/agent-card.json
+│   └── chat/gateways/
+│       ├── ChatGateway.java          # Port: send prompt → LLM → Mono<String>
+│       └── AgentResponseGateway.java # Port: publish response to Kafka
+└── usecase/src/main/java/[package]/usecase/
+    └── AgentChatUseCase.java         # Core logic: LLM call + response routing
+
+infrastructure/
+├── entry-points/
+│   └── reactive-web/
+│       ├── build.gradle
+│       └── src/
+│           ├── main/java/[package]/api/
+│           │   ├── Handler.java              # Handles POST /message:send
+│           │   ├── RouterRest.java           # Routes: /message:send + /.well-known/agent-card.json
+│           │   └── config/
+│           │       ├── CorsConfig.java
+│           │       ├── JacksonConfig.java     # JsonMapper bean (Jackson 3)
+│           │       └── SecurityHeadersConfig.java
+│           └── test/java/[package]/api/
+│               ├── HandlerTest.java
+│               └── RouterRestTest.java
+└── driven-adapters/
+    ├── mcp-client/                           # Generated when --agent-enable-mcp-client=true
+    │   ├── build.gradle
+    │   └── src/main/java/[package]/mcpclient/adapter/
+    │       └── ChatGatewayAdapter.java
+    └── spring-ai-adapter/                    # Generated when --agent-enable-mcp-client=false
+        ├── build.gradle
+        └── src/main/java/[package]/chat/
+            └── SpringAiChatAdapter.java
+
+# If --agent-enable-kafka=true:
+infrastructure/
+├── entry-points/
+│   └── reactive-web/src/main/java/[package]/kafka/
+│       ├── consumer/
+│       │   ├── KafkaConsumer.java
+│       │   └── config/
+│       │       └── KafkaConfig.java
+│       └── producer/
+│           ├── KafkaProducerAdapter.java
+│           └── config/
+│               └── KafkaProducerConfig.java
+```
+
+### Automatic Configuration
+
+The command automatically updates `application.yaml`:
+
+```yaml
+spring:
+  application:
+    name: "my-agent"
+  ai:
+    openai:
+      api-key: "${LLM_API_KEY:lm-studio}"
+      base-url: "${LLM_URL:http://localhost:1234}"
+      chat:
+        options:
+          model: "${LLM_MODEL:local-model}"
+          temperature: "0.0"
+    # If --agent-enable-mcp-client=true
+    mcp:
+      client:
+        streamable-http:
+          connections:
+            mcp-server-1:
+              url: "${MCP_SERVER_URL:http://localhost:8080}"
+              endpoint: "${MCP_SERVER_ENDPOINT:/mcp/stream}"
+
+# If --agent-enable-kafka=true:
+adapters:
+  kafka:
+    consumer:
+      topic: "${KAFKA_CONSUMER_TOPIC:ms_test-commands}"
+    producer:
+      topic: "${KAFKA_PRODUCER_TOPIC:ms_test-responses}"
+
+agent:
+  system-prompt: "You are a specialised agent called 'my-agent'. Use available MCP tools. Respond in JSON."
+
+cors:
+  allowed-origins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200}"
 ```

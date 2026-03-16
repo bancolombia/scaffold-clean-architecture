@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':model')
+
+    // Spring AI BOM + OpenAI-compatible client
+    implementation platform("org.springframework.ai:spring-ai-bom:{{SPRING_AI_VERSION}}")
+    implementation "org.springframework.ai:spring-ai-starter-model-openai"
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.mockito:mockito-core'
+}

@@ -1,0 +1,10 @@
+{
+  "folders": [
+    "applications/app-service/src/main/java/{{packagePath}}/config",
+    "infrastructure/driven-adapters/mcp-client/src/main/java/{{packagePath}}/config"
+  ],
+  "files": {
+    "entry-point/agent/config/chat-client-config.java.mustache": "infrastructure/driven-adapters/mcp-client/src/main/java/{{packagePath}}/config/ChatClientConfig.java",
+    "entry-point/agent/config/jackson-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/JacksonConfig.java"
+  }
+}

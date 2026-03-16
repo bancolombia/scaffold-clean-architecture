@@ -1,0 +1,42 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+@SuppressWarnings("java:S116")
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class Task {
+    private String id;
+    private String status;
+    private Error error;
+    private Long execution_time_ms;
+
+{{^lombok}}
+    public Task() {}
+
+    public Task(String id, String status, Error error, Long execution_time_ms) {
+        this.id = id;
+        this.status = status;
+        this.error = error;
+        this.execution_time_ms = execution_time_ms;
+    }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public Error getError() { return error; }
+    public void setError(Error error) { this.error = error; }
+    public Long getExecution_time_ms() { return execution_time_ms; }
+    public void setExecution_time_ms(Long execution_time_ms) { this.execution_time_ms = execution_time_ms; }
+{{/lombok}}
+}

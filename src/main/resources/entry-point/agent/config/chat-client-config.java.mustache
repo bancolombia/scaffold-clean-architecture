@@ -1,0 +1,57 @@
+package {{package}}.config;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class ChatClientConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(ChatClientConfig.class);
+
+    @Bean
+    public ChatClient chatClient(
+            ChatClient.Builder chatClientBuilder,
+            List<ToolCallbackProvider> toolCallbackProviders,
+            @Value("${agent.system-prompt:#{null}}") String systemPrompt) {
+        log.info("=== Configuring ChatClient ===");
+        log.info("Found {} ToolCallbackProvider(s)", toolCallbackProviders.size());
+
+        ChatClient.Builder builder = chatClientBuilder;
+
+        List<ToolCallback> allTools = new ArrayList<>();
+        for (ToolCallbackProvider provider : toolCallbackProviders) {
+            ToolCallback[] tools = provider.getToolCallbacks();
+            log.info("Provider has {} tools", tools.length);
+            for (ToolCallback tool : tools) {
+                allTools.add(tool);
+                log.info("  - Registered tool: {}", tool.getToolDefinition().name());
+            }
+        }
+
+        if (!allTools.isEmpty()) {
+            log.info("Registering {} total MCP tools in ChatClient", allTools.size());
+            for (ToolCallback tool : allTools) {
+                builder = builder.defaultToolCallbacks(tool);
+            }
+        } else {
+            log.warn("No MCP tools found to register");
+        }
+
+        if (systemPrompt != null && !systemPrompt.isEmpty()) {
+            log.info("Configured system prompt");
+            builder = builder.defaultSystem(systemPrompt);
+        }
+
+        ChatClient client = builder.build();
+        log.info("=== ChatClient configuration complete ===");
+        return client;
+    }
+}
