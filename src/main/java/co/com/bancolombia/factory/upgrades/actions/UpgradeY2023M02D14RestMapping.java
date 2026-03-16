@@ -20,7 +20,7 @@ public class UpgradeY2023M02D14RestMapping implements UpgradeAction {
         "(Get|Post|Put|Delete|Patch|Request)Mapping\\((.*(path|value)\\s*=\\s*|)\\\".*(/)\\\".*\\)";
     Optional<File> subProjectDir =
         Stream.of("api-rest", "reactive-web")
-            .map(builder::getChildProjectDir)
+            .map(v -> builder.getChildProjectDirs().get(v))
             .filter(Objects::nonNull)
             .findFirst();
     AtomicBoolean applied = new AtomicBoolean(false);

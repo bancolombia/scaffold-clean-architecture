@@ -63,8 +63,8 @@ public class ModuleBuilder {
   @Getter private final Logger logger;
   @Getter private final File projectDir;
   @Getter private final String projectName;
-  @Getter private Map<String, String> childBuildFiles = new HashMap<>();
-  @Getter private Map<String, String> childProjectDirs = new HashMap<>();
+  @Getter private Map<String, File> childBuildFiles = new HashMap<>();
+  @Getter private Map<String, File> childProjectDirs = new HashMap<>();
   private ObjectNode properties;
 
   @Setter private StyledTextOutput styledLogger;
@@ -80,8 +80,8 @@ public class ModuleBuilder {
         .getChildProjects()
         .forEach(
             (name, child) -> {
-              childBuildFiles.put(name, child.getBuildFile().getPath());
-              childProjectDirs.put(name, child.getProjectDir().getPath());
+              childBuildFiles.put(name, child.getBuildFile());
+              childProjectDirs.put(name, child.getProjectDir());
             });
   }
 
@@ -98,18 +98,13 @@ public class ModuleBuilder {
     initialize();
   }
 
-  public void setChildProjects(Map<String, String> buildFiles, Map<String, String> projectDirs) {
+  public void setChildProjects(Map<String, File> buildFiles, Map<String, File> projectDirs) {
     if (buildFiles != null) this.childBuildFiles = buildFiles;
     if (projectDirs != null) this.childProjectDirs = projectDirs;
   }
 
   public File resolveFile(String path) {
     return FileUtils.resolveFile(projectDir, path);
-  }
-
-  public File getChildProjectDir(String name) {
-    String path = childProjectDirs.get(name);
-    return path != null ? new File(path) : null;
   }
 
   private void initialize() {
@@ -258,8 +253,7 @@ public class ModuleBuilder {
   }
 
   public void appendDependencyToModule(String module, String dependency) throws IOException {
-    String buildFilePath = childBuildFiles.get(module);
-    buildFilePath = buildFilePath.replace(projectDir.getPath(), ".");
+    String buildFilePath = childBuildFiles.get(module).getPath().replace(projectDir.getPath(), ".");
     updateFile(
         buildFilePath,
         current -> {
@@ -273,23 +267,23 @@ public class ModuleBuilder {
 
   public void appendConfigurationToModule(String module, String configuration) throws IOException {
     logger.lifecycle("adding configuration {} to module {}", configuration, module);
-    String buildFilePath = childBuildFiles.get(module);
+    String buildFilePath = childBuildFiles.get(module).getPath().replace(projectDir.getPath(), ".");
     updateFile(buildFilePath, current -> Utils.addConfiguration(current, configuration));
   }
 
   public void removeDependencyFromModule(String module, String dependency) throws IOException {
     logger.lifecycle("removing dependency {} from module {}", dependency, module);
-    String buildFilePath = childBuildFiles.get(module);
+    String buildFilePath = childBuildFiles.get(module).getPath().replace(projectDir.getPath(), ".");
     updateFile(buildFilePath, current -> Utils.removeLinesIncludes(current, dependency));
   }
 
   public void deleteModule(String module) {
-    String moduleProjectDir = childProjectDirs.get(module);
+    File moduleProjectDir = childProjectDirs.get(module);
     logger.lifecycle(
         "deleting module {} from dir {}",
         module,
-        moduleProjectDir.replace(projectDir.getPath(), ""));
-    removeDir(moduleProjectDir);
+        moduleProjectDir.getPath().replace(projectDir.getPath(), ""));
+    removeDir(moduleProjectDir.getPath());
   }
 
   public ObjectNode appendToProperties(String path) {

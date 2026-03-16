@@ -33,8 +33,8 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   protected final Logger logger = getLogger();
   protected final File projectDir;
   protected final String projectName;
-  protected final Map<String, String> childBuildFiles;
-  protected final Map<String, String> childProjectDirs;
+  protected final Map<String, File> childBuildFiles;
+  protected final Map<String, File> childProjectDirs;
 
   protected AbstractCleanArchitectureDefaultTask() {
     this.projectDir = getProject().getProjectDir();
@@ -45,8 +45,8 @@ public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
         .getChildProjects()
         .forEach(
             (name, child) -> {
-              childBuildFiles.put(name, child.getBuildFile().getPath());
-              childProjectDirs.put(name, child.getProjectDir().getPath());
+              childBuildFiles.put(name, child.getBuildFile());
+              childProjectDirs.put(name, child.getProjectDir());
             });
   }
 
