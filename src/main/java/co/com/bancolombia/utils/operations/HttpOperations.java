@@ -2,11 +2,10 @@ package co.com.bancolombia.utils.operations;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.DependencyReleaseXml;
+import co.com.bancolombia.models.GradleVersion;
 import co.com.bancolombia.models.MavenMetadata;
 import co.com.bancolombia.models.Release;
-import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -21,8 +20,7 @@ public class HttpOperations implements ExternalOperations {
       "https://repo1.maven.org/maven2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_PLUGINS =
       "https://plugins.gradle.org/m2/%group/%artifact/maven-metadata.xml";
-  public static final String SPRING_INITIALIZER = "https://start.spring.io/starter.zip";
-  public static final String GRADLE_WRAPPER_PROPERTIES = "gradle/wrapper/gradle-wrapper.properties";
+  public static final String GRADLE_VERSIONS_API = "https://services.gradle.org/versions/current";
   private final Map<String, String> endpoints;
 
   public HttpOperations() {
@@ -34,8 +32,8 @@ public class HttpOperations implements ExternalOperations {
             DEPENDENCY_RELEASES,
             GRADLE_PLUGINS,
             GRADLE_PLUGINS,
-            SPRING_INITIALIZER,
-            SPRING_INITIALIZER);
+            GRADLE_VERSIONS_API,
+            GRADLE_VERSIONS_API);
   }
 
   // To enable test mocks injection
@@ -112,16 +110,12 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Optional<String> getGradleWrapperFromFile() {
-    Path path = Path.of("build", "demo.zip");
     try {
-      RestConsumer.downloadFile(resolve(SPRING_INITIALIZER), path);
-      String content = FileUtils.readFileFromZip(path, GRADLE_WRAPPER_PROPERTIES);
-      int start = content.indexOf("gradle-") + 7;
-      int end = content.indexOf("-bin", start);
-      return Optional.of(content.substring(start, end));
+      GradleVersion release =
+          RestConsumer.getRequest(resolve(GRADLE_VERSIONS_API), GradleVersion.class);
+      return Optional.ofNullable(release).map(GradleVersion::version);
     } catch (Exception e) {
-      logger.lifecycle(
-          "Can't resolver version of gradle-wrapper.properties from zip", e.getMessage());
+      logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
       return Optional.empty();
     }
   }

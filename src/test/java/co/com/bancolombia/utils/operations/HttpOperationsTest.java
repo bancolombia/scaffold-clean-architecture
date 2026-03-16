@@ -2,21 +2,16 @@ package co.com.bancolombia.utils.operations;
 
 import static co.com.bancolombia.utils.operations.HttpOperations.DEPENDENCY_RELEASES;
 import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_PLUGINS;
-import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_WRAPPER_PROPERTIES;
+import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_VERSIONS_API;
 import static co.com.bancolombia.utils.operations.HttpOperations.PLUGIN_RELEASES;
-import static co.com.bancolombia.utils.operations.HttpOperations.SPRING_INITIALIZER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
-import co.com.bancolombia.utils.FileUtilsTest;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,7 +20,6 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import okio.Buffer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +32,7 @@ class HttpOperationsTest {
   @BeforeEach
   void setup() throws IOException {
     String releaseResponse = "[{\"tag_name\":\"2.0.0\",\"published_at\":\"2021-11-18T13:30:02Z\"}]";
+    String gradleVersionResponse = "{\"version\":\"9.4.0\"}";
     String dependencyResponse =
         """
                 <metadata>
@@ -64,46 +59,23 @@ class HttpOperationsTest {
         new Dispatcher() {
           @Override
           public @NotNull MockResponse dispatch(RecordedRequest request) {
-            switch (Objects.requireNonNull(request.getPath())) {
-              case "/releases":
-                {
-                  return new MockResponse().setResponseCode(200).setBody(releaseResponse);
-                }
-              case "/name/maven-metadata.xml":
-                {
-                  return new MockResponse()
+            return switch (Objects.requireNonNull(request.getPath())) {
+              case "/releases" -> new MockResponse().setResponseCode(200).setBody(releaseResponse);
+              case "/name/maven-metadata.xml" ->
+                  new MockResponse()
                       .setResponseCode(200)
                       .addHeader("Content-Type", "application/xml")
                       .setBody(dependencyResponse);
-                }
-              case "/maven-metadata.xml":
-                {
-                  return new MockResponse()
+              case "/maven-metadata.xml" ->
+                  new MockResponse()
                       .setResponseCode(200)
                       .addHeader("Content-Type", "application/xml")
                       .setBody(xmlResponse);
-                }
-              case "/analytics":
-                {
-                  return new MockResponse().setResponseCode(201);
-                }
-              case "/demo.zip":
-                {
-                  Path path = Paths.get("build", "test.zip");
-                  try {
-                    Buffer buffer = new Buffer();
-                    buffer.write(Files.readAllBytes(path));
-                    return new MockResponse()
-                        .setBody(buffer)
-                        .setResponseCode(200)
-                        .addHeader("Content-Type", "application/zip");
-                  } catch (IOException e) {
-                    return new MockResponse().setResponseCode(500);
-                  }
-                }
-              default:
-                return new MockResponse().setResponseCode(404);
-            }
+              case "/versions/current" ->
+                  new MockResponse().setResponseCode(200).setBody(gradleVersionResponse);
+              case "/analytics" -> new MockResponse().setResponseCode(201);
+              default -> new MockResponse().setResponseCode(404);
+            };
           }
         };
     server.setDispatcher(dispatcher);
@@ -117,8 +89,8 @@ class HttpOperationsTest {
                 server.url("name/maven-metadata.xml").toString(),
                 GRADLE_PLUGINS,
                 server.url("/maven-metadata.xml").toString(),
-                SPRING_INITIALIZER,
-                server.url("/demo.zip").toString()));
+                GRADLE_VERSIONS_API,
+                server.url("/versions/current").toString()));
   }
 
   @Test
@@ -154,22 +126,13 @@ class HttpOperationsTest {
   }
 
   @Test
-  void getGradleWrapperVersion() throws Exception {
+  void getGradleWrapperVersion() {
     // Arrange
-    Files.createDirectories(Path.of("build/gradle/wrapper"));
-    String zipFilePath = "build/test.zip";
-    String textContent =
-        "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.5.1-bin.zip";
-    Path tempFilePath =
-        FileUtilsTest.createTempTextFile("build/" + GRADLE_WRAPPER_PROPERTIES, textContent);
-    FileUtilsTest.createZipFile(zipFilePath, tempFilePath, GRADLE_WRAPPER_PROPERTIES);
-    Path out = Path.of("build", "demo.zip");
     // Act
     Optional<String> version = operations.getGradleWrapperFromFile();
     // Assert
-    assertTrue(Files.exists(out));
     assertTrue(version.isPresent());
-    assertEquals("8.5.1", version.get());
+    assertEquals("9.4.0", version.get());
   }
 
   @Test
