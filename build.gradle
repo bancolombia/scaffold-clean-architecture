@@ -13,8 +13,8 @@ plugins {
     id 'maven-publish'
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.2.3.7755'
-    id 'com.gradle.plugin-publish' version '2.1.0'
-    id 'com.diffplug.spotless' version '8.3.0'
+    id 'com.gradle.plugin-publish' version '2.1.1'
+    id 'com.diffplug.spotless' version '8.4.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.2.0'
 }
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.4.0'
+    gradleVersion = '9.4.1'
 }
 
 tasks.register('ci-updater', JavaExec) {

@@ -2,6 +2,7 @@ package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -58,12 +59,24 @@ public class UpgradeY2026M03D11PitestReportAggregate implements UpgradeAction {
                   }
               }""";
 
+  private static final String SPRING_BOOT_PLATFORM =
+      "implementation platform(\"org.springframework.boot:spring-boot-dependencies:${springBootVersion}\")";
+
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     return builder.updateFile(
         MAIN_GRADLE,
-        content -> UpdateUtils.replace(content, OLD_PITEST_AGGREGATE, NEW_PITEST_AGGREGATE));
+        content -> {
+          String partial = UpdateUtils.replace(content, OLD_PITEST_AGGREGATE, NEW_PITEST_AGGREGATE);
+          return UpdateUtils.insertAfterMatch(
+              partial,
+              SPRING_BOOT_PLATFORM,
+              "pitest-history-plugin",
+              "\n        pitest 'org.pitest:pitest-history-plugin:"
+                  .concat(Constants.PITEST_HISTORY_VERSION)
+                  .concat("'"));
+        });
   }
 
   @Override

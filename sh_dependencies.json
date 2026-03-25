@@ -77,6 +77,10 @@
             "packageName": "org.pitest:pitest"
         },
         {
+            "name": "PITEST_HISTORY_VERSION",
+            "packageName": "org.pitest:pitest-history-plugin"
+        },
+        {
             "name": "PITEST_JUNIT5_VERSION",
             "packageName": "org.pitest:pitest-junit5-plugin"
         }

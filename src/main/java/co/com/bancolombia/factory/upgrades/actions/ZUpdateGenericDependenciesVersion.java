@@ -30,6 +30,10 @@ public class ZUpdateGenericDependenciesVersion implements UpgradeAction {
             builder, BUILD_GRADLE, "pitestVersion", Constants.GRADLE_PITEST_VERSION),
         UpdateUtils.updateVersions(builder, MAIN_GRADLE, "pitestVersion", Constants.PITEST_VERSION),
         UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "pitestHistoryVersion", Constants.PITEST_HISTORY_VERSION),
+        UpdateUtils.updateVersions(
+            builder, BUILD_GRADLE, "blockHoundVersion", Constants.BLOCK_HOUND_VERSION),
+        UpdateUtils.updateVersions(
             builder, MAIN_GRADLE, "junit5PluginVersion", Constants.PITEST_JUNIT5_VERSION));
   }
 
