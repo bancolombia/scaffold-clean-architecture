@@ -14,6 +14,19 @@ public class EntryPointMcp implements ModuleFactory {
   private static final String SPRING_AI_MCP_SERVER = "spring.ai.mcp.server";
   private static final String SPRING_AI_MCP_SERVER_CAPABILITIES =
       "spring.ai.mcp.server.capabilities";
+  private static final String JAVA_COMPILE_PARAMETERS_SENTINEL =
+      "options.compilerArgs += '-parameters'";
+  private static final String JAVA_COMPILE_PARAMETERS_BLOCK =
+      String.join(
+          "\n",
+          "",
+          "    doFirst {",
+          "        if (!options.compilerArgs.contains('-parameters')) {",
+          "            options.compilerArgs += '-parameters'",
+          "        }",
+          "    }");
+  private static final String JAVA_COMPILE_OPTIONS_REGEX =
+      "(options\\.compilerArgs\\s*=\\s*\\[[^]]*])";
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
@@ -111,5 +124,16 @@ public class EntryPointMcp implements ModuleFactory {
 
     // Request timeout
     builder.appendToProperties(SPRING_AI_MCP_SERVER).put("request-timeout", "30s");
+
+    // Add -parameters flag for JavaCompile to expose param names for MCP Tools
+    builder.updateFile(
+        co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE,
+        content -> {
+          if (content.contains(JAVA_COMPILE_PARAMETERS_SENTINEL)) {
+            return content;
+          }
+          return content.replaceAll(
+              JAVA_COMPILE_OPTIONS_REGEX, "$1" + JAVA_COMPILE_PARAMETERS_BLOCK);
+        });
   }
 }
