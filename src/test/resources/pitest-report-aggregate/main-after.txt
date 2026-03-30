@@ -28,6 +28,7 @@ subprojects {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        pitest 'org.pitest:pitest-history-plugin:0.0.1'
     }
 
     test.finalizedBy(project.tasks.jacocoTestReport)

@@ -80,7 +80,7 @@ public class {{classname}}Controller {
     private Mono<{{>return-types}}> {{operationId}}Mock() { // TODO: Remove this mock method
     {{#examples}}
         return Mono.fromSupplier(() -> {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            tools.jackson.databind.json.JsonMapper mapper = new tools.jackson.databind.json.JsonMapper();
             try {
                 return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>example-return-types}}.class);
             } catch (Exception e) {
@@ -104,7 +104,7 @@ public class {{classname}}Controller {
     private {{>return-types}} {{operationId}}Mock() { // TODO: Remove this mock method
         {{#examples}}
         try {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            tools.jackson.databind.json.JsonMapper mapper = new tools.jackson.databind.json.JsonMapper();
             return mapper.readValue("{{#lambdaRemoveLineBreak}}{{#lambdaEscapeDoubleQuote}}{{{example}}}{{/lambdaEscapeDoubleQuote}}{{/lambdaRemoveLineBreak}}", {{>example-return-types}}.class);
         } catch (Exception e) {
             throw new RuntimeException("Cannot parse example to {{>return-types}}");

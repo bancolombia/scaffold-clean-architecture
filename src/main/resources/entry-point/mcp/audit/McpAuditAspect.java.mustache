@@ -47,7 +47,7 @@ public class McpAuditAspect {
     /**
      * Audita todas las llamadas a Resources MCP
      * Note: Annotation might be different depending on Spring AI version, adjusting relative to scaffold.
-     * Assuming standard Spring AI MCP annotations or custom ones. User reference uses org.springaicommunity.mcp.annotation
+     * Assuming standard Spring AI MCP annotations or custom ones. User reference uses org.springframework.ai.mcp.annotation
      * but standard Spring AI uses @Tool.
      * Use user provided annotation package for consistency with their reference if they are using the community starter.
      */
@@ -63,7 +63,7 @@ public class McpAuditAspect {
     /**
      * Audita todas las llamadas a Resources MCP
      */
-    @Around("@annotation(org.springaicommunity.mcp.annotation.McpResource)")
+    @Around("@annotation(org.springframework.ai.mcp.annotation.McpResource)")
     public Object auditResourceCall(ProceedingJoinPoint joinPoint) throws Throwable {
         return auditMcpCall(joinPoint, "RESOURCE");
     }
@@ -71,7 +71,7 @@ public class McpAuditAspect {
     /**
      * Audita todas las llamadas a Prompts MCP
      */
-    @Around("@annotation(org.springaicommunity.mcp.annotation.McpPrompt)")
+    @Around("@annotation(org.springframework.ai.mcp.annotation.McpPrompt)")
     public Object auditPromptCall(ProceedingJoinPoint joinPoint) throws Throwable {
         return auditMcpCall(joinPoint, "PROMPT");
     }

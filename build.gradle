@@ -13,8 +13,8 @@ plugins {
     id 'maven-publish'
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.2.3.7755'
-    id 'com.gradle.plugin-publish' version '2.1.0'
-    id 'com.diffplug.spotless' version '8.3.0'
+    id 'com.gradle.plugin-publish' version '2.1.1'
+    id 'com.diffplug.spotless' version '8.4.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.2.0'
 }
@@ -178,9 +178,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'tools.jackson.core:jackson-databind:3.1.0'
-    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.1.0'
-    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.1.0'
+    api 'tools.jackson.core:jackson-databind:3.1.1'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.1.1'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.1.1'
     api 'commons-io:commons-io:2.21.0'
     api gradleApi()
 
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.4.0'
+    gradleVersion = '9.4.1'
 }
 
 tasks.register('ci-updater', JavaExec) {

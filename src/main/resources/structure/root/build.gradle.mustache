@@ -4,8 +4,12 @@ buildscript {
 		springBootVersion = '{{SPRING_BOOT_VERSION}}'
 		sonarVersion = '{{SONAR_VERSION}}'
 		jacocoVersion = '{{JACOCO_VERSION}}'
+		{{#reactive}}
+		blockHoundVersion = '{{BLOCK_HOUND_VERSION}}'
+        {{/reactive}}
 		{{#mutation}}
 		pitestVersion = '{{GRADLE_PITEST_VERSION}}'
+		pitestHistoryVersion = '{{PITEST_HISTORY_VERSION}}'
 		{{/mutation}}
 		{{#lombok}}
         lombokVersion = '{{LOMBOK_VERSION}}'
@@ -42,9 +46,7 @@ sonar {
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.modules", "${modules.join(',')}"
         property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
-        {{^example}}
-        property "sonar.exclusions","**/MainApplication.java"
-        {{/example}}
+        property "sonar.exclusions", "**/MainApplication.java,**/**.bin,**/deployment/**"
         property "sonar.tests", "src/test"
         property "sonar.java.binaries", "**/build/classes/java/main"
         property "sonar.junit.reportsPath", "**/build/test-results/test"
