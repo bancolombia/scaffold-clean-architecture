@@ -38,7 +38,6 @@ subprojects {
         testCompileOnly  "org.projectlombok:lombok:${lombokVersion}"
         testAnnotationProcessor  "org.projectlombok:lombok:${lombokVersion}"
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-        pitest 'org.pitest:pitest-history-plugin:0.0.1'
     }
 
     tasks.withType(Test).configureEach {
