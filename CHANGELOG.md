@@ -1,5 +1,14 @@
 # Changelog
 
+## [v4.4.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.4.1) (2026-03-30)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.4.0...v4.4.1)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies and add pitest-history-plugin support [\#851](https://github.com/bancolombia/scaffold-clean-architecture/pull/851) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump github/codeql-action from 4.34.1 to 4.35.1 [\#848](https://github.com/bancolombia/scaffold-clean-architecture/pull/848) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.4.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.4.0) (2026-03-27)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.3.0...v4.4.0)
@@ -7,7 +16,7 @@
 **Merged pull requests:**
 
 - build\(deps\): bump actions/deploy-pages from 4 to 5 [\#846](https://github.com/bancolombia/scaffold-clean-architecture/pull/846) ([dependabot[bot]](https://github.com/apps/dependabot))
-- chore\(entrypoint\): add -parameters flag for JavaCompile in MCP server configuration [\#844](https://github.com/bancolombia/scaffold-clean-architecture/pull/844) ([kenyodarz](https://github.com/kenyodarz))
+- feat\(entrypoint\): add -parameters flag for JavaCompile in MCP server configuration [\#844](https://github.com/bancolombia/scaffold-clean-architecture/pull/844) ([kenyodarz](https://github.com/kenyodarz))
 - build\(deps\): bump gradle/actions from 6.0.0 to 6.0.1 [\#843](https://github.com/bancolombia/scaffold-clean-architecture/pull/843) ([dependabot[bot]](https://github.com/apps/dependabot))
 - build\(deps\): bump gradle/actions from 5.0.2 to 6.0.0 [\#842](https://github.com/bancolombia/scaffold-clean-architecture/pull/842) ([dependabot[bot]](https://github.com/apps/dependabot))
 - build\(deps\): bump github/codeql-action from 4.33.0 to 4.34.1 [\#840](https://github.com/bancolombia/scaffold-clean-architecture/pull/840) ([dependabot[bot]](https://github.com/apps/dependabot))
