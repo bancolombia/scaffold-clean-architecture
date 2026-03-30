@@ -178,9 +178,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'tools.jackson.core:jackson-databind:3.1.0'
-    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.1.0'
-    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.1.0'
+    api 'tools.jackson.core:jackson-databind:3.1.1'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.1.1'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.1.1'
     api 'commons-io:commons-io:2.21.0'
     api gradleApi()
 
