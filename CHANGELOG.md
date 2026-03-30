@@ -1,5 +1,20 @@
 # Changelog
 
+## [v4.4.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.4.0) (2026-03-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.3.0...v4.4.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/deploy-pages from 4 to 5 [\#846](https://github.com/bancolombia/scaffold-clean-architecture/pull/846) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(entrypoint\): add -parameters flag for JavaCompile in MCP server configuration [\#844](https://github.com/bancolombia/scaffold-clean-architecture/pull/844) ([kenyodarz](https://github.com/kenyodarz))
+- build\(deps\): bump gradle/actions from 6.0.0 to 6.0.1 [\#843](https://github.com/bancolombia/scaffold-clean-architecture/pull/843) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions from 5.0.2 to 6.0.0 [\#842](https://github.com/bancolombia/scaffold-clean-architecture/pull/842) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.33.0 to 4.34.1 [\#840](https://github.com/bancolombia/scaffold-clean-architecture/pull/840) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.15.1 to 2.16.0 [\#839](https://github.com/bancolombia/scaffold-clean-architecture/pull/839) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.32.6 to 4.33.0 [\#838](https://github.com/bancolombia/scaffold-clean-architecture/pull/838) ([dependabot[bot]](https://github.com/apps/dependabot))
+- refactor\(ModuleBuilder\): change childBuildFiles and childProjectDirs to use File objects [\#837](https://github.com/bancolombia/scaffold-clean-architecture/pull/837) ([luisgomez29](https://github.com/luisgomez29))
+
 ## [v4.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.3.0) (2026-03-16)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.2.0...v4.3.0)
