@@ -1,5 +1,37 @@
 # Changelog
 
+## [v4.5.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.5.0) (2026-06-11)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.4.1...v4.5.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump gradle/actions from 6.1.0 to 6.1.1 [\#884](https://github.com/bancolombia/scaffold-clean-architecture/pull/884) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.36.1 to 4.36.2 [\#883](https://github.com/bancolombia/scaffold-clean-architecture/pull/883) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 6.0.2 to 6.0.3 [\#882](https://github.com/bancolombia/scaffold-clean-architecture/pull/882) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.36.0 to 4.36.1 [\#881](https://github.com/bancolombia/scaffold-clean-architecture/pull/881) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.35.5 to 4.36.0 [\#880](https://github.com/bancolombia/scaffold-clean-architecture/pull/880) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.19.3 to 2.19.4 [\#877](https://github.com/bancolombia/scaffold-clean-architecture/pull/877) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.35.4 to 4.35.5 [\#876](https://github.com/bancolombia/scaffold-clean-architecture/pull/876) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.19.1 to 2.19.3 [\#875](https://github.com/bancolombia/scaffold-clean-architecture/pull/875) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/create-github-app-token from 3.1.1 to 3.2.0 [\#873](https://github.com/bancolombia/scaffold-clean-architecture/pull/873) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 4.9.0 to 5.0.0 [\#872](https://github.com/bancolombia/scaffold-clean-architecture/pull/872) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.35.3 to 4.35.4 [\#868](https://github.com/bancolombia/scaffold-clean-architecture/pull/868) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.35.2 to 4.35.3 [\#867](https://github.com/bancolombia/scaffold-clean-architecture/pull/867) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.19.0 to 2.19.1 [\#866](https://github.com/bancolombia/scaffold-clean-architecture/pull/866) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.18.0 to 2.19.0 [\#865](https://github.com/bancolombia/scaffold-clean-architecture/pull/865) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 6.3.0 to 6.4.0 [\#864](https://github.com/bancolombia/scaffold-clean-architecture/pull/864) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action from 4.35.1 to 4.35.2 [\#863](https://github.com/bancolombia/scaffold-clean-architecture/pull/863) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.17.0 to 2.18.0 [\#862](https://github.com/bancolombia/scaffold-clean-architecture/pull/862) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-pages-artifact from 4 to 5 [\#860](https://github.com/bancolombia/scaffold-clean-architecture/pull/860) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump peter-evans/create-pull-request from 8.1.0 to 8.1.1 [\#859](https://github.com/bancolombia/scaffold-clean-architecture/pull/859) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/create-github-app-token from 3.0.0 to 3.1.1 [\#858](https://github.com/bancolombia/scaffold-clean-architecture/pull/858) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/upload-artifact from 7.0.0 to 7.0.1 [\#857](https://github.com/bancolombia/scaffold-clean-architecture/pull/857) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.16.1 to 2.17.0 [\#856](https://github.com/bancolombia/scaffold-clean-architecture/pull/856) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions from 6.0.1 to 6.1.0 [\#853](https://github.com/bancolombia/scaffold-clean-architecture/pull/853) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.16.0 to 2.16.1 [\#852](https://github.com/bancolombia/scaffold-clean-architecture/pull/852) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#841](https://github.com/bancolombia/scaffold-clean-architecture/pull/841) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
 ## [v4.4.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.4.1) (2026-03-30)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.4.0...v4.4.1)
@@ -1527,10 +1559,6 @@
 
 - Make minor update to Spring Boot 2.6.8 [\#261](https://github.com/bancolombia/scaffold-clean-architecture/issues/261)
 - Pipeline Support For Jenkins [\#170](https://github.com/bancolombia/scaffold-clean-architecture/issues/170)
-
-**Closed issues:**
-
-- Upgrade github action pipeline  [\#244](https://github.com/bancolombia/scaffold-clean-architecture/issues/244)
 
 **Merged pull requests:**
 
