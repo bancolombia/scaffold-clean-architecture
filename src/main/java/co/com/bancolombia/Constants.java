@@ -27,7 +27,7 @@ public final class Constants {
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.0.3";
   public static final String CLOUD_EVENTS_VERSION = "4.1.1";
   public static final String REACTOR_KAFKA_VERSION = "1.3.25";
-  public static final String SPRING_AI_VERSION = "2.0.0-M4";
+  public static final String SPRING_AI_VERSION = "2.0.0-RC1";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.12";
   public static final String PITEST_VERSION = "1.25.4";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
@@ -38,7 +38,7 @@ public final class Constants {
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String PLUGIN_VERSION = "4.4.1";
   public static final String DEPENDENCY_CHECK_VERSION = "12.2.2";
-  public static final String GRADLE_PITEST_VERSION = "1.19.0-rc.3";
+  public static final String GRADLE_PITEST_VERSION = "1.19.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "9.5.1";
 
