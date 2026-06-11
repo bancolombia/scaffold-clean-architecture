@@ -63,6 +63,19 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         "'org.springframework.boot:spring-boot-starter-web-services'",
                         "'org.springframework.boot:spring-boot-starter-webservices'");
 
+                // AspectJ starter renamed
+
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "\"org.springframework.boot:spring-boot-starter-aop\"",
+                        "\"org.springframework.boot:spring-boot-starter-aspectj\"");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "'org.springframework.boot:spring-boot-starter-aop'",
+                        "'org.springframework.boot:spring-boot-starter-aspectj'");
+
                 // Reactive Web changes
                 updatedContent =
                     UpdateUtils.replace(
@@ -143,6 +156,16 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         updatedContent,
                         "'org.springframework.boot:spring-boot-starter-oauth2-client'",
                         "'org.springframework.boot:spring-boot-starter-security-oauth2-client'");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "\"org.springframework.boot:spring-boot-starter-oauth2-authorization-server\"",
+                        "\"org.springframework.boot:spring-boot-starter-security-oauth2-authorization-server\"");
+                updatedContent =
+                    UpdateUtils.replace(
+                        updatedContent,
+                        "'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'",
+                        "'org.springframework.boot:spring-boot-starter-security-oauth2-authorization-server'");
 
                 // Kafka package changes
                 updatedContent =

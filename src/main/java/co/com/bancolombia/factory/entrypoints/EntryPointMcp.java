@@ -60,7 +60,7 @@ public class EntryPointMcp implements ModuleFactory {
           APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-security'");
       builder.appendDependencyToModule(
           APP_SERVICE,
-          "implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'");
+          "implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'");
     }
 
     // Add MCP configuration to app-service application.yaml
