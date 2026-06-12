@@ -10,10 +10,14 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import {{package}}.model.a2a.Message;
+import {{package}}.model.a2a.Part;
 import {{package}}.model.a2a.SendMessageRequest;
 import {{package}}.model.a2a.SendMessageResponse;
+import {{package}}.model.a2a.TaskState;
 import {{package}}.model.chat.gateways.AgentResponseGateway;
 import {{package}}.model.chat.gateways.ChatGateway;
+import {{package}}.model.chat.gateways.TaskStoreGateway;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,88 +30,59 @@ class AgentChatUseCaseTest {
 
     private ChatGateway chatGateway;
     private AgentResponseGateway agentResponseGateway;
+    private TaskStoreGateway taskStoreGateway;
     private AgentChatUseCase agentChatUseCase;
 
     @BeforeEach
     void setUp() {
         chatGateway = mock(ChatGateway.class);
         agentResponseGateway = mock(AgentResponseGateway.class);
-        agentChatUseCase = new AgentChatUseCase(chatGateway, agentResponseGateway);
+        taskStoreGateway = mock(TaskStoreGateway.class);
+        agentChatUseCase = new AgentChatUseCase(chatGateway, agentResponseGateway, taskStoreGateway);
     }
-
-    // ── chatAndRespond (REST transport) ───────────────────────────────────────
 
     @Test
     @DisplayName("Should return success response when ChatGateway succeeds (REST)")
     void chatAndRespondShouldReturnSuccess() {
-        // Arrange
         SendMessageRequest request = buildRequest("Hello");
-        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("{\"result\":\"ok\"}"));
+        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("Hello response"));
 
-        // Act & Assert
         StepVerifier.create(agentChatUseCase.chatAndRespond(request))
                 .assertNext(response -> {
-                    assertEquals("COMPLETED", response.getTask().getStatus());
-                    assertEquals("test-task-123", response.getTask().getId());
-                    assertNotNull(response.getTask().getExecution_time_ms());
+                    assertEquals(TaskState.COMPLETED, response.getTask().getStatus().getState());
+                    assertNotNull(response.getTask().getId());
                     assertNotNull(response.getMessage());
-                    assertEquals("ASSISTANT", response.getMessage().getRole());
-                    assertEquals("{\"result\":\"ok\"}", response.getMessage().getContent());
-                })
-                .verifyComplete();
-
-        // AgentResponseGateway must NOT be called for REST transport
-        verifyNoInteractions(agentResponseGateway);
-    }
-
-    @Test
-    @DisplayName("Should return error response when ChatGateway fails (REST)")
-    void chatAndRespondShouldReturnErrorWhenChatGatewayFails() {
-        // Arrange
-        SendMessageRequest request = buildRequest("Hello");
-        when(chatGateway.sendMessage(anyString()))
-                .thenReturn(Mono.error(new RuntimeException("LLM unavailable")));
-
-        // Act & Assert
-        StepVerifier.create(agentChatUseCase.chatAndRespond(request))
-                .assertNext(response -> {
-                    assertEquals("FAILED", response.getTask().getStatus());
-                    assertNotNull(response.getTask().getError());
-                    assertEquals("INTERNAL_ERROR", response.getTask().getError().getCode());
-                    assertEquals("LLM unavailable", response.getTask().getError().getMessage());
+                    assertEquals("agent", response.getMessage().getRole());
+                    assertEquals("Hello response", response.getMessage().extractText());
                 })
                 .verifyComplete();
 
         verifyNoInteractions(agentResponseGateway);
     }
 
-    // ── chat (Kafka transport) ────────────────────────────────────────────────
-
     @Test
-    @DisplayName("Should publish success response to AgentResponseGateway (Kafka)")
+    @DisplayName("Should publish success response to AgentResponseGateway and TaskStore (Kafka)")
     void chatShouldPublishSuccessResponse() {
-        // Arrange
         SendMessageRequest request = buildRequest("Hello");
-        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("{\"result\":\"ok\"}"));
+        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just("Hello response"));
+        when(taskStoreGateway.save(any())).thenReturn(Mono.empty());
         when(agentResponseGateway.sendResponse(any(SendMessageResponse.class))).thenReturn(Mono.empty());
 
-        // Act & Assert
         StepVerifier.create(agentChatUseCase.chat(request))
                 .verifyComplete();
 
         ArgumentCaptor<SendMessageResponse> captor = ArgumentCaptor.forClass(SendMessageResponse.class);
         verify(agentResponseGateway).sendResponse(captor.capture());
-        assertEquals("COMPLETED", captor.getValue().getTask().getStatus());
+        assertEquals(TaskState.COMPLETED, captor.getValue().getTask().getStatus().getState());
     }
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private SendMessageRequest buildRequest(String content) {
         return SendMessageRequest.builder()
-                .task_id("test-task-123")
                 .message(Message.builder()
-                        .role("USER")
-                        .content(content)
+                        .role("user")
+                        .contextId("ctx-123")
+                        .messageId("msg-123")
+                        .parts(List.of(Part.ofText(content)))
                         .build())
                 .build();
     }

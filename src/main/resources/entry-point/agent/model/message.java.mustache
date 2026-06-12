@@ -1,5 +1,6 @@
 package {{package}}.model.a2a;
 
+import java.util.List;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 {{/lombok}}
 
+/**
+ * A2A Protocol v1.0 - Message
+ */
 {{#lombok}}
 @Data
 @Builder(toBuilder = true)
@@ -14,20 +18,60 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 {{/lombok}}
 public class Message {
+
     private String role;
-    private String content;
+    private List<Part> parts;
+    private String messageId;
+    private String contextId;
+    private List<String> referenceTaskIds;
+
+    // ─── Factory helpers ───────────────────────────────────────────────────────
+
+    public static Message userText(String text) {
+        return Message.builder()
+                .role("user")
+                .parts(List.of(Part.ofText(text)))
+                .build();
+    }
+
+    public static Message agentText(String text) {
+        return Message.builder()
+                .role("agent")
+                .parts(List.of(Part.ofText(text)))
+                .build();
+    }
+
+    public String extractText() {
+        if (parts == null) {
+            return "";
+        }
+        return parts.stream()
+                .filter(p -> p.getText() != null)
+                .map(Part::getText)
+                .findFirst()
+                .orElse("");
+    }
 
 {{^lombok}}
     public Message() {}
 
-    public Message(String role, String content) {
+    public Message(String role, List<Part> parts, String messageId, String contextId, List<String> referenceTaskIds) {
         this.role = role;
-        this.content = content;
+        this.parts = parts;
+        this.messageId = messageId;
+        this.contextId = contextId;
+        this.referenceTaskIds = referenceTaskIds;
     }
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public List<Part> getParts() { return parts; }
+    public void setParts(List<Part> parts) { this.parts = parts; }
+    public String getMessageId() { return messageId; }
+    public void setMessageId(String messageId) { this.messageId = messageId; }
+    public String getContextId() { return contextId; }
+    public void setContextId(String contextId) { this.contextId = contextId; }
+    public List<String> getReferenceTaskIds() { return referenceTaskIds; }
+    public void setReferenceTaskIds(List<String> referenceTaskIds) { this.referenceTaskIds = referenceTaskIds; }
 {{/lombok}}
 }

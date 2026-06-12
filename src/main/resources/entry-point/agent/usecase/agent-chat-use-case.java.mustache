@@ -2,13 +2,22 @@ package {{package}}.usecase;
 
 import static java.util.logging.Level.SEVERE;
 
-import {{package}}.model.a2a.Error;
+import {{package}}.model.a2a.Artifact;
 import {{package}}.model.a2a.Message;
+import {{package}}.model.a2a.Part;
 import {{package}}.model.a2a.SendMessageRequest;
 import {{package}}.model.a2a.SendMessageResponse;
 import {{package}}.model.a2a.Task;
+import {{package}}.model.a2a.TaskState;
+import {{package}}.model.a2a.TaskStatus;
 import {{package}}.model.chat.gateways.AgentResponseGateway;
 import {{package}}.model.chat.gateways.ChatGateway;
+import {{package}}.model.chat.gateways.TaskStoreGateway;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
@@ -16,11 +25,18 @@ import lombok.extern.java.Log;
 {{/lombok}}
 import reactor.core.publisher.Mono;
 
+/**
+ * Caso de uso que ejecuta la comunicación con el LLM a través de MCP tools.
+ */
 {{#lombok}}
 @Log
 @RequiredArgsConstructor
 {{/lombok}}
 public class AgentChatUseCase {
+
+    private static final String INTERNAL_ERROR = "INTERNAL_ERROR";
+    private static final String NO_CONTENT = "No content provided";
+    private static final String KEY_EXECUTION_TIME_MS = "executionTimeMs";
 
 {{^lombok}}
     private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(AgentChatUseCase.class.getName());
@@ -28,80 +44,131 @@ public class AgentChatUseCase {
 
     private final ChatGateway chatGateway;
     private final AgentResponseGateway agentResponseGateway;
+    private final TaskStoreGateway taskStoreGateway;
 
 {{^lombok}}
-    public AgentChatUseCase(ChatGateway chatGateway, AgentResponseGateway agentResponseGateway) {
+    public AgentChatUseCase(ChatGateway chatGateway,
+                            AgentResponseGateway agentResponseGateway,
+                            TaskStoreGateway taskStoreGateway) {
         this.chatGateway = chatGateway;
         this.agentResponseGateway = agentResponseGateway;
+        this.taskStoreGateway = taskStoreGateway;
     }
 {{/lombok}}
 
-    public Mono<Void> chat(SendMessageRequest request) {
-        long startTime = System.currentTimeMillis();
-        String prompt = buildPrompt(request.getMessage());
-
-        return chatGateway.sendMessage(prompt)
-                .flatMap(llmResponse -> {
-                    long execTimeMs = System.currentTimeMillis() - startTime;
-                    return agentResponseGateway.sendResponse(
-                            createSuccessResponse(request, llmResponse, execTimeMs));
-                })
-                .onErrorResume(error -> {
-                    log.log(SEVERE, "Error in chat()", error);
-                    return agentResponseGateway.sendResponse(
-                            createErrorResponse(request, startTime, "INTERNAL_ERROR", error.getMessage()));
-                });
+    private static String extractContextId(SendMessageRequest request) {
+        return request != null && request.getMessage() != null
+                ? request.getMessage().getContextId()
+                : null;
     }
 
-    public Mono<SendMessageResponse> chatAndRespond(SendMessageRequest request) {
-        long startTime = System.currentTimeMillis();
-        String prompt = buildPrompt(request.getMessage());
+    private static Message buildAgentMessage(String contextId, String text) {
+        return Message.builder()
+                .role("agent")
+                .contextId(contextId)
+                .messageId(UUID.randomUUID().toString())
+                .parts(List.of(Part.ofText(text)))
+                .build();
+    }
 
-        return chatGateway.sendMessage(prompt)
+    private static String nowIso() {
+        return Instant.now().atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
+    }
+
+    /**
+     * Ejecuta el chat con el LLM y publica la respuesta vía AgentResponseGateway (Kafka).
+     */
+    public Mono<Void> chat(SendMessageRequest request) {
+        return executeChat(request)
+                .flatMap(response -> {
+                    if (response.getTask() != null) {
+                        return taskStoreGateway.save(response.getTask()).thenReturn(response);
+                    }
+                    return Mono.just(response);
+                })
+                .flatMap(agentResponseGateway::sendResponse);
+    }
+
+    /**
+     * Ejecuta el chat con el LLM y retorna la respuesta directamente (REST).
+     */
+    public Mono<SendMessageResponse> chatAndRespond(SendMessageRequest request) {
+        return executeChat(request);
+    }
+
+    private Mono<SendMessageResponse> executeChat(SendMessageRequest request) {
+        long startTime = System.currentTimeMillis();
+        return chatGateway.sendMessage(buildPrompt(request))
                 .map(llmResponse -> createSuccessResponse(request, llmResponse,
                         System.currentTimeMillis() - startTime))
                 .onErrorResume(error -> {
-                    log.log(SEVERE, "Error in chatAndRespond()", error);
-                    return Mono.just(createErrorResponse(request, startTime,
-                            "INTERNAL_ERROR", error.getMessage()));
+                    log.log(SEVERE, "Error executing chat", error);
+                    return Mono.just(createErrorResponse(request, startTime, error.getMessage()));
                 });
     }
 
-    private String buildPrompt(Message message) {
-        if (message != null && message.getContent() != null) {
-            return message.getContent();
+    private String buildPrompt(SendMessageRequest request) {
+        if (request == null || request.getMessage() == null) {
+            return NO_CONTENT;
         }
-        return "";
+        String content = request.getMessage().extractText();
+        if (content == null || content.isBlank()) {
+            return NO_CONTENT;
+        }
+        return content;
     }
 
-    private SendMessageResponse createSuccessResponse(SendMessageRequest request, String llmResponse,
-            long executionTimeMs) {
-        return SendMessageResponse.builder()
-                .message(Message.builder()
-                        .role("ASSISTANT")
-                        .content(llmResponse)
+    private SendMessageResponse createSuccessResponse(SendMessageRequest request,
+            String llmResponse, long executionTimeMs) {
+        String contextId = extractContextId(request);
+        Message agentMessage = buildAgentMessage(contextId, llmResponse);
+
+        Task task = Task.builder()
+                .id(UUID.randomUUID().toString())
+                .contextId(contextId)
+                .status(TaskStatus.builder()
+                        .state(TaskState.COMPLETED)
+                        .message(agentMessage)
+                        .timestamp(nowIso())
                         .build())
-                .task(Task.builder()
-                        .id(request != null && request.getTask_id() != null ? request.getTask_id() : UUID.randomUUID().toString())
-                        .status("COMPLETED")
-                        .execution_time_ms(executionTimeMs)
-                        .build())
+                .artifacts(List.of(
+                        Artifact.builder()
+                                .artifactId(UUID.randomUUID().toString())
+                                .name("agent-response")
+                                .description("Primary response generated by the consumer agent")
+                                .parts(List.of(Part.ofData(Map.of(
+                                        "response", llmResponse,
+                                        KEY_EXECUTION_TIME_MS, executionTimeMs))))
+                                .build()))
+                .history(List.of(agentMessage))
+                .metadata(Map.of(KEY_EXECUTION_TIME_MS, executionTimeMs))
                 .build();
+
+        return SendMessageResponse.builder().message(agentMessage).task(task).build();
     }
 
-    private SendMessageResponse createErrorResponse(SendMessageRequest request, long startTime,
-            String code, String message) {
-        return SendMessageResponse.builder()
-                .task(Task.builder()
-                        .id(request != null && request.getTask_id() != null ? request.getTask_id() : UUID.randomUUID().toString())
-                        .status("FAILED")
-                        .execution_time_ms(System.currentTimeMillis() - startTime)
-                        .error(Error.builder()
-                                .code(code)
-                                .message(message)
-                                .build())
+    private SendMessageResponse createErrorResponse(SendMessageRequest request,
+            long startTime, String errorMessage) {
+        String contextId = extractContextId(request);
+        Message agentMessage = buildAgentMessage(contextId,
+                "No pude completar la operación: " + errorMessage);
+        long executionTimeMs = System.currentTimeMillis() - startTime;
+
+        Task task = Task.builder()
+                .id(UUID.randomUUID().toString())
+                .contextId(contextId)
+                .status(TaskStatus.builder()
+                        .state(TaskState.FAILED)
+                        .message(agentMessage)
+                        .timestamp(nowIso())
                         .build())
+                .history(List.of(agentMessage))
+                .metadata(Map.of(
+                        KEY_EXECUTION_TIME_MS, executionTimeMs,
+                        "errorCode", INTERNAL_ERROR,
+                        "errorMessage", errorMessage == null ? "unknown" : errorMessage))
                 .build();
+
+        return SendMessageResponse.builder().message(agentMessage).task(task).build();
     }
 }
-

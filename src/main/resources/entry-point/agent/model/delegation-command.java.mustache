@@ -1,0 +1,52 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+import java.util.Map;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class DelegationCommand {
+    private String messageId;
+    private String correlationId;
+    private String traceId;
+    private String intent;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> parameters;
+    private List<String> requiredScopes;
+
+{{^lombok}}
+    public DelegationCommand() {}
+
+    public DelegationCommand(String messageId, String correlationId, String traceId, String intent, Map<String, Object> parameters, List<String> requiredScopes) {
+        this.messageId = messageId;
+        this.correlationId = correlationId;
+        this.traceId = traceId;
+        this.intent = intent;
+        this.parameters = parameters;
+        this.requiredScopes = requiredScopes;
+    }
+
+    public String getMessageId() { return messageId; }
+    public void setMessageId(String messageId) { this.messageId = messageId; }
+    public String getCorrelationId() { return correlationId; }
+    public void setCorrelationId(String correlationId) { this.correlationId = correlationId; }
+    public String getTraceId() { return traceId; }
+    public void setTraceId(String traceId) { this.traceId = traceId; }
+    public String getIntent() { return intent; }
+    public void setIntent(String intent) { this.intent = intent; }
+    public Map<String, Object> getParameters() { return parameters; }
+    public void setParameters(Map<String, Object> parameters) { this.parameters = parameters; }
+    public List<String> getRequiredScopes() { return requiredScopes; }
+    public void setRequiredScopes(List<String> requiredScopes) { this.requiredScopes = requiredScopes; }
+{{/lombok}}
+}

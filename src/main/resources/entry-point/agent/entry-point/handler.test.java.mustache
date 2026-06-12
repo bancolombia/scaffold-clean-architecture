@@ -5,6 +5,8 @@ import {{package}}.model.a2a.Message;
 import {{package}}.model.a2a.SendMessageRequest;
 import {{package}}.model.a2a.SendMessageResponse;
 import {{package}}.model.a2a.Task;
+import {{package}}.model.a2a.TaskState;
+import {{package}}.model.a2a.TaskStatus;
 import {{package}}.usecase.AgentChatUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,7 @@ class RouterRestTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(SendMessageResponse.class)
                 .value(response -> {
-                    assertThat(response.getTask().getStatus()).isEqualTo("COMPLETED");
+                    assertThat(response.getTask().getStatus().getState()).isEqualTo(TaskState.COMPLETED);
                     assertThat(response.getTask().getId()).isEqualTo("test-task-123");
                 });
     }
@@ -81,7 +83,7 @@ class RouterRestTest {
                 .expectStatus().isOk()
                 .expectBody(AgentCard.class)
                 .value(card -> {
-                    assertThat(card.getAgent_id()).isEqualTo("test-agent");
+                    assertThat(card.getProtocolVersion()).isEqualTo("1.0");
                     assertThat(card.getName()).isEqualTo("Test Agent");
                     assertThat(card.getDescription()).isEqualTo("Test Description");
                 });
@@ -92,30 +94,28 @@ class RouterRestTest {
     private SendMessageRequest buildRequest(String content) {
         return SendMessageRequest.builder()
                 .task_id("test-task-123")
-                .message(Message.builder()
-                        .role("USER")
-                        .content(content)
-                        .build())
+                .message(Message.userText(content))
                 .build();
     }
 
     private SendMessageResponse buildMockResponse(String status, String errorCode) {
+        TaskState state = TaskState.valueOf(status);
         SendMessageResponse.SendMessageResponseBuilder builder = SendMessageResponse.builder()
-                .message(Message.builder().role("ASSISTANT").content("test result").build())
+                .message(Message.agentText("test result"))
                 .task(Task.builder()
                         .id("test-task-123")
-                        .status(status)
-                        .execution_time_ms(50L)
+                        .status(TaskStatus.builder().state(state).build())
+                        .metadata(java.util.Map.of("execution_time_ms", 50L))
                         .build());
 
-        if (!"COMPLETED".equals(status)) {
+        if (state != TaskState.COMPLETED) {
             builder.task(Task.builder()
                     .id("test-task-123")
-                    .status(status)
-                    .error({{package}}.model.a2a.Error.builder()
-                            .code(errorCode)
-                            .message("Error: " + errorCode)
-                            .build())
+                    .status(TaskStatus.builder().state(state).build())
+                    .metadata(java.util.Map.of(
+                            "execution_time_ms", 50L,
+                            "errorCode", errorCode,
+                            "errorMessage", "Error: " + errorCode))
                     .build());
         }
         return builder.build();

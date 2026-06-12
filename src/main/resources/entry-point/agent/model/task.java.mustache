@@ -1,5 +1,7 @@
 package {{package}}.model.a2a;
 
+import java.util.List;
+import java.util.Map;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 {{/lombok}}
 
-@SuppressWarnings("java:S116")
+/**
+ * A2A Protocol v1.0 - Task
+ */
 {{#lombok}}
 @Data
 @Builder(toBuilder = true)
@@ -15,28 +19,38 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 {{/lombok}}
 public class Task {
+
     private String id;
-    private String status;
-    private Error error;
-    private Long execution_time_ms;
+    private String contextId;
+    private TaskStatus status;
+    private List<Artifact> artifacts;
+    private List<Message> history;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> metadata;
 
 {{^lombok}}
     public Task() {}
 
-    public Task(String id, String status, Error error, Long execution_time_ms) {
+    public Task(String id, String contextId, TaskStatus status, List<Artifact> artifacts, List<Message> history, Map<String, Object> metadata) {
         this.id = id;
+        this.contextId = contextId;
         this.status = status;
-        this.error = error;
-        this.execution_time_ms = execution_time_ms;
+        this.artifacts = artifacts;
+        this.history = history;
+        this.metadata = metadata;
     }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public Error getError() { return error; }
-    public void setError(Error error) { this.error = error; }
-    public Long getExecution_time_ms() { return execution_time_ms; }
-    public void setExecution_time_ms(Long execution_time_ms) { this.execution_time_ms = execution_time_ms; }
+    public String getContextId() { return contextId; }
+    public void setContextId(String contextId) { this.contextId = contextId; }
+    public TaskStatus getStatus() { return status; }
+    public void setStatus(TaskStatus status) { this.status = status; }
+    public List<Artifact> getArtifacts() { return artifacts; }
+    public void setArtifacts(List<Artifact> artifacts) { this.artifacts = artifacts; }
+    public List<Message> getHistory() { return history; }
+    public void setHistory(List<Message> history) { this.history = history; }
+    public Map<String, Object> getMetadata() { return metadata; }
+    public void setMetadata(Map<String, Object> metadata) { this.metadata = metadata; }
 {{/lombok}}
 }

@@ -1,0 +1,75 @@
+package {{package}}.model.a2a;
+
+import java.util.Map;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - Part
+ * <p>
+ * Fundamental content container used within Messages and Artifacts. A Part holds one of: text
+ * content, a file reference (URL or inline bytes), or structured data. Only one content field
+ * should be set per Part instance.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class Part {
+
+    private String text;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> data;
+    private String url;
+    @SuppressWarnings("java:S116")
+    private String mediaType;
+    private String filename;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> metadata;
+
+    // ─── Factory helpers ───────────────────────────────────────────────────────
+
+    public static Part ofText(String text) {
+        return Part.builder().text(text).build();
+    }
+
+    public static Part ofData(Map<String, Object> data) {
+        return Part.builder().data(data).build();
+    }
+
+    public static Part ofUrl(String url, String mediaType) {
+        return Part.builder().url(url).mediaType(mediaType).build();
+    }
+
+{{^lombok}}
+    public Part() {}
+
+    public Part(String text, Map<String, Object> data, String url, String mediaType, String filename, Map<String, Object> metadata) {
+        this.text = text;
+        this.data = data;
+        this.url = url;
+        this.mediaType = mediaType;
+        this.filename = filename;
+        this.metadata = metadata;
+    }
+
+    public String getText() { return text; }
+    public void setText(String text) { this.text = text; }
+    public Map<String, Object> getData() { return data; }
+    public void setData(Map<String, Object> data) { this.data = data; }
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+    public String getMediaType() { return mediaType; }
+    public void setMediaType(String mediaType) { this.mediaType = mediaType; }
+    public String getFilename() { return filename; }
+    public void setFilename(String filename) { this.filename = filename; }
+    public Map<String, Object> getMetadata() { return metadata; }
+    public void setMetadata(Map<String, Object> metadata) { this.metadata = metadata; }
+{{/lombok}}
+}
