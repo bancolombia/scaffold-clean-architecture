@@ -1,5 +1,7 @@
 package {{package}}.model.a2a;
 
+import java.util.List;
+import java.util.Map;
 {{#lombok}}
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 {{/lombok}}
 
-@SuppressWarnings("java:S116")
+/**
+ * A2A Protocol v1.0 - AgentCard.
+ */
 {{#lombok}}
 @Data
 @Builder(toBuilder = true)
@@ -15,24 +19,62 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 {{/lombok}}
 public class AgentCard {
-    private String agent_id;
+
+    private String protocolVersion;
     private String name;
     private String description;
+    private String version;
+    private AgentProvider provider;
+    private List<AgentInterface> supportedInterfaces;
+    private AgentCapabilities capabilities;
+    private List<String> defaultInputModes;
+    private List<String> defaultOutputModes;
+    private List<AgentSkill> skills;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> securitySchemes;
+    private List<String> tags;
 
 {{^lombok}}
     public AgentCard() {}
 
-    public AgentCard(String agent_id, String name, String description) {
-        this.agent_id = agent_id;
+    public AgentCard(String protocolVersion, String name, String description, String version, AgentProvider provider, List<AgentInterface> supportedInterfaces, AgentCapabilities capabilities, List<String> defaultInputModes, List<String> defaultOutputModes, List<AgentSkill> skills, Map<String, Object> securitySchemes, List<String> tags) {
+        this.protocolVersion = protocolVersion;
         this.name = name;
         this.description = description;
+        this.version = version;
+        this.provider = provider;
+        this.supportedInterfaces = supportedInterfaces;
+        this.capabilities = capabilities;
+        this.defaultInputModes = defaultInputModes;
+        this.defaultOutputModes = defaultOutputModes;
+        this.skills = skills;
+        this.securitySchemes = securitySchemes;
+        this.tags = tags;
     }
 
-    public String getAgent_id() { return agent_id; }
-    public void setAgent_id(String agent_id) { this.agent_id = agent_id; }
+    public String getProtocolVersion() { return protocolVersion; }
+    public void setProtocolVersion(String protocolVersion) { this.protocolVersion = protocolVersion; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String getVersion() { return version; }
+    public void setVersion(String version) { this.version = version; }
+    public AgentProvider getProvider() { return provider; }
+    public void setProvider(AgentProvider provider) { this.provider = provider; }
+    public List<AgentInterface> getSupportedInterfaces() { return supportedInterfaces; }
+    public void setSupportedInterfaces(List<AgentInterface> supportedInterfaces) { this.supportedInterfaces = supportedInterfaces; }
+    public AgentCapabilities getCapabilities() { return capabilities; }
+    public void setCapabilities(AgentCapabilities capabilities) { this.capabilities = capabilities; }
+    public List<String> getDefaultInputModes() { return defaultInputModes; }
+    public void setDefaultInputModes(List<String> defaultInputModes) { this.defaultInputModes = defaultInputModes; }
+    public List<String> getDefaultOutputModes() { return defaultOutputModes; }
+    public void setDefaultOutputModes(List<String> defaultOutputModes) { this.defaultOutputModes = defaultOutputModes; }
+    public List<AgentSkill> getSkills() { return skills; }
+    public void setSkills(List<AgentSkill> skills) { this.skills = skills; }
+    public Map<String, Object> getSecuritySchemes() { return securitySchemes; }
+    public void setSecuritySchemes(Map<String, Object> securitySchemes) { this.securitySchemes = securitySchemes; }
+    public List<String> getTags() { return tags; }
+    public void setTags(List<String> tags) { this.tags = tags; }
 {{/lombok}}
 }

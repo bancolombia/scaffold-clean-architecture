@@ -1,0 +1,37 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - AgentProvider. Organization info inside AgentCard.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AgentProvider {
+
+    private String organization;
+    private String url;
+
+{{^lombok}}
+    public AgentProvider() {}
+
+    public AgentProvider(String organization, String url) {
+        this.organization = organization;
+        this.url = url;
+    }
+
+    public String getOrganization() { return organization; }
+    public void setOrganization(String organization) { this.organization = organization; }
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+{{/lombok}}
+}
