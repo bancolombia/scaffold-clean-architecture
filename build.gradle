@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.3.1.8318'
     id 'com.gradle.plugin-publish' version '2.1.1'
-    id 'com.diffplug.spotless' version '8.6.0'
+    id 'com.diffplug.spotless' version '8.7.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '12.2.2'
 }
@@ -198,10 +198,10 @@ dependencies {
 
     testImplementation gradleTestKit()
     testImplementation 'org.mockito:mockito-junit-jupiter:5.23.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.1.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.1.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.1.0'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.1.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:6.1.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.1.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:6.1.1'
 
     compileOnly 'org.projectlombok:lombok:1.18.46'
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.5.1'
+    gradleVersion = '9.6.1'
 }
 
 tasks.register('ci-updater', JavaExec) {
