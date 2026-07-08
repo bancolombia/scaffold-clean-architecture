@@ -1,30 +1,26 @@
 plugins {
-    id 'com.google.protobuf' version '0.9.6'
+    id 'com.google.protobuf' version '{{PROTOBUF_PLUGIN_VERSION}}'
 }
 
 dependencies {
     implementation project(':model')
     implementation project(':usecase')
-    implementation 'org.springframework:spring-context'
 
-    implementation 'net.devh:grpc-server-spring-boot-starter:{{grpcSpringBootStarterVersion}}'
-
-    implementation 'io.grpc:grpc-netty-shaded'
-    implementation 'io.grpc:grpc-protobuf'
-    implementation 'io.grpc:grpc-stub'
-    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'org.springframework.boot:spring-boot-starter-grpc-server'
+    implementation 'io.grpc:grpc-services'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.grpc:spring-grpc-test'
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:{{protobufVersion}}"
+        artifact = "com.google.protobuf:protoc:{{PROTOBUF_VERSION}}"
     }
 
     plugins {
         grpc {
-            artifact = "io.grpc:protoc-gen-grpc-java:{{grpcVersion}}"
+            artifact = "io.grpc:protoc-gen-grpc-java:{{GRPC_VERSION}}"
         }
     }
 

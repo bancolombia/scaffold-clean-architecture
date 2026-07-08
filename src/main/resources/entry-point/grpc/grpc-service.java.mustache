@@ -4,7 +4,7 @@ import {{package}}.grpc.mapper.ErrorMapper;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.stereotype.Service;
 
 /**
  * gRPC Server Entry Point.
@@ -14,11 +14,17 @@ import net.devh.boot.grpc.server.service.GrpcService;
  * from the proto file during the build process.
  * </p>
  * <p>
+ * Spring gRPC automatically registers all {@link io.grpc.BindableService} beans
+ * with the gRPC server.
+ * </p>
+ * <p>
  * To compile the proto files, run: ./gradlew generateProto
  * </p>
+ *
+ * @see <a href="https://docs.spring.io/spring-grpc/reference/server.html">Spring gRPC Server Documentation</a>
  */
 @Slf4j
-@GrpcService
+@Service
 @RequiredArgsConstructor
 public class GrpcServerEntryPoint extends CustomServiceGrpc.CustomServiceImplBase {
 
@@ -34,12 +40,12 @@ public class GrpcServerEntryPoint extends CustomServiceGrpc.CustomServiceImplBas
         try {
             // TODO: Replace this sample implementation with your business logic
             // Example: var result = someUseCase.execute(request.getId());
-            
+
             Response response = Response.newBuilder()
                     .setId(request.getId())
                     .setMessage("SUCCESS")
                     .build();
-            
+
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 

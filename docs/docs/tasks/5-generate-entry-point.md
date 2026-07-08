@@ -446,7 +446,7 @@ cors:
 
 ## Usage Example for gRPC Server
 
-The **`grpc`** entry point type generates a gRPC server module using [grpc-spring-boot-starter](https://github.com/yidongnan/grpc-spring-boot-starter). It includes Protocol Buffers configuration, a sample service implementation, and error mapping.
+The **`grpc`** entry point type generates a gRPC server module using the official [Spring gRPC](https://docs.spring.io/spring-grpc/reference/) integration (`spring-boot-starter-grpc-server`). It includes Protocol Buffers configuration, a sample service implementation, and error mapping.
 
 ### Basic Command
 
@@ -479,9 +479,10 @@ infrastructure/
 The command automatically updates `application.yaml` with gRPC server configuration:
 
 ```yaml
-grpc:
-  server:
-    port: ${GRPC_SERVER_PORT:9090}
+spring:
+  grpc:
+    server:
+      port: ${GRPC_SERVER_PORT:9090}
 ```
 
 ### Dependencies
@@ -490,10 +491,9 @@ The generated module includes:
 
 | Dependency | Description |
 |------------|-------------|
-| `grpc-server-spring-boot-starter` | Spring Boot integration for gRPC |
-| `grpc-netty-shaded` | Netty transport for gRPC |
-| `grpc-protobuf` | Protocol Buffers support |
-| `grpc-stub` | gRPC stub generation |
+| `spring-boot-starter-grpc-server` | Official Spring Boot integration for gRPC |
+| `grpc-services` | gRPC services (health, reflection) |
+| `spring-grpc-test` | Spring gRPC testing utilities |
 | `protobuf-gradle-plugin` | Gradle plugin for proto compilation |
 
 ### Proto File

@@ -78,10 +78,7 @@ class EntryPointGrpcTest {
     assertFileContains(
         TEST_DIR + "/infrastructure/entry-points/grpc/build.gradle",
         "com.google.protobuf",
-        "grpc-server-spring-boot-starter",
-        "grpc-netty-shaded",
-        "grpc-protobuf",
-        "grpc-stub",
+        "spring-boot-starter-grpc-server",
         "protobuf {");
   }
 
@@ -112,7 +109,7 @@ class EntryPointGrpcTest {
 
     // Assert
     assertFileContains(
-        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml", "grpc:");
+        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml", "spring:");
   }
 
   @Test
