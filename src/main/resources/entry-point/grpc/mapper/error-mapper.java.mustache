@@ -1,0 +1,65 @@
+package {{package}}.grpc.mapper;
+
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+/**
+ * Maps exceptions to gRPC Status errors.
+ * <p>
+ * Customize this mapper to handle your domain-specific exceptions
+ * and map them to appropriate gRPC status codes.
+ * </p>
+ */
+@Slf4j
+@Component
+public class ErrorMapper {
+
+    /**
+     * Maps a throwable to a gRPC StatusRuntimeException.
+     *
+     * @param throwable the exception to map
+     * @return a StatusRuntimeException with appropriate status code
+     */
+    public Throwable map(Throwable throwable) {
+        if (throwable instanceof StatusRuntimeException) {
+            return throwable;
+        }
+
+        // TODO: Add your custom exception mappings here
+        // Example:
+        // if (throwable instanceof NotFoundException) {
+        //     return Status.NOT_FOUND
+        //             .withDescription(throwable.getMessage())
+        //             .withCause(throwable)
+        //             .asRuntimeException();
+        // }
+        // if (throwable instanceof ValidationException) {
+        //     return Status.INVALID_ARGUMENT
+        //             .withDescription(throwable.getMessage())
+        //             .withCause(throwable)
+        //             .asRuntimeException();
+        // }
+
+        if (throwable instanceof IllegalArgumentException) {
+            return Status.INVALID_ARGUMENT
+                    .withDescription(getMessage(throwable))
+                    .withCause(throwable)
+                    .asRuntimeException();
+        }
+
+        log.error("Unmapped exception occurred", throwable);
+        return Status.INTERNAL
+                .withDescription(getMessage(throwable))
+                .withCause(throwable)
+                .asRuntimeException();
+    }
+
+    private String getMessage(Throwable throwable) {
+        if (throwable.getMessage() != null) {
+            return throwable.getMessage();
+        }
+        return "Internal server error";
+    }
+}

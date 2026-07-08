@@ -256,4 +256,20 @@ class GenerateEntryPointTaskImperativeTest {
     // Assert
     assertEquals(2, options.size());
   }
+
+  @Test
+  void generateEntryPointGrpc() throws IOException, CleanException {
+    // Arrange
+    task.setType("GRPC");
+    // Act
+    task.execute();
+    // Assert
+    assertFilesExistsInDir(
+        TEST_DIR + "/infrastructure/entry-points/grpc/",
+        "build.gradle",
+        "src/main/java/co/com/bancolombia/grpc/GrpcServerEntryPoint.java",
+        "src/main/java/co/com/bancolombia/grpc/mapper/ErrorMapper.java",
+        "src/main/proto/service.proto",
+        "src/test/java/co/com/bancolombia/grpc/GrpcServerEntryPointTest.java");
+  }
 }

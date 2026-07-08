@@ -1,0 +1,48 @@
+plugins {
+    id 'com.google.protobuf' version '0.9.6'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework:spring-context'
+
+    implementation 'net.devh:grpc-server-spring-boot-starter:{{grpcSpringBootStarterVersion}}'
+
+    implementation 'io.grpc:grpc-netty-shaded'
+    implementation 'io.grpc:grpc-protobuf'
+    implementation 'io.grpc:grpc-stub'
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:{{protobufVersion}}"
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:{{grpcVersion}}"
+        }
+    }
+
+    generateProtoTasks {
+        all().each {
+            it.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+// Ensure generated sources are included in the source sets
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}

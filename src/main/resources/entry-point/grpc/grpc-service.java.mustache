@@ -1,0 +1,63 @@
+package {{package}}.grpc;
+
+import {{package}}.grpc.mapper.ErrorMapper;
+import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.server.service.GrpcService;
+
+/**
+ * gRPC Server Entry Point.
+ * <p>
+ * This class implements the gRPC service defined in service.proto.
+ * The base class (CustomServiceGrpc.CustomServiceImplBase) is generated
+ * from the proto file during the build process.
+ * </p>
+ * <p>
+ * To compile the proto files, run: ./gradlew generateProto
+ * </p>
+ */
+@Slf4j
+@GrpcService
+@RequiredArgsConstructor
+public class GrpcServerEntryPoint extends CustomServiceGrpc.CustomServiceImplBase {
+
+    // TODO: Inject your use cases here
+    // private final SomeUseCase someUseCase;
+    private final ErrorMapper errorMapper;
+
+    @Override
+    public void getById(
+            Request request,
+            StreamObserver<Response> responseObserver) {
+        log.info("Received gRPC request with id: {}", request.getId());
+        try {
+            // TODO: Replace this sample implementation with your business logic
+            // Example: var result = someUseCase.execute(request.getId());
+            
+            Response response = Response.newBuilder()
+                    .setId(request.getId())
+                    .setMessage("SUCCESS")
+                    .build();
+            
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+        } catch (Exception exception) {
+            log.error("Error processing gRPC request", exception);
+            responseObserver.onError(errorMapper.map(exception));
+        }
+    }
+
+    @Override
+    public void health(
+            com.google.protobuf.Empty request,
+            StreamObserver<HealthResponse> responseObserver) {
+        responseObserver.onNext(
+                HealthResponse.newBuilder()
+                        .setStatus("UP")
+                        .build()
+        );
+        responseObserver.onCompleted();
+    }
+}
