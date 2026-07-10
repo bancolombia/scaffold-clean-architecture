@@ -1,0 +1,10 @@
+package {{package}}.model.a2a.gateways;
+
+import {{package}}.model.a2a.ChatMessage;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+public interface ChatHistoryGateway {
+    Mono<Void> saveMessage(String sessionId, String role, String content);
+    Flux<ChatMessage> getHistory(String sessionId);
+}

@@ -1,0 +1,79 @@
+package {{package}}.usecase;
+
+import {{package}}.model.a2a.ChatMessage;
+import {{package}}.model.a2a.DelegationResult;
+import {{package}}.model.a2a.gateways.AgentDelegationGateway;
+import {{package}}.model.a2a.gateways.CapabilityDiscoveryGateway;
+import {{package}}.model.a2a.gateways.ChatHistoryGateway;
+import {{package}}.model.chat.gateways.ChatGateway;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+class OrchestratorUseCaseTest {
+
+    private ChatGateway chatGateway;
+    private AgentDelegationGateway delegationGateway;
+    private CapabilityDiscoveryGateway capabilityDiscoveryGateway;
+    private ChatHistoryGateway chatHistoryGateway;
+    private OrchestratorUseCase useCase;
+
+    @BeforeEach
+    void setUp() {
+        chatGateway = Mockito.mock(ChatGateway.class);
+        delegationGateway = Mockito.mock(AgentDelegationGateway.class);
+        capabilityDiscoveryGateway = Mockito.mock(CapabilityDiscoveryGateway.class);
+        chatHistoryGateway = Mockito.mock(ChatHistoryGateway.class);
+
+        useCase = new OrchestratorUseCase(chatGateway, delegationGateway, capabilityDiscoveryGateway, chatHistoryGateway);
+    }
+
+    @Test
+    void shouldOrchestrateDirectAnswerWithoutTools() {
+        String query = "Hola";
+        String responseText = "Hola, ¿en qué puedo ayudarte?";
+
+        when(chatHistoryGateway.saveMessage(anyString(), anyString(), anyString())).thenReturn(Mono.empty());
+        when(chatHistoryGateway.getHistory(anyString())).thenReturn(Flux.empty());
+        when(capabilityDiscoveryGateway.discoverCapabilities(anyString())).thenReturn(Mono.just("[]"));
+        when(chatGateway.sendMessage(anyString())).thenReturn(Mono.just(responseText));
+
+        StepVerifier.create(useCase.orchestrate(query, "trace-1"))
+                .expectNext(responseText)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldOrchestrateAndDelegateWithTools() {
+        String query = "Busca el cliente Juan Perez";
+        String llmDecision = "ACTION:SEARCH_CLIENTS\n{\n  \"name\": \"Juan Perez\"\n}";
+        DelegationResult delegationResult = DelegationResult.builder()
+                .status("SUCCESS")
+                .result(Map.of("message", "Cliente Juan Perez encontrado con cuenta activa."))
+                .build();
+        String synthesisText = "He encontrado al cliente Juan Perez con una cuenta activa.";
+
+        when(chatHistoryGateway.saveMessage(anyString(), anyString(), anyString())).thenReturn(Mono.empty());
+        when(chatHistoryGateway.getHistory(anyString())).thenReturn(Flux.empty());
+        when(capabilityDiscoveryGateway.discoverCapabilities(anyString())).thenReturn(Mono.just("[]"));
+        when(chatGateway.sendMessage(anyString()))
+                .thenReturn(Mono.just(llmDecision)) // Primera respuesta
+                .thenReturn(Mono.just(synthesisText)); // Segunda respuesta (síntesis)
+
+        when(delegationGateway.delegate(any())).thenReturn(Mono.just(delegationResult));
+
+        StepVerifier.create(useCase.orchestrate(query, "trace-2"))
+                .expectNext(synthesisText)
+                .verifyComplete();
+    }
+}

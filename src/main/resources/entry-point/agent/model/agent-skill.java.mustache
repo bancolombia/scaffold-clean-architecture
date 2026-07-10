@@ -1,0 +1,64 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+import java.util.Map;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - AgentSkill. Describes a specific capability of the agent.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AgentSkill {
+
+    private String id;
+    private String name;
+    private String description;
+    private List<String> tags;
+    private List<String> inputModes;
+    private List<String> outputModes;
+    private List<String> examples;
+    @SuppressWarnings("java:S1948")
+    private Map<String, Object> schema;
+
+{{^lombok}}
+    public AgentSkill() {}
+
+    public AgentSkill(String id, String name, String description, List<String> tags, List<String> inputModes, List<String> outputModes, List<String> examples, Map<String, Object> schema) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.tags = tags;
+        this.inputModes = inputModes;
+        this.outputModes = outputModes;
+        this.examples = examples;
+        this.schema = schema;
+    }
+
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public List<String> getTags() { return tags; }
+    public void setTags(List<String> tags) { this.tags = tags; }
+    public List<String> getInputModes() { return inputModes; }
+    public void setInputModes(List<String> inputModes) { this.inputModes = inputModes; }
+    public List<String> getOutputModes() { return outputModes; }
+    public void setOutputModes(List<String> outputModes) { this.outputModes = outputModes; }
+    public List<String> getExamples() { return examples; }
+    public void setExamples(List<String> examples) { this.examples = examples; }
+    public Map<String, Object> getSchema() { return schema; }
+    public void setSchema(Map<String, Object> schema) { this.schema = schema; }
+{{/lombok}}
+}

@@ -1,0 +1,9 @@
+package {{package}}.model.chat.gateways;
+
+import {{package}}.model.a2a.Task;
+import reactor.core.publisher.Mono;
+
+public interface TaskStoreGateway {
+    Mono<Void> save(Task task);
+    Mono<Task> findById(String taskId);
+}

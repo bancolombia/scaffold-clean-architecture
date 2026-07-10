@@ -2,7 +2,13 @@ package {{package}}.api;
 
 import {{package}}.model.a2a.SendMessageRequest;
 import {{package}}.model.a2a.AgentCard;
+{{#agent-is-collaborative}}
 import {{package}}.usecase.AgentChatUseCase;
+{{/agent-is-collaborative}}
+{{#agent-is-supervisor}}
+import {{package}}.usecase.OrchestratorUseCase;
+{{/agent-is-supervisor}}
+import java.util.Map;
 {{#lombok}}
 import lombok.extern.log4j.Log4j2;
 {{/lombok}}
@@ -19,41 +25,77 @@ import reactor.core.publisher.Mono;
 {{/lombok}}
 public class Handler {
 
-    private static final String HEADER_CORRELATION_ID = "X-Correlation-Id";
     private static final String HEADER_TRACE_ID = "X-Trace-Id";
 
+    {{#agent-is-collaborative}}
     private final AgentChatUseCase agentChatUseCase;
     private final AgentCard agentCard;
+    {{/agent-is-collaborative}}
+    {{#agent-is-supervisor}}
+    private final OrchestratorUseCase orchestratorUseCase;
+    {{/agent-is-supervisor}}
 
-    public Handler(AgentChatUseCase agentChatUseCase,
-                   @Value("${agent.id:agent-1}") String agentId,
-                   @Value("${agent.name:Agent}") String name,
-                   @Value("${agent.description:Agent Description}") String description) {
+    public Handler(
+            {{#agent-is-collaborative}}
+            AgentChatUseCase agentChatUseCase,
+            @Value("${agent.id:agent-1}") String agentId,
+            @Value("${agent.name:Agent}") String name,
+            @Value("${agent.description:Agent Description}") String description
+            {{/agent-is-collaborative}}
+            {{#agent-is-hybrid}}
+            ,
+            {{/agent-is-hybrid}}
+            {{#agent-is-supervisor}}
+            OrchestratorUseCase orchestratorUseCase
+            {{/agent-is-supervisor}}
+            ) {
+        {{#agent-is-collaborative}}
         this.agentChatUseCase = agentChatUseCase;
-        this.agentCard = new AgentCard(agentId, name, description);
+        this.agentCard = AgentCard.builder()
+                .protocolVersion("1.0")
+                .name(name)
+                .description(description)
+                .version("1.0.0")
+                .tags(java.util.List.of("finance"))
+                .build();
+        {{/agent-is-collaborative}}
+        {{#agent-is-supervisor}}
+        this.orchestratorUseCase = orchestratorUseCase;
+        {{/agent-is-supervisor}}
     }
 
-    public Mono<ServerResponse> handleSendMessage(ServerRequest serverRequest) {
-{{#lombok}}
-        log.info("A2A REST message received — correlationId: {}, traceId: {}",
-                serverRequest.headers().firstHeader(HEADER_CORRELATION_ID),
-                serverRequest.headers().firstHeader(HEADER_TRACE_ID));
-{{/lombok}}
+    {{#agent-is-supervisor}}
+    public Mono<ServerResponse> orchestrate(ServerRequest serverRequest) {
+        return serverRequest.bodyToMono(Map.class)
+                .flatMap(body -> {
+                    String query = (String) body.get("query");
+                    String traceId = serverRequest.headers().firstHeader(HEADER_TRACE_ID);
+                    return orchestratorUseCase.orchestrate(query, traceId);
+                })
+                .flatMap(answer -> ServerResponse.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(Map.of("answer", answer)))
+                .onErrorResume(e -> ServerResponse.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(Map.of("error", e.getMessage())));
+    }
+    {{/agent-is-supervisor}}
 
+    {{#agent-is-collaborative}}
+    public Mono<ServerResponse> handleJsonRpc(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(SendMessageRequest.class)
                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Request body is required")))
                 .flatMap(agentChatUseCase::chatAndRespond)
                 .flatMap(response -> ServerResponse.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(response))
-                .onErrorResume(e -> {
-{{#lombok}}
-                    log.error("Error processing A2A REST message", e);
-{{/lombok}}
-                    return ServerResponse.badRequest()
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .bodyValue("{\"error\":\"" + e.getMessage() + "\"}");
-                });
+                .onErrorResume(e -> ServerResponse.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(Map.of("error", e.getMessage())));
+    }
+
+    public Mono<ServerResponse> handleSendMessage(ServerRequest serverRequest) {
+        return handleJsonRpc(serverRequest);
     }
 
     public Mono<ServerResponse> handleAgentCard(ServerRequest serverRequest) {
@@ -61,4 +103,5 @@ public class Handler {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(agentCard);
     }
+    {{/agent-is-collaborative}}
 }

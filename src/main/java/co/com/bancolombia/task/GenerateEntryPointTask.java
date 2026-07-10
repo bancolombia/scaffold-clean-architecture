@@ -31,6 +31,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption mcpEnableAudit = BooleanOption.TRUE;
   private BooleanOption agentEnableKafka = BooleanOption.TRUE;
   private BooleanOption agentEnableMcpClient = BooleanOption.TRUE;
+  private String agentRole = "collaborative";
 
   @Option(
       option = "server",
@@ -197,6 +198,13 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @Option(
+      option = "agent-role",
+      description = "Set the role of the agent: collaborative, supervisor, or hybrid")
+  public void setAgentRole(String agentRole) {
+    this.agentRole = agentRole;
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
@@ -220,6 +228,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   }
 
   private void appendAgentParams() {
+    builder.addParam("agent-role", agentRole);
     builder.addParam("agent-enable-kafka", agentEnableKafka == BooleanOption.TRUE);
     builder.addParam("agent-enable-mcp-client", agentEnableMcpClient == BooleanOption.TRUE);
   }

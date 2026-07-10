@@ -1,0 +1,9 @@
+package {{package}}.model.a2a.gateways;
+
+import {{package}}.model.a2a.DelegationCommand;
+import {{package}}.model.a2a.DelegationResult;
+import reactor.core.publisher.Mono;
+
+public interface AgentDelegationGateway {
+    Mono<DelegationResult> delegate(DelegationCommand command);
+}
