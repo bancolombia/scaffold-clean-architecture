@@ -1,0 +1,19 @@
+name: Enhancement Request
+description: The Enhancement Request is used to formalize and document proposals aimed at improving existing features or proposing new functionalities.
+labels: ["c:enhancement"]
+body:
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: New functionality or update
+      description: >-
+        Describe the new functionality or update. You can also attach screenshots if necessary.
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Why do you consider it necessary?
+      description: Explain the reason why you consider this new functionality or update necessary.
+    validations:
+      required: true
