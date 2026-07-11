@@ -1,0 +1,36 @@
+name: Report Error
+description: Use this option to report errors in the component.
+labels: [ "c:bug" ]
+body:
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the Error
+      description: >
+        Please clearly describe the error encountered and its expected behavior. You can also attach screenshots if necessary.
+  - type: textarea
+    attributes:
+      label: How to Replicate the Error
+      description: Step-by-step instructions to reproduce the error
+      value: |
+        1. Preconditions (environment, configuration, test data)
+        2. Request or action performed
+        3. Expected behavior
+        4. Actual behavior
+        5. Error message, stack trace, or logs (if available)
+        ...
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Runtime Environment
+
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Component version
+      placeholder: v1.0.0
