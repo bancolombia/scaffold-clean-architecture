@@ -1,0 +1,42 @@
+package {{package}}.model.a2a;
+
+import java.util.List;
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - Optional configuration hints sent alongside a SendMessage call.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class MessageSendConfiguration {
+
+    private List<String> acceptedOutputModes;
+    private Integer historyLength;
+    private Boolean blocking;
+
+{{^lombok}}
+    public MessageSendConfiguration() {}
+
+    public MessageSendConfiguration(List<String> acceptedOutputModes, Integer historyLength, Boolean blocking) {
+        this.acceptedOutputModes = acceptedOutputModes;
+        this.historyLength = historyLength;
+        this.blocking = blocking;
+    }
+
+    public List<String> getAcceptedOutputModes() { return acceptedOutputModes; }
+    public void setAcceptedOutputModes(List<String> acceptedOutputModes) { this.acceptedOutputModes = acceptedOutputModes; }
+    public Integer getHistoryLength() { return historyLength; }
+    public void setHistoryLength(Integer historyLength) { this.historyLength = historyLength; }
+    public Boolean getBlocking() { return blocking; }
+    public void setBlocking(Boolean blocking) { this.blocking = blocking; }
+{{/lombok}}
+}

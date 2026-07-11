@@ -1,0 +1,251 @@
+package {{package}}.usecase;
+
+import {{package}}.model.a2a.ChatMessage;
+import {{package}}.model.a2a.DelegationCommand;
+import {{package}}.model.a2a.DelegationResult;
+import {{package}}.model.a2a.gateways.AgentDelegationGateway;
+import {{package}}.model.a2a.gateways.CapabilityDiscoveryGateway;
+import {{package}}.model.a2a.gateways.ChatHistoryGateway;
+import {{package}}.model.chat.gateways.ChatGateway;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import reactor.core.publisher.Mono;
+
+/**
+ * Caso de uso principal del agente orquestador/supervisor.
+ */
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+public class OrchestratorUseCase {
+
+    private static final String KEY_RAW_JSON    = "rawJson";
+    private static final String KEY_RAW_QUERY   = "rawQuery";
+
+{{^lombok}}
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(OrchestratorUseCase.class.getName());
+{{/lombok}}
+
+    private final ChatGateway chatGateway;
+    private final AgentDelegationGateway delegationGateway;
+    private final CapabilityDiscoveryGateway capabilityDiscoveryGateway;
+    private final ChatHistoryGateway chatHistoryGateway;
+
+{{^lombok}}
+    public OrchestratorUseCase(ChatGateway chatGateway,
+                               AgentDelegationGateway delegationGateway,
+                               CapabilityDiscoveryGateway capabilityDiscoveryGateway,
+                               ChatHistoryGateway chatHistoryGateway) {
+        this.chatGateway = chatGateway;
+        this.delegationGateway = delegationGateway;
+        this.capabilityDiscoveryGateway = capabilityDiscoveryGateway;
+        this.chatHistoryGateway = chatHistoryGateway;
+    }
+{{/lombok}}
+
+    public Mono<String> orchestrate(String userQuery, String traceId) {
+        String correlationId = UUID.randomUUID().toString();
+        String sessionId = (traceId == null || traceId.isBlank()) ? correlationId : traceId;
+
+        return chatHistoryGateway.saveMessage(sessionId, "user", userQuery)
+                .then(chatHistoryGateway.getHistory(sessionId).collectList())
+                .flatMap(history -> capabilityDiscoveryGateway.discoverCapabilities(userQuery)
+                        .flatMap(capabilities -> chatGateway.sendMessage(
+                                buildDecisionPrompt(userQuery, capabilities, history))))
+                .flatMap(llmDecision -> handleLlmDecision(llmDecision, userQuery, correlationId,
+                        sessionId))
+                .flatMap(finalResponse -> chatHistoryGateway.saveMessage(sessionId, "assistant",
+                                finalResponse)
+                        .thenReturn(finalResponse))
+                .doOnError(err -> log.severe(
+                        "Orchestration error [sessionId=" + sessionId + "]: " + err.getMessage()));
+    }
+
+    private Mono<String> handleLlmDecision(String llmDecision, String userQuery,
+            String correlationId, String traceId) {
+        if (!requiresTool(llmDecision)) {
+            return Mono.justOrEmpty(llmDecision);
+        }
+        String intent = extractIntent(llmDecision);
+        Map<String, Object> parameters = extractParameters(llmDecision, userQuery);
+        return dispatchToConsumer(intent, parameters, correlationId, traceId)
+                .flatMap(response -> synthesizeResponse(userQuery, response));
+    }
+
+    private Mono<DelegationResult> dispatchToConsumer(String intent, Map<String, Object> parameters,
+            String correlationId, String traceId) {
+        DelegationCommand command = DelegationCommand.builder()
+                .messageId(UUID.randomUUID().toString())
+                .correlationId(correlationId)
+                .traceId(traceId)
+                .intent(intent)
+                .parameters(parameters)
+                .requiredScopes(scopesFor(intent))
+                .build();
+
+        return delegationGateway.delegate(command);
+    }
+
+    private Mono<String> synthesizeResponse(String userQuery, DelegationResult response) {
+        if ("SUCCESS".equals(response.getStatus())) {
+            if (isNonTerminalTask(response.getResult())) {
+                return Mono.just(
+                        "Tu solicitud sigue en proceso. Intenta nuevamente en unos segundos para obtener la respuesta final.");
+            }
+            return chatGateway.sendMessage(
+                    buildSynthesisPrompt(userQuery,
+                            extractSpecializedInformation(response.getResult())));
+        }
+        String errorMsg = response.getError() != null
+                ? response.getError().getMessage()
+                : "Unknown error";
+        return Mono.just("No pude completar la operacion: " + errorMsg);
+    }
+
+    private String buildDecisionPrompt(String userQuery, String capabilities,
+            List<ChatMessage> history) {
+        StringBuilder historyStr = new StringBuilder();
+        if (!history.isEmpty()) {
+            historyStr.append("\nHISTORIAL DE LA CONVERSACIÓN:\n");
+            for (ChatMessage msg : history) {
+                if (history.indexOf(msg) == history.size() - 1 && "user".equals(msg.getRole())) {
+                    continue;
+                }
+                historyStr.append(msg.getRole().toUpperCase()).append(": ").append(msg.getContent())
+                        .append("\n");
+            }
+        }
+
+        return String.format("""
+                Eres un agente orquestador bancario. Tu objetivo es entender la intención del usuario y delegar la tarea al agente especializado correspondiente, pasándole los datos extraídos de la solicitud del usuario en formato JSON.
+                
+                %s
+                
+                El usuario pregunta: '%s'
+                
+                %s
+                
+                REGLAS ESTRICTAS:
+                1. Si NO usas ninguna herramienta o estás saludando, responde directamente al usuario.
+                2. Si decides usar una herramienta, DEBES responder EXCLUSIVAMENTE con este formato exacto:
+                ACTION:[Nombre_De_Accion]
+                {
+                  "parametro1": "valor extraido del usuario",
+                  "parametro2": "otro valor"
+                }
+                3. Asegúrate de cerrar bien las llaves del JSON. No agregues texto adicional fuera del formato solicitado.
+                4. Si faltan parámetros OBLIGATORIOS de la herramienta, NO la invoques. En su lugar, responde directamente al usuario pidiéndole los datos faltantes cordialmente.
+                """, historyStr.toString(), userQuery, capabilities);
+    }
+
+    private String buildSynthesisPrompt(String userQuery, String specializedInformation) {
+        return String.format("""
+                El usuario pregunto: '%s'
+                Obtuviste la siguiente informacion de tus herramientas especializadas: %s
+                
+                Sintetiza una respuesta clara, cordial y concisa para el usuario, basándote únicamente en la información obtenida. No menciones el uso de herramientas.
+                """, userQuery, specializedInformation);
+    }
+
+    private String extractSpecializedInformation(Map<String, Object> result) {
+        if (result == null || result.isEmpty()) {
+            return "Sin información disponible.";
+        }
+
+        String artifactText = extractArtifactText(result);
+        if (!artifactText.isBlank()) {
+            return artifactText;
+        }
+
+        Object message = result.get("message");
+        if (message != null) {
+            return Objects.toString(message, "");
+        }
+
+        return result.toString();
+    }
+
+    private String extractArtifactText(Map<String, Object> result) {
+        Object artifacts = result.get("artifacts");
+        if (!(artifacts instanceof List<?> artifactList)) {
+            return "";
+        }
+
+        StringBuilder text = new StringBuilder();
+        for (Object artifact : artifactList) {
+            if (!(artifact instanceof Map<?, ?> artifactMap)) {
+                continue;
+            }
+            Object parts = artifactMap.get("parts");
+            if (!(parts instanceof List<?> partList)) {
+                continue;
+            }
+            for (Object part : partList) {
+                if (part instanceof Map<?, ?> partMap) {
+                    Object candidate = partMap.get("text");
+                    if (candidate == null) {
+                        candidate = partMap.get("data");
+                    }
+                    if (candidate != null) {
+                        if (!text.isEmpty()) {
+                            text.append('\n');
+                        }
+                        text.append(candidate);
+                    }
+                }
+            }
+        }
+        return text.toString();
+    }
+
+    private boolean isNonTerminalTask(Map<String, Object> result) {
+        if (result == null || !"task".equalsIgnoreCase(Objects.toString(result.get("kind"), ""))) {
+            return false;
+        }
+        if (result.get("status") instanceof Map<?, ?> status) {
+            String state = Objects.toString(status.get("state"), "").toLowerCase();
+            return !state.isBlank() && !java.util.Set.of("completed", "failed", "cancelled",
+                            "canceled")
+                    .contains(state);
+        }
+        return false;
+    }
+
+    private boolean requiresTool(String llmDecision) {
+        return llmDecision != null && llmDecision.startsWith("ACTION:");
+    }
+
+    private String extractIntent(String llmDecision) {
+        return llmDecision.substring("ACTION:".length())
+                .split("[ \\n{]", 2)[0]
+                .trim();
+    }
+
+    private Map<String, Object> extractParameters(String llmDecision, String userQuery) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(KEY_RAW_QUERY, userQuery);
+        params.put(KEY_RAW_JSON, extractJsonBlock(llmDecision));
+        return params;
+    }
+
+    private static String extractJsonBlock(String text) {
+        int jsonStart = text.indexOf("{");
+        if (jsonStart == -1) return "{}";
+        int jsonEnd = text.lastIndexOf("}");
+        return jsonEnd > jsonStart
+                ? text.substring(jsonStart, jsonEnd + 1)
+                : text.substring(jsonStart) + "}";
+    }
+
+    private java.util.List<String> scopesFor(String intent) {
+        return java.util.List.of("clients.read");
+    }
+}

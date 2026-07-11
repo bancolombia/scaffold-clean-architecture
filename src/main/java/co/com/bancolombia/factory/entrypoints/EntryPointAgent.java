@@ -33,6 +33,7 @@ import java.io.IOException;
  * [--agent-enable-kafka=true] [--agent-enable-mcp-client=true]}
  */
 public class EntryPointAgent implements ModuleFactory {
+  private static final String ROLE_HYBRID = "hybrid";
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
@@ -41,20 +42,35 @@ public class EntryPointAgent implements ModuleFactory {
     final String ENTRY_POINT_DIR = "infrastructure/entry-points";
     final String DRIVEN_ADAPTER_DIR = "infrastructure/driven-adapters";
 
+    String agentRole = builder.getStringParam("agent-role");
+    if (agentRole == null || agentRole.isBlank()) {
+      agentRole = "collaborative";
+    }
+
+    boolean isCollaborative =
+        agentRole.equalsIgnoreCase("collaborative") || agentRole.equalsIgnoreCase(ROLE_HYBRID);
+    boolean isSupervisor =
+        agentRole.equalsIgnoreCase("supervisor") || agentRole.equalsIgnoreCase(ROLE_HYBRID);
+    boolean isHybrid = agentRole.equalsIgnoreCase(ROLE_HYBRID);
+
+    builder.addParam("agent-role", agentRole);
+    builder.addParam("agent-is-collaborative", isCollaborative);
+    builder.addParam("agent-is-supervisor", isSupervisor);
+    builder.addParam("agent-is-hybrid", isHybrid);
+
     boolean enableKafka = builder.getBooleanParam("agent-enable-kafka");
-    boolean enableMcpClient = builder.getBooleanParam("agent-enable-mcp-client");
+    boolean enableMcpClient = isCollaborative;
+    boolean enableSpringAiAdapter = isSupervisor;
 
     // ── Generate base templates (always) ──────────────────────────────────
     builder.setupFromTemplate("entry-point/agent");
 
-    if (!enableMcpClient) {
+    if (enableSpringAiAdapter) {
       builder.setupFromTemplate("entry-point/agent/spring-ai");
     }
 
-    // ── Generate Kafka modules (conditional) ──────────────────────────────
-    if (enableKafka) {
-      builder.setupFromTemplate("entry-point/agent/kafka");
-    }
+    // ── Generate Kafka modules (always) ───────────────────────────────────
+    builder.setupFromTemplate("entry-point/agent/kafka");
 
     // ── Generate MCP Client module (conditional) ──────────────────────────
     if (enableMcpClient) {
@@ -65,16 +81,12 @@ public class EntryPointAgent implements ModuleFactory {
     // ── Register modules in settings.gradle ───────────────────────────────
     builder.appendToSettings("reactive-web", ENTRY_POINT_DIR);
 
-    if (!enableMcpClient) {
-      // Only add spring-ai-adapter if MCP client is NOT enabled
-      // (ChatGatewayAdapter in mcp-client replaces SpringAiChatAdapter)
+    if (enableSpringAiAdapter) {
       builder.appendToSettings("spring-ai-adapter", DRIVEN_ADAPTER_DIR);
     }
 
-    if (enableKafka) {
-      builder.appendToSettings("kafka-consumer", ENTRY_POINT_DIR);
-      builder.appendToSettings("kafka-producer", DRIVEN_ADAPTER_DIR);
-    }
+    builder.appendToSettings("kafka-consumer", ENTRY_POINT_DIR);
+    builder.appendToSettings("kafka-producer", DRIVEN_ADAPTER_DIR);
 
     if (enableMcpClient) {
       builder.appendToSettings("mcp-client", DRIVEN_ADAPTER_DIR);
@@ -83,7 +95,7 @@ public class EntryPointAgent implements ModuleFactory {
     // ── Wire dependencies into app-service ────────────────────────────────
     builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":reactive-web"));
 
-    if (!enableMcpClient) {
+    if (enableSpringAiAdapter) {
       builder.appendDependencyToModule(
           APP_SERVICE, buildImplementationFromProject(":spring-ai-adapter"));
     }
@@ -93,12 +105,10 @@ public class EntryPointAgent implements ModuleFactory {
     builder.appendDependencyToModule(
         APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-actuator'");
 
-    if (enableKafka) {
-      builder.appendDependencyToModule(
-          APP_SERVICE, buildImplementationFromProject(":kafka-consumer"));
-      builder.appendDependencyToModule(
-          APP_SERVICE, buildImplementationFromProject(":kafka-producer"));
-    }
+    builder.appendDependencyToModule(
+        APP_SERVICE, buildImplementationFromProject(":kafka-consumer"));
+    builder.appendDependencyToModule(
+        APP_SERVICE, buildImplementationFromProject(":kafka-producer"));
 
     if (enableMcpClient) {
       builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":mcp-client"));

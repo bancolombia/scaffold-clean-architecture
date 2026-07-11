@@ -1,0 +1,43 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - AgentInterface. Protocol+URL describing where the agent listens.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AgentInterface {
+
+    /**
+     * Transport protocol: "jsonrpc", "grpc", "rest"
+     */
+    private String protocol;
+    /**
+     * Base URL of the A2A endpoint.
+     */
+    private String url;
+
+{{^lombok}}
+    public AgentInterface() {}
+
+    public AgentInterface(String protocol, String url) {
+        this.protocol = protocol;
+        this.url = url;
+    }
+
+    public String getProtocol() { return protocol; }
+    public void setProtocol(String protocol) { this.protocol = protocol; }
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
+{{/lombok}}
+}

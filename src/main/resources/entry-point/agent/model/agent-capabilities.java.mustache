@@ -1,0 +1,47 @@
+package {{package}}.model.a2a;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+{{/lombok}}
+
+/**
+ * A2A Protocol v1.0 - AgentCapabilities.
+ */
+{{#lombok}}
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AgentCapabilities {
+
+    {{#lombok}}
+    @Builder.Default
+    {{/lombok}}
+    private boolean streaming = false;
+
+    {{#lombok}}
+    @Builder.Default
+    {{/lombok}}
+    private boolean pushNotifications = false;
+
+{{^lombok}}
+    public AgentCapabilities() {
+        this.streaming = false;
+        this.pushNotifications = false;
+    }
+
+    public AgentCapabilities(boolean streaming, boolean pushNotifications) {
+        this.streaming = streaming;
+        this.pushNotifications = pushNotifications;
+    }
+
+    public boolean isStreaming() { return streaming; }
+    public void setStreaming(boolean streaming) { this.streaming = streaming; }
+    public boolean isPushNotifications() { return pushNotifications; }
+    public void setPushNotifications(boolean pushNotifications) { this.pushNotifications = pushNotifications; }
+{{/lombok}}
+}

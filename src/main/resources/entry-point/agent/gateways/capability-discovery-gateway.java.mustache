@@ -1,0 +1,7 @@
+package {{package}}.model.a2a.gateways;
+
+import reactor.core.publisher.Mono;
+
+public interface CapabilityDiscoveryGateway {
+    Mono<String> discoverCapabilities(String userQuery);
+}

@@ -44,6 +44,7 @@ gradle gep --type [entryPointType]
 | **agent**             | Spring AI A2A Reactive Agent           | `--name`             | String                                | project name           |
 |                       |                                        | `--agent-enable-kafka` | `true`, `false`                     | `true`                 |
 |                       |                                        | `--agent-enable-mcp-client` | `true`, `false`                | `true`                 |
+|                       |                                        | `--agent-role`       | `collaborative`, `supervisor`, `hybrid` | `collaborative`     |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.
@@ -324,23 +325,23 @@ gradle gep --type=agent
 | `--name`                    | String         | project name   | Agent name (used in `spring.application.name`)               |
 | `--agent-enable-kafka`      | `true`/`false` | `true`         | Add Kafka consumer + producer transport                      |
 | `--agent-enable-mcp-client` | `true`/`false` | `true`         | Add `mcp-client` instead of `spring-ai-adapter` for tool use |
+| `--agent-role`              | `collaborative`/`supervisor`/`hybrid` | `collaborative` | Set the role of the agent determining REST exposure and adapters |
 
 ### Usage Examples
 
 ```shell
-# Full agent: REST + Kafka + MCP client (Default behavior)
-gradle generateEntryPoint --type=agent --name=my-agent
+# Full collaborative agent: REST + Kafka + MCP client (Default behavior)
+gradle generateEntryPoint --type=agent --name=my-agent --agent-role=collaborative
 
-# Minimal REST-only agent without async transport and without MCP
+# Supervisor agent: REST + Kafka + spring-ai-adapter (Exposes business REST endpoint)
+gradle generateEntryPoint --type=agent --name=my-agent --agent-role=supervisor
+
+# Hybrid agent: Combines both collaborative and supervisor capabilities
+gradle generateEntryPoint --type=agent --name=my-agent --agent-role=hybrid
+
+# Minimal REST-only collaborative agent without async transport and without MCP
 # Generates spring-ai-adapter as the ChatGateway implementation
-gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-kafka=false --agent-enable-mcp-client=false
-
-# Agent with Kafka only
-# Generates spring-ai-adapter and Kafka modules
-gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-mcp-client=false
-
-# Agent with MCP client only (REST + MCP)
-gradle generateEntryPoint --type=agent --name=my-agent --agent-enable-kafka=false
+gradle generateEntryPoint --type=agent --name=my-agent --agent-role=collaborative --agent-enable-kafka=false --agent-enable-mcp-client=false
 ```
 
 ### Generated Structure
