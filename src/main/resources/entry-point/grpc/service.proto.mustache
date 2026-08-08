@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package grpc;
+
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "{{package}}.grpc";
+option java_outer_classname = "CustomServiceProto";
+
+// Custom gRPC Service
+// TODO: Rename this service and update the GrpcServerEntryPoint class accordingly
+service CustomService {
+  // Get resource by ID
+  rpc getById(Request) returns (Response);
+  // Health check endpoint
+  rpc health(google.protobuf.Empty) returns (HealthResponse);
+}
+
+message Request {
+  string id = 1;
+}
+
+message Response {
+  string id = 1;
+  string message = 2;
+}
+
+message HealthResponse {
+  string status = 1;
+}

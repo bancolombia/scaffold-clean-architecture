@@ -1,0 +1,44 @@
+plugins {
+    id 'com.google.protobuf' version '{{PROTOBUF_PLUGIN_VERSION}}'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation project(':usecase')
+
+    implementation 'org.springframework.boot:spring-boot-starter-grpc-server'
+    implementation 'io.grpc:grpc-services'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-grpc-server-test'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:{{PROTOBUF_VERSION}}"
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:{{GRPC_VERSION}}"
+        }
+    }
+
+    generateProtoTasks {
+        all().each {
+            it.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+// Ensure generated sources are included in the source sets
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
