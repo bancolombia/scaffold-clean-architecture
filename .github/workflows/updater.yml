@@ -29,7 +29,9 @@ jobs:
           java-version: 17
       - name: Check for updates
         run: ./gradlew ci-updater
-      - name: Gradle Wrapper
+      - name: Update gradle-wrapper.properties
+        run: ./gradlew wrapper
+      - name: Update Gradle
         run: ./gradlew wrapper
       - name: Check formatting
         run: ./gradlew spotlessApply
