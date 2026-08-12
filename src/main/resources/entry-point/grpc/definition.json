@@ -1,0 +1,15 @@
+{
+  "folders": [
+    "infrastructure/entry-points/grpc/src/main/java/{{packagePath}}/grpc",
+    "infrastructure/entry-points/grpc/src/main/java/{{packagePath}}/grpc/mapper",
+    "infrastructure/entry-points/grpc/src/main/proto",
+    "infrastructure/entry-points/grpc/src/test/java/{{packagePath}}/grpc"
+  ],
+  "files": {
+    "entry-point/grpc/build.gradle.mustache": "infrastructure/entry-points/grpc/build.gradle",
+    "entry-point/grpc/grpc-service.java.mustache": "infrastructure/entry-points/grpc/src/main/java/{{packagePath}}/grpc/GrpcServerEntryPoint.java",
+    "entry-point/grpc/mapper/error-mapper.java.mustache": "infrastructure/entry-points/grpc/src/main/java/{{packagePath}}/grpc/mapper/ErrorMapper.java",
+    "entry-point/grpc/grpc-service.test.java.mustache": "infrastructure/entry-points/grpc/src/test/java/{{packagePath}}/grpc/GrpcServerEntryPointTest.java",
+    "entry-point/grpc/service.proto.mustache": "infrastructure/entry-points/grpc/src/main/proto/service.proto"
+  }
+}

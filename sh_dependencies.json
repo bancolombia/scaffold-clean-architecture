@@ -87,6 +87,14 @@
         {
             "name": "PITEST_JUNIT5_VERSION",
             "packageName": "org.pitest:pitest-junit5-plugin"
+        },
+        {
+            "name": "GRPC_VERSION",
+            "packageName": "io.grpc:grpc-core"
+        },
+        {
+            "name": "PROTOBUF_VERSION",
+            "packageName": "com.google.protobuf:protobuf-java"
         }
     ],
     "gradle": [
@@ -105,6 +113,10 @@
         {
             "name": "GRADLE_PITEST_VERSION",
             "packageName": "info.solidsoft.pitest:info.solidsoft.pitest.gradle.plugin"
+        },
+        {
+            "name": "PROTOBUF_PLUGIN_VERSION",
+            "packageName": "com.google.protobuf:com.google.protobuf.gradle.plugin"
         }
     ],
     "custom": [

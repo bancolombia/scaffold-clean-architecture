@@ -47,7 +47,7 @@ else
     ./gradlew gda --type $adapter
   done
 
-  for entry in "mq" "restmvc" "sqs" "graphql"
+  for entry in "grpc" "mq" "restmvc" "sqs" "graphql"
   do
     ./gradlew gep --type $entry
   done

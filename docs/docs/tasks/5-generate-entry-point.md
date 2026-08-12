@@ -16,6 +16,7 @@ gradle gep --type [entryPointType]
 | Type                  | Name                                   | Parameter            | Values                                | Default                |
 |-----------------------|----------------------------------------|----------------------|---------------------------------------|------------------------|
 | **generic**           | Empty Entry Point                      | `--name`             | String                                | -                      |
+| **grpc**              | gRPC Server Entry Point                | -                    | -                                     | -                      |
 | **asynceventhandler** | Async Event Handler                    | `--eda`              | `true`, `false`                       | `false`                |
 |                       |                                        | `--tech`             | `rabbitmq`, `kafka`, `rabbitmq,kafka` | `rabbitmq`             |
 | **graphql**           | API GraphQL                            | `--pathgql`          | String (path)                         | `/graphql`             |
@@ -439,4 +440,152 @@ agent:
 
 cors:
   allowed-origins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200}"
+```
+
+
+---
+
+## Usage Example for gRPC Server
+
+The **`grpc`** entry point type generates a gRPC server module using the official [Spring gRPC](https://docs.spring.io/spring-grpc/reference/) integration (`spring-boot-starter-grpc-server`). It includes Protocol Buffers configuration, a sample service implementation, and error mapping.
+
+### Basic Command
+
+```shell
+gradle generateEntryPoint --type=grpc
+gradle gep --type=grpc
+```
+
+### Generated Structure
+
+```bash
+infrastructure/
+└── entry-points/
+    └── grpc/
+        ├── build.gradle
+        └── src/
+            ├── main/
+            │   ├── java/[package]/grpc/
+            │   │   ├── GrpcServerEntryPoint.java
+            │   │   └── mapper/
+            │   │       └── ErrorMapper.java
+            │   └── proto/
+            │       └── service.proto
+            └── test/java/[package]/grpc/
+                └── GrpcServerEntryPointTest.java
+```
+
+### Automatic Configuration
+
+The command automatically updates `application.yaml` with gRPC server configuration:
+
+```yaml
+spring:
+  grpc:
+    server:
+      port: ${GRPC_SERVER_PORT:9090}
+```
+
+### Dependencies
+
+The generated module includes:
+
+| Dependency | Description |
+|------------|-------------|
+| `spring-boot-starter-grpc-server` | Official Spring Boot integration for gRPC |
+| `grpc-services` | gRPC services (health, reflection) |
+| `spring-grpc-test` | Spring gRPC testing utilities |
+| `protobuf-gradle-plugin` | Gradle plugin for proto compilation |
+
+### Proto File
+
+The generated `service.proto` includes a sample service with two RPCs:
+
+```protobuf
+syntax = "proto3";
+
+package grpc;
+
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+option java_package = "co.com.bancolombia.grpc";
+
+service CustomService {
+  rpc getById(Request) returns (Response);
+  rpc health(google.protobuf.Empty) returns (HealthResponse);
+}
+
+message Request {
+  string id = 1;
+}
+
+message Response {
+  string id = 1;
+  string message = 2;
+}
+
+message HealthResponse {
+  string status = 1;
+}
+```
+
+### Compiling Proto Files
+
+After generating the entry point, compile the proto files to generate Java classes:
+
+```shell
+# Generate Java classes from proto files
+./gradlew :grpc:generateProto
+
+# Compile the module
+./gradlew :grpc:compileJava
+```
+
+### Customization
+
+1. **Modify the service definition**: Edit `service.proto` with your own messages and RPCs
+2. **Implement business logic**: Inject use cases into `GrpcServerEntryPoint` and implement your methods
+3. **Map domain exceptions**: Add custom exception mappings in `ErrorMapper`
+
+### Example: Adding a New RPC
+
+1. Add the RPC definition in `service.proto`:
+
+```protobuf
+service CustomService {
+  rpc createUser(CreateUserRequest) returns (CreateUserResponse);
+}
+
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+}
+
+message CreateUserResponse {
+  string id = 1;
+  string status = 2;
+}
+```
+
+2. Regenerate and implement in `GrpcServerEntryPoint.java`:
+
+```java
+@Override
+public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse>responseObserver) {
+    try {
+        // Call your use case
+        var result = createUserUseCase.execute(request.getName(), request.getEmail());
+        
+        CreateUserResponse response = CreateUserResponse.newBuilder()
+                .setId(result.getId())
+                .setStatus("CREATED")
+                .build();
+        
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    } catch (Exception e) {
+        responseObserver.onError(errorMapper.map(e));
+    }
+}
 ```
