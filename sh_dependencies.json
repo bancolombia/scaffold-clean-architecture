@@ -73,6 +73,10 @@
             "packageName": "org.springaicommunity:mcp-server-security"
         },
         {
+            "name": "JACKSON_VERSION",
+            "packageName": "tools.jackson.core:jackson-core"
+        },
+        {
             "name": "PITEST_VERSION",
             "packageName": "org.pitest:pitest"
         },

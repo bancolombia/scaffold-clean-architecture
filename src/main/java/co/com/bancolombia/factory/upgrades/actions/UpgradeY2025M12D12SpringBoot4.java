@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -10,6 +11,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.gradle.api.logging.Logger;
 
 public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
+
+  private static final String JACKSON_TOOLS_OLD_VERSION_REGEX =
+      "(tools\\.jackson(?:\\.\\w+)?:jackson-[\\w-]+:)(?!3\\.)[^'\"\\s]+";
 
   @Override
   public boolean up(ModuleBuilder builder) {
@@ -193,6 +197,13 @@ public class UpgradeY2025M12D12SpringBoot4 implements UpgradeAction {
                         updatedContent,
                         "tools.jackson.core:jackson-annotations",
                         "com.fasterxml.jackson.core:jackson-annotations");
+                // Jackson 2.x version pins are invalid under the new tools.jackson group id
+                // (that group id only exists starting with Jackson 3.x), so any leftover
+                // 2.x version (e.g. inherited from a prior dependency update) must be
+                // normalized to a valid Jackson 3.x version.
+                updatedContent =
+                    updatedContent.replaceAll(
+                        JACKSON_TOOLS_OLD_VERSION_REGEX, "$1" + Constants.JACKSON_VERSION);
                 updatedContent =
                     UpdateUtils.replace(
                         updatedContent, "JsonProcessingException", "JacksonException");
