@@ -82,7 +82,8 @@ public class UpgradeY2026M03D11PitestReportAggregate implements UpgradeAction {
                       .concat(Constants.PITEST_HISTORY_VERSION)
                       .concat("'"));
             });
-    boolean appliedThreads = builder.updateExpression(MAIN_GRADLE, THREADS_REGEX, THREADS_NEW_VALUE);
+    boolean appliedThreads =
+        builder.updateExpression(MAIN_GRADLE, THREADS_REGEX, THREADS_NEW_VALUE);
     return UpdateUtils.oneOfAll(appliedAggregate, appliedThreads);
   }
 
