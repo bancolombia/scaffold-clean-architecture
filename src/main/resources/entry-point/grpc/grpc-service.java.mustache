@@ -45,9 +45,7 @@ public class GrpcServerEntryPoint extends CustomServiceGrpc.CustomServiceImplBas
     private final ErrorMapper errorMapper;
 
     @Override
-    public void getById(
-            Request request,
-            StreamObserver<Response> responseObserver) {
+    public void getById(Request request, StreamObserver<Response> responseObserver) {
         log.info("Received gRPC request with id: {}", request.getId());
         try {
             // TODO: Replace this sample implementation with your business logic
@@ -68,9 +66,7 @@ public class GrpcServerEntryPoint extends CustomServiceGrpc.CustomServiceImplBas
     }
 
     @Override
-    public void health(
-            com.google.protobuf.Empty request,
-            StreamObserver<HealthResponse> responseObserver) {
+    public void health(com.google.protobuf.Empty request, StreamObserver<HealthResponse> responseObserver) {
         responseObserver.onNext(
                 HealthResponse.newBuilder()
                         .setStatus("UP")
