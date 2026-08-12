@@ -571,9 +571,7 @@ message CreateUserResponse {
 
 ```java
 @Override
-public void createUser(
-        CreateUserRequest request,
-        StreamObserver<CreateUserResponse> responseObserver) {
+public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse>responseObserver) {
     try {
         // Call your use case
         var result = createUserUseCase.execute(request.getName(), request.getEmail());
