@@ -37,12 +37,12 @@ public final class Constants {
   public static final String JACOCO_VERSION = "0.8.15";
   public static final String SONAR_VERSION = "7.4.0.8496";
   public static final String COBERTURA_VERSION = "4.0.0";
-  public static final String PLUGIN_VERSION = "4.5.0";
+  public static final String PLUGIN_VERSION = "4.6.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
   public static final String GRPC_VERSION = "1.81.0";
   public static final String PROTOBUF_VERSION = "4.33.4";
-  public static final String PROTOBUF_PLUGIN_VERSION = "0.10.0";
+  public static final String PROTOBUF_PLUGIN_VERSION = "4.6.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "9.7.0";
 

@@ -1,5 +1,69 @@
 # Changelog
 
+## [v4.6.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.0) (2026-08-12)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.5.1...v4.6.0)
+
+**Merged pull requests:**
+
+- feat: Add gRPC entry point type [\#902](https://github.com/bancolombia/scaffold-clean-architecture/pull/902) ([Daniel7R](https://github.com/Daniel7R))
+
+## [v4.5.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.5.1) (2026-08-12)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.5.0...v4.5.1)
+
+**Merged pull requests:**
+
+- chore\(upgrades\): normalize leftover Jackson 2.x version after tools.jackson migration [\#949](https://github.com/bancolombia/scaffold-clean-architecture/pull/949) ([luisgomez29](https://github.com/luisgomez29))
+- chore: Update Pitest configuration and dependency versions [\#948](https://github.com/bancolombia/scaffold-clean-architecture/pull/948) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump dorny/paths-filter from 4.0.2 to 4.0.3 [\#947](https://github.com/bancolombia/scaffold-clean-architecture/pull/947) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.4 to 4.37.6 [\#944](https://github.com/bancolombia/scaffold-clean-architecture/pull/944) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.4 to 4.37.6 [\#943](https://github.com/bancolombia/scaffold-clean-architecture/pull/943) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.4 to 4.37.6 [\#942](https://github.com/bancolombia/scaffold-clean-architecture/pull/942) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.20.0 to 2.20.1 [\#941](https://github.com/bancolombia/scaffold-clean-architecture/pull/941) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.4 to 4.37.6 [\#940](https://github.com/bancolombia/scaffold-clean-architecture/pull/940) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump gradle/actions/setup-gradle from 6.2.0 to 6.3.0 [\#935](https://github.com/bancolombia/scaffold-clean-architecture/pull/935) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.3 to 4.37.4 [\#932](https://github.com/bancolombia/scaffold-clean-architecture/pull/932) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.6.0 to 5.7.0 [\#931](https://github.com/bancolombia/scaffold-clean-architecture/pull/931) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.3 to 4.37.4 [\#930](https://github.com/bancolombia/scaffold-clean-architecture/pull/930) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.3 to 4.37.4 [\#929](https://github.com/bancolombia/scaffold-clean-architecture/pull/929) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.3 to 4.37.4 [\#928](https://github.com/bancolombia/scaffold-clean-architecture/pull/928) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.3 to 2.4.4 [\#926](https://github.com/bancolombia/scaffold-clean-architecture/pull/926) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.2 to 4.37.3 [\#925](https://github.com/bancolombia/scaffold-clean-architecture/pull/925) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.2 to 4.37.3 [\#924](https://github.com/bancolombia/scaffold-clean-architecture/pull/924) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.2 to 4.37.3 [\#923](https://github.com/bancolombia/scaffold-clean-architecture/pull/923) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.2 to 4.37.3 [\#922](https://github.com/bancolombia/scaffold-clean-architecture/pull/922) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.1 to 4.37.2 [\#920](https://github.com/bancolombia/scaffold-clean-architecture/pull/920) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.1 to 4.37.2 [\#919](https://github.com/bancolombia/scaffold-clean-architecture/pull/919) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.1 to 4.37.2 [\#918](https://github.com/bancolombia/scaffold-clean-architecture/pull/918) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.1 to 4.37.2 [\#917](https://github.com/bancolombia/scaffold-clean-architecture/pull/917) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 7.0.0 to 7.0.1 [\#916](https://github.com/bancolombia/scaffold-clean-architecture/pull/916) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.5.0 to 5.6.0 [\#915](https://github.com/bancolombia/scaffold-clean-architecture/pull/915) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.0 to 4.37.1 [\#914](https://github.com/bancolombia/scaffold-clean-architecture/pull/914) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.0 to 4.37.1 [\#913](https://github.com/bancolombia/scaffold-clean-architecture/pull/913) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.0 to 4.37.1 [\#912](https://github.com/bancolombia/scaffold-clean-architecture/pull/912) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.0 to 4.37.1 [\#911](https://github.com/bancolombia/scaffold-clean-architecture/pull/911) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 6.4.0 to 7.0.0 [\#910](https://github.com/bancolombia/scaffold-clean-architecture/pull/910) ([dependabot[bot]](https://github.com/apps/dependabot))
+- ci: add issue templates for error reporting and enhancement requests [\#909](https://github.com/bancolombia/scaffold-clean-architecture/pull/909) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): update dependencies [\#908](https://github.com/bancolombia/scaffold-clean-architecture/pull/908) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump github/codeql-action/autobuild from 4.36.3 to 4.37.0 [\#906](https://github.com/bancolombia/scaffold-clean-architecture/pull/906) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.36.3 to 4.37.0 [\#905](https://github.com/bancolombia/scaffold-clean-architecture/pull/905) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.36.3 to 4.37.0 [\#904](https://github.com/bancolombia/scaffold-clean-architecture/pull/904) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.36.3 to 4.37.0 [\#903](https://github.com/bancolombia/scaffold-clean-architecture/pull/903) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.4.0 to 5.5.0 [\#901](https://github.com/bancolombia/scaffold-clean-architecture/pull/901) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.19.4 to 2.20.0 [\#900](https://github.com/bancolombia/scaffold-clean-architecture/pull/900) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.36.2 to 4.36.3 [\#899](https://github.com/bancolombia/scaffold-clean-architecture/pull/899) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump dorny/paths-filter from 4.0.1 to 4.0.2 [\#898](https://github.com/bancolombia/scaffold-clean-architecture/pull/898) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.36.2 to 4.36.3 [\#897](https://github.com/bancolombia/scaffold-clean-architecture/pull/897) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.36.2 to 4.36.3 [\#896](https://github.com/bancolombia/scaffold-clean-architecture/pull/896) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.36.2 to 4.36.3 [\#895](https://github.com/bancolombia/scaffold-clean-architecture/pull/895) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.3.0 to 5.4.0 [\#894](https://github.com/bancolombia/scaffold-clean-architecture/pull/894) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/checkout from 6.0.3 to 7.0.0 [\#892](https://github.com/bancolombia/scaffold-clean-architecture/pull/892) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.2.0 to 5.3.0 [\#891](https://github.com/bancolombia/scaffold-clean-architecture/pull/891) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): update dependencies [\#888](https://github.com/bancolombia/scaffold-clean-architecture/pull/888) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump gradle/actions from 6.1.1 to 6.2.0 [\#887](https://github.com/bancolombia/scaffold-clean-architecture/pull/887) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(agent\): add agent type entry point and align testing models [\#886](https://github.com/bancolombia/scaffold-clean-architecture/pull/886) ([kenyodarz](https://github.com/kenyodarz))
+
 ## [v4.5.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.5.0) (2026-06-11)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.4.1...v4.5.0)
