@@ -62,21 +62,29 @@ public class UpgradeY2026M03D11PitestReportAggregate implements UpgradeAction {
   private static final String SPRING_BOOT_PLATFORM =
       "implementation platform(\"org.springframework.boot:spring-boot-dependencies:${springBootVersion}\")";
 
+  private static final String THREADS_REGEX = "threads\\s*=\\s*.+";
+  private static final String THREADS_NEW_VALUE = "threads = Runtime.runtime.availableProcessors()";
+
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    return builder.updateFile(
-        MAIN_GRADLE,
-        content -> {
-          String partial = UpdateUtils.replace(content, OLD_PITEST_AGGREGATE, NEW_PITEST_AGGREGATE);
-          return UpdateUtils.insertAfterMatch(
-              partial,
-              SPRING_BOOT_PLATFORM,
-              "pitest-history-plugin",
-              "\n        pitest 'org.pitest:pitest-history-plugin:"
-                  .concat(Constants.PITEST_HISTORY_VERSION)
-                  .concat("'"));
-        });
+    boolean appliedAggregate =
+        builder.updateFile(
+            MAIN_GRADLE,
+            content -> {
+              String partial =
+                  UpdateUtils.replace(content, OLD_PITEST_AGGREGATE, NEW_PITEST_AGGREGATE);
+              return UpdateUtils.insertAfterMatch(
+                  partial,
+                  SPRING_BOOT_PLATFORM,
+                  "pitest-history-plugin",
+                  "\n        pitest 'org.pitest:pitest-history-plugin:"
+                      .concat(Constants.PITEST_HISTORY_VERSION)
+                      .concat("'"));
+            });
+    boolean appliedThreads =
+        builder.updateExpression(MAIN_GRADLE, THREADS_REGEX, THREADS_NEW_VALUE);
+    return UpdateUtils.oneOfAll(appliedAggregate, appliedThreads);
   }
 
   @Override
