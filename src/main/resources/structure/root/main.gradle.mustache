@@ -76,7 +76,7 @@ subprojects {
         pitestVersion = '{{PITEST_VERSION}}'
         verbose = false
         outputFormats = ['XML', 'HTML']
-        threads = 8
+        threads = Runtime.runtime.availableProcessors()
         exportLineCoverage = true
         useClasspathFile = true
         withHistory = true
