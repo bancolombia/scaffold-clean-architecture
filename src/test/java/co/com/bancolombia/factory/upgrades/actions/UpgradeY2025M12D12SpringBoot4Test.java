@@ -1,5 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
+import static co.com.bancolombia.Constants.JACKSON_VERSION;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,7 +92,9 @@ class UpgradeY2025M12D12SpringBoot4Test {
     // Assert
     assertTrue(applied);
     verify(builder, times(1))
-        .addFile(file, "testImplementation \"tools.jackson.core:jackson-databind:3.2.1\"");
+        .addFile(
+            file,
+            "testImplementation \"tools.jackson.core:jackson-databind:" + JACKSON_VERSION + "\"");
   }
 
   @ParameterizedTest(name = "{0}")
