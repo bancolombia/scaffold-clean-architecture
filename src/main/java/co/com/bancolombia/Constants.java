@@ -13,12 +13,12 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
   // dependencies
   public static final String SECRETS_VERSION = "4.5.2";
-  public static final String SPRING_BOOT_VERSION = "4.1.0";
+  public static final String SPRING_BOOT_VERSION = "4.1.1";
   public static final String LOMBOK_VERSION = "1.18.46";
   public static final String REACTIVE_COMMONS_VERSION = "7.3.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.17.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.53.1";
+  public static final String AWS_BOM_VERSION = "2.54.1";
   public static final String COMMONS_JMS_VERSION = "3.1.3";
   public static final String ARCH_UNIT_VERSION = "1.5.0";
   public static final String OKHTTP_VERSION = "5.5.0";
@@ -27,7 +27,7 @@ public final class Constants {
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.1.0";
   public static final String CLOUD_EVENTS_VERSION = "5.0.0";
   public static final String REACTOR_KAFKA_VERSION = "1.3.25";
-  public static final String SPRING_AI_VERSION = "2.0.0";
+  public static final String SPRING_AI_VERSION = "2.0.1";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.2";
   public static final String PITEST_VERSION = "1.25.9";
@@ -41,8 +41,8 @@ public final class Constants {
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
   public static final String GRPC_VERSION = "1.83.1";
-  public static final String PROTOBUF_VERSION = "4.35.1";
-  public static final String PROTOBUF_PLUGIN_VERSION = "4.6.0";
+  public static final String PROTOBUF_VERSION = "4.36.0";
+  public static final String PROTOBUF_PLUGIN_VERSION = "0.10.0";
   // custom
   public static final String GRADLE_WRAPPER_VERSION = "9.7.0";
 
