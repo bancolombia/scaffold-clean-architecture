@@ -13,7 +13,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-grpc-server-test'
 }
 
+// The Spring Boot Gradle plugin can auto-configure protoc and protoc-gen-grpc-java
+// (aligning them with the protobuf-java and grpc-util versions of its BOM), but only
+// when 'org.springframework.boot' is applied to this same module. In this architecture
+// it is only applied to :app-service, so protoc, the grpc plugin and the code
+// generation tasks must be configured explicitly here.
 protobuf {
+    // Keep in sync with the protobuf-java version managed by the Spring Boot BOM.
     protoc {
         artifact = "com.google.protobuf:protoc:{{PROTOBUF_VERSION}}"
     }

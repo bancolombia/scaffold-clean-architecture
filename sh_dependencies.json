@@ -91,10 +91,6 @@
         {
             "name": "GRPC_VERSION",
             "packageName": "io.grpc:grpc-core"
-        },
-        {
-            "name": "PROTOBUF_VERSION",
-            "packageName": "com.google.protobuf:protobuf-java"
         }
     ],
     "gradle": [

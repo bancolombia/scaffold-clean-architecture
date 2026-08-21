@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.4.0.8496'
     id 'com.gradle.plugin-publish' version '2.1.1'
-    id 'com.diffplug.spotless' version '8.9.0'
+    id 'com.diffplug.spotless' version '8.10.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '13.0.0'
 }
@@ -178,9 +178,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'tools.jackson.core:jackson-databind:3.2.1'
-    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.2.1'
-    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.2.1'
+    api 'tools.jackson.core:jackson-databind:3.2.2'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.2.2'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.2.2'
     api 'commons-io:commons-io:2.22.0'
     api gradleApi()
 
@@ -205,8 +205,8 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.46'
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
-    implementation 'com.squareup.okhttp3:okhttp:5.4.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:5.4.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.5.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:5.5.0'
 }
 
 jacocoTestReport {
@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.7.0'
+    gradleVersion = '9.7.1'
 }
 
 tasks.register('ci-updater', JavaExec) {
