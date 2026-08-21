@@ -11,7 +11,8 @@ public final class Constants {
   public static final String PLUGIN_TASK_GROUP = "Clean Architecture";
   public static final String APP_SERVICE = "app-service";
   public static final String PATH_GRAPHQL = "/graphql";
-  // dependencies
+
+  // Dependencies
   public static final String SECRETS_VERSION = "4.5.2";
   public static final String SPRING_BOOT_VERSION = "4.1.1";
   public static final String LOMBOK_VERSION = "1.18.46";
@@ -33,18 +34,26 @@ public final class Constants {
   public static final String PITEST_VERSION = "1.25.9";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
-  // gradle plugins
+  public static final String GRPC_VERSION = "1.83.1";
+
+  /**
+   * Must match the protobuf-java version managed by the Spring Boot BOM ({@link
+   * #SPRING_BOOT_VERSION}). A newer protoc generates gencode that the older protobuf-java runtime
+   * rejects with ProtobufRuntimeVersionException.
+   */
+  public static final String PROTOBUF_VERSION = "4.35.1";
+
+  // Gradle plugins
+  public static final String PLUGIN_VERSION = "4.6.0";
   public static final String JACOCO_VERSION = "0.8.15";
   public static final String SONAR_VERSION = "7.4.0.8496";
   public static final String COBERTURA_VERSION = "4.0.0";
-  public static final String PLUGIN_VERSION = "4.6.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
-  public static final String GRPC_VERSION = "1.83.1";
-  public static final String PROTOBUF_VERSION = "4.36.0";
   public static final String PROTOBUF_PLUGIN_VERSION = "0.10.0";
-  // custom
-  public static final String GRADLE_WRAPPER_VERSION = "9.7.0";
+
+  // Custom
+  public static final String GRADLE_WRAPPER_VERSION = "9.7.1";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {

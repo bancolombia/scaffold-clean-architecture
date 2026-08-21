@@ -295,7 +295,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.7.0'
+    gradleVersion = '9.7.1'
 }
 
 tasks.register('ci-updater', JavaExec) {
