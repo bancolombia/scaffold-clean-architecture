@@ -44,13 +44,13 @@ public final class Constants {
   public static final String PROTOBUF_VERSION = "4.35.1";
 
   // Gradle plugins
-  public static final String PLUGIN_VERSION = "4.6.0";
+  public static final String PLUGIN_VERSION = "4.6.1";
   public static final String JACOCO_VERSION = "0.8.15";
   public static final String SONAR_VERSION = "7.4.0.8496";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
-  public static final String PROTOBUF_PLUGIN_VERSION = "0.10.0";
+  public static final String PROTOBUF_PLUGIN_VERSION = "4.6.1";
 
   // Custom
   public static final String GRADLE_WRAPPER_VERSION = "9.7.1";

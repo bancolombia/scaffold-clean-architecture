@@ -1,5 +1,18 @@
 # Changelog
 
+## [v4.6.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.1) (2026-08-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.6.0...v4.6.1)
+
+**Merged pull requests:**
+
+- fix\(deps\): update dependencies [\#956](https://github.com/bancolombia/scaffold-clean-architecture/pull/956) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.6 to 4.37.7 [\#954](https://github.com/bancolombia/scaffold-clean-architecture/pull/954) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.6 to 4.37.7 [\#953](https://github.com/bancolombia/scaffold-clean-architecture/pull/953) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.6 to 4.37.7 [\#952](https://github.com/bancolombia/scaffold-clean-architecture/pull/952) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.6 to 4.37.7 [\#951](https://github.com/bancolombia/scaffold-clean-architecture/pull/951) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.20.1 to 2.21.0 [\#950](https://github.com/bancolombia/scaffold-clean-architecture/pull/950) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.6.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.0) (2026-08-12)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.5.1...v4.6.0)
