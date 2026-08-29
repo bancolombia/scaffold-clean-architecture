@@ -1,0 +1,43 @@
+package {{package}}.kafka.consumer.handlers;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import org.reactivecommons.api.domain.DomainEvent;
+import org.reactivecommons.async.impl.config.annotations.EnableEventListeners;
+import reactor.core.publisher.Mono;
+{{#lombok}}
+
+import java.util.logging.Level;
+{{/lombok}}
+{{^lombok}}
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+{{/lombok}}
+
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+@EnableEventListeners
+public class EventsHandler {
+{{^lombok}}
+    private static final Logger log = Logger.getLogger(EventsHandler.class.getName());
+
+{{/lombok}}
+//    private final SampleUseCase sampleUseCase;
+
+{{^lombok}}
+    public EventsHandler(/*SampleUseCase sampleUseCase*/) {
+        //this.sampleUseCase = sampleUseCase;
+    }
+
+{{/lombok}}
+    public Mono<Void> handleEventA(DomainEvent<Object/*change for proper model*/> event) {
+        log.log(Level.INFO, "Event received: {0} -> {1}", new Object[]{event.getName(), event.getData()}); // TODO: Remove this line
+//        return sampleUseCase.doSomething(event.getData());
+        return Mono.empty();
+    }
+}

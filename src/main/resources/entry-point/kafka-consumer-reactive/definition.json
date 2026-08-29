@@ -1,10 +1,14 @@
 {
   "folders": [
-    "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/config"
+    "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers"
   ],
   "files": {
     "entry-point/kafka-consumer-reactive/build.gradle.mustache": "infrastructure/entry-points/kafka-consumer/build.gradle",
-    "entry-point/kafka-consumer-reactive/kafka-config.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config/KafkaConfig.java",
-    "entry-point/kafka-consumer-reactive/kafka-consumer.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/KafkaConsumer.java"
+    "entry-point/kafka-consumer-reactive/handler-registry-configuration.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfiguration.java",
+    "entry-point/kafka-consumer-reactive/events-handler.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/handlers/EventsHandler.java",
+    "entry-point/kafka-consumer-reactive/kafka-config-properties.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config/KafkaConfigProperties.java",
+    "entry-point/kafka-consumer-reactive/kafka-config-helper.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/kafka/KafkaConfigHelper.java",
+    "entry-point/kafka-consumer-reactive/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfigurationTest.java",
+    "entry-point/kafka-consumer-reactive/events-handler.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers/EventsHandlerTest.java"
   }
 }

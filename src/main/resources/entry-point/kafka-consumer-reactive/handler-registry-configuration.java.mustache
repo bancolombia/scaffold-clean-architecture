@@ -1,0 +1,18 @@
+package {{package}}.kafka.consumer;
+
+import {{package}}.kafka.consumer.handlers.EventsHandler;
+import org.reactivecommons.async.api.HandlerRegistry;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class HandlerRegistryConfiguration {
+
+    // With Reactive Commons Kafka the event name IS the topic the listener subscribes to.
+    // see more at: https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka
+    @Bean
+    public HandlerRegistry handlerRegistry(EventsHandler events) {
+        return HandlerRegistry.register()
+                .listenEvent("event.test", events::handleEventA, Object.class/*change for proper model*/);
+    }
+}

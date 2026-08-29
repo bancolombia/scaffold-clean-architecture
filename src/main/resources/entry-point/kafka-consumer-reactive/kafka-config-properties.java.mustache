@@ -1,0 +1,10 @@
+package {{package}}.kafka.consumer.config;
+
+/**
+ * Kafka connection values resolved at runtime, typically read from a secrets manager.
+ * <p>
+ * Provide a bean of this type to feed the {@code KafkaPropsCustomizer} with the real
+ * broker address and SASL/SCRAM credentials.
+ */
+public record KafkaConfigProperties(String bootstrapserver, String username, String password) {
+}

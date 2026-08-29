@@ -256,7 +256,14 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java");
+        "src/main/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfiguration.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/handlers/EventsHandler.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfigProperties.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfigurationTest.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/handlers/EventsHandlerTest.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/applications/app-service/",
+        "src/main/java/co/com/bancolombia/config/kafka/KafkaConfigHelper.java");
   }
 
   @Test
