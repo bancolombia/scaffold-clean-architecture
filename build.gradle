@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.4.0.8496'
     id 'com.gradle.plugin-publish' version '2.1.1'
-    id 'com.diffplug.spotless' version '8.10.0'
+    id 'com.diffplug.spotless' version '8.10.1'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '13.0.0'
 }
