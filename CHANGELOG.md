@@ -1,5 +1,23 @@
 # Changelog
 
+## [v4.6.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.2) (2026-09-10)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.6.1...v4.6.2)
+
+**Merged pull requests:**
+
+- fix\(tests\): improve metrics publisher coverage and fix WebFluxTest imports for Spring Boot 4 [\#972](https://github.com/bancolombia/scaffold-clean-architecture/pull/972) ([juan-campuzano](https://github.com/juan-campuzano))
+- build\(deps\): bump step-security/harden-runner from 2.21.0 to 2.21.1 [\#967](https://github.com/bancolombia/scaffold-clean-architecture/pull/967) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.8 to 4.37.9 [\#966](https://github.com/bancolombia/scaffold-clean-architecture/pull/966) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.8 to 4.37.9 [\#965](https://github.com/bancolombia/scaffold-clean-architecture/pull/965) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.8 to 4.37.9 [\#964](https://github.com/bancolombia/scaffold-clean-architecture/pull/964) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.8 to 4.37.9 [\#963](https://github.com/bancolombia/scaffold-clean-architecture/pull/963) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 5.7.0 to 6.0.0 [\#962](https://github.com/bancolombia/scaffold-clean-architecture/pull/962) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.7 to 4.37.8 [\#960](https://github.com/bancolombia/scaffold-clean-architecture/pull/960) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.7 to 4.37.8 [\#959](https://github.com/bancolombia/scaffold-clean-architecture/pull/959) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.7 to 4.37.8 [\#958](https://github.com/bancolombia/scaffold-clean-architecture/pull/958) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.7 to 4.37.8 [\#957](https://github.com/bancolombia/scaffold-clean-architecture/pull/957) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.6.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.1) (2026-08-21)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.6.0...v4.6.1)

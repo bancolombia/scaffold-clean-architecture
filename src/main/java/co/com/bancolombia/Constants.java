@@ -44,7 +44,7 @@ public final class Constants {
   public static final String PROTOBUF_VERSION = "4.35.1";
 
   // Gradle plugins
-  public static final String PLUGIN_VERSION = "4.6.1";
+  public static final String PLUGIN_VERSION = "4.6.2";
   public static final String JACOCO_VERSION = "0.8.15";
   public static final String SONAR_VERSION = "7.5.0.8588";
   public static final String COBERTURA_VERSION = "4.0.0";
