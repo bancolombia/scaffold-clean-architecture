@@ -111,7 +111,7 @@
             "packageName": "info.solidsoft.pitest:info.solidsoft.pitest.gradle.plugin"
         },
         {
-            "name": "PROTOBUF_PLUGIN_VERSION",
+            "name": "GRADLE_PROTOBUF_VERSION",
             "packageName": "com.google.protobuf:com.google.protobuf.gradle.plugin"
         }
     ],
