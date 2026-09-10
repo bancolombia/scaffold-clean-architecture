@@ -1,26 +1,109 @@
 package {{package}}.metrics.aws;
 
-import io.micrometer.core.instrument.logging.LoggingMeterRegistry;
-import io.micrometer.core.instrument.logging.LoggingRegistryConfig;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Timer;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import software.amazon.awssdk.metrics.MetricCollection;
+import software.amazon.awssdk.metrics.MetricRecord;
+import software.amazon.awssdk.metrics.SdkMetric;
 import software.amazon.awssdk.metrics.internal.EmptyMetricCollection;
 
+import java.time.Duration;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class MicrometerMetricPublisherTest {
 
     @Test
-    void metricTest() {
-        LoggingMeterRegistry loggingMeterRegistry = LoggingMeterRegistry
-            .builder(LoggingRegistryConfig.DEFAULT)
-            .build();
-
-        MicrometerMetricPublisher micrometerMetricPublisher = new MicrometerMetricPublisher(loggingMeterRegistry);
+    void metricTestWithEmptyCollection() {
+        MeterRegistry meterRegistry = mock(MeterRegistry.class);
+        MicrometerMetricPublisher micrometerMetricPublisher = new MicrometerMetricPublisher(meterRegistry);
 
         micrometerMetricPublisher.publish(EmptyMetricCollection.create());
         micrometerMetricPublisher.close();
 
         assertNotNull(micrometerMetricPublisher);
+    }
 
+    @Test
+    void metricTestPublishesDuration() {
+        MeterRegistry meterRegistry = mock(MeterRegistry.class);
+        Timer timer = mock(Timer.class);
+        when(meterRegistry.timer(any(), anyTagList())).thenReturn(timer);
+
+        MetricRecord<Duration> durationRecord = metricRecord("ApiCallDuration", Duration.ofMillis(150));
+        MetricCollection metricCollection = metricCollectionOf(durationRecord);
+
+        new MicrometerMetricPublisher(meterRegistry).publish(metricCollection);
+
+        verify(meterRegistry, timeout(1000)).timer("ApiCallDuration", List.<Tag>of());
+        verify(timer, timeout(1000)).record(Duration.ofMillis(150));
+    }
+
+    @Test
+    void metricTestPublishesCounter() {
+        MeterRegistry meterRegistry = mock(MeterRegistry.class);
+        Counter counter = mock(Counter.class);
+        when(meterRegistry.counter(any(), anyTagList())).thenReturn(counter);
+
+        MetricRecord<Integer> integerRecord = metricRecord("RetryCount", 3);
+        MetricCollection metricCollection = metricCollectionOf(integerRecord);
+
+        new MicrometerMetricPublisher(meterRegistry).publish(metricCollection);
+
+        verify(meterRegistry, timeout(1000)).counter("RetryCount", List.<Tag>of());
+        verify(counter, timeout(1000)).increment(3);
+    }
+
+    @Test
+    void metricTestBuildsTagsFromStringAndBooleanRecords() {
+        MeterRegistry meterRegistry = mock(MeterRegistry.class);
+        Timer timer = mock(Timer.class);
+        when(meterRegistry.timer(any(), anyTagList())).thenReturn(timer);
+
+        MetricRecord<String> stringRecord = metricRecord("ServiceId", "my-service");
+        MetricRecord<Boolean> booleanRecord = metricRecord("ApiCallSuccessful", true);
+        MetricRecord<Duration> durationRecord = metricRecord("ApiCallDuration", Duration.ofMillis(10));
+        MetricCollection metricCollection = metricCollectionOf(stringRecord, booleanRecord, durationRecord);
+
+        new MicrometerMetricPublisher(meterRegistry).publish(metricCollection);
+
+        ArgumentCaptor<List<Tag>> tagsCaptor = ArgumentCaptor.forClass(List.class);
+        verify(meterRegistry, timeout(1000)).timer(eq("ApiCallDuration"), tagsCaptor.capture());
+        List<Tag> tags = tagsCaptor.getValue();
+        assertTrue(tags.contains(Tag.of("ServiceId", "my-service")));
+        assertTrue(tags.contains(Tag.of("ApiCallSuccessful", "true")));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> MetricRecord<T> metricRecord(String name, T value) {
+        MetricRecord<T> record = mock(MetricRecord.class);
+        SdkMetric<T> metric = mock(SdkMetric.class);
+        when(metric.name()).thenReturn(name);
+        when(record.metric()).thenReturn(metric);
+        when(record.value()).thenReturn(value);
+        return record;
+    }
+
+    private static MetricCollection metricCollectionOf(MetricRecord<?>... records) {
+        MetricCollection metricCollection = mock(MetricCollection.class);
+        when(metricCollection.stream()).thenAnswer(invocation -> List.of(records).stream());
+        return metricCollection;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<Tag> anyTagList() {
+        return any(List.class);
     }
 }
