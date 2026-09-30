@@ -1,15 +1,15 @@
 {
   "folders": [
-    "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers",
+    "infrastructure/entry-points/kafka-strimzi-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers",
     "domain/model/src/main/java/{{packagePath}}/model/topiccredentials"
   ],
   "files": {
-    "entry-point/kafka-strimzi-consumer/build.gradle.mustache": "infrastructure/entry-points/kafka-consumer/build.gradle",
-    "entry-point/kafka-strimzi-consumer/handler-registry-configuration.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfiguration.java",
-    "entry-point/kafka-strimzi-consumer/topics-handler.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandler.java",
+    "entry-point/kafka-strimzi-consumer/build.gradle.mustache": "infrastructure/entry-points/kafka-strimzi-consumer/build.gradle",
+    "entry-point/kafka-strimzi-consumer/handler-registry-configuration.java.mustache": "infrastructure/entry-points/kafka-strimzi-consumer/src/main/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfiguration.java",
+    "entry-point/kafka-strimzi-consumer/topics-handler.java.mustache": "infrastructure/entry-points/kafka-strimzi-consumer/src/main/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandler.java",
     "entry-point/kafka-strimzi-consumer/consumer-credentials.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/topiccredentials/ConsumerCredentials.java",
     "entry-point/kafka-strimzi-consumer/kafka-config-helper.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/kafka/KafkaConfigHelper.java",
-    "entry-point/kafka-strimzi-consumer/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfigurationTest.java",
-    "entry-point/kafka-strimzi-consumer/topics-handler.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandlerTest.java"
+    "entry-point/kafka-strimzi-consumer/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/kafka-strimzi-consumer/src/test/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfigurationTest.java",
+    "entry-point/kafka-strimzi-consumer/topics-handler.test.java.mustache": "infrastructure/entry-points/kafka-strimzi-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandlerTest.java"
   }
 }

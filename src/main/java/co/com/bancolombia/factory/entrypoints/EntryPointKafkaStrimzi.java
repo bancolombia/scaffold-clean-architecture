@@ -21,7 +21,7 @@ import tools.jackson.databind.node.ObjectNode;
  */
 public class EntryPointKafkaStrimzi implements ModuleFactory {
 
-  private static final String MODULE = "kafka-consumer";
+  private static final String MODULE = "kafka-strimzi-consumer";
   private static final String KAFKA_DOMAIN_PROPERTIES = "reactive.commons.kafka.app";
   private static final String ASYNC_KAFKA_APICURIO_STARTER =
       "org.reactivecommons:async-kafka-apicurio-starter:" + REACTIVE_COMMONS_VERSION;
