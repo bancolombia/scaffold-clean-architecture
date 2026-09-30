@@ -1,0 +1,34 @@
+package {{package}}.config.kafka;
+
+import org.reactivecommons.async.kafka.config.KafkaProperties;
+import org.reactivecommons.async.kafka.config.props.AsyncKafkaPropsDomain;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+
+/**
+ * Hybrid configuration (YAML + KafkaPropsCustomizer) for the Reactive Commons Kafka domain used
+ * by the agent's Kafka transport (consumer + producer).
+ * <p>
+ * Values bound from application.yaml are kept; only the fields set below are overridden.
+ *
+ * @see <a href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka">Kafka configuration properties</a>
+ */
+@Configuration
+public class KafkaConfigHelper {
+
+    private static final String DEFAULT_DOMAIN = "app";
+
+    @Bean
+    public AsyncKafkaPropsDomain.KafkaPropsCustomizer kafkaPropsCustomizer() {
+        return domainProperties -> domainProperties.customize(DEFAULT_DOMAIN, domain -> {
+                    KafkaProperties connection = domain.getConnectionProperties();
+                    connection.setBootstrapServers(List.of("localhost:9092"));
+                    // Resolve the broker address from your secrets manager or environment
+                    // before overriding it here, e.g.:
+                    // connection.setBootstrapServers(List.of(System.getenv("KAFKA_SERVERS")));
+                }
+        );
+    }
+}

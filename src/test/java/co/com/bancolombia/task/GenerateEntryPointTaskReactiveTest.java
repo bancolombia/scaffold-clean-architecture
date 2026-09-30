@@ -249,6 +249,7 @@ class GenerateEntryPointTaskReactiveTest {
   @Test
   void generateEntryPointKafkaConsumer() throws IOException, CleanException {
     // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/kafka-consumer"));
     task.setType("KAFKA");
 
     // Act
@@ -289,12 +290,13 @@ class GenerateEntryPointTaskReactiveTest {
   @Test
   void generateEntryPointReactiveKafkaStrimzi() throws IOException, CleanException {
     // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/kafka-strimzi-consumer"));
     task.setType("KAFKASTRIMZI");
     // Act
     task.execute();
     // Assert
     assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
+        TEST_DIR + "/infrastructure/entry-points/kafka-strimzi-consumer/",
         "build.gradle",
         "src/main/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfiguration.java",
         "src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java",

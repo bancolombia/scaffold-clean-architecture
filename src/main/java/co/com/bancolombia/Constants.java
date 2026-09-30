@@ -27,7 +27,6 @@ public final class Constants {
   public static final String BIN_STASH_VERSION = "2.1.4";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.1.1";
   public static final String CLOUD_EVENTS_VERSION = "5.0.0";
-  public static final String REACTOR_KAFKA_VERSION = "1.3.25";
   public static final String SPRING_AI_VERSION = "2.0.1";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.3";
