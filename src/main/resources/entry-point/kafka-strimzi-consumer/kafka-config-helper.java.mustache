@@ -1,0 +1,92 @@
+package {{package}}.config.kafka;
+
+//import {{package}}.model.topiccredentials.ConsumerCredentials;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+//import io.apicurio.registry.serde.SerdeConfig;
+//import org.apache.kafka.clients.CommonClientConfigs;
+//import org.apache.kafka.common.config.SaslConfigs;
+import org.reactivecommons.async.kafka.config.KafkaProperties;
+//import org.reactivecommons.async.kafka.config.props.ApicurioRegistry;
+//import org.reactivecommons.async.kafka.config.props.ApicurioTopic;
+//import org.reactivecommons.async.kafka.config.props.ApicurioValidationProperties;
+import org.reactivecommons.async.kafka.config.props.AsyncKafkaPropsDomain;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+//import java.util.Map;
+
+/**
+ * Hybrid configuration (YAML + KafkaPropsCustomizer) for the Reactive Commons Kafka domains,
+ * applying Strimzi OAuth Bearer authentication and per topic JSON Schema validation backed by
+ * an Apicurio Registry.
+ * <p>
+ * Values bound from application.yaml are kept; only the fields set below are overridden.
+ *
+ * @see <a href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka">Kafka configuration properties</a>
+ * @see <a href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka-schema-validation">Kafka Schema Validation (Apicurio)</a>
+ */
+@Configuration
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class KafkaConfigHelper {
+
+    private static final String DEFAULT_DOMAIN = "app";
+    private static final String MAIN_REGISTRY = "main-registry";
+    private static final String OAUTHBEARER_MECHANISM = "OAUTHBEARER";
+    private static final String STRIMZI_OAUTH_CALLBACK_HANDLER =
+            "io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler";
+    private static final String OAUTHBEARER_JAAS_CONFIG =
+            "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required "
+                    + "oauth.client.id=\"%s\" "
+                    + "oauth.client.secret=\"%s\" "
+                    + "oauth.token.endpoint.uri=\"%s\" "
+                    + "oauth.grant.type=\"%s\";";
+
+    // Expose a ConsumerCredentials bean reading the Strimzi OAuth client id/secret, the token
+    // endpoint and the Apicurio Registry URL from your secrets manager, then uncomment the
+    // field below (and its import above) to inject it.
+//    private final ConsumerCredentials consumerCredentials;
+{{^lombok}}
+
+//    public KafkaConfigHelper(final ConsumerCredentials consumerCredentials) {
+//        this.consumerCredentials = consumerCredentials;
+//    }
+{{/lombok}}
+
+    @Bean
+    public AsyncKafkaPropsDomain.KafkaPropsCustomizer kafkaPropsCustomizer() {
+        return domainProperties -> domainProperties.customize(DEFAULT_DOMAIN, domain -> {
+                    connection.getSecurity().setProtocol(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG);
+                    Map<String, String> properties = connection.getProperties();
+                    properties.put(SaslConfigs.SASL_MECHANISM, OAUTHBEARER_MECHANISM);
+                    properties.put(SaslConfigs.SASL_LOGIN_CALLBACK_HANDLER_CLASS, STRIMZI_OAUTH_CALLBACK_HANDLER);
+                    properties.put(SaslConfigs.SASL_JAAS_CONFIG, String.format(
+                            OAUTHBEARER_JAAS_CONFIG,
+                            consumerCredentials.clientId(),
+                            consumerCredentials.clientSecret(),
+                            consumerCredentials.tokenEndpointUri(),
+                            consumerCredentials.grantType()
+                    ));
+
+                    domain.setApicurio(ApicurioValidationProperties.builder()
+                            .registries(List.of(ApicurioRegistry.builder()
+                                    .name(MAIN_REGISTRY)
+                                    .properties(Map.of(
+                                            SerdeConfig.REGISTRY_URL, "registryUrl",
+                                            SerdeConfig.EXPLICIT_ARTIFACT_GROUP_ID, "kafka",
+                                            SerdeConfig.AUTH_CLIENT_ID, consumerCredentials.clientId(),
+                                            SerdeConfig.AUTH_CLIENT_SECRET, consumerCredentials.clientSecret(),
+                                            SerdeConfig.AUTH_TOKEN_ENDPOINT, consumerCredentials.tokenEndpointUri(),
+                                            "apicurio.registry.find-latest", "true"))
+                                    .topics(List.of(
+                                            ApicurioTopic.builder().name("{{topicConsumer}}").build()))
+                                    .build()))
+                            .build());
+                }
+        );
+    }
+}

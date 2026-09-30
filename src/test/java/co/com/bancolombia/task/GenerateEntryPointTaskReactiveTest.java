@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.TestUtils.assertFileContains;
 import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
 import static co.com.bancolombia.TestUtils.createTask;
 import static co.com.bancolombia.TestUtils.deleteStructure;
@@ -295,9 +296,24 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java",
-        "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfig.java");
+        "src/main/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfiguration.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfigurationTest.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandlerTest.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/model/",
+        "src/main/java/co/com/bancolombia/model/topiccredentials/ConsumerCredentials.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/applications/app-service/",
+        "src/main/java/co/com/bancolombia/config/kafka/KafkaConfigHelper.java");
+    assertFileContains(
+        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml",
+        "apicurio:",
+        "registries:",
+        "main-registry",
+        "test-with-registries");
   }
+
 
   @Test
   void generateEntryPointMcp() throws IOException, CleanException {
