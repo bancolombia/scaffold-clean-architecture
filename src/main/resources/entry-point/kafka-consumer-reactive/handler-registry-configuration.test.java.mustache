@@ -1,6 +1,6 @@
 package {{package}}.kafka.consumer;
 
-import {{package}}.kafka.consumer.handlers.EventsHandler;
+import {{package}}.kafka.consumer.handlers.TopicsHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reactivecommons.async.api.HandlerRegistry;
@@ -9,17 +9,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HandlerRegistryConfigurationTest {
 
-    EventsHandler eventsHandler;
+    TopicsHandler topicsHandler;
 
     @BeforeEach
     void setUp() {
-        eventsHandler = new EventsHandler();
+        topicsHandler = new TopicsHandler();
     }
 
     @Test
     void testHandlerRegistry() {
-        HandlerRegistryConfiguration handlerRegistryConfiguration = new HandlerRegistryConfiguration();
-        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(eventsHandler);
+        var handlerRegistryConfiguration = new HandlerRegistryConfiguration();
+        HandlerRegistry handlerRegistry = handlerRegistryConfiguration.handlerRegistry(topicsHandler);
 
         assertNotNull(handlerRegistry);
     }

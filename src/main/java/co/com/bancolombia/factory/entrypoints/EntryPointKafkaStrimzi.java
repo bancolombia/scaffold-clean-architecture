@@ -26,8 +26,8 @@ public class EntryPointKafkaStrimzi implements ModuleFactory {
 
     builder.addParam("topicConsumer", topicConsumer);
     builder.setupFromTemplate("entry-point/kafka-strimzi-consumer");
-    builder.appendToSettings("kafka-consumer", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(":kafka-consumer");
+    builder.appendToSettings("kafka-strimzi-consumer", "infrastructure/entry-points");
+    String dependency = buildImplementationFromProject(":kafka-strimzi-consumer");
     builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     builder

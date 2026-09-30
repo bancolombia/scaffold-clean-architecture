@@ -1,0 +1,42 @@
+package {{package}}.kafka.consumer.handlers;
+
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+{{/lombok}}
+import org.reactivecommons.api.domain.RawMessage;
+import org.reactivecommons.async.impl.config.annotations.EnableTopicListeners;
+import org.reactivecommons.async.kafka.KafkaMessage;
+import reactor.core.publisher.Mono;
+
+{{^lombok}}
+import java.util.logging.Level;
+import java.util.logging.Logger;
+{{/lombok}}
+
+{{#lombok}}
+@Log
+@RequiredArgsConstructor
+{{/lombok}}
+@EnableTopicListeners
+public class TopicsHandler {
+{{^lombok}}
+    private static final Logger log = Logger.getLogger(TopicsHandler.class.getName());
+{{/lombok}}
+
+    // private final SampleUseCase sampleUseCase;
+{{^lombok}}
+    public TopicsHandler(/*SampleUseCase sampleUseCase*/) {
+        //this.sampleUseCase = sampleUseCase;
+    }
+{{/lombok}}
+
+    // See more at: https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/handling-queues-and-topics/kafka
+    public Mono<Void> handleMessage(RawMessage message) {
+        KafkaMessage rawMessage = (KafkaMessage) message;
+        log.info("Message received from topic: " + new String(rawMessage.getBody()));
+        log.info("Headers: " + rawMessage.getProperties().getHeaders());
+        // Process the message
+        return Mono.empty();
+    }
+}

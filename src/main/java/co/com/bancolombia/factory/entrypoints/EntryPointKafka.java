@@ -37,7 +37,6 @@ public class EntryPointKafka implements ModuleFactory {
         .appendToProperties(KAFKA_DOMAIN_PROPERTIES)
         .put("withDLQRetry", "${APP_ASYNC_WITH_DLQ_RETRY:true}")
         .put("maxRetries", "${APP_ASYNC_MAX_RETRIES:5}")
-        .put("retryDelay", "${APP_ASYNC_RETRY_DELAY:1000}")
-        .put("createTopology", "${APP_ASYNC_CREATE_TOPOLOGY:true}");
+        .put("retryDelay", "${APP_ASYNC_RETRY_DELAY:1000}");
   }
 }
