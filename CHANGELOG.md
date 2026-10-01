@@ -1,5 +1,31 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.0...HEAD)
+
+**Implemented enhancements:**
+
+- \[BUG\] Broken Reactive Kafka Adapters in Spring Boot 4.x due to Library Discontinuation [\#855](https://github.com/bancolombia/scaffold-clean-architecture/issues/855)
+
+## [v4.7.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.0) (2026-10-01)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.6.2...v4.7.0)
+
+**Merged pull requests:**
+
+- feat: migrate the Reactor Kafka implementation to Reactive Commons Kafka. [\#990](https://github.com/bancolombia/scaffold-clean-architecture/pull/990) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump gradle/actions/setup-gradle from 6.3.0 to 6.4.0 [\#989](https://github.com/bancolombia/scaffold-clean-architecture/pull/989) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.38.0 to 4.38.1 [\#983](https://github.com/bancolombia/scaffold-clean-architecture/pull/983) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.38.0 to 4.38.1 [\#982](https://github.com/bancolombia/scaffold-clean-architecture/pull/982) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.38.0 to 4.38.1 [\#981](https://github.com/bancolombia/scaffold-clean-architecture/pull/981) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.38.0 to 4.38.1 [\#980](https://github.com/bancolombia/scaffold-clean-architecture/pull/980) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/analyze from 4.37.9 to 4.38.0 [\#978](https://github.com/bancolombia/scaffold-clean-architecture/pull/978) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/autobuild from 4.37.9 to 4.38.0 [\#977](https://github.com/bancolombia/scaffold-clean-architecture/pull/977) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/init from 4.37.9 to 4.38.0 [\#976](https://github.com/bancolombia/scaffold-clean-architecture/pull/976) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump github/codeql-action/upload-sarif from 4.37.9 to 4.38.0 [\#975](https://github.com/bancolombia/scaffold-clean-architecture/pull/975) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-java from 6.0.0 to 6.0.1 [\#974](https://github.com/bancolombia/scaffold-clean-architecture/pull/974) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v4.6.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.6.2) (2026-09-10)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.6.1...v4.6.2)
