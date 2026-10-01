@@ -19,12 +19,6 @@ dependencies {
     implementation "org.springframework.ai:spring-ai-starter-mcp-client-webflux"
     {{/agent-enable-mcp-client}}
 
-    // Kafka — reactive transport (optional: set agent-enable-kafka flag)
-    {{#agent-enable-kafka}}
-    implementation "io.projectreactor.kafka:reactor-kafka:{{REACTOR_KAFKA_VERSION}}"
-    implementation 'tools.jackson.core:jackson-databind'
-    {{/agent-enable-kafka}}
-
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
     testImplementation 'io.projectreactor:reactor-test'

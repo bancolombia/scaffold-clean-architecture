@@ -1,0 +1,108 @@
+package {{package}}.kafka.consumer.handlers;
+
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.usecase.AgentChatUseCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.reactivecommons.async.kafka.KafkaMessage;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.nio.charset.StandardCharsets;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class TopicsHandlerTest {
+
+    @Mock
+    private AgentChatUseCase agentChatUseCase;
+
+    @Mock
+    private JsonMapper jsonMapper;
+
+    @Mock
+    private KafkaMessage kafkaMessage;
+
+    private TopicsHandler handler;
+
+    @BeforeEach
+    void setUp() {
+        handler = new TopicsHandler(agentChatUseCase, jsonMapper);
+    }
+
+    @Test
+    void shouldHandleMessageSuccessfully() throws Exception {
+        byte[] body = """
+                {
+                    "task_id": "task-123"
+                }
+                """.getBytes(StandardCharsets.UTF_8);
+
+        SendMessageRequest request = mock(SendMessageRequest.class);
+
+        when(kafkaMessage.getBody()).thenReturn(body);
+        when(jsonMapper.readValue(body, SendMessageRequest.class))
+                .thenReturn(request);
+        when(agentChatUseCase.chat(request))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(handler.handleMessage(kafkaMessage))
+                .verifyComplete();
+
+        verify(jsonMapper).readValue(body, SendMessageRequest.class);
+        verify(agentChatUseCase).chat(request);
+    }
+
+    @Test
+    void shouldCompleteWhenMessageCannotBeDeserialized() throws Exception {
+        byte[] body = "invalid-json".getBytes(StandardCharsets.UTF_8);
+
+        JacksonException exception = mock(JacksonException.class);
+
+        when(kafkaMessage.getBody()).thenReturn(body);
+        when(jsonMapper.readValue(body, SendMessageRequest.class))
+                .thenThrow(exception);
+
+        StepVerifier.create(handler.handleMessage(kafkaMessage))
+                .verifyComplete();
+
+        verify(jsonMapper).readValue(body, SendMessageRequest.class);
+        verifyNoInteractions(agentChatUseCase);
+    }
+
+    @Test
+    void shouldPropagateErrorWhenUseCaseFails() throws Exception {
+        byte[] body = """
+                {
+                    "task_id": "task-123"
+                }
+                """.getBytes(StandardCharsets.UTF_8);
+
+        SendMessageRequest request = mock(SendMessageRequest.class);
+        RuntimeException exception = new RuntimeException("Use case failed");
+
+        when(kafkaMessage.getBody()).thenReturn(body);
+        when(jsonMapper.readValue(body, SendMessageRequest.class))
+                .thenReturn(request);
+        when(agentChatUseCase.chat(request))
+                .thenReturn(Mono.error(exception));
+
+        StepVerifier.create(handler.handleMessage(kafkaMessage))
+                .expectErrorMatches(error ->
+                        error == exception
+                                && "Use case failed".equals(error.getMessage()))
+                .verify();
+
+        verify(jsonMapper).readValue(body, SendMessageRequest.class);
+        verify(agentChatUseCase).chat(request);
+    }
+}

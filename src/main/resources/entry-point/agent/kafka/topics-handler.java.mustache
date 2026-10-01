@@ -1,0 +1,56 @@
+package {{package}}.kafka.consumer.handlers;
+
+import {{package}}.model.a2a.SendMessageRequest;
+import {{package}}.usecase.AgentChatUseCase;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+{{/lombok}}
+import org.reactivecommons.api.domain.RawMessage;
+import org.reactivecommons.async.impl.config.annotations.EnableTopicListeners;
+import org.reactivecommons.async.kafka.KafkaMessage;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
+
+{{#lombok}}
+@Log4j2
+@RequiredArgsConstructor
+{{/lombok}}
+@Component
+@EnableTopicListeners
+public class TopicsHandler {
+{{^lombok}}
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TopicsHandler.class);
+{{/lombok}}
+
+    private final AgentChatUseCase agentChatUseCase;
+    private final JsonMapper jsonMapper;
+{{^lombok}}
+    public TopicsHandler(AgentChatUseCase agentChatUseCase, JsonMapper jsonMapper) {
+        this.agentChatUseCase = agentChatUseCase;
+        this.jsonMapper = jsonMapper;
+    }
+{{/lombok}}
+
+    // See: https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/handling-queues-and-topics/kafka
+    public Mono<Void> handleMessage(RawMessage message) {
+        KafkaMessage rawMessage = (KafkaMessage) message;
+        byte[] body = rawMessage.getBody();
+
+        log.info("Record received: {}", new String(body));
+
+        return Mono.fromCallable(() -> jsonMapper.readValue(body, SendMessageRequest.class))
+                .flatMap(request ->
+                        agentChatUseCase.chat(request)
+                                .doOnSuccess(ignored ->
+                                        log.info("Successfully processed task id: {}", request.getTask_id())
+                                )
+                )
+                .doOnError(error ->
+                        log.error("Error processing task id: {}", new String(body), error)
+                )
+                .onErrorComplete(JacksonException.class);
+    }
+}

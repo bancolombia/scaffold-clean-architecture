@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.TestUtils.assertFileContains;
 import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
 import static co.com.bancolombia.TestUtils.createTask;
 import static co.com.bancolombia.TestUtils.deleteStructure;
@@ -248,6 +249,7 @@ class GenerateEntryPointTaskReactiveTest {
   @Test
   void generateEntryPointKafkaConsumer() throws IOException, CleanException {
     // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/kafka-consumer"));
     task.setType("KAFKA");
 
     // Act
@@ -256,7 +258,14 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java");
+        "src/main/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfiguration.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfigProperties.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfigurationTest.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandlerTest.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/applications/app-service/",
+        "src/main/java/co/com/bancolombia/config/kafka/KafkaConfig.java");
   }
 
   @Test
@@ -281,15 +290,30 @@ class GenerateEntryPointTaskReactiveTest {
   @Test
   void generateEntryPointReactiveKafkaStrimzi() throws IOException, CleanException {
     // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/kafka-strimzi-consumer"));
     task.setType("KAFKASTRIMZI");
     // Act
     task.execute();
     // Assert
     assertFilesExistsInDir(
-        TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
+        TEST_DIR + "/infrastructure/entry-points/kafka-strimzi-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java",
-        "src/main/java/co/com/bancolombia/kafka/consumer/config/KafkaConfig.java");
+        "src/main/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfiguration.java",
+        "src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/HandlerRegistryConfigurationTest.java",
+        "src/test/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandlerTest.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/domain/model/",
+        "src/main/java/co/com/bancolombia/model/topiccredentials/ConsumerCredentials.java");
+    assertFilesExistsInDir(
+        TEST_DIR + "/applications/app-service/",
+        "src/main/java/co/com/bancolombia/config/kafka/KafkaConfig.java");
+    assertFileContains(
+        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml",
+        "apicurio:",
+        "registries:",
+        "main-registry",
+        "test-with-registries");
   }
 
   @Test
@@ -336,17 +360,17 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/kafka-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java");
+        "src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java");
 
-    String kafkaConsumer =
+    String topicsHandler =
         Files.readString(
             Path.of(
                 TEST_DIR,
-                "infrastructure/entry-points/kafka-consumer/src/main/java/co/com/bancolombia/kafka/consumer/KafkaConsumer.java"));
+                "infrastructure/entry-points/kafka-consumer/src/main/java/co/com/bancolombia/kafka/consumer/handlers/TopicsHandler.java"));
 
-    assertTrue(kafkaConsumer.contains("import tools.jackson.core.JacksonException;"));
-    assertTrue(kafkaConsumer.contains("import tools.jackson.databind.json.JsonMapper;"));
-    assertTrue(kafkaConsumer.contains("catch (JacksonException e)"));
-    assertFalse(kafkaConsumer.contains("com.fasterxml.jackson"));
+    assertTrue(topicsHandler.contains("import tools.jackson.core.JacksonException;"));
+    assertTrue(topicsHandler.contains("import tools.jackson.databind.json.JsonMapper;"));
+    assertTrue(topicsHandler.contains("onErrorComplete(JacksonException.class)"));
+    assertFalse(topicsHandler.contains("com.fasterxml.jackson"));
   }
 }

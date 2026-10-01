@@ -1,35 +1,62 @@
-package {{package}}.kafka.consumer.config;
+package {{package}}.config.kafka;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.boot.ssl.SslBundles;
+//import {{package}}.kafka.consumer.config.KafkaConfigProperties;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.reactivecommons.async.kafka.config.KafkaProperties;
+import org.reactivecommons.async.kafka.config.props.AsyncKafkaPropsDomain;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
-import reactor.kafka.receiver.ReceiverOptions;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Collections;
+import java.util.List;
 
+/**
+ * Hybrid configuration (YAML + KafkaPropsCustomizer) for the Reactive Commons Kafka domains.
+ * <p>
+ * Values bound from application.yaml are kept; only the fields set below are overridden.
+ *
+ * @see <a href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka">Kafka configuration properties</a>
+ */
 @Configuration
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
 public class KafkaConfig {
 
-    @Bean
-    public ReceiverOptions<String, String> kafkaReceiverOptions(
-            @Value(value = "${adapters.kafka.consumer.topic}") String topic,
-            KafkaProperties kafkaProperties,
-            SslBundles sslBundles) throws UnknownHostException {
-        // Set id based on hostname, customize here another properties
-        kafkaProperties.setClientId(InetAddress.getLocalHost().getHostName());
-        ReceiverOptions<String, String> basicReceiverOptions =
-                ReceiverOptions.create(kafkaProperties.buildConsumerProperties(sslBundles));
-        return basicReceiverOptions.subscription(Collections.singletonList(topic));
-    }
+    private static final String DEFAULT_DOMAIN = "app";
+    private static final String SASL_PROTOCOL = "SASL_SSL";
+    private static final String SASL_MECHANISM_KEY = "sasl.mechanism";
+    private static final String SASL_JAAS_CONFIG_KEY = "sasl.jaas.config";
+    private static final String SCRAM_MECHANISM = "SCRAM-SHA-512";
+    private static final String SCRAM_LOGIN_MODULE =
+            "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
+
+    // Expose a KafkaConfigProperties bean reading the broker address and the SASL/SCRAM
+    // credentials from your secrets manager, then uncomment the field below to inject it.
+//    private final KafkaConfigProperties configProperties;
+{{^lombok}}
+//
+//    public KafkaConfig(final KafkaConfigProperties configProperties) {
+//        this.configProperties = configProperties;
+//    }
+{{/lombok}}
 
     @Bean
-    public ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate(
-            ReceiverOptions<String, String> kafkaReceiverOptions) {
-        return new ReactiveKafkaConsumerTemplate<>(kafkaReceiverOptions);
+    public AsyncKafkaPropsDomain.KafkaPropsCustomizer kafkaPropsCustomizer() {
+        return domainProperties -> domainProperties.customize(DEFAULT_DOMAIN, domain -> {
+                    KafkaProperties connection = domain.getConnectionProperties();
+                    connection.setBootstrapServers(List.of("localhost:9092"));
+//                  connection.setBootstrapServers(List.of(configProperties.bootstrapserver()));
+
+                    // Uncomment to apply SASL/SCRAM authentication
+//                    connection.getSecurity().setProtocol(SASL_PROTOCOL);
+//                    Map<String, String> properties = connection.getProperties();
+//                    properties.put(SASL_MECHANISM_KEY, SCRAM_MECHANISM);
+//                    properties.put(SASL_JAAS_CONFIG_KEY, String.format(
+//                            SCRAM_LOGIN_MODULE, configProperties.username(), configProperties.password()
+//                    ));
+                }
+        );
     }
 }

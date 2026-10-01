@@ -1,6 +1,8 @@
 package co.com.bancolombia.factory.entrypoints;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
+import static co.com.bancolombia.utils.Utils.buildImplementation;
 import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -34,6 +36,8 @@ import java.io.IOException;
  */
 public class EntryPointAgent implements ModuleFactory {
   private static final String ROLE_HYBRID = "hybrid";
+  private static final String ASYNC_KAFKA_STARTER =
+      "org.reactivecommons:async-kafka-starter:" + REACTIVE_COMMONS_VERSION;
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
@@ -109,6 +113,7 @@ public class EntryPointAgent implements ModuleFactory {
         APP_SERVICE, buildImplementationFromProject(":kafka-consumer"));
     builder.appendDependencyToModule(
         APP_SERVICE, buildImplementationFromProject(":kafka-producer"));
+    builder.appendDependencyToModule(APP_SERVICE, buildImplementation(ASYNC_KAFKA_STARTER));
 
     if (enableMcpClient) {
       builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":mcp-client"));
@@ -160,12 +165,11 @@ public class EntryPointAgent implements ModuleFactory {
           .appendToProperties("adapters.kafka.producer")
           .put("topic", "${KAFKA_PRODUCER_TOPIC:" + agentName + "-responses}");
       builder
-          .appendToProperties("spring.kafka.consumer")
-          .put("bootstrap-servers", "${KAFKA_SERVERS:localhost:9092}")
-          .put("group-id", agentName + "-group");
+          .appendToProperties("reactive.commons.kafka.app.connection-properties.security")
+          .put("protocol", "${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}");
       builder
-          .appendToProperties("spring.kafka.producer")
-          .put("bootstrap-servers", "${KAFKA_SERVERS:localhost:9092}");
+          .appendToProperties("reactive.commons.kafka.app.connection-properties.consumer")
+          .put("group-id", "${KAFKA_CONSUMER_GROUP_ID:" + agentName + "-group}");
     }
   }
 }
