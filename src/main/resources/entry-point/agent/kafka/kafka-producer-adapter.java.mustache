@@ -2,12 +2,12 @@ package {{package}}.kafka.producer;
 
 import {{package}}.model.a2a.SendMessageResponse;
 import {{package}}.model.chat.gateways.AgentResponseGateway;
+import org.reactivecommons.api.domain.DomainEventBus;
 import tools.jackson.databind.json.JsonMapper;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 {{/lombok}}
-import org.reactivecommons.async.api.DomainEventBus;
 import org.reactivecommons.async.impl.config.annotations.EnableDomainEventBus;
 import org.reactivecommons.async.kafka.KafkaMessage;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,20 +43,21 @@ public class KafkaProducerAdapter implements AgentResponseGateway {
     @Override
     public Mono<Void> sendResponse(SendMessageResponse response) {
         return Mono.fromCallable(() -> jsonMapper.writeValueAsBytes(response))
-                .flatMap(body -> {
-                    log.info("Sending response to kafka topic {}", topic);
-                    KafkaMessage.KafkaMessageProperties properties = new KafkaMessage.KafkaMessageProperties();
+                .map(body -> {
+                    var properties = new KafkaMessage.KafkaMessageProperties();
                     properties.setTopic(topic);
                     properties.setKey(UUID.randomUUID().toString());
                     properties.getHeaders().put("content-type", "application/json");
 
-                    KafkaMessage rawMessage = new KafkaMessage(body, properties, null);
-                    return Mono.from(domainEventBus.emit(rawMessage))
-                            .doOnSuccess(v -> log.info("Message sent successfully to topic {}", topic));
+                    return new KafkaMessage(body, properties, null);
                 })
-                .onErrorResume(e -> {
-                    log.error("Failed to serialize or send SendMessageResponse", e);
-                    return Mono.empty();
-                });
+                .flatMap(rawMessage -> {
+                    log.info("Sending response to kafka topic {}", topic);
+                    return Mono.from(domainEventBus.emit(rawMessage));
+                })
+                .doOnSuccess(ignored ->
+                        log.info("Message sent successfully to topic {}", topic))
+                .doOnError(error ->
+                        log.error("Failed to serialize or send SendMessageResponse", error));
     }
 }

@@ -1,4 +1,4 @@
-package {{package}}.kafka.consumer;
+package {{package}}.kafka.consumer.handlers;
 
 import {{package}}.model.a2a.SendMessageRequest;
 import {{package}}.usecase.AgentChatUseCase;
@@ -20,17 +20,15 @@ import reactor.core.publisher.Mono;
 {{/lombok}}
 @Component
 @EnableTopicListeners
-public class KafkaConsumer {
-
+public class TopicsHandler {
 {{^lombok}}
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TopicsHandler.class);
 {{/lombok}}
 
     private final AgentChatUseCase agentChatUseCase;
     private final JsonMapper jsonMapper;
-
 {{^lombok}}
-    public KafkaConsumer(AgentChatUseCase agentChatUseCase, JsonMapper jsonMapper) {
+    public TopicsHandler(AgentChatUseCase agentChatUseCase, JsonMapper jsonMapper) {
         this.agentChatUseCase = agentChatUseCase;
         this.jsonMapper = jsonMapper;
     }
@@ -40,15 +38,19 @@ public class KafkaConsumer {
     public Mono<Void> handleMessage(RawMessage message) {
         KafkaMessage rawMessage = (KafkaMessage) message;
         byte[] body = rawMessage.getBody();
+
         log.info("Record received: {}", new String(body));
-        try {
-            SendMessageRequest request = jsonMapper.readValue(body, SendMessageRequest.class);
-            return agentChatUseCase.chat(request)
-                    .doOnSuccess(v -> log.info("Successfully processed task id: {}",
-                            request.getTask_id()));
-        } catch (JacksonException e) {
-            log.error("Error parsing kafka record: {}", new String(body), e);
-            return Mono.empty();
-        }
+
+        return Mono.fromCallable(() -> jsonMapper.readValue(body, SendMessageRequest.class))
+                .flatMap(request ->
+                        agentChatUseCase.chat(request)
+                                .doOnSuccess(ignored ->
+                                        log.info("Successfully processed task id: {}", request.getTask_id())
+                                )
+                )
+                .doOnError(error ->
+                        log.error("Error processing task id: {}", new String(body), error)
+                )
+                .onErrorComplete(JacksonException.class);
     }
 }

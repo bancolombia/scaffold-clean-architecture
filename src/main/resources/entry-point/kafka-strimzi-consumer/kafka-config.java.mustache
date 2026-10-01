@@ -1,22 +1,22 @@
 package {{package}}.config.kafka;
 
-//import {{package}}.model.topiccredentials.ConsumerCredentials;
+import {{package}}.model.topiccredentials.ConsumerCredentials;
+import io.apicurio.registry.resolver.config.SchemaResolverConfig;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
 {{/lombok}}
-//import io.apicurio.registry.serde.SerdeConfig;
-//import org.apache.kafka.clients.CommonClientConfigs;
-//import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.clients.CommonClientConfigs;
+import org.apache.kafka.common.config.SaslConfigs;
 import org.reactivecommons.async.kafka.config.KafkaProperties;
-//import org.reactivecommons.async.kafka.config.props.ApicurioRegistry;
-//import org.reactivecommons.async.kafka.config.props.ApicurioTopic;
-//import org.reactivecommons.async.kafka.config.props.ApicurioValidationProperties;
+import org.reactivecommons.async.kafka.config.props.ApicurioRegistry;
+import org.reactivecommons.async.kafka.config.props.ApicurioTopic;
+import org.reactivecommons.async.kafka.config.props.ApicurioValidationProperties;
 import org.reactivecommons.async.kafka.config.props.AsyncKafkaPropsDomain;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-//import java.util.Map;
+import java.util.Map;
 
 /**
  * Hybrid configuration (YAML + KafkaPropsCustomizer) for the Reactive Commons Kafka domains,
@@ -32,7 +32,7 @@ import java.util.List;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class KafkaConfigHelper {
+public class KafkaConfig {
 
     private static final String DEFAULT_DOMAIN = "app";
     private static final String MAIN_REGISTRY = "main-registry";
@@ -49,17 +49,18 @@ public class KafkaConfigHelper {
     // Expose a ConsumerCredentials bean reading the Strimzi OAuth client id/secret, the token
     // endpoint and the Apicurio Registry URL from your secrets manager, then uncomment the
     // field below (and its import above) to inject it.
-//    private final ConsumerCredentials consumerCredentials;
-{{^lombok}}
+    private final ConsumerCredentials consumerCredentials;
 
-//    public KafkaConfigHelper(final ConsumerCredentials consumerCredentials) {
-//        this.consumerCredentials = consumerCredentials;
-//    }
-{{/lombok}}
+    {{^lombok}}
+    public KafkaConfig(final ConsumerCredentials consumerCredentials) {
+        this.consumerCredentials = consumerCredentials;
+    }
+    {{/lombok}}
 
     @Bean
     public AsyncKafkaPropsDomain.KafkaPropsCustomizer kafkaPropsCustomizer() {
         return domainProperties -> domainProperties.customize(DEFAULT_DOMAIN, domain -> {
+                    KafkaProperties connection = domain.getConnectionProperties();
                     connection.getSecurity().setProtocol(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG);
                     Map<String, String> properties = connection.getProperties();
                     properties.put(SaslConfigs.SASL_MECHANISM, OAUTHBEARER_MECHANISM);
@@ -76,12 +77,12 @@ public class KafkaConfigHelper {
                             .registries(List.of(ApicurioRegistry.builder()
                                     .name(MAIN_REGISTRY)
                                     .properties(Map.of(
-                                            SerdeConfig.REGISTRY_URL, "registryUrl",
-                                            SerdeConfig.EXPLICIT_ARTIFACT_GROUP_ID, "kafka",
-                                            SerdeConfig.AUTH_CLIENT_ID, consumerCredentials.clientId(),
-                                            SerdeConfig.AUTH_CLIENT_SECRET, consumerCredentials.clientSecret(),
-                                            SerdeConfig.AUTH_TOKEN_ENDPOINT, consumerCredentials.tokenEndpointUri(),
-                                            "apicurio.registry.find-latest", "true"))
+                                            SchemaResolverConfig.REGISTRY_URL, "registryUrl",
+                                            SchemaResolverConfig.EXPLICIT_ARTIFACT_GROUP_ID, "kafka",
+                                            SchemaResolverConfig.AUTH_CLIENT_ID, consumerCredentials.clientId(),
+                                            SchemaResolverConfig.AUTH_CLIENT_SECRET, consumerCredentials.clientSecret(),
+                                            SchemaResolverConfig.AUTH_TOKEN_ENDPOINT, consumerCredentials.tokenEndpointUri(),
+                                            SchemaResolverConfig.FIND_LATEST_ARTIFACT, "true"))
                                     .topics(List.of(
                                             ApicurioTopic.builder().name("{{topicConsumer}}").build()))
                                     .build()))

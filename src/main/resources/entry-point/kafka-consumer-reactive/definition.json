@@ -7,7 +7,7 @@
     "entry-point/kafka-consumer-reactive/handler-registry-configuration.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfiguration.java",
     "entry-point/kafka-consumer-reactive/topics-handler.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandler.java",
     "entry-point/kafka-consumer-reactive/kafka-config-properties.java.mustache": "infrastructure/entry-points/kafka-consumer/src/main/java/{{packagePath}}/kafka/consumer/config/KafkaConfigProperties.java",
-    "entry-point/kafka-consumer-reactive/kafka-config-helper.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/kafka/KafkaConfigHelper.java",
+    "entry-point/kafka-consumer-reactive/kafka-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/kafka/KafkaConfig.java",
     "entry-point/kafka-consumer-reactive/handler-registry-configuration.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/HandlerRegistryConfigurationTest.java",
     "entry-point/kafka-consumer-reactive/topics-handler.test.java.mustache": "infrastructure/entry-points/kafka-consumer/src/test/java/{{packagePath}}/kafka/consumer/handlers/TopicsHandlerTest.java"
   }

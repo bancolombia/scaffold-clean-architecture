@@ -22,7 +22,7 @@ import java.util.List;
 {{#lombok}}
 @RequiredArgsConstructor
 {{/lombok}}
-public class KafkaConfigHelper {
+public class KafkaConfig {
 
     private static final String DEFAULT_DOMAIN = "app";
     private static final String SASL_PROTOCOL = "SASL_SSL";
@@ -37,7 +37,7 @@ public class KafkaConfigHelper {
 //    private final KafkaConfigProperties configProperties;
 {{^lombok}}
 //
-//    public KafkaConfigHelper(final KafkaConfigProperties configProperties) {
+//    public KafkaConfig(final KafkaConfigProperties configProperties) {
 //        this.configProperties = configProperties;
 //    }
 {{/lombok}}

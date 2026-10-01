@@ -1,0 +1,25 @@
+package {{package}}.kafka.consumer;
+
+import {{package}}.kafka.consumer.handlers.TopicsHandler;
+import org.junit.jupiter.api.Test;
+import org.reactivecommons.async.api.HandlerRegistry;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+
+class HandlerRegistryConfigurationTest {
+
+    private final HandlerRegistryConfiguration configuration =
+            new HandlerRegistryConfiguration();
+
+    @Test
+    void shouldCreateHandlerRegistry() {
+        TopicsHandler topicsHandler = mock(TopicsHandler.class);
+        String topic = "test-topic";
+
+        HandlerRegistry registry =
+                configuration.handlerRegistry(topicsHandler, topic);
+
+        assertNotNull(registry);
+    }
+}

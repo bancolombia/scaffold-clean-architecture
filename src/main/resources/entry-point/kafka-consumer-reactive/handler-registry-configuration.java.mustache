@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class HandlerRegistryConfiguration {
 
     @Bean
-    public HandlerRegistry handlerRegistry(TopicsHandler events) {
+    public HandlerRegistry handlerRegistry(TopicsHandler topicsHandler) {
         return HandlerRegistry.register()
-                .listenTopic("event.test", events::handleMessage);
+                .listenTopic("event.test", topicsHandler::handleMessage);
     }
 }

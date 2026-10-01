@@ -1,5 +1,6 @@
 package {{package}}.kafka.consumer;
 
+import {{package}}.kafka.consumer.handlers.TopicsHandler;
 import org.reactivecommons.async.api.HandlerRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +11,9 @@ public class HandlerRegistryConfiguration {
 
     @Bean
     public HandlerRegistry handlerRegistry(
-            KafkaConsumer kafkaConsumer,
+            TopicsHandler topicsHandler,
             @Value("${adapters.kafka.consumer.topic}") String topic) {
         return HandlerRegistry.register()
-                .listenTopic(topic, kafkaConsumer::handleMessage);
+                .listenTopic(topic, topicsHandler::handleMessage);
     }
 }
