@@ -17,7 +17,9 @@ import tools.jackson.databind.node.ObjectNode;
  * Kafka consumer entry point built on Reactive Commons, validating every message against a JSON
  * Schema stored in an Apicurio Registry.
  *
- * @see <a href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka-schema-validation">Kafka Schema Validation (Apicurio)</a>
+ * @see <a
+ *     href="https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka-schema-validation">Kafka
+ *     Schema Validation (Apicurio)</a>
  */
 public class EntryPointKafkaStrimzi implements ModuleFactory {
 
@@ -42,7 +44,8 @@ public class EntryPointKafkaStrimzi implements ModuleFactory {
     builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":" + MODULE));
     // KafkaConfigHelper lives in app-service, so it needs the Reactive Commons Kafka
     // and Apicurio validation types. The starter replaces async-kafka-starter.
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementation(ASYNC_KAFKA_APICURIO_STARTER));
+    builder.appendDependencyToModule(
+        APP_SERVICE, buildImplementation(ASYNC_KAFKA_APICURIO_STARTER));
 
     builder
         .appendToProperties(KAFKA_DOMAIN_PROPERTIES + ".connection-properties.security")
@@ -59,7 +62,8 @@ public class EntryPointKafkaStrimzi implements ModuleFactory {
     appendApicurioProperties(builder, topicConsumer);
   }
 
-  // See: https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka-schema-validation
+  // See:
+  // https://bancolombia.github.io/reactive-commons-java/docs/reactive-commons/configuration_properties/kafka-schema-validation
   private void appendApicurioProperties(ModuleBuilder builder, String topicConsumer) {
     ObjectNode apicurio = builder.appendToProperties(KAFKA_DOMAIN_PROPERTIES + ".apicurio");
     ArrayNode registries = apicurio.putArray("registries");
