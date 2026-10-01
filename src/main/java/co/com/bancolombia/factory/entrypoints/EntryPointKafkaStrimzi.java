@@ -42,8 +42,6 @@ public class EntryPointKafkaStrimzi implements ModuleFactory {
     builder.setupFromTemplate("entry-point/kafka-strimzi-consumer");
     builder.appendToSettings(MODULE, "infrastructure/entry-points");
     builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":" + MODULE));
-    // KafkaConfigHelper lives in app-service, so it needs the Reactive Commons Kafka
-    // and Apicurio validation types. The starter replaces async-kafka-starter.
     builder.appendDependencyToModule(
         APP_SERVICE, buildImplementation(ASYNC_KAFKA_APICURIO_STARTER));
 

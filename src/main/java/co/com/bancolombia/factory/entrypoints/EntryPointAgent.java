@@ -113,7 +113,6 @@ public class EntryPointAgent implements ModuleFactory {
         APP_SERVICE, buildImplementationFromProject(":kafka-consumer"));
     builder.appendDependencyToModule(
         APP_SERVICE, buildImplementationFromProject(":kafka-producer"));
-    // KafkaConfigHelper lives in app-service, so it needs the Reactive Commons Kafka types
     builder.appendDependencyToModule(APP_SERVICE, buildImplementation(ASYNC_KAFKA_STARTER));
 
     if (enableMcpClient) {

@@ -24,7 +24,6 @@ public class EntryPointKafka implements ModuleFactory {
     builder.setupFromTemplate("entry-point/kafka-consumer-reactive");
     builder.appendToSettings(MODULE, "infrastructure/entry-points");
     builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":" + MODULE));
-    // KafkaConfigHelper lives in app-service, so it needs the Reactive Commons Kafka types
     builder.appendDependencyToModule(APP_SERVICE, buildImplementation(ASYNC_KAFKA_STARTER));
 
     builder
