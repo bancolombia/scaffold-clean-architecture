@@ -10,7 +10,9 @@ import com.tngtech.archunit.lang.ConditionEvent;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.elements.MembersShouldConjunction;
+{{#lombok}}
 import lombok.extern.java.Log;
+{{/lombok}}
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,8 +41,13 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 // Please do not modify this file
+{{#lombok}}
 @Log
+{{/lombok}}
 class ArchitectureTest {
+{{^lombok}}
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(ArchitectureTest.class.getName());
+{{/lombok}}
     private static JavaClasses allClasses;
     private static JavaClasses domainClasses;
     private static JavaClasses useCaseClasses;
