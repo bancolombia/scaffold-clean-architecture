@@ -1,0 +1,39 @@
+package {{package}}.adk.endpoint;
+
+import {{package}}.model.adk.AdkChatRequest;
+import {{package}}.model.adk.AdkChatResponse;
+import {{package}}.model.adk.gateways.AdkAgentGateway;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+@RestController
+@RequestMapping("/adk")
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class AdkChatEndpoint {
+
+    private final AdkAgentGateway agentGateway;
+
+{{^lombok}}
+    public AdkChatEndpoint(AdkAgentGateway agentGateway) {
+        this.agentGateway = agentGateway;
+    }
+{{/lombok}}
+
+    @PostMapping(value = "/chat", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<AdkChatResponse> chat(@RequestBody AdkChatRequest request) {
+        return agentGateway.chat(request.getUserId(), request.getMessage())
+                .map(response -> AdkChatResponse.builder()
+                        .agentResponse(response)
+                        .sessionId(request.getUserId())
+                        .build());
+    }
+}

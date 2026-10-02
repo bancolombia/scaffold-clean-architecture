@@ -1,0 +1,39 @@
+package {{package}}.adk.endpoint;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
+import {{package}}.model.adk.gateways.AdkAgentGateway;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.bean.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
+
+@WebFluxTest(AdkChatEndpoint.class)
+class AdkChatEndpointTest {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockBean
+    private AdkAgentGateway agentGateway;
+
+    @Test
+    void shouldReturnChatResponse() {
+        when(agentGateway.chat(anyString(), anyString()))
+                .thenReturn(Mono.just("Hello from ADK agent!"));
+
+        webTestClient.post()
+                .uri("/adk/chat")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue("{\"userId\":\"user-1\",\"message\":\"Hi\"}")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.agentResponse").isEqualTo("Hello from ADK agent!")
+                .jsonPath("$.sessionId").isEqualTo("user-1");
+    }
+}
