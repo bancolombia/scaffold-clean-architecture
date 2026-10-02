@@ -1,0 +1,51 @@
+package {{package}}.adk.config;
+
+import com.google.adk.agents.LlmAgent;
+import com.google.adk.runner.Runner;
+import com.google.adk.sessions.InMemorySessionService;
+import com.google.adk.sessions.SessionService;
+{{#adk-enable-multi-agent}}
+import com.google.adk.agents.SequentialAgent;
+{{/adk-enable-multi-agent}}
+import {{package}}.adk.tools.GreetingTool;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AdkAgentConfig {
+
+    @Value("${adk.agent.name:my-agent}")
+    private String agentName;
+
+    @Value("${adk.agent.model:gemini-2.0-flash}")
+    private String model;
+
+    @Value("${adk.agent.instruction:You are a helpful assistant.}")
+    private String instruction;
+
+    @Bean
+    public SessionService sessionService() {
+        return new InMemorySessionService();
+    }
+
+    @Bean
+    public GreetingTool greetingTool() {
+        return new GreetingTool();
+    }
+
+    @Bean
+    public LlmAgent llmAgent(GreetingTool greetingTool) {
+        return LlmAgent.builder()
+                .name(agentName)
+                .model(model)
+                .instruction(instruction)
+                .tools(greetingTool)
+                .build();
+    }
+
+    @Bean
+    public Runner runner(LlmAgent agent, SessionService sessionService) {
+        return new Runner(agent, sessionService);
+    }
+}

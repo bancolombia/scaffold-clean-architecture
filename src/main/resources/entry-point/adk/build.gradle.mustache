@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(':model')
+    implementation project(':usecase')
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Google ADK
+    implementation 'com.google.adk:google-adk:{{GOOGLE_ADK_VERSION}}'
+
+    {{#adk-enable-dev-ui}}
+    // ADK Dev UI (development only)
+    runtimeOnly 'com.google.adk:google-adk-dev:{{GOOGLE_ADK_VERSION}}'
+    {{/adk-enable-dev-ui}}
+}
