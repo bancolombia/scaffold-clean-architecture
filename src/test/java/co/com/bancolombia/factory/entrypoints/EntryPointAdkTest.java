@@ -26,8 +26,7 @@ class EntryPointAdkTest {
   @BeforeAll
   static void setup() throws IOException, CleanException {
     deleteStructure(Path.of(TEST_DIR));
-    Project project =
-        setupProject(EntryPointAdkTest.class, GenerateStructureTask.class);
+    Project project = setupProject(EntryPointAdkTest.class, GenerateStructureTask.class);
 
     GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
     taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);

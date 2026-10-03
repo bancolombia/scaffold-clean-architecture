@@ -44,8 +44,6 @@ public class EntryPointAdk implements ModuleFactory {
                 + agentName
                 + "'. Use available tools to help users.");
 
-    builder
-        .appendToProperties("adk.session")
-        .put("type", "${ADK_SESSION_TYPE:in-memory}");
+    builder.appendToProperties("adk.session").put("type", "${ADK_SESSION_TYPE:in-memory}");
   }
 }
