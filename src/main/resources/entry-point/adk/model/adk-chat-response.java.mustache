@@ -1,0 +1,66 @@
+package {{package}}.model.adk;
+
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
+{{/lombok}}
+public class AdkChatResponse {
+    private String agentResponse;
+    private String sessionId;
+{{^lombok}}
+
+    public AdkChatResponse() {
+    }
+
+    public AdkChatResponse(String agentResponse, String sessionId) {
+        this.agentResponse = agentResponse;
+        this.sessionId = sessionId;
+    }
+
+    public String getAgentResponse() {
+        return agentResponse;
+    }
+
+    public void setAgentResponse(String agentResponse) {
+        this.agentResponse = agentResponse;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public static AdkChatResponseBuilder builder() {
+        return new AdkChatResponseBuilder();
+    }
+
+    public static class AdkChatResponseBuilder {
+        private String agentResponse;
+        private String sessionId;
+
+        public AdkChatResponseBuilder agentResponse(String agentResponse) {
+            this.agentResponse = agentResponse;
+            return this;
+        }
+
+        public AdkChatResponseBuilder sessionId(String sessionId) {
+            this.sessionId = sessionId;
+            return this;
+        }
+
+        public AdkChatResponse build() {
+            return new AdkChatResponse(agentResponse, sessionId);
+        }
+    }
+{{/lombok}}
+}

@@ -1,0 +1,36 @@
+package {{package}}.usecase.adk;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import {{package}}.model.adk.gateways.AdkAgentGateway;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+class AdkChatUseCaseTest {
+
+    private AdkAgentGateway agentGateway;
+    private AdkChatUseCase useCase;
+
+    @BeforeEach
+    void setUp() {
+        agentGateway = mock(AdkAgentGateway.class);
+        useCase = new AdkChatUseCase(agentGateway);
+    }
+
+    @Test
+    void shouldDelegateChatToGateway() {
+        when(agentGateway.chat(anyString(), anyString()))
+                .thenReturn(Mono.just("Agent response"));
+
+        StepVerifier.create(useCase.chat("user-1", "Hello"))
+                .expectNext("Agent response")
+                .verifyComplete();
+
+        verify(agentGateway).chat("user-1", "Hello");
+    }
+}
