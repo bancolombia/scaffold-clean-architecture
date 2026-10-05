@@ -2,11 +2,31 @@
 
 ## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.1...HEAD)
+
+**Fixed bugs:**
+
+- Generated reactive project with --lombok=false does not compile \(sqs-sender, sqs-listener, ArchitectureTest\) [\#993](https://github.com/bancolombia/scaffold-clean-architecture/issues/993)
+
+## [v4.7.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.1) (2026-10-05)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.0...v4.7.1)
 
 **Implemented enhancements:**
 
 - \[BUG\] Broken Reactive Kafka Adapters in Spring Boot 4.x due to Library Discontinuation [\#855](https://github.com/bancolombia/scaffold-clean-architecture/issues/855)
+
+**Fixed bugs:**
+
+- fix: build reactive projects generated with --lombok=false [\#994](https://github.com/bancolombia/scaffold-clean-architecture/pull/994) ([0103juan](https://github.com/0103juan))
+
+**Closed issues:**
+
+- docs: add CONTRIBUTING.md to guide external contributors [\#999](https://github.com/bancolombia/scaffold-clean-architecture/issues/999)
+
+**Merged pull requests:**
+
+- build\(deps\): update dependencies [\#998](https://github.com/bancolombia/scaffold-clean-architecture/pull/998) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
 
 ## [v4.7.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.0) (2026-10-01)
 
