@@ -1,0 +1,35 @@
+package {{package}}.adk.tools;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+class GreetingToolTest {
+
+    private GreetingTool greetingTool;
+
+    @BeforeEach
+    void setUp() {
+        greetingTool = new GreetingTool();
+    }
+
+    @Test
+    void shouldGreetUserByName() {
+        String result = greetingTool.greet("Alice");
+        assertEquals("Hello, Alice! Welcome.", result);
+    }
+
+    @Test
+    void shouldHandleBlankName() {
+        String result = greetingTool.greet("");
+        assertTrue(result.contains("tell me your name"));
+    }
+
+    @Test
+    void shouldHandleNullName() {
+        String result = greetingTool.greet(null);
+        assertTrue(result.contains("tell me your name"));
+    }
+}

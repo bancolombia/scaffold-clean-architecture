@@ -1,0 +1,25 @@
+package {{package}}.usecase.adk;
+
+import {{package}}.model.adk.gateways.AdkAgentGateway;
+{{#lombok}}
+import lombok.RequiredArgsConstructor;
+{{/lombok}}
+import reactor.core.publisher.Mono;
+
+{{#lombok}}
+@RequiredArgsConstructor
+{{/lombok}}
+public class AdkChatUseCase {
+
+    private final AdkAgentGateway agentGateway;
+
+{{^lombok}}
+    public AdkChatUseCase(AdkAgentGateway agentGateway) {
+        this.agentGateway = agentGateway;
+    }
+{{/lombok}}
+
+    public Mono<String> chat(String userId, String message) {
+        return agentGateway.chat(userId, message);
+    }
+}
