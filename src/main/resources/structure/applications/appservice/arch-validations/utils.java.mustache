@@ -1,7 +1,9 @@
 package {{package}};
 
+{{#lombok}}
 import lombok.extern.java.Log;
 
+{{/lombok}}
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
@@ -28,8 +30,13 @@ import static {{package}}.Utils.Rule.Severity.MEDIUM;
 import static {{package}}.Utils.Rule.SoftwareQuality.MAINTAINABILITY;
 import static {{package}}.Utils.Rule.SoftwareQuality.RELIABILITY;
 
+{{#lombok}}
 @Log
+{{/lombok}}
 public class Utils {
+{{^lombok}}
+    private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(Utils.class.getName());
+{{/lombok}}
     private static final Map<String, Rule> RULES = new HashMap<>();
 
     static {
