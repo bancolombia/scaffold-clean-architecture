@@ -65,6 +65,10 @@
             "packageName": "org.springframework.ai:spring-ai-bom"
         },
         {
+            "name": "GOOGLE_ADK_VERSION",
+            "packageName": "com.google.adk:google-adk"
+        },
+        {
             "name": "SPRING_MCP_SECURITY_VERSION",
             "packageName": "org.springaicommunity:mcp-server-security"
         },

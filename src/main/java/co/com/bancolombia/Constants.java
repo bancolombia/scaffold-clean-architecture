@@ -28,6 +28,7 @@ public final class Constants {
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.1.1";
   public static final String CLOUD_EVENTS_VERSION = "5.0.0";
   public static final String SPRING_AI_VERSION = "2.0.1";
+  public static final String GOOGLE_ADK_VERSION = "1.0.0";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.3";
   public static final String PITEST_VERSION = "1.30.0";

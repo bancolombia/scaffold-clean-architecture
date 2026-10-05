@@ -32,6 +32,8 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private BooleanOption agentEnableKafka = BooleanOption.TRUE;
   private BooleanOption agentEnableMcpClient = BooleanOption.TRUE;
   private String agentRole = "collaborative";
+  private BooleanOption adkEnableMultiAgent = BooleanOption.FALSE;
+  private BooleanOption adkEnableDevUi = BooleanOption.FALSE;
 
   @Option(
       option = "server",
@@ -205,6 +207,31 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.agentRole = agentRole;
   }
 
+  // ADK Options
+  @Option(
+      option = "adk-enable-multi-agent",
+      description = "Enable ADK multi-agent orchestration (Sequential, Parallel, Loop agents)")
+  public void setAdkEnableMultiAgent(BooleanOption adkEnableMultiAgent) {
+    this.adkEnableMultiAgent = adkEnableMultiAgent;
+  }
+
+  @OptionValues("adk-enable-multi-agent")
+  public List<BooleanOption> getAdkEnableMultiAgentOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
+  @Option(
+      option = "adk-enable-dev-ui",
+      description = "Enable ADK Dev UI for agent debugging and testing")
+  public void setAdkEnableDevUi(BooleanOption adkEnableDevUi) {
+    this.adkEnableDevUi = adkEnableDevUi;
+  }
+
+  @OptionValues("adk-enable-dev-ui")
+  public List<BooleanOption> getAdkEnableDevUiOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @Override
   protected void prepareParams() {
     builder.addParam("task-param-server", server);
@@ -217,6 +244,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     appendRCommonsParams();
     appendMcpParams();
     appendAgentParams();
+    appendAdkParams();
   }
 
   private void appendMcpParams() {
@@ -231,6 +259,11 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     builder.addParam("agent-role", agentRole);
     builder.addParam("agent-enable-kafka", agentEnableKafka == BooleanOption.TRUE);
     builder.addParam("agent-enable-mcp-client", agentEnableMcpClient == BooleanOption.TRUE);
+  }
+
+  private void appendAdkParams() {
+    builder.addParam("adk-enable-multi-agent", adkEnableMultiAgent == BooleanOption.TRUE);
+    builder.addParam("adk-enable-dev-ui", adkEnableDevUi == BooleanOption.TRUE);
   }
 
   private void appendRCommonsParams() {

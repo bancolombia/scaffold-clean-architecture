@@ -1,0 +1,14 @@
+package {{package}}.adk.tools;
+
+import com.google.adk.tools.Annotations.Schema;
+
+public class GreetingTool {
+
+    @Schema(description = "Greets a user by name")
+    public String greet(@Schema(description = "The name of the user to greet") String name) {
+        if (name == null || name.isBlank()) {
+            return "Hello! Please tell me your name.";
+        }
+        return "Hello, " + name + "! Welcome.";
+    }
+}
