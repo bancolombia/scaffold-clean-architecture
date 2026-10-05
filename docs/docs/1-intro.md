@@ -94,6 +94,15 @@ end-to-end reactive system.
 When we talk about asynchronous message driven communication, we can use several semantic ways to use the term "
 message". So, we can talk about Events, Commands and Queries.
 
+## Supported Languages
+
+| Language | Status | Notes |
+|----------|--------|-------|
+| **Java** | **Supported** (primary) | All templates, entry points, and driven adapters are generated in Java |
+| **Kotlin** | **Deprecated** | Existing support is being phased out (see [#1006](https://github.com/bancolombia/scaffold-clean-architecture/issues/1006)) |
+
+This scaffold is a **Gradle plugin targeting the JVM**. Only JVM languages that integrate with Spring Boot and Gradle are candidates for future support. Non-JVM languages (e.g., Elixir, Go, Rust) are out of scope and would require separate scaffold projects.
+
 ## Secrets Manager
 
 Our adapters can be configured to use the Secrets Manager to retrieve the secrets needed to connect to the external
