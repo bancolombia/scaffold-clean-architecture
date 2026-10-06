@@ -1,12 +1,17 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v4.7.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.2) (2026-10-06)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.1...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.1...v4.7.2)
 
 **Fixed bugs:**
 
 - Generated reactive project with --lombok=false does not compile \(sqs-sender, sqs-listener, ArchitectureTest\) [\#993](https://github.com/bancolombia/scaffold-clean-architecture/issues/993)
+
+**Merged pull requests:**
+
+- fix\(template\): update Jackson dependency versions to fix vulnerabilities [\#1011](https://github.com/bancolombia/scaffold-clean-architecture/pull/1011) ([luisgomez29](https://github.com/luisgomez29))
+- build: disable Gradle configuration cache [\#1010](https://github.com/bancolombia/scaffold-clean-architecture/pull/1010) ([luisgomez29](https://github.com/luisgomez29))
 
 ## [v4.7.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.1) (2026-10-05)
 
