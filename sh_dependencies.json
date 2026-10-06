@@ -73,6 +73,10 @@
             "packageName": "tools.jackson.core:jackson-core"
         },
         {
+            "name": "JACKSON_2_VERSION",
+            "packageName": "com.fasterxml.jackson.core:jackson-core"
+        },
+        {
             "name": "PITEST_VERSION",
             "packageName": "org.pitest:pitest"
         },

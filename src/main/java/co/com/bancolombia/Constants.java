@@ -30,6 +30,7 @@ public final class Constants {
   public static final String SPRING_AI_VERSION = "2.0.1";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.3";
+  public static final String JACKSON_2_VERSION = "2.22.3";
   public static final String PITEST_VERSION = "1.30.0";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
