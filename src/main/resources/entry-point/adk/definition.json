@@ -1,0 +1,28 @@
+{
+  "folders": [
+    "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/config",
+    "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/tools",
+    "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/endpoint",
+    "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/adapter",
+    "infrastructure/entry-points/adk-agent/src/test/java/{{packagePath}}/adk/tools",
+    "infrastructure/entry-points/adk-agent/src/test/java/{{packagePath}}/adk/endpoint",
+    "domain/model/src/main/java/{{packagePath}}/model/adk",
+    "domain/model/src/main/java/{{packagePath}}/model/adk/gateways",
+    "domain/usecase/src/main/java/{{packagePath}}/usecase/adk",
+    "domain/usecase/src/test/java/{{packagePath}}/usecase/adk"
+  ],
+  "files": {
+    "entry-point/adk/build.gradle.mustache": "infrastructure/entry-points/adk-agent/build.gradle",
+    "entry-point/adk/config/adk-agent-config.java.mustache": "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/config/AdkAgentConfig.java",
+    "entry-point/adk/tools/greeting-tool.java.mustache": "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/tools/GreetingTool.java",
+    "entry-point/adk/tools/greeting-tool.test.java.mustache": "infrastructure/entry-points/adk-agent/src/test/java/{{packagePath}}/adk/tools/GreetingToolTest.java",
+    "entry-point/adk/endpoint/adk-chat-endpoint.java.mustache": "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/endpoint/AdkChatEndpoint.java",
+    "entry-point/adk/endpoint/adk-chat-endpoint.test.java.mustache": "infrastructure/entry-points/adk-agent/src/test/java/{{packagePath}}/adk/endpoint/AdkChatEndpointTest.java",
+    "entry-point/adk/adapter/adk-agent-adapter.java.mustache": "infrastructure/entry-points/adk-agent/src/main/java/{{packagePath}}/adk/adapter/AdkAgentAdapter.java",
+    "entry-point/adk/model/adk-chat-request.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/adk/AdkChatRequest.java",
+    "entry-point/adk/model/adk-chat-response.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/adk/AdkChatResponse.java",
+    "entry-point/adk/gateways/adk-agent-gateway.java.mustache": "domain/model/src/main/java/{{packagePath}}/model/adk/gateways/AdkAgentGateway.java",
+    "entry-point/adk/usecase/adk-chat-use-case.java.mustache": "domain/usecase/src/main/java/{{packagePath}}/usecase/adk/AdkChatUseCase.java",
+    "entry-point/adk/usecase/adk-chat-use-case.test.java.mustache": "domain/usecase/src/test/java/{{packagePath}}/usecase/adk/AdkChatUseCaseTest.java"
+  }
+}

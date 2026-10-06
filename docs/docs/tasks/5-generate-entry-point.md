@@ -42,6 +42,8 @@ gradle gep --type [entryPointType]
 |                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
 | **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
 |                       |                                        | `--topic-consumer`  | String (topic name)                   | `test-with-registries` |
+| **adk**               | Google ADK Agent                       | `--adk-enable-multi-agent` | `true`, `false`                 | `false`                |
+|                       |                                        | `--adk-enable-dev-ui`      | `true`, `false`                 | `false`                |
 | **agent**             | Spring AI A2A Reactive Agent           | `--name`             | String                                | project name           |
 |                       |                                        | `--agent-enable-kafka` | `true`, `false`                     | `true`                 |
 |                       |                                        | `--agent-enable-mcp-client` | `true`, `false`                | `true`                 |
@@ -442,6 +444,128 @@ cors:
   allowed-origins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200}"
 ```
 
+
+---
+
+## Usage Example for ADK (Google Agent Development Kit)
+
+The **`adk`** entry point type generates a reactive agent skeleton based on [Google ADK for Java](https://google.github.io/adk-docs/get-started/java/). It creates a complete Clean Architecture structure with an `InMemoryRunner`, a sample tool, a REST endpoint, and the gateway adapter.
+
+### Basic Command
+
+```shell
+gradle generateEntryPoint --type=adk
+gradle gep --type=adk
+```
+
+### Available Parameters
+
+| Parameter                  | Values         | Default | Description                                      |
+|----------------------------|----------------|---------|--------------------------------------------------|
+| `--adk-enable-multi-agent` | `true`/`false` | `false` | Import `SequentialAgent` for multi-agent workflows |
+| `--adk-enable-dev-ui`      | `true`/`false` | `false` | Add `google-adk-dev` runtime for the ADK Dev UI  |
+
+### Usage Examples
+
+```shell
+# Basic ADK agent
+gradle generateEntryPoint --type=adk
+
+# With Dev UI for local debugging
+gradle generateEntryPoint --type=adk --adk-enable-dev-ui=true
+
+# With multi-agent orchestration support
+gradle generateEntryPoint --type=adk --adk-enable-multi-agent=true
+```
+
+### Generated Structure
+
+```bash
+infrastructure/
+└── entry-points/
+    └── adk-agent/
+        ├── build.gradle
+        └── src/
+            ├── main/java/[package]/adk/
+            │   ├── config/
+            │   │   └── AdkAgentConfig.java        # InMemoryRunner + LlmAgent + FunctionTool beans
+            │   ├── tools/
+            │   │   └── GreetingTool.java           # Example tool with @Schema annotations
+            │   ├── endpoint/
+            │   │   └── AdkChatEndpoint.java        # POST /adk/chat
+            │   └── adapter/
+            │       └── AdkAgentAdapter.java        # AdkAgentGateway impl using InMemoryRunner
+            └── test/java/[package]/adk/
+                ├── tools/
+                │   └── GreetingToolTest.java
+                └── endpoint/
+                    └── AdkChatEndpointTest.java
+
+domain/
+├── model/src/main/java/[package]/model/adk/
+│   ├── AdkChatRequest.java
+│   ├── AdkChatResponse.java
+│   └── gateways/
+│       └── AdkAgentGateway.java                   # Port interface
+└── usecase/src/main/java/[package]/usecase/adk/
+    └── AdkChatUseCase.java                        # + test
+```
+
+### Automatic Configuration
+
+The command automatically updates `application.yaml`:
+
+```yaml
+adk:
+  agent:
+    name: "myProject"
+    model: "${ADK_MODEL:gemini-2.0-flash}"
+    instruction: "You are a helpful assistant called 'myProject'. Use available tools to help users."
+  session:
+    type: "${ADK_SESSION_TYPE:in-memory}"
+```
+
+### Creating Custom Tools
+
+ADK tools are plain Java methods annotated with `@Schema`:
+
+```java
+import com.google.adk.tools.Annotations.Schema;
+
+public class WeatherTool {
+
+    @Schema(description = "Gets the current weather for a city")
+    public String getWeather(@Schema(description = "City name, e.g. Medellín") String city) {
+        // Call your use case or external API
+        return "Sunny, 24°C in " + city;
+    }
+}
+```
+
+Register the tool in `AdkAgentConfig`:
+
+```java
+@Bean
+public LlmAgent llmAgent() throws NoSuchMethodException {
+    return LlmAgent.builder()
+            .name(agentName)
+            .model(model)
+            .instruction(instruction)
+            .tools(
+                FunctionTool.create(GreetingTool.class, "greet"),
+                FunctionTool.create(WeatherTool.class, "getWeather")
+            )
+            .build();
+}
+```
+
+### Environment Variables
+
+| Variable           | Description                          | Default            |
+|--------------------|--------------------------------------|--------------------|
+| `ADK_MODEL`        | LLM model to use                     | `gemini-2.0-flash` |
+| `ADK_SESSION_TYPE`  | Session storage type                | `in-memory`        |
+| `GOOGLE_API_KEY`   | API key for Gemini (required at runtime) | -              |
 
 ---
 
