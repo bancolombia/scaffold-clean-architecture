@@ -7,6 +7,18 @@ allprojects {
         {{^example}}//{{/example}}mavenLocal()
         mavenCentral()
     }
+
+    // Force dependency versions to address reported vulnerabilities.
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'com.fasterxml.jackson.core' && details.requested.name == 'jackson-core') {
+                details.useVersion("{{JACKSON_2_VERSION}}")
+            }
+            if (details.requested.group == 'tools.jackson.core' && details.requested.name == 'jackson-core') {
+                details.useVersion("{{JACKSON_VERSION}}")
+            }
+        }
+    }
 }
 
 subprojects {
@@ -55,6 +67,10 @@ subprojects {
         pitest "org.pitest:pitest-history-plugin:${pitestHistoryVersion}"
         {{/mutation}}
     }
+
+    // Remove once it has been updated in Spring Boot
+    ext['jackson-2-bom.version'] = "{{JACKSON_2_VERSION}}"
+    ext['jackson-bom.version'] = "{{JACKSON_VERSION}}"
 
     {{#reactive}}
     tasks.withType(Test).configureEach {
