@@ -63,24 +63,28 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         String baseModelPackage = getBaseModelPackage();
 
         Map<String, String> openapiClassToDomainClass = new HashMap<>();
-        Map<String, String> classToPackage = new HashMap<>();
+        Map<String, String> schemaKeyToPackage = new HashMap<>();
+        Map<String, String> openapiClassToPackage = new HashMap<>();
 
         for (String schemaKey : result.keySet()) {
             String openapiClassName = super.toModelName(schemaKey);
             String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
+            String modelPackage =
+                    OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName);
+
             openapiClassToDomainClass.put(openapiClassName, domainClassName);
-            classToPackage.put(
-                    domainClassName,
-                    OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName));
+            schemaKeyToPackage.put(schemaKey, modelPackage);
+            openapiClassToPackage.put(openapiClassName, modelPackage);
         }
 
         for (Map.Entry<String, Object> entry : result.entrySet()) {
             String schemaKey = entry.getKey();
             String openapiClassName = super.toModelName(schemaKey);
             String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
+            String modelPackage = schemaKeyToPackage.get(schemaKey);
 
             Map<String, Object> models = (Map<String, Object>) entry.getValue();
-            models.put("package", classToPackage.get(domainClassName));
+            models.put("package", modelPackage);
             models.put("classname", domainClassName);
 
             List<Map<String, Object>> modelList = (List<Map<String, Object>>) models.get("models");
@@ -93,24 +97,38 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
                     continue;
                 }
                 codegenModel.classname = domainClassName;
-                remapPropertyTypes(codegenModel, openapiClassToDomainClass);
                 models.put(
                         "imports",
-                        buildImports(codegenModel, classToPackage.get(domainClassName), classToPackage, openapiClassToDomainClass));
+                        buildImports(codegenModel, modelPackage, openapiClassToPackage, openapiClassToDomainClass));
+                remapPropertyTypes(codegenModel, openapiClassToDomainClass);
             }
         }
         return result;
     }
 
+    // Es necesario remappear para que las propiedades de las clases correspondan a los nombres de las clases a las que
+    // hacen referencia
     private void remapPropertyTypes(CodegenModel model, Map<String, String> openapiClassToDomainClass) {
         for (CodegenProperty property : model.allVars) {
-            property.datatype = remapType(property.datatype, openapiClassToDomainClass);
-            property.baseType = remapType(property.baseType, openapiClassToDomainClass);
-            property.complexType = remapType(property.complexType, openapiClassToDomainClass);
-            if (property.items != null) {
-                property.items.datatype = remapType(property.items.datatype, openapiClassToDomainClass);
-                property.items.baseType = remapType(property.items.baseType, openapiClassToDomainClass);
+            remapOneProperty(property, openapiClassToDomainClass);
+        }
+        if (model.vars != null) {
+            for (CodegenProperty property : model.vars) {
+                remapOneProperty(property, openapiClassToDomainClass);
             }
+        }
+    }
+
+    // Es necesario remappear para que las clases correspondan a sus nombres
+    private void remapOneProperty(CodegenProperty property, Map<String, String> map) {
+        property.datatype = remapType(property.datatype, map);
+        property.baseType = remapType(property.baseType, map);
+        property.complexType = remapType(property.complexType, map);
+        property.datatypeWithEnum = remapType(property.datatypeWithEnum, map);
+        if (property.items != null) {
+            property.items.datatype = remapType(property.items.datatype, map);
+            property.items.baseType = remapType(property.items.baseType, map);
+            property.items.datatypeWithEnum = remapType(property.items.datatypeWithEnum, map);
         }
     }
 
@@ -136,49 +154,49 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         return modelPackage();
     }
 
+    /** Package per schema is set in {@link #postProcessAllModels} via {@code models.put("package", ...)}. */
     private List<Map<String, String>> buildImports(
             CodegenModel model,
             String modelPackage,
-            Map<String, String> classToPackage,
+            Map<String, String> openapiClassToPackage,
             Map<String, String> openapiClassToDomainClass) {
-        Set<String> importTypes = new LinkedHashSet<>();
+        Set<String> importOpenapiTypes = new LinkedHashSet<>();
         for (CodegenProperty property : model.allVars) {
-            collectReferencedTypes(property.datatype, importTypes, openapiClassToDomainClass);
-            collectReferencedTypes(property.baseType, importTypes, openapiClassToDomainClass);
-            collectReferencedTypes(property.complexType, importTypes, openapiClassToDomainClass);
+            collectReferencedOpenapiTypes(property.datatype, importOpenapiTypes);
+            collectReferencedOpenapiTypes(property.baseType, importOpenapiTypes);
+            collectReferencedOpenapiTypes(property.complexType, importOpenapiTypes);
             if (property.items != null) {
-                collectReferencedTypes(property.items.datatype, importTypes, openapiClassToDomainClass);
-                collectReferencedTypes(property.items.baseType, importTypes, openapiClassToDomainClass);
+                collectReferencedOpenapiTypes(property.items.datatype, importOpenapiTypes);
+                collectReferencedOpenapiTypes(property.items.baseType, importOpenapiTypes);
             }
         }
 
         List<Map<String, String>> imports = new ArrayList<>();
-        for (String type : importTypes) {
-            String refPackage = classToPackage.get(type);
+        for (String openapiType : importOpenapiTypes) {
+            String refPackage = openapiClassToPackage.get(openapiType);
             if (refPackage == null || refPackage.equals(modelPackage)) {
                 continue;
             }
+            String domainType = openapiClassToDomainClass.getOrDefault(openapiType, openapiType);
             Map<String, String> entry = new HashMap<>();
-            entry.put("import", refPackage + "." + type);
+            entry.put("import", refPackage + "." + domainType);
             imports.add(entry);
         }
         return imports;
     }
 
-    private void collectReferencedTypes(
-            String datatype, Set<String> importTypes, Map<String, String> openapiClassToDomainClass) {
+    private void collectReferencedOpenapiTypes(String datatype, Set<String> importOpenapiTypes) {
         if (datatype == null || datatype.isBlank()) {
             return;
         }
         Matcher generic = GENERIC_TYPE.matcher(datatype);
         if (generic.matches()) {
-            collectReferencedTypes(generic.group(1), importTypes, openapiClassToDomainClass);
-            collectReferencedTypes(generic.group(2), importTypes, openapiClassToDomainClass);
+            collectReferencedOpenapiTypes(generic.group(1), importOpenapiTypes);
+            collectReferencedOpenapiTypes(generic.group(2), importOpenapiTypes);
             return;
         }
-        String domainType = openapiClassToDomainClass.getOrDefault(datatype, datatype);
-        if (Character.isUpperCase(domainType.charAt(0))) {
-            importTypes.add(domainType);
+        if (Character.isUpperCase(datatype.charAt(0))) {
+            importOpenapiTypes.add(datatype);
         }
     }
 }
