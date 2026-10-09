@@ -51,6 +51,7 @@ else
   do
     ./gradlew gep --type $entry
   done
+  ./gradlew gh --name custom
 fi
 
 branch="${GITHUB_REF##*/}"

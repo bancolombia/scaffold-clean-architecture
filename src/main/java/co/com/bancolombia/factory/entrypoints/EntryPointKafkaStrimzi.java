@@ -1,9 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
-import static co.com.bancolombia.utils.Utils.buildImplementation;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -40,10 +37,6 @@ public class EntryPointKafkaStrimzi implements ModuleFactory {
     builder.addParam("topicConsumer", topicConsumer);
 
     builder.setupFromTemplate("entry-point/kafka-strimzi-consumer");
-    builder.appendToSettings(MODULE, "infrastructure/entry-points");
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":" + MODULE));
-    builder.appendDependencyToModule(
-        APP_SERVICE, buildImplementation(ASYNC_KAFKA_APICURIO_STARTER));
 
     builder
         .appendToProperties(KAFKA_DOMAIN_PROPERTIES + ".connection-properties.security")

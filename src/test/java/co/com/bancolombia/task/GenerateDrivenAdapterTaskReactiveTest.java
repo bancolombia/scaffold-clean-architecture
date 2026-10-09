@@ -9,13 +9,16 @@ import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
 import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -222,6 +225,15 @@ class GenerateDrivenAdapterTaskReactiveTest {
         "src/main/java/co/com/bancolombia/s3/operations/S3Operations.java",
         "src/main/java/co/com/bancolombia/s3/config/S3Config.java",
         "src/main/java/co/com/bancolombia/s3/config/model/S3ConnectionProperties.java");
+
+    String bomDependency =
+        "implementation platform('software.amazon.awssdk:bom:" + Constants.AWS_BOM_VERSION + "')";
+    assertFileContains(TEST_DIR + "/build.gradle", bomDependency);
+
+    task.setType("KMS");
+    task.execute();
+    String rootBuild = Files.readString(Path.of(TEST_DIR, "build.gradle"));
+    assertTrue(rootBuild.indexOf(bomDependency) == rootBuild.lastIndexOf(bomDependency));
   }
 
   @Test

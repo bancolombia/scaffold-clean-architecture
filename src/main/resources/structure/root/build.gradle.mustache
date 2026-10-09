@@ -1,60 +1,50 @@
-buildscript {
-	ext {
-		cleanArchitectureVersion = '{{PLUGIN_VERSION}}'
-		springBootVersion = '{{SPRING_BOOT_VERSION}}'
-		sonarVersion = '{{SONAR_VERSION}}'
-		jacocoVersion = '{{JACOCO_VERSION}}'
-		{{#reactive}}
-		blockHoundVersion = '{{BLOCK_HOUND_VERSION}}'
-        {{/reactive}}
-		{{#mutation}}
-		pitestVersion = '{{GRADLE_PITEST_VERSION}}'
-		pitestHistoryVersion = '{{PITEST_HISTORY_VERSION}}'
-		{{/mutation}}
-		{{#lombok}}
-        lombokVersion = '{{LOMBOK_VERSION}}'
-        {{/lombok}}
-	}
-}
-
 plugins {
-	id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+	id 'co.com.bancolombia.cleanArchitecture'
     {{#example}}
     id "org.owasp.dependencycheck" version "{{DEPENDENCY_CHECK_VERSION}}" apply false
     {{/example}}
-	id 'org.springframework.boot' version "${springBootVersion}" apply false
-	{{#mutation}}
-	id 'info.solidsoft.pitest' version "${pitestVersion}" apply false
-	{{/mutation}}
-	id 'org.sonarqube' version "${sonarVersion}"
-	id 'jacoco'
+	id 'org.springframework.boot' apply false
+    id 'org.sonarqube'
+    {{#mutation}}
+    id 'info.solidsoft.pitest'
+    {{/mutation}}
 }
 
-sonar {
-    def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
-    properties {
+allprojects {
+    repositories {
         {{#example}}
-        property "sonar.organization", "grupo-bancolombia"
-        {{#reactive}}
-        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated"
-        {{/reactive}}
-        {{^reactive}}
-        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated-i"
-        {{/reactive}}
-        property "sonar.host.url", "https://sonarcloud.io/"
+        mavenLocal()
         {{/example}}
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.modules", "${modules.join(',')}"
-        property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
-        property "sonar.exclusions", "**/MainApplication.java,**/**.bin,**/deployment/**"
-        property "sonar.tests", "src/test"
-        property "sonar.java.binaries", "**/build/classes/java/main"
-        property "sonar.junit.reportsPath", "**/build/test-results/test"
-        property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacocoMergedReport/jacocoMergedReport.xml"
-        property "sonar.pitest.reportPaths", "build/reports/pitest/mutations.xml"
-        property "sonar.externalIssuesReportPaths", "build/issues.json"
+        mavenCentral()
+    }
+    dependencies {
+    }
+    // Force dependency versions to address reported vulnerabilities.
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'com.fasterxml.jackson.core' && details.requested.name == 'jackson-core') {
+                details.useVersion("{{JACKSON_2_VERSION}}")
+            }
+            if (details.requested.group == 'tools.jackson.core' && details.requested.name == 'jackson-core') {
+                details.useVersion("{{JACKSON_VERSION}}")
+            }
+        }
     }
 }
 
-apply from: './main.gradle'
+subprojects {
+    // Remove once it has been updated in Spring Boot
+    ext['jackson-2-bom.version'] = "{{JACKSON_2_VERSION}}"
+    ext['jackson-bom.version'] = "{{JACKSON_VERSION}}"
+}
+
+{{#example}}
+
+sonar {
+    properties {
+        property "sonar.organization", "grupo-bancolombia"
+        property "sonar.projectKey", "bancolombia_scaffold-clean-architecture-generated{{^reactive}}-i{{/reactive}}"
+        property "sonar.host.url", "https://sonarcloud.io/"
+    }
+}
+{{/example}}

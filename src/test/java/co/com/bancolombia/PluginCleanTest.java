@@ -8,19 +8,30 @@ import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.GenerateStructureTask;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.artifacts.ExternalModuleDependency;
+import org.gradle.api.artifacts.ProjectDependency;
+import org.gradle.api.attributes.Category;
+import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.springframework.boot.gradle.tasks.bundling.BootJar;
 
 /** A simple unit test for the 'co.com.bancolombia.greeting' plugin. */
 class PluginCleanTest {
@@ -50,6 +61,7 @@ class PluginCleanTest {
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
     // Act
+    assertNotNull(project.getExtensions().findByName("dependenciesOverride"));
     Task task = project.getTasks().findByName("cleanArchitecture");
     Task task2 = project.getTasks().findByName("generateModel");
     Task task3 = project.getTasks().findByName("generateUseCase");
@@ -108,5 +120,237 @@ class PluginCleanTest {
 
     Plugin<?> applied = project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
     assertNotNull(applied);
+  }
+
+  @Test
+  void shouldRegisterPitestAggregationWhenPitestPluginIsDeclared() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    Project child = ProjectBuilder.builder().withName("app-service").withParent(project).build();
+    child.getPluginManager().apply("java");
+    child.getPluginManager().apply("info.solidsoft.pitest");
+
+    // Act
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+
+    // Assert
+    assertNotNull(project.getTasks().findByName("jacocoMergedReport"));
+    assertNotNull(project.getTasks().findByName("pitestReportAggregate"));
+  }
+
+  @Test
+  void shouldNotRegisterPitestAggregationWhenPluginIsNotDeclared() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+
+    // Act
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+
+    // Assert
+    assertNotNull(project.getTasks().findByName("jacocoMergedReport"));
+    assertNull(project.getTasks().findByName("pitestReportAggregate"));
+  }
+
+  @Test
+  void shouldApplyDefaultModuleDependenciesFromRootPlugin(@TempDir Path tempDir)
+      throws IOException {
+    // Arrange
+    Project root =
+        ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("demo").build();
+    root.getExtensions().getExtraProperties().set("reactive", false);
+    root.getExtensions().getExtraProperties().set("lombok", false);
+    root.getExtensions().getExtraProperties().set("mutation", false);
+    root.getExtensions().getExtraProperties().set("javaVersion", 21);
+
+    Project model = createSubproject(root, tempDir, "model", "domain/model");
+    Project usecase = createSubproject(root, tempDir, "usecase", "domain/usecase");
+    Project appService = createSubproject(root, tempDir, "app-service", "applications/app-service");
+    Project entryPoint =
+        createSubproject(root, tempDir, "api-rest", "infrastructure/entry-points/api-rest");
+    Project drivenAdapter =
+        createSubproject(
+            root, tempDir, "rest-consumer", "infrastructure/driven-adapters/rest-consumer");
+    Project helper = createSubproject(root, tempDir, "logger", "infrastructure/helpers/logger");
+    appService.getPlugins().apply("java");
+    appService.getDependencies().add("testImplementation", "com.tngtech.archunit:archunit:9.8.7");
+    entryPoint.getPlugins().apply("java");
+    entryPoint
+        .getDependencies()
+        .add(
+            "implementation",
+            entryPoint.getDependencies().platform("com.example:example-bom:7.8.9"));
+    entryPoint.getDependencies().add("implementation", "com.example:entry-sdk");
+
+    // Act
+    root.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    ((ProjectInternal) entryPoint).evaluate();
+    ((ProjectInternal) appService).evaluate();
+
+    // Assert
+    assertHasProjectDependency(appService, ":model");
+    assertHasProjectDependency(appService, ":usecase");
+    assertHasProjectDependency(appService, ":api-rest");
+    assertHasProjectDependency(appService, ":rest-consumer");
+    assertHasProjectDependency(usecase, ":model");
+    assertHasProjectDependency(entryPoint, ":model");
+    assertHasProjectDependency(entryPoint, ":usecase");
+    assertHasProjectDependency(drivenAdapter, ":model");
+    assertHasProjectDependency(helper, ":model");
+    assertHasExternalDependency(
+        entryPoint, "implementation", "org.springframework", "spring-context", null);
+    assertHasExternalDependency(
+        drivenAdapter, "implementation", "org.springframework", "spring-context", null);
+    assertHasExternalDependency(
+        helper, "implementation", "org.springframework", "spring-context", null);
+    assertHasExternalDependency(appService, "com.example", "example-bom", "7.8.9", true);
+    assertHasExternalDependency(appService, "com.example", "entry-sdk", null, false);
+    assertHasExternalDependency(
+        appService, "implementation", "org.springframework.boot", "spring-boot-starter", null);
+    assertHasExternalDependency(
+        appService, "runtimeOnly", "org.springframework.boot", "spring-boot-devtools", null);
+    assertHasExternalDependency(
+        appService, "testImplementation", "tools.jackson.core", "jackson-databind", null);
+    assertEquals(
+        1,
+        countExternalDependencies(
+            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertHasExternalDependency(
+        appService, "testImplementation", "com.tngtech.archunit", "archunit", "9.8.7");
+    assertTrue(appService.getPlugins().hasPlugin("org.springframework.boot"));
+    assertNotNull(appService.getTasks().findByName("explodedJar"));
+    assertFalse(appService.getTasks().named("jar", Jar.class).get().getEnabled());
+    assertEquals(
+        "demo.jar",
+        appService.getTasks().named("bootJar", BootJar.class).get().getArchiveFileName().get());
+    assertTrue(
+        model.getConfigurations().getByName("implementation").getDependencies().stream()
+            .noneMatch(ProjectDependency.class::isInstance));
+  }
+
+  @Test
+  void shouldExcludeModuleFromAppServiceDependenciesWhenConfigured(@TempDir Path tempDir)
+      throws IOException {
+    // Arrange
+    Project root =
+        ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("demo").build();
+    root.getExtensions().getExtraProperties().set("reactive", false);
+    root.getExtensions().getExtraProperties().set("lombok", false);
+    root.getExtensions().getExtraProperties().set("mutation", false);
+    root.getExtensions().getExtraProperties().set("javaVersion", 21);
+    root.getExtensions().getExtraProperties().set("excludeModuleFromApp", "rest-consumer");
+
+    createSubproject(root, tempDir, "model", "domain/model");
+    createSubproject(root, tempDir, "usecase", "domain/usecase");
+    Project appService = createSubproject(root, tempDir, "app-service", "applications/app-service");
+    Project entryPoint =
+        createSubproject(root, tempDir, "api-rest", "infrastructure/entry-points/api-rest");
+    Project drivenAdapter =
+        createSubproject(
+            root, tempDir, "rest-consumer", "infrastructure/driven-adapters/rest-consumer");
+    drivenAdapter.getPlugins().apply("java");
+    drivenAdapter.getDependencies().add("implementation", "com.example:adapter-sdk:1.2.3");
+
+    // Act
+    root.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    ((ProjectInternal) appService).evaluate();
+
+    // Assert
+    assertHasProjectDependency(appService, ":model");
+    assertHasProjectDependency(appService, ":api-rest");
+    assertFalse(
+        appService.getConfigurations().getByName("implementation").getDependencies().stream()
+            .filter(ProjectDependency.class::isInstance)
+            .map(ProjectDependency.class::cast)
+            .anyMatch(dependency -> dependency.getPath().equals(":rest-consumer")));
+    assertFalse(hasExternalDependency(appService, "com.example", "adapter-sdk", "1.2.3", false));
+    // module stays part of the build, just not wired into app-service
+    assertHasProjectDependency(entryPoint, ":model");
+  }
+
+  @Test
+  void shouldAddArchUnitWithPluginVersionWhenDeveloperHasNotDeclaredIt(@TempDir Path tempDir)
+      throws IOException {
+    Project root =
+        ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("demo").build();
+    Project appService = createSubproject(root, tempDir, "app-service", "applications/app-service");
+
+    root.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    ((ProjectInternal) appService).evaluate();
+
+    assertHasExternalDependency(
+        appService,
+        "testImplementation",
+        "com.tngtech.archunit",
+        "archunit",
+        Constants.ARCH_UNIT_VERSION);
+    assertEquals(
+        1,
+        countExternalDependencies(
+            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+  }
+
+  private Project createSubproject(Project root, Path rootDir, String name, String relativePath)
+      throws IOException {
+    Path projectDir = rootDir.resolve(relativePath);
+    Files.createDirectories(projectDir);
+    return ProjectBuilder.builder()
+        .withName(name)
+        .withProjectDir(projectDir.toFile())
+        .withParent(root)
+        .build();
+  }
+
+  private void assertHasProjectDependency(Project project, String dependencyPath) {
+    assertTrue(
+        project.getConfigurations().getByName("implementation").getDependencies().stream()
+            .filter(ProjectDependency.class::isInstance)
+            .map(ProjectDependency.class::cast)
+            .anyMatch(dependency -> dependency.getPath().equals(dependencyPath)));
+  }
+
+  private void assertHasExternalDependency(
+      Project project, String group, String name, String version, boolean platform) {
+    assertTrue(hasExternalDependency(project, group, name, version, platform));
+  }
+
+  private void assertHasExternalDependency(
+      Project project, String configuration, String group, String name, String version) {
+    assertTrue(
+        project.getConfigurations().getByName(configuration).getDependencies().stream()
+            .filter(ExternalModuleDependency.class::isInstance)
+            .map(ExternalModuleDependency.class::cast)
+            .anyMatch(
+                dependency ->
+                    group.equals(dependency.getGroup())
+                        && name.equals(dependency.getName())
+                        && java.util.Objects.equals(version, dependency.getVersion())));
+  }
+
+  private boolean hasExternalDependency(
+      Project project, String group, String name, String version, boolean platform) {
+    return project.getConfigurations().getByName("implementation").getDependencies().stream()
+        .filter(ExternalModuleDependency.class::isInstance)
+        .map(ExternalModuleDependency.class::cast)
+        .anyMatch(
+            dependency ->
+                group.equals(dependency.getGroup())
+                    && name.equals(dependency.getName())
+                    && java.util.Objects.equals(version, dependency.getVersion())
+                    && isPlatformDependency(dependency) == platform);
+  }
+
+  private boolean isPlatformDependency(ExternalModuleDependency dependency) {
+    Category category = dependency.getAttributes().getAttribute(Category.CATEGORY_ATTRIBUTE);
+    return category != null && Category.REGULAR_PLATFORM.equals(category.getName());
+  }
+
+  private long countExternalDependencies(
+      Project project, String configuration, String group, String name) {
+    return project.getConfigurations().getByName(configuration).getDependencies().stream()
+        .filter(ExternalModuleDependency.class::isInstance)
+        .map(ExternalModuleDependency.class::cast)
+        .filter(
+            dependency -> group.equals(dependency.getGroup()) && name.equals(dependency.getName()))
+        .count();
   }
 }

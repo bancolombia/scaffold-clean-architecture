@@ -1,21 +1,14 @@
 pluginManagement {
     repositories {
-        {{^example}}//{{/example}}mavenLocal()
+        {{#example}}
+        mavenLocal()
+        {{/example}}
         gradlePluginPortal()
     }
 }
 
-buildCache {
-    local {
-        directory = new File(rootDir, 'build-cache')
-    }
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture.settings' version '{{PLUGIN_VERSION}}'
 }
 
 rootProject.name = '{{projectName}}'
-
-include ':app-service'
-include ':model'
-include ':usecase'
-project(':app-service').projectDir = file('./applications/app-service')
-project(':model').projectDir = file('./domain/model')
-project(':usecase').projectDir = file('./domain/usecase')

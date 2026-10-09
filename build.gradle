@@ -30,6 +30,7 @@ version = providers.systemProperty('version').get()
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 java {
@@ -150,6 +151,22 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
                 implementationClass = 'co.com.bancolombia.PluginClean'
                 tags.set(['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource'])
             }
+
+            cleanArchitectureSettings {
+                id = 'co.com.bancolombia.cleanArchitecture.settings'
+                displayName = 'Scaffold Clean Architecture Settings Conventions'
+                description = 'Settings conventions for generated clean architecture projects'
+                implementationClass = 'co.com.bancolombia.plugins.SettingsConventionPlugin'
+                tags.set(['scaffold', 'cleanArchitecture', 'settings'])
+            }
+
+            cleanArchitectureChild {
+                id = 'co.com.bancolombia.cleanArchitecture.child'
+                displayName = 'Scaffold Clean Architecture Child Conventions'
+                description = 'Subproject conventions for generated clean architecture projects'
+                implementationClass = 'co.com.bancolombia.plugins.ChildConventionPlugin'
+                tags.set(['scaffold', 'cleanArchitecture', 'child'])
+            }
         }
     }
 
@@ -161,6 +178,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
     gradlePlugin.testSourceSets(sourceSets.functionalTest)
     configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
+    configurations.functionalTestRuntimeOnly.extendsFrom(configurations.testRuntimeOnly)
 
     // Add a task to run the functional tests
     tasks.register('functionalTest', Test) {
@@ -168,6 +186,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         group = 'verification'
         testClassesDirs = sourceSets.functionalTest.output.classesDirs
         classpath = sourceSets.functionalTest.runtimeClasspath
+        useJUnitPlatform()
     }
 
     check {
@@ -185,6 +204,8 @@ dependencies {
     api gradleApi()
 
     implementation 'org.reflections:reflections:0.10.2'
+    implementation 'org.pitest:pitest-aggregator:1.30.0'
+    implementation 'org.pitest:pitest-entry:1.30.0'
     // swagger generators
     implementation('io.swagger.codegen.v3:swagger-codegen-generators:1.0.62') {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
@@ -197,6 +218,8 @@ dependencies {
     implementation 'com.googlecode.lambdaj:lambdaj:2.3.3'
 
     testImplementation gradleTestKit()
+    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:4.1.1'
+    testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.19.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.24.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:6.1.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:6.1.3'

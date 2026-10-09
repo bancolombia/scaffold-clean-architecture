@@ -1,6 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
@@ -11,8 +12,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.factory.ModuleBuilder;
-import co.com.bancolombia.factory.commons.GenericModule;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import java.io.File;
 import java.io.FileWriter;
@@ -39,7 +40,8 @@ class UpgradeY2022M05D03Test {
   void setup() throws IOException {
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
-    when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
+    when(project.getProjectDir())
+        .thenReturn(Files.createTempDirectory("sample").toFile()); // NOSONAR
     builder = spy(new ModuleBuilder(project));
     updater = new UpgradeY2022M05D03();
     assertNotNull(updater.name());
@@ -53,6 +55,7 @@ class UpgradeY2022M05D03Test {
     when(builder.getParam(FILES_TO_UPDATE))
         .thenReturn(List.of(MAIN_GRADLE, drivenFile, APP_BUILD_GRADLE));
     builder.addFile(APP_BUILD_GRADLE, "dependencies {\n\tcompile 'some:dependency:1.1.1'\n}");
+    builder.addFile(BUILD_GRADLE, "allprojects {\n    dependencies {\n    }\n}\n");
     builder.addFile(MAIN_GRADLE, "dependencies {\n\tcompile 'some-other:dependency:1.1.1'\n}");
     builder.addFile(SETTINGS_GRADLE, "rootProject.name = 'cleanArchitecture'");
     File file = Path.of(project.getProjectDir().getAbsolutePath(), GRADLE_PROPERTIES).toFile();
@@ -66,10 +69,10 @@ class UpgradeY2022M05D03Test {
     // Assert
     verify(builder, atLeast(1))
         .addFile(
-            MAIN_GRADLE,
-            "dependencies {\n\t"
-                + GenericModule.AWS_BOM
-                + "\n\tcompile 'some-other:dependency:1.1.1'\n}");
+            BUILD_GRADLE,
+            "allprojects {\n    dependencies {\n\t\timplementation platform('software.amazon.awssdk:bom:"
+                + Constants.AWS_BOM_VERSION
+                + "')\n    }\n}\n");
     verify(builder, atLeast(1))
         .addFile(
             APP_BUILD_GRADLE,

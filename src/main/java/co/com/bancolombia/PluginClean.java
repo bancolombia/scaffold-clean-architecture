@@ -1,6 +1,10 @@
 package co.com.bancolombia;
 
 import co.com.bancolombia.models.TaskModel;
+import co.com.bancolombia.plugins.ChildConventionPlugin;
+import co.com.bancolombia.plugins.DependencyOverrideConventions;
+import co.com.bancolombia.plugins.RootModuleDependencyConventions;
+import co.com.bancolombia.plugins.RootQualityConventions;
 import co.com.bancolombia.task.ValidateStructureTask;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
@@ -9,12 +13,20 @@ import java.util.stream.Stream;
 import org.gradle.api.Action;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.plugins.UnknownPluginException;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.testing.Test;
+import org.gradle.api.tasks.wrapper.Wrapper;
 import org.jetbrains.annotations.NotNull;
 
 public class PluginClean implements Plugin<Project> {
-  private CleanPluginExtension cleanPluginExtension;
+  private static final String SONAR_PLUGIN_ID = "org.sonarqube";
+  private static final String JACOCO_PLUGIN_ID = "jacoco";
+  private final RootModuleDependencyConventions rootModuleDependencyConventions =
+      new RootModuleDependencyConventions();
+  private final DependencyOverrideConventions dependencyOverrideConventions =
+      new DependencyOverrideConventions();
+  private final RootQualityConventions rootQualityConventions = new RootQualityConventions();
 
   public void apply(Project project) {
     boolean onlyUpdater = false;
@@ -24,24 +36,57 @@ public class PluginClean implements Plugin<Project> {
       project.getLogger().debug("Property onlyUpdater not found, using default value false", e);
     }
     if (onlyUpdater) {
+      CleanPluginExtension cleanPluginExtension =
+          project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
       TaskContainer taskContainer = project.getTasks();
-      initTasks()
+      initTasks(cleanPluginExtension)
           .filter(t -> "it".equals(t.getShortcut()))
           .forEach(task -> this.appendTask(taskContainer, task));
       return;
     }
     project.getPluginManager().apply("java");
-    cleanPluginExtension =
+    project.getPluginManager().apply(JACOCO_PLUGIN_ID);
+    applyOptionalPlugin(project, SONAR_PLUGIN_ID);
+
+    CleanPluginExtension cleanPluginExtension =
         project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
 
     TaskContainer taskContainer = project.getTasks();
-    initTasks().forEach(task -> this.appendTask(taskContainer, task));
+    initTasks(cleanPluginExtension).forEach(task -> this.appendTask(taskContainer, task));
+    configureWrapper(project);
+    applyChildConventions(project);
+    rootModuleDependencyConventions.configure(project);
+    rootQualityConventions.configure(project);
+    dependencyOverrideConventions.configure(project);
 
     project.getSubprojects().forEach(this::listenTest);
 
     taskContainer
         .named("compileJava")
         .configure(task -> task.getDependsOn().add(taskContainer.named("validateStructure")));
+  }
+
+  private void applyOptionalPlugin(Project project, String pluginId) {
+    try {
+      project.getPluginManager().apply(pluginId);
+    } catch (UnknownPluginException exception) {
+      project
+          .getLogger()
+          .debug("Skipping optional plugin {} because it is not available", pluginId);
+    }
+  }
+
+  private void configureWrapper(Project project) {
+    project
+        .getTasks()
+        .withType(Wrapper.class)
+        .configureEach(wrapper -> wrapper.setGradleVersion(Constants.GRADLE_WRAPPER_VERSION));
+  }
+
+  private void applyChildConventions(Project project) {
+    project
+        .getSubprojects()
+        .forEach(subproject -> subproject.getPluginManager().apply(ChildConventionPlugin.class));
   }
 
   private void listenTest(Project project) {
@@ -59,7 +104,7 @@ public class PluginClean implements Plugin<Project> {
                     }));
   }
 
-  private Stream<TaskModel> initTasks() {
+  private Stream<TaskModel> initTasks(CleanPluginExtension cleanPluginExtension) {
     return ReflectionUtils.getTasks()
         .map(
             clazz -> {
@@ -71,14 +116,15 @@ public class PluginClean implements Plugin<Project> {
                       .group(Constants.PLUGIN_TASK_GROUP)
                       .taskAction(clazz);
               if (clazz == ValidateStructureTask.class) {
-                builder.action(buildValidateStructureTaskAction());
+                builder.action(buildValidateStructureTaskAction(cleanPluginExtension));
               }
               return builder.build();
             });
   }
 
   @NotNull
-  private Action<? extends ValidateStructureTask> buildValidateStructureTaskAction() {
+  private Action<? extends ValidateStructureTask> buildValidateStructureTaskAction(
+      CleanPluginExtension cleanPluginExtension) {
     return task ->
         task.getWhitelistedDependencies()
             .set(cleanPluginExtension.getModelProps().getWhitelistedDependencies());

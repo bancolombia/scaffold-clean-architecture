@@ -1,9 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
 import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
-import static co.com.bancolombia.utils.Utils.buildImplementation;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -80,43 +77,6 @@ public class EntryPointAgent implements ModuleFactory {
     if (enableMcpClient) {
       builder.setupFromTemplate("entry-point/agent/mcp-client");
       builder.setupFromTemplate("entry-point/agent/config");
-    }
-
-    // ── Register modules in settings.gradle ───────────────────────────────
-    builder.appendToSettings("reactive-web", ENTRY_POINT_DIR);
-
-    if (enableSpringAiAdapter) {
-      builder.appendToSettings("spring-ai-adapter", DRIVEN_ADAPTER_DIR);
-    }
-
-    builder.appendToSettings("kafka-consumer", ENTRY_POINT_DIR);
-    builder.appendToSettings("kafka-producer", DRIVEN_ADAPTER_DIR);
-
-    if (enableMcpClient) {
-      builder.appendToSettings("mcp-client", DRIVEN_ADAPTER_DIR);
-    }
-
-    // ── Wire dependencies into app-service ────────────────────────────────
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":reactive-web"));
-
-    if (enableSpringAiAdapter) {
-      builder.appendDependencyToModule(
-          APP_SERVICE, buildImplementationFromProject(":spring-ai-adapter"));
-    }
-
-    builder.appendDependencyToModule(
-        APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-webflux'");
-    builder.appendDependencyToModule(
-        APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-actuator'");
-
-    builder.appendDependencyToModule(
-        APP_SERVICE, buildImplementationFromProject(":kafka-consumer"));
-    builder.appendDependencyToModule(
-        APP_SERVICE, buildImplementationFromProject(":kafka-producer"));
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementation(ASYNC_KAFKA_STARTER));
-
-    if (enableMcpClient) {
-      builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":mcp-client"));
     }
 
     // ── Add application.yaml properties ───────────────────────────────────

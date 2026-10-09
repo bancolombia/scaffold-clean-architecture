@@ -13,7 +13,6 @@ public class DrivenAdapterGeneric implements ModuleFactory {
         builder,
         "No name is set for GENERIC type, usage: gradle generateDrivenAdapter "
             + "--type GENERIC --name [name]",
-        "infrastructure/driven-adapters",
         "driven-adapter/generic");
   }
 }

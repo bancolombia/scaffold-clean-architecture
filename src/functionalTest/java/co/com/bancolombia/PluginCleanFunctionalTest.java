@@ -130,10 +130,9 @@ public class PluginCleanFunctionalTest {
     runner.withArguments(task, "--lombok=" + "false");
     runner.withProjectDir(projectDir);
     BuildResult result = runner.build();
-    // Verify the resultassertTrue(new File(BUILD_FUNCTIONAL_TEST_README_MD).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -195,7 +194,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -245,6 +244,19 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void generatedBuildAppliesDefaultQualityAndSpringBootPlugins() {
+    canRunTaskGenerateStructureWithOutParameters();
+
+    runner.withArguments("tasks", "--all");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(result.getOutput().contains("sonar"));
+    assertTrue(result.getOutput().contains("app-service:pitest"));
+    assertTrue(result.getOutput().contains("app-service:bootJar"));
+  }
+
+  @Test
   public void canRunTaskGenerateStructureImperative() {
 
     String task = "ca";
@@ -257,7 +269,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -350,7 +362,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());

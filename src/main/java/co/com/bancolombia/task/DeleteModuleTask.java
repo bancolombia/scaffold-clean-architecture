@@ -46,7 +46,6 @@ public abstract class DeleteModuleTask extends AbstractCleanArchitectureDefaultT
     }
     String dependency = buildImplementationFromProject(":" + module);
     builder.deleteModule(module);
-    builder.removeFromSettings(module);
     builder.removeDependencyFromModule(APP_SERVICE, dependency);
     builder.persist();
   }

@@ -309,26 +309,13 @@ When creating template files, follow these standardized naming conventions:
 Consistent naming and organization improves maintainability and makes it easier for contributors to locate and understand template files. Always follow this convention when adding new modules.
 :::
 
-##### appendToSettings
-
-```java
-public void appendToSettings(String module, String baseDir) throws IOException {}
-```
-
-This method will add a new module to the `setting.gradle` file, you should pass the module name and the module location.
-
 ##### appendDependencyToModule
 
 ```java
 public void appendDependencyToModule(String module, String dependency) throws IOException {}
 ```
 
-This method adds a new dependency for the indicated module, you could use the method `buildImplementationFromProject` located in Utils class to create the dependency definition depending on the language. for example:
-
-```java
-String dependency = Utils.buildImplementationFromProject(builder.isKotlin(), ":dynamodb");
-builder.appendDependencyToModule(APP_SERVICE, dependency);
-```
+This method adds a new dependency for the indicated module.
 
 ##### appendToProperties
 
