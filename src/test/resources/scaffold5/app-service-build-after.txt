@@ -1,0 +1,6 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation 'tools.jackson.core:jackson-databind'
+    implementation 'software.amazon.awssdk:s3'
+}

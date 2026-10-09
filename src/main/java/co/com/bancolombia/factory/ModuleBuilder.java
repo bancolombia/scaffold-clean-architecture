@@ -439,7 +439,7 @@ public class ModuleBuilder {
     return FileUtils.getBooleanProperty(projectDir.getPath(), property, defaultValue, logger);
   }
 
-  private String readFile(String path) throws IOException {
+  public String readFile(String path) throws IOException {
     String finalPath = FileUtils.toRelative(path);
     FileModel current = files.get(finalPath);
     String content;

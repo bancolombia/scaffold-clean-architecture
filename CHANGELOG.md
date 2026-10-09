@@ -1,5 +1,17 @@
 # Changelog
 
+## [v4.7.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.3) (2026-10-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.0-beta1...v4.7.3)
+
+**Merged pull requests:**
+
+- fix: implement updater to scaffold v5 [\#1014](https://github.com/bancolombia/scaffold-clean-architecture/pull/1014) ([juancgalvis](https://github.com/juancgalvis))
+
+## [v5.0.0-beta1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.0-beta1) (2026-10-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.2...v5.0.0-beta1)
+
 ## [v4.7.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.2) (2026-10-06)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.1...v4.7.2)
