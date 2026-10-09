@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.DirectoryProperty;
@@ -116,7 +115,7 @@ public abstract class AggregatePitestReportTask extends DefaultTask {
   }
 
   private List<File> existingFiles(ConfigurableFileCollection files) {
-    return files.getFiles().stream().filter(File::exists).collect(Collectors.toList());
+    return files.getFiles().stream().filter(File::exists).toList();
   }
 
   private String readAndNormalizeReport(File report) {

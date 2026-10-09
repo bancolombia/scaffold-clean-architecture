@@ -27,10 +27,6 @@ public class DependenciesOverrideExtension {
 
   void applyTo(DependencyResolveDetails details) {
     String group = details.getRequested().getGroup();
-    if (group == null) {
-      return;
-    }
-
     String version = overrides.get(new DependencyKey(group, details.getRequested().getName()));
     if (version == null) {
       version = overrides.get(new DependencyKey(group, null));

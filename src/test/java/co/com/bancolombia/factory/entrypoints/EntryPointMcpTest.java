@@ -1,10 +1,7 @@
 package co.com.bancolombia.factory.entrypoints;
 
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
-import static co.com.bancolombia.TestUtils.deleteStructure;
-import static co.com.bancolombia.TestUtils.getTask;
-import static co.com.bancolombia.TestUtils.getTestDir;
-import static co.com.bancolombia.TestUtils.setupProject;
+import static co.com.bancolombia.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -63,9 +60,12 @@ class EntryPointMcpTest {
       throws IOException, CleanException {
     String appBuild = Files.readString(Path.of(TEST_DIR, APP_BUILD_GRADLE));
     appBuild +=
-        "\ntasks.withType(JavaCompile).configureEach {\n"
-            + "    options.compilerArgs = ['-Amapstruct.suppressGeneratorTimestamp=true']\n"
-            + "}\n";
+        """
+                        tasks.withType(JavaCompile).configureEach {
+                            options.compilerArgs = ['-Amapstruct.suppressGeneratorTimestamp=true']
+                        }
+
+                        """;
     assertTrue(appBuild.contains("options.compilerArgs = ["));
     builder.addFile(APP_BUILD_GRADLE, appBuild);
 
@@ -81,19 +81,19 @@ class EntryPointMcpTest {
   void shouldNotDuplicateParametersBlockWhenAlreadyPresent() throws IOException, CleanException {
     String appBuild =
         """
-      plugins { id 'org.springframework.boot' }
-      dependencies { implementation 'org.springframework.boot:spring-boot-starter' }
-        tasks.withType(JavaCompile).configureEach {
-            options.compilerArgs = [
-                    '-Amapstruct.suppressGeneratorTimestamp=true'
-            ]
-            doFirst {
-                if (!options.compilerArgs.contains('-parameters')) {
-                    options.compilerArgs += '-parameters'
-                }
-            }
-        }
-        """;
+                        plugins { id 'org.springframework.boot' }
+                        dependencies { implementation 'org.springframework.boot:spring-boot-starter' }
+                          tasks.withType(JavaCompile).configureEach {
+                              options.compilerArgs = [
+                                      '-Amapstruct.suppressGeneratorTimestamp=true'
+                              ]
+                              doFirst {
+                                  if (!options.compilerArgs.contains('-parameters')) {
+                                      options.compilerArgs += '-parameters'
+                                  }
+                              }
+                          }
+                        """;
     builder.addFile(APP_BUILD_GRADLE, appBuild);
 
     entryPointMcp.buildModule(builder);

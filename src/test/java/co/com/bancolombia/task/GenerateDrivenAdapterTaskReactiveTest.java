@@ -8,8 +8,7 @@ import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
@@ -233,7 +232,7 @@ class GenerateDrivenAdapterTaskReactiveTest {
     task.setType("KMS");
     task.execute();
     String rootBuild = Files.readString(Path.of(TEST_DIR, "build.gradle"));
-    assertTrue(rootBuild.indexOf(bomDependency) == rootBuild.lastIndexOf(bomDependency));
+    assertEquals(rootBuild.indexOf(bomDependency), rootBuild.lastIndexOf(bomDependency));
   }
 
   @Test

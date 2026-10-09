@@ -1,7 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -19,11 +17,7 @@ import tools.jackson.databind.node.ObjectNode;
  *     Schema Validation (Apicurio)</a>
  */
 public class EntryPointKafkaStrimzi implements ModuleFactory {
-
-  private static final String MODULE = "kafka-strimzi-consumer";
   private static final String KAFKA_DOMAIN_PROPERTIES = "reactive.commons.kafka.app";
-  private static final String ASYNC_KAFKA_APICURIO_STARTER =
-      "org.reactivecommons:async-kafka-apicurio-starter:" + REACTIVE_COMMONS_VERSION;
   private static final String DEFAULT_TOPIC = "test-with-registries";
   private static final String MAIN_REGISTRY = "main-registry";
 

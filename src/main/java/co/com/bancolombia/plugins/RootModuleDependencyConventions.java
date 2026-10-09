@@ -57,8 +57,7 @@ public class RootModuleDependencyConventions {
       case "USECASE":
         addProjectDependency(subproject, MODEL_PATH);
         break;
-      case "DRIVEN_ADAPTER":
-      case "HELPER":
+      case "DRIVEN_ADAPTER", "HELPER":
         addSpringContextDependency(subproject);
         addProjectDependency(subproject, MODEL_PATH);
         break;

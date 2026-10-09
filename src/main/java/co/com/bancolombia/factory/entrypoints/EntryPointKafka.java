@@ -1,7 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -9,11 +7,7 @@ import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
 
 public class EntryPointKafka implements ModuleFactory {
-
-  private static final String MODULE = "kafka-consumer";
   private static final String KAFKA_DOMAIN_PROPERTIES = "reactive.commons.kafka.app";
-  private static final String ASYNC_KAFKA_STARTER =
-      "org.reactivecommons:async-kafka-starter:" + REACTIVE_COMMONS_VERSION;
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {

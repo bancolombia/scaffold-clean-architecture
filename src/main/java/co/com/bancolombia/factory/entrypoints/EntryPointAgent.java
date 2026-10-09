@@ -1,7 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.REACTIVE_COMMONS_VERSION;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -33,15 +31,10 @@ import java.io.IOException;
  */
 public class EntryPointAgent implements ModuleFactory {
   private static final String ROLE_HYBRID = "hybrid";
-  private static final String ASYNC_KAFKA_STARTER =
-      "org.reactivecommons:async-kafka-starter:" + REACTIVE_COMMONS_VERSION;
 
   @Override
   public void buildModule(ModuleBuilder builder) throws IOException, CleanException {
     builder.runValidations(ReactiveTypeValidation.class);
-
-    final String ENTRY_POINT_DIR = "infrastructure/entry-points";
-    final String DRIVEN_ADAPTER_DIR = "infrastructure/driven-adapters";
 
     String agentRole = builder.getStringParam("agent-role");
     if (agentRole == null || agentRole.isBlank()) {
@@ -60,13 +53,11 @@ public class EntryPointAgent implements ModuleFactory {
     builder.addParam("agent-is-hybrid", isHybrid);
 
     boolean enableKafka = builder.getBooleanParam("agent-enable-kafka");
-    boolean enableMcpClient = isCollaborative;
-    boolean enableSpringAiAdapter = isSupervisor;
 
     // ── Generate base templates (always) ──────────────────────────────────
     builder.setupFromTemplate("entry-point/agent");
 
-    if (enableSpringAiAdapter) {
+    if (isSupervisor) {
       builder.setupFromTemplate("entry-point/agent/spring-ai");
     }
 
@@ -74,7 +65,7 @@ public class EntryPointAgent implements ModuleFactory {
     builder.setupFromTemplate("entry-point/agent/kafka");
 
     // ── Generate MCP Client module (conditional) ──────────────────────────
-    if (enableMcpClient) {
+    if (isCollaborative) {
       builder.setupFromTemplate("entry-point/agent/mcp-client");
       builder.setupFromTemplate("entry-point/agent/config");
     }
@@ -110,7 +101,7 @@ public class EntryPointAgent implements ModuleFactory {
         .appendToProperties("cors")
         .put("allowed-origins", "${CORS_ALLOWED_ORIGINS:http://localhost:4200}");
 
-    if (enableMcpClient) {
+    if (isCollaborative) {
       builder
           .appendToProperties("spring.ai.mcp.client.streamable-http.connections.mcp-server-1")
           .put("url", "${MCP_SERVER_URL:http://localhost:8080}")
