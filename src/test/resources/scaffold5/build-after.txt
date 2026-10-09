@@ -1,0 +1,24 @@
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture'
+    id 'org.springframework.boot' apply false
+    id 'org.sonarqube'
+    id 'info.solidsoft.pitest'
+}
+
+allprojects {
+    repositories {
+        maven {
+            url = 'https://repo.maven.apache.org/maven2'
+        }
+    }
+
+    dependencies {
+        implementation platform('software.amazon.awssdk:bom:2.54.10')
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.exclusions", "**/config/**, **/MainApplication.java, **/*Mapper.java, **/exception/**"
+    }
+}

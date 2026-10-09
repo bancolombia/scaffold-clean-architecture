@@ -1,0 +1,33 @@
+buildscript {
+	ext {
+		pitestVersion = '1.19.0'
+		cleanArchitectureVersion = '4.6.1'
+		springBootVersion = '4.1.1'
+		sonarVersion = '7.4.0.8496'
+		jacocoVersion = '0.8.15'
+		lombokVersion = '1.18.46'
+	}
+}
+
+plugins {
+    id 'info.solidsoft.pitest' version "${pitestVersion}" apply false
+    id 'java-library'
+    id 'co.com.bancolombia.cleanArchitecture' version "${cleanArchitectureVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'org.sonarqube' version "${sonarVersion}"
+    id 'org.owasp.dependencycheck' version '10.0.4'
+    id 'jacoco'
+}
+
+sonar {
+    def modules = subprojects.projectDir.collect { "${it.toString().replace(project.projectDir.toString() + "/", "")}" }
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.modules", "${modules.join(',')}"
+        property "sonar.sources", "src,deployment,settings.gradle,main.gradle,build.gradle,${modules.collect { "${it}/build.gradle" }.join(',')}"
+        property "sonar.exclusions", "**/config/**, **/MainApplication.java, **/*Mapper.java, **/exception/**"
+        property "sonar.java.binaries", "**/build/classes/java/main"
+    }
+}
+
+apply from: './main.gradle'
