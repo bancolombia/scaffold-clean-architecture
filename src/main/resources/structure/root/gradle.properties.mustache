@@ -1,8 +1,13 @@
 package={{package}}
 systemProp.version={{PLUGIN_VERSION}}
+javaVersion={{javaVersion}}
 reactive={{reactive}}
 lombok={{lombok}}
 metrics={{metrics}}
+# comma separated module names to exclude completely from the Gradle build
+excludeModule=
+# comma separated module names to exclude only as app-service dependencies
+excludeModuleFromApp=
 language=java
 org.gradle.parallel=true
 org.gradle.caching=true

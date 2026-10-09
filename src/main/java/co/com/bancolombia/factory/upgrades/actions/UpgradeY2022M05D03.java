@@ -27,12 +27,12 @@ public class UpgradeY2022M05D03 implements UpgradeAction {
 
   @Override
   public String name() {
-    return "Apply aws bom dependency";
+    return "Normalize AWS SDK dependency versions";
   }
 
   @Override
   public String description() {
-    return "Manages aws dependencies version though bom dependency";
+    return "Removes explicit AWS SDK versions; the project must declare its own AWS BOM";
   }
 
   @SneakyThrows

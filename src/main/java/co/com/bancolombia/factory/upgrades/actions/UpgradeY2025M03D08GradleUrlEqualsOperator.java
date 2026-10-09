@@ -12,9 +12,14 @@ public class UpgradeY2025M03D08GradleUrlEqualsOperator implements UpgradeAction 
   @Override
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
-    return builder.updateFile(MAIN_GRADLE, content -> updateUrl(builder, MAIN_GRADLE, content))
-        | builder.updateFile(
-            SETTINGS_GRADLE, content -> updateUrl(builder, SETTINGS_GRADLE, content));
+    var applied = false;
+    if (builder.hasFile(MAIN_GRADLE)) {
+      applied =
+          builder.updateFile(MAIN_GRADLE, content -> updateUrl(builder, MAIN_GRADLE, content));
+    }
+    return builder.updateFile(
+            SETTINGS_GRADLE, content -> updateUrl(builder, SETTINGS_GRADLE, content))
+        | applied;
   }
 
   private String updateUrl(ModuleBuilder builder, String file, String content) {

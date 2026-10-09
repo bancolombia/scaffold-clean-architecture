@@ -14,6 +14,7 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -58,15 +59,6 @@ class GenerateStructureTaskTest {
   }
 
   @Test
-  void shouldReturnForceOptions() {
-    // Arrange
-    // Act
-    List<BooleanOption> types = task.getForceOptions();
-    // Assert
-    assertEquals(Arrays.asList(AbstractCleanArchitectureDefaultTask.BooleanOption.values()), types);
-  }
-
-  @Test
   void shouldReturnJavaVersion() {
     // Arrange
     List<Integer> expectedVersions = Arrays.asList(17, 21, 25);
@@ -89,7 +81,6 @@ class GenerateStructureTaskTest {
         ".gitignore",
         "build.gradle",
         "lombok.config",
-        "main.gradle",
         "settings.gradle",
         "infrastructure/driven-adapters/",
         "infrastructure/entry-points",
@@ -117,7 +108,7 @@ class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties", "main.gradle");
+    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties");
   }
 
   @Test
@@ -129,7 +120,7 @@ class GenerateStructureTaskTest {
     // Act
     task.execute();
     // Assert
-    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties", "main.gradle");
+    assertFilesExistsInDir(dir, "build.gradle", "gradle.properties");
     assertFalse(new File(dir + "lombok.config").exists());
   }
 
@@ -161,5 +152,60 @@ class GenerateStructureTaskTest {
         assertThrows(IllegalArgumentException.class, () -> task.setJavaVersion(invalidVersion));
     assertEquals(
         "Unsupported Java version: 19. Supported versions: 17, 21, 25", exception.getMessage());
+  }
+
+  @Test
+  void shouldGenerateBuildGradleUsingRootPluginAndWithoutMainGradleReference()
+      throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+
+    // Act
+    task.execute();
+    String buildContent = Files.readString(Path.of(dir, "build.gradle"));
+
+    // Assert
+    assertTrue(buildContent.contains("id 'co.com.bancolombia.cleanArchitecture'"));
+    assertFalse(buildContent.contains("id 'co.com.bancolombia.cleanArchitecture.root'"));
+    assertFalse(buildContent.contains("apply from: './main.gradle'"));
+    assertFalse(buildContent.contains("buildscript {"));
+    assertTrue(buildContent.contains("id 'org.springframework.boot' apply false"));
+    assertTrue(buildContent.contains("id 'org.sonarqube'"));
+    assertTrue(buildContent.contains("id 'info.solidsoft.pitest'"));
+    assertFalse(buildContent.contains("sonar {"));
+  }
+
+  @Test
+  void shouldGenerateSettingsGradleUsingSettingsPluginAndWithoutStaticIncludes()
+      throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+
+    // Act
+    task.execute();
+    String settingsContent = Files.readString(Path.of(dir, "settings.gradle"));
+
+    // Assert
+    assertTrue(
+        settingsContent.contains("id 'co.com.bancolombia.cleanArchitecture.settings' version"));
+    assertFalse(settingsContent.contains("include ':app-service'"));
+    assertFalse(settingsContent.contains("include ':model'"));
+    assertFalse(settingsContent.contains("include ':usecase'"));
+  }
+
+  @Test
+  void shouldGenerateGradlePropertiesWithPluginInputs() throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+
+    // Act
+    task.execute();
+    String gradleProperties = Files.readString(Path.of(dir, "gradle.properties"));
+
+    // Assert
+    assertTrue(gradleProperties.contains("javaVersion=25"));
+    assertFalse(gradleProperties.contains("mutation="));
+    assertFalse(gradleProperties.contains("awsBom="));
+    assertFalse(gradleProperties.contains("pluginVersion."));
   }
 }

@@ -1,9 +1,9 @@
 package co.com.bancolombia.factory.commons;
 
 import static co.com.bancolombia.Constants.APP_SERVICE;
+import static co.com.bancolombia.Constants.REACTIVE_COMMONS_MAPPER_VERSION;
 import static co.com.bancolombia.utils.Utils.buildImplementation;
 
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -16,7 +16,7 @@ public class ObjectMapperFactory implements ModuleFactory {
     builder.setupFromTemplate("commons/object-mapper");
     String dependency =
         buildImplementation(
-            "org.reactivecommons.utils:object-mapper:" + Constants.REACTIVE_COMMONS_MAPPER_VERSION);
+            "org.reactivecommons.utils:object-mapper:" + REACTIVE_COMMONS_MAPPER_VERSION);
     builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }
