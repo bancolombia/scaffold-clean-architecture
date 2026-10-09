@@ -1,7 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
-import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
@@ -9,18 +8,6 @@ import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import lombok.SneakyThrows;
 
 public class UpgradeY2025M05D10GradleCache implements UpgradeAction {
-  private static final String BUILD_CACHE = "buildCache";
-  private static final String MATCH_CACHE = "rootProject.name";
-  private static final String APPEND_CACHE =
-      """
-  buildCache {
-      local {
-          directory = new File(rootDir, 'build-cache')
-      }
-  }
-
-  """;
-
   private static final String PARALLEL_CHECK = "org.gradle.parallel=true";
   private static final String CACHING = "org.gradle.caching=true";
   private static final String CACHING_REGEX = "\\borg\\.gradle\\.caching=false\\b";
@@ -40,10 +27,6 @@ public class UpgradeY2025M05D10GradleCache implements UpgradeAction {
   @SneakyThrows
   public boolean up(ModuleBuilder builder) {
     return builder.updateFile(
-            SETTINGS_GRADLE,
-            content ->
-                UpdateUtils.insertBeforeMatch(content, MATCH_CACHE, BUILD_CACHE, APPEND_CACHE))
-        | builder.updateFile(
             GRADLE_PROPERTIES,
             content -> {
               content =

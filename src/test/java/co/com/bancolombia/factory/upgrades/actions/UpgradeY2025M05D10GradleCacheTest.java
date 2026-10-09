@@ -1,13 +1,9 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
-import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -49,9 +45,6 @@ class UpgradeY2025M05D10GradleCacheTest {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange
     builder.addFile(
-        SETTINGS_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-8.14-gradle-cache/settings-before.txt"));
-    builder.addFile(
         GRADLE_PROPERTIES,
         FileUtils.getResourceAsString(
             resolver, "gradle-8.14-gradle-cache/gradle.properties-before.txt"));
@@ -62,10 +55,6 @@ class UpgradeY2025M05D10GradleCacheTest {
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
-    verify(builder, atLeast(1))
-        .addFile(
-            SETTINGS_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-8.14-gradle-cache/settings-after.txt"));
     verify(builder, atLeast(1))
         .addFile(
             GRADLE_PROPERTIES,

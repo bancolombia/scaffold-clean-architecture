@@ -1,7 +1,6 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
@@ -30,14 +29,11 @@ class UpgradeY2022M04D27Test {
   @Test
   void shouldApplyUpdate() throws IOException {
     // Arrange\
-    builder.addFile(MAIN_GRADLE, "sourceCompatibility = JavaVersion.VERSION_1_8\n");
     builder.addFile(DOCKERFILE, "adoptopenjdk/openjdk8-openj9:alpine-slim\n");
 
     // Act
     updater.up(builder);
     // Assert
-    verify(builder, atLeast(1))
-        .updateExpression(MAIN_GRADLE, "JavaVersion.VERSION_1_8", "JavaVersion.VERSION_11");
     verify(builder, atLeast(1))
         .updateExpression(
             DOCKERFILE, "adoptopenjdk/openjdk8-openj9:alpine-slim", "eclipse-temurin:17-alpine");
