@@ -9,6 +9,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateUtils {
 
+  /** Returns the balanced {@code marker { ... }} block (brace-aware), or null if not found. */
+  public static String extractBlock(String content, String marker) {
+    int markerIndex = content.indexOf(marker);
+    if (markerIndex == -1) {
+      return null;
+    }
+    int braceStart = content.indexOf('{', markerIndex);
+    if (braceStart == -1) {
+      return null;
+    }
+    int depth = 0;
+    int i = braceStart;
+    for (; i < content.length(); i++) {
+      char c = content.charAt(i);
+      if (c == '{') {
+        depth++;
+      } else if (c == '}') {
+        depth--;
+        if (depth == 0) {
+          break;
+        }
+      }
+    }
+    if (depth != 0) {
+      return null;
+    }
+    return content.substring(markerIndex, i + 1);
+  }
+
   public static boolean appendIfNotContains(
       ModuleBuilder builder, String file, String contains, String toAdd) throws IOException {
     return builder.updateFile(

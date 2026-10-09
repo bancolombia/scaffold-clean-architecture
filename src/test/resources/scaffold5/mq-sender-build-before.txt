@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':model')
+    implementation 'com.github.bancolombia:commons-jms-mq:3.1.4'
+    implementation 'org.springframework:spring-context'
+    implementation 'io.micrometer:micrometer-core'
+}

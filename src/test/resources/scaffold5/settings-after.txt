@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven { url = "https://repo.maven.apache.org/maven2"}
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture.settings' version '5.0.0'
+}
+
+rootProject.name = 'FuaIntegration'
