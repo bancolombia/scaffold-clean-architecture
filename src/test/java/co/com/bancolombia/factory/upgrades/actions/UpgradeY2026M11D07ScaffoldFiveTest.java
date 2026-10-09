@@ -25,7 +25,9 @@ import co.com.bancolombia.utils.operations.ExternalOperations;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
 import org.gradle.internal.logging.text.StyledTextOutput;
@@ -77,6 +79,12 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
 
   private String resource(String path) throws IOException {
     return FileUtils.getResourceAsString(resolver, path);
+  }
+
+  private String removeLineContaining(String content, String token) {
+    return Arrays.stream(content.split("\n"))
+        .filter(line -> !line.contains(token))
+        .collect(Collectors.joining("\n"));
   }
 
   @Test
@@ -132,8 +140,7 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
   void shouldOmitSonarBlockWhenExclusionsPropertyIsMissing() throws IOException {
     stubLatestRelease("5.0.0");
     String buildWithoutExclusions =
-        resource("scaffold5/build-before.txt")
-            .replaceAll("\\s*property \"sonar\\.exclusions\", \"[^\"]*\"\n", "\n");
+        removeLineContaining(resource("scaffold5/build-before.txt"), "sonar.exclusions");
     builder.addFile(BUILD_GRADLE, buildWithoutExclusions);
     builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
     builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
