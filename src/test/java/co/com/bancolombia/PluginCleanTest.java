@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
@@ -103,6 +105,24 @@ class PluginCleanTest {
 
     assertEquals(taskGroup, task10.getGroup());
     assertEquals(descriptionTask10, task10.getDescription());
+  }
+
+  @Test
+  void shouldSkipScaffoldFiveConventionsWhenLegacyMainGradleExists(@TempDir Path tempDir)
+      throws IOException {
+    Files.createFile(tempDir.resolve("main.gradle"));
+    Project project =
+        ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("legacy").build();
+
+    GradleException exception =
+        assertThrows(
+            GradleException.class,
+            () -> project.getPlugins().apply("co.com.bancolombia.cleanArchitecture"));
+
+    assertNotNull(exception);
+    assertFalse(project.getPlugins().hasPlugin("java"));
+    assertNull(project.getTasks().findByName("generateModel"));
+    assertNull(project.getExtensions().findByName("dependenciesOverride"));
   }
 
   @Test

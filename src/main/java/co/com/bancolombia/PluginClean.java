@@ -11,6 +11,7 @@ import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.ReflectionUtils;
 import java.util.stream.Stream;
 import org.gradle.api.Action;
+import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.UnknownPluginException;
@@ -44,6 +45,12 @@ public class PluginClean implements Plugin<Project> {
           .forEach(task -> this.appendTask(taskContainer, task));
       return;
     }
+    if (project.file(Constants.MainFiles.MAIN_GRADLE).isFile()) {
+      printLegacyProjectMigrationNotice(project);
+      throw new GradleException(
+          "Scaffold 5 cannot be applied to this Scaffold 4 project until it is migrated.");
+    }
+
     project.getPluginManager().apply("java");
     project.getPluginManager().apply(JACOCO_PLUGIN_ID);
     applyOptionalPlugin(project, SONAR_PLUGIN_ID);
@@ -64,6 +71,18 @@ public class PluginClean implements Plugin<Project> {
     taskContainer
         .named("compileJava")
         .configure(task -> task.getDependsOn().add(taskContainer.named("validateStructure")));
+  }
+
+  private void printLegacyProjectMigrationNotice(Project project) {
+    project.getLogger().lifecycle("+==========================================================+");
+    project.getLogger().lifecycle("|                    MIGRATION REQUIRED                    |");
+    project.getLogger().lifecycle("+==========================================================+");
+    project.getLogger().lifecycle("You are using Scaffold 5 on a Scaffold 4 project");
+    project
+        .getLogger()
+        .lifecycle(
+            "You may follow the next migration guide "
+                + "https://bancolombia.github.io/scaffold-clean-architecture/docs/migrations/v4-v5");
   }
 
   private void applyOptionalPlugin(Project project, String pluginId) {
