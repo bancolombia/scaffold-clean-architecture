@@ -19,14 +19,14 @@ public final class Constants {
   public static final String REACTIVE_COMMONS_VERSION = "7.4.1";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.17.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.55.11";
-  public static final String COMMONS_JMS_VERSION = "3.1.4";
+  public static final String AWS_BOM_VERSION = "2.55.15";
+  public static final String COMMONS_JMS_VERSION = "3.1.5";
   public static final String ARCH_UNIT_VERSION = "1.5.1";
   public static final String OKHTTP_VERSION = "5.5.0";
   public static final String RESILIENCE_4J_VERSION = "2.4.0";
   public static final String BIN_STASH_VERSION = "2.1.4";
   public static final String SPRING_DOC_OPENAPI_VERSION = "3.1.1";
-  public static final String CLOUD_EVENTS_VERSION = "5.0.0";
+  public static final String CLOUD_EVENTS_VERSION = "5.1.0";
   public static final String SPRING_AI_VERSION = "2.0.1";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.3";
@@ -34,7 +34,7 @@ public final class Constants {
   public static final String PITEST_VERSION = "1.30.0";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
-  public static final String GRPC_VERSION = "1.84.0";
+  public static final String GRPC_VERSION = "1.84.3";
 
   /**
    * Must match the protobuf-java version managed by the Spring Boot BOM ({@link
@@ -53,7 +53,7 @@ public final class Constants {
   public static final String GRADLE_PROTOBUF_VERSION = "0.10.0";
 
   // Custom
-  public static final String GRADLE_WRAPPER_VERSION = "9.8.0";
+  public static final String GRADLE_WRAPPER_VERSION = "9.8.1";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {

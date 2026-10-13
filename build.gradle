@@ -14,7 +14,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'org.sonarqube' version '7.5.0.8588'
     id 'com.gradle.plugin-publish' version '2.2.1'
-    id 'com.diffplug.spotless' version '8.10.3'
+    id 'com.diffplug.spotless' version '8.10.4'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'org.owasp.dependencycheck' version '13.0.0'
 }
@@ -157,7 +157,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
                 displayName = 'Scaffold Clean Architecture Settings Conventions'
                 description = 'Settings conventions for generated clean architecture projects'
                 implementationClass = 'co.com.bancolombia.plugins.SettingsConventionPlugin'
-                tags.set(['scaffold', 'cleanArchitecture', 'settings'])
+                tags.set(['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource', 'settings'])
             }
 
             cleanArchitectureChild {
@@ -165,7 +165,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
                 displayName = 'Scaffold Clean Architecture Child Conventions'
                 description = 'Subproject conventions for generated clean architecture projects'
                 implementationClass = 'co.com.bancolombia.plugins.ChildConventionPlugin'
-                tags.set(['scaffold', 'cleanArchitecture', 'child'])
+                tags.set(['scaffold', 'cleanArchitecture', 'Bancolombia', 'OpenSource', 'child'])
             }
         }
     }
@@ -211,7 +211,7 @@ dependencies {
         exclude group: 'net.sf.jopt-simple', module: 'jopt-simple'
     }
     constraints { // for previous swagger dependency
-        implementation('commons-codec:commons-codec:1.22.1') {
+        implementation('commons-codec:commons-codec:1.23.0') {
             because "This version closes a security vulnerability"
         }
     }
@@ -318,7 +318,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.8.0'
+    gradleVersion = '9.8.1'
 }
 
 tasks.register('ci-updater', JavaExec) {
