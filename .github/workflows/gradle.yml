@@ -104,7 +104,7 @@ jobs:
       - name: Sonar analysis for generated reactive project
         if: github.event.pull_request.head.repo.fork == false && steps.changes.outputs.templates == 'true'
         working-directory: ./build/toscan/reactive
-        run: ./gradlew sonar --stacktrace
+        run: ./gradlew sonar -xjacocoMergedReport --stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

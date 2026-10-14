@@ -1,9 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-import static co.com.bancolombia.utils.Utils.buildTestImplementation;
-
 import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -41,11 +37,6 @@ public class EntryPointRestMvc implements ModuleFactory {
         (VersioningStrategy) builder.getParam("task-param-versioning-strategy");
     setupTemplate(builder, versioningStrategy);
     builder.setupFromTemplate("entry-point/rest-mvc");
-    builder.appendToSettings("api-rest", "infrastructure/entry-points");
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":api-rest"));
-    // to run archunit validations
-    builder.appendDependencyToModule(
-        APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
 
     if (builder.getBooleanParam("include-swagger")) {
       builder.addParam("module", "api-rest");

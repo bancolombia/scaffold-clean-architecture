@@ -129,11 +129,10 @@ public class PluginCleanFunctionalTest {
 
     runner.withArguments(task, "--lombok=" + "false");
     runner.withProjectDir(projectDir);
-    BuildResult result = runner.build();
-    // Verify the resultassertTrue(new File(BUILD_FUNCTIONAL_TEST_README_MD).exists());
+    BuildResult result = runner.buildAndFail();
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -180,6 +179,26 @@ public class PluginCleanFunctionalTest {
             .exists());
 
     assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
+  }
+
+  @Test
+  public void warnsAndSkipsScaffoldFiveWhenMainGradleExists() throws IOException {
+    writeString(new File(projectDir, "main.gradle"), "// legacy Scaffold 4 build file\n");
+
+    runner.withArguments("tasks", "--all");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.buildAndFail();
+
+    String output = result.getOutput();
+    assertTrue(output.contains("MIGRATION REQUIRED"));
+    assertTrue(output.contains("You are using Scaffold 5 on a Scaffold 4 project"));
+    assertTrue(
+        output.indexOf("MIGRATION REQUIRED")
+            < output.indexOf("You are using Scaffold 5 on a Scaffold 4 project"));
+    assertTrue(
+        output.contains(
+            "https://bancolombia.github.io/scaffold-clean-architecture/docs/migrations/v4-v5"));
+    assertFalse(output.contains("generateModel"));
   }
 
   @Test
@@ -195,7 +214,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -245,6 +264,19 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
+  public void generatedBuildAppliesDefaultQualityAndSpringBootPlugins() {
+    canRunTaskGenerateStructureWithOutParameters();
+
+    runner.withArguments("tasks", "--all");
+    runner.withProjectDir(projectDir);
+    BuildResult result = runner.build();
+
+    assertTrue(result.getOutput().contains("sonar"));
+    assertTrue(result.getOutput().contains("app-service:pitest"));
+    assertTrue(result.getOutput().contains("app-service:bootJar"));
+  }
+
+  @Test
   public void canRunTaskGenerateStructureImperative() {
 
     String task = "ca";
@@ -257,7 +289,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());
@@ -350,7 +382,7 @@ public class PluginCleanFunctionalTest {
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_GITIGNORE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_BUILD_GRADLE).exists());
     assertTrue(new File("build/functionalTest/lombok.config").exists());
-    assertTrue(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
+    assertFalse(new File(BUILD_FUNCTIONAL_TEST_MAIN_GRADLE).exists());
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_SETTINGS_GRADLE).exists());
 
     assertTrue(new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_DRIVEN_ADAPTERS).exists());

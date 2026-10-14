@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -25,10 +22,7 @@ public class DrivenAdapterMongoDB implements ModuleFactory {
       builder.setupFromTemplate("driven-adapter/mongo-repository");
     }
 
-    builder.appendToSettings("mongo-repository", "infrastructure/driven-adapters");
     builder.appendToProperties("spring.data.mongodb").put("uri", "mongodb://localhost:27017/test");
-    String dependency = buildImplementationFromProject(":mongo-repository");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     new ObjectMapperFactory().buildModule(builder);
   }

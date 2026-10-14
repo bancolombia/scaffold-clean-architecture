@@ -1,13 +1,9 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -53,9 +49,6 @@ class UpgradeY2025M12D01GradleJavaToolchainTest {
         GRADLE_PROPERTIES,
         FileUtils.getResourceAsString(
             resolver, "gradle-9-java-toolchain/gradle.properties-before.txt"));
-    builder.addFile(
-        MAIN_GRADLE,
-        FileUtils.getResourceAsString(resolver, "gradle-9-java-toolchain/main-before.txt"));
     // Act
     boolean applied = updater.up(builder);
     // Assert
@@ -65,9 +58,5 @@ class UpgradeY2025M12D01GradleJavaToolchainTest {
             GRADLE_PROPERTIES,
             FileUtils.getResourceAsString(
                 resolver, "gradle-9-java-toolchain/gradle.properties-after.txt"));
-    verify(builder, atLeast(1))
-        .addFile(
-            MAIN_GRADLE,
-            FileUtils.getResourceAsString(resolver, "gradle-9-java-toolchain/main-after.txt"));
   }
 }

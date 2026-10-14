@@ -12,7 +12,6 @@ public class HelperGeneric implements ModuleFactory {
     GenericModule.generateGenericModule(
         builder,
         "No Helper name is set, usage: gradle generateHelper " + "--name",
-        "infrastructure/helpers",
         "helper/generic");
   }
 }

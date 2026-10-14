@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
-import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -18,9 +15,6 @@ public class DrivenAdapterDynamoDB implements ModuleFactory {
     String typePath = getPathType(builder.isReactive());
 
     GenericModule.addAwsBom(builder);
-    builder.appendToSettings("dynamo-db", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(":dynamo-db");
-    builder.appendDependencyToModule(Constants.APP_SERVICE, dependency);
     builder.setupFromTemplate("driven-adapter/" + typePath);
     builder.appendToProperties("aws.dynamodb").put("endpoint", "http://localhost:8000");
     new ObjectMapperFactory().buildModule(builder);

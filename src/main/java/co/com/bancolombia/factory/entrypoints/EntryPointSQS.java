@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -18,9 +15,6 @@ public class EntryPointSQS implements ModuleFactory {
       template = "entry-point/sqs-reactive";
     }
     builder.setupFromTemplate(template);
-    builder.appendToSettings("sqs-listener", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(":sqs-listener");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     GenericModule.addAwsBom(builder);
     builder

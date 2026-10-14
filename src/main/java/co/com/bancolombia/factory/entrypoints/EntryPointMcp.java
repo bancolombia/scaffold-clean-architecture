@@ -1,7 +1,6 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
+import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -44,24 +43,6 @@ public class EntryPointMcp implements ModuleFactory {
 
     // Setup module from templates
     builder.setupFromTemplate("entry-point/mcp");
-
-    // Add to settings.gradle
-    builder.appendToSettings("mcp-server", "infrastructure/entry-points");
-
-    // Add dependency to app-service
-    builder.appendDependencyToModule(APP_SERVICE, buildImplementationFromProject(":mcp-server"));
-    builder.appendDependencyToModule(
-        APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-actuator'");
-    builder.appendDependencyToModule(
-        APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-webflux'");
-    // Handle Security Dependencies
-    if (enableSecurity) {
-      builder.appendDependencyToModule(
-          APP_SERVICE, "implementation 'org.springframework.boot:spring-boot-starter-security'");
-      builder.appendDependencyToModule(
-          APP_SERVICE,
-          "implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'");
-    }
 
     // Add MCP configuration to app-service application.yaml
     addMcpConfigToAppService(builder, enableTools, enableResources, enablePrompts, enableSecurity);
@@ -127,7 +108,7 @@ public class EntryPointMcp implements ModuleFactory {
 
     // Add -parameters flag for JavaCompile to expose param names for MCP Tools
     builder.updateFile(
-        co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE,
+        APP_BUILD_GRADLE,
         content -> {
           if (content.contains(JAVA_COMPILE_PARAMETERS_SENTINEL)) {
             return content;

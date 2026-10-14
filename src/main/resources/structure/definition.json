@@ -22,7 +22,6 @@
     "structure/applications/appservice/build.gradle.mustache": "applications/app-service/build.gradle",
     "structure/domain/model/build.gradle.mustache": "domain/model/build.gradle",
     "structure/domain/usecase/build.gradle.mustache": "domain/usecase/build.gradle",
-    "structure/root/main.gradle.mustache": "main.gradle",
     "structure/root/settings.gradle.mustache": "settings.gradle",
     "structure/root/build.gradle.mustache": "build.gradle",
     "structure/applications/appservice/main.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/MainApplication.java",

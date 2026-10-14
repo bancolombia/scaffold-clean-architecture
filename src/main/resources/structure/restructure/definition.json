@@ -2,7 +2,6 @@
   "folders": [],
   "files": {
     "structure/root/gradle.properties.mustache": "gradle.properties",
-    "structure/root/main.gradle.mustache": "main.gradle",
     "structure/root/build.gradle.mustache": "build.gradle"
   }
 }

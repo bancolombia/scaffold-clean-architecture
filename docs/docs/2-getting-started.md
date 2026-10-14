@@ -25,7 +25,7 @@ content into your **build.gradle** file.
 
 ```groovy
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '4.6.3'
+    id 'co.com.bancolombia.cleanArchitecture' version '5.0.0-beta'
 }
 ```
 
@@ -50,7 +50,7 @@ import TabItem from '@theme/TabItem';
 mkdir scaffold-quick-start
 cd scaffold-quick-start
 echo "plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '4.6.3'
+    id 'co.com.bancolombia.cleanArchitecture' version '5.0.0-beta'
 }" > build.gradle
 gradle wrapper
 ./gradlew ca --name=ScaffoldQuickStart
@@ -71,7 +71,7 @@ Set-Location -Path "scaffold-quick-start"
 # Create the build.gradle file with the specified content
 @"
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture' version '4.6.3'
+    id 'co.com.bancolombia.cleanArchitecture' version '5.0.0-beta'
 }
 "@ | Set-Content -Path "build.gradle"
 
@@ -94,7 +94,7 @@ cd scaffold-quick-start
 :: Create the build.gradle file with the specified content
 (
 echo plugins {
-echo     id 'co.com.bancolombia.cleanArchitecture' version '4.6.3'
+echo     id 'co.com.bancolombia.cleanArchitecture' version '5.0.0-beta'
 echo }
 ) > build.gradle
 
@@ -113,6 +113,29 @@ Then open your browser and go to [http://localhost:8080/api/usecase/path](http:/
 will reply with an empty string, to change the response you can modify the `Handler` class in the
 `entry-points/reactive-web`
 
+## Build and coverage reports
+
+Run the complete build and the merged JaCoCo report with:
+
+```shell
+./gradlew build jacocoMergedReport
+```
+
+Gradle builds the task graph for both requested tasks and executes shared tasks only once. The
+command runs the standard `build` lifecycle (`assemble` and `check`), including compilation,
+`validateStructure`, and the subproject tests. The merged report adds these quality tasks:
+
+| Task | What it does |
+| --- | --- |
+| `jacocoTestReport` in each module | Collects JaCoCo coverage after that module's tests. |
+| `jacocoMergedReport` at the root | Merges module execution data into root XML and HTML reports. |
+| `pitest` in each module | Runs mutation analysis when Pitest is declared in the root `plugins {}` block. |
+| `pitestReportAggregate` at the root | Combines module PIT results into root HTML and XML reports when Pitest is declared. |
+
+When Pitest is not declared, the build, module tests, and merged JaCoCo report still run; PIT tasks
+are omitted. See [JaCoCo Merged Report](tasks/jacoco-merged-report) for report locations and task
+details.
+
 # Tasks
 
 The Scaffolding Clean Architecture plugin will allow you the next tasks:
@@ -127,5 +150,6 @@ The Scaffolding Clean Architecture plugin will allow you the next tasks:
 - [Generate Acceptance Test](tasks/generate-acceptance-test)
 - [Generate Performance Test](tasks/generate-performance-test)
 - [Validate Structure](tasks/validate-structure)
+- [JaCoCo Merged Report](tasks/jacoco-merged-report)
 - [Delete Module](tasks/delete-module)
 - [Update Project](tasks/update-project)

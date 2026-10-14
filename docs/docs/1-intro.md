@@ -27,6 +27,50 @@ the inner layers.
 The below image shows the layers of the Clean Architecture applied, this is built on a multimodule gradle project
 structure.
 
+## Scaffold v5 modules and discovery
+
+The generated project uses Gradle projects for the application, domain, and infrastructure modules. The Settings
+convention plugin discovers each module from its `build.gradle`; the root conventions then connect the detected
+projects to `app-service` while preserving the Clean Architecture dependency direction.
+
+```mermaid
+flowchart LR
+	settings["SettingsConventionPlugin<br/>scans applications, domain, infrastructure"]
+
+	subgraph application["Application"]
+		app["app-service<br/>Bootable application"]
+	end
+
+	subgraph infrastructure["Infrastructure"]
+		entry["entry-point"]
+		adapter["driven-adapter"]
+		helper["helper"]
+	end
+
+	subgraph domain["Domain"]
+		usecase["usecase"]
+		model["model and ports"]
+	end
+
+	settings -. autodiscovers .-> app
+	settings -. autodiscovers .-> entry
+	settings -. autodiscovers .-> adapter
+	settings -. autodiscovers .-> helper
+	settings -. autodiscovers .-> usecase
+	settings -. autodiscovers .-> model
+
+	entry --> usecase
+	usecase --> model
+	adapter --> model
+	helper --> model
+
+	app -. assembles detected modules .-> entry
+	app -. assembles detected modules .-> adapter
+	app -. assembles detected modules .-> helper
+	app -. assembles detected modules .-> usecase
+	app -. assembles detected modules .-> model
+```
+
 # Layers
 
 ## Domain

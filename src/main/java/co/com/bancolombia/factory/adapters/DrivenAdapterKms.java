@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -20,7 +17,6 @@ public class DrivenAdapterKms implements ModuleFactory {
 
     GenericModule.addAwsBom(builder);
     builder.setupFromTemplate("driven-adapter/" + typePath);
-    builder.appendToSettings("kms-repository", "infrastructure/driven-adapters");
     builder
         .appendToProperties("adapters.aws.kms")
         .put("region", "us-east-1")
@@ -28,8 +24,6 @@ public class DrivenAdapterKms implements ModuleFactory {
         .put("protocol", "http")
         .put("port", "4566")
         .put("keyId", "add-your-key-here"); // implementation project('kms-repository')
-    String dependency = buildImplementationFromProject(":kms-repository");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
     new DrivenAdapterSecrets().buildModule(builder);
   }
 

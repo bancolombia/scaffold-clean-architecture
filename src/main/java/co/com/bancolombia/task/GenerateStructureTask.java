@@ -1,10 +1,7 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.annotations.CATask;
-import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,7 +24,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
   private BooleanOption mutation = BooleanOption.TRUE;
-  private BooleanOption force = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
   private Integer javaVersion = JavaVersion.VERSION_25.getNumber();
 
@@ -68,11 +64,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     this.javaVersion = JavaVersion.validateVersion(Integer.parseInt(version));
   }
 
-  @Option(option = "force", description = "Force regenerates all files")
-  public void setForce(BooleanOption force) {
-    this.force = force;
-  }
-
   @Option(option = "example", description = "Generate locally for example")
   public void setWithExample(BooleanOption withExample) {
     this.withExample = withExample;
@@ -90,11 +81,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
 
   @OptionValues("metrics")
   public List<BooleanOption> getMetricsOptions() {
-    return Arrays.asList(BooleanOption.values());
-  }
-
-  @OptionValues("force")
-  public List<BooleanOption> getForceOptions() {
     return Arrays.asList(BooleanOption.values());
   }
 
@@ -122,27 +108,10 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21.getNumber());
     builder.addParam("java25", javaVersion == JavaVersion.VERSION_25.getNumber());
 
-    boolean exists = FileUtils.exists(builder.getProjectDir().getPath(), MAIN_GRADLE);
-    if (exists && force == BooleanOption.FALSE) {
-      logger.lifecycle(
-          "Existing project detected, regenerating main.gradle, build.gradle and gradle.properties");
-      loadProperty("package");
-      loadProperty("language");
-      builder.addParam(REACTIVE, builder.isReactive());
-      builder.addParam("lombok", builder.isEnableLombok());
-      builder.addParam("metrics", builder.withMetrics());
-      builder.addParam("mutation", builder.withMutation());
-      if (builder.isEnableLombok()) {
-        builder.setupFromTemplate("structure/restructure");
-      } else {
-        builder.setupFromTemplate("structure/restructure/without-lombok");
-      }
+    if (lombok == BooleanOption.TRUE) {
+      builder.setupFromTemplate("structure");
     } else {
-      if (lombok == BooleanOption.TRUE) {
-        builder.setupFromTemplate("structure");
-      } else {
-        builder.setupFromTemplate("structure/without-lombok");
-      }
+      builder.setupFromTemplate("structure/without-lombok");
     }
 
     builder.persist();
@@ -152,17 +121,6 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   @Override
   protected Optional<String> resolveAnalyticsType() {
     return Optional.of(builder.getBooleanParam(REACTIVE) ? REACTIVE : "imperative");
-  }
-
-  private void loadProperty(String property) {
-    try {
-      String propertyValue = FileUtils.readProperties(".", property);
-      if (propertyValue != null && !propertyValue.isEmpty()) {
-        builder.addParam(property, propertyValue);
-      }
-    } catch (IOException ignored) {
-      logger.debug("Error reading property {} from gradle.properties", property);
-    }
   }
 
   public enum ProjectType {

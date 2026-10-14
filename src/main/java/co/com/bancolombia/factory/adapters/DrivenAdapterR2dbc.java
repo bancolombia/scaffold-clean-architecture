@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -19,9 +16,6 @@ public class DrivenAdapterR2dbc implements ModuleFactory {
     builder.runValidations(ReactiveTypeValidation.class);
     logger.lifecycle("Generating for reactive project");
     builder.setupFromTemplate("driven-adapter/r2dbc-postgresql");
-    String dependency = buildImplementationFromProject(":r2dbc-postgresql");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
-    builder.appendToSettings("r2dbc-postgresql", "infrastructure/driven-adapters");
     new ObjectMapperFactory().buildModule(builder);
   }
 }

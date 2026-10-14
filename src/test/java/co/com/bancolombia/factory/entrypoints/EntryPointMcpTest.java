@@ -1,10 +1,7 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
-import static co.com.bancolombia.TestUtils.deleteStructure;
-import static co.com.bancolombia.TestUtils.getTask;
-import static co.com.bancolombia.TestUtils.getTestDir;
-import static co.com.bancolombia.TestUtils.setupProject;
+import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
+import static co.com.bancolombia.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -59,15 +56,22 @@ class EntryPointMcpTest {
   }
 
   @Test
-  void shouldAddParametersFlagBlockWhenMainGradleContainsCompilerArgsBlock()
+  void shouldAddParametersFlagBlockWhenAppBuildContainsCompilerArgsBlock()
       throws IOException, CleanException {
-    String mainGradle = Files.readString(Path.of(TEST_DIR, MAIN_GRADLE));
-    assertTrue(mainGradle.contains("options.compilerArgs = ["));
-    builder.addFile(MAIN_GRADLE, mainGradle);
+    String appBuild = Files.readString(Path.of(TEST_DIR, APP_BUILD_GRADLE));
+    appBuild +=
+        """
+                        tasks.withType(JavaCompile).configureEach {
+                            options.compilerArgs = ['-Amapstruct.suppressGeneratorTimestamp=true']
+                        }
+
+                        """;
+    assertTrue(appBuild.contains("options.compilerArgs = ["));
+    builder.addFile(APP_BUILD_GRADLE, appBuild);
 
     entryPointMcp.buildModule(builder);
 
-    String updated = readGeneratedMainGradle();
+    String updated = readGeneratedAppBuildGradle();
     assertTrue(updated.contains("options.compilerArgs = ["));
     assertTrue(updated.contains("if (!options.compilerArgs.contains('-parameters')) {"));
     assertEquals(1, countOccurrences(updated, "options.compilerArgs += '-parameters'"));
@@ -75,48 +79,50 @@ class EntryPointMcpTest {
 
   @Test
   void shouldNotDuplicateParametersBlockWhenAlreadyPresent() throws IOException, CleanException {
-    String mainGradle =
+    String appBuild =
         """
-        tasks.withType(JavaCompile).configureEach {
-            options.compilerArgs = [
-                    '-Amapstruct.suppressGeneratorTimestamp=true'
-            ]
-            doFirst {
-                if (!options.compilerArgs.contains('-parameters')) {
-                    options.compilerArgs += '-parameters'
-                }
-            }
-        }
-        """;
-    builder.addFile(MAIN_GRADLE, mainGradle);
+                        plugins { id 'org.springframework.boot' }
+                        dependencies { implementation 'org.springframework.boot:spring-boot-starter' }
+                          tasks.withType(JavaCompile).configureEach {
+                              options.compilerArgs = [
+                                      '-Amapstruct.suppressGeneratorTimestamp=true'
+                              ]
+                              doFirst {
+                                  if (!options.compilerArgs.contains('-parameters')) {
+                                      options.compilerArgs += '-parameters'
+                                  }
+                              }
+                          }
+                        """;
+    builder.addFile(APP_BUILD_GRADLE, appBuild);
 
     entryPointMcp.buildModule(builder);
 
-    String updated = readGeneratedMainGradle();
+    String updated = readGeneratedAppBuildGradle();
     assertEquals(1, countOccurrences(updated, "doFirst {"));
     assertEquals(1, countOccurrences(updated, "options.compilerArgs += '-parameters'"));
   }
 
   @Test
-  void shouldKeepWorkingWhenMainGradleContainsJavaBlock() throws IOException, CleanException {
+  void shouldKeepWorkingWhenAppBuildContainsJavaBlock() throws IOException, CleanException {
     DefaultResolver resolver = new DefaultResolver();
     builder.addFile(
-        MAIN_GRADLE,
+        APP_BUILD_GRADLE,
         FileUtils.getResourceAsString(resolver, "gradle-8.11-java-block/main-after.txt"));
 
     entryPointMcp.buildModule(builder);
 
-    String updated = readGeneratedMainGradle();
+    String updated = readGeneratedAppBuildGradle();
     assertTrue(updated.contains("java {"));
     assertTrue(updated.contains("tasks.withType(JavaCompile).configureEach {"));
     assertTrue(updated.contains("if (!options.compilerArgs.contains('-parameters')) {"));
     assertEquals(1, countOccurrences(updated, "options.compilerArgs += '-parameters'"));
   }
 
-  private String readGeneratedMainGradle() throws IOException {
+  private String readGeneratedAppBuildGradle() throws IOException {
     AtomicReference<String> content = new AtomicReference<>();
     builder.updateFile(
-        MAIN_GRADLE,
+        APP_BUILD_GRADLE,
         current -> {
           content.set(current);
           return current;

@@ -111,29 +111,4 @@ class EntryPointGrpcTest {
     assertFileContains(
         TEST_DIR + "/applications/app-service/src/main/resources/application.yaml", "spring:");
   }
-
-  @Test
-  void shouldAddDependencyToAppService() throws IOException, CleanException {
-    // Arrange
-    task.setType("GRPC");
-
-    // Act
-    task.execute();
-
-    // Assert
-    assertFileContains(
-        TEST_DIR + "/applications/app-service/build.gradle", "implementation project(':grpc')");
-  }
-
-  @Test
-  void shouldAddModuleToSettings() throws IOException, CleanException {
-    // Arrange
-    task.setType("GRPC");
-
-    // Act
-    task.execute();
-
-    // Assert
-    assertFileContains(TEST_DIR + "/settings.gradle", "grpc");
-  }
 }
