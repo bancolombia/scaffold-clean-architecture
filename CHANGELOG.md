@@ -1,5 +1,16 @@
 # Changelog
 
+## [v5.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.1) (2026-10-15)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.0...v5.0.1)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/create-github-app-token from 3.2.0 to 3.3.0 [\#1024](https://github.com/bancolombia/scaffold-clean-architecture/pull/1024) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.4 to 2.5.0 [\#1023](https://github.com/bancolombia/scaffold-clean-architecture/pull/1023) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#1015](https://github.com/bancolombia/scaffold-clean-architecture/pull/1015) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump launch-editor from 2.12.0 to 2.14.1 in /docs [\#889](https://github.com/bancolombia/scaffold-clean-architecture/pull/889) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v5.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.0) (2026-10-14)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.3...v5.0.0)
