@@ -16,10 +16,10 @@ public final class Constants {
   public static final String SECRETS_VERSION = "4.5.3";
   public static final String SPRING_BOOT_VERSION = "4.1.1";
   public static final String LOMBOK_VERSION = "1.18.48";
-  public static final String REACTIVE_COMMONS_VERSION = "7.4.1";
+  public static final String REACTIVE_COMMONS_VERSION = "7.4.2";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.17.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.55.15";
+  public static final String AWS_BOM_VERSION = "2.56.0";
   public static final String COMMONS_JMS_VERSION = "3.1.5";
   public static final String ARCH_UNIT_VERSION = "1.5.1";
   public static final String OKHTTP_VERSION = "5.5.0";
@@ -31,10 +31,10 @@ public final class Constants {
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.3";
   public static final String JACKSON_2_VERSION = "2.22.3";
-  public static final String PITEST_VERSION = "1.30.0";
+  public static final String PITEST_VERSION = "1.30.1";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
-  public static final String GRPC_VERSION = "1.84.3";
+  public static final String GRPC_VERSION = "1.85.0";
 
   /**
    * Must match the protobuf-java version managed by the Spring Boot BOM ({@link
