@@ -5,7 +5,7 @@ import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
@@ -37,7 +37,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
           id 'co.com.bancolombia.cleanArchitecture'
           id 'org.springframework.boot' apply false
           id 'org.sonarqube'
-          id 'info.solidsoft.pitest'
+          id 'info.solidsoft.pitest' apply false
       }""";
 
   private static final Pattern ROOT_PROJECT_NAME = Pattern.compile("rootProject\\.name\\s*=\\s*.+");
@@ -52,6 +52,11 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
       Pattern.compile("JavaLanguageVersion\\.of\\((\\d+)\\)");
   private static final Pattern PROJECT_DEPENDENCY =
       Pattern.compile("project\\(\\s*['\"]:([^'\"]+)['\"]\\s*\\)");
+  private static final Pattern PITEST_BLOCK = Pattern.compile("(?m)^\\s*pitest\\s*\\{");
+  private static final Pattern PITEST_ARRAY_PROPERTY =
+      Pattern.compile("(?m)^\\s*(excluded(?:Test)?Classes\\s*=\\s*(\\[[^]]*\\]))\\s*$");
+  private static final Pattern EMPTY_ARRAY = Pattern.compile("\\[\\s*\\]");
+  public static final String SPACES = "        ";
 
   @Override
   @SneakyThrows
@@ -144,7 +149,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
           String sonarExclusions = extractSonarExclusions(content);
           StringBuilder result = new StringBuilder();
           result.append(NEW_PLUGINS_BLOCK).append("\n\n");
-          result.append(buildAllProjectsBlock(mainGradleContent));
+          result.append(buildRootProjectsBlocks(mainGradleContent));
           if (sonarExclusions != null) {
             result.append("\n").append(buildSonarBlock(sonarExclusions));
           }
@@ -164,7 +169,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
     return null;
   }
 
-  private String buildAllProjectsBlock(String mainGradleContent) {
+  private String buildRootProjectsBlocks(String mainGradleContent) {
     String repositoriesBlock = null;
     String bomLine = null;
     if (mainGradleContent != null) {
@@ -179,11 +184,71 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
     }
     StringBuilder sb = new StringBuilder("allprojects {\n    ");
     sb.append(repositoriesBlock != null ? repositoriesBlock : "repositories {\n    }").append("\n");
+    sb.append("}\n\nsubprojects {\n    dependencies {\n");
     if (bomLine != null) {
-      sb.append("\n    dependencies {\n        ").append(bomLine).append("\n    }\n");
+      sb.append(SPACES).append(bomLine).append("\n");
+    }
+    sb.append("    }\n");
+    String pitestExclusions = buildPitestExclusionsBlock(mainGradleContent);
+    if (pitestExclusions != null) {
+      sb.append(pitestExclusions);
     }
     sb.append("}\n");
     return sb.toString();
+  }
+
+  private String buildPitestExclusionsBlock(String mainGradleContent) {
+    if (mainGradleContent == null) {
+      return null;
+    }
+    String subprojectsBlock = UpdateUtils.extractBlock(mainGradleContent, "subprojects");
+    String pitestScope = subprojectsBlock != null ? subprojectsBlock : mainGradleContent;
+    String pitestBlock = extractPitestConfigurationBlock(pitestScope);
+    if (pitestBlock == null) {
+      return null;
+    }
+    String excludedClasses = extractNonEmptyPitestArrayProperty(pitestBlock, "excludedClasses");
+    String excludedTestClasses =
+        extractNonEmptyPitestArrayProperty(pitestBlock, "excludedTestClasses");
+    if (excludedClasses == null && excludedTestClasses == null) {
+      return null;
+    }
+    StringBuilder pitest = new StringBuilder("    pitest {\n");
+    if (excludedClasses != null) {
+      pitest.append(SPACES).append(excludedClasses).append("\n");
+    }
+    if (excludedTestClasses != null) {
+      pitest.append(SPACES).append(excludedTestClasses).append("\n");
+    }
+    pitest.append("    }\n");
+    return pitest.toString();
+  }
+
+  /**
+   * Resolves the {@code pitest { ... }} block, not plugin ids such as {@code
+   * info.solidsoft.pitest}.
+   */
+  private String extractPitestConfigurationBlock(String content) {
+    Matcher matcher = PITEST_BLOCK.matcher(content);
+    if (!matcher.find()) {
+      return null;
+    }
+    return UpdateUtils.extractBlock(content.substring(matcher.start()), "pitest");
+  }
+
+  private String extractNonEmptyPitestArrayProperty(String pitestBlock, String propertyName) {
+    Matcher matcher = PITEST_ARRAY_PROPERTY.matcher(pitestBlock);
+    while (matcher.find()) {
+      String assignment = matcher.group(1).trim();
+      if (!assignment.startsWith(propertyName)) {
+        continue;
+      }
+      if (EMPTY_ARRAY.matcher(matcher.group(2)).matches()) {
+        return null;
+      }
+      return assignment;
+    }
+    return null;
   }
 
   private String buildSonarBlock(String sonarExclusions) {
@@ -293,11 +358,11 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
 
   @Override
   public String name() {
-    return "4.x.x->5.0.0";
+    return "4.x.x->5.x.x";
   }
 
   @Override
   public String description() {
-    return "Update scaffold 4.x.x to 5.0.0";
+    return "Update scaffold 4.x.x to 5.x.x";
   }
 }

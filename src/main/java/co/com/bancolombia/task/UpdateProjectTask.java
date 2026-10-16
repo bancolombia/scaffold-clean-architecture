@@ -1,7 +1,7 @@
 package co.com.bancolombia.task;
 
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.DEPENDENCIES_TO_UPDATE;
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.DEPENDENCIES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.upgrades.UpgradeFactory;

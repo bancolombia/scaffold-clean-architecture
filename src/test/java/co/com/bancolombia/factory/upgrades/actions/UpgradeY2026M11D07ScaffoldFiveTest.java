@@ -5,7 +5,7 @@ import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -155,6 +155,69 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
   }
 
   @Test
+  void shouldCopyNonEmptyPitestExclusionsFromMainGradle() throws IOException {
+    stubLatestRelease("5.0.0");
+    String mainWithPitest =
+        resource("scaffold5/main-before.txt")
+            .replace(
+                "    dependencies {",
+                """
+                    pitest {
+                        excludedClasses = ['co.com.bancolombia.model.*']
+                        excludedTestClasses = ['co.com.bancolombia.SomeTest']
+                    }
+
+                    dependencies {
+                """);
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, mainWithPitest);
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    String expectedBuild =
+        resource("scaffold5/build-after.txt")
+            .replace(
+                "    }\n}\n\nsonar",
+                """
+                    }
+                    pitest {
+                        excludedClasses = ['co.com.bancolombia.model.*']
+                        excludedTestClasses = ['co.com.bancolombia.SomeTest']
+                    }
+                }
+
+                sonar""");
+    verify(builder).addFile(BUILD_GRADLE, expectedBuild);
+  }
+
+  @Test
+  void shouldOmitPitestBlockWhenExclusionArraysAreEmpty() throws IOException {
+    stubLatestRelease("5.0.0");
+    String mainWithEmptyPitest =
+        resource("scaffold5/main-before.txt")
+            .replace(
+                "    dependencies {",
+                """
+                    pitest {
+                        excludedClasses = []
+                        excludedTestClasses = []
+                    }
+
+                    dependencies {
+                """);
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, mainWithEmptyPitest);
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    verify(builder).addFile(BUILD_GRADLE, resource("scaffold5/build-after.txt"));
+  }
+
+  @Test
   void shouldSkipAwsBomDependencyWhenAbsentFromMainGradle() throws IOException {
     stubLatestRelease("5.0.0");
     String mainWithoutBom =
@@ -172,8 +235,7 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
             BUILD_GRADLE,
             resource("scaffold5/build-after.txt")
                 .replace(
-                    "\n\n    dependencies {\n        implementation platform('software.amazon.awssdk:bom:2.54.10')\n    }\n",
-                    "\n"));
+                    "        implementation platform('software.amazon.awssdk:bom:2.54.10')\n", ""));
   }
 
   @Test

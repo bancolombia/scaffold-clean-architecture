@@ -1,7 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.DEPENDENCIES_TO_UPDATE;
-import static co.com.bancolombia.factory.upgrades.actions.UpdateDependencies.FILES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.DEPENDENCIES_TO_UPDATE;
+import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateDependenciesTest {
+class ZUpdateDependenciesTest {
 
   @Mock private ExternalOperations operations;
   @Mock private Project project;
@@ -41,7 +41,7 @@ class UpdateDependenciesTest {
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
     builder = spy(new ModuleBuilder(project));
-    updater = new UpdateDependencies(operations);
+    updater = new ZUpdateDependencies(operations);
     assertNotNull(updater.name());
     assertNotNull(updater.description());
   }
