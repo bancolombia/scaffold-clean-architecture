@@ -1,10 +1,7 @@
 package co.com.bancolombia.factory;
 
 import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
@@ -29,13 +26,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import lombok.Getter;
@@ -307,9 +298,11 @@ public class ModuleBuilder {
     this.params.put("packagePath", packageName.replace('.', '/').toLowerCase());
   }
 
+  @SneakyThrows
   public void addFile(String path, String content) {
-    String finalPath = FileUtils.toRelative(path);
-    this.files.put(finalPath, FileModel.builder().path(finalPath).content(content).build());
+    String relativePath = FileUtils.toRelative(path);
+    this.files.put(
+        getMapPath(relativePath), FileModel.builder().path(relativePath).content(content).build());
   }
 
   public void addDir(String path) {
@@ -461,14 +454,21 @@ public class ModuleBuilder {
   }
 
   public String readFile(String path) throws IOException {
-    String finalPath = FileUtils.toRelative(path);
-    FileModel current = files.get(finalPath);
+    String relativePath = FileUtils.toRelative(path);
+    String mapPath = getMapPath(relativePath);
+    FileModel current = files.get(mapPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(projectDir, finalPath, logger);
+      content = FileUtils.readFile(projectDir, relativePath, logger);
     } else {
       content = current.getContent();
     }
     return content;
+  }
+
+  @SneakyThrows
+  private String getMapPath(String relativePath) {
+    File file = FileUtils.resolveFile(projectDir, relativePath).getAbsoluteFile();
+    return file.getCanonicalPath();
   }
 }

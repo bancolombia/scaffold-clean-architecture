@@ -1,7 +1,7 @@
 name: "release-actions"
 on:
   release:
-    types: [ released ]
+    types: [ published ]
 jobs:
   release:
     permissions:
