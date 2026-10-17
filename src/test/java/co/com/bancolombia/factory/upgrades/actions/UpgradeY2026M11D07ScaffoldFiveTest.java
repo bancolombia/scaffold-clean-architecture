@@ -116,6 +116,49 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
   }
 
   @Test
+  void shouldKeepBuildscriptExtWithNonPluginManagedVersions() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(
+        BUILD_GRADLE,
+        resource("scaffold5/build-before.txt")
+            .replace(
+                "\tlombokVersion = '1.18.46'\n",
+                "\tlombokVersion = '1.18.46'\n\t\tcustomToolVersion = '1.0.0'\n"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    verify(builder)
+        .addFile(
+            BUILD_GRADLE,
+            """
+            buildscript {
+            \text {
+            \t\tcustomToolVersion = '1.0.0'
+            \t}
+            }
+
+            """
+                + resource("scaffold5/build-after.txt"));
+  }
+
+  @Test
+  void shouldRemoveDependencyMgmtGradleWhenPresent() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+    builder.addFile("./dependencyMgmt.gradle", "dependencies {\n}\n");
+
+    updater.up(builder);
+
+    verify(builder).removeDir("./dependencyMgmt.gradle");
+  }
+
+  @Test
   void shouldReduceAppServiceToDependenciesBlockWhenFilesToUpdateUsesAbsoluteStylePaths()
       throws IOException {
     stubLatestRelease("5.0.0");
@@ -300,7 +343,6 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
             APP_BUILD_GRADLE,
             """
             dependencies {
-                implementation 'org.springframework.boot:spring-boot-starter'
             }
             """);
   }
@@ -332,5 +374,85 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
                 implementation project(':rest-consumer')
                 implementation 'io.micrometer:micrometer-core'
             }""");
+  }
+
+  @Test
+  void shouldRemoveInfrastructureImplementationsFromAppService() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+    builder.addFile(
+        APP_BUILD_GRADLE,
+        resource("scaffold5/app-service-build-before.txt")
+            .replace(
+                "    implementation 'software.amazon.awssdk:s3'\n",
+                "    implementation 'software.amazon.awssdk:s3'\n"
+                    + "    implementation 'org.owasp.encoder:encoder:1.4.0'\n"
+                    + "    implementation 'com.github.bancolombia:commons-jms-mq:3.1.4'\n"
+                    + "    implementation 'io.micrometer:micrometer-core'\n"));
+    builder.addFile(MQ_SENDER_BUILD_GRADLE, resource("scaffold5/mq-sender-build-before.txt"));
+    builder.addFile(REACTIVE_WEB_BUILD_GRADLE, resource("scaffold5/reactive-web-build-before.txt"));
+    builder.addParam(
+        FILES_TO_UPDATE,
+        List.of(BUILD_GRADLE, APP_BUILD_GRADLE, MQ_SENDER_BUILD_GRADLE, REACTIVE_WEB_BUILD_GRADLE));
+
+    updater.up(builder);
+
+    verify(builder).addFile(APP_BUILD_GRADLE, resource("scaffold5/app-service-build-after.txt"));
+  }
+
+  @Test
+  void shouldRemoveConfigurationsAllWithOnlyResolutionStrategy() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+    builder.addFile(
+        MQ_SENDER_BUILD_GRADLE,
+        resource("scaffold5/mq-sender-build-before.txt")
+            + """
+
+            configurations.all {
+                resolutionStrategy {}
+            }
+            """);
+    builder.addParam(FILES_TO_UPDATE, List.of(BUILD_GRADLE, MQ_SENDER_BUILD_GRADLE));
+
+    updater.up(builder);
+
+    verify(builder)
+        .addFile(MQ_SENDER_BUILD_GRADLE, resource("scaffold5/mq-sender-build-after.txt"));
+  }
+
+  @Test
+  void shouldKeepConfigurationsAllWithExcludeGroup() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+    builder.addFile(
+        MQ_SENDER_BUILD_GRADLE,
+        resource("scaffold5/mq-sender-build-before.txt")
+            + """
+
+            configurations.all {
+                exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+            }
+            """);
+    builder.addParam(FILES_TO_UPDATE, List.of(BUILD_GRADLE, MQ_SENDER_BUILD_GRADLE));
+
+    updater.up(builder);
+
+    verify(builder)
+        .addFile(
+            MQ_SENDER_BUILD_GRADLE,
+            resource("scaffold5/mq-sender-build-after.txt")
+                + "\nconfigurations.all {\n"
+                + "    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'\n"
+                + "}");
   }
 }
