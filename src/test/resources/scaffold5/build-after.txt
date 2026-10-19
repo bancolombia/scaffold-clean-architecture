@@ -2,7 +2,7 @@ plugins {
     id 'co.com.bancolombia.cleanArchitecture'
     id 'org.springframework.boot' apply false
     id 'org.sonarqube'
-    id 'info.solidsoft.pitest'
+    id 'info.solidsoft.pitest' apply false
 }
 
 allprojects {
@@ -11,7 +11,9 @@ allprojects {
             url = 'https://repo.maven.apache.org/maven2'
         }
     }
+}
 
+subprojects {
     dependencies {
         implementation platform('software.amazon.awssdk:bom:2.54.10')
     }
