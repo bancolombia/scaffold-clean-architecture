@@ -14,13 +14,13 @@ import lombok.SneakyThrows;
 import org.gradle.api.logging.Logger;
 
 @AllArgsConstructor
-public class UpdateDependencies implements UpgradeAction {
+public class ZUpdateDependencies implements UpgradeAction {
   public static final String DEPENDENCIES_TO_UPDATE =
-      UpdateDependencies.class.getSimpleName() + "dependencies";
-  public static final String FILES_TO_UPDATE = UpdateDependencies.class.getSimpleName() + "files";
+      ZUpdateDependencies.class.getSimpleName() + "dependencies";
+  public static final String FILES_TO_UPDATE = ZUpdateDependencies.class.getSimpleName() + "files";
   private final ExternalOperations operations;
 
-  public UpdateDependencies() {
+  public ZUpdateDependencies() {
     operations = OperationsProvider.fromDefault();
   }
 

@@ -286,9 +286,11 @@ public class ModuleBuilder {
     this.params.put("packagePath", packageName.replace('.', '/').toLowerCase());
   }
 
+  @SneakyThrows
   public void addFile(String path, String content) {
-    String finalPath = FileUtils.toRelative(path);
-    this.files.put(finalPath, FileModel.builder().path(finalPath).content(content).build());
+    String relativePath = FileUtils.toRelative(path);
+    this.files.put(
+        getMapPath(relativePath), FileModel.builder().path(relativePath).content(content).build());
   }
 
   public void addDir(String path) {
@@ -440,14 +442,21 @@ public class ModuleBuilder {
   }
 
   public String readFile(String path) throws IOException {
-    String finalPath = FileUtils.toRelative(path);
-    FileModel current = files.get(finalPath);
+    String relativePath = FileUtils.toRelative(path);
+    String mapPath = getMapPath(relativePath);
+    FileModel current = files.get(mapPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(projectDir, finalPath, logger);
+      content = FileUtils.readFile(projectDir, relativePath, logger);
     } else {
       content = current.getContent();
     }
     return content;
+  }
+
+  @SneakyThrows
+  private String getMapPath(String relativePath) {
+    File file = FileUtils.resolveFile(projectDir, relativePath).getAbsoluteFile();
+    return file.getCanonicalPath();
   }
 }
