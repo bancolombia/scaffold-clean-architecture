@@ -1,5 +1,8 @@
 name: "release-actions-v4"
 on:
+  push:
+    branches:
+      - maintenance/*
   workflow_dispatch:
 jobs:
   library:
