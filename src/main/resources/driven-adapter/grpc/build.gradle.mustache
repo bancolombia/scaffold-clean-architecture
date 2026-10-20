@@ -1,0 +1,36 @@
+plugins {
+    id 'com.google.protobuf' version '{{GRADLE_PROTOBUF_VERSION}}'
+}
+
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework.boot:spring-boot-starter-grpc-client'
+    implementation 'io.grpc:grpc-services'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-grpc-client-test'
+}
+
+// The Spring Boot Gradle plugin can auto-configure protoc and protoc-gen-grpc-java
+// (aligning them with the protobuf-java and grpc-util versions of its BOM), but only
+// when 'org.springframework.boot' is applied to this same module. In this architecture
+// it is only applied to :app-service, so protoc, the grpc plugin and the code
+// generation tasks must be configured explicitly here.
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:{{PROTOBUF_VERSION}}"
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:{{GRPC_VERSION}}"
+        }
+    }
+
+    generateProtoTasks {
+        all().each {
+            it.plugins {
+                grpc {}
+            }
+        }
+    }
+}

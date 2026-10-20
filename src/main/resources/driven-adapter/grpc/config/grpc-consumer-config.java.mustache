@@ -1,0 +1,47 @@
+package {{package}}.grpc.config;
+
+import {{package}}.grpc.ExampleServiceGrpc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
+
+/**
+ * Configuration for gRPC client.
+ *
+ * <p>This class configures the gRPC client stubs used to communicate with external gRPC services.
+ * The channel configuration (address, negotiation type, etc.) is defined in application.yaml
+ * under {@code spring.grpc.client.channels}.</p>
+ *
+ * <h3>Configuration Properties</h3>
+ * <pre>
+ * spring:
+ *   grpc:
+ *     client:
+ *       channels:
+ *         example-service:
+ *           address: static://localhost:9090
+ *           negotiation-type: PLAINTEXT
+ * </pre>
+ *
+ * <h3>About Generated Classes</h3>
+ * <p>{@code ExampleServiceGrpc} is auto-generated from the proto file during build.
+ * Run {@code ./gradlew generateProto} if the class is not found.</p>
+ *
+ * @see <a href="https://docs.spring.io/spring-grpc/reference/client.html">Spring gRPC Client Documentation</a>
+ */
+@Configuration
+public class GrpcClientConfig {
+    /**
+     * Creates a blocking stub for the ExampleService gRPC service.
+     *
+     * <p>The channel name "example-service" must match the configuration in application.yaml.</p>
+     *
+     * @param channelFactory the factory to create gRPC channels
+     * @return a blocking stub for synchronous gRPC calls
+     */
+    @Bean
+    ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceBlockingStub(
+            GrpcChannelFactory channelFactory) {
+        return ExampleServiceGrpc.newBlockingStub(channelFactory.createChannel("example-service"));
+    }
+}
