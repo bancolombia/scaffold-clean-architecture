@@ -4,8 +4,10 @@ plugins {
 
 dependencies {
     implementation project(':model')
+
     implementation 'org.springframework.boot:spring-boot-starter-grpc-client'
     implementation 'io.grpc:grpc-services'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-grpc-client-test'
 }
@@ -16,6 +18,7 @@ dependencies {
 // it is only applied to :app-service, so protoc, the grpc plugin and the code
 // generation tasks must be configured explicitly here.
 protobuf {
+    // Keep in sync with the protobuf-java version managed by the Spring Boot BOM.
     protoc {
         artifact = "com.google.protobuf:protoc:{{PROTOBUF_VERSION}}"
     }
