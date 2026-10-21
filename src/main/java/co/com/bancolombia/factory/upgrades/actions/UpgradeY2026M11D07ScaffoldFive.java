@@ -384,16 +384,11 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
         continue;
       }
       boolean isAppService = current.equals(appServiceFile);
-      boolean isInfrastructureModule = isUnderInfrastructure(file);
       applied |=
           builder.updateFile(
               file,
               content ->
-                  cleanModuleContent(
-                      content,
-                      isAppService,
-                      isInfrastructureModule,
-                      infrastructureImplementationArtifacts));
+                  cleanModuleContent(content, isAppService, infrastructureImplementationArtifacts));
     }
     return applied;
   }
@@ -443,10 +438,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
    * dependency on another infrastructure module (e.g. {@code project(':rest-consumer')}) must stay.
    */
   private String cleanModuleContent(
-      String content,
-      boolean isAppService,
-      boolean isInfrastructureModule,
-      Set<String> infrastructureImplementationArtifacts) {
+      String content, boolean isAppService, Set<String> infrastructureImplementationArtifacts) {
     String cleaned = removeResolutionStrategyConfigurationsAllBlocks(content);
     if (isAppService) {
       cleaned = removeProjectDependencies(cleaned, null);
@@ -454,7 +446,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
           removeInfrastructureImplementationDuplicates(
               cleaned, infrastructureImplementationArtifacts);
       cleaned = removePluginV5AppServiceDependencies(cleaned);
-    } else if (isInfrastructureModule) {
+    } else {
       cleaned = removeProjectDependencies(cleaned, Set.of("model", "usecase"));
     }
     cleaned = Utils.removeLinesIncludes(cleaned, "'org.springframework:spring-context'");
