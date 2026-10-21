@@ -197,9 +197,9 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
 dependencies {
     api 'com.github.spullara.mustache.java:compiler:0.9.14'
-    api 'tools.jackson.core:jackson-databind:3.2.3'
-    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.2.3'
-    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.2.3'
+    api 'tools.jackson.core:jackson-databind:3.2.4'
+    api 'tools.jackson.dataformat:jackson-dataformat-yaml:3.2.4'
+    api 'tools.jackson.dataformat:jackson-dataformat-xml:3.2.4'
     api 'commons-io:commons-io:2.22.0'
     api gradleApi()
 
@@ -318,7 +318,7 @@ tasks.register('installGitHooks') {
 }
 
 tasks.named('wrapper') {
-    gradleVersion = '9.8.1'
+    gradleVersion = '9.8.2'
 }
 
 tasks.register('ci-updater', JavaExec) {
