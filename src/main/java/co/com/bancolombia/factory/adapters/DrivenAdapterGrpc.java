@@ -12,8 +12,7 @@ public class DrivenAdapterGrpc implements ModuleFactory {
 
     builder
         .appendToProperties("spring.grpc.client.channels.example-service")
-        .put("address", "static://localhost:9090")
-        .put("negotiation-type", "PLAINTEXT");
+        .put("target", "static://localhost:9090");
     builder.setupFromTemplate("driven-adapter/grpc");
   }
 }

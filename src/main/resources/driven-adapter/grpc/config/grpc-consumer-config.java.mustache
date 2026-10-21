@@ -31,6 +31,14 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  */
 @Configuration
 public class GrpcClientConfig {
+
+    private final String target;
+
+    protected GrpcClientConfig(
+            @Value("${spring.grpc.client.channels.example-service.target}")  String target) {
+        this.target = target;
+    }
+
     /**
      * Creates a blocking stub for the ExampleService gRPC service.
      *
@@ -42,6 +50,6 @@ public class GrpcClientConfig {
     @Bean
     ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceBlockingStub(
             GrpcChannelFactory channelFactory) {
-        return ExampleServiceGrpc.newBlockingStub(channelFactory.createChannel("example-service"));
+        return ExampleServiceGrpc.newBlockingStub(channelFactory.createChannel(target));
     }
 }
