@@ -1,5 +1,20 @@
 # Changelog
 
+## [v5.0.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.3) (2026-10-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.5...v5.0.3)
+
+**Merged pull requests:**
+
+- build\(deps\): bump launch-editor from 2.14.1 to 2.14.2 in /docs [\#1029](https://github.com/bancolombia/scaffold-clean-architecture/pull/1029) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump follow-redirects from 1.16.0 to 1.16.1 in /docs [\#1028](https://github.com/bancolombia/scaffold-clean-architecture/pull/1028) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs: update migration guide version [\#1027](https://github.com/bancolombia/scaffold-clean-architecture/pull/1027) ([juancgalvis](https://github.com/juancgalvis))
+- fix\(deps\): update dependencies [\#1026](https://github.com/bancolombia/scaffold-clean-architecture/pull/1026) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+
+## [v4.7.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.5) (2026-10-21)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.2...v4.7.5)
+
 ## [v5.0.2](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.2) (2026-10-19)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.4...v5.0.2)
@@ -8,17 +23,27 @@
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.1...v4.7.4)
 
-**Merged pull requests:**
-
-- fix: upgrade action to v5 [\#1025](https://github.com/bancolombia/scaffold-clean-architecture/pull/1025) ([juancgalvis](https://github.com/juancgalvis))
-
 ## [v5.0.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.1) (2026-10-15)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.0...v5.0.1)
 
+**Merged pull requests:**
+
+- build\(deps\): bump actions/create-github-app-token from 3.2.0 to 3.3.0 [\#1024](https://github.com/bancolombia/scaffold-clean-architecture/pull/1024) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.4.4 to 2.5.0 [\#1023](https://github.com/bancolombia/scaffold-clean-architecture/pull/1023) ([dependabot[bot]](https://github.com/apps/dependabot))
+- fix\(deps\): update dependencies [\#1015](https://github.com/bancolombia/scaffold-clean-architecture/pull/1015) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- build\(deps\): bump launch-editor from 2.12.0 to 2.14.1 in /docs [\#889](https://github.com/bancolombia/scaffold-clean-architecture/pull/889) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v5.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.0) (2026-10-14)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.3...v5.0.0)
+
+**Merged pull requests:**
+
+- build\(deps\): bump actions/upload-artifact from 7.0.1 to 7.0.2 [\#1018](https://github.com/bancolombia/scaffold-clean-architecture/pull/1018) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.21.1 to 2.22.1 [\#1017](https://github.com/bancolombia/scaffold-clean-architecture/pull/1017) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/setup-node from 7.0.0 to 7.1.0 [\#1016](https://github.com/bancolombia/scaffold-clean-architecture/pull/1016) ([dependabot[bot]](https://github.com/apps/dependabot))
+- feat\(plugin\)!: implement generic plugin conventions to avoid boilerplate configurations in main.gradle and build.gradle [\#1013](https://github.com/bancolombia/scaffold-clean-architecture/pull/1013) ([juancgalvis](https://github.com/juancgalvis))
 
 ## [v4.7.3](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.3) (2026-10-09)
 
