@@ -1,12 +1,7 @@
 package co.com.bancolombia.utils.operations;
 
-import static co.com.bancolombia.utils.operations.HttpOperations.DEPENDENCY_RELEASES;
-import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_PLUGINS;
-import static co.com.bancolombia.utils.operations.HttpOperations.GRADLE_VERSIONS_API;
-import static co.com.bancolombia.utils.operations.HttpOperations.PLUGIN_RELEASES;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static co.com.bancolombia.utils.operations.HttpOperations.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
@@ -35,26 +30,38 @@ class HttpOperationsTest {
     String gradleVersionResponse = "{\"version\":\"9.4.0\"}";
     String dependencyResponse =
         """
-                <metadata>
-                  <groupId>some.dependency</groupId>
-                  <artifactId>name</artifactId>
-                  <versioning>
-                    <latest>2.0.1</latest>
-                    <release>2.0.1</release>
-                    <versions>
-                      <version>0.0.1</version>
-                    </versions>
-                  </versioning>
-                </metadata>
-                """;
+                        <metadata>
+                          <groupId>some.dependency</groupId>
+                          <artifactId>name</artifactId>
+                          <versioning>
+                            <latest>2.0.1</latest>
+                            <release>2.0.1</release>
+                            <versions>
+                              <version>0.0.1</version>
+                            </versions>
+                          </versioning>
+                        </metadata>
+                        """;
     String xmlResponse =
         """
-                <metadata>
-                  <groupId>org.sonarqube</groupId>
-                  <artifactId>org.sonarqube.gradle.plugin</artifactId>
-                  <version>4.4.1.3373</version>
-                </metadata>
-                """;
+                        <metadata>
+                          <groupId>org.springframework.boot</groupId>
+                          <artifactId>org.springframework.boot.gradle.plugin</artifactId>
+                          <version>4.2.0-RC1</version>
+                          <versioning>
+                            <latest>4.2.0-RC1</latest>
+                            <release>4.2.0-RC1</release>
+                            <versions>
+                              <version>4.1.1</version>
+                              <version>4.1.2</version>
+                              <version>4.2.0-M1</version>
+                              <version>4.2.0-M2</version>
+                              <version>4.2.0-RC1</version>
+                            </versions>
+                            <lastUpdated>20261022170307</lastUpdated>
+                          </versioning>
+                        </metadata>
+                        """;
     final Dispatcher dispatcher =
         new Dispatcher() {
           @Override
@@ -106,12 +113,13 @@ class HttpOperationsTest {
   @Test
   void getGradlePluginVersion() {
     // Arrange
-    DependencyRelease release = DependencyRelease.from("org.sonarqube:org.sonarqube.gradle.plugin");
+    DependencyRelease release =
+        DependencyRelease.from("org.springframework.boot:org.springframework.boot.gradle.plugin");
     // Act
     Optional<DependencyRelease> result = operations.getLatestGradlePluginVersion(release);
     // Assert
     assertTrue(result.isPresent());
-    assertEquals("4.4.1.3373", result.get().getVersion());
+    assertEquals("4.1.2", result.get().getVersion());
   }
 
   @Test
