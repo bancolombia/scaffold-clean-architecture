@@ -13,21 +13,21 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
 
   // Dependencies
-  public static final String SECRETS_VERSION = "4.5.3";
-  public static final String SPRING_BOOT_VERSION = "4.1.1";
+  public static final String SECRETS_VERSION = "4.5.4";
+  public static final String SPRING_BOOT_VERSION = "4.1.2";
   public static final String LOMBOK_VERSION = "1.18.48";
-  public static final String REACTIVE_COMMONS_VERSION = "7.4.2";
+  public static final String REACTIVE_COMMONS_VERSION = "7.5.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
-  public static final String BLOCK_HOUND_VERSION = "1.0.17.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.57.1";
-  public static final String COMMONS_JMS_VERSION = "3.1.5";
+  public static final String BLOCK_HOUND_VERSION = "1.0.18.RELEASE";
+  public static final String AWS_BOM_VERSION = "2.57.3";
+  public static final String COMMONS_JMS_VERSION = "3.1.6";
   public static final String ARCH_UNIT_VERSION = "1.5.1";
-  public static final String OKHTTP_VERSION = "5.5.0";
+  public static final String OKHTTP_VERSION = "5.5.1";
   public static final String RESILIENCE_4J_VERSION = "2.4.0";
-  public static final String BIN_STASH_VERSION = "2.1.4";
-  public static final String SPRING_DOC_OPENAPI_VERSION = "3.1.1";
+  public static final String BIN_STASH_VERSION = "2.1.5";
+  public static final String SPRING_DOC_OPENAPI_VERSION = "3.2.0";
   public static final String CLOUD_EVENTS_VERSION = "5.1.0";
-  public static final String SPRING_AI_VERSION = "2.0.1";
+  public static final String SPRING_AI_VERSION = "2.0.2";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.2.4";
   public static final String JACKSON_2_VERSION = "2.22.4";
@@ -45,7 +45,7 @@ public final class Constants {
 
   // Gradle plugins
   public static final String PLUGIN_VERSION = "5.0.3";
-  public static final String JACOCO_VERSION = "0.8.15";
+  public static final String JACOCO_VERSION = "0.8.16";
   public static final String SONAR_VERSION = "7.5.0.8588";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
