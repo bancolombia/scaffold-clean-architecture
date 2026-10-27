@@ -75,16 +75,12 @@ public class ChildConventionPlugin implements Plugin<Project> {
   }
 
   private void configureTests(Project project) {
-    boolean reactive =
-        Boolean.parseBoolean(String.valueOf(project.getRootProject().findProperty("reactive")));
-    if (reactive && JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
       project
           .getTasks()
           .withType(Test.class)
           .configureEach(
               test -> {
-                test.getFailOnNoDiscoveredTests().set(false);
                 test.getJvmArgs().add("-XX:+AllowRedefinitionToAddDeleteMethods");
                 test.getJvmArgs().add("-XX:+EnableDynamicAgentLoading");
                 test.getJvmArgs().add("-Djdk.attach.allowAttachSelf=true");
@@ -94,7 +90,11 @@ public class ChildConventionPlugin implements Plugin<Project> {
     project
         .getTasks()
         .withType(Test.class)
-        .configureEach(test -> test.finalizedBy(project.getTasks().named("jacocoTestReport")));
+        .configureEach(
+            test -> {
+              test.getFailOnNoDiscoveredTests().set(false);
+              test.finalizedBy(project.getTasks().named("jacocoTestReport"));
+            });
   }
 
   private void configureDependencies(Project project) {
