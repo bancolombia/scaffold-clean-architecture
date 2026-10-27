@@ -1,5 +1,18 @@
 # Changelog
 
+## [v5.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.5) (2026-10-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.4...v5.0.5)
+
+**Merged pull requests:**
+
+- fix: add blockhound and exclude platform from validate structure [\#1037](https://github.com/bancolombia/scaffold-clean-architecture/pull/1037) ([juancgalvis](https://github.com/juancgalvis))
+- build\(deps\): bump postcss-selector-parser from 6.1.4 to 6.1.5 in /docs [\#1036](https://github.com/bancolombia/scaffold-clean-architecture/pull/1036) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump fast-uri from 3.1.8 to 3.1.9 in /docs [\#1035](https://github.com/bancolombia/scaffold-clean-architecture/pull/1035) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump dompurify from 3.4.16 to 3.4.17 in /docs [\#1034](https://github.com/bancolombia/scaffold-clean-architecture/pull/1034) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump body-parser from 1.20.8 to 1.20.9 in /docs [\#1033](https://github.com/bancolombia/scaffold-clean-architecture/pull/1033) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.22.1 to 2.22.2 [\#1031](https://github.com/bancolombia/scaffold-clean-architecture/pull/1031) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v5.0.4](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.4) (2026-10-26)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.3...v5.0.4)
