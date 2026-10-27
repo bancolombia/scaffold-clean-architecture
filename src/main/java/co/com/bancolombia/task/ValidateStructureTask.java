@@ -17,7 +17,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.Dependency;
+import org.gradle.api.artifacts.ModuleDependency;
 import org.gradle.api.artifacts.UnknownConfigurationException;
+import org.gradle.api.attributes.Category;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
@@ -37,8 +39,6 @@ public abstract class ValidateStructureTask
   private static final String USE_CASE_MODULE = "usecase";
   private static final String REACTOR_CORE = "reactor-core";
   private static final String REACTOR_EXTRA = "reactor-extra";
-  private static final String SPRING_DEPENDENCIES = "spring-boot-dependencies";
-  private static final String AWS_BOM = "bom";
   private static final String DEPENDENCY = "--- Dependency: ";
 
   @Internal
@@ -132,12 +132,23 @@ public abstract class ValidateStructureTask
                         .getByName(JavaPlugin.IMPLEMENTATION_CONFIGURATION_NAME)
                         .getDependencies()
                         .stream()
+                        .filter(dependency -> !isPlatformDependency(dependency))
                         .map(Dependency::getName)
                         .collect(Collectors.toSet());
                   } catch (UnknownConfigurationException e) {
                     return Set.of();
                   }
                 }));
+  }
+
+  private boolean isPlatformDependency(Dependency dependency) {
+    if (!(dependency instanceof ModuleDependency moduleDependency)) {
+      return false;
+    }
+    var category = moduleDependency.getAttributes().getAttribute(Category.CATEGORY_ATTRIBUTE);
+    return category != null
+        && (Category.REGULAR_PLATFORM.equals(category.getName())
+            || Category.ENFORCED_PLATFORM.equals(category.getName()));
   }
 
   private boolean validateModelLayer() {
@@ -198,7 +209,7 @@ public abstract class ValidateStructureTask
             .map(String::trim)
             .filter(e -> !e.isEmpty())
             .collect(Collectors.toList());
-    deps.addAll(Arrays.asList(REACTOR_EXTRA, REACTOR_CORE, SPRING_DEPENDENCIES, AWS_BOM));
+    deps.addAll(Arrays.asList(REACTOR_EXTRA, REACTOR_CORE));
     return !deps.contains(dependencyName);
   }
 
