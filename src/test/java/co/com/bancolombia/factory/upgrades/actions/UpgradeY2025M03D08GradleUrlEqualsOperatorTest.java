@@ -74,6 +74,34 @@ class UpgradeY2025M03D08GradleUrlEqualsOperatorTest {
   }
 
   @Test
+  void shouldApplyUpdateWithUri() throws IOException {
+    DefaultResolver resolver = new DefaultResolver();
+    // Arrange
+    builder.addFile(
+        MAIN_GRADLE,
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.13-url-equals-operator/main-2-before.txt"));
+    builder.addFile(
+        SETTINGS_GRADLE,
+        FileUtils.getResourceAsString(
+            resolver, "gradle-8.13-url-equals-operator/settings-before.txt"));
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertTrue(applied);
+    verify(builder, atLeast(1))
+        .addFile(
+            MAIN_GRADLE,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.13-url-equals-operator/main-after.txt"));
+    verify(builder, atLeast(1))
+        .addFile(
+            SETTINGS_GRADLE,
+            FileUtils.getResourceAsString(
+                resolver, "gradle-8.13-url-equals-operator/settings-after.txt"));
+  }
+
+  @Test
   void shouldNotApplyUpdateIfUrlIsUpdatedExists() throws IOException {
     DefaultResolver resolver = new DefaultResolver();
     // Arrange

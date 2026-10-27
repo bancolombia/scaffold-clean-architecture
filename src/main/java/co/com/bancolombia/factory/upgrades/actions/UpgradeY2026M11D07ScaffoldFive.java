@@ -15,6 +15,7 @@ import co.com.bancolombia.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -46,9 +47,19 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
       Pattern.compile("property\\s+\"sonar\\.exclusions\",\\s*\"([^\"]*)\"");
   private static final Set<String> SONAR_EXCLUSIONS_SET =
       Set.of("**/MainApplication.java", "**/MainApplication.java,**/**.bin,**/deployment/**");
-  private static final Pattern AWS_BOM_LINE =
+  private static final Pattern PLATFORM_DEPENDENCY_LINE =
       Pattern.compile(
-          "(?m)^\\s*(\\w+\\s+platform\\(['\"]software\\.amazon\\.awssdk:bom[^'\"]*['\"]\\))");
+          "(?m)^\\s*(\\w+\\s*(?:\\(\\s*)?platform\\s*\\(\\s*(['\"])([^'\"]+)\\2\\s*\\)"
+              + "\\s*\\)?)\\s*$");
+  private static final Pattern MAVEN_BOM_LINE =
+      Pattern.compile("^\\s*mavenBom\\s*(?:\\(\\s*)?(['\"])([^'\"]+)\\1\\s*\\)?\\s*$");
+  private static final Pattern IMPLEMENTATION_DEPENDENCY_LINE =
+      Pattern.compile("^\\s*(implementation\\s+(?:\\(\\s*)?(['\"])([^'\"]+)\\2\\s*\\)?)\\s*$");
+  private static final Pattern WHITELISTED_DEPENDENCIES =
+      Pattern.compile("whitelistedDependencies\\s*=\\s*(['\"])(.*?)\\1");
+  private static final String SPRING_BOOT_DEPENDENCIES_BOM =
+      "org.springframework.boot:spring-boot-dependencies";
+  private static final String CLEAN_PLUGIN = "cleanPlugin";
   private static final Pattern JAVA_TOOLCHAIN_VERSION =
       Pattern.compile("JavaLanguageVersion\\.of\\((\\d+)\\)");
   private static final Pattern PROJECT_DEPENDENCY =
@@ -193,7 +204,11 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
             result.append(preservedBuildscript).append("\n\n");
           }
           result.append(NEW_PLUGINS_BLOCK).append("\n\n");
-          result.append(buildRootProjectsBlocks(mainGradleContent));
+          String cleanPluginBlock = extractCleanPluginBlock(mainGradleContent, content);
+          result.append(buildRootProjectsBlocks(mainGradleContent, cleanPluginBlock));
+          if (cleanPluginBlock != null) {
+            result.append("\n").append(cleanPluginBlock.strip()).append("\n");
+          }
           if (sonarExclusions != null) {
             result.append("\n").append(buildSonarBlock(sonarExclusions));
           }
@@ -250,24 +265,30 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
     return null;
   }
 
-  private String buildRootProjectsBlocks(String mainGradleContent) {
+  private String buildRootProjectsBlocks(String mainGradleContent, String cleanPluginBlock) {
     String repositoriesBlock = null;
-    String bomLine = null;
+    List<String> bomLines = List.of();
     if (mainGradleContent != null) {
       String allprojectsBlock = UpdateUtils.extractBlock(mainGradleContent, "allprojects");
       if (allprojectsBlock != null) {
         repositoriesBlock = UpdateUtils.extractBlock(allprojectsBlock, "repositories");
       }
-      Matcher bomMatcher = AWS_BOM_LINE.matcher(mainGradleContent);
-      if (bomMatcher.find()) {
-        bomLine = bomMatcher.group(1).trim();
-      }
+      bomLines = extractBomLines(mainGradleContent);
     }
+    List<String> whitelistedDependencies = extractWhitelistedDependencies(cleanPluginBlock);
+    List<String> dependencies =
+        mainGradleContent == null
+            ? List.of()
+            : extractWhitelistedImplementationDependencies(
+                mainGradleContent, whitelistedDependencies);
     StringBuilder sb = new StringBuilder("allprojects {\n    ");
     sb.append(repositoriesBlock != null ? repositoriesBlock : "repositories {\n    }").append("\n");
     sb.append("}\n\nsubprojects {\n    dependencies {\n");
-    if (bomLine != null) {
+    for (String bomLine : bomLines) {
       sb.append(SPACES).append(bomLine).append("\n");
+    }
+    for (String dependency : dependencies) {
+      sb.append(SPACES).append(dependency).append("\n");
     }
     sb.append("    }\n");
     String pitestExclusions = buildPitestExclusionsBlock(mainGradleContent);
@@ -276,6 +297,73 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
     }
     sb.append("}\n");
     return sb.toString();
+  }
+
+  private String extractCleanPluginBlock(String mainGradleContent, String buildGradleContent) {
+    String cleanPluginBlock =
+        mainGradleContent == null
+            ? null
+            : UpdateUtils.extractBlock(mainGradleContent, CLEAN_PLUGIN);
+    if (cleanPluginBlock == null && buildGradleContent != null) {
+      cleanPluginBlock = UpdateUtils.extractBlock(buildGradleContent, CLEAN_PLUGIN);
+    }
+    return cleanPluginBlock;
+  }
+
+  private List<String> extractWhitelistedDependencies(String cleanPluginBlock) {
+    if (cleanPluginBlock == null) {
+      return List.of();
+    }
+    Matcher matcher = WHITELISTED_DEPENDENCIES.matcher(cleanPluginBlock);
+    if (!matcher.find()) {
+      return List.of();
+    }
+    return Arrays.stream(matcher.group(2).split(","))
+        .map(String::trim)
+        .filter(dependency -> !dependency.isEmpty())
+        .toList();
+  }
+
+  private List<String> extractWhitelistedImplementationDependencies(
+      String mainGradleContent, List<String> whitelistedDependencies) {
+    if (whitelistedDependencies.isEmpty()) {
+      return List.of();
+    }
+    List<String> dependencies = new ArrayList<>();
+    for (String line : mainGradleContent.split("\n")) {
+      Matcher matcher = IMPLEMENTATION_DEPENDENCY_LINE.matcher(line);
+      if (!matcher.matches()) {
+        continue;
+      }
+      String[] coordinateParts = matcher.group(3).split(":", -1);
+      if (coordinateParts.length >= 2 && whitelistedDependencies.contains(coordinateParts[1])) {
+        dependencies.add(matcher.group(1).trim());
+      }
+    }
+    return dependencies;
+  }
+
+  private List<String> extractBomLines(String mainGradleContent) {
+    List<String> bomLines = new ArrayList<>();
+    for (String line : mainGradleContent.split("\n")) {
+      Matcher platformMatcher = PLATFORM_DEPENDENCY_LINE.matcher(line);
+      if (platformMatcher.matches() && !isSpringBootDependenciesBom(platformMatcher.group(3))) {
+        bomLines.add(platformMatcher.group(1).trim());
+      }
+      Matcher mavenBomMatcher = MAVEN_BOM_LINE.matcher(line);
+      if (mavenBomMatcher.matches()) {
+        String coordinate = mavenBomMatcher.group(2);
+        if (!isSpringBootDependenciesBom(coordinate)) {
+          bomLines.add("implementation platform(\"" + coordinate + "\")");
+        }
+      }
+    }
+    return bomLines;
+  }
+
+  private boolean isSpringBootDependenciesBom(String coordinate) {
+    return coordinate.equals(SPRING_BOOT_DEPENDENCIES_BOM)
+        || coordinate.startsWith(SPRING_BOOT_DEPENDENCIES_BOM + ":");
   }
 
   private String buildPitestExclusionsBlock(String mainGradleContent) {
@@ -439,7 +527,9 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
    */
   private String cleanModuleContent(
       String content, boolean isAppService, Set<String> infrastructureImplementationArtifacts) {
-    String cleaned = removeResolutionStrategyConfigurationsAllBlocks(content);
+    String cleaned =
+        removeResolutionStrategyConfigurationsAllBlocks(content)
+            .replace(":${springBootVersion}", "");
     if (isAppService) {
       cleaned = removeProjectDependencies(cleaned, null);
       cleaned =

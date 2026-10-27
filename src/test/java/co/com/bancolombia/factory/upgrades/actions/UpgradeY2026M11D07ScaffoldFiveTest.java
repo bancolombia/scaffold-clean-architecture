@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -34,6 +35,7 @@ import org.gradle.internal.logging.text.StyledTextOutput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -279,6 +281,119 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
             resource("scaffold5/build-after.txt")
                 .replace(
                     "        implementation platform('software.amazon.awssdk:bom:2.54.10')\n", ""));
+  }
+
+  @Test
+  void shouldConvertAnyMavenBomExceptSpringBootDependenciesBom() throws IOException {
+    stubLatestRelease("5.0.0");
+    String mainWithMavenBoms =
+        resource("scaffold5/main-before.txt")
+            .replace(
+                "        implementation platform('software.amazon.awssdk:bom:2.54.10')\n",
+                """
+                        mavenBom "software.amazon.awssdk:bom:${sdkAWSVersion}"
+                        mavenBom "co.com.bancolombia.d2b:core-bom:${sdkD2BCoreVersion}"
+                        mavenBom "com.example:custom-bom:1.2.3"
+                        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+                        api platform('com.example:api-bom:2.0.0')
+                        implementation(platform("com.example:wrapped-bom:3.0.0"))
+                        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+                    """);
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, mainWithMavenBoms);
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    String expectedBuild =
+        resource("scaffold5/build-after.txt")
+            .replace(
+                "        implementation platform('software.amazon.awssdk:bom:2.54.10')\n",
+                """
+                            implementation platform("software.amazon.awssdk:bom:${sdkAWSVersion}")
+                            implementation platform("co.com.bancolombia.d2b:core-bom:${sdkD2BCoreVersion}")
+                            implementation platform("com.example:custom-bom:1.2.3")
+                            api platform('com.example:api-bom:2.0.0')
+                            implementation(platform("com.example:wrapped-bom:3.0.0"))
+                    """);
+    verify(builder).addFile(BUILD_GRADLE, expectedBuild);
+  }
+
+  @Test
+  void shouldCopyWhitelistedMainGradleDependenciesAndCleanPluginBlock() throws IOException {
+    stubLatestRelease("5.0.0");
+    String mainWithCleanPlugin =
+        resource("scaffold5/main-before.txt")
+                .replace(
+                    "        implementation 'io.projectreactor:reactor-core'",
+                    """
+                        implementation 'io.projectreactor:reactor-core'
+                        implementation 'com.example:core:1.2.3'
+                        implementation 'co.example:core-bom'
+                        implementation 'com.example:not-whitelisted:1.2.3'
+                    """)
+            + """
+
+                cleanPlugin {
+                    modelProps {
+                        whitelistedDependencies = "core, core-bom"
+                    }
+                }
+                """;
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, mainWithCleanPlugin);
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    ArgumentCaptor<String> buildGradle = ArgumentCaptor.forClass(String.class);
+    verify(builder, atLeastOnce()).addFile(eq(BUILD_GRADLE), buildGradle.capture());
+    List<String> buildGradleContents = buildGradle.getAllValues();
+    String migratedBuild = buildGradleContents.get(buildGradleContents.size() - 1);
+    assertTrue(migratedBuild.contains("implementation 'com.example:core:1.2.3'"));
+    assertTrue(migratedBuild.contains("implementation 'co.example:core-bom'"));
+    assertFalse(migratedBuild.contains("implementation 'com.example:not-whitelisted:1.2.3'"));
+    assertTrue(migratedBuild.contains("whitelistedDependencies = \"core, core-bom\""));
+  }
+
+  @Test
+  void shouldUseCleanPluginBlockFromBuildGradleToWhitelistMainDependencies() throws IOException {
+    stubLatestRelease("5.0.0");
+    String mainWithWhitelistedDependency =
+        resource("scaffold5/main-before.txt")
+            .replace(
+                "        implementation 'io.projectreactor:reactor-core'",
+                """
+                        implementation 'io.projectreactor:reactor-core'
+                        implementation 'com.example:core:1.2.3'
+                    """);
+    String buildWithCleanPlugin =
+        resource("scaffold5/build-before.txt")
+            .replace(
+                "apply from: './main.gradle'",
+                """
+                cleanPlugin {
+                    modelProps {
+                        whitelistedDependencies = "core"
+                    }
+                }
+
+                apply from: './main.gradle'""");
+    builder.addFile(BUILD_GRADLE, buildWithCleanPlugin);
+    builder.addFile(MAIN_GRADLE, mainWithWhitelistedDependency);
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+
+    updater.up(builder);
+
+    ArgumentCaptor<String> buildGradle = ArgumentCaptor.forClass(String.class);
+    verify(builder, atLeastOnce()).addFile(eq(BUILD_GRADLE), buildGradle.capture());
+    List<String> buildGradleContents = buildGradle.getAllValues();
+    String migratedBuild = buildGradleContents.get(buildGradleContents.size() - 1);
+    assertTrue(migratedBuild.contains("implementation 'com.example:core:1.2.3'"));
+    assertTrue(migratedBuild.contains("whitelistedDependencies = \"core\""));
   }
 
   @Test
