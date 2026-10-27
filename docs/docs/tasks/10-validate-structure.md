@@ -31,38 +31,36 @@ Having that in mind, the **`validateStructure | vs`** task performs the followin
     - Allow declaration of dependency on Model and/or UseCase modules.
     - Avoid declaration of dependency AppService module.
 
+**Platform dependencies**:
+
+Dependencies declared with Gradle's `platform(...)` or `enforcedPlatform(...)` are automatically
+excluded from dependency validation. These dependencies define BOM (Bill of Materials) versions
+rather than technology dependencies, including when added to all modules through `subprojects`:
+
+```groovy
+subprojects {
+    dependencies {
+        implementation platform("com.myorg:my-bom:0.0.1")
+    }
+}
+```
+
+Platforms are identified by their Gradle category, not their name. Ordinary dependencies are
+still validated, even if they have the same coordinates as a platform. The UseCase module must
+still depend on the Model module.
+
 **Whitelisting dependencies**:
 
-Some dependencies, specially when working with BOMs (Bills of Materials), are injected transversally to the project,
-making the validation task to flag failures to rules 1 and 2. To avoid this scenario, or other you may encounter,
-you can configure a set of whitelisted dependencies.
+For other dependencies that you explicitly want to allow in the domain modules, configure
+`whitelistedDependencies`. Platforms do not need to be whitelisted.
 
-*Example:*
+```groovy
+// build.gradle
+cleanPlugin {
+    modelProps {
+        whitelistedDependencies = "allowed-library, another-library"
+    }
+}
+```
 
-1) Let's say you have declared a BOM in your project:
-
-   ```groovy
-   dependencies {
-     implementation(platform("com.myorg:my-bom:0.0.1"))
-   }
-   ```
-
-2) This will make **`validateStructure | vs`** to flag a failure indicating an error like this:
-
-   ```bash
-   Validating Model Module
-    --- Dependency com.myorg:some-bom is not allowed in Model Layer
-   ```
-
-3) To avoid this, you can white list your BOM like this:
-
-   ```groovy
-   // build.gradle
-   cleanPlugin {
-     modelProps {
-        whitelistedDependencies = "my-bom, <dep2>, <depN..>"
-     }
-   }
-   ```
-
-   Indicating only the name of the dependencies comma-separated.
+Indicate only the dependency names, comma-separated.

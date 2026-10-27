@@ -19,9 +19,13 @@ public class ChildConventionPlugin implements Plugin<Project> {
   private static final String JACOCO_PLUGIN_ID = "jacoco";
   private static final String DEPENDENCY_MANAGEMENT_PLUGIN_ID = "io.spring.dependency-management";
   private static final String PITEST_PLUGIN_ID = "info.solidsoft.pitest";
-  private static final String IMPLEMENTATION_CONFIGURATION = "implementation";
-  private static final String TEST_IMPLEMENTATION_CONFIGURATION = "testImplementation";
+  private static final String IMPLEMENTATION = "implementation";
+  private static final String TEST_IMPLEMENTATION = "testImplementation";
   private static final String PITEST_CONFIGURATION = "pitest";
+  public static final String ANNOTATION_PROCESSOR = "annotationProcessor";
+  public static final String COMPILE_ONLY = "compileOnly";
+  public static final String TEST_COMPILE_ONLY = "testCompileOnly";
+  public static final String TEST_ANNOTATION_PROCESSOR = "testAnnotationProcessor";
 
   /** Applies shared conventions for generated Java subprojects. */
   @Override
@@ -71,11 +75,7 @@ public class ChildConventionPlugin implements Plugin<Project> {
   }
 
   private void configureTests(Project project) {
-    project.getTasks().withType(Test.class).configureEach(Test::useJUnitPlatform);
-
-    boolean reactive =
-        Boolean.parseBoolean(String.valueOf(project.getRootProject().findProperty("reactive")));
-    if (reactive && JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
       project
           .getTasks()
           .withType(Test.class)
@@ -90,34 +90,41 @@ public class ChildConventionPlugin implements Plugin<Project> {
     project
         .getTasks()
         .withType(Test.class)
-        .configureEach(test -> test.finalizedBy(project.getTasks().named("jacocoTestReport")));
+        .configureEach(
+            test -> {
+              test.getFailOnNoDiscoveredTests().set(false);
+              test.finalizedBy(project.getTasks().named("jacocoTestReport"));
+            });
   }
 
   private void configureDependencies(Project project) {
     DependencyHandler dependencies = project.getDependencies();
     String springBootBom =
         "org.springframework.boot:spring-boot-dependencies:" + Constants.SPRING_BOOT_VERSION;
-    dependencies.add(IMPLEMENTATION_CONFIGURATION, dependencies.platform(springBootBom));
+    dependencies.add(IMPLEMENTATION, dependencies.platform(springBootBom));
+    dependencies.add(ANNOTATION_PROCESSOR, dependencies.platform(springBootBom));
     dependencies.add("testRuntimeOnly", "org.junit.platform:junit-platform-launcher");
-    dependencies.add(
-        TEST_IMPLEMENTATION_CONFIGURATION, "org.springframework.boot:spring-boot-starter-test");
+    dependencies.add(TEST_IMPLEMENTATION, "org.springframework.boot:spring-boot-starter-test");
 
     boolean reactive =
         Boolean.parseBoolean(String.valueOf(project.getRootProject().findProperty("reactive")));
     if (reactive) {
-      dependencies.add(IMPLEMENTATION_CONFIGURATION, "io.projectreactor:reactor-core");
-      dependencies.add(IMPLEMENTATION_CONFIGURATION, "io.projectreactor.addons:reactor-extra");
-      dependencies.add(TEST_IMPLEMENTATION_CONFIGURATION, "io.projectreactor:reactor-test");
+      dependencies.add(IMPLEMENTATION, "io.projectreactor:reactor-core");
+      dependencies.add(IMPLEMENTATION, "io.projectreactor.addons:reactor-extra");
+      dependencies.add(TEST_IMPLEMENTATION, "io.projectreactor:reactor-test");
+      String blockHound =
+          "io.projectreactor.tools:blockhound-junit-platform:" + Constants.BLOCK_HOUND_VERSION;
+      dependencies.add(TEST_IMPLEMENTATION, blockHound);
     }
 
     boolean lombok =
         Boolean.parseBoolean(String.valueOf(project.getRootProject().findProperty("lombok")));
     if (lombok) {
       String lombokDependency = "org.projectlombok:lombok:" + Constants.LOMBOK_VERSION;
-      dependencies.add("compileOnly", lombokDependency);
-      dependencies.add("annotationProcessor", lombokDependency);
-      dependencies.add("testCompileOnly", lombokDependency);
-      dependencies.add("testAnnotationProcessor", lombokDependency);
+      dependencies.add(COMPILE_ONLY, lombokDependency);
+      dependencies.add(ANNOTATION_PROCESSOR, lombokDependency);
+      dependencies.add(TEST_COMPILE_ONLY, lombokDependency);
+      dependencies.add(TEST_ANNOTATION_PROCESSOR, lombokDependency);
     }
 
     if (isPitestEnabled(project)
