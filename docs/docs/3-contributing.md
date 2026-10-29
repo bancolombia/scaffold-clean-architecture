@@ -439,8 +439,7 @@ Generate a new clean architecture project using the local plugin.
 In an empty folder, use the plugins DSL and let `pluginManagement` resolve the locally published
 plugin:
 
-```groovy
-// settings.gradle
+```groovy title="settings.gradle"
 pluginManagement {
   repositories {
     mavenLocal()
@@ -449,8 +448,7 @@ pluginManagement {
 }
 ```
 
-```groovy
-// build.gradle
+```groovy title="build.gradle"
 plugins {
   id 'co.com.bancolombia.cleanArchitecture' version '2.4.1.1'
 }
