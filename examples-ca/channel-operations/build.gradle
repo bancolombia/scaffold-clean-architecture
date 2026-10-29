@@ -26,3 +26,9 @@ subprojects {
         excludedClasses = ['co.com.bancolombia.model.*']
     }
 }
+
+tasks.named('wrapper') {
+    gradleVersion = '9.8.2'
+    validateDistributionUrl = true
+    distributionSha256Sum = '21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607'
+}
