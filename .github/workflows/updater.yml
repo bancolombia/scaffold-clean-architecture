@@ -8,22 +8,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        uses: step-security/harden-runner@v2
         with:
           egress-policy: audit
 
       - name: Generate a token
         id: generate_token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        uses: actions/create-github-app-token@v3
         with:
           client-id: ${{ secrets.APP_ID_ADMIN_GITHUB }}
           private-key: ${{ secrets.APP_PRIVATE_KEY_ADMIN_GITHUB }}
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7
         with:
           ref: master
           token: ${{ steps.generate_token.outputs.token }}
       - name: Set up JDK 17
-        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin' 
           java-version: 17
@@ -48,7 +48,7 @@ jobs:
           fi
       - name: Create Pull Request
         if: env.HAS_CHANGES == 'true'
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ steps.generate_token.outputs.token }}
           committer: Dependencies Bot <release-bot@bancolombia.com.co>
