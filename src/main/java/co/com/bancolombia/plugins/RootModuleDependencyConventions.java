@@ -25,6 +25,8 @@ public class RootModuleDependencyConventions {
   private static final String ARCH_UNIT_GROUP = "com.tngtech.archunit";
   private static final String ARCH_UNIT_ARTIFACT = "archunit";
   private static final String SPRING_BOOT_PLUGIN_ID = "org.springframework.boot";
+  private static final String COPY_OTEL_AGENT = "copyOtelAgent";
+  private static final String OTEL_AGENT = "otelAgent";
 
   public void configure(Project rootProject) {
     Set<String> excludedFromApp = resolveExcludedModulesFromApp(rootProject);
@@ -116,27 +118,27 @@ public class RootModuleDependencyConventions {
       return;
     }
 
-    if (appService.getConfigurations().findByName("otelAgent") == null) {
-      appService.getConfigurations().create("otelAgent");
+    if (appService.getConfigurations().findByName(OTEL_AGENT) == null) {
+      appService.getConfigurations().create(OTEL_AGENT);
     }
     appService
         .getDependencies()
         .add(
-            "otelAgent",
+            OTEL_AGENT,
             "io.opentelemetry.javaagent:opentelemetry-javaagent:" + Constants.OTEL_VERSION);
 
     appService
         .getTasks()
         .register(
-            "copyOtelAgent",
+            COPY_OTEL_AGENT,
             Copy.class,
             task -> {
-              task.from(appService.getConfigurations().getByName("otelAgent"));
+              task.from(appService.getConfigurations().getByName(OTEL_AGENT));
               task.into(appService.getLayout().getBuildDirectory().dir("otel"));
               task.rename(file -> "opentelemetry-javaagent.jar");
             });
 
-    appService.getTasks().named("bootJar").configure(task -> task.dependsOn("copyOtelAgent"));
+    appService.getTasks().named("bootJar").configure(task -> task.dependsOn(COPY_OTEL_AGENT));
 
     File otelAgentJar =
         new File(
@@ -147,7 +149,7 @@ public class RootModuleDependencyConventions {
         .named("bootRun", JavaExec.class)
         .configure(
             bootRun -> {
-              bootRun.dependsOn("copyOtelAgent");
+              bootRun.dependsOn(COPY_OTEL_AGENT);
               bootRun.jvmArgs("-javaagent:" + otelAgentJar.getAbsolutePath());
             });
   }
