@@ -91,6 +91,10 @@
         {
             "name": "GRPC_VERSION",
             "packageName": "io.grpc:grpc-core"
+        },
+        {
+            "name": "OTEL_VERSION",
+            "packageName": "io.opentelemetry.javaagent:opentelemetry-javaagent"
         }
     ],
     "gradle": [

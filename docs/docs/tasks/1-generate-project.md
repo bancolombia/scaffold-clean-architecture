@@ -9,15 +9,16 @@ The **`cleanArchitecture | ca`** task will generate a clean architecture structu
 **Caution**: If you run this task on an existing project it will replace generated root files such
 as `settings.gradle`, `build.gradle`, and `gradle.properties`.
 
-| Parameter   | Description                                                              | Usage                              | Default Value        |
-|-------------|--------------------------------------------------------------------------|------------------------------------|----------------------|
-| package     | You can specify the main or default package of your project              | `--package=<desired.base.package>` | `co.com.bancolombia` |
-| type        | Define if project shoud be created around reactive or imperative aproach | `--type=<imperative or reactive>`  | `reactive`           |
-| name        | Sets projects name                                                       | `--name=<Project name>`            | `cleanArchitecture`  |
-| lombok      | Specify if you want to use this plugin                                   | `--lombok=<true or false>`         | `true`               |
-| metrics     | Specify if you want to enable this feature with micrometer               | `--metrics=<true or false>`        | `true`               |
-| mutation    | Declare Pitest in the root plugins block for mutation testing             | `--mutation=<true or false>`       | `true`               |
-| java-version | Sets Java version                                                        | `--java-version=<17, 21 or 25>`    | `25`                 |
+| Parameter    | Description                                                               | Usage                              | Default Value        |
+|--------------|---------------------------------------------------------------------------|------------------------------------|----------------------|
+| package      | You can specify the main or default package of your project               | `--package=<desired.base.package>` | `co.com.bancolombia` |
+| type         | Define if project shoud be created around reactive or imperative aproach  | `--type=<imperative or reactive>`  | `reactive`           |
+| name         | Sets projects name                                                        | `--name=<Project name>`            | `cleanArchitecture`  |
+| lombok       | Specify if you want to use this plugin                                    | `--lombok=<true or false>`         | `true`               |
+| metrics      | Specify if you want to enable this feature with micrometer                | `--metrics=<true or false>`        | `true`               |
+| mutation     | Declare Pitest in the root plugins block for mutation testing             | `--mutation=<true or false>`       | `true`               |
+| otel         | Enable OpenTelemetry Java agent setup for `app-service` via `cleanPlugin` | `--otel=<true or false>`           | `false`              |
+| java-version | Sets Java version                                                         | `--java-version=<17, 21 or 25>`    | `25`                 |
 
 Examples:
 
@@ -26,6 +27,7 @@ gradle cleanArchitecture --package=co.com.bancolombia --type=reactive --name=Nam
 ```
 
 Short form
+
 ```shell
 gradle ca --package=co.com.bancolombia --type=reactive --name=NameProject --lombok=true
 ```
@@ -87,3 +89,5 @@ The generated Settings convention plugin discovers modules with a `build.gradle`
 `applications`, `domain`, and `infrastructure`; `settings.gradle` does not need static module
 includes. The v5 structure does not generate `main.gradle`. The `mutation` option controls whether
 the Pitest plugin is declared in the root `plugins` block; it is not written to `gradle.properties`.
+The `otel` option adds a `cleanPlugin { otel = true }` block to the root `build.gradle` when enabled;
+OpenTelemetry agent wiring for `app-service` is applied by the root convention plugin.

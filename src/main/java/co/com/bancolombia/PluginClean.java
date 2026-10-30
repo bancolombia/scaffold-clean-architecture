@@ -16,6 +16,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.UnknownPluginException;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.testing.Test;
 import org.gradle.api.tasks.wrapper.Wrapper;
 import org.jetbrains.annotations.NotNull;
@@ -52,11 +53,13 @@ public class PluginClean implements Plugin<Project> {
     }
 
     project.getPluginManager().apply("java");
+    project.getTasks().named("jar", Jar.class).configure(task -> task.setEnabled(false));
     project.getPluginManager().apply(JACOCO_PLUGIN_ID);
     applyOptionalPlugin(project, SONAR_PLUGIN_ID);
 
     CleanPluginExtension cleanPluginExtension =
         project.getExtensions().create("cleanPlugin", CleanPluginExtension.class);
+    cleanPluginExtension.getOtel().convention(false);
 
     TaskContainer taskContainer = project.getTasks();
     initTasks(cleanPluginExtension).forEach(task -> this.appendTask(taskContainer, task));

@@ -35,6 +35,7 @@ public final class Constants {
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
   public static final String GRPC_VERSION = "1.85.1";
+  public static final String OTEL_VERSION = "2.33.1";
 
   /**
    * Must match the protobuf-java version managed by the Spring Boot BOM ({@link

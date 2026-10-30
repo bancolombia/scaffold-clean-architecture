@@ -11,19 +11,19 @@ specific values in the generated root or module `build.gradle` files after the p
 
 The root convention configures the `sonar` task with these defaults:
 
-| Property | Default |
-| --- | --- |
-| `sonar.sourceEncoding` | `UTF-8` |
-| `sonar.modules` | Discovered Gradle module directories, relative to the root project |
-| `sonar.sources` | `src,deployment,settings.gradle,build.gradle`, plus each module's `build.gradle` |
-| `sonar.exclusions` | `**/MainApplication.java,**/**.bin,**/deployment/**` |
-| `sonar.tests` | `src/test` |
-| `sonar.java.binaries` | `**/build/classes/java/main` |
-| `sonar.junit.reportsPath` | `**/build/test-results/test` |
-| `sonar.java.coveragePlugin` | `jacoco` |
-| `sonar.coverage.jacoco.xmlReportPaths` | `build/reports/jacocoMergedReport/jacocoMergedReport.xml` |
-| `sonar.pitest.reportPaths` | `build/reports/pitest/mutations.xml` |
-| `sonar.externalIssuesReportPaths` | `build/issues.json` |
+| Property                               | Default                                                                          |
+|----------------------------------------|----------------------------------------------------------------------------------|
+| `sonar.sourceEncoding`                 | `UTF-8`                                                                          |
+| `sonar.modules`                        | Discovered Gradle module directories, relative to the root project               |
+| `sonar.sources`                        | `src,deployment,settings.gradle,build.gradle`, plus each module's `build.gradle` |
+| `sonar.exclusions`                     | `**/MainApplication.java,**/**.bin,**/deployment/**`                             |
+| `sonar.tests`                          | `src/test`                                                                       |
+| `sonar.java.binaries`                  | `**/build/classes/java/main`                                                     |
+| `sonar.junit.reportsPath`              | `**/build/test-results/test`                                                     |
+| `sonar.java.coveragePlugin`            | `jacoco`                                                                         |
+| `sonar.coverage.jacoco.xmlReportPaths` | `build/reports/jacocoMergedReport/jacocoMergedReport.xml`                        |
+| `sonar.pitest.reportPaths`             | `build/reports/pitest/mutations.xml`                                             |
+| `sonar.externalIssuesReportPaths`      | `build/issues.json`                                                              |
 
 The root `sonar` task depends on `jacocoMergedReport`. When Pitest is declared, it also depends on
 `pitestReportAggregate`.
@@ -45,22 +45,22 @@ sonar {
 Pitest is configured by the child convention in each subproject where the Pitest plugin is applied.
 The defaults are:
 
-| Setting | Default |
-| --- | --- |
-| `targetClasses` | The configured project package followed by `.*` |
-| `excludedClasses`, `excludedTestClasses` | Empty |
-| `pitestVersion` | `Constants.PITEST_VERSION` |
-| `verbose` | `false` |
-| `outputFormats` | `XML`, `HTML` |
-| `threads` | Available processors |
-| `exportLineCoverage` | `true` |
-| `useClasspathFile` | `true` |
-| `withHistory` | `true` |
-| `timestampedReports` | `false` |
-| `junit5PluginVersion` | `Constants.PITEST_JUNIT5_VERSION` |
-| `failWhenNoMutations` | `false` |
-| `jvmArgs` | `-XX:+AllowRedefinitionToAddDeleteMethods` |
-| `fileExtensionsToFilter` | `xml`, `orbit` |
+| Setting                                  | Default                                         |
+|------------------------------------------|-------------------------------------------------|
+| `targetClasses`                          | The configured project package followed by `.*` |
+| `excludedClasses`, `excludedTestClasses` | Empty                                           |
+| `pitestVersion`                          | `Constants.PITEST_VERSION`                      |
+| `verbose`                                | `false`                                         |
+| `outputFormats`                          | `XML`, `HTML`                                   |
+| `threads`                                | Available processors                            |
+| `exportLineCoverage`                     | `true`                                          |
+| `useClasspathFile`                       | `true`                                          |
+| `withHistory`                            | `true`                                          |
+| `timestampedReports`                     | `false`                                         |
+| `junit5PluginVersion`                    | `Constants.PITEST_JUNIT5_VERSION`               |
+| `failWhenNoMutations`                    | `false`                                         |
+| `jvmArgs`                                | `-XX:+AllowRedefinitionToAddDeleteMethods`      |
+| `fileExtensionsToFilter`                 | `xml`, `orbit`                                  |
 
 Because Pitest is applied to child projects, configure its extension inside `subprojects` in the root
 `build.gradle`. This block runs after the scaffold defaults, so values set here override them:
@@ -85,11 +85,11 @@ The root convention applies Spring Boot to `app-service` unless the user already
 sets up the standard packaging tasks. It also adds these dependencies when they are not already
 present:
 
-| Configuration | Dependency |
-| --- | --- |
-| `implementation` | `org.springframework.boot:spring-boot-starter` |
-| `runtimeOnly` | `org.springframework.boot:spring-boot-devtools` |
-| `testImplementation` | `tools.jackson.core:jackson-databind` |
+| Configuration        | Dependency                                                    |
+|----------------------|---------------------------------------------------------------|
+| `implementation`     | `org.springframework.boot:spring-boot-starter`                |
+| `runtimeOnly`        | `org.springframework.boot:spring-boot-devtools`               |
+| `testImplementation` | `tools.jackson.core:jackson-databind`                         |
 | `testImplementation` | `com.tngtech.archunit:archunit:<Constants.ARCH_UNIT_VERSION>` |
 
 If the developer declares ArchUnit in any `app-service` configuration, the convention leaves that
@@ -100,3 +100,22 @@ Packaging defaults:
 - The standard `jar` task is disabled.
 - `explodedJar` copies the plain jar contents into `build/exploded`.
 - `bootJar` is named `<root-project-name>.jar`.
+
+## OpenTelemetry Java agent
+
+When `cleanPlugin.otel` is `true` (or the project was generated with `ca --otel=true`), the root
+convention configures `app-service` with:
+
+- An `otelAgent` configuration depending on `io.opentelemetry.javaagent:opentelemetry-javaagent`
+  at the plugin-managed version.
+- A `copyOtelAgent` task that copies the agent to `build/otel/opentelemetry-javaagent.jar`.
+- `bootJar` depending on `copyOtelAgent`.
+- `bootRun` attaching the agent via `-javaagent`.
+
+Enable it in an existing project:
+
+```groovy
+cleanPlugin {
+    otel = true
+}
+```

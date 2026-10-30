@@ -28,6 +28,7 @@ import org.gradle.api.artifacts.ExternalModuleDependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.attributes.Category;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -63,6 +64,7 @@ class PluginCleanTest {
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
 
     // Act
+    assertFalse(project.getTasks().named("jar", Jar.class).get().getEnabled());
     assertNotNull(project.getExtensions().findByName("dependenciesOverride"));
     Task task = project.getTasks().findByName("cleanArchitecture");
     Task task2 = project.getTasks().findByName("generateModel");
@@ -307,6 +309,32 @@ class PluginCleanTest {
         1,
         countExternalDependencies(
             appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+  }
+
+  @Test
+  void shouldConfigureOtelAgentWhenCleanPluginOtelIsEnabled(@TempDir Path tempDir)
+      throws IOException {
+    Project root =
+        ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("demo").build();
+    Project appService = createSubproject(root, tempDir, "app-service", "applications/app-service");
+
+    root.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    root.getExtensions().getByType(CleanPluginExtension.class).getOtel().set(true);
+    ((ProjectInternal) appService).evaluate();
+
+    assertNotNull(appService.getConfigurations().findByName("otelAgent"));
+    assertHasExternalDependency(
+        appService,
+        "otelAgent",
+        "io.opentelemetry.javaagent",
+        "opentelemetry-javaagent",
+        Constants.OTEL_VERSION);
+    assertNotNull(appService.getTasks().findByName("copyOtelAgent"));
+    assertTrue(
+        appService.getTasks().named("bootJar").get().getDependsOn().contains("copyOtelAgent"));
+    JavaExec bootRun = appService.getTasks().named("bootRun", JavaExec.class).get();
+    assertTrue(bootRun.getJvmArgs().stream().anyMatch(arg -> arg.startsWith("-javaagent:")));
+    assertTrue(bootRun.getDependsOn().contains("copyOtelAgent"));
   }
 
   private Project createSubproject(Project root, Path rootDir, String name, String relativePath)
