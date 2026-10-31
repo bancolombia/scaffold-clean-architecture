@@ -24,6 +24,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
   private BooleanOption lombok = BooleanOption.TRUE;
   private BooleanOption metrics = BooleanOption.TRUE;
   private BooleanOption mutation = BooleanOption.TRUE;
+  private BooleanOption otel = BooleanOption.FALSE;
   private BooleanOption withExample = BooleanOption.FALSE;
   private Integer javaVersion = JavaVersion.VERSION_25.getNumber();
 
@@ -59,6 +60,13 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     this.mutation = mutation;
   }
 
+  @Option(
+      option = "otel",
+      description = "Enable OpenTelemetry Java agent conventions for app-service")
+  public void setOtel(BooleanOption otel) {
+    this.otel = otel;
+  }
+
   @Option(option = "java-version", description = "Set Java version")
   public void setJavaVersion(String version) {
     this.javaVersion = JavaVersion.validateVersion(Integer.parseInt(version));
@@ -84,6 +92,11 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("otel")
+  public List<BooleanOption> getOtelOptions() {
+    return Arrays.asList(BooleanOption.values());
+  }
+
   @OptionValues("java-version")
   public List<Integer> getJavaVersions() {
     return Arrays.stream(JavaVersion.values()).map(JavaVersion::getNumber).toList();
@@ -103,6 +116,7 @@ public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask 
     builder.addParam("metrics", metrics == BooleanOption.TRUE);
     builder.addParam("example", withExample == BooleanOption.TRUE);
     builder.addParam("mutation", mutation == BooleanOption.TRUE);
+    builder.addParam("otel", otel == BooleanOption.TRUE);
     builder.addParam("javaVersion", javaVersion);
     builder.addParam("java17", javaVersion == JavaVersion.VERSION_17.getNumber());
     builder.addParam("java21", javaVersion == JavaVersion.VERSION_21.getNumber());

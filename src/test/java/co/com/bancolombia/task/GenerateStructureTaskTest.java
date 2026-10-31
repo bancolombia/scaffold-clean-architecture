@@ -173,6 +173,20 @@ class GenerateStructureTaskTest {
     assertTrue(buildContent.contains("id 'org.sonarqube'"));
     assertTrue(buildContent.contains("id 'info.solidsoft.pitest'"));
     assertFalse(buildContent.contains("sonar {"));
+    assertFalse(buildContent.contains("cleanPlugin {"));
+  }
+
+  @Test
+  void shouldGenerateBuildGradleWithCleanPluginOtelWhenOtelEnabled()
+      throws IOException, CleanException {
+    String dir = project.getProjectDir().getPath();
+    task.setOtel(BooleanOption.TRUE);
+
+    task.execute();
+    String buildContent = Files.readString(Path.of(dir, "build.gradle"));
+
+    assertTrue(buildContent.contains("cleanPlugin {"));
+    assertTrue(buildContent.contains("otel = true"));
   }
 
   @Test

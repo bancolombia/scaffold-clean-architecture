@@ -10,6 +10,12 @@ plugins {
     {{/mutation}}
 }
 
+{{#otel}}
+cleanPlugin {
+    otel = true
+}
+
+{{/otel}}
 allprojects {
     repositories {
         {{#example}}

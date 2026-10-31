@@ -1,6 +1,8 @@
 package co.com.bancolombia.plugins;
 
+import co.com.bancolombia.CleanPluginExtension;
 import co.com.bancolombia.Constants;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +12,7 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.tasks.Copy;
+import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.TaskProvider;
 import org.gradle.api.tasks.bundling.Jar;
 
@@ -22,6 +25,8 @@ public class RootModuleDependencyConventions {
   private static final String ARCH_UNIT_GROUP = "com.tngtech.archunit";
   private static final String ARCH_UNIT_ARTIFACT = "archunit";
   private static final String SPRING_BOOT_PLUGIN_ID = "org.springframework.boot";
+  private static final String COPY_OTEL_AGENT = "copyOtelAgent";
+  private static final String OTEL_AGENT = "otelAgent";
 
   public void configure(Project rootProject) {
     Set<String> excludedFromApp = resolveExcludedModulesFromApp(rootProject);
@@ -101,7 +106,52 @@ public class RootModuleDependencyConventions {
               "jackson-databind",
               "tools.jackson.core:jackson-databind");
           addArchUnitDependencyIfMissing(appService);
+          configureOtelAgentIfEnabled(appService);
         });
+  }
+
+  private void configureOtelAgentIfEnabled(Project appService) {
+    Project rootProject = appService.getRootProject();
+    CleanPluginExtension extension =
+        rootProject.getExtensions().findByType(CleanPluginExtension.class);
+    if (extension == null || !Boolean.TRUE.equals(extension.getOtel().getOrElse(false))) {
+      return;
+    }
+
+    if (appService.getConfigurations().findByName(OTEL_AGENT) == null) {
+      appService.getConfigurations().create(OTEL_AGENT);
+    }
+    appService
+        .getDependencies()
+        .add(
+            OTEL_AGENT,
+            "io.opentelemetry.javaagent:opentelemetry-javaagent:" + Constants.OTEL_VERSION);
+
+    appService
+        .getTasks()
+        .register(
+            COPY_OTEL_AGENT,
+            Copy.class,
+            task -> {
+              task.from(appService.getConfigurations().getByName(OTEL_AGENT));
+              task.into(appService.getLayout().getBuildDirectory().dir("otel"));
+              task.rename(file -> "opentelemetry-javaagent.jar");
+            });
+
+    appService.getTasks().named("bootJar").configure(task -> task.dependsOn(COPY_OTEL_AGENT));
+
+    File otelAgentJar =
+        new File(
+            appService.getLayout().getBuildDirectory().dir("otel").get().getAsFile(),
+            "opentelemetry-javaagent.jar");
+    appService
+        .getTasks()
+        .named("bootRun", JavaExec.class)
+        .configure(
+            bootRun -> {
+              bootRun.dependsOn(COPY_OTEL_AGENT);
+              bootRun.jvmArgs("-javaagent:" + otelAgentJar.getAbsolutePath());
+            });
   }
 
   private void configureAppServicePackaging(Project appService) {
