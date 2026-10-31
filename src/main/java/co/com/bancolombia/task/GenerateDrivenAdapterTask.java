@@ -56,6 +56,11 @@ public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
     return Arrays.asList(BooleanOption.values());
   }
 
+  @OptionValues("grpc")
+  public List<String> getGrpcOptions() {
+    return Arrays.asList("GRPC", "grpc", "Grpc");
+  }
+
   @Option(option = "tech", description = "Reactive Commons Technologies")
   public void setTech(String tech) {
     this.tech = tech;

@@ -42,7 +42,7 @@ then
     ./gradlew gep --type $entry
   done
 else
-  for adapter in "dynamodb" "jpa" "kms" "mongodb" "mq" "redis" "restconsumer" "s3" "secrets" "sqs"
+  for adapter in "dynamodb" "grpc" "jpa" "kms" "mongodb" "mq" "redis" "restconsumer" "s3" "secrets" "sqs"
   do
     ./gradlew gda --type $adapter
   done
