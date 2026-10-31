@@ -1,5 +1,25 @@
 # Changelog
 
+## [v5.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.1.0) (2026-10-31)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.6...v5.1.0)
+
+**Closed issues:**
+
+- chore: add config.yml to issue templates [\#1002](https://github.com/bancolombia/scaffold-clean-architecture/issues/1002)
+
+**Merged pull requests:**
+
+- feat: include opentelemetry agent download  [\#1043](https://github.com/bancolombia/scaffold-clean-architecture/pull/1043) ([juancgalvis](https://github.com/juancgalvis))
+- ci: add config.yml file to configure the issue template chooser [\#1041](https://github.com/bancolombia/scaffold-clean-architecture/pull/1041) ([luisgomez29](https://github.com/luisgomez29))
+- docs: Update migration docs [\#1040](https://github.com/bancolombia/scaffold-clean-architecture/pull/1040) ([luisgomez29](https://github.com/luisgomez29))
+- ci: Update GitHub Actions task versions [\#1039](https://github.com/bancolombia/scaffold-clean-architecture/pull/1039) ([luisgomez29](https://github.com/luisgomez29))
+- chore: Update sample projects to scaffold 5 [\#1038](https://github.com/bancolombia/scaffold-clean-architecture/pull/1038) ([luisgomez29](https://github.com/luisgomez29))
+
+## [v4.7.6](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.6) (2026-10-27)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.5...v4.7.6)
+
 ## [v5.0.5](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.0.5) (2026-10-27)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.0.4...v5.0.5)
