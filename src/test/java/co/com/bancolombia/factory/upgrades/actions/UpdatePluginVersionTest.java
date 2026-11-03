@@ -1,7 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -72,14 +72,20 @@ class UpdatePluginVersionTest {
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");
     doReturn(release).when(builder).getLatestRelease();
-    builder.addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = '2.2.4'\n");
+    builder.addFile(
+        SETTINGS_GRADLE,
+        "plugins { id 'co.com.bancolombia.cleanArchitecture.settings' version '2.2.4' }\n");
     builder.addFile(GRADLE_PROPERTIES, "systemProp.version=2.2.4");
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
     verify(builder, times(1))
-        .addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = '" + release.getTagName() + "'\n");
+        .addFile(
+            SETTINGS_GRADLE,
+            "plugins { id 'co.com.bancolombia.cleanArchitecture.settings' version '"
+                + release.getTagName()
+                + "' }\n");
     verify(builder).addFile(GRADLE_PROPERTIES, "systemProp.version=" + release.getTagName());
   }
 
@@ -89,13 +95,19 @@ class UpdatePluginVersionTest {
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin() + ".1");
     doReturn(release).when(builder).getLatestRelease();
-    builder.addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = \"2.2.4\"\n");
+    builder.addFile(
+        SETTINGS_GRADLE,
+        "plugins { id 'co.com.bancolombia.cleanArchitecture.settings' version \"2.2.4\" }\n");
     builder.addFile(GRADLE_PROPERTIES, "systemProp.version=2.2.4");
     // Act
     boolean applied = updater.up(builder);
     // Assert
     assertTrue(applied);
     verify(builder)
-        .addFile(BUILD_GRADLE, "\t\tcleanArchitectureVersion = '" + release.getTagName() + "'\n");
+        .addFile(
+            SETTINGS_GRADLE,
+            "plugins { id 'co.com.bancolombia.cleanArchitecture.settings' version \""
+                + release.getTagName()
+                + "\" }\n");
   }
 }

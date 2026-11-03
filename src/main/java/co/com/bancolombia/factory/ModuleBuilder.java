@@ -1,10 +1,7 @@
 package co.com.bancolombia.factory;
 
 import static co.com.bancolombia.Constants.MainFiles.APPLICATION_PROPERTIES;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Description;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Header;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Normal;
-import static org.gradle.internal.logging.text.StyledTextOutput.Style.Success;
+import static org.gradle.internal.logging.text.StyledTextOutput.Style.*;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
@@ -29,13 +26,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import lombok.Getter;
@@ -105,6 +96,11 @@ public class ModuleBuilder {
 
   public File resolveFile(String path) {
     return FileUtils.resolveFile(projectDir, path);
+  }
+
+  public boolean hasFile(String path) {
+    String relativePath = FileUtils.toRelative(path);
+    return files.containsKey(relativePath) || resolveFile(relativePath).exists();
   }
 
   private void initialize() {
@@ -193,23 +189,6 @@ public class ModuleBuilder {
       addDir(Utils.extractDir(path));
       addFile(path, content);
     }
-  }
-
-  public void appendToSettings(String module, String baseDir) throws IOException {
-    logger.lifecycle("adding module {} to " + SETTINGS_GRADLE, module);
-    updateFile(
-        SETTINGS_GRADLE,
-        settings -> Utils.addModule(settings, Utils.INCLUDE_MODULE_JAVA, module, baseDir));
-  }
-
-  public void removeFromSettings(String module) throws IOException {
-    logger.lifecycle("removing {} from settings.gradle", module);
-    updateFile(
-        SETTINGS_GRADLE,
-        settings -> {
-          String moduleKey = ":" + module;
-          return Utils.removeLinesIncludes(settings, moduleKey);
-        });
   }
 
   public boolean updateExpression(String path, String regex, String value) throws IOException {
@@ -307,9 +286,11 @@ public class ModuleBuilder {
     this.params.put("packagePath", packageName.replace('.', '/').toLowerCase());
   }
 
+  @SneakyThrows
   public void addFile(String path, String content) {
-    String finalPath = FileUtils.toRelative(path);
-    this.files.put(finalPath, FileModel.builder().path(finalPath).content(content).build());
+    String relativePath = FileUtils.toRelative(path);
+    this.files.put(
+        getMapPath(relativePath), FileModel.builder().path(relativePath).content(content).build());
   }
 
   public void addDir(String path) {
@@ -460,15 +441,22 @@ public class ModuleBuilder {
     return FileUtils.getBooleanProperty(projectDir.getPath(), property, defaultValue, logger);
   }
 
-  private String readFile(String path) throws IOException {
-    String finalPath = FileUtils.toRelative(path);
-    FileModel current = files.get(finalPath);
+  public String readFile(String path) throws IOException {
+    String relativePath = FileUtils.toRelative(path);
+    String mapPath = getMapPath(relativePath);
+    FileModel current = files.get(mapPath);
     String content;
     if (current == null) {
-      content = FileUtils.readFile(projectDir, finalPath, logger);
+      content = FileUtils.readFile(projectDir, relativePath, logger);
     } else {
       content = current.getContent();
     }
     return content;
+  }
+
+  @SneakyThrows
+  private String getMapPath(String relativePath) {
+    File file = FileUtils.resolveFile(projectDir, relativePath).getAbsoluteFile();
+    return file.getCanonicalPath();
   }
 }

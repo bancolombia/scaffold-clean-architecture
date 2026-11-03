@@ -6,21 +6,8 @@ pluginManagement {
     }
 }
 
-buildCache {
-    local {
-        directory = new File(rootDir, 'build-cache')
-    }
+plugins {
+    id 'co.com.bancolombia.cleanArchitecture.settings' version '5.0.5'
 }
 
 rootProject.name = 'channel-operations'
-
-include ':app-service'
-include ':model'
-include ':usecase'
-project(':app-service').projectDir = file('./applications/app-service')
-project(':model').projectDir = file('./domain/model')
-project(':usecase').projectDir = file('./domain/usecase')
-include ':reactive-web'
-project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
-include ':r2postgresql'
-project(':r2postgresql').projectDir = file('./infrastructure/driven-adapters/r2postgresql')

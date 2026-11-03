@@ -1,0 +1,7 @@
+contact_links:
+  - name: Documentation
+    url: https://bancolombia.github.io/scaffold-clean-architecture/
+    about: Check the documentation before opening an issue
+  - name: Question / Support
+    url: https://github.com/bancolombia/scaffold-clean-architecture/discussions
+    about: Use Discussions for questions and support

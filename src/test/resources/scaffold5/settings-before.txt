@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        maven { url = "https://repo.maven.apache.org/maven2"}
+        gradlePluginPortal()
+    }
+}
+
+buildCache {
+    local {
+        directory = new File(rootDir, 'build-cache')
+    }
+}
+
+rootProject.name = 'FuaIntegration'
+
+include ':app-service'
+include ':model'
+include ':usecase'
+project(':app-service').projectDir = file('./applications/app-service')
+project(':model').projectDir = file('./domain/model')
+project(':usecase').projectDir = file('./domain/usecase')
+include ':mq-sender'
+project(':mq-sender').projectDir = file('./infrastructure/driven-adapters/mq-sender')

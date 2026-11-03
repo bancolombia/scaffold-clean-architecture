@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.ModuleBuilder;
@@ -29,14 +26,11 @@ public class DrivenAdapterRedis implements ModuleFactory {
 
     logger.lifecycle("Generating {} in {} mode", typePath, modePath);
     builder.setupFromTemplate("driven-adapter/" + typePath + "/" + modePath);
-    builder.appendToSettings("redis", "infrastructure/driven-adapters");
     if (builder.getBooleanParam("include-secret")) {
       builder.setupFromTemplate("driven-adapter/" + typePath + "/secret");
     } else {
       builder.appendToProperties("spring.redis").put("host", "localhost").put("port", 6379);
     }
-    String dependency = buildImplementationFromProject(":redis");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
 
     new ObjectMapperFactory().buildModule(builder);
   }

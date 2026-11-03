@@ -7,6 +7,7 @@ import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.runCleanTask;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,6 +15,8 @@ import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.Set;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPlugin;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -21,6 +24,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -251,5 +257,71 @@ class ValidateStructureTaskTest {
     this.prepareReactiveProject();
     task.execute();
     // Assert
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  void validateStructureIgnoresPlatformsInSubprojects(boolean enforced)
+      throws IOException, CleanException {
+    setupException();
+    var project = task.getProject();
+    project
+        .project(":usecase")
+        .getDependencies()
+        .add("implementation", project.getDependencies().project(Map.of("path", ":model")));
+    project.subprojects(
+        subproject -> {
+          subproject.getPluginManager().apply(JavaPlugin.class);
+          var dependencies = subproject.getDependencies();
+          var platform =
+              enforced
+                  ? dependencies.enforcedPlatform("some:dep:1.2.3")
+                  : dependencies.platform("some:dep:1.2.3");
+          dependencies.add("implementation", platform);
+        });
+
+    assertEquals(Set.of(), task.getModuleDependencies().get().get("model"));
+    assertEquals(Set.of("model"), task.getModuleDependencies().get().get("usecase"));
+    task.execute();
+  }
+
+  @ParameterizedTest
+  @CsvSource({"model,false", "model,true", "usecase,false", "usecase,true"})
+  void validateStructureRejectsOrdinaryDependencyAlongsidePlatform(String module, boolean enforced)
+      throws IOException, CleanException {
+    setupException();
+    var project = task.getProject();
+    var usecase = project.project(":usecase");
+    usecase
+        .getDependencies()
+        .add("implementation", project.getDependencies().project(Map.of("path", ":model")));
+    var dependencies = project.project(":" + module).getDependencies();
+    var platform =
+        enforced
+            ? dependencies.enforcedPlatform("some:dep:1.2.3")
+            : dependencies.platform("some:dep:1.2.3");
+    dependencies.add("implementation", platform);
+    dependencies.add("implementation", "some:dep:1.2.3");
+
+    var exception = assertThrows(CleanException.class, () -> task.execute());
+    assertEquals(
+        module.equals("model") ? "Model module is invalid" : "Use case module is invalid",
+        exception.getMessage());
+  }
+
+  @ParameterizedTest
+  @ValueSource(booleans = {false, true})
+  void validateStructureStillRequiresModelDependencyWithPlatform(boolean enforced)
+      throws IOException, CleanException {
+    setupException();
+    var dependencies = task.getProject().project(":usecase").getDependencies();
+    dependencies.add(
+        "implementation",
+        enforced
+            ? dependencies.enforcedPlatform("some:dep:1.2.3")
+            : dependencies.platform("some:dep:1.2.3"));
+
+    var exception = assertThrows(CleanException.class, () -> task.execute());
+    assertEquals("Use case module is invalid", exception.getMessage());
   }
 }

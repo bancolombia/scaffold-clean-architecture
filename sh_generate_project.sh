@@ -27,7 +27,7 @@ echo "pluginManagement {
 
 cd $MY_DIR || exit
 gradle --version
-gradle ca --metrics false --example true --type $TYPE
+gradle ca --metrics false --otel true --example true --type $TYPE
 gradle wrapper
 
 if [ $TYPE == "reactive" ]
@@ -51,6 +51,7 @@ else
   do
     ./gradlew gep --type $entry
   done
+  ./gradlew gh --name custom
 fi
 
 branch="${GITHUB_REF##*/}"

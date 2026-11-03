@@ -1,6 +1,4 @@
 dependencies {
-    implementation project(':model')
-    implementation project(':usecase')
     {{#eda}}
     implementation 'io.cloudevents:cloudevents-core:{{CLOUD_EVENTS_VERSION}}'
     {{/eda}}
@@ -10,7 +8,6 @@ dependencies {
     {{#kafka}}
     implementation 'org.reactivecommons:async-kafka-starter:{{REACTIVE_COMMONS_VERSION}}'
     {{/kafka}}
-    implementation 'org.springframework:spring-context'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'
     {{/metrics}}

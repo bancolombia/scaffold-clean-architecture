@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.entrypoints;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.*;
-
 import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -23,9 +20,6 @@ public class EntryPointWebflux implements ModuleFactory {
       setupTemplate(builder, versioningStrategy);
     } else {
       builder.setupFromTemplate("entry-point/rest-webflux");
-      // to run archunit validations
-      builder.appendDependencyToModule(
-          APP_SERVICE, buildTestImplementation("org.springframework:spring-web"));
     }
     if (builder.getBooleanParam("include-swagger")) {
       builder.addParam("module", "reactive-web");
@@ -49,9 +43,6 @@ public class EntryPointWebflux implements ModuleFactory {
 
     Swagger.fromBuilder(builder, "infrastructure/entry-points/reactive-web", true);
 
-    builder.appendToSettings("reactive-web", "infrastructure/entry-points");
-    String dependency = buildImplementationFromProject(":reactive-web");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
     if (builder.withMetrics()) {
       builder
           .appendToProperties("management.endpoints.web.exposure")

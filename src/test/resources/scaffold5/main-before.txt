@@ -1,0 +1,31 @@
+apply plugin: 'info.solidsoft.pitest.aggregator'
+
+allprojects {
+    repositories {
+        maven {
+            url = 'https://repo.maven.apache.org/maven2'
+        }
+    }
+    apply plugin: 'org.owasp.dependencycheck'
+}
+
+subprojects {
+    apply plugin: 'info.solidsoft.pitest'
+    apply plugin: 'java-library'
+    apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.owasp.dependencycheck'
+
+    compileJava.dependsOn validateStructure
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    dependencies {
+        implementation 'io.projectreactor:reactor-core'
+        implementation platform('software.amazon.awssdk:bom:2.54.10')
+    }
+}

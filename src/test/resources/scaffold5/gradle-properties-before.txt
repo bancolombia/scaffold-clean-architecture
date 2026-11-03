@@ -1,0 +1,14 @@
+package=co.com.bancolombia
+systemProp.version=4.6.1
+reactive=true
+lombok=true
+org.gradle.parallel=true
+org.gradle.caching=true
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache.parallel=true
+org.gradle.configuration-cache.integrity-check=false
+org.gradle.configuration-cache.read-only=false
+log4j2.version=2.25.3
+language=java
+metrics=false
+systemProp.sonar.gradle.skipCompile=true

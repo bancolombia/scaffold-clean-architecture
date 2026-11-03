@@ -13,7 +13,6 @@ public class EntryPointGeneric implements ModuleFactory {
         builder,
         "No name is set for GENERIC type, usage: gradle generateEntryPoint "
             + "--type GENERIC --name [name]",
-        "infrastructure/entry-points",
         "entry-point/generic");
   }
 }

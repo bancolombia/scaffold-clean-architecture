@@ -1,10 +1,9 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
+import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
-import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.Utils;
@@ -48,7 +47,10 @@ public class UpdatePluginVersion implements UpgradeAction {
 
     builder.updateExpression(
         GRADLE_PROPERTIES, "(systemProp\\.version\\s?=\\s?).+", "$1" + lastRelease);
-    UpdateUtils.updateVersions(builder, BUILD_GRADLE, "cleanArchitectureVersion", lastRelease);
+    builder.updateExpression(
+        SETTINGS_GRADLE,
+        "(id\\s+['\"]co\\.com\\.bancolombia\\.cleanArchitecture\\.settings['\"]\\s+version\\s+)(['\"])[^'\"]+\\2",
+        "$1$2" + lastRelease + "$2");
     logger.lifecycle("Plugin updated");
     return true;
   }

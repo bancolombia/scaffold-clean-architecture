@@ -1,7 +1,6 @@
 package co.com.bancolombia.utils.operations;
 
 import co.com.bancolombia.models.DependencyRelease;
-import co.com.bancolombia.models.DependencyReleaseXml;
 import co.com.bancolombia.models.GradleVersion;
 import co.com.bancolombia.models.MavenMetadata;
 import co.com.bancolombia.models.Release;
@@ -9,6 +8,7 @@ import co.com.bancolombia.utils.operations.http.RestConsumer;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -64,9 +64,31 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
+    return getTheLastDependencyReleaseFromMavenFormat(dependency, this::getDependencyEndpoint);
+  }
+
+  @Override
+  public Optional<DependencyRelease> getLatestGradlePluginVersion(DependencyRelease dependency) {
+    return getTheLastDependencyReleaseFromMavenFormat(dependency, this::getGradlePluginEndpoint);
+  }
+
+  @Override
+  public Optional<String> getGradleWrapperFromFile() {
+    try {
+      GradleVersion release =
+          RestConsumer.getRequest(resolve(GRADLE_VERSIONS_API), GradleVersion.class);
+      return Optional.ofNullable(release).map(GradleVersion::version);
+    } catch (Exception e) {
+      logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
+      return Optional.empty();
+    }
+  }
+
+  private Optional<DependencyRelease> getTheLastDependencyReleaseFromMavenFormat(
+      DependencyRelease dependency, Function<DependencyRelease, String> endpointResolver) {
     var endpoint = "";
     try {
-      endpoint = getDependencyEndpoint(dependency);
+      endpoint = endpointResolver.apply(dependency);
       var metadata = RestConsumer.getRequest(endpoint, MavenMetadata.class, true);
       var release = metadata.toDependencyRelease();
       if (release.isNewest(dependency)) {
@@ -80,42 +102,6 @@ public class HttpOperations implements ExternalOperations {
           dependency,
           endpoint,
           e.getMessage());
-      return Optional.empty();
-    }
-  }
-
-  @Override
-  public Optional<DependencyRelease> getLatestGradlePluginVersion(DependencyRelease dependency) {
-    String endpoint = "";
-    try {
-      endpoint = getGradlePluginEndpoint(dependency);
-      DependencyRelease release =
-          RestConsumer.getRequest(endpoint, DependencyReleaseXml.class, true)
-              .toDependencyRelease()
-              .orElse(dependency);
-      if (release.isNewest(dependency)) {
-        logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
-        return Optional.of(release);
-      }
-      return Optional.empty();
-    } catch (Exception e) {
-      logger.lifecycle(
-          "\tx Can't update this dependency {} from {}, reason: {}",
-          dependency,
-          endpoint,
-          e.getMessage());
-      return Optional.empty();
-    }
-  }
-
-  @Override
-  public Optional<String> getGradleWrapperFromFile() {
-    try {
-      GradleVersion release =
-          RestConsumer.getRequest(resolve(GRADLE_VERSIONS_API), GradleVersion.class);
-      return Optional.ofNullable(release).map(GradleVersion::version);
-    } catch (Exception e) {
-      logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
       return Optional.empty();
     }
   }

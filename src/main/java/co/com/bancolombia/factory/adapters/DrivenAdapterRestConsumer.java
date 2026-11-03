@@ -1,9 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementation;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -20,15 +16,10 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     if (builder.isReactive()) {
       logger.lifecycle("Generating rest-consumer for reactive project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/reactive-rest-consumer");
-      String implementation =
-          buildImplementation("org.springframework.boot:spring-boot-starter-webflux");
-      builder.appendDependencyToModule(APP_SERVICE, implementation);
       builder.appendToProperties("adapter.restconsumer").put("timeout", 5000);
     } else {
       logger.lifecycle("Generating rest-consumer for imperative project");
       builder.setupFromTemplate("driven-adapter/consumer-rest/rest-consumer");
-      String implementation = buildImplementation("tools.jackson.core:jackson-databind");
-      builder.appendDependencyToModule(APP_SERVICE, implementation);
     }
     builder
         .appendToProperties("adapter.restconsumer")
@@ -37,9 +28,6 @@ public class DrivenAdapterRestConsumer implements ModuleFactory {
     withCircuitBreaker(builder.appendToProperties("resilience4j.circuitbreaker.instances.testGet"));
     withCircuitBreaker(
         builder.appendToProperties("resilience4j.circuitbreaker.instances.testPost"));
-    builder.appendToSettings("rest-consumer", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(":rest-consumer");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
     Swagger.fromBuilder(builder, "infrastructure/driven-adapters/rest-consumer", false);
   }
 

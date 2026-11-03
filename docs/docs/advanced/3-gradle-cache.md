@@ -171,7 +171,7 @@ the [best practice recommended by Gradle](https://docs.gradle.org/current/usergu
 of setting up a **project-specific local cache**. Instead of using Gradle's global cache directory (`GRADLE_USER_HOME`),
 a `build-cache` directory is created at the root of the project.
 
-This is configured in the `settings.gradle` file:
+This is configured by the `settings` plugin, and is equivalent to:
 
 ```groovy
 buildCache {

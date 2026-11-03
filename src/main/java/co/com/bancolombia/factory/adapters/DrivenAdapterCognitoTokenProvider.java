@@ -1,8 +1,5 @@
 package co.com.bancolombia.factory.adapters;
 
-import static co.com.bancolombia.Constants.APP_SERVICE;
-import static co.com.bancolombia.utils.Utils.buildImplementationFromProject;
-
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
@@ -25,9 +22,5 @@ public class DrivenAdapterCognitoTokenProvider implements ModuleFactory {
         .put("secret", "<cognito-credentials-secret-name>")
         .put("timeout", 5000)
         .put("endpoint", "https://<domain>.auth.<region>.amazoncognito.com/oauth2/token");
-
-    builder.appendToSettings("cognito-token-provider", "infrastructure/driven-adapters");
-    String dependency = buildImplementationFromProject(":cognito-token-provider");
-    builder.appendDependencyToModule(APP_SERVICE, dependency);
   }
 }
