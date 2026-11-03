@@ -1,0 +1,24 @@
+package {{package}};
+
+{{^x-is-composed-model}}
+{{#imports}}import {{import}};
+{{/imports}}
+{{#lombok}}
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+{{/lombok}}
+{{/x-is-composed-model}}
+
+{{#models}}
+{{#model}}
+{{^isEnum}}
+{{>pojo}}
+{{/isEnum}}
+{{#isEnum}}
+{{>enum-class}}
+{{/isEnum}}
+{{/model}}
+{{/models}}

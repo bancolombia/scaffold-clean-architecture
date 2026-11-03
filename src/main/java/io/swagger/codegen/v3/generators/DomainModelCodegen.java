@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class DomainModelCodegen extends AbstractScaffoldCodegen {
 
-    private static final Pattern GENERIC_TYPE = Pattern.compile("([A-Za-z0-9_]+)<(.+)>");
+    private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
 
     public DomainModelCodegen() {
         super();
@@ -31,7 +31,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
 
     @Override
     public String getDefaultTemplateDir() {
-        return "commons/rest-from-swagger";
+        return "commons/model-from-openapi";
     }
 
     @Override

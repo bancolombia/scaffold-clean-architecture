@@ -40,12 +40,15 @@ public final class OpenApiModelPackageResolver {
     static String resolveFolderSegment(String className) {
         String lower = className.toLowerCase(Locale.ROOT);
         if (DEFAULT_MODELS.matcher(className).find()) {
-            return "";
+            return "common";
         }
         if (lower.contains("response")) {
             return "response";
         }
-        return "request";
+        if (lower.contains("request")) {
+            return "request";
+        }
+        return "";
     }
 
     /**Asignael archivo en su carpeta correspondiente
