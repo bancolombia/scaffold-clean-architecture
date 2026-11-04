@@ -121,7 +121,7 @@ class GenerateDrivenAdapterTaskImperativeTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/driven-adapters/rest-consumer/",
         "src/main/java/co/com/bancolombia/consumer/api/PetApi.java",
-        "src/main/java/co/com/bancolombia/consumer/api/model/Pet.java");
+        "src/main/java/co/com/bancolombia/consumer/api/dtos/Pet.java");
   }
 
   @Test

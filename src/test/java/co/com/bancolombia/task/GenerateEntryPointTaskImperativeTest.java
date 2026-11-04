@@ -124,7 +124,7 @@ class GenerateEntryPointTaskImperativeTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/api-rest/",
         "src/main/java/co/com/bancolombia/api/PetApiController.java",
-        "src/main/java/co/com/bancolombia/api/model/Pet.java");
+        "src/main/java/co/com/bancolombia/api/dtos/Pet.java");
   }
 
   @Test
