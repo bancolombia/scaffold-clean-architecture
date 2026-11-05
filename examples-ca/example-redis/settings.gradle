@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'co.com.bancolombia.cleanArchitecture.settings' version '5.0.5'
+    id 'co.com.bancolombia.cleanArchitecture.settings' version '5.1.0'
 }
 
 rootProject.name = 'example-redis'
