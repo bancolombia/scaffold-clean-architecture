@@ -70,7 +70,7 @@ class UpgradeY2026M11D05DockerCompactObjectHeadersTest {
   }
 
   @Test
-  void shouldNotAddFlagTwice() throws IOException {
+  void shouldNotAddFlagTwice() {
     builder.addFile(
         DOCKERFILE, DOCKERFILE_TEMPLATE.formatted("25", "-XX:+UseCompactObjectHeaders "));
 
