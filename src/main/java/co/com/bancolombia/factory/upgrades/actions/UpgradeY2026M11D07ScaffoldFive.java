@@ -65,6 +65,9 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
   private static final Pattern JAVA_25_IMAGE = Pattern.compile("(?m)^\\s*FROM\\s+\\S*:25\\b");
   private static final Pattern DOCKER_JAVA_OPTS =
       Pattern.compile("(ENV\\s+JAVA_OPTS\\s*=\\s*\")\\s*");
+  private static final String TOOLING_PARALLEL_PROPERTY = "org.gradle.tooling.parallel";
+  private static final Pattern GRADLE_PARALLEL =
+      Pattern.compile("(?m)^(org\\.gradle\\.parallel\\s*=.*)$");
   private static final Pattern JAVA_TOOLCHAIN_VERSION =
       Pattern.compile("JavaLanguageVersion\\.of\\((\\d+)\\)");
   private static final Pattern PROJECT_DEPENDENCY =
@@ -467,8 +470,19 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
             String javaVersion = extractJavaVersion(mainGradleContent);
             updated = updated.stripTrailing() + "\njavaVersion=" + javaVersion + "\n";
           }
-          return updated;
+          return addToolingParallel(updated);
         });
+  }
+
+  private String addToolingParallel(String content) {
+    if (content.contains(TOOLING_PARALLEL_PROPERTY)) {
+      return content;
+    }
+    String line = TOOLING_PARALLEL_PROPERTY + "=true";
+    if (GRADLE_PARALLEL.matcher(content).find()) {
+      return GRADLE_PARALLEL.matcher(content).replaceFirst("$1\n" + line);
+    }
+    return content.stripTrailing() + "\n" + line + "\n";
   }
 
   private String extractJavaVersion(String mainGradleContent) {
