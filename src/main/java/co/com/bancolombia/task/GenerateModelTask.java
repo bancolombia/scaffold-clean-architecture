@@ -4,20 +4,14 @@ import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
-
+import co.com.bancolombia.utils.swagger.Swagger;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
-import co.com.bancolombia.utils.swagger.Swagger;
 import org.gradle.api.tasks.options.Option;
 
-@CATask(
-        name = "generateModel",
-        shortcut = "gm",
-        description = "Generate model in domain layer")
-
+@CATask(name = "generateModel", shortcut = "gm", description = "Generate model in domain layer")
 public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
 
   private String name = "";
@@ -29,38 +23,41 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     this.name = modelName;
   }
 
-  @Option(option = "from-openapi", description = "Path or URL to the OpenAPI v3 specification (YAML or JSON)")
+  @Option(
+      option = "from-openapi",
+      description = "Path or URL to the OpenAPI v3 specification (YAML or JSON)")
   public void setFromOpenApi(String fromOpenApi) {
     this.fromOpenApi = fromOpenApi;
   }
 
-  @Option(option = "models", description = "(Optional) Schema names you want to generate (default: all schemas)")
+  @Option(
+      option = "models",
+      description = "(Optional) Schema names you want to generate (default: all schemas)")
   public void setModels(String models) {
     this.models = models;
   }
 
-
   @Override
   protected void doExecute() throws IOException, ParamNotFoundException {
 
-    //Debe llevar nombre de modelo o tener ruta de contrato
+    // Requires a model name or an OpenAPI contract path
     boolean hasName = name != null && !name.isBlank();
     boolean hasSpec = fromOpenApi != null && !fromOpenApi.isBlank();
 
-    //Si no hay carpeta domain/model, saca error
+    // if there is no folder domain/model, error
     File modelModule = builder.resolveFile("domain/model");
     if (!modelModule.isDirectory()) {
       throw new IllegalStateException(
-              "domain/model module not found. Run cleanArchitecture (ca) before importing OpenAPI models.");
+          "domain/model module not found. Run cleanArchitecture (ca) before importing OpenAPI models.");
     }
 
     if (!hasName && !hasSpec) {
       printHelp();
       throw new IllegalArgumentException(
-              "No model name and no OpenAPI spec, \r\n " +
-                      "usage: gradle generateModel --from-openapi [path-or-url]" +
-                      "\r\n or \r\n" +
-                      "usage: gradle generateModel --name [name]");
+          "No model name and no OpenAPI spec, \r\n "
+              + "usage: gradle generateModel --from-openapi [path-or-url]"
+              + "\r\n or \r\n"
+              + "usage: gradle generateModel --name [name]");
     }
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     if (hasSpec) {
@@ -79,7 +76,6 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
       builder.setupFromTemplate("model");
       builder.persist();
     }
-
   }
 
   @Override

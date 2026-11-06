@@ -23,31 +23,31 @@ public class Swagger {
   private static final String DOMAIN_MODEL_MODULE = "domain/model";
   private static final String PACKAGE = "package";
   private static final String DOMAIN_MODEL_LANG =
-          "io.swagger.codegen.v3.generators.DomainModelCodegen";
+      "io.swagger.codegen.v3.generators.DomainModelCodegen";
   private static final String MODELS_SYSTEM_PROPERTY = "models";
 
   public static void fromBuilder(ModuleBuilder builder, String outputDir, boolean entryPoint) {
     if (builder.getStringParam("swagger-file") != null) {
       generate(
-              SwaggerOptions.builder()
-                      .reactive(builder.isReactive())
-                      .lombok(builder.isEnableLombok())
-                      .entryPoint(entryPoint)
-                      .router(builder.getBooleanParam("task-param-router"))
-                      .swagger(builder.getStringParam("swagger-file"))
-                      .logger(builder.getLogger())
-                      .outputDir(builder.getProjectDir() + "/" + outputDir)
-                      .packageName(
-                              entryPoint
-                                      ? builder.getStringParam(PACKAGE)
-                                      : builder.getStringParam(PACKAGE) + ".consumer")
-                      .build());
+          SwaggerOptions.builder()
+              .reactive(builder.isReactive())
+              .lombok(builder.isEnableLombok())
+              .entryPoint(entryPoint)
+              .router(builder.getBooleanParam("task-param-router"))
+              .swagger(builder.getStringParam("swagger-file"))
+              .logger(builder.getLogger())
+              .outputDir(builder.getProjectDir() + "/" + outputDir)
+              .packageName(
+                  entryPoint
+                      ? builder.getStringParam(PACKAGE)
+                      : builder.getStringParam(PACKAGE) + ".consumer")
+              .build());
     }
   }
 
   public static void generate(SwaggerOptions options) {
     CodegenConfigurator configurator =
-            baseConfigurator(options.getSwagger(), options.getOutputDir(), options.isLombok());
+        baseConfigurator(options.getSwagger(), options.getOutputDir(), options.isLombok());
     configurator.addAdditionalProperty("async", options.isReactive());
     configurator.addAdditionalProperty("invokerPackage", options.getPackageName() + ".api");
     configurator.addAdditionalProperty("fullController", true);
@@ -62,22 +62,23 @@ public class Swagger {
   }
 
   public static List<String> generateDomainModels(
-          ModuleBuilder builder, String specPath, String modelsFilter) {
+      ModuleBuilder builder, String specPath, String modelsFilter) {
     String modelPackage = builder.getStringParam(PACKAGE) + ".model.entities";
     String outputDir = builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
     Logger logger = builder.getLogger();
 
     CodegenConfigurator configurator =
-            baseConfigurator(resolveSpec(builder, specPath), outputDir, builder.isEnableLombok());
+        baseConfigurator(resolveSpec(builder, specPath), outputDir, builder.isEnableLombok());
     configurator.setLang(DOMAIN_MODEL_LANG);
     configurator.setModelPackage(modelPackage);
-    configurator.addAdditionalProperty(OpenApiModelPackageResolver.BASE_MODEL_PACKAGE, modelPackage);
+    configurator.addAdditionalProperty(
+        OpenApiModelPackageResolver.BASE_MODEL_PACKAGE, modelPackage);
     configurator.addAdditionalProperty("hideGenerationTimestamp", true);
 
     List<File> generated =
-            run(configurator, modelsFilter, outputDir, logger).stream()
-                    .filter(file -> file.getName().endsWith(".java"))
-                    .toList();
+        run(configurator, modelsFilter, outputDir, logger).stream()
+            .filter(file -> file.getName().endsWith(".java"))
+            .toList();
 
     List<String> classNames = new ArrayList<>();
     for (File file : generated) {
@@ -90,7 +91,7 @@ public class Swagger {
   }
 
   private static CodegenConfigurator baseConfigurator(
-          String inputSpec, String outputDir, boolean lombok) {
+      String inputSpec, String outputDir, boolean lombok) {
     CodegenConfigurator configurator = new CodegenConfigurator();
     configurator.setInputSpecURL(inputSpec);
     configurator.setOutputDir(outputDir);
@@ -101,7 +102,7 @@ public class Swagger {
   }
 
   private static List<File> run(
-          CodegenConfigurator configurator, String modelsFilter, String outputDir, Logger logger) {
+      CodegenConfigurator configurator, String modelsFilter, String outputDir, Logger logger) {
     String previousModels = System.getProperty(MODELS_SYSTEM_PROPERTY);
     try {
       if (modelsFilter != null && !modelsFilter.isBlank()) {
@@ -123,9 +124,9 @@ public class Swagger {
       return specPath;
     }
     throw new CleanDomainException(
-            "OpenAPI spec not found: "
-                    + specPath
-                    + ". Use a path relative to the project root or an http(s) URL.");
+        "OpenAPI spec not found: "
+            + specPath
+            + ". Use a path relative to the project root or an http(s) URL.");
   }
 
   private static void restoreSystemProperty(String previousValue) {

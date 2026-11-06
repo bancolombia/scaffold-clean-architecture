@@ -105,8 +105,8 @@ class UpdateUtilsTest {
     String toInsert = "jar {enabled = false}";
     String currentContent = "dependencies {}\n";
     assertThrows(
-            InvalidStateException.class,
-            () -> UpdateUtils.insertAfterMatch(currentContent, match, check, toInsert));
+        InvalidStateException.class,
+        () -> UpdateUtils.insertAfterMatch(currentContent, match, check, toInsert));
   }
 
   @Test
@@ -116,8 +116,8 @@ class UpdateUtilsTest {
     String toInsert = "jar {enabled = false}";
     String currentContent = "dependencies {}\n";
     assertThrows(
-            InvalidStateException.class,
-            () -> UpdateUtils.insertBeforeMatch(currentContent, match, check, toInsert));
+        InvalidStateException.class,
+        () -> UpdateUtils.insertBeforeMatch(currentContent, match, check, toInsert));
   }
 
   @Test
