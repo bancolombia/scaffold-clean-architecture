@@ -54,8 +54,7 @@ still depend on the Model module.
 For other dependencies that you explicitly want to allow in the domain modules, configure
 `whitelistedDependencies`. Platforms do not need to be whitelisted.
 
-```groovy
-// build.gradle
+```groovy title="build.gradle"
 cleanPlugin {
     modelProps {
         whitelistedDependencies = "allowed-library, another-library"

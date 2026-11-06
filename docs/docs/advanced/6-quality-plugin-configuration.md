@@ -130,7 +130,7 @@ A Java agent runs with the same privileges as your application. Enable
 
 Enable it in an existing project:
 
-```groovy
+```groovy title="build.gradle"
 cleanPlugin {
     otel = true
 }

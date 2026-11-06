@@ -21,13 +21,14 @@ pipeline {
         stage ('Code Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                sh "./gradlew sonarqube \
-                  -Dsonar.projectKey=${PROJECT_NAME} \
-                  -Dsonar.projectName=${PROJECT_NAME} \
-                  -Dsonar.projectVersion=${BUILD_NUMBER} \
-                  -Dsonar.host.url=${env.SONAR_HOST_URL} \
-                  -Dsonar.login=${env.SONAR_AUTH_TOKEN} \
-                  --no-daemon"
+                sh '''
+                    SONAR_TOKEN="$SONAR_AUTH_TOKEN" ./gradlew sonar \
+                      -Dsonar.projectKey="$PROJECT_NAME" \
+                      -Dsonar.projectName="$PROJECT_NAME" \
+                      -Dsonar.projectVersion="$BUILD_NUMBER" \
+                      -Dsonar.host.url="$SONAR_HOST_URL" \
+                      --no-daemon
+                '''
                 }
              }
         }

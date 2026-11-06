@@ -230,7 +230,10 @@ class PluginCleanTest {
     assertHasExternalDependency(
         appService, "implementation", "org.springframework.boot", "spring-boot-starter", null);
     assertHasExternalDependency(
-        appService, "runtimeOnly", "org.springframework.boot", "spring-boot-devtools", null);
+        appService, "developmentOnly", "org.springframework.boot", "spring-boot-devtools", null);
+    assertTrue(
+        appService.getConfigurations().getByName("runtimeOnly").getDependencies().stream()
+            .noneMatch(dependency -> "spring-boot-devtools".equals(dependency.getName())));
     assertHasExternalDependency(
         appService, "testImplementation", "tools.jackson.core", "jackson-databind", null);
     assertEquals(

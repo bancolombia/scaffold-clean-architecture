@@ -198,8 +198,9 @@ class GenerateStructureTaskTest {
     String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
 
     assertTrue(
-        dockerfile.contains("COPY otel/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar"));
-    assertTrue(dockerfile.contains("-javaagent:/opentelemetry-javaagent.jar"));
+        dockerfile.contains(
+            "COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar"));
+    assertTrue(dockerfile.contains("-javaagent:/app/opentelemetry-javaagent.jar"));
   }
 
   @Test
