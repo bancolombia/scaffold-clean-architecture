@@ -26,7 +26,6 @@ class HttpOperationsTest {
 
   @BeforeEach
   void setup() throws IOException {
-    String releaseResponse = "[{\"tag_name\":\"2.0.0\",\"published_at\":\"2021-11-18T13:30:02Z\"}]";
     String gradleVersionResponse = "{\"version\":\"9.4.0\"}";
     String dependencyResponse =
         """
@@ -67,7 +66,6 @@ class HttpOperationsTest {
           @Override
           public @NotNull MockResponse dispatch(RecordedRequest request) {
             return switch (Objects.requireNonNull(request.getPath())) {
-              case "/releases" -> new MockResponse().setResponseCode(200).setBody(releaseResponse);
               case "/name/maven-metadata.xml" ->
                   new MockResponse()
                       .setResponseCode(200)
@@ -78,6 +76,12 @@ class HttpOperationsTest {
                       .setResponseCode(200)
                       .addHeader("Content-Type", "application/xml")
                       .setBody(xmlResponse);
+              case "/co/com/bancolombia/cleanArchitecture/co.com.bancolombia.cleanArchitecture.gradle.plugin/maven-metadata.xml" ->
+                  new MockResponse()
+                      .setResponseCode(200)
+                      .addHeader("Content-Type", "application/xml")
+                      .setBody(
+                          "<metadata><groupId>co.com.bancolombia.cleanArchitecture</groupId><artifactId>co.com.bancolombia.cleanArchitecture.gradle.plugin</artifactId><versioning><latest>4.7.7</latest><release>4.7.7</release><versions><version>v3.0.5</version><version>0.5</version><version>4.7.6</version><version>4.7.7</version><version>5.0.5</version><version>5.0.10</version><version>5.1.0</version><version>5.1.1.Final</version><version>5.2.0-RC1</version><version>5.2.0-beta</version><version>6.0.0</version></versions></versioning></metadata>");
               case "/versions/current" ->
                   new MockResponse().setResponseCode(200).setBody(gradleVersionResponse);
               case "/analytics" -> new MockResponse().setResponseCode(201);
@@ -90,8 +94,6 @@ class HttpOperationsTest {
     operations =
         new HttpOperations(
             Map.of(
-                PLUGIN_RELEASES,
-                server.url("/releases").toString(),
                 DEPENDENCY_RELEASES,
                 server.url("name/maven-metadata.xml").toString(),
                 GRADLE_PLUGINS,
@@ -100,14 +102,27 @@ class HttpOperationsTest {
                 server.url("/versions/current").toString()));
   }
 
+  private HttpOperations pluginPortalOperations() {
+    return new HttpOperations(
+        Map.of(GRADLE_PLUGINS, server.url("/") + "%group/%artifact/maven-metadata.xml"));
+  }
+
   @Test
   void getVersionPlugin() {
-    // Arrange
+    // Arrange: the installed plugin is 5.x.x (Constants.PLUGIN_VERSION)
     // Act
-    Release result = operations.getLatestPluginVersion();
-    // Assert
-    assertEquals("2.0.0", result.getTagName());
-    assertEquals("2021-11-18T13:30:02Z", result.getPublishedAt().toString());
+    Release result = pluginPortalOperations().getLatestPluginVersion();
+    // Assert: highest stable 5.x (a .Final suffix is stable); neither 4.7.7 (the latest of the
+    // portal), nor 6.0.0, nor the 5.2.0 RC/beta
+    assertEquals("5.1.1.Final", result.getTagName());
+  }
+
+  @Test
+  void shouldReturnNullLatestPluginVersionWhenPluginPortalCanNotBeLoaded() {
+    HttpOperations broken =
+        new HttpOperations(Map.of(GRADLE_PLUGINS, server.url("/not-found").toString()));
+
+    assertNull(broken.getLatestPluginVersion());
   }
 
   @Test
@@ -152,5 +167,18 @@ class HttpOperationsTest {
     String result = RestConsumer.postRequest(baseUrl.toString(), body, String.class);
     // Assert
     assertNull(result);
+  }
+
+  @Test
+  void shouldGetMajorVersionOfAPluginVersion() {
+    assertEquals(5, HttpOperations.majorOf("5.1.0").getAsInt());
+    assertEquals(4, HttpOperations.majorOf("4.7.8").getAsInt());
+  }
+
+  @Test
+  void shouldNotGetMajorVersionOfLocalPlaceholderVersions() {
+    // sh_publish_plugin_local.sh publishes the plugin as CURRENT_LOCAL_VERSION
+    assertTrue(HttpOperations.majorOf("CURRENT_LOCAL_VERSION").isEmpty());
+    assertTrue(HttpOperations.majorOf("").isEmpty());
   }
 }

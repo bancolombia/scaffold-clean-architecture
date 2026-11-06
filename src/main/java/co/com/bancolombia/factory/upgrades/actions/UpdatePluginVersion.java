@@ -4,6 +4,7 @@ import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 
 import co.com.bancolombia.factory.ModuleBuilder;
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.Utils;
@@ -39,7 +40,7 @@ public class UpdatePluginVersion implements UpgradeAction {
 
   private boolean updatePlugin(String lastRelease, Logger logger, ModuleBuilder builder)
       throws IOException {
-    if (lastRelease.equals(Utils.getVersionPlugin())) {
+    if (!UpdateUtils.isNewerVersion(Utils.getVersionPlugin(), lastRelease)) {
       logger.lifecycle("You are already using the latest version of the plugin");
       return false;
     }
