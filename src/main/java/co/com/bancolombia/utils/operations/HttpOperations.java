@@ -9,6 +9,7 @@ import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -42,11 +43,21 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Release getLatestPluginVersion() {
-    return getLatestPluginVersion(installedMajor()).orElse(null);
+    OptionalInt major = majorOf(Utils.getVersionPlugin());
+    if (major.isEmpty()) {
+      // Local builds use a placeholder version, there is no release line to compare with
+      logger.debug("Plugin version {} has no numeric major version", Utils.getVersionPlugin());
+      return null;
+    }
+    return getLatestPluginVersion(major.getAsInt()).orElse(null);
   }
 
-  private static int installedMajor() {
-    return Integer.parseInt(Utils.getVersionPlugin().split("\\.")[0]);
+  static OptionalInt majorOf(String version) {
+    try {
+      return OptionalInt.of(Integer.parseInt(version.split("\\.")[0]));
+    } catch (NumberFormatException e) {
+      return OptionalInt.empty();
+    }
   }
 
   /** Highest stable release of a major version, compared by version and not by publication date. */
