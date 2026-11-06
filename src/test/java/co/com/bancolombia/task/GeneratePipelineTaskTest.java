@@ -59,7 +59,8 @@ class GeneratePipelineTaskTest {
     assertFilesExistsInDir(TEST_DIR + "/deployment/", "cleanarchitecture_azure_build.yaml");
     assertFileContains(
         TEST_DIR + "/deployment/cleanarchitecture_azure_build.yaml",
-        "sonar.projectKey=$(Build.Repository.Name)");
+        "sonar.projectKey=$(Build.Repository.Name)",
+        "SonarQubePrepare@8");
   }
 
   @Test
