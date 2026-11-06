@@ -114,7 +114,7 @@ convention configures `app-service` with:
 
 Enable it in an existing project:
 
-```groovy
+```groovy title="build.gradle"
 cleanPlugin {
     otel = true
 }

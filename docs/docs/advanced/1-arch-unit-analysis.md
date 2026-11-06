@@ -226,7 +226,7 @@ We recommend not to skip the rules, but if you need to do it, you can add the pr
 
 For example:
 
-```properties
+```properties title="gradle.properties"
 package=co.com.bancolombia
 systemProp.version=3.20.15
 reactive=true
