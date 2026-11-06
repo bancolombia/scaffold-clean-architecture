@@ -27,12 +27,14 @@ import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.Optional;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "validateStructure",
     shortcut = "vs",
     description = "Validate that project references are not violated")
 @SuppressWarnings({"unchecked", "rawtypes"})
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class ValidateStructureTask
     extends AbstractCleanArchitectureDefaultTask { // NOSONAR
   private static final String MODEL_MODULE = "model";

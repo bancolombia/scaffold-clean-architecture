@@ -14,8 +14,10 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(name = "deleteModule", shortcut = "dm", description = "Delete gradle module")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class DeleteModuleTask extends AbstractCleanArchitectureDefaultTask {
   private String module;
 

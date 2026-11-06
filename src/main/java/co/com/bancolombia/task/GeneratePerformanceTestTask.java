@@ -4,11 +4,13 @@ import co.com.bancolombia.task.annotations.CATask;
 import java.util.ArrayList;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generatePerformanceTest",
     shortcut = "gpt",
     description = "Generate performance test")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class GeneratePerformanceTestTask extends AbstractResolvableTypeTask {
   @Input
   public abstract SetProperty<String> getModuleNames();

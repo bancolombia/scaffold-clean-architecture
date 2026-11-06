@@ -7,8 +7,10 @@ import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(name = "generateModel", shortcut = "gm", description = "Generate model in domain layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   private String name = "";
 

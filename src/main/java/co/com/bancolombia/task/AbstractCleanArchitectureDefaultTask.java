@@ -27,7 +27,9 @@ import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.logging.text.StyledTextOutput;
 import org.gradle.internal.logging.text.StyledTextOutputFactory;
+import org.gradle.work.DisableCachingByDefault;
 
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class AbstractCleanArchitectureDefaultTask extends DefaultTask {
   protected ModuleBuilder builder;
   protected final Logger logger = getLogger();

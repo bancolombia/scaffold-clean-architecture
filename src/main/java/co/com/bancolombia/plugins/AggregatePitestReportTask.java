@@ -18,10 +18,12 @@ import org.gradle.api.tasks.PathSensitive;
 import org.gradle.api.tasks.PathSensitivity;
 import org.gradle.api.tasks.SkipWhenEmpty;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.work.DisableCachingByDefault;
 import org.pitest.aggregate.ReportAggregator;
 import org.pitest.mutationtest.config.DirectoryResultOutputStrategy;
 import org.pitest.mutationtest.config.UndatedReportDirCreationStrategy;
 
+@DisableCachingByDefault(because = "The aggregated report is not verified to be reproducible")
 public abstract class AggregatePitestReportTask extends DefaultTask {
 
   @SkipWhenEmpty
@@ -122,7 +124,7 @@ public abstract class AggregatePitestReportTask extends DefaultTask {
     try {
       return Files.readString(report.toPath(), StandardCharsets.UTF_8)
           .replaceAll("<\\?xml[^>]*>", "")
-          .replaceAll("</?mutations( partial=['\\\"]true['\\\"])?\\s*>", "")
+          .replaceAll("</?mutations( partial=['\"]true['\"])?\\s*>", "")
           .trim();
     } catch (IOException exception) {
       throw new IllegalStateException(
