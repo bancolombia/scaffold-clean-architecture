@@ -431,6 +431,9 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
             GRADLE_PROPERTIES,
             resource("scaffold5/gradle-properties-before.txt")
                     .replace("systemProp.version=4.6.1", "systemProp.version=5.0.0-beta")
+                    .replace(
+                        "org.gradle.parallel=true\n",
+                        "org.gradle.parallel=true\norg.gradle.tooling.parallel=true\n")
                 + "\nbeta5=true\njavaVersion=17\n");
   }
 
