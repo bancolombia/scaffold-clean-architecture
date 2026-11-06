@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -34,7 +35,7 @@ public class UpdateProjectDependencies {
     File buildGradle = Paths.get(file).toFile();
     String content = FileUtils.readFileAsString(buildGradle, null);
     content =
-        Utils.findExpressions(content, "['\"].+:.+:[^\\$].+['\"]").stream()
+        Utils.findExpressions(content, DependencyRelease.DECLARATION_REGEX).stream()
             .map(DependencyRelease::from)
             .distinct()
             .map(operations::getTheLastDependencyRelease)
@@ -43,7 +44,8 @@ public class UpdateProjectDependencies {
             .reduce(
                 content,
                 (current, release) ->
-                    Utils.replaceExpression(current, release.toRegex(), release.toString()),
+                    Utils.replaceExpression(
+                        current, release.toRegex(), Matcher.quoteReplacement(release.toString())),
                 (current, next) -> next);
 
     content =
@@ -56,7 +58,8 @@ public class UpdateProjectDependencies {
             .reduce(
                 content,
                 (current, release) ->
-                    Utils.replaceExpression(current, release.toRegex(), release.toString()),
+                    Utils.replaceExpression(
+                        current, release.toRegex(), Matcher.quoteReplacement(release.toString())),
                 (current, next) -> next);
 
     if (content.contains("wrapper")) {
@@ -64,7 +67,9 @@ public class UpdateProjectDependencies {
       if (dep.isPresent()) {
         content =
             Utils.replaceExpression(
-                content, "gradleVersion\\s*=\\s*.*", "gradleVersion = '" + dep.get() + "'");
+                content,
+                "gradleVersion\\s*=\\s*.*",
+                Matcher.quoteReplacement("gradleVersion = '" + dep.get() + "'"));
       }
     }
 

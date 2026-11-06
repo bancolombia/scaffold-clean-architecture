@@ -3,6 +3,7 @@ package co.com.bancolombia.models;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,11 +30,17 @@ public class DependencyRelease {
     return String.format("'%s:%s:%s'", this.getGroup(), this.getArtifact(), this.getVersion());
   }
 
+  /** Finds quoted {@code group:artifact:version} declarations, one per string literal. */
+  public static final String DECLARATION_REGEX = "['\"][^'\"\\s]+:[^'\"\\s]+:[^$'\"][^'\"]*['\"]";
+
   public String toRegex() {
     if (isGradlePlugin()) {
-      return String.format("id\\s+['\"]%s['\"]\\s+version\\s+['\"].+['\"]", this.getGroup());
+      return String.format(
+          "id\\s+['\"]%s['\"]\\s+version\\s+['\"][^'\"]*['\"]", Pattern.quote(this.getGroup()));
     }
-    return String.format("['\"]%s:%s:[^\\$].+['\"]", this.getGroup(), this.getArtifact());
+    return String.format(
+        "['\"]%s:%s:[^$'\"][^'\"]*['\"]",
+        Pattern.quote(this.getGroup()), Pattern.quote(this.getArtifact()));
   }
 
   public boolean valid() {

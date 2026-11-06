@@ -8,6 +8,7 @@ import co.com.bancolombia.utils.operations.OperationsProvider;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -35,7 +36,9 @@ public class ZUpdateDependencies implements UpgradeAction {
     if (deps.isEmpty()) {
       deps =
           gradleFiles.stream()
-              .flatMap(file -> builder.findExpressions(file, "['\"].+:.+:[^\\$].+['\"]").stream())
+              .flatMap(
+                  file ->
+                      builder.findExpressions(file, DependencyRelease.DECLARATION_REGEX).stream())
               .collect(Collectors.toSet());
     }
 
@@ -78,6 +81,7 @@ public class ZUpdateDependencies implements UpgradeAction {
 
   @SneakyThrows
   private boolean update(ModuleBuilder builder, DependencyRelease release, String file) {
-    return builder.updateExpression(file, release.toRegex(), release.toString());
+    return builder.updateExpression(
+        file, release.toRegex(), Matcher.quoteReplacement(release.toString()));
   }
 }
