@@ -190,6 +190,31 @@ class GenerateStructureTaskTest {
   }
 
   @Test
+  void shouldGenerateDockerfileWithOtelAgentWhenOtelEnabled() throws IOException, CleanException {
+    String dir = project.getProjectDir().getPath();
+    task.setOtel(BooleanOption.TRUE);
+
+    task.execute();
+    String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
+
+    assertTrue(
+        dockerfile.contains("COPY otel/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar"));
+    assertTrue(dockerfile.contains("-javaagent:/opentelemetry-javaagent.jar"));
+  }
+
+  @Test
+  void shouldGenerateDockerfileWithoutOtelAgentWhenOtelDisabled()
+      throws IOException, CleanException {
+    String dir = project.getProjectDir().getPath();
+
+    task.execute();
+    String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
+
+    assertFalse(dockerfile.contains("opentelemetry"));
+    assertFalse(dockerfile.contains("javaagent"));
+  }
+
+  @Test
   void shouldGenerateSettingsGradleUsingSettingsPluginAndWithoutStaticIncludes()
       throws IOException, CleanException {
     // Arrange
