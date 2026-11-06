@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class AbstractResolvableTypeTask extends AbstractCleanArchitectureDefaultTask {
   protected String name;
   protected String type;
