@@ -16,11 +16,13 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.internal.logging.text.StyledTextOutput;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "updateCleanArchitecture",
     shortcut = "u",
     description = "Update project dependencies")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class UpdateProjectTask extends AbstractCleanArchitectureDefaultTask {
   private final Set<String> dependencies = new HashSet<>();
   private BooleanOption git = BooleanOption.TRUE;

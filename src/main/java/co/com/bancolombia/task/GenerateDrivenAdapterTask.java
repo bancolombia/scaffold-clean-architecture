@@ -8,11 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generateDrivenAdapter",
     shortcut = "gda",
     description = "Generate driven adapter in infrastructure layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateDrivenAdapterTask extends AbstractResolvableTypeTask {
   private String url = "http://localhost:8080";
   private String swaggerFile = null;
