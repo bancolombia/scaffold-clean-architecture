@@ -7,11 +7,14 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -56,7 +59,8 @@ class GeneratePipelineTaskTest {
     assertFilesExistsInDir(TEST_DIR + "/deployment/", "cleanarchitecture_azure_build.yaml");
     assertFileContains(
         TEST_DIR + "/deployment/cleanarchitecture_azure_build.yaml",
-        "sonar.projectKey=$(Build.Repository.Name)");
+        "sonar.projectKey=$(Build.Repository.Name)",
+        "SonarQubePrepare@");
   }
 
   @Test
@@ -81,6 +85,10 @@ class GeneratePipelineTaskTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/deployment/", "Jenkinsfile");
+    String jenkinsfile = Files.readString(Path.of(TEST_DIR, "deployment", "Jenkinsfile"));
+    assertTrue(jenkinsfile.contains("SONAR_TOKEN=\"$SONAR_AUTH_TOKEN\" ./gradlew sonar "));
+    assertFalse(jenkinsfile.contains("sonar.login"));
+    assertFalse(jenkinsfile.contains("gradlew sonarqube"));
   }
 
   @Test
@@ -91,6 +99,7 @@ class GeneratePipelineTaskTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/.circleci/", "config.yml");
+    assertFileContains(TEST_DIR + "/.circleci/config.yml", "cimg/openjdk");
   }
 
   @Test
@@ -102,6 +111,13 @@ class GeneratePipelineTaskTest {
     // Assert
     assertFilesExistsInDir(
         TEST_DIR + "/.github/workflows/", "cleanarchitecture_github_action_gradle.yaml");
+    String workflow =
+        Files.readString(
+            Path.of(
+                TEST_DIR, ".github", "workflows", "cleanarchitecture_github_action_gradle.yaml"));
+    assertTrue(workflow.contains("actions/checkout@"));
+    assertTrue(workflow.contains("actions/setup-java@"));
+    assertFalse(workflow.matches("(?s).*uses: actions/[\\w-]+@v\\d.*"));
   }
 
   @Test
