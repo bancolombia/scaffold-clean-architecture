@@ -2,6 +2,7 @@ package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
@@ -60,6 +61,10 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
   private static final String SPRING_BOOT_DEPENDENCIES_BOM =
       "org.springframework.boot:spring-boot-dependencies";
   private static final String CLEAN_PLUGIN = "cleanPlugin";
+  private static final String COMPACT_OBJECT_HEADERS_FLAG = "-XX:+UseCompactObjectHeaders";
+  private static final Pattern JAVA_25_IMAGE = Pattern.compile("(?m)^\\s*FROM\\s+\\S*:25\\b");
+  private static final Pattern DOCKER_JAVA_OPTS =
+      Pattern.compile("(ENV\\s+JAVA_OPTS\\s*=\\s*\")\\s*");
   private static final String TOOLING_PARALLEL_PROPERTY = "org.gradle.tooling.parallel";
   private static final Pattern GRADLE_PARALLEL =
       Pattern.compile("(?m)^(org\\.gradle\\.parallel\\s*=.*)$");
@@ -114,7 +119,27 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
       applied = true;
     }
     applied |= removeDependencyMgmtGradle(builder);
+    applied |= upgradeDockerfile(builder);
     return applied;
+  }
+
+  /** Java 25 projects get -XX:+UseCompactObjectHeaders in the Dockerfile JAVA_OPTS. */
+  private boolean upgradeDockerfile(ModuleBuilder builder) {
+    try {
+      return builder.updateFile(
+          DOCKERFILE,
+          content -> {
+            if (content.contains(COMPACT_OBJECT_HEADERS_FLAG)
+                || !JAVA_25_IMAGE.matcher(content).find()) {
+              return content;
+            }
+            return DOCKER_JAVA_OPTS
+                .matcher(content)
+                .replaceFirst("$1" + COMPACT_OBJECT_HEADERS_FLAG + " ");
+          });
+    } catch (IOException e) {
+      return false;
+    }
   }
 
   private boolean removeDependencyMgmtGradle(ModuleBuilder builder) {

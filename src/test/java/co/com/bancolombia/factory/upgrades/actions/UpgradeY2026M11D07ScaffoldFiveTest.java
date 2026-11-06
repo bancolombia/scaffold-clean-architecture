@@ -2,10 +2,12 @@ package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
+import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
 import static co.com.bancolombia.Constants.MainFiles.GRADLE_PROPERTIES;
 import static co.com.bancolombia.Constants.MainFiles.MAIN_GRADLE;
 import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -572,5 +574,48 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
                 + "\nconfigurations.all {\n"
                 + "    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'\n"
                 + "}");
+  }
+
+  private void addMigratableProject() throws IOException {
+    stubLatestRelease("5.0.0");
+    builder.addFile(SETTINGS_GRADLE, resource("scaffold5/settings-before.txt"));
+    builder.addFile(BUILD_GRADLE, resource("scaffold5/build-before.txt"));
+    builder.addFile(MAIN_GRADLE, resource("scaffold5/main-before.txt"));
+    builder.addFile(GRADLE_PROPERTIES, resource("scaffold5/gradle-properties-before.txt"));
+  }
+
+  @Test
+  void shouldAddCompactObjectHeadersToDockerfileWhenUsingJava25() throws IOException {
+    addMigratableProject();
+    builder.addFile(
+        DOCKERFILE,
+        "FROM eclipse-temurin:25-jdk-alpine\nENV JAVA_OPTS=\" -XX:MaxRAMPercentage=70\"\n");
+
+    assertTrue(updater.up(builder));
+
+    verify(builder)
+        .addFile(
+            DOCKERFILE,
+            "FROM eclipse-temurin:25-jdk-alpine\n"
+                + "ENV JAVA_OPTS=\"-XX:+UseCompactObjectHeaders -XX:MaxRAMPercentage=70\"\n");
+  }
+
+  @Test
+  void shouldNotChangeDockerfileWhenNotUsingJava25OrFlagIsPresent() throws IOException {
+    addMigratableProject();
+    String java21 = "FROM eclipse-temurin:21-jdk-alpine\nENV JAVA_OPTS=\"-Xmx1g\"\n";
+    builder.addFile(DOCKERFILE, java21);
+
+    updater.up(builder);
+
+    assertEquals(java21, builder.readFile(DOCKERFILE));
+
+    String withFlag =
+        "FROM eclipse-temurin:25-jdk-alpine\nENV JAVA_OPTS=\"-XX:+UseCompactObjectHeaders\"\n";
+    builder.addFile(DOCKERFILE, withFlag);
+
+    updater.up(builder);
+
+    assertEquals(withFlag, builder.readFile(DOCKERFILE));
   }
 }
