@@ -161,6 +161,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
 
     gradlePlugin.testSourceSets(sourceSets.functionalTest)
     configurations.functionalTestImplementation.extendsFrom(configurations.testImplementation)
+    configurations.functionalTestRuntimeOnly.extendsFrom(configurations.testRuntimeOnly)
 
     // Add a task to run the functional tests
     tasks.register('functionalTest', Test) {
@@ -168,6 +169,7 @@ if (project.hasProperty('signing.keyId')) { // publish as library in maven centr
         group = 'verification'
         testClassesDirs = sourceSets.functionalTest.output.classesDirs
         classpath = sourceSets.functionalTest.runtimeClasspath
+        useJUnitPlatform()
     }
 
     check {
