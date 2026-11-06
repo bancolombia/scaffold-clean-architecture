@@ -18,18 +18,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 class GenerateModelTaskTest {
   private static final String TEST_DIR = getTestDir(GenerateModelTaskTest.class);
   private static final String MODEL_DIR = TEST_DIR + "/domain/model/";
   private static final String ENTITIES =
-          MODEL_DIR + "src/main/java/co/com/bancolombia/model/entities";
+      MODEL_DIR + "src/main/java/co/com/bancolombia/model/entities";
   private static final String SPEC =
-          Path.of("src/test/resources/swagger/sample-catalog.yaml").toAbsolutePath().toString();
+      Path.of("src/test/resources/swagger/sample-catalog.yaml").toAbsolutePath().toString();
 
   private static GenerateModelTask task;
 
@@ -43,10 +40,10 @@ class GenerateModelTaskTest {
     taskStructure.execute();
 
     ProjectBuilder.builder()
-            .withName("app-service")
-            .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
-            .withParent(project)
-            .build();
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
+        .withParent(project)
+        .build();
 
     task = createTask(project, GenerateModelTask.class);
   }
@@ -82,9 +79,9 @@ class GenerateModelTaskTest {
     task.setName("testModel");
     task.execute();
     assertFilesExistsInDir(
-            MODEL_DIR,
-            "src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java",
-            "src/main/java/co/com/bancolombia/model/testmodel/TestModel.java");
+        MODEL_DIR,
+        "src/main/java/co/com/bancolombia/model/testmodel/gateways/TestModelRepository.java",
+        "src/main/java/co/com/bancolombia/model/testmodel/TestModel.java");
   }
 
   @Test
@@ -103,7 +100,7 @@ class GenerateModelTaskTest {
     task.execute();
 
     assertFilesExistsInDir(
-            ENTITIES + "/", "Author.java", "request/Book.java", "response/Book.java");
+        ENTITIES + "/", "Author.java", "request/Book.java", "response/Book.java");
     assertContains("Author.java", "package co.com.bancolombia.model.entities;");
     assertContains("request/Book.java", "package co.com.bancolombia.model.entities.request;");
     assertContains("response/Book.java", "package co.com.bancolombia.model.entities.response;");
@@ -120,6 +117,15 @@ class GenerateModelTaskTest {
     assertContains("response/Book.java", "private Author author");
   }
 
+  @Test
+  void shouldGenerateAllModelsWithBlankModels() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setModels(" ");
+    task.execute();
+
+    assertFilesExistsInDir(
+        ENTITIES + "/", "Author.java", "request/Book.java", "response/Book.java");
+  }
 
   @Test
   void shouldGenerateNamedModelAndOpenApiModelsTogether() throws IOException, CleanException {
@@ -128,7 +134,7 @@ class GenerateModelTaskTest {
     task.execute();
 
     assertFilesExistsInDir(
-            MODEL_DIR, "src/main/java/co/com/bancolombia/model/customer/Customer.java");
+        MODEL_DIR, "src/main/java/co/com/bancolombia/model/customer/Customer.java");
     assertFilesExistsInDir(ENTITIES + "/", "Author.java");
   }
 
@@ -138,11 +144,24 @@ class GenerateModelTaskTest {
     assertThrows(CleanDomainException.class, () -> task.execute());
   }
 
+  @Test
+  void shouldRestorePreviousModelsProperty() throws IOException, CleanException {
+    System.setProperty("models", "previous");
+    try {
+      task.setFromOpenApi(SPEC);
+      task.setModels("author");
+      task.execute();
+      Assertions.assertEquals("previous", System.getProperty("models"));
+    } finally {
+      System.clearProperty("models");
+    }
+  }
+
   private static void assertContains(String relativePath, String expected) throws IOException {
     String content = Files.readString(Path.of(ENTITIES, relativePath));
     assertTrue(
-            content.contains(expected),
-            () -> relativePath + " should contain: " + expected + "\n---\n" + content);
+        content.contains(expected),
+        () -> relativePath + " should contain: " + expected + "\n---\n" + content);
   }
 
   private static void deleteDirectory(Path dir) throws IOException {
