@@ -42,13 +42,22 @@ class UpgradeY2026M11D05GradleToolingParallelTest {
   @Test
   void shouldAddPropertyAfterParallel() throws IOException {
     builder.addFile(
-        GRADLE_PROPERTIES, "language=java\norg.gradle.parallel=true\norg.gradle.caching=true\n");
+        GRADLE_PROPERTIES,
+        """
+        language=java
+        org.gradle.parallel=true
+        org.gradle.caching=true
+        """);
 
     assertTrue(updater.up(builder));
 
     assertEquals(
-        "language=java\norg.gradle.parallel=true\norg.gradle.tooling.parallel=true\n"
-            + "org.gradle.caching=true\n",
+        """
+        language=java
+        org.gradle.parallel=true
+        org.gradle.tooling.parallel=true
+        org.gradle.caching=true
+        """,
         builder.readFile(GRADLE_PROPERTIES));
   }
 
