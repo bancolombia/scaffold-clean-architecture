@@ -198,4 +198,17 @@ class HttpOperationsTest {
 
     assertNull(broken.getLatestPluginVersion());
   }
+
+  @Test
+  void shouldGetMajorVersionOfAPluginVersion() {
+    assertEquals(5, HttpOperations.majorOf("5.1.0").getAsInt());
+    assertEquals(4, HttpOperations.majorOf("4.7.8").getAsInt());
+  }
+
+  @Test
+  void shouldNotGetMajorVersionOfLocalPlaceholderVersions() {
+    // sh_publish_plugin_local.sh publishes the plugin as CURRENT_LOCAL_VERSION
+    assertTrue(HttpOperations.majorOf("CURRENT_LOCAL_VERSION").isEmpty());
+    assertTrue(HttpOperations.majorOf("").isEmpty());
+  }
 }
