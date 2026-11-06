@@ -107,10 +107,26 @@ When `cleanPlugin.otel` is `true` (or the project was generated with `ca --otel=
 convention configures `app-service` with:
 
 - An `otelAgent` configuration depending on `io.opentelemetry.javaagent:opentelemetry-javaagent`
-  at the plugin-managed version.
-- A `copyOtelAgent` task that copies the agent to `build/otel/opentelemetry-javaagent.jar`.
+  at the plugin-managed version. It is resolvable but not consumable by other projects.
+- A `copyOtelAgent` task that copies the agent to `applications/app-service/build/otel/opentelemetry-javaagent.jar`.
 - `bootJar` depending on `copyOtelAgent`.
 - `bootRun` attaching the agent via `-javaagent`.
+
+:::warning[Don't forget the agent in your Docker image]
+The generated `Dockerfile` expects an `otel` folder with the agent next to the `bootJar` in the Docker build context.
+The agent is generated in `applications/app-service/build/otel`, so copy that folder next to the jar before building
+the image, otherwise the build will fail.
+:::
+
+:::tip[Verify the agent dependency]
+A Java agent runs with the same privileges as your application. Enable
+[Gradle dependency verification](https://docs.gradle.org/current/userguide/dependency_verification.html)
+(`gradle/verification-metadata.xml`) so the build fails if the downloaded agent jar is not the expected one:
+
+```bash
+./gradlew --write-verification-metadata sha256
+```
+:::
 
 Enable it in an existing project:
 

@@ -28,6 +28,7 @@ import org.gradle.api.artifacts.ExternalModuleDependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.attributes.Category;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -332,7 +333,12 @@ class PluginCleanTest {
         "io.opentelemetry.javaagent",
         "opentelemetry-javaagent",
         Constants.OTEL_VERSION);
+    assertFalse(appService.getConfigurations().getByName("otelAgent").isCanBeConsumed());
+    assertTrue(appService.getConfigurations().getByName("otelAgent").isCanBeResolved());
     assertNotNull(appService.getTasks().findByName("copyOtelAgent"));
+    assertEquals(
+        appService.getLayout().getBuildDirectory().dir("otel").get().getAsFile(),
+        appService.getTasks().named("copyOtelAgent", Copy.class).get().getDestinationDir());
     assertTrue(
         appService.getTasks().named("bootJar").get().getDependsOn().contains("copyOtelAgent"));
     JavaExec bootRun = appService.getTasks().named("bootRun", JavaExec.class).get();
