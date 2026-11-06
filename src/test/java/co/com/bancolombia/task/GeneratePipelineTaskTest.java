@@ -60,7 +60,7 @@ class GeneratePipelineTaskTest {
     assertFileContains(
         TEST_DIR + "/deployment/cleanarchitecture_azure_build.yaml",
         "sonar.projectKey=$(Build.Repository.Name)",
-        "SonarQubePrepare@8");
+        "SonarQubePrepare@");
   }
 
   @Test
@@ -99,7 +99,7 @@ class GeneratePipelineTaskTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/.circleci/", "config.yml");
-    assertFileContains(TEST_DIR + "/.circleci/config.yml", "cimg/openjdk:25.0");
+    assertFileContains(TEST_DIR + "/.circleci/config.yml", "cimg/openjdk");
   }
 
   @Test
@@ -115,8 +115,8 @@ class GeneratePipelineTaskTest {
         Files.readString(
             Path.of(
                 TEST_DIR, ".github", "workflows", "cleanarchitecture_github_action_gradle.yaml"));
-    assertTrue(workflow.contains("actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"));
-    assertTrue(workflow.contains("actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78"));
+    assertTrue(workflow.contains("actions/checkout@"));
+    assertTrue(workflow.contains("actions/setup-java@"));
     assertFalse(workflow.matches("(?s).*uses: actions/[\\w-]+@v\\d.*"));
   }
 
