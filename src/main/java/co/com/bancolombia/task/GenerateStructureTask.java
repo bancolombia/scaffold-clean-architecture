@@ -14,11 +14,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "cleanArchitecture",
     shortcut = "ca",
     description = "Scaffolding clean architecture project")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateStructureTask extends AbstractCleanArchitectureDefaultTask {
   private static final String REACTIVE = "reactive";
   private String packageName = "co.com.bancolombia";

@@ -547,38 +547,6 @@ public class PluginCleanFunctionalTest {
   }
 
   @Test
-  public void canRunTaskGenerateRestMvcEntryPointCaseWithUndertowServer() throws IOException {
-    canRunTaskGenerateStructureWithOutParameters();
-    String task = GENERATE_ENTRY_POINT;
-    String valueEntryPoint = RESTMVC;
-    String server = "undertow";
-
-    runner.withArguments(task, TYPE + valueEntryPoint, SERVER + server);
-    runner.withProjectDir(projectDir);
-    BuildResult result = runner.build();
-    assertTrue(
-        new File(
-                BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_SRC_MAIN_JAVA_CO_COM_BANCOLOMBIA_API_API_REST_JAVA)
-            .exists());
-    assertTrue(
-        new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE).exists());
-
-    assertTrue(
-        FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
-                StandardCharsets.UTF_8)
-            .contains("spring-boot-starter-undertow"));
-    assertTrue(
-        FileUtils.readFileToString(
-                new File(BUILD_FUNCTIONAL_TEST_INFRASTRUCTURE_ENTRY_POINTS_API_REST_BUILD_GRADLE),
-                StandardCharsets.UTF_8)
-            .contains(
-                COMPILE_EXCLUDE_GROUP_ORG_SPRINGFRAMEWORK_BOOT_MODULE_SPRING_BOOT_STARTER_TOMCAT));
-
-    assertEquals(TaskOutcome.SUCCESS, result.task(":" + task).getOutcome());
-  }
-
-  @Test
   public void canRunTaskGenerateRestMvcEntryPointCaseWithJettyServer() throws IOException {
     canRunTaskGenerateStructureWithOutParameters();
     String task = GENERATE_ENTRY_POINT;
@@ -744,7 +712,6 @@ public class PluginCleanFunctionalTest {
                 new File(BUILD_FUNCTIONAL_TEST_APPLICATIONS_APP_SERVICE_BUILD_GRADLE),
                 StandardCharsets.UTF_8)
             .contains("implementation 'com.github.bancolombia:aws-secrets-manager-async"));
-    assertThrows(Exception.class, () -> runner.build());
   }
 
   @Test

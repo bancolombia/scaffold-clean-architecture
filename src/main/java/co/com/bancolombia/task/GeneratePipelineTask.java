@@ -5,11 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generatePipeline",
     shortcut = "gpl",
     description = "Generate CI pipeline as a code in deployment layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GeneratePipelineTask extends AbstractResolvableTypeTask {
   private BooleanOption monoRepo = BooleanOption.FALSE;
 
