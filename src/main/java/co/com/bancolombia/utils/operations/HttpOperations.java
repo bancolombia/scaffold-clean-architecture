@@ -1,5 +1,6 @@
 package co.com.bancolombia.utils.operations;
 
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.DependencyReleaseXml;
 import co.com.bancolombia.models.GradleVersion;
@@ -54,6 +55,26 @@ public class HttpOperations implements ExternalOperations {
     } catch (Exception e) {
       logger.lifecycle("Can't check the latest version of the plugin, reason: {}", e.getMessage());
       return null;
+    }
+  }
+
+  @Override
+  public Optional<Release> getLatestPluginVersion(int major) {
+    String stable = major + "\\.\\d+\\.\\d+";
+    try {
+      return Arrays.stream(RestConsumer.getRequest(resolve(PLUGIN_RELEASES), Release[].class))
+          .filter(HttpOperations::filterValidVersions)
+          .map(Release::cleanTagName)
+          .filter(release -> release.getTagName().matches(stable))
+          .reduce(
+              (current, next) ->
+                  UpdateUtils.isNewerVersion(current.getTagName(), next.getTagName())
+                      ? next
+                      : current);
+    } catch (Exception e) {
+      logger.lifecycle(
+          "Can't check the latest {}.x.x version of the plugin, reason: {}", major, e.getMessage());
+      return Optional.empty();
     }
   }
 

@@ -426,6 +426,11 @@ public class ModuleBuilder {
     }
   }
 
+  /** Highest stable release of the given major version, or null if it can not be resolved. */
+  public Release getLatestRelease(int major) {
+    return operations.getLatestPluginVersion(major).orElse(null);
+  }
+
   private void loadLatestRelease() {
     Release latestRelease = operations.getLatestPluginVersion();
     if (latestRelease != null) {

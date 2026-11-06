@@ -71,6 +71,18 @@ class HttpOperationsTest {
                       .setResponseCode(200)
                       .addHeader("Content-Type", "application/xml")
                       .setBody(xmlResponse);
+              case "/releases-by-major" ->
+                  new MockResponse()
+                      .setResponseCode(200)
+                      .setBody(
+                          """
+                          [{"tag_name":"v4.7.7","published_at":"2026-11-06T14:17:22Z"},
+                          {"tag_name":"v5.2.0-beta","published_at":"2026-11-05T10:00:00Z"},
+                          {"tag_name":"v5.1.0","published_at":"2026-10-31T00:35:41Z"},
+                          {"tag_name":"v5.0.5","published_at":"2026-10-27T15:32:32Z"},
+                          {"tag_name":"v4.7.6","published_at":"2026-10-27T19:14:08Z"},
+                          {"tag_name":"v5.0.10","published_at":"2026-10-20T10:00:00Z"}]
+                          """);
               case "/versions/current" ->
                   new MockResponse().setResponseCode(200).setBody(gradleVersionResponse);
               case "/analytics" -> new MockResponse().setResponseCode(201);
@@ -144,5 +156,40 @@ class HttpOperationsTest {
     String result = RestConsumer.postRequest(baseUrl.toString(), body, String.class);
     // Assert
     assertNull(result);
+  }
+
+  private HttpOperations releasesByMajorOperations() {
+    return new HttpOperations(Map.of(PLUGIN_RELEASES, server.url("/releases-by-major").toString()));
+  }
+
+  @Test
+  void shouldGetLatestStableReleaseOfMajorEvenWhenAnotherMajorIsNewer() {
+    Optional<Release> result = releasesByMajorOperations().getLatestPluginVersion(5);
+
+    assertTrue(result.isPresent());
+    assertEquals("5.1.0", result.get().getTagName());
+  }
+
+  @Test
+  void shouldCompareVersionsNumericallyNotByDate() {
+    Optional<Release> result = releasesByMajorOperations().getLatestPluginVersion(5);
+
+    // 5.0.10 is older than 5.1.0 by version and by date; it must not win lexicographically either
+    assertEquals("5.1.0", result.orElseThrow().getTagName());
+    assertEquals(
+        "4.7.7", releasesByMajorOperations().getLatestPluginVersion(4).orElseThrow().getTagName());
+  }
+
+  @Test
+  void shouldReturnEmptyWhenThereIsNoStableReleaseOfMajor() {
+    assertTrue(releasesByMajorOperations().getLatestPluginVersion(6).isEmpty());
+  }
+
+  @Test
+  void shouldReturnEmptyWhenReleasesCanNotBeLoaded() {
+    HttpOperations broken =
+        new HttpOperations(Map.of(PLUGIN_RELEASES, server.url("/not-found").toString()));
+
+    assertTrue(broken.getLatestPluginVersion(5).isEmpty());
   }
 }
