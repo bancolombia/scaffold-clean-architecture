@@ -64,6 +64,9 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     }
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     if (hasSpec) {
+      if (models != null && !models.isBlank()) {
+        logger.lifecycle("Schemas filter: {}", models);
+      }
       List<String> classNames = Swagger.generateDomainModels(builder, fromOpenApi, models);
       logger.lifecycle("Generated {} domain model(s) from OpenAPI", classNames.size());
     }
@@ -76,8 +79,6 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
       builder.setupFromTemplate("model");
       builder.persist();
     }
-
-    //File modelModule = builder.resolveFile("domain/model");
 
   }
 

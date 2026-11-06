@@ -21,6 +21,7 @@ import org.gradle.api.logging.Logger;
 public class Swagger {
 
   private static final String DOMAIN_MODEL_MODULE = "domain/model";
+  private static final String PACKAGE = "package";
   private static final String DOMAIN_MODEL_LANG =
           "io.swagger.codegen.v3.generators.DomainModelCodegen";
   private static final String MODELS_SYSTEM_PROPERTY = "models";
@@ -38,8 +39,8 @@ public class Swagger {
                       .outputDir(builder.getProjectDir() + "/" + outputDir)
                       .packageName(
                               entryPoint
-                                      ? builder.getStringParam("package")
-                                      : builder.getStringParam("package") + ".consumer")
+                                      ? builder.getStringParam(PACKAGE)
+                                      : builder.getStringParam(PACKAGE) + ".consumer")
                       .build());
     }
   }
@@ -62,7 +63,7 @@ public class Swagger {
 
   public static List<String> generateDomainModels(
           ModuleBuilder builder, String specPath, String modelsFilter) {
-    String modelPackage = builder.getStringParam("package") + ".model.entities";
+    String modelPackage = builder.getStringParam(PACKAGE) + ".model.entities";
     String outputDir = builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
     Logger logger = builder.getLogger();
 
