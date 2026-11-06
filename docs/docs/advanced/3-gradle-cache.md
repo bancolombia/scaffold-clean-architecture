@@ -146,20 +146,42 @@ To enable the configuration cache in read-only mode, add the following property 
 org.gradle.configuration-cache.read-only=true
 ```
 
+## Tooling API Parallelism
+
+Besides task execution, Gradle can also run the actions requested by Tooling API clients (such as IDEs importing the
+project) in parallel. Since **Gradle 9.4.0**, the
+[`org.gradle.tooling.parallel`](https://docs.gradle.org/current/userguide/performance.html#sec:configure_tooling_api_actions_parallelism)
+property controls this behavior independently of `org.gradle.parallel`, which improves scenarios like IDE sync times.
+
+If it is not set, its value is derived from `org.gradle.parallel`, but relying on that default is deprecated, so it is
+recommended to [set it explicitly](https://docs.gradle.org/current/userguide/build_environment.html). To enable it, add
+the following property to your `gradle.properties` file:
+
+```properties
+org.gradle.tooling.parallel=true
+```
+
+:::warning[When Not to Use It]
+Parallel work is like several people editing the same document at once: it is faster, but problems appear if they
+change the same part. If your modules share data and you see random errors or inconsistent results, disable it with
+`org.gradle.tooling.parallel=false`.
+:::
+
 ## Cache Configuration in Scaffold Projects
 
 Projects generated with the **Scaffold Clean Architecture** come pre-configured to take full advantage of Gradle's
 caching capabilities. The `gradle.properties` file already includes the properties to enable both the Build Cache and
-the Configuration Cache:
+the Configuration Cache, along with parallel execution:
 
 :::tip[Gradle Version Recommendation]
-To enable all these properties and ensure maximum compatibility, it is recommended to use **[Gradle 9.2.1 or higher
+To enable all these properties and ensure maximum compatibility, it is recommended to use **[Gradle 9.4.1 or higher
 ](https://gradle.org/releases/)**.
 :::
 
-```properties
+```properties title="gradle.properties"
 org.gradle.caching=true
 org.gradle.parallel=true
+org.gradle.tooling.parallel=true
 org.gradle.configuration-cache=true
 org.gradle.configuration-cache.parallel=true
 org.gradle.configuration-cache.integrity-check=false
