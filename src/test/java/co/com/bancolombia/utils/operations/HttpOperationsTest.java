@@ -202,7 +202,6 @@ class HttpOperationsTest {
   private HttpOperations mavenLikeOperations() {
     return new HttpOperations(
         Map.of(
-            DEPENDENCY_RELEASES,
-            server.url("/maven2/") + "%group/%artifact/maven-metadata.xml"));
+            DEPENDENCY_RELEASES, server.url("/maven2/") + "%group/%artifact/maven-metadata.xml"));
   }
 }
