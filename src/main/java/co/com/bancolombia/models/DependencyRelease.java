@@ -31,7 +31,8 @@ public class DependencyRelease {
   }
 
   /** Finds quoted {@code group:artifact:version} declarations, one per string literal. */
-  public static final String DECLARATION_REGEX = "['\"][^'\"\\s]+:[^'\"\\s]+:[^$'\"][^'\"]*['\"]";
+  public static final String DECLARATION_REGEX =
+      "['\"][^'\"\\s]+:[^'\"\\s]+:[^$'\"\\s][^'\"\\s]*['\"]";
 
   public String toRegex() {
     if (isGradlePlugin()) {
@@ -39,7 +40,7 @@ public class DependencyRelease {
           "id\\s+['\"]%s['\"]\\s+version\\s+['\"][^'\"]*['\"]", Pattern.quote(this.getGroup()));
     }
     return String.format(
-        "['\"]%s:%s:[^$'\"][^'\"]*['\"]",
+        "['\"]%s:%s:[^$'\"\\s][^'\"\\s]*['\"]",
         Pattern.quote(this.getGroup()), Pattern.quote(this.getArtifact()));
   }
 

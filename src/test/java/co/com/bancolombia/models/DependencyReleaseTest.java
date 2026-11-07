@@ -95,4 +95,13 @@ class DependencyReleaseTest {
         Utils.findExpressions("println 'Time: 10:30:00 now'", DependencyRelease.DECLARATION_REGEX)
             .isEmpty());
   }
+
+  @Test
+  void shouldNotFindNorUpdateAVersionWithSpaces() {
+    String content = "implementation 'org.flywaydb:flyway-core:9.0.0 beta'";
+    DependencyRelease flyway = release("org.flywaydb", "flyway-core", "11.0.0");
+
+    assertTrue(Utils.findExpressions(content, DependencyRelease.DECLARATION_REGEX).isEmpty());
+    assertEquals(content, update(content, flyway));
+  }
 }

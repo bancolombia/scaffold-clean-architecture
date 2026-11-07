@@ -17,12 +17,12 @@ import org.gradle.api.logging.Logging;
 public class HttpOperations implements ExternalOperations {
   public static final String PLUGIN_RELEASES =
       "https://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
-  private static final Pattern SAFE_VERSION = Pattern.compile("[\\w.+-]+");
   public static final String DEPENDENCY_RELEASES =
       "https://repo1.maven.org/maven2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_PLUGINS =
       "https://plugins.gradle.org/m2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_VERSIONS_API = "https://services.gradle.org/versions/current";
+  private static final Pattern SAFE_VERSION = Pattern.compile("[\\w.+-]+");
   private final Map<String, String> endpoints;
 
   public HttpOperations() {
