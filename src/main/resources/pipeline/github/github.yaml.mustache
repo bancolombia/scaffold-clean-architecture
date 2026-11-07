@@ -29,6 +29,20 @@ jobs:
         run: cp build/reports/jacoco/report.xml jacoco.xml || echo "Code coverage failed"
       - name: Build with Gradle
         run: ./gradlew build --refresh-dependencies --no-daemon --continue
+{{#otel}}
+      - name: Stage artifact
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p dist/otel
+          cp applications/app-service/build/libs/*.jar dist/
+          cp applications/app-service/build/otel/*.jar dist/otel/
+      - name: Upload artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: {{projectName}}
+          path: dist
+{{/otel}}
 # TODO: Add all other tasks that your project require in build job
   release:
     if: github.event_name == 'release' 
