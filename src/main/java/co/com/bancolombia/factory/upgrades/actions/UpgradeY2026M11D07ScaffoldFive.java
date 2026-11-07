@@ -167,7 +167,7 @@ public class UpgradeY2026M11D07ScaffoldFive implements UpgradeAction {
     if (isBeta5Requested(builder)) {
       return BETA5_VERSION;
     }
-    Release release = builder.getLatestRelease();
+    Release release = builder.getLatestRelease(5);
     if (release == null || release.getTagName() == null) {
       return null;
     }

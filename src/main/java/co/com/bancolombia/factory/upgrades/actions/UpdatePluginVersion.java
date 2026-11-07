@@ -40,7 +40,7 @@ public class UpdatePluginVersion implements UpgradeAction {
 
   private boolean updatePlugin(String lastRelease, Logger logger, ModuleBuilder builder)
       throws IOException {
-    if (lastRelease.equals(Utils.getVersionPlugin())) {
+    if (!UpdateUtils.isNewerVersion(Utils.getVersionPlugin(), lastRelease)) {
       logger.lifecycle("You are already using the latest version of the plugin");
       return false;
     }

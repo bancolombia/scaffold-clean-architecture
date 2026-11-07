@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -78,7 +79,7 @@ class UpgradeY2026M11D07ScaffoldFiveTest {
   private void stubLatestRelease(String tagName) {
     Release release = new Release();
     release.setTagName(tagName);
-    when(operations.getLatestPluginVersion()).thenReturn(release);
+    when(operations.getLatestPluginVersion(5)).thenReturn(Optional.of(release));
   }
 
   private String resource(String path) throws IOException {

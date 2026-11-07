@@ -41,4 +41,9 @@ class MockOperationsTest {
     // Assert
     assertTrue(operations.getTheLastDependencyRelease(dependencyRelease).isEmpty());
   }
+
+  @Test
+  void getLatestPluginVersionByMajor() {
+    assertTrue(operations.getLatestPluginVersion(5).isEmpty());
+  }
 }

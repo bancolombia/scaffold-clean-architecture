@@ -12,6 +12,11 @@ public class MockOperations implements ExternalOperations {
   }
 
   @Override
+  public Optional<Release> getLatestPluginVersion(int major) {
+    return Optional.empty();
+  }
+
+  @Override
   public Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency) {
     return Optional.empty();
   }
