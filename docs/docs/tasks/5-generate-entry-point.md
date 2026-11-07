@@ -13,39 +13,39 @@ gradle generateEntryPoint --type=[entryPointType]
 gradle gep --type [entryPointType]
 ```
 
-| Type                  | Name                                   | Parameter            | Values                                | Default                |
-|-----------------------|----------------------------------------|----------------------|---------------------------------------|------------------------|
-| **generic**           | Empty Entry Point                      | `--name`             | String                                | -                      |
-| **grpc**              | gRPC Server Entry Point                | -                    | -                                     | -                      |
-| **asynceventhandler** | Async Event Handler                    | `--eda`              | `true`, `false`                       | `false`                |
-|                       |                                        | `--tech`             | `rabbitmq`, `kafka`, `rabbitmq,kafka` | `rabbitmq`             |
-| **graphql**           | API GraphQL                            | `--pathgql`          | String (path)                         | `/graphql`             |
-| **kafka**             | Kafka Consumer                         | -                    | -                                     | -                      |
-| **mcp**               | MCP Server (Model Context Protocol)    | `--name`             | String                                | -                      |
-|                       |                                        | `--enable-tools`     | `true`, `false`                       | `true`                 |
-|                       |                                        | `--enable-resources` | `true`, `false`                       | `true`                 |
-|                       |                                        | `--enable-prompts`   | `true`, `false`                       | `true`                 |
-|                       |                                        | `--enable-security`  | `true`, `false`                       | `true`                 |
-|                       |                                        | `--enable-audit`     | `true`, `false`                       | `true`                 |
-| **mq**                | JMS MQ Client to listen messages       | -                    | -                                     | -                      |
-| **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`           | `tomcat`, `jetty`                     | `tomcat`               |
-|                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
-|                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 | 
-|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
-|                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
-| **rsocket**           | Rsocket Controller Entry Point         | -                    | -                                     | -                      |
-| **sqs**               | SQS Listener                           | -                    | -                                     | -                      |
-| **webflux**           | API REST (Spring Boot Starter WebFlux) | `--router`           | `true`, `false`                       | `true`                 |
-|                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
-|                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 |
-|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
-|                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
-| **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
-|                       |                                        | `--topic-consumer`  | String (topic name)                   | `test-with-registries` |
-| **agent**             | Spring AI A2A Reactive Agent           | `--name`             | String                                | project name           |
-|                       |                                        | `--agent-enable-kafka` | `true`, `false`                     | `true`                 |
+| Type                  | Name                                   | Parameter                   | Values                                | Default                |
+|-----------------------|----------------------------------------|-----------------------------|---------------------------------------|------------------------|
+| **generic**           | Empty Entry Point                      | `--name`                    | String                                | -                      |
+| **grpc**              | gRPC Server Entry Point                | -                           | -                                     | -                      |
+| **asynceventhandler** | Async Event Handler                    | `--eda`                     | `true`, `false`                       | `false`                |
+|                       |                                        | `--tech`                    | `rabbitmq`, `kafka`, `rabbitmq,kafka` | `rabbitmq`             |
+| **graphql**           | API GraphQL                            | `--pathgql`                 | String (path)                         | `/graphql`             |
+| **kafka**             | Kafka Consumer                         | -                           | -                                     | -                      |
+| **mcp**               | MCP Server (Model Context Protocol)    | `--name`                    | String                                | -                      |
+|                       |                                        | `--enable-tools`            | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-resources`        | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-prompts`          | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-security`         | `true`, `false`                       | `true`                 |
+|                       |                                        | `--enable-audit`            | `true`, `false`                       | `true`                 |
+| **mq**                | JMS MQ Client to listen messages       | -                           | -                                     | -                      |
+| **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`                  | `tomcat`, `jetty`                     | `tomcat`               |
+|                       |                                        | `--authorization`           | `true`, `false`                       | `false`                |
+|                       |                                        | `--versioning`              | `HEADER`, `PATH`, `NONE`              | `NONE`                 | 
+|                       |                                        | `--from-openapi`            | File path                             | `swagger.yaml`         |
+|                       |                                        | `--swagger`                 | `true`, `false`                       | `false`                |
+| **rsocket**           | Rsocket Controller Entry Point         | -                           | -                                     | -                      |
+| **sqs**               | SQS Listener                           | -                           | -                                     | -                      |
+| **webflux**           | API REST (Spring Boot Starter WebFlux) | `--router`                  | `true`, `false`                       | `true`                 |
+|                       |                                        | `--authorization`           | `true`, `false`                       | `false`                |
+|                       |                                        | `--versioning`              | `HEADER`, `PATH`, `NONE`              | `NONE`                 |
+|                       |                                        | `--from-openapi`            | File path                             | `swagger.yaml`         |
+|                       |                                        | `--swagger`                 | `true`, `false`                       | `false`                |
+| **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`                    | String                                | -                      |
+|                       |                                        | `--topic-consumer`          | String (topic name)                   | `test-with-registries` |
+| **agent**             | Spring AI A2A Reactive Agent           | `--name`                    | String                                | project name           |
+|                       |                                        | `--agent-enable-kafka`      | `true`, `false`                     | `true`                 |
 |                       |                                        | `--agent-enable-mcp-client` | `true`, `false`                | `true`                 |
-|                       |                                        | `--agent-role`       | `collaborative`, `supervisor`, `hybrid` | `collaborative`     |
+|                       |                                        | `--agent-role`              | `collaborative`, `supervisor`, `hybrid` | `collaborative`     |
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.

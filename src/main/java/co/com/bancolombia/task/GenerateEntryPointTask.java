@@ -52,7 +52,7 @@ public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
     this.swagger = swagger;
   }
 
-  @Option(option = "from-swagger", description = "Generation will be from a swagger.yaml file")
+  @Option(option = "from-openapi", description = "Generation will be from a swagger.yaml file")
   public void setFromSwagger(String swaggerFile) {
     this.swaggerFile = swaggerFile;
   }
