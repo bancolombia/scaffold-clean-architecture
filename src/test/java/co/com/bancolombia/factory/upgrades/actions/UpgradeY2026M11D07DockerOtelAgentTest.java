@@ -150,7 +150,7 @@ class UpgradeY2026M11D07DockerOtelAgentTest {
   }
 
   @Test
-  void shouldSkipWhenThereIsNoDockerfileOrBuildGradle() throws IOException {
+  void shouldSkipWhenThereIsNoDockerfileOrBuildGradle() {
     assertFalse(updater.up(builder));
 
     builder.addFile(BUILD_GRADLE, OTEL_ENABLED);
