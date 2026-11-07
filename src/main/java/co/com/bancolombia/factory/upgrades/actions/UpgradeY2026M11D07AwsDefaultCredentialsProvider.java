@@ -5,6 +5,7 @@ import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,6 +35,7 @@ public class UpgradeY2026M11D07AwsDefaultCredentialsProvider implements UpgradeA
               + "\\.addCredentialsProvider\\(ContainerCredentialsProvider\\.builder\\(\\)\\.build\\(\\)\\)\\s*"
               + "\\.addCredentialsProvider\\(InstanceProfileCredentialsProvider\\.create\\(\\)\\)\\s*"
               + "\\.build\\(\\);\\s*}\\n");
+  private static final Set<String> BUILD_OUTPUT_FOLDERS = Set.of("build", ".gradle");
   private static final Pattern CREDENTIALS_IMPORT =
       Pattern.compile("(?m)^import software\\.amazon\\.awssdk\\.auth\\.credentials\\.(\\w+);\\n");
 
@@ -43,13 +45,20 @@ public class UpgradeY2026M11D07AwsDefaultCredentialsProvider implements UpgradeA
     FileUtils.allFiles(
         builder.getProjectDir(),
         file -> apply(builder, file, applied),
-        (dir, name) -> name.endsWith(".java") && !isBuildOutput(dir));
+        (dir, name) -> name.endsWith(".java") && !isBuildOutput(builder.getProjectDir(), dir));
     return applied.get();
   }
 
-  private static boolean isBuildOutput(File dir) {
-    String path = dir.getAbsolutePath().replace('\\', '/') + "/";
-    return path.contains("/build/") || path.contains("/.gradle/");
+  /** Whether the directory is inside a build or .gradle folder of the project. */
+  private static boolean isBuildOutput(File projectDir, File dir) {
+    Path relative =
+        projectDir.getAbsoluteFile().toPath().relativize(dir.getAbsoluteFile().toPath());
+    for (Path element : relative) {
+      if (BUILD_OUTPUT_FOLDERS.contains(element.toString())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private void apply(ModuleBuilder builder, File file, AtomicBoolean applied) {

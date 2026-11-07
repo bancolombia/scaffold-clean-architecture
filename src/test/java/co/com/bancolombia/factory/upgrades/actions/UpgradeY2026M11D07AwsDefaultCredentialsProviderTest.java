@@ -210,13 +210,24 @@ class UpgradeY2026M11D07AwsDefaultCredentialsProviderTest {
   void shouldKeepACustomizedProviderChain() throws IOException {
     String customized =
         SQS_BEFORE.replace(
-            "                .build();\n    }\n\n    protected",
-            "                .addCredentialsProvider(AnonymousCredentialsProvider.create())\n"
-                + "                .build();\n    }\n\n    protected");
+            ".addCredentialsProvider(WebIdentityTokenFileCredentialsProvider.create())",
+            ".addCredentialsProvider(AnonymousCredentialsProvider.create())");
     Path file = write(SQS_CONFIG, customized);
 
     assertFalse(updater.up(builder));
     assertEquals(customized.stripTrailing(), read(file));
+  }
+
+  @Test
+  void shouldUpgradeAProjectLocatedInsideABuildFolder() throws IOException {
+    projectDir = Files.createDirectories(projectDir.resolve("build/toscan/reactive"));
+    when(project.getProjectDir()).thenReturn(projectDir.toFile());
+    builder = new ModuleBuilder(project);
+    Path file = write(SQS_CONFIG, SQS_BEFORE);
+
+    assertTrue(updater.up(builder));
+
+    assertEquals(SQS_AFTER.stripTrailing(), read(file));
   }
 
   @Test
