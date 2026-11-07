@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grpc;
+
+option java_multiple_files = true;
+option java_package = "{{package}}.grpc";
+option java_outer_classname = "ExampleServiceProto";
+
+// Example gRPC Service for client consumption
+// TODO: Replace this with the actual service definition from the server you want to consume.
+// The proto file should match the server's proto definition.
+service ExampleService {
+  // Get resource by ID
+  rpc getById(Request) returns (Response);
+}
+
+message Request {
+  string id = 1;
+}
+
+message Response {
+  string id = 1;
+  string message = 2;
+}

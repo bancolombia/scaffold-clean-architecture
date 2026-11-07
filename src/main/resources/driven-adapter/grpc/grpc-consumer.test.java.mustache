@@ -1,0 +1,57 @@
+package {{package}}.grpc;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class GrpcConsumerAdapterTest {
+    @Mock
+    private ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+    private GrpcConsumerAdapter grpcConsumerAdapter;
+    @BeforeEach
+    void setUp() {
+        grpcConsumerAdapter = new GrpcConsumerAdapter(exampleServiceStub);
+    }
+
+    @Test
+    void shouldCallGrpcServiceSuccessfully() {
+        // Arrange
+        String testId = "test-id";
+        String expectedMessage = "Success response";
+        Response mockResponse = Response.newBuilder()
+                .setId(testId)
+                .setMessage(expectedMessage)
+                .build();
+        when(exampleServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
+        // Act
+        String result = assertDoesNotThrow(() -> grpcConsumerAdapter.getById(testId));
+        // Assert
+        assertNotNull(result);
+        assertEquals(expectedMessage, result);
+        verify(exampleServiceStub).getById(any(Request.class));
+    }
+
+    @Test
+    void shouldHandleGrpcError() {
+        // Arrange
+        String testId = "test-id";
+        when(exampleServiceStub.getById(any(Request.class)))
+                .thenThrow(new StatusRuntimeException(Status.UNAVAILABLE));
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> grpcConsumerAdapter.getById(testId));
+        verify(exampleServiceStub).getById(any(Request.class));
+    }
+}
