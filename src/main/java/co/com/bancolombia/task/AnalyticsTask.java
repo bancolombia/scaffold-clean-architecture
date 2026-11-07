@@ -10,8 +10,10 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(name = "analytics", shortcut = "a", description = "Set analytics state")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class AnalyticsTask extends AbstractCleanArchitectureDefaultTask {
   private BooleanOption enabled = BooleanOption.TRUE;
 
