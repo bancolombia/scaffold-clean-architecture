@@ -15,6 +15,57 @@ This document describes how we use ArchUnit to enforce architectural constraints
 This rule try to enforce the usage of AsyncClient variants of AWS SDK, for example the usage of `kmsAsyncClient` instead
 of `kmsClient` in reactive flows using the `Mono.fromFuture` method.
 
+The rule is only generated in **reactive** projects, imperative projects do not include it.
+
+#### Beans created at startup
+
+Classes whose name ends with `Config` are excluded from the rule, so a bean that needs a synchronous client to be built
+can use it there. This code runs once while the application starts, before any request is attended, so it does not
+block the reactive flows. For example, reading a secret to build a bean:
+
+```java
+@Configuration
+public class DbCredentialsConfig {
+
+  public record DbCredentials(String user, String password) {}
+
+  @Bean
+  public DbCredentials dbCredentials(
+      @Value("${aws.region}") String region,
+      @Value("${db.user}") String user,
+      @Value("${db.secret-name}") String secretName) {
+    try (SecretsManagerClient client =
+        SecretsManagerClient.builder().region(Region.of(region)).build()) {
+      String password =
+          client.getSecretValue(request -> request.secretId(secretName)).secretString();
+      return new DbCredentials(user, password);
+    }
+  }
+}
+```
+
+:::warning[The exclusion is by class name]
+The name must end exactly with `Config`: `DbCredentialsConfig` is excluded, but `DbCredentialsConfiguration` is not.
+The rule checks the class that uses the client, so if a `Config` class delegates the call to a helper class, the helper
+is reported. Use the synchronous client only at startup; in any other flow keep the asynchronous one.
+:::
+
+#### Secrets read with the Secrets Manager adapter
+
+The generated Secrets Manager adapter uses `GenericManagerAsync`, which is asynchronous. To build a bean with the secret
+values, wait for the result once at startup:
+
+```java
+return secretManager.getSecret(secretName, SecretModel.class).toFuture().join();
+```
+
+:::note[Possible null warning in SonarQube]
+Some SonarQube rules, such as organization-specific ones, may report that `join()` can return `null`. This is a false
+positive for `getSecret` of the `aws-secrets-manager-async` library used by the scaffold: the returned `Mono` emits a
+non-null value or fails (with a `SecretException` when the secret is missing, empty or not a string), it never completes
+empty. If your quality profile reports it, mark it as a false positive.
+:::
+
 ### Rule_2.2: Domain classes should not be named with technology suffixes
 
 ![Static Badge](https://img.shields.io/badge/kind-Clean%20Architecture-blue)
