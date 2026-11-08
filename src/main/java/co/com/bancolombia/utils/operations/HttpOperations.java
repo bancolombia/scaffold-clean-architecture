@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -21,6 +22,9 @@ public class HttpOperations implements ExternalOperations {
   public static final String GRADLE_PLUGINS =
       "https://plugins.gradle.org/m2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_VERSIONS_API = "https://services.gradle.org/versions/current";
+  public static final String GRADLE_DISTRIBUTION_SHA256 =
+      "https://services.gradle.org/distributions/gradle-%version-%type.zip.sha256";
+  private static final Pattern SHA256_PATTERN = Pattern.compile("[0-9a-f]{64}");
   private final Map<String, String> endpoints;
 
   public HttpOperations() {
@@ -33,7 +37,9 @@ public class HttpOperations implements ExternalOperations {
             GRADLE_PLUGINS,
             GRADLE_PLUGINS,
             GRADLE_VERSIONS_API,
-            GRADLE_VERSIONS_API);
+            GRADLE_VERSIONS_API,
+            GRADLE_DISTRIBUTION_SHA256,
+            GRADLE_DISTRIBUTION_SHA256);
   }
 
   // To enable test mocks injection
@@ -82,6 +88,28 @@ public class HttpOperations implements ExternalOperations {
       logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Optional<String> getGradleDistributionSha256(String version, String distributionType) {
+    try {
+      String url =
+          resolve(GRADLE_DISTRIBUTION_SHA256)
+              .replace("%version", version)
+              .replace("%type", distributionType);
+      String checksum = RestConsumer.getTextRequest(url).trim();
+      if (SHA256_PATTERN.matcher(checksum).matches()) {
+        return Optional.of(checksum);
+      }
+      logger.lifecycle("Invalid checksum for Gradle {}-{}", version, distributionType);
+    } catch (Exception e) {
+      logger.lifecycle(
+          "Can't resolve checksum for Gradle {}-{}, reason: {}",
+          version,
+          distributionType,
+          e.getMessage());
+    }
+    return Optional.empty();
   }
 
   private Optional<DependencyRelease> getTheLastDependencyReleaseFromMavenFormat(

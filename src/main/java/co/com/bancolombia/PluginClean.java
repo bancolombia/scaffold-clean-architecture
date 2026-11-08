@@ -102,7 +102,20 @@ public class PluginClean implements Plugin<Project> {
     project
         .getTasks()
         .withType(Wrapper.class)
-        .configureEach(wrapper -> wrapper.setGradleVersion(Constants.GRADLE_WRAPPER_VERSION));
+        .configureEach(
+            wrapper -> {
+              wrapper.setGradleVersion(Constants.GRADLE_WRAPPER_VERSION);
+              // Resolved at execution time so --gradle-version and user overrides are honored
+              wrapper.doFirst(task -> applyDefaultChecksum((Wrapper) task));
+            });
+  }
+
+  private static void applyDefaultChecksum(Wrapper wrapper) {
+    if (wrapper.getDistributionSha256Sum() == null
+        && wrapper.getDistributionType() == Wrapper.DistributionType.BIN
+        && Constants.GRADLE_WRAPPER_VERSION.equals(wrapper.getGradleVersion())) {
+      wrapper.setDistributionSha256Sum(Constants.GRADLE_WRAPPER_SHA256);
+    }
   }
 
   private void applyChildConventions(Project project) {

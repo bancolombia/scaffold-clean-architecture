@@ -60,11 +60,9 @@ public class UpdateProjectDependencies {
                 (current, next) -> next);
 
     if (content.contains("wrapper")) {
-      Optional<String> dep = operations.getGradleWrapperFromFile();
-      if (dep.isPresent()) {
-        content =
-            Utils.replaceExpression(
-                content, "gradleVersion\\s*=\\s*.*", "gradleVersion = '" + dep.get() + "'");
+      Optional<String> version = operations.getGradleWrapperFromFile();
+      if (version.isPresent()) {
+        content = new GradleWrapperUpdater(operations).update(content, version.get());
       }
     }
 

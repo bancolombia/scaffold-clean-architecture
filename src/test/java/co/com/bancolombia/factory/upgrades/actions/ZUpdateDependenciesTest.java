@@ -2,9 +2,11 @@ package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.DEPENDENCIES_TO_UPDATE;
 import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FILES_TO_UPDATE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -92,5 +94,52 @@ class ZUpdateDependenciesTest {
     // Assert
     assertTrue(applied);
     verify(builder).addFile(file, expected);
+  }
+
+  @Test
+  void shouldUpdateGradleWrapperWhenUpdatingAll() {
+    // Arrange
+    String file = "./build.gradle";
+    String current =
+        """
+        tasks.named('wrapper') {
+            gradleVersion = '9.8.2'
+            distributionSha256Sum = 'old'
+        }
+        """;
+    String expected =
+        """
+        tasks.named('wrapper') {
+            gradleVersion = '9.9.0'
+            distributionSha256Sum = '%s'
+        }
+        """
+            .formatted("c".repeat(64));
+    when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
+    when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
+    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
+    when(operations.getGradleDistributionSha256("9.9.0", "bin"))
+        .thenReturn(Optional.of("c".repeat(64)));
+    builder.addFile(file, current);
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertTrue(applied);
+    verify(builder).addFile(file, expected);
+  }
+
+  @Test
+  void shouldNotUpdateGradleWrapperWhenUpdatingSpecificDependencies() {
+    // Arrange
+    String file = "./build.gradle";
+    when(builder.getParam(DEPENDENCIES_TO_UPDATE))
+        .thenReturn(Set.of("group:dependency-name:1.2.3"));
+    when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
+    builder.addFile(file, "tasks.named('wrapper') {\n    gradleVersion = '9.8.2'\n}\n");
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertFalse(applied);
+    verify(operations, never()).getGradleWrapperFromFile();
   }
 }

@@ -25,4 +25,9 @@ public class MockOperations implements ExternalOperations {
   public Optional<String> getGradleWrapperFromFile() {
     return Optional.empty();
   }
+
+  @Override
+  public Optional<String> getGradleDistributionSha256(String version, String distributionType) {
+    return Optional.empty();
+  }
 }

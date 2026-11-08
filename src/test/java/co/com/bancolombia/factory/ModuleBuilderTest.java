@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +18,7 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.task.GenerateStructureTask;
 import co.com.bancolombia.utils.FileUtils;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +101,7 @@ class ModuleBuilderTest {
   void shouldPrintVersionMissMatch() {
     setupMocks();
     Release release = new Release();
-    release.setTagName("1.1.1");
+    release.setTagName("999.0.0");
     release.setPublishedAt(OffsetDateTime.now());
     when(operations.getLatestPluginVersion()).thenReturn(release);
     // Act
@@ -107,5 +109,30 @@ class ModuleBuilderTest {
     // Assert
     assertEquals(release, loaded);
     verify(styledTextOutput, atLeastOnce()).append("gradle u");
+  }
+
+  @Test
+  void shouldNotSuggestUpdateWhenPluginIsNewerThanLatestRelease() {
+    Release release = new Release();
+    release.setTagName("0.0.1");
+    release.setPublishedAt(OffsetDateTime.now());
+    when(operations.getLatestPluginVersion()).thenReturn(release);
+    // Act
+    Release loaded = builder.getLatestRelease();
+    // Assert
+    assertEquals(release, loaded);
+    verify(styledTextOutput, never()).append("gradle u");
+  }
+
+  @Test
+  void shouldNotSuggestUpdateWhenPluginIsTheLatestRelease() {
+    Release release = new Release();
+    release.setTagName(Utils.getVersionPlugin());
+    release.setPublishedAt(OffsetDateTime.now());
+    when(operations.getLatestPluginVersion()).thenReturn(release);
+    // Act
+    builder.getLatestRelease();
+    // Assert
+    verify(styledTextOutput, never()).append("gradle u");
   }
 }

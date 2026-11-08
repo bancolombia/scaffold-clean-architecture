@@ -1,10 +1,12 @@
 package co.com.bancolombia.utils.offline;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.operations.ExternalOperations;
@@ -21,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ZUpdateDependenciesTest {
   private static final String TEST_PATH = "build/Constants.java";
+  private static final String NEW_SHA256 = "a".repeat(64);
 
   @Mock private ExternalOperations operations;
   private UpdateDependencies task;
@@ -48,6 +51,8 @@ class ZUpdateDependenciesTest {
     Release release = new Release();
     release.setTagName("1.2.3");
     when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of(newVersion));
+    when(operations.getGradleDistributionSha256(newVersion, "bin"))
+        .thenReturn(Optional.of(NEW_SHA256));
     when(operations.getLatestGradlePluginVersion(any())).thenReturn(Optional.of(dependencyRelease));
     when(operations.getTheLastDependencyRelease(any())).thenReturn(Optional.of(dependencyRelease));
     // Act
@@ -55,6 +60,22 @@ class ZUpdateDependenciesTest {
     // Assert
     String result = Files.readString(Path.of(TEST_PATH));
     assertNotEquals(result, originalContent);
-    assertTrue(result.contains(newVersion));
+    assertTrue(result.contains("GRADLE_WRAPPER_VERSION = \"" + newVersion + "\";"));
+    assertTrue(result.contains("GRADLE_WRAPPER_SHA256 = \"" + NEW_SHA256 + "\";"));
+  }
+
+  @Test
+  void shouldKeepGradleWrapperWhenChecksumIsNotAvailable() throws IOException {
+    // Arrange
+    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
+    when(operations.getGradleDistributionSha256("9.9.0", "bin")).thenReturn(Optional.empty());
+    // Act
+    task.run();
+    // Assert
+    String result = Files.readString(Path.of(TEST_PATH));
+    assertFalse(result.contains("\"9.9.0\""));
+    assertTrue(
+        result.contains("GRADLE_WRAPPER_VERSION = \"" + Constants.GRADLE_WRAPPER_VERSION + "\";"));
+    assertTrue(result.contains(Constants.GRADLE_WRAPPER_SHA256));
   }
 }

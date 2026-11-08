@@ -55,6 +55,8 @@ public final class Constants {
 
   // Custom
   public static final String GRADLE_WRAPPER_VERSION = "9.8.2";
+  public static final String GRADLE_WRAPPER_SHA256 =
+      "21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {

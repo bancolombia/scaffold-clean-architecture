@@ -20,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class HttpOperationsTest {
+  private static final String SHA256 =
+      "21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607";
 
   private final MockWebServer server = new MockWebServer();
   private HttpOperations operations;
@@ -80,6 +82,10 @@ class HttpOperationsTest {
                       .setBody(xmlResponse);
               case "/versions/current" ->
                   new MockResponse().setResponseCode(200).setBody(gradleVersionResponse);
+              case "/distributions/gradle-9.4.0-bin.zip.sha256" ->
+                  new MockResponse().setResponseCode(200).setBody(SHA256 + "\n");
+              case "/distributions/gradle-9.4.0-all.zip.sha256" ->
+                  new MockResponse().setResponseCode(200).setBody("<html>not a checksum</html>");
               case "/analytics" -> new MockResponse().setResponseCode(201);
               default -> new MockResponse().setResponseCode(404);
             };
@@ -97,7 +103,9 @@ class HttpOperationsTest {
                 GRADLE_PLUGINS,
                 server.url("/maven-metadata.xml").toString(),
                 GRADLE_VERSIONS_API,
-                server.url("/versions/current").toString()));
+                server.url("/versions/current").toString(),
+                GRADLE_DISTRIBUTION_SHA256,
+                server.url("/distributions/").toString() + "gradle-%version-%type.zip.sha256"));
   }
 
   @Test
@@ -141,6 +149,30 @@ class HttpOperationsTest {
     // Assert
     assertTrue(version.isPresent());
     assertEquals("9.4.0", version.get());
+  }
+
+  @Test
+  void getGradleDistributionSha256() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("9.4.0", "bin");
+    // Assert
+    assertEquals(Optional.of(SHA256), checksum);
+  }
+
+  @Test
+  void getGradleDistributionSha256ShouldRejectInvalidContent() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("9.4.0", "all");
+    // Assert
+    assertTrue(checksum.isEmpty());
+  }
+
+  @Test
+  void getGradleDistributionSha256ShouldBeEmptyWhenNotFound() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("0.0.0", "bin");
+    // Assert
+    assertTrue(checksum.isEmpty());
   }
 
   @Test

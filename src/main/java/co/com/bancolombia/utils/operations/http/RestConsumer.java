@@ -35,18 +35,26 @@ public class RestConsumer {
     return execute(request, classModel, false);
   }
 
+  public static String getTextRequest(String url) throws IOException {
+    return executeForBody(new Request.Builder().url(url).build());
+  }
+
   private static <T> T execute(Request request, Class<T> modelClass, boolean isXml)
       throws IOException {
+    String body = executeForBody(request);
+    if (body.isEmpty()) {
+      return null;
+    }
+    ObjectMapper mapper = isXml ? objectXmlMapper : objectMapper;
+    return mapper.readValue(body, modelClass);
+  }
+
+  private static String executeForBody(Request request) throws IOException {
     try (Response response = client.newCall(request).execute()) {
       if (!response.isSuccessful()) {
         throw new IOException("HTTP " + response.code() + " for " + request.url());
       }
-      String body = response.body().string();
-      if (body.isEmpty()) {
-        return null;
-      }
-      ObjectMapper mapper = isXml ? objectXmlMapper : objectMapper;
-      return mapper.readValue(body, modelClass);
+      return response.body().string();
     }
   }
 

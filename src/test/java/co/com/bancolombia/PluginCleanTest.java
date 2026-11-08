@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -30,6 +31,7 @@ import org.gradle.api.attributes.Category;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
+import org.gradle.api.tasks.wrapper.Wrapper;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -107,6 +109,26 @@ class PluginCleanTest {
 
     assertEquals(taskGroup, task10.getGroup());
     assertEquals(descriptionTask10, task10.getDescription());
+  }
+
+  @Test
+  void shouldConfigureWrapperChecksumOnlyForDefaultVersion() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    Wrapper defaults = project.getTasks().register("defaultWrapper", Wrapper.class).get();
+    Wrapper otherVersion = project.getTasks().register("otherWrapper", Wrapper.class).get();
+    otherVersion.setGradleVersion("9.9.0");
+    Wrapper custom = project.getTasks().register("customWrapper", Wrapper.class).get();
+    custom.setDistributionSha256Sum("custom");
+    // Act
+    Stream.of(defaults, otherVersion, custom)
+        .forEach(wrapper -> wrapper.getActions().get(0).execute(wrapper));
+    // Assert
+    assertEquals(Constants.GRADLE_WRAPPER_VERSION, defaults.getGradleVersion());
+    assertEquals(Constants.GRADLE_WRAPPER_SHA256, defaults.getDistributionSha256Sum());
+    assertNull(otherVersion.getDistributionSha256Sum());
+    assertEquals("custom", custom.getDistributionSha256Sum());
   }
 
   @Test
