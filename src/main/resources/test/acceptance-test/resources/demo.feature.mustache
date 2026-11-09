@@ -1,4 +1,4 @@
-# We suggest to consulting the Karate Framework documentation: https://github.com/intuit/karate
+# We suggest to consulting the Karate Framework documentation: https://docs.karatelabs.io
 @acceptanceTest
 Feature: Here is the full description of the test suite to be run DEMO
 
@@ -19,8 +19,8 @@ Feature: Here is the full description of the test suite to be run DEMO
 
 
     #   Reference
-    #   https://github.com/karatelabs/karate#request
-    #   https://github.com/karatelabs/karate#reading-files
+    #   https://docs.karatelabs.io/http-requests/making-requests
+    #   https://docs.karatelabs.io/core-syntax/actions
     Scenario: This is the description of this scenario to be tested and its objective
         Given path 'pet'
         And request read('addPet.json')
@@ -31,9 +31,9 @@ Feature: Here is the full description of the test suite to be run DEMO
         * if (report.hasErrors()) karate.fail(report.getMessages() + ' - '+ strResponse)
 
     #   Reference
-    #   https://github.com/karatelabs/karate#path
-    #   https://github.com/karatelabs/karate#param
-    #   https://github.com/karatelabs/karate#params
+    #   https://docs.karatelabs.io/http-requests/making-requests
+    #   https://docs.karatelabs.io/http-requests/request-parameters
+    #   https://docs.karatelabs.io/http-requests/request-parameters
     Scenario Outline: Update pet with id <PET_ID>
         Given path 'pet/', <PET_ID>
         And params {name: '<NAME>', status: '<STATUS>'}
@@ -49,7 +49,7 @@ Feature: Here is the full description of the test suite to be run DEMO
             | 10     | Alice  | available |
 
     #   Reference
-    #   https://github.com/karatelabs/karate#path
+    #   https://docs.karatelabs.io/http-requests/making-requests
     Scenario: Get pet with id 9
         Given path 'pet/9'
         And configure headers = { 'Content-Type': 'application/json' }

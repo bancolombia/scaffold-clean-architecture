@@ -1,11 +1,11 @@
 package {{package}};
 
-import com.intuit.karate.Results;
-import com.intuit.karate.Runner;
-import org.junit.jupiter.api.Test;
+import io.karatelabs.core.Runner;
+import io.karatelabs.core.SuiteResult;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,25 +14,25 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TestParallel {
+class TestParallel {
 
-    private final static int WORKERS = 1;
+    private static final int WORKERS = 1;
 
     @Test
     void testAll() {
-      Results results = Runner.path()
-              .outputCucumberJson(true)
-              .relativeTo(getClass())
-              .parallel(WORKERS);
-      generateReport(results.getReportDir());
-      assertEquals(0, results.getFailCount(), results.getErrorMessages());
+        SuiteResult result = Runner.path("classpath:{{packagePath}}")
+                .outputCucumberJson(true)
+                .tags("~@ignore")
+                .parallel(WORKERS);
+        generateReport(result.getReportDir().toString());
+        assertEquals(0, result.getScenarioFailedCount(), String.join("\n", result.getErrors()));
     }
 
     public static void generateReport(String karateOutputPath) {
         Collection<File> jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[]{"json"}, true);
         List<String> jsonPaths = new ArrayList<>(jsonFiles.size());
         jsonFiles.forEach(file -> jsonPaths.add(file.getAbsolutePath()));
-        Configuration config = new Configuration(new File("target"), "{{acceptanceTestPath}}");
+        Configuration config = new Configuration(new File("build"), "{{acceptanceTestPath}}");
         ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, config);
         reportBuilder.generateReports();
     }
