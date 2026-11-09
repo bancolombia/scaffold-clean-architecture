@@ -5,6 +5,7 @@ import co.com.bancolombia.plugins.ChildConventionPlugin;
 import co.com.bancolombia.plugins.DependencyOverrideConventions;
 import co.com.bancolombia.plugins.RootModuleDependencyConventions;
 import co.com.bancolombia.plugins.RootQualityConventions;
+import co.com.bancolombia.task.GeneratePipelineTask;
 import co.com.bancolombia.task.ValidateStructureTask;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
@@ -153,6 +154,9 @@ public class PluginClean implements Plugin<Project> {
               if (clazz == ValidateStructureTask.class) {
                 builder.action(buildValidateStructureTaskAction(cleanPluginExtension));
               }
+              if (clazz == GeneratePipelineTask.class) {
+                builder.action(buildGeneratePipelineTaskAction(cleanPluginExtension));
+              }
               return builder.build();
             });
   }
@@ -163,6 +167,12 @@ public class PluginClean implements Plugin<Project> {
     return task ->
         task.getWhitelistedDependencies()
             .set(cleanPluginExtension.getModelProps().getWhitelistedDependencies());
+  }
+
+  @NotNull
+  private Action<? extends GeneratePipelineTask> buildGeneratePipelineTaskAction(
+      CleanPluginExtension cleanPluginExtension) {
+    return task -> task.getOtel().set(cleanPluginExtension.getOtel());
   }
 
   @SuppressWarnings("unchecked")

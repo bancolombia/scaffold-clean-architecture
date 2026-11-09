@@ -95,16 +95,49 @@ stages:
               htmlPath: '$(System.DefaultWorkingDirectory)/build/reports/pitest/index.html'
               {{/monoRepo}}
 
+          {{#otel}}
+          - task: CopyFiles@2
+            displayName: 'Stage Artifact'
+            condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
+            inputs:
+              {{#monoRepo}}
+              SourceFolder: '$(System.DefaultWorkingDirectory)/$(projectName)/applications/app-service/build/libs'
+              {{/monoRepo}}
+              {{^monoRepo}}
+              SourceFolder: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs'
+              {{/monoRepo}}
+              Contents: '*.jar'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+          - task: CopyFiles@2
+            displayName: 'Stage OpenTelemetry Agent'
+            condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
+            inputs:
+              {{#monoRepo}}
+              SourceFolder: '$(System.DefaultWorkingDirectory)/$(projectName)/applications/app-service/build/otel'
+              {{/monoRepo}}
+              {{^monoRepo}}
+              SourceFolder: '$(System.DefaultWorkingDirectory)/applications/app-service/build/otel'
+              {{/monoRepo}}
+              Contents: '*.jar'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/otel'
+
+          {{/otel}}
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact'
             condition: in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/trunk', 'refs/heads/master')
             inputs:
+              {{#otel}}
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              {{/otel}}
+              {{^otel}}
               {{#monoRepo}}
               PathtoPublish: '$(System.DefaultWorkingDirectory)/$(projectName)/applications/app-service/build/libs/'
               {{/monoRepo}}
               {{^monoRepo}}
               PathtoPublish: '$(System.DefaultWorkingDirectory)/applications/app-service/build/libs/'
               {{/monoRepo}}
+              {{/otel}}
               ArtifactName: '$(Artifact.Name)'
 
           - task: PublishBuildArtifacts@1

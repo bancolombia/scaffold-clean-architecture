@@ -11,9 +11,12 @@ FROM eclipse-temurin:25-jdk-alpine
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 COPY *.jar {{projectName}}.jar
+{{#otel}}
+COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+{{/otel}}
 # NOTE: If the Java base image already provides the user and its permissions, remove this line
 RUN chown -R appuser:appgroup /app
-ENV JAVA_OPTS="{{#java25}}-XX:+UseCompactObjectHeaders {{/java25}}-XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom"
+ENV JAVA_OPTS="{{#otel}}-javaagent:/app/opentelemetry-javaagent.jar {{/otel}}{{#java25}}-XX:+UseCompactObjectHeaders {{/java25}}-XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom"
 # Replace with a non-root user to avoid running the container with excessive privileges
 USER appuser
 ENTRYPOINT [ "/bin/sh", "-c", "/opt/java/openjdk/bin/java $JAVA_OPTS  -jar /app/{{projectName}}.jar" ]

@@ -125,4 +125,25 @@ class UpdateProjectDependenciesTest {
     assertTrue(result.contains("gradleVersion = '9.9.0'"));
     assertTrue(result.contains("distributionSha256Sum = '" + NEW_SHA256 + "'"));
   }
+
+  @Test
+  void shouldWriteVersionsWithDollarSignLiterally() throws IOException {
+    // Arrange
+    when(operations.getTheLastDependencyRelease(any()))
+        .thenReturn(
+            Optional.of(
+                DependencyRelease.from("com.github.spullara.mustache.java:compiler:1.2$1")));
+    when(operations.getLatestGradlePluginVersion(any()))
+        .thenReturn(Optional.of(DependencyRelease.from("id org.sonarqube version 5.0$1")));
+    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9$1"));
+    when(operations.getGradleDistributionSha256("9.9$1", "bin"))
+        .thenReturn(Optional.of(NEW_SHA256));
+    // Act
+    task.run();
+    // Assert
+    String result = Files.readString(TEST_FILE);
+    assertTrue(result.contains("'com.github.spullara.mustache.java:compiler:1.2$1'"));
+    assertTrue(result.contains("id 'org.sonarqube' version '5.0$1'"));
+    assertTrue(result.contains("gradleVersion = '9.9$1'"));
+  }
 }

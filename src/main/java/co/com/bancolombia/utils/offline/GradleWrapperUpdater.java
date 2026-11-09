@@ -2,6 +2,7 @@ package co.com.bancolombia.utils.offline;
 
 import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +34,15 @@ public class GradleWrapperUpdater {
             sha256 ->
                 SHA256
                     .matcher(replaceVersion(content, version))
-                    .replaceAll("distributionSha256Sum = '" + sha256 + "'"))
+                    .replaceAll(
+                        Matcher.quoteReplacement("distributionSha256Sum = '" + sha256 + "'")))
         .orElse(content);
   }
 
   private static String replaceVersion(String content, String version) {
     return Utils.replaceExpression(
-        content, "gradleVersion\\s*=\\s*.*", "gradleVersion = '" + version + "'");
+        content,
+        "gradleVersion\\s*=\\s*.*",
+        Matcher.quoteReplacement("gradleVersion = '" + version + "'"));
   }
 }

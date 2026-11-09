@@ -1,22 +1,22 @@
 package co.com.bancolombia.utils.operations;
 
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.GradleVersion;
 import co.com.bancolombia.models.MavenMetadata;
 import co.com.bancolombia.models.Release;
+import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.http.RestConsumer;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
 
 public class HttpOperations implements ExternalOperations {
-  public static final String PLUGIN_RELEASES =
-      "https://api.github.com/repos/bancolombia/scaffold-clean-architecture/releases";
+  private static final String PLUGIN_ID = "co.com.bancolombia.cleanArchitecture";
   public static final String DEPENDENCY_RELEASES =
       "https://repo1.maven.org/maven2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_PLUGINS =
@@ -25,13 +25,12 @@ public class HttpOperations implements ExternalOperations {
   public static final String GRADLE_DISTRIBUTION_SHA256 =
       "https://services.gradle.org/distributions/gradle-%version-%type.zip.sha256";
   private static final Pattern SHA256_PATTERN = Pattern.compile("[0-9a-f]{64}");
+  private static final Pattern SAFE_VERSION = Pattern.compile("[\\w.+-]+");
   private final Map<String, String> endpoints;
 
   public HttpOperations() {
     this.endpoints =
         Map.of(
-            PLUGIN_RELEASES,
-            PLUGIN_RELEASES,
             DEPENDENCY_RELEASES,
             DEPENDENCY_RELEASES,
             GRADLE_PLUGINS,
@@ -51,21 +50,42 @@ public class HttpOperations implements ExternalOperations {
 
   @Override
   public Release getLatestPluginVersion() {
-    try {
-      return Arrays.stream(RestConsumer.getRequest(resolve(PLUGIN_RELEASES), Release[].class))
-          .filter(HttpOperations::filterValidVersions)
-          .findFirst()
-          .map(Release::cleanTagName)
-          .orElse(null);
-    } catch (Exception e) {
-      logger.lifecycle("Can't check the latest version of the plugin, reason: {}", e.getMessage());
+    OptionalInt major = majorOf(Utils.getVersionPlugin());
+    if (major.isEmpty()) {
+      // Local builds use a placeholder version, there is no release line to compare with
+      logger.debug("Plugin version {} has no numeric major version", Utils.getVersionPlugin());
       return null;
+    }
+    return getLatestPluginVersion(major.getAsInt()).orElse(null);
+  }
+
+  static OptionalInt majorOf(String version) {
+    try {
+      return OptionalInt.of(Integer.parseInt(version.split("\\.")[0]));
+    } catch (NumberFormatException e) {
+      return OptionalInt.empty();
     }
   }
 
-  private static boolean filterValidVersions(Release release) {
-    return Stream.of("alpha", "beta", "-M", "-RC")
-        .noneMatch(invalid -> release.getTagName().contains(invalid));
+  /** Highest stable release of a major version, compared by version and not by publication date. */
+  private Optional<Release> getLatestPluginVersion(int major) {
+    try {
+      var plugin = new DependencyRelease();
+      plugin.setGroup(PLUGIN_ID);
+      plugin.setArtifact(PLUGIN_ID + ".gradle.plugin");
+      var endpoint = getGradlePluginEndpoint(plugin);
+      return RestConsumer.getRequest(endpoint, MavenMetadata.class, true)
+          .getVersioning()
+          .getVersions()
+          .stream()
+          .filter(version -> version.startsWith(major + ".") && Utils.isStableVersion(version))
+          .reduce((current, next) -> UpdateUtils.isNewerVersion(current, next) ? next : current)
+          .map(version -> new Release(version, null));
+    } catch (Exception e) {
+      logger.lifecycle(
+          "Can't check the latest {}.x.x version of the plugin, reason: {}", major, e.getMessage());
+      return Optional.empty();
+    }
   }
 
   @Override
@@ -83,7 +103,9 @@ public class HttpOperations implements ExternalOperations {
     try {
       GradleVersion release =
           RestConsumer.getRequest(resolve(GRADLE_VERSIONS_API), GradleVersion.class);
-      return Optional.ofNullable(release).map(GradleVersion::version);
+      return Optional.ofNullable(release)
+          .map(GradleVersion::version)
+          .filter(version -> SAFE_VERSION.matcher(version).matches());
     } catch (Exception e) {
       logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
       return Optional.empty();
@@ -119,6 +141,14 @@ public class HttpOperations implements ExternalOperations {
       endpoint = endpointResolver.apply(dependency);
       var metadata = RestConsumer.getRequest(endpoint, MavenMetadata.class, true);
       var release = metadata.toDependencyRelease();
+      if (!isSafeRelease(dependency, release)) {
+        logger.warn(
+            "Ignoring unexpected release {} for dependency {} from {}",
+            release,
+            dependency,
+            endpoint);
+        return Optional.empty();
+      }
       if (release.isNewest(dependency)) {
         logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
         return Optional.of(release);
@@ -134,10 +164,21 @@ public class HttpOperations implements ExternalOperations {
     }
   }
 
+  /**
+   * The release is written into build files, so it must be the requested artifact and its version
+   * must be a plain version string.
+   */
+  private static boolean isSafeRelease(DependencyRelease requested, DependencyRelease release) {
+    return release.getVersion() != null
+        && SAFE_VERSION.matcher(release.getVersion()).matches()
+        && requested.getGroup().equals(release.getGroup())
+        && requested.getArtifact().equals(release.getArtifact());
+  }
+
   private String getDependencyEndpoint(DependencyRelease dependency) {
     if (dependency.valid()) {
       var group = String.join("/", dependency.getGroup().split("\\."));
-      var artifact = String.join("/", dependency.getArtifact().split("\\."));
+      var artifact = dependency.getArtifact();
       return resolve(DEPENDENCY_RELEASES)
           .replaceFirst("%group", group)
           .replaceFirst("%artifact", artifact);

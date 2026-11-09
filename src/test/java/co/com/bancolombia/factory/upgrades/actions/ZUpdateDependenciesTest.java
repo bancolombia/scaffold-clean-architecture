@@ -142,4 +142,23 @@ class ZUpdateDependenciesTest {
     assertFalse(applied);
     verify(operations, never()).getGradleWrapperFromFile();
   }
+
+  @Test
+  void shouldWriteVersionWithDollarSignLiterally() {
+    DependencyRelease release = new DependencyRelease();
+    release.setGroup("group");
+    release.setArtifact("dependency-name");
+    release.setVersion("1.2.4$1");
+    String file = "./main.gradle";
+    String current = "dependencies {\n\timplementation 'group:dependency-name:1.2.3'\n}";
+    String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4$1'\n}";
+    when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
+    when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
+    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
+        .thenReturn(Optional.of(release));
+    builder.addFile(file, current);
+
+    assertTrue(updater.up(builder));
+    verify(builder).addFile(file, expected);
+  }
 }
