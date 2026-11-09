@@ -4,11 +4,15 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+{{#reactive}}
 import com.tngtech.archunit.lang.ArchCondition;
+{{/reactive}}
 import com.tngtech.archunit.lang.ArchRule;
+{{#reactive}}
 import com.tngtech.archunit.lang.ConditionEvent;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+{{/reactive}}
 import com.tngtech.archunit.lang.syntax.elements.MembersShouldConjunction;
 {{#lombok}}
 import lombok.extern.java.Log;
