@@ -1,5 +1,64 @@
 # Changelog
 
+## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.0...HEAD)
+
+**Closed issues:**
+
+- build: add distributionSha256Sum to gradle-wrapper.properties [\#1050](https://github.com/bancolombia/scaffold-clean-architecture/issues/1050)
+
+## [v5.2.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.2.0) (2026-11-09)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.8...v5.2.0)
+
+**Fixed bugs:**
+
+- fix: dependency updater breaks on dotted artifactIds, unquoted regex and '$' in replacement [\#1047](https://github.com/bancolombia/scaffold-clean-architecture/issues/1047)
+
+**Closed issues:**
+
+- fix: OpenTelemetry agent is only applied to bootRun, not to the generated Docker image [\#1046](https://github.com/bancolombia/scaffold-clean-architecture/issues/1046)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependencies [\#1079](https://github.com/bancolombia/scaffold-clean-architecture/pull/1079) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- chore: add upgrade hint to the release notes [\#1078](https://github.com/bancolombia/scaffold-clean-architecture/pull/1078) ([luisgomez29](https://github.com/luisgomez29))
+- feat: add distributionSha256Sum to the Gradle wrapper and keep it in sync on updates [\#1077](https://github.com/bancolombia/scaffold-clean-architecture/pull/1077) ([luisgomez29](https://github.com/luisgomez29))
+- chore: document Rule\_1.5 and reading secrets at startup [\#1076](https://github.com/bancolombia/scaffold-clean-architecture/pull/1076) ([luisgomez29](https://github.com/luisgomez29))
+- chore: update the acceptance test templates to Karate 2 [\#1075](https://github.com/bancolombia/scaffold-clean-architecture/pull/1075) ([luisgomez29](https://github.com/luisgomez29))
+- chore: use the AWS SDK default credentials provider in the generated AWS clients [\#1074](https://github.com/bancolombia/scaffold-clean-architecture/pull/1074) ([luisgomez29](https://github.com/luisgomez29))
+- chore: fix read plugin versions from the Gradle plugin portal by major version [\#1073](https://github.com/bancolombia/scaffold-clean-architecture/pull/1073) ([luisgomez29](https://github.com/luisgomez29))
+- chore: fix gradle build by declaring task caching and updating functional tests [\#1070](https://github.com/bancolombia/scaffold-clean-architecture/pull/1070) ([luisgomez29](https://github.com/luisgomez29))
+- chore: stop FileUtilsTest from generating src/test/resources/userHome [\#1069](https://github.com/bancolombia/scaffold-clean-architecture/pull/1069) ([luisgomez29](https://github.com/luisgomez29))
+- chore: harden generated Jenkins, CircleCI, GitHub and Azure pipeline templates [\#1067](https://github.com/bancolombia/scaffold-clean-architecture/pull/1067) ([luisgomez29](https://github.com/luisgomez29))
+- chore: fail on non-successful HTTP responses in RestConsumer [\#1066](https://github.com/bancolombia/scaffold-clean-architecture/pull/1066) ([luisgomez29](https://github.com/luisgomez29))
+- chore: fix dependency updater matching, metadata URL and replacement [\#1065](https://github.com/bancolombia/scaffold-clean-architecture/pull/1065) ([luisgomez29](https://github.com/luisgomez29))
+- chore: declare spring-boot-devtools as developmentOnly in app-service [\#1064](https://github.com/bancolombia/scaffold-clean-architecture/pull/1064) ([luisgomez29](https://github.com/luisgomez29))
+- chore: attach OpenTelemetry agent to the generated Docker image [\#1063](https://github.com/bancolombia/scaffold-clean-architecture/pull/1063) ([luisgomez29](https://github.com/luisgomez29))
+- chore: enable org.gradle.tooling.parallel and update docs [\#1061](https://github.com/bancolombia/scaffold-clean-architecture/pull/1061) ([luisgomez29](https://github.com/luisgomez29))
+- chore: run Dockerfile as non-root user and add compact object headers upgrade [\#1059](https://github.com/bancolombia/scaffold-clean-architecture/pull/1059) ([luisgomez29](https://github.com/luisgomez29))
+- build\(deps\): bump follow-redirects from 1.16.1 to 1.16.2 in /docs [\#1058](https://github.com/bancolombia/scaffold-clean-architecture/pull/1058) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump joi from 17.13.8 to 17.13.9 in /docs [\#1057](https://github.com/bancolombia/scaffold-clean-architecture/pull/1057) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v4.7.8](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.8) (2026-11-07)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.7...v4.7.8)
+
+**Fixed bugs:**
+
+- fix: RestConsumer ignores HTTP status codes and never closes responses [\#1048](https://github.com/bancolombia/scaffold-clean-architecture/issues/1048)
+- fix: spring-boot-devtools is packaged into bootJar \(runtimeOnly instead of developmentOnly\) [\#1045](https://github.com/bancolombia/scaffold-clean-architecture/issues/1045)
+
+**Closed issues:**
+
+- chore: harden generated pipeline templates \(Jenkins token, CircleCI image, unpinned actions\) [\#1055](https://github.com/bancolombia/scaffold-clean-architecture/issues/1055)
+- fix: generated Dockerfile cannot start \(missing appuser, OpenJ9-only -Xshareclasses on Temurin\) [\#1044](https://github.com/bancolombia/scaffold-clean-architecture/issues/1044)
+
+## [v4.7.7](https://github.com/bancolombia/scaffold-clean-architecture/tree/v4.7.7) (2026-11-06)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.1.0...v4.7.7)
+
 ## [v5.1.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.1.0) (2026-10-31)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v4.7.6...v5.1.0)
