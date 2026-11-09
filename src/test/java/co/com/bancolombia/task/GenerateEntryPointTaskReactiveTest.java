@@ -109,7 +109,7 @@ class GenerateEntryPointTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/entry-points/reactive-web/",
         "src/main/java/co/com/bancolombia/api/PetApiController.java",
-        "src/main/java/co/com/bancolombia/api/model/Pet.java");
+        "src/main/java/co/com/bancolombia/api/dtos/Pet.java");
   }
 
   @Test
@@ -162,7 +162,7 @@ class GenerateEntryPointTaskReactiveTest {
         TEST_DIR + "/infrastructure/entry-points/reactive-web/",
         "src/main/java/co/com/bancolombia/api/PetApiRouter.java",
         "src/main/java/co/com/bancolombia/api/PetApiHandler.java",
-        "src/main/java/co/com/bancolombia/api/model/Pet.java");
+        "src/main/java/co/com/bancolombia/api/dtos/Pet.java");
   }
 
   @Test

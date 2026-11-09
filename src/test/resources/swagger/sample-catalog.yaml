@@ -1,0 +1,72 @@
+openapi: 3.0.1
+info:
+  title: Sample Library Catalog
+  description: Fictional contract used only for plugin tests.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/catalog/v1
+paths:
+  /books/search:
+    post:
+      summary: Search books in the catalog
+      operationId: searchBooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bookRequest'
+      responses:
+        '200':
+          description: Books found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bookResponse'
+components:
+  schemas:
+    author:
+      type: object
+      description: Person who wrote a book
+      properties:
+        authorId:
+          type: string
+          example: AUT-001
+        fullName:
+          type: string
+          example: Jane Placeholder
+    bookRequest:
+      type: object
+      description: Filters used to search books
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: Example Title
+        author:
+          $ref: '#/components/schemas/author'
+    bookResponse:
+      type: object
+      description: Book returned by the catalog
+      properties:
+        isbn:
+          type: string
+          example: 000-0-00-000000-0
+        pages:
+          type: integer
+          format: int32
+          example: 250
+        author:
+          $ref: '#/components/schemas/author'
+        coAuthors:
+          type: array
+          items:
+            $ref: '#/components/schemas/author'
+        availability:
+          type: string
+          description: Current loan status of the book
+          enum:
+            - AVAILABLE
+            - BORROWED
+            - LOST

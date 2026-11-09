@@ -85,15 +85,15 @@ components:
         id:
           type: integer
           format: int64
-#          example: 1
+        #          example: 1
         name:
           type: string
-#          example: doggie
+        #          example: doggie
         photoUrls:
           type: array
           items:
             type: string
-#            example: https://some.com/image.png
+        #            example: https://some.com/image.png
         status:
           type: string
           description: pet status in the store
