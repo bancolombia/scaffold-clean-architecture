@@ -67,13 +67,14 @@ class ZUpdateDependenciesTest {
   @Test
   void shouldKeepGradleWrapperWhenChecksumIsNotAvailable() throws IOException {
     // Arrange
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.1"));
-    when(operations.getGradleDistributionSha256("9.9.1", "bin")).thenReturn(Optional.empty());
+    String newVersion = Constants.GRADLE_WRAPPER_VERSION + "-next";
+    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of(newVersion));
+    when(operations.getGradleDistributionSha256(newVersion, "bin")).thenReturn(Optional.empty());
     // Act
     task.run();
     // Assert
     String result = Files.readString(Path.of(TEST_PATH));
-    assertFalse(result.contains("\"9.9.1\""));
+    assertFalse(result.contains("\"" + newVersion + "\""));
     assertTrue(
         result.contains("GRADLE_WRAPPER_VERSION = \"" + Constants.GRADLE_WRAPPER_VERSION + "\";"));
     assertTrue(result.contains(Constants.GRADLE_WRAPPER_SHA256));

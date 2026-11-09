@@ -119,7 +119,7 @@ class PluginCleanTest {
     project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
     Wrapper defaults = project.getTasks().register("defaultWrapper", Wrapper.class).get();
     Wrapper otherVersion = project.getTasks().register("otherWrapper", Wrapper.class).get();
-    otherVersion.setGradleVersion("9.9.1");
+    otherVersion.setGradleVersion("8.0");
     Wrapper custom = project.getTasks().register("customWrapper", Wrapper.class).get();
     custom.setDistributionSha256Sum("custom");
     // Act
