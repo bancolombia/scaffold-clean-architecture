@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.TestUtils.assertFileContains;
 import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
 import static co.com.bancolombia.TestUtils.createTask;
 import static co.com.bancolombia.TestUtils.deleteStructure;
@@ -139,6 +140,11 @@ class GenerateDrivenAdapterTaskImperativeTest {
         "src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java",
         "src/main/java/co/com/bancolombia/jpa/config/DBSecret.java",
         "src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java");
+    assertFileContains(
+        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml",
+        "h2:",
+        "enabled: true",
+        "/h2");
   }
 
   @Test

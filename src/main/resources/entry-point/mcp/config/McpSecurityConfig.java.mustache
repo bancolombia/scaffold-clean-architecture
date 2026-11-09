@@ -89,7 +89,6 @@ public class McpSecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         // Endpoints públicos para actuator
                         .pathMatchers("/actuator/health", "/actuator/info").permitAll()
-                        .pathMatchers("/h2-console/**").permitAll()
                         // Resto requiere autenticación
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
