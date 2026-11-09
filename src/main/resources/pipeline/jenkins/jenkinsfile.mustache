@@ -39,7 +39,18 @@ pipeline {
         }
         stage('Publish Artifact') {
             steps {
+{{#otel}}
+                sh '''
+                    rm -rf build/artifact
+                    mkdir -p build/artifact/otel
+                    cp applications/app-service/build/libs/*.jar build/artifact/
+                    cp applications/app-service/build/otel/*.jar build/artifact/otel/
+                '''
+                archiveArtifacts artifacts: 'build/artifact/**/*.jar'
+{{/otel}}
+{{^otel}}
                 archiveArtifacts artifacts: 'applications/app-service/build/libs/*.jar'
+{{/otel}}
             }
         }
     }
