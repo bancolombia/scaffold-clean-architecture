@@ -36,3 +36,8 @@ test {
     systemProperty "karate.env", System.properties.getProperty("karate.env")
     outputs.upToDateWhen { false }
 }
+
+tasks.named('wrapper') {
+    gradleVersion = '{{GRADLE_WRAPPER_VERSION}}'
+    distributionSha256Sum = '{{GRADLE_WRAPPER_SHA256}}'
+}

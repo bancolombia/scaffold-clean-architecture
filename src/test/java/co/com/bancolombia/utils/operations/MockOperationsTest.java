@@ -29,6 +29,13 @@ class MockOperationsTest {
   }
 
   @Test
+  void getGradleDistributionSha256() {
+    // Act
+    // Assert
+    assertTrue(operations.getGradleDistributionSha256("9.8.2", "bin").isEmpty());
+  }
+
+  @Test
   void getLatestGradlePluginVersion() {
     // Act
     // Assert

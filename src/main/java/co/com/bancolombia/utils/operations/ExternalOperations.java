@@ -13,4 +13,6 @@ public interface ExternalOperations {
   Optional<DependencyRelease> getLatestGradlePluginVersion(DependencyRelease dependency);
 
   Optional<String> getGradleWrapperFromFile();
+
+  Optional<String> getGradleDistributionSha256(String version, String distributionType);
 }

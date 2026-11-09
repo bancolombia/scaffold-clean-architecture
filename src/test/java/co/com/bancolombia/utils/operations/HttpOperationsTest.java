@@ -20,6 +20,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class HttpOperationsTest {
+  private static final String SHA256 =
+      "21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607";
 
   private final MockWebServer server = new MockWebServer();
   private HttpOperations operations;
@@ -102,6 +104,10 @@ class HttpOperationsTest {
                           "<metadata><groupId>co.com.bancolombia.cleanArchitecture</groupId><artifactId>co.com.bancolombia.cleanArchitecture.gradle.plugin</artifactId><versioning><latest>4.7.7</latest><release>4.7.7</release><versions><version>v3.0.5</version><version>0.5</version><version>4.7.6</version><version>4.7.7</version><version>5.0.5</version><version>5.0.10</version><version>5.1.0</version><version>5.1.1.Final</version><version>5.2.0-RC1</version><version>5.2.0-beta</version><version>6.0.0</version></versions></versioning></metadata>");
               case "/versions/current" ->
                   new MockResponse().setResponseCode(200).setBody(gradleVersionResponse);
+              case "/distributions/gradle-9.4.0-bin.zip.sha256" ->
+                  new MockResponse().setResponseCode(200).setBody(SHA256 + "\n");
+              case "/distributions/gradle-9.4.0-all.zip.sha256" ->
+                  new MockResponse().setResponseCode(200).setBody("<html>not a checksum</html>");
               case "/analytics" -> new MockResponse().setResponseCode(201);
               default -> new MockResponse().setResponseCode(404);
             };
@@ -117,7 +123,9 @@ class HttpOperationsTest {
                 GRADLE_PLUGINS,
                 server.url("/maven-metadata.xml").toString(),
                 GRADLE_VERSIONS_API,
-                server.url("/versions/current").toString()));
+                server.url("/versions/current").toString(),
+                GRADLE_DISTRIBUTION_SHA256,
+                server.url("/distributions/").toString() + "gradle-%version-%type.zip.sha256"));
   }
 
   private HttpOperations pluginPortalOperations() {
@@ -174,6 +182,30 @@ class HttpOperationsTest {
     // Assert
     assertTrue(version.isPresent());
     assertEquals("9.4.0", version.get());
+  }
+
+  @Test
+  void getGradleDistributionSha256() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("9.4.0", "bin");
+    // Assert
+    assertEquals(Optional.of(SHA256), checksum);
+  }
+
+  @Test
+  void getGradleDistributionSha256ShouldRejectInvalidContent() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("9.4.0", "all");
+    // Assert
+    assertTrue(checksum.isEmpty());
+  }
+
+  @Test
+  void getGradleDistributionSha256ShouldBeEmptyWhenNotFound() {
+    // Act
+    Optional<String> checksum = operations.getGradleDistributionSha256("0.0.0", "bin");
+    // Assert
+    assertTrue(checksum.isEmpty());
   }
 
   @Test

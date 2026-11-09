@@ -8,6 +8,7 @@ import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterSecrets;
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.validations.Validation;
 import co.com.bancolombia.models.FileModel;
 import co.com.bancolombia.models.Release;
@@ -417,21 +418,27 @@ public class ModuleBuilder {
   private void loadLatestRelease() {
     Release latestRelease = operations.getLatestPluginVersion();
     if (latestRelease != null) {
-      if (latestRelease.getTagName().equals(Utils.getVersionPlugin())) {
-        logger.lifecycle("You have the latest plugin version {}", latestRelease.getTagName());
-      } else {
+      String latest = latestRelease.getTagName();
+      if (latest.equals(Utils.getVersionPlugin())) {
+        logger.lifecycle("You have the latest plugin version {}", latest);
+      } else if (UpdateUtils.isNewerVersion(Utils.getVersionPlugin(), latest)) {
         styledLogger
             .style(Description)
             .append("You have an old version of the plugin ")
             .style(Normal)
             .append("the latest version is: ")
             .style(Header)
-            .append(latestRelease.getTagName())
+            .append(latest)
             .style(Normal)
             .append(" to update it please run: ")
             .style(Success)
             .append("gradle u")
             .println();
+      } else {
+        logger.lifecycle(
+            "You are using the plugin version {}, newer than the latest release {}",
+            Utils.getVersionPlugin(),
+            latest);
       }
       params.put(LATEST_RELEASE, latestRelease);
     }

@@ -19,6 +19,7 @@ import tools.jackson.databind.json.JsonMapper;
 public class UpdateDependencies {
   public static final String DEPENDENCIES_CONFIG_FILE = "sh_dependencies.json";
   public static final String CONSTANTS_PATH = "src/main/java/co/com/bancolombia/Constants.java";
+  public static final String GRADLE_WRAPPER_SHA256 = "GRADLE_WRAPPER_SHA256";
 
   @Builder.Default private JsonMapper mapper = new JsonMapper();
   @Builder.Default private ExternalOperations operations = OperationsProvider.real();
@@ -38,7 +39,7 @@ public class UpdateDependencies {
       current.setVersion(Constants.getVersion(dependency.getName()));
       DependencyRelease newest = operations.getTheLastDependencyRelease(current).orElse(current);
       if (newest.isNewest(current)) {
-        content = updateVersion(content, dependency, newest.getVersion());
+        content = updateVersion(content, dependency.getName(), newest.getVersion());
       }
     }
     for (UpdateSettings.Dependency dependency : settings.getGradle()) {
@@ -46,21 +47,22 @@ public class UpdateDependencies {
       current.setVersion(Constants.getVersion(dependency.getName()));
       DependencyRelease newest = operations.getLatestGradlePluginVersion(current).orElse(current);
       if (newest.isNewest(current)) {
-        content = updateVersion(content, dependency, newest.getVersion());
+        content = updateVersion(content, dependency.getName(), newest.getVersion());
       }
     }
     for (UpdateSettings.Dependency dependency : settings.getCustom()) {
-      Optional<String> dep = operations.getGradleWrapperFromFile();
-      if (dep.isPresent()) {
-        content = updateVersion(content, dependency, dep.get());
+      Optional<String> version = operations.getGradleWrapperFromFile();
+      Optional<String> sha256 =
+          version.flatMap(v -> operations.getGradleDistributionSha256(v, "bin"));
+      if (version.isPresent() && sha256.isPresent()) {
+        content = updateVersion(content, dependency.getName(), version.get());
+        content = updateVersion(content, GRADLE_WRAPPER_SHA256, sha256.get());
       }
     }
     FileUtils.writeContentToFile(content, constantsFile);
   }
 
-  private String updateVersion(
-      String content, UpdateSettings.Dependency dependency, String version) {
-    return content.replaceFirst(
-        dependency.getName() + " = .*;", dependency.getName() + " = \"" + version + "\";");
+  private String updateVersion(String content, String name, String version) {
+    return content.replaceFirst(name + " =[^;]*;", name + " = \"" + version + "\";");
   }
 }

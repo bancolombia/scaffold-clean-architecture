@@ -27,4 +27,5 @@ onlyUpdater=true
 ./gradlew it --action UPDATE_DEPENDENCIES
 ```
 
-This tas will update gradle dependencies and gradle plugin versions.
+This tas will update gradle dependencies and gradle plugin versions. It also updates the Gradle version of the `wrapper`
+task and, when declared, its `distributionSha256Sum`.
