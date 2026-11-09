@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
@@ -21,6 +22,7 @@ public class HttpOperations implements ExternalOperations {
   public static final String GRADLE_PLUGINS =
       "https://plugins.gradle.org/m2/%group/%artifact/maven-metadata.xml";
   public static final String GRADLE_VERSIONS_API = "https://services.gradle.org/versions/current";
+  private static final Pattern SAFE_VERSION = Pattern.compile("[\\w.+-]+");
   private final Map<String, String> endpoints;
 
   public HttpOperations() {
@@ -77,7 +79,9 @@ public class HttpOperations implements ExternalOperations {
     try {
       GradleVersion release =
           RestConsumer.getRequest(resolve(GRADLE_VERSIONS_API), GradleVersion.class);
-      return Optional.ofNullable(release).map(GradleVersion::version);
+      return Optional.ofNullable(release)
+          .map(GradleVersion::version)
+          .filter(version -> SAFE_VERSION.matcher(version).matches());
     } catch (Exception e) {
       logger.lifecycle("Can't resolve Gradle version from API, reason: {}", e.getMessage());
       return Optional.empty();
@@ -91,6 +95,14 @@ public class HttpOperations implements ExternalOperations {
       endpoint = endpointResolver.apply(dependency);
       var metadata = RestConsumer.getRequest(endpoint, MavenMetadata.class, true);
       var release = metadata.toDependencyRelease();
+      if (!isSafeRelease(dependency, release)) {
+        logger.warn(
+            "Ignoring unexpected release {} for dependency {} from {}",
+            release,
+            dependency,
+            endpoint);
+        return Optional.empty();
+      }
       if (release.isNewest(dependency)) {
         logger.lifecycle("Updating {} to {}", dependency.toString(), release.toString());
         return Optional.of(release);
@@ -106,10 +118,21 @@ public class HttpOperations implements ExternalOperations {
     }
   }
 
+  /**
+   * The release is written into build files, so it must be the requested artifact and its version
+   * must be a plain version string.
+   */
+  private static boolean isSafeRelease(DependencyRelease requested, DependencyRelease release) {
+    return release.getVersion() != null
+        && SAFE_VERSION.matcher(release.getVersion()).matches()
+        && requested.getGroup().equals(release.getGroup())
+        && requested.getArtifact().equals(release.getArtifact());
+  }
+
   private String getDependencyEndpoint(DependencyRelease dependency) {
     if (dependency.valid()) {
       var group = String.join("/", dependency.getGroup().split("\\."));
-      var artifact = String.join("/", dependency.getArtifact().split("\\."));
+      var artifact = dependency.getArtifact();
       return resolve(DEPENDENCY_RELEASES)
           .replaceFirst("%group", group)
           .replaceFirst("%artifact", artifact);
