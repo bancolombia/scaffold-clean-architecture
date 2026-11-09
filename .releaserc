@@ -3,6 +3,11 @@
    "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
+      ["@semantic-release/exec",
+       {
+        "generateNotesCmd": "printf '### Upgrade\\n\\nTo apply the upgrade actions to your project run `gradle clean u --git false`.\\n\\nMore info: [Update Project](https://bancolombia.github.io/scaffold-clean-architecture/docs/tasks/update-project)'"
+      }
+      ],
       ["@semantic-release/git",
        {
         "assets": [ { "path": "build/**/*", "label": "Compiled files" }],
