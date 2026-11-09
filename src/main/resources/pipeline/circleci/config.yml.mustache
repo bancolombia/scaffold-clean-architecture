@@ -33,10 +33,18 @@ jobs:
             - store_artifacts:
                 path: applications/app-service/build/libs/
                 destination: Artifact
+{{#otel}}
+            - store_artifacts:
+                path: applications/app-service/build/otel/
+                destination: Artifact/otel
+{{/otel}}
             - persist_to_workspace:
                 root: applications/app-service/build
                 paths:
                   - libs
+{{#otel}}
+                  - otel
+{{/otel}}
 workflows:
   version: 2
   ci:

@@ -119,7 +119,7 @@ public class RootModuleDependencyConventions {
     }
 
     if (appService.getConfigurations().findByName(OTEL_AGENT) == null) {
-      appService.getConfigurations().create(OTEL_AGENT);
+      appService.getConfigurations().create(OTEL_AGENT).setCanBeConsumed(false);
     }
     appService
         .getDependencies()

@@ -71,6 +71,24 @@ class HttpOperationsTest {
                       .setResponseCode(200)
                       .addHeader("Content-Type", "application/xml")
                       .setBody(dependencyResponse);
+              case "/maven2/jakarta/servlet/jakarta.servlet-api/maven-metadata.xml" ->
+                  new MockResponse()
+                      .setResponseCode(200)
+                      .addHeader("Content-Type", "application/xml")
+                      .setBody(
+                          "<metadata><groupId>jakarta.servlet</groupId><artifactId>jakarta.servlet-api</artifactId><versioning><latest>6.1.0</latest><release>6.1.0</release><versions><version>6.1.0</version></versions></versioning></metadata>");
+              case "/maven2/unsafe/version/maven-metadata.xml" ->
+                  new MockResponse()
+                      .setResponseCode(200)
+                      .addHeader("Content-Type", "application/xml")
+                      .setBody(
+                          "<metadata><groupId>unsafe</groupId><artifactId>version</artifactId><versioning><latest>1.0&apos; + evil + &apos;</latest><release>1.0&apos; + evil + &apos;</release><versions><version>1.0&apos; + evil + &apos;</version></versions></versioning></metadata>");
+              case "/maven2/other/requested/maven-metadata.xml" ->
+                  new MockResponse()
+                      .setResponseCode(200)
+                      .addHeader("Content-Type", "application/xml")
+                      .setBody(
+                          "<metadata><groupId>other</groupId><artifactId>different</artifactId><versioning><latest>9.9.9</latest><release>9.9.9</release><versions><version>9.9.9</version></versions></versioning></metadata>");
               case "/maven-metadata.xml" ->
                   new MockResponse()
                       .setResponseCode(200)
@@ -180,5 +198,38 @@ class HttpOperationsTest {
     // sh_publish_plugin_local.sh publishes the plugin as CURRENT_LOCAL_VERSION
     assertTrue(HttpOperations.majorOf("CURRENT_LOCAL_VERSION").isEmpty());
     assertTrue(HttpOperations.majorOf("").isEmpty());
+  }
+
+  @Test
+  void shouldKeepDotsInArtifactIdWhenBuildingMavenMetadataUrl() {
+    Optional<DependencyRelease> result =
+        mavenLikeOperations()
+            .getTheLastDependencyRelease(
+                DependencyRelease.from("jakarta.servlet:jakarta.servlet-api:6.0.0"));
+
+    assertTrue(result.isPresent());
+    assertEquals("6.1.0", result.get().getVersion());
+  }
+
+  @Test
+  void shouldIgnoreReleaseWithUnsafeVersion() {
+    assertTrue(
+        mavenLikeOperations()
+            .getTheLastDependencyRelease(DependencyRelease.from("unsafe:version:0.1.0"))
+            .isEmpty());
+  }
+
+  @Test
+  void shouldIgnoreReleaseOfADifferentArtifact() {
+    assertTrue(
+        mavenLikeOperations()
+            .getTheLastDependencyRelease(DependencyRelease.from("other:requested:0.1.0"))
+            .isEmpty());
+  }
+
+  private HttpOperations mavenLikeOperations() {
+    return new HttpOperations(
+        Map.of(
+            DEPENDENCY_RELEASES, server.url("/maven2/") + "%group/%artifact/maven-metadata.xml"));
   }
 }
