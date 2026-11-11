@@ -1,12 +1,22 @@
 # Changelog
 
-## [Unreleased](https://github.com/bancolombia/scaffold-clean-architecture/tree/HEAD)
+## [v5.2.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.2.1) (2026-11-11)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.0...HEAD)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.0...v5.2.1)
 
 **Closed issues:**
 
+- chore: remove unreachable /h2-console permitAll rule from MCP security template [\#1053](https://github.com/bancolombia/scaffold-clean-architecture/issues/1053)
 - build: add distributionSha256Sum to gradle-wrapper.properties [\#1050](https://github.com/bancolombia/scaffold-clean-architecture/issues/1050)
+- docs: document Java-only scope and Kotlin removal \(v3.17.3\) [\#1006](https://github.com/bancolombia/scaffold-clean-architecture/issues/1006)
+
+**Merged pull requests:**
+
+- chore: align jackson-annotations with the overridden Jackson 3 version and use JsonMapper in the architecture test [\#1084](https://github.com/bancolombia/scaffold-clean-architecture/pull/1084) ([luisgomez29](https://github.com/luisgomez29))
+- fix: run tests on the JUnit Platform with the required JVM arguments and align the merged JaCoCo report path [\#1083](https://github.com/bancolombia/scaffold-clean-architecture/pull/1083) ([luisgomez29](https://github.com/luisgomez29))
+- chore\(deps\): update dependencies [\#1082](https://github.com/bancolombia/scaffold-clean-architecture/pull/1082) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- docs: state that Java is the only supported language [\#1081](https://github.com/bancolombia/scaffold-clean-architecture/pull/1081) ([luisgomez29](https://github.com/luisgomez29))
+- chore: remove unreachable H2 console config and generate it only for imperative JPA projects [\#1080](https://github.com/bancolombia/scaffold-clean-architecture/pull/1080) ([luisgomez29](https://github.com/luisgomez29))
 
 ## [v5.2.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.2.0) (2026-11-09)
 
