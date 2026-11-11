@@ -62,12 +62,11 @@ _**This task will generate something like that:**_
    ┃ ┃ ┗ 📜build.gradle
    ```
 
-
 ---
 
 ## Usage Example for gRPC Client Consumer
 
-The **`grpc`** driven adapter type generates a gRPC client module using the official [Spring gRPC](https://docs.spring.io/spring-grpc/reference/) integration (`spring-boot-starter-grpc-client`). It includes Protocol Buffers configuration, a sample client adapter, and configuration for connecting to external gRPC services.
+The **`grpc`** driven adapter type generates a gRPC client module using the official [Spring Boot gRPC](https://docs.spring.io/spring-boot/reference/io/grpc.html) integration (`spring-boot-starter-grpc-client`). It includes Protocol Buffers configuration, a sample client adapter, and configuration for connecting to external gRPC services.
 
 ### Basic Command
 
@@ -85,13 +84,13 @@ infrastructure/
         ├── build.gradle
         └── src/
             ├── main/
-            │   ├── java/[package]/grpc/
+            │   ├── java/[package]/grpc/consumer/
             │   │   ├── GrpcConsumerAdapter.java
             │   │   └── config/
             │   │       └── GrpcClientConfig.java
             │   └── proto/
-            │       └── service.proto
-            └── test/java/[package]/grpc/
+            │       └── consumer.proto
+            └── test/java/[package]/grpc/consumer/
                 └── GrpcConsumerAdapterTest.java
 ```
 
@@ -103,10 +102,15 @@ The command automatically updates `application.yaml` with gRPC client configurat
 spring:
   grpc:
     client:
-      channels:
+      channel:
         example-service:
           target: static://localhost:9090
 ```
+
+:::note[Reactive projects]
+The adapter uses a blocking stub. In reactive projects the task prints a warning; wrap the calls (for example with
+`Mono.fromCallable(...)` on `Schedulers.boundedElastic()`) so they do not block the event loop.
+:::
 
 ### Dependencies
 
@@ -115,26 +119,27 @@ The generated module includes:
 | Dependency | Description |
 |------------|-------------|
 | `spring-boot-starter-grpc-client` | Official Spring Boot integration for gRPC client |
-| `grpc-services` | gRPC services utilities |
-| `spring-grpc-test` | Spring gRPC testing utilities |
+| `spring-boot-starter-grpc-client-test` | Spring gRPC client testing utilities |
 | `protobuf-gradle-plugin` | Gradle plugin for proto compilation |
 
 ### Proto File
 
-The generated `service.proto` includes a sample service definition that should match the server you want to consume:
+The generated `consumer.proto` (with its own proto package and `java_package`, so it does not collide with the gRPC entry point) includes a sample service definition that should match the server you want to consume:
 
 ```protobuf
 syntax = "proto3";
 
-package grpc;
+package consumer;
 
 option java_multiple_files = true;
-option java_package = "co.com.bancolombia.grpc";
+option java_package = "co.com.bancolombia.grpc.consumer";
 option java_outer_classname = "ExampleServiceProto";
 
 // Example gRPC Service for client consumption
 // TODO: Replace this with the actual service definition from the server you want to consume.
+// The proto file should match the server's proto definition.
 service ExampleService {
+  // Get resource by ID
   rpc getById(Request) returns (Response);
 }
 
@@ -162,7 +167,7 @@ After generating the driven adapter, compile the proto files to generate Java cl
 
 ### Customization
 
-1. **Modify the proto file**: Replace `service.proto` with the actual service definition from the gRPC server you want to consume
+1. **Modify the proto file**: Replace `consumer.proto` with the actual service definition from the gRPC server you want to consume
 2. **Update the configuration**: Modify `GrpcClientConfig.java` to create the appropriate stubs for your service
 3. **Implement the gateway**: Have `GrpcConsumerAdapter` implement a gateway interface from your domain layer
 
@@ -180,7 +185,7 @@ public interface ExampleGateway {
 2. Implement the gateway in the driven adapter:
 
 ```java
-// infrastructure/driven-adapters/grpc-consumer/src/main/java/[package]/grpc/GrpcConsumerAdapter.java
+// infrastructure/driven-adapters/grpc-consumer/src/main/java/[package]/grpc/consumer/GrpcConsumerAdapter.java
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -190,7 +195,7 @@ public class GrpcConsumerAdapter implements ExampleGateway {
 
     @Override
     public String getById(String id) {
-        log.info("Calling gRPC service with id: {}", id);
+        log.debug("Calling gRPC service with id: {}", id);
         try {
             Request request = Request.newBuilder()
                     .setId(id)
@@ -198,8 +203,8 @@ public class GrpcConsumerAdapter implements ExampleGateway {
             Response response = exampleServiceStub.getById(request);
             return response.getMessage();
         } catch (StatusRuntimeException e) {
-            log.error("gRPC call failed with status: {}", e.getStatus(), e);
-            throw new RuntimeException("Failed to call gRPC service", e);
+            log.error("gRPC call failed with status: {}", e.getStatus().getCode());
+            throw new IllegalStateException("Failed to call gRPC service", e);
         }
     }
 }
@@ -213,20 +218,20 @@ The gRPC client can be configured with additional options in `application.yaml`:
 spring:
   grpc:
     client:
-      channels:
+      channel:
         example-service:
           target: static://localhost:9090
-          # TLS Configuration (optional)
-          tls:
+          # TLS (optional): uses an SSL bundle
+          ssl:
             enabled: false
-            # bundle: my-bundle  # Reference to SSL bundle
-          # Negotiation type: PLAINTEXT or TLS
-          negotiation-type: PLAINTEXT
+            # bundle: my-bundle
           # Keep alive settings
-          keep-alive-time: 30s
-          keep-alive-timeout: 10s
-          # Load balancing policy
-          default-load-balancing-policy: round_robin
+          keepalive:
+            time: 30s
+            timeout: 10s
+          default:
+            deadline: 5s
+            load-balancing-policy: round_robin
 ```
 
 ### Testing
