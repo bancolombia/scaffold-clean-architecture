@@ -22,6 +22,10 @@ public class DrivenAdapterJPA implements ModuleFactory {
     builder
         .appendToProperties("spring.jpa")
         .put("databasePlatform", "org.hibernate.dialect.H2Dialect");
+    // The H2 console is servlet-only, so it is only configured for imperative projects
+    if (!builder.isReactive()) {
+      builder.appendToProperties("spring.h2.console").put("enabled", true).put("path", "/h2");
+    }
 
     new ObjectMapperFactory().buildModule(builder);
   }

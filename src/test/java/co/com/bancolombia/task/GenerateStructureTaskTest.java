@@ -101,6 +101,19 @@ class GenerateStructureTaskTest {
   }
 
   @Test
+  void shouldNotConfigureH2ConsoleInTheBaseStructure() throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+    // Act
+    task.execute();
+    // Assert
+    String yaml =
+        Files.readString(
+            Path.of(dir, "applications/app-service/src/main/resources/application.yaml"));
+    assertFalse(yaml.contains("h2"));
+  }
+
+  @Test
   void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();

@@ -24,6 +24,8 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 class GenerateDrivenAdapterTaskReactiveTest {
   private static final String TEST_DIR = getTestDir(GenerateDrivenAdapterTaskReactiveTest.class);
@@ -151,6 +153,23 @@ class GenerateDrivenAdapterTaskReactiveTest {
     assertFilesExistsInDir(
         TEST_DIR + "/domain/model/",
         "src/main/java/co/com/bancolombia/model/events/gateways/EventsGateway.java");
+  }
+
+  @Test
+  void shouldNotConfigureH2ConsoleForJPAInReactiveProjects() throws IOException, CleanException {
+    // Arrange
+    task.setType("JPA");
+    // Act
+    task.execute();
+    // Assert
+    JsonNode spring =
+        new YAMLMapper()
+            .readTree(
+                Path.of(TEST_DIR, "applications/app-service/src/main/resources/application.yaml")
+                    .toFile())
+            .path("spring");
+    assertFalse(spring.path("datasource").isMissingNode());
+    assertTrue(spring.path("h2").isMissingNode());
   }
 
   @Test
