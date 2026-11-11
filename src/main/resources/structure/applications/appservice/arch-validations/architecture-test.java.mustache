@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 {{#hasSpringWeb}}
 import org.springframework.web.bind.annotation.RestController;
 {{/hasSpringWeb}}
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -75,7 +75,7 @@ class ArchitectureTest {
      @AfterAll
     static void exportIssues() {
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            JsonMapper mapper = JsonMapper.builder().build();
             List.of({{{modulePaths}}}).forEach(path -> {
                 try {
                     Files.write(Path.of(path, "build/issues.json"), mapper.writeValueAsBytes(issues.getOrDefault(path, new Utils.IssuesReport())));
