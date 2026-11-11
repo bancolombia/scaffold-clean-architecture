@@ -60,10 +60,10 @@ class DrivenAdapterGrpcTest {
     assertFilesExistsInDir(
         TEST_DIR + "/infrastructure/driven-adapters/grpc-consumer/",
         "build.gradle",
-        "src/main/java/co/com/bancolombia/grpc/GrpcConsumerAdapter.java",
-        "src/main/java/co/com/bancolombia/grpc/config/GrpcClientConfig.java",
-        "src/main/proto/service.proto",
-        "src/test/java/co/com/bancolombia/grpc/GrpcConsumerAdapterTest.java");
+        "src/main/java/co/com/bancolombia/grpc/consumer/GrpcConsumerAdapter.java",
+        "src/main/java/co/com/bancolombia/grpc/consumer/config/GrpcClientConfig.java",
+        "src/main/proto/consumer.proto",
+        "src/test/java/co/com/bancolombia/grpc/consumer/GrpcConsumerAdapterTest.java");
   }
 
   @Test
@@ -92,10 +92,28 @@ class DrivenAdapterGrpcTest {
 
     // Assert
     assertFileContains(
-        TEST_DIR + "/infrastructure/driven-adapters/grpc-consumer/src/main/proto/service.proto",
+        TEST_DIR + "/infrastructure/driven-adapters/grpc-consumer/src/main/proto/consumer.proto",
         "syntax = \"proto3\"",
         "service ExampleService",
+        "package consumer;",
+        "java_package = \"co.com.bancolombia.grpc.consumer\"",
         "rpc getById");
+  }
+
+  @Test
+  void shouldGenerateCompilableAdapterAndNamedChannelConfig() throws IOException, CleanException {
+    // Arrange
+    task.setType("GRPC");
+    String base =
+        TEST_DIR
+            + "/infrastructure/driven-adapters/grpc-consumer/src/main/java/co/com/bancolombia/grpc/consumer/";
+
+    // Act
+    task.execute();
+
+    // Assert
+    assertFileContains(base + "GrpcConsumerAdapter.java", "public class GrpcConsumerAdapter");
+    assertFileContains(base + "config/GrpcClientConfig.java", "createChannel(CHANNEL_NAME)");
   }
 
   @Test
@@ -108,6 +126,11 @@ class DrivenAdapterGrpcTest {
 
     // Assert
     assertFileContains(
-        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml", "spring:");
+        TEST_DIR + "/applications/app-service/src/main/resources/application.yaml",
+        "grpc:",
+        "channel:",
+        "example-service:",
+        "target:",
+        "static://localhost:9090");
   }
 }

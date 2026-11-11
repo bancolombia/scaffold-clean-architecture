@@ -1,9 +1,10 @@
 syntax = "proto3";
 
-package grpc;
+// Own proto package and java_package so these classes don't collide with the gRPC entry point
+package consumer;
 
 option java_multiple_files = true;
-option java_package = "{{package}}.grpc";
+option java_package = "{{package}}.grpc.consumer";
 option java_outer_classname = "ExampleServiceProto";
 
 // Example gRPC Service for client consumption

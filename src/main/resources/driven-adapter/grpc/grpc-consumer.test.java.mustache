@@ -1,8 +1,7 @@
-package {{package}}.grpc;
+package {{package}}.grpc.consumer;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -18,9 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class GrpcConsumerAdapterTest {
+
     @Mock
     private ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+
     private GrpcConsumerAdapter grpcConsumerAdapter;
+
     @BeforeEach
     void setUp() {
         grpcConsumerAdapter = new GrpcConsumerAdapter(exampleServiceStub);
@@ -30,17 +32,15 @@ class GrpcConsumerAdapterTest {
     void shouldCallGrpcServiceSuccessfully() {
         // Arrange
         String testId = "test-id";
-        String expectedMessage = "Success response";
         Response mockResponse = Response.newBuilder()
                 .setId(testId)
-                .setMessage(expectedMessage)
+                .setMessage("Success response")
                 .build();
         when(exampleServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
         // Act
-        String result = assertDoesNotThrow(() -> grpcConsumerAdapter.getById(testId));
+        String result = grpcConsumerAdapter.getById(testId);
         // Assert
-        assertNotNull(result);
-        assertEquals(expectedMessage, result);
+        assertEquals("Success response", result);
         verify(exampleServiceStub).getById(any(Request.class));
     }
 
@@ -51,7 +51,7 @@ class GrpcConsumerAdapterTest {
         when(exampleServiceStub.getById(any(Request.class)))
                 .thenThrow(new StatusRuntimeException(Status.UNAVAILABLE));
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> grpcConsumerAdapter.getById(testId));
+        assertThrows(IllegalStateException.class, () -> grpcConsumerAdapter.getById(testId));
         verify(exampleServiceStub).getById(any(Request.class));
     }
 }
