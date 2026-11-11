@@ -280,10 +280,7 @@ class PluginCleanTest {
             .noneMatch(dependency -> "spring-boot-devtools".equals(dependency.getName())));
     assertHasExternalDependency(
         appService, "testImplementation", "tools.jackson.core", "jackson-databind", null);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
     assertHasExternalDependency(
         appService, "testImplementation", "com.tngtech.archunit", "archunit", "9.8.7");
     assertTrue(appService.getPlugins().hasPlugin("org.springframework.boot"));
@@ -353,10 +350,7 @@ class PluginCleanTest {
         "com.tngtech.archunit",
         "archunit",
         Constants.ARCH_UNIT_VERSION);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
   }
 
   @Test
@@ -445,9 +439,8 @@ class PluginCleanTest {
     return category != null && Category.REGULAR_PLATFORM.equals(category.getName());
   }
 
-  private long countExternalDependencies(
-      Project project, String configuration, String group, String name) {
-    return project.getConfigurations().getByName(configuration).getDependencies().stream()
+  private long countExternalDependencies(Project project, String group, String name) {
+    return project.getConfigurations().getByName("testImplementation").getDependencies().stream()
         .filter(ExternalModuleDependency.class::isInstance)
         .map(ExternalModuleDependency.class::cast)
         .filter(
