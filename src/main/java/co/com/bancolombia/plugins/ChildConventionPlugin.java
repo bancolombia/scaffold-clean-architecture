@@ -75,23 +75,19 @@ public class ChildConventionPlugin implements Plugin<Project> {
   }
 
   private void configureTests(Project project) {
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-      project
-          .getTasks()
-          .withType(Test.class)
-          .configureEach(
-              test -> {
-                test.getJvmArgs().add("-XX:+AllowRedefinitionToAddDeleteMethods");
-                test.getJvmArgs().add("-XX:+EnableDynamicAgentLoading");
-                test.getJvmArgs().add("-Djdk.attach.allowAttachSelf=true");
-              });
-    }
-
+    boolean dynamicAgentSupported = JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13);
     project
         .getTasks()
         .withType(Test.class)
         .configureEach(
             test -> {
+              test.useJUnitPlatform();
+              if (dynamicAgentSupported) {
+                test.jvmArgs(
+                    "-XX:+AllowRedefinitionToAddDeleteMethods",
+                    "-XX:+EnableDynamicAgentLoading",
+                    "-Djdk.attach.allowAttachSelf=true");
+              }
               test.getFailOnNoDiscoveredTests().set(false);
               test.finalizedBy(project.getTasks().named("jacocoTestReport"));
             });

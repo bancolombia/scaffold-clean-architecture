@@ -34,6 +34,7 @@ import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.wrapper.Wrapper;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.gradle.testing.jacoco.tasks.JacocoReport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -181,6 +182,27 @@ class PluginCleanTest {
     // Assert
     assertNotNull(project.getTasks().findByName("jacocoMergedReport"));
     assertNotNull(project.getTasks().findByName("pitestReportAggregate"));
+  }
+
+  @Test
+  void shouldWriteTheMergedJacocoReportWhereSonarAndPipelinesExpectIt() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    Project child = ProjectBuilder.builder().withName("app-service").withParent(project).build();
+    child.getPluginManager().apply("java");
+
+    // Act
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+
+    // Assert
+    JacocoReport report = (JacocoReport) project.getTasks().getByName("jacocoMergedReport");
+    Path buildDir = project.getLayout().getBuildDirectory().get().getAsFile().toPath();
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml"),
+        report.getReports().getXml().getOutputLocation().get().getAsFile().toPath());
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/html"),
+        report.getReports().getHtml().getOutputLocation().get().getAsFile().toPath());
   }
 
   @Test

@@ -14,7 +14,7 @@ pipeline {
             post {
                 always {
                     junit '**/build/test-results/test/TEST-*.xml'
-                    publishCoverage adapters: [jacocoAdapter('build/reports/jacocoMergedReport/jacocoMergedReport.xml')]
+                    publishCoverage adapters: [jacocoAdapter('build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml')]
                 }
             }
         }

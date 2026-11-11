@@ -12,7 +12,7 @@ modules into one root report. Run it with:
 ```
 
 The task runs the `test` and `jacocoTestReport` tasks available in subprojects, then writes the
-merged XML and HTML reports under `build/reports/jacocoMergedReport/`.
+merged XML and HTML reports under `build/reports/jacoco/jacocoMergedReport/`.
 
 When Pitest is declared in the root `plugins {}` block, the merged report also depends on
 `pitestReportAggregate`. That task runs each available subproject `pitest` task and creates the
