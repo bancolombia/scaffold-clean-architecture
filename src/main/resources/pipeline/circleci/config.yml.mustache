@@ -21,7 +21,7 @@ jobs:
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
-          path: build/reports/jacocoMergedReport/jacocoMergedReport.xml
+          path: build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml
           destination: coverage
       - when:
           condition:

@@ -21,7 +21,7 @@ The root convention configures the `sonar` task with these defaults:
 | `sonar.java.binaries`                  | `**/build/classes/java/main`                                                     |
 | `sonar.junit.reportsPath`              | `**/build/test-results/test`                                                     |
 | `sonar.java.coveragePlugin`            | `jacoco`                                                                         |
-| `sonar.coverage.jacoco.xmlReportPaths` | `build/reports/jacocoMergedReport/jacocoMergedReport.xml`                        |
+| `sonar.coverage.jacoco.xmlReportPaths` | `build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml`                 |
 | `sonar.pitest.reportPaths`             | `build/reports/pitest/mutations.xml`                                             |
 | `sonar.externalIssuesReportPaths`      | `build/issues.json`                                                              |
 

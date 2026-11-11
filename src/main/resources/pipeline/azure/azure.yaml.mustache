@@ -76,12 +76,12 @@ stages:
             displayName: 'Publish code coverage'
             inputs:
               {{#monoRepo}}
-              summaryFileLocation: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
-              reportDirectory: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacocoMergedReport/html'
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/$(projectName)/build/reports/jacoco/jacocoMergedReport/html'
               {{/monoRepo}}
               {{^monoRepo}}
-              summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/jacocoMergedReport.xml'
-              reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacocoMergedReport/html'
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/build/reports/jacoco/jacocoMergedReport/html'
               {{/monoRepo}}
 
           - task: publish-report-html@0

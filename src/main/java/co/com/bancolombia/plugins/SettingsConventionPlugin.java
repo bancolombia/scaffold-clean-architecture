@@ -14,6 +14,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.initialization.Settings;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.logging.Logging;
+import org.jspecify.annotations.NonNull;
 
 public class SettingsConventionPlugin implements Plugin<Settings> {
   private static final Logger LOGGER = Logging.getLogger(SettingsConventionPlugin.class);
@@ -28,7 +29,7 @@ public class SettingsConventionPlugin implements Plugin<Settings> {
 
   /** Applies settings conventions and dynamically includes Gradle modules. */
   @Override
-  public void apply(Settings settings) {
+  public void apply(@NonNull Settings settings) {
     configureBuildCache(settings);
     configurePluginResolution(settings);
     includeModules(settings);

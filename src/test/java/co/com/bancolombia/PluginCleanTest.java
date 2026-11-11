@@ -34,6 +34,7 @@ import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.wrapper.Wrapper;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.gradle.testing.jacoco.tasks.JacocoReport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -184,6 +185,27 @@ class PluginCleanTest {
   }
 
   @Test
+  void shouldWriteTheMergedJacocoReportWhereSonarAndPipelinesExpectIt() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    Project child = ProjectBuilder.builder().withName("app-service").withParent(project).build();
+    child.getPluginManager().apply("java");
+
+    // Act
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+
+    // Assert
+    JacocoReport report = (JacocoReport) project.getTasks().getByName("jacocoMergedReport");
+    Path buildDir = project.getLayout().getBuildDirectory().get().getAsFile().toPath();
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml"),
+        report.getReports().getXml().getOutputLocation().get().getAsFile().toPath());
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/html"),
+        report.getReports().getHtml().getOutputLocation().get().getAsFile().toPath());
+  }
+
+  @Test
   void shouldNotRegisterPitestAggregationWhenPluginIsNotDeclared() {
     // Arrange
     Project project = ProjectBuilder.builder().build();
@@ -258,10 +280,7 @@ class PluginCleanTest {
             .noneMatch(dependency -> "spring-boot-devtools".equals(dependency.getName())));
     assertHasExternalDependency(
         appService, "testImplementation", "tools.jackson.core", "jackson-databind", null);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
     assertHasExternalDependency(
         appService, "testImplementation", "com.tngtech.archunit", "archunit", "9.8.7");
     assertTrue(appService.getPlugins().hasPlugin("org.springframework.boot"));
@@ -331,10 +350,7 @@ class PluginCleanTest {
         "com.tngtech.archunit",
         "archunit",
         Constants.ARCH_UNIT_VERSION);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
   }
 
   @Test
@@ -423,9 +439,8 @@ class PluginCleanTest {
     return category != null && Category.REGULAR_PLATFORM.equals(category.getName());
   }
 
-  private long countExternalDependencies(
-      Project project, String configuration, String group, String name) {
-    return project.getConfigurations().getByName(configuration).getDependencies().stream()
+  private long countExternalDependencies(Project project, String group, String name) {
+    return project.getConfigurations().getByName("testImplementation").getDependencies().stream()
         .filter(ExternalModuleDependency.class::isInstance)
         .map(ExternalModuleDependency.class::cast)
         .filter(
