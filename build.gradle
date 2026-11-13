@@ -320,6 +320,7 @@ tasks.register('installGitHooks') {
 tasks.named('wrapper') {
     gradleVersion = '9.9.1'
     distributionSha256Sum = 'd8a18a7a841dd5df825d35a685fad6f2d7f12ac0c280e57b67c27b4a520ba228'
+    validateDistributionUrl = true
 }
 
 tasks.register('ci-updater', JavaExec) {

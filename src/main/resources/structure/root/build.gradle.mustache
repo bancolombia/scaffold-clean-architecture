@@ -39,8 +39,13 @@ subprojects {
     ext['jackson-bom.version'] = "{{JACKSON_VERSION}}"
 }
 
-{{#example}}
+tasks.named('wrapper') {
+    gradleVersion = '{{GRADLE_WRAPPER_VERSION}}'
+    distributionSha256Sum = '{{GRADLE_WRAPPER_SHA256}}'
+    validateDistributionUrl = true
+}
 
+{{#example}}
 sonar {
     properties {
         property "sonar.organization", "grupo-bancolombia"

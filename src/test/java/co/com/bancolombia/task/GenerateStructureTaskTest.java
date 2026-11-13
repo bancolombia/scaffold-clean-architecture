@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.task.AbstractCleanArchitectureDefaultTask.BooleanOption;
 import java.io.File;
@@ -111,6 +112,21 @@ class GenerateStructureTaskTest {
         Files.readString(
             Path.of(dir, "applications/app-service/src/main/resources/application.yaml"));
     assertFalse(yaml.contains("h2"));
+  }
+
+  @Test
+  void shouldConfigureTheWrapperTaskInTheRootBuildGradle() throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+    // Act
+    task.execute();
+    // Assert
+    String buildGradle = Files.readString(Path.of(dir, "build.gradle"));
+    assertTrue(buildGradle.contains("tasks.named('wrapper') {"));
+    assertTrue(buildGradle.contains("gradleVersion = '" + Constants.GRADLE_WRAPPER_VERSION + "'"));
+    assertTrue(
+        buildGradle.contains("distributionSha256Sum = '" + Constants.GRADLE_WRAPPER_SHA256 + "'"));
+    assertTrue(buildGradle.contains("validateDistributionUrl = true"));
   }
 
   @Test
