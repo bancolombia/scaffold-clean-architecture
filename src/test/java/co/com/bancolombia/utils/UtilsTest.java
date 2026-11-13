@@ -6,11 +6,14 @@ import co.com.bancolombia.exceptions.ParamNotFoundException;
 import com.github.mustachejava.resolver.DefaultResolver;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -395,6 +398,29 @@ class UtilsTest {
     }
 
     @Test
+    void shouldSkipBuildOutputsWhenGettingGradleFiles(@TempDir Path root) throws IOException {
+        Files.createDirectories(root.resolve("domain/model/build/tmp"));
+        Files.createDirectories(root.resolve("build/tmp"));
+        Files.writeString(root.resolve("build.gradle"), "");
+        Files.writeString(root.resolve("domain/model/build.gradle"), "");
+        Files.writeString(root.resolve("domain/model/build/tmp/generated.gradle"), "");
+        Files.writeString(root.resolve("build/tmp/other.gradle"), "");
+
+        List<String> result = Utils.getAllFilesWithGradleExtension(root.toString());
+
+        assertEquals(2, result.size());
+        assertTrue(result.stream().noneMatch(s -> s.contains("/build/")));
+    }
+
+    @Test
+    void shouldGetGradleFilesWhenTheBaseIsABuildDirectory(@TempDir Path temp) throws IOException {
+        Path base = Files.createDirectories(temp.resolve("build"));
+        Files.writeString(base.resolve("build.gradle"), "");
+
+        assertEquals(1, Utils.getAllFilesWithGradleExtension(base.toString()).size());
+    }
+
+    @Test
     void sample() {
         assertEquals("my/path/package", "my.path.package".replace('.', '/'));
         assertEquals("mypathpackage", "my'path'package".replace("'", ""));
@@ -419,4 +445,3 @@ class UtilsTest {
         D
     }
 }
-// @formatter:on

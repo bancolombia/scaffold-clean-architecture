@@ -28,4 +28,4 @@ onlyUpdater=true
 ```
 
 This tas will update gradle dependencies and gradle plugin versions. It also updates the Gradle version of the `wrapper`
-task and, when declared, its `distributionSha256Sum`.
+task and, when declared, its `distributionSha256Sum`. See [Gradle Wrapper](./7-gradle-wrapper.md).

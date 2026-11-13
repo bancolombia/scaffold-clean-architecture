@@ -3,9 +3,13 @@ package co.com.bancolombia.utils;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +18,9 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
@@ -143,23 +147,41 @@ public class Utils {
   }
 
   public static List<String> getAllFilesWithGradleExtension(String base) throws IOException {
-    List<String> paths;
-    try (Stream<Path> walk = Files.walk(Paths.get(base))) {
-      paths =
-          walk.filter(p -> !Files.isDirectory(p))
-              .map(Path::toString)
-              .filter(f -> f.endsWith("gradle") && !f.contains(".git"))
-              .filter(f -> !f.contains(".git"))
-              .filter(f -> !f.contains("settings.gradle"))
-              .map(f -> f.replace("\\", "/"))
-              .filter(f -> !f.contains("/bin/"))
-              .filter(f -> !f.contains("/resources/"))
-              .filter(f -> !f.contains("/examples-ca/"))
-              .map(p -> p.replace("build/functionalTest/", ""))
-              .map(p -> p.replace("build/unitTest/", ""))
-              .toList();
-    }
-    return paths;
+    Path root = Paths.get(base);
+    List<String> paths = new ArrayList<>();
+    Files.walkFileTree(
+        root,
+        new SimpleFileVisitor<>() {
+          @Override
+          public @NonNull FileVisitResult preVisitDirectory(
+              @NonNull Path dir, @NonNull BasicFileAttributes attrs) {
+            boolean buildOutput = !dir.equals(root) && "build".equals(dir.getFileName().toString());
+            return buildOutput ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public @NonNull FileVisitResult visitFile(
+              @NonNull Path file, @NonNull BasicFileAttributes attrs) {
+            paths.add(file.toString());
+            return FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public @NonNull FileVisitResult visitFileFailed(
+              @NonNull Path file, @NonNull IOException exception) {
+            return FileVisitResult.CONTINUE;
+          }
+        });
+    return paths.stream()
+        .filter(f -> f.endsWith("gradle") && !f.contains(".git"))
+        .filter(f -> !f.contains("settings.gradle"))
+        .map(f -> f.replace("\\", "/"))
+        .filter(f -> !f.contains("/bin/"))
+        .filter(f -> !f.contains("/resources/"))
+        .filter(f -> !f.contains("/examples-ca/"))
+        .map(p -> p.replace("build/functionalTest/", ""))
+        .map(p -> p.replace("build/unitTest/", ""))
+        .toList();
   }
 
   public static String replaceGroup(
