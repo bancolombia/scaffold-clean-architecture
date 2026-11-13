@@ -153,19 +153,22 @@ public class Utils {
         root,
         new SimpleFileVisitor<>() {
           @Override
-          public @NonNull FileVisitResult preVisitDirectory(@NonNull Path dir, @NonNull BasicFileAttributes attrs) {
+          public @NonNull FileVisitResult preVisitDirectory(
+              @NonNull Path dir, @NonNull BasicFileAttributes attrs) {
             boolean buildOutput = !dir.equals(root) && "build".equals(dir.getFileName().toString());
             return buildOutput ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
           }
 
           @Override
-          public @NonNull FileVisitResult visitFile(@NonNull Path file, @NonNull BasicFileAttributes attrs) {
+          public @NonNull FileVisitResult visitFile(
+              @NonNull Path file, @NonNull BasicFileAttributes attrs) {
             paths.add(file.toString());
             return FileVisitResult.CONTINUE;
           }
 
           @Override
-          public @NonNull FileVisitResult visitFileFailed(@NonNull Path file, @NonNull IOException exception) {
+          public @NonNull FileVisitResult visitFileFailed(
+              @NonNull Path file, @NonNull IOException exception) {
             return FileVisitResult.CONTINUE;
           }
         });
