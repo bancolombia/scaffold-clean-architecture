@@ -315,3 +315,6 @@ swagger*.yaml
 /build-cache/
 
 .kiro
+
+# Release tooling (semantic-release)
+node_modules/
