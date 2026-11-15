@@ -12,10 +12,13 @@ import lombok.NoArgsConstructor;
 public class AnalyticsExporter {
   private static final String ENDPOINT = "";
 
+  // ENDPOINT is empty in the source and replaced on release, so the IDE sees a constant condition
+  @SuppressWarnings("ConstantValue")
   public static void collectMetric(AnalyticsBody body) throws IOException {
-    if (!shouldMock()) {
-      RestConsumer.postRequest(ENDPOINT, body, Map.class);
+    if (ENDPOINT.isBlank() || shouldMock()) {
+      return;
     }
+    RestConsumer.postRequest(ENDPOINT, body, Map.class);
   }
 
   private static boolean shouldMock() {
