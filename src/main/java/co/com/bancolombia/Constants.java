@@ -19,7 +19,7 @@ public final class Constants {
   public static final String REACTIVE_COMMONS_VERSION = "7.8.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
   public static final String BLOCK_HOUND_VERSION = "1.0.18.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.57.13";
+  public static final String AWS_BOM_VERSION = "2.59.1";
   public static final String COMMONS_JMS_VERSION = "3.1.6";
   public static final String ARCH_UNIT_VERSION = "1.5.1";
   public static final String OKHTTP_VERSION = "5.5.1";
@@ -47,7 +47,7 @@ public final class Constants {
   // Gradle plugins
   public static final String PLUGIN_VERSION = "5.2.1";
   public static final String JACOCO_VERSION = "0.8.16";
-  public static final String SONAR_VERSION = "7.5.0.8588";
+  public static final String SONAR_VERSION = "7.6.0.18749";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
