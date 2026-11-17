@@ -2,16 +2,21 @@ package co.com.bancolombia.utils.swagger;
 
 import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.factory.ModuleBuilder;
-import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import io.swagger.codegen.v3.DefaultGenerator;
 import io.swagger.codegen.v3.config.CodegenConfigurator;
+import io.swagger.codegen.v3.generators.DomainModelCodegen;
 import io.swagger.codegen.v3.generators.OpenApiModelPackageResolver;
+import io.swagger.v3.parser.OpenAPIV3Parser;
+import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
@@ -21,6 +26,7 @@ import org.gradle.api.logging.Logger;
 public class Swagger {
 
   private static final String DOMAIN_MODEL_MODULE = "domain/model";
+  private static final String JAVA_SOURCE_FOLDER = "src/main/java";
   private static final String PACKAGE = "package";
   private static final String DOMAIN_MODEL_LANG =
       "io.swagger.codegen.v3.generators.DomainModelCodegen";
@@ -52,7 +58,7 @@ public class Swagger {
     configurator.addAdditionalProperty("invokerPackage", options.getPackageName() + ".api");
     configurator.addAdditionalProperty("fullController", true);
     configurator.setApiPackage(options.getPackageName() + ".api");
-    configurator.setModelPackage(options.getPackageName() + ".api.dtos");
+    configurator.setModelPackage(options.getPackageName() + ".api.model");
     configurator.setLang(resolveLang(options));
 
     List<File> files = run(configurator, null, options.getOutputDir(), options.getLogger());
@@ -63,14 +69,15 @@ public class Swagger {
 
   public static List<String> generateDomainModels(
       ModuleBuilder builder, String specPath, String modelsFilter) {
-    String modelPackage = builder.getStringParam(PACKAGE) + ".model.entities";
-    String outputDir = builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
+    String modelPackage = domainModelPackage(builder);
+    String outputDir = domainModelOutputDir(builder);
     Logger logger = builder.getLogger();
 
     CodegenConfigurator configurator =
         baseConfigurator(resolveSpec(builder, specPath), outputDir, builder.isEnableLombok());
     configurator.setLang(DOMAIN_MODEL_LANG);
     configurator.setModelPackage(modelPackage);
+    configurator.setSkipOverwrite(true);
     configurator.addAdditionalProperty(
         OpenApiModelPackageResolver.BASE_MODEL_PACKAGE, modelPackage);
     configurator.addAdditionalProperty("hideGenerationTimestamp", true);
@@ -83,9 +90,7 @@ public class Swagger {
     List<String> classNames = new ArrayList<>();
     for (File file : generated) {
       logger.lifecycle("OpenAPI domain model generated: {}", file.getAbsolutePath());
-      String className = file.getName().replace(".java", "");
-      ArchitectureValidation.validateModelName(className);
-      classNames.add(className);
+      classNames.add(file.getName().replace(".java", ""));
     }
     return classNames;
   }
@@ -160,6 +165,47 @@ public class Swagger {
       return "io.swagger.codegen.v3.generators.WebClientCodegen";
     }
     return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
+  }
+
+  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
+      ModuleBuilder builder, String specPath, String modelsFilter) {
+    SwaggerParseResult parsed =
+        new OpenAPIV3Parser().readLocation(resolveSpec(builder, specPath), null, null);
+    if (parsed.getOpenAPI() == null) {
+      throw new CleanDomainException("Invalid OpenAPI specification: " + parsed.getMessages());
+    }
+    Set<String> selected =
+        modelsFilter == null || modelsFilter.isBlank()
+            ? Set.of()
+            : Arrays.stream(modelsFilter.split(",")).map(String::trim).collect(Collectors.toSet());
+    return DomainModelCodegen.resolveTargets(
+        parsed.getOpenAPI(), selected, domainModelPackage(builder));
+  }
+
+  public static Path domainModelSourceRoot(ModuleBuilder builder) {
+    return Path.of(domainModelOutputDir(builder), JAVA_SOURCE_FOLDER);
+  }
+
+  private static String domainModelPackage(ModuleBuilder builder) {
+    return builder.getStringParam(PACKAGE) + ".model.entities";
+  }
+
+  private static String domainModelOutputDir(ModuleBuilder builder) {
+    return builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
+  }
+
+  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
+      ModuleBuilder builder, String spec, String models, String basePackage) {
+    SwaggerParseResult parsed =
+        new OpenAPIV3Parser().readLocation(resolveSpec(builder, spec), null, null);
+    if (parsed.getOpenAPI() == null) {
+      throw new IllegalArgumentException("Invalid OpenAPI specification: " + parsed.getMessages());
+    }
+    Set<String> selected =
+        models == null || models.isBlank()
+            ? Set.of()
+            : Arrays.stream(models.split(",")).map(String::trim).collect(Collectors.toSet());
+    return DomainModelCodegen.resolveTargets(parsed.getOpenAPI(), selected, basePackage);
   }
 
   @Builder

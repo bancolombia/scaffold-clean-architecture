@@ -31,14 +31,14 @@ gradle gep --type [entryPointType]
 | **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`                  | `tomcat`, `jetty`                     | `tomcat`               |
 |                       |                                        | `--authorization`           | `true`, `false`                       | `false`                |
 |                       |                                        | `--versioning`              | `HEADER`, `PATH`, `NONE`              | `NONE`                 | 
-|                       |                                        | `--from-openapi`            | File path                             | `swagger.yaml`         |
+|                       |                                        | `--from-swagger`            | File path                             | `swagger.yaml`         |
 |                       |                                        | `--swagger`                 | `true`, `false`                       | `false`                |
 | **rsocket**           | Rsocket Controller Entry Point         | -                           | -                                     | -                      |
 | **sqs**               | SQS Listener                           | -                           | -                                     | -                      |
 | **webflux**           | API REST (Spring Boot Starter WebFlux) | `--router`                  | `true`, `false`                       | `true`                 |
 |                       |                                        | `--authorization`           | `true`, `false`                       | `false`                |
 |                       |                                        | `--versioning`              | `HEADER`, `PATH`, `NONE`              | `NONE`                 |
-|                       |                                        | `--from-openapi`            | File path                             | `swagger.yaml`         |
+|                       |                                        | `--from-swagger`            | File path                             | `swagger.yaml`         |
 |                       |                                        | `--swagger`                 | `true`, `false`                       | `false`                |
 | **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`                    | String                                | -                      |
 |                       |                                        | `--topic-consumer`          | String (topic name)                   | `test-with-registries` |

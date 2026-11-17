@@ -2,17 +2,15 @@ package io.swagger.codegen.v3.generators;
 
 import io.swagger.codegen.v3.CodegenModel;
 import io.swagger.codegen.v3.CodegenProperty;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import io.swagger.v3.oas.models.OpenAPI;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DomainModelCodegen extends AbstractScaffoldCodegen {
 
+  static final String SUPER_BUILDER = "x-use-super-builder";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
 
   public DomainModelCodegen() {
@@ -61,32 +59,33 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
   public Map<String, Object> postProcessAllModels(Map<String, Object> processedModels) {
     Map<String, Object> result = super.postProcessAllModels(processedModels);
     String baseModelPackage = getBaseModelPackage();
-
     Map<String, String> openapiClassToDomainClass = new HashMap<>();
     Map<String, String> schemaKeyToPackage = new HashMap<>();
     Map<String, String> openapiClassToPackage = new HashMap<>();
-
     for (String schemaKey : result.keySet()) {
       String openapiClassName = super.toModelName(schemaKey);
       String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
       String modelPackage =
           OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName);
-
       openapiClassToDomainClass.put(openapiClassName, domainClassName);
       schemaKeyToPackage.put(schemaKey, modelPackage);
       openapiClassToPackage.put(openapiClassName, modelPackage);
     }
 
+    Set<String> openapiModelImports =
+        openapiClassToDomainClass.keySet().stream()
+            .map(this::toModelImport)
+            .collect(Collectors.toSet());
+
+    List<CodegenModel> allModels = new ArrayList<>();
     for (Map.Entry<String, Object> entry : result.entrySet()) {
       String schemaKey = entry.getKey();
       String openapiClassName = super.toModelName(schemaKey);
       String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
       String modelPackage = schemaKeyToPackage.get(schemaKey);
-
       Map<String, Object> models = (Map<String, Object>) entry.getValue();
       models.put("package", modelPackage);
       models.put("classname", domainClassName);
-
       List<Map<String, Object>> modelList = (List<Map<String, Object>>) models.get("models");
       if (modelList == null) {
         continue;
@@ -99,17 +98,62 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         codegenModel.classname = domainClassName;
         models.put(
             "imports",
-            buildImports(
-                codegenModel, modelPackage, openapiClassToPackage, openapiClassToDomainClass));
+            mergeImports(
+                models.get("imports"),
+                buildImports(
+                    codegenModel, modelPackage, openapiClassToPackage, openapiClassToDomainClass),
+                openapiModelImports));
         remapPropertyTypes(codegenModel, openapiClassToDomainClass);
+        if (codegenModel.parent != null) {
+          codegenModel.parent = remapType(codegenModel.parent, openapiClassToDomainClass);
+        }
+        codegenModel.vars.forEach(this::clearNullDefault);
+        allModels.add(codegenModel);
       }
     }
+    markInheritance(allModels);
     return result;
   }
 
-  // Es necesario remappear para que las propiedades de las clases correspondan a los nombres de las
-  // clases a las que
-  // hacen referencia
+  @SuppressWarnings("unchecked")
+  private static List<Map<String, String>> mergeImports(
+      Object codegenImports,
+      List<Map<String, String>> domainImports,
+      Set<String> openapiModelImports) {
+    Map<String, Map<String, String>> merged = new LinkedHashMap<>();
+    if (codegenImports instanceof List<?> list) {
+      for (Object item : list) {
+        Map<String, String> imp = (Map<String, String>) item;
+        String fqcn = imp.get("import");
+        if (fqcn != null && !openapiModelImports.contains(fqcn)) {
+          merged.putIfAbsent(fqcn, imp);
+        }
+      }
+    }
+    domainImports.forEach(imp -> merged.putIfAbsent(imp.get("import"), imp));
+    return new ArrayList<>(merged.values());
+  }
+
+  private void clearNullDefault(CodegenProperty property) {
+    if ("null".equals(property.defaultValue)) {
+      property.defaultValue = null;
+    }
+  }
+
+  private void markInheritance(List<CodegenModel> models) {
+    Set<String> parents =
+        models.stream()
+            .map(model -> model.parent)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
+    for (CodegenModel model : models) {
+      if (model.parent != null || parents.contains(model.classname)) {
+        model.getVendorExtensions().put(SUPER_BUILDER, true);
+      }
+    }
+  }
+
+  // Remap property types so they reference the cleaned domain class names.
   private void remapPropertyTypes(
       CodegenModel model, Map<String, String> openapiClassToDomainClass) {
     for (CodegenProperty property : model.allVars) {
@@ -122,7 +166,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     }
   }
 
-  // Es necesario remappear para que las clases correspondan a sus nombres
+  // Remap property type so they reference the cleaned domain class names.
   private void remapOneProperty(CodegenProperty property, Map<String, String> map) {
     property.datatype = remapType(property.datatype, map);
     property.baseType = remapType(property.baseType, map);
@@ -164,6 +208,9 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
       Map<String, String> openapiClassToPackage,
       Map<String, String> openapiClassToDomainClass) {
     Set<String> importOpenapiTypes = new LinkedHashSet<>();
+    if (model.parent != null) {
+      importOpenapiTypes.add(model.parent);
+    }
     for (CodegenProperty property : model.allVars) {
       collectReferencedOpenapiTypes(property.datatype, importOpenapiTypes);
       collectReferencedOpenapiTypes(property.baseType, importOpenapiTypes);
@@ -201,5 +248,33 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     if (Character.isUpperCase(datatype.charAt(0))) {
       importOpenapiTypes.add(datatype);
     }
+  }
+
+  public record ModelTarget(String schemaKey, String className, String packageName) {
+    public String relativePath() {
+      return packageName.replace('.', '/') + "/" + className + ".java";
+    }
+  }
+
+  public static List<ModelTarget> resolveTargets(
+      OpenAPI openAPI, Set<String> selectedSchemas, String baseModelPackage) {
+    DomainModelCodegen codegen = new DomainModelCodegen();
+    Set<String> schemaKeys =
+        openAPI.getComponents() == null || openAPI.getComponents().getSchemas() == null
+            ? Set.of()
+            : openAPI.getComponents().getSchemas().keySet();
+    List<ModelTarget> targets = new ArrayList<>();
+    for (String schemaKey : schemaKeys) {
+      if (!selectedSchemas.isEmpty() && !selectedSchemas.contains(schemaKey)) {
+        continue;
+      }
+      String openapiClassName = codegen.toModelName(schemaKey);
+      targets.add(
+          new ModelTarget(
+              schemaKey,
+              OpenApiModelPackageResolver.cleanModelName(openapiClassName),
+              OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName)));
+    }
+    return targets;
   }
 }

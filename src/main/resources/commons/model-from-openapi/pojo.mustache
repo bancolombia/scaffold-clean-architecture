@@ -1,13 +1,17 @@
 /**
 * {{#description}}{{.}}{{/description}}{{^description}}{{classname}}{{/description}}
 */
-{{#useBeanValidation}}@Validated{{/useBeanValidation}}
 {{#lombok}}
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+{{#vendorExtensions.x-use-super-builder}}
+@SuperBuilder(toBuilder = true)
+{{/vendorExtensions.x-use-super-builder}}
+{{^vendorExtensions.x-use-super-builder}}
 @Builder(toBuilder = true)
+{{/vendorExtensions.x-use-super-builder}}
 {{/lombok}}
 public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializableModel}} implements Serializable {{#interfaceModels}}, {{classname}}{{^@last}}, {{/@last}}{{#@last}} {{/@last}}{{/interfaceModels}}{{/serializableModel}}{{^serializableModel}}{{#interfaceModels}}{{#@first}}implements {{/@first}}{{classname}}{{^@last}}, {{/@last}}{{#@last}}{{/@last}}{{/interfaceModels}}{{/serializableModel}} {
 {{#vars}}
@@ -21,64 +25,7 @@ public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializ
     private {{{datatypeWithEnum}}} {{name}}{{#defaultValue}}{{#required}} = {{{defaultValue}}}{{/required}}{{/defaultValue}};
     {{/isContainer}}
     {{^isContainer}}
-    {{#useBeanValidation}}{{>beanValidation}}{{/useBeanValidation}}
-    private {{{datatypeWithEnum}}} {{name}} = {{{defaultValue}}};
+    private {{{datatypeWithEnum}}} {{name}};
     {{/isContainer}}
 {{/vars}}
-{{^lombok}}
-{{#vars}}
-
-    public {{classname}} {{name}}({{{datatypeWithEnum}}} {{name}}) {
-        this.{{name}} = {{name}};
-        return this;
-    }
-    {{#isListContainer}}
-
-    public {{classname}} add{{nameInCamelCase}}Item({{{items.datatypeWithEnum}}} {{name}}Item) {
-    {{^required}}
-        if (this.{{name}} == null) {
-            this.{{name}} = {{{defaultValue}}};
-        }
-    {{/required}}
-        this.{{name}}.add({{name}}Item);
-        return this;
-    }
-    {{/isListContainer}}
-    {{#isMapContainer}}
-    public {{classname}} put{{nameInCamelCase}}Item(String key, {{{items.datatypeWithEnum}}} {{name}}Item) {
-    {{^required}}
-        if (this.{{name}} == null) {
-            this.{{name}} = {{{defaultValue}}};
-        }
-    {{/required}}
-        this.{{name}}.put(key, {{name}}Item);
-        return this;
-    }
-    {{/isMapContainer}}
-
-    /**
-    {{#description}}
-        * {{{description}}}
-    {{/description}}
-    {{^description}}
-        * Get {{name}}
-    {{/description}}
-    {{#minimum}}
-        * minimum: {{minimum}}
-    {{/minimum}}
-    {{#maximum}}
-        * maximum: {{maximum}}
-    {{/maximum}}
-    * @return {{name}}
-    **/
-    {{#useBeanValidation}}{{>bean-validation}}{{/useBeanValidation}}
-    public {{{datatypeWithEnum}}} {{getter}}() {
-        return {{name}};
-    }
-
-    public void {{setter}}({{{datatypeWithEnum}}} {{name}}) {
-        this.{{name}} = {{name}};
-    }
-{{/vars}}
-{{/lombok}}
 }

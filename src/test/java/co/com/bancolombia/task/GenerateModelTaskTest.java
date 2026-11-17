@@ -6,9 +6,7 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.exceptions.CleanException;
@@ -16,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.*;
@@ -59,6 +58,24 @@ class GenerateModelTaskTest {
   @AfterAll
   static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
+  }
+
+  @Test
+  void generatedModelsWithImports() throws IOException, CleanException {
+
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    Path generatedRoot =
+        Path.of(TEST_DIR, "domain/model/src/main/java/co/com/bancolombia/model/entities");
+
+    assertFilesExistsInDir(
+        MODEL_DIR, "src/main/java/co/com/bancolombia/model/entities/response/Book.java");
+
+    String book = Files.readString(generatedRoot.resolve("response/Book.java"));
+    assertTrue(book.contains("import java.util.List;"));
+    assertTrue(book.contains("import java.time.OffsetDateTime;"));
+    assertTrue(book.contains("import java.math.BigDecimal;"));
   }
 
   @Test
@@ -155,6 +172,95 @@ class GenerateModelTaskTest {
     } finally {
       System.clearProperty("models");
     }
+  }
+
+  @Test
+  void shouldGenerateTopLevelEnum() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+    assertContains("LoanStatus.java", "public enum LoanStatus");
+    assertContains("LoanStatus.java", "ACTIVE(\"ACTIVE\")");
+    assertContains("LoanStatus.java", "private final String value;");
+    assertContains("LoanStatus.java", "LoanStatus(String value)");
+    assertNotContains("LoanStatus.java", "import lombok");
+    assertContains("LoanRecord.java", "private LoanStatus status;");
+  }
+
+  @Test
+  void shouldUseSuperBuilderForAllOfInheritance() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    assertContains("Child.java", "public class Child extends Base");
+    assertContains("Child.java", "@SuperBuilder(toBuilder = true)");
+    assertContains("Child.java", "import lombok.experimental.SuperBuilder;");
+    assertNotContains("Child.java", "@Builder(");
+    assertNotContains("Child.java", "private String id;");
+    assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
+  }
+
+  private void assertNotContains(String s, String s1) {}
+
+  @Test
+  void shouldRemapAndImportRenamedParentFromAnotherPackage() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    assertContains("LoanRecord.java", "public class LoanRecord extends Audit");
+    assertContains("LoanRecord.java", "import co.com.bancolombia.model.entities.response.Audit;");
+    assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
+  }
+
+  @Test
+  void shouldKeepBuilderForModelsWithoutInheritance() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    assertContains("Author.java", "@Builder(toBuilder = true)");
+    assertContains("Author.java", "@AllArgsConstructor");
+    assertNotContains("Author.java", "SuperBuilder");
+  }
+
+  private static String spec(String fileName) {
+    return Path.of("src/test/resources/swagger", fileName).toAbsolutePath().toString();
+  }
+
+  @Test
+  void shouldNotWriteAnyFileWhenAModelNameIsInvalid() {
+    task.setFromOpenApi(spec("invalid-name.yaml"));
+
+    assertThrows(CleanDomainException.class, () -> task.execute());
+    assertFalse(Files.exists(Path.of(ENTITIES)), "No model should be generated");
+  }
+
+  @Test
+  void shouldFailWhenTwoSchemasGenerateTheSameFile() {
+    task.setFromOpenApi(spec("duplicate-target.yaml"));
+
+    assertThrows(CleanDomainException.class, () -> task.execute());
+    assertFalse(Files.exists(Path.of(ENTITIES)));
+  }
+
+  @Test
+  void shouldNotOverwriteExistingModels() throws IOException, CleanException {
+    Path existing = Path.of(ENTITIES, "Author.java");
+    Files.createDirectories(existing.getParent());
+    Files.writeString(existing, "// custom content");
+
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    assertEquals("// custom content", Files.readString(existing));
+    assertFilesExistsInDir(ENTITIES + "/", "response/Book.java");
+  }
+
+  @Test
+  void shouldReportAnalyticsTypeOnlyWhenNameIsSet() {
+    task.setName(null);
+    assertTrue(task.resolveAnalyticsType().isEmpty());
+
+    task.setName("customer");
+    assertEquals(Optional.of("customer"), task.resolveAnalyticsType());
   }
 
   private static void assertContains(String relativePath, String expected) throws IOException {

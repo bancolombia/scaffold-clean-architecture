@@ -57,12 +57,30 @@ components:
           type: integer
           format: int32
           example: 250
+          default: 10
         author:
           $ref: '#/components/schemas/author'
         coAuthors:
           type: array
           items:
             $ref: '#/components/schemas/author'
+        tags:
+          type: array
+          description: Keywords used to classify the book
+          items:
+            type: string
+          example:
+            - fiction
+            - classic
+        publishedAt:
+          type: string
+          format: date-time
+          description: Date and time the book was published
+          example: '2020-05-17T10:30:00Z'
+        price:
+          type: number
+          description: Retail price of the book
+          example: 19.99
         availability:
           type: string
           description: Current loan status of the book
@@ -70,3 +88,45 @@ components:
             - AVAILABLE
             - BORROWED
             - LOST
+    base:
+      type: object
+      description: Parent model in the same package as its child
+      properties:
+        id:
+          type: string
+    child:
+      description: Inherits from base
+      allOf:
+        - $ref: '#/components/schemas/base'
+        - type: object
+          properties:
+            name:
+              type: string
+    auditResponse:
+      type: object
+      description: Parent model that is renamed and lives in another package
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+    loanRecord:
+      allOf:
+        - $ref: '#/components/schemas/auditResponse'
+        - type: object
+          properties:
+            loanId:
+              type: string
+            dueDate:
+              type: string
+              format: date-time
+            status:
+              $ref: '#/components/schemas/loanStatus'
+    loanStatus:
+      type: string
+      description: Status of a loan
+      enum:
+        - ACTIVE
+        - RETURNED
+        - OVERDUE

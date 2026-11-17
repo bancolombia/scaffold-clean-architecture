@@ -2,26 +2,24 @@ package io.swagger.codegen.v3.generators;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class OpenApiModelPackageResolver {
 
   public static final String BASE_MODEL_PACKAGE = "baseModelPackage";
 
-  private static final Pattern REQUEST_OR_RESPONSE =
-      Pattern.compile("request|response", Pattern.CASE_INSENSITIVE);
-
-  private static final Pattern DEFAULT_MODELS =
-      Pattern.compile("meta|failure|error|UnauthorizedObject", Pattern.CASE_INSENSITIVE);
+  private static final Pattern REQUEST_OR_RESPONSE_SUFFIX =
+      Pattern.compile("(request|response)$", Pattern.CASE_INSENSITIVE);
 
   private OpenApiModelPackageResolver() {}
 
   /**
-   * Agrega el package respectivo a la clase
+   * Add the corresponding package to the class
    *
-   * @param baseModelPackage nombre del package base
-   * @param className nombre del modelo en el contrato
-   * @return nombre del package base mas la carpeta correspondiente
+   * @param baseModelPackage Name of the base package
+   * @param className Contract´s model name
+   * @return base package name plus it´s corresponding folder
    */
   static String resolvePackage(String baseModelPackage, String className) {
     String segment = resolveFolderSegment(className);
@@ -32,31 +30,26 @@ public final class OpenApiModelPackageResolver {
   }
 
   /**
-   * Separa los modelos en folders request y response respectivamente
+   * Separate the models into 'request' and 'response' folders, respectively.
    *
-   * @param className Nombre del modelo
-   * @return Dicta si va a carpteta request, response o ninguna basado en su nombre
+   * @param className Model name
+   * @return Determine whether the item should be filed under "request," "response," or neither,
+   *     based on its name.
    */
   static String resolveFolderSegment(String className) {
-    String lower = className.toLowerCase(Locale.ROOT);
-    if (DEFAULT_MODELS.matcher(className).find()) {
-      return "common";
-    }
-    if (lower.contains("response")) {
-      return "response";
-    }
-    if (lower.contains("request")) {
-      return "request";
+    Matcher suffix = REQUEST_OR_RESPONSE_SUFFIX.matcher(className);
+    if (suffix.find()) {
+      return suffix.group(1).toLowerCase(Locale.ROOT);
     }
     return "";
   }
 
   /**
-   * Asignael archivo en su carpeta correspondiente
+   * Assign the file to its corresponding folder
    *
-   * @param originalClassName nombre del modelo en el Contrato
-   * @param domainClassName el nombre del archivo
-   * @return
+   * @param originalClassName Contract´s model name
+   * @param domainClassName File name
+   * @return model file path
    */
   static String modelFilePath(String originalClassName, String domainClassName) {
     String segment = resolveFolderSegment(originalClassName);
@@ -67,15 +60,13 @@ public final class OpenApiModelPackageResolver {
   }
 
   /**
-   * Limpia los nombres de los modelos para cumplir arquitectura limpia
+   * Clean up model names to comply with clean architecture.
    *
-   * @param className nombre del Modelo
-   * @return nombre del modelo sin la palabre Response o Request
+   * @param className Model name
+   * @return model name without the word Response or Request
    */
   static String cleanModelName(String className) {
-    if (!REQUEST_OR_RESPONSE.matcher(className).find()) {
-      return className;
-    }
-    return REQUEST_OR_RESPONSE.matcher(className).replaceAll("").trim();
+    String cleaned = REQUEST_OR_RESPONSE_SUFFIX.matcher(className).replaceFirst("");
+    return cleaned.isEmpty() ? className : cleaned;
   }
 }
