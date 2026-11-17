@@ -1,6 +1,6 @@
 name: Enhancement Request
 description: The Enhancement Request is used to formalize and document proposals aimed at improving existing features or proposing new functionalities.
-labels: ["c:enhancement"]
+labels: ["enhancement"]
 body:
   - type: textarea
     validations:
