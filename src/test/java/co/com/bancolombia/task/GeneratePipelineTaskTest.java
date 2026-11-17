@@ -7,16 +7,20 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GeneratePipelineTaskTest {
@@ -41,6 +45,12 @@ class GeneratePipelineTaskTest {
     task = createTask(project, GeneratePipelineTask.class);
   }
 
+  @BeforeEach
+  void resetTaskOptions() {
+    task.getOtel().set(false);
+    task.setMonoRepo(AbstractCleanArchitectureDefaultTask.BooleanOption.FALSE);
+  }
+
   @AfterAll
   static void tearDown() {
     deleteStructure(Path.of(TEST_DIR));
@@ -56,7 +66,8 @@ class GeneratePipelineTaskTest {
     assertFilesExistsInDir(TEST_DIR + "/deployment/", "cleanarchitecture_azure_build.yaml");
     assertFileContains(
         TEST_DIR + "/deployment/cleanarchitecture_azure_build.yaml",
-        "sonar.projectKey=$(Build.Repository.Name)");
+        "sonar.projectKey=$(Build.Repository.Name)",
+        "SonarQubePrepare@");
   }
 
   @Test
@@ -81,6 +92,10 @@ class GeneratePipelineTaskTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/deployment/", "Jenkinsfile");
+    String jenkinsfile = Files.readString(Path.of(TEST_DIR, "deployment", "Jenkinsfile"));
+    assertTrue(jenkinsfile.contains("SONAR_TOKEN=\"$SONAR_AUTH_TOKEN\" ./gradlew sonar "));
+    assertFalse(jenkinsfile.contains("sonar.login"));
+    assertFalse(jenkinsfile.contains("gradlew sonarqube"));
   }
 
   @Test
@@ -91,6 +106,7 @@ class GeneratePipelineTaskTest {
     task.execute();
     // Assert
     assertFilesExistsInDir(TEST_DIR + "/.circleci/", "config.yml");
+    assertFileContains(TEST_DIR + "/.circleci/config.yml", "cimg/openjdk");
   }
 
   @Test
@@ -102,6 +118,13 @@ class GeneratePipelineTaskTest {
     // Assert
     assertFilesExistsInDir(
         TEST_DIR + "/.github/workflows/", "cleanarchitecture_github_action_gradle.yaml");
+    String workflow =
+        Files.readString(
+            Path.of(
+                TEST_DIR, ".github", "workflows", "cleanarchitecture_github_action_gradle.yaml"));
+    assertTrue(workflow.contains("actions/checkout@"));
+    assertTrue(workflow.contains("actions/setup-java@"));
+    assertFalse(workflow.matches("(?s).*uses: actions/[\\w-]+@v\\d.*"));
   }
 
   @Test
@@ -110,5 +133,91 @@ class GeneratePipelineTaskTest {
     task.setType(null);
     // Act - Assert
     assertThrows(IllegalArgumentException.class, () -> task.execute());
+  }
+
+  private static String generated(String path) throws IOException {
+    return Files.readString(Path.of(TEST_DIR, path));
+  }
+
+  @Test
+  void pipelinesDoNotShipTheOtelAgentWhenOtelIsDisabled() throws IOException, CleanException {
+    for (String type : new String[] {"AZURE", "CIRCLECI", "JENKINS", "GITHUB"}) {
+      task.setType(type);
+      task.execute();
+    }
+
+    assertFalse(generated("deployment/cleanarchitecture_azure_build.yaml").contains("otel"));
+    assertFalse(generated(".circleci/config.yml").contains("otel"));
+    assertFalse(generated("deployment/Jenkinsfile").contains("otel"));
+    assertFalse(
+        generated(".github/workflows/cleanarchitecture_github_action_gradle.yaml")
+            .contains("otel"));
+  }
+
+  @Test
+  void azureDevOpsPipelinePublishesTheJarsAndTheOtelAgent() throws IOException, CleanException {
+    task.getOtel().set(true);
+    task.setType("AZURE");
+    task.execute();
+
+    String pipeline = generated("deployment/cleanarchitecture_azure_build.yaml");
+
+    assertTrue(pipeline.contains("applications/app-service/build/libs"));
+    assertTrue(pipeline.contains("applications/app-service/build/otel"));
+    assertTrue(pipeline.contains("TargetFolder: '$(Build.ArtifactStagingDirectory)/otel'"));
+    assertTrue(pipeline.contains("PathtoPublish: '$(Build.ArtifactStagingDirectory)'"));
+  }
+
+  @Test
+  void azureDevOpsMonoRepoPipelinePublishesTheOtelAgent() throws IOException, CleanException {
+    task.getOtel().set(true);
+    task.setMonoRepo(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    task.setType("AZURE");
+    task.execute();
+
+    String pipeline = generated("deployment/cleanarchitecture_azure_build.yaml");
+
+    assertTrue(pipeline.contains("$(projectName)/applications/app-service/build/otel"));
+    assertTrue(pipeline.contains("$(projectName)/applications/app-service/build/libs"));
+  }
+
+  @Test
+  void circleCiPipelineStoresAndPersistsTheOtelAgent() throws IOException, CleanException {
+    task.getOtel().set(true);
+    task.setType("CIRCLECI");
+    task.execute();
+
+    String pipeline = generated(".circleci/config.yml");
+
+    assertTrue(pipeline.contains("path: applications/app-service/build/libs/"));
+    assertTrue(pipeline.contains("path: applications/app-service/build/otel/"));
+    assertTrue(pipeline.contains("destination: Artifact/otel"));
+    assertTrue(pipeline.contains("- otel"));
+  }
+
+  @Test
+  void jenkinsPipelineArchivesTheJarsAndTheOtelAgent() throws IOException, CleanException {
+    task.getOtel().set(true);
+    task.setType("JENKINS");
+    task.execute();
+
+    String pipeline = generated("deployment/Jenkinsfile");
+
+    assertTrue(pipeline.contains("applications/app-service/build/libs/*.jar"));
+    assertTrue(pipeline.contains("applications/app-service/build/otel/*.jar"));
+    assertTrue(pipeline.contains("archiveArtifacts artifacts: 'build/artifact/**/*.jar'"));
+  }
+
+  @Test
+  void githubWorkflowUploadsTheJarsAndTheOtelAgent() throws IOException, CleanException {
+    task.getOtel().set(true);
+    task.setType("GITHUB");
+    task.execute();
+
+    String workflow = generated(".github/workflows/cleanarchitecture_github_action_gradle.yaml");
+
+    assertTrue(workflow.contains("applications/app-service/build/libs/*.jar"));
+    assertTrue(workflow.contains("applications/app-service/build/otel/*.jar"));
+    assertTrue(workflow.contains("actions/upload-artifact@"));
   }
 }

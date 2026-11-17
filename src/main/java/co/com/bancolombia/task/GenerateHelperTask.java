@@ -1,11 +1,13 @@
 package co.com.bancolombia.task;
 
 import co.com.bancolombia.task.annotations.CATask;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generateHelper",
     shortcut = "gh",
     description = "Generate helper in infrastructure layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateHelperTask extends AbstractResolvableTypeTask {
 
   @Override

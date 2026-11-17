@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        awsSdkVersion = '2.57.6'
+        awsSdkVersion = '2.57.9'
     }
 }
 
@@ -26,10 +26,4 @@ subprojects {
     pitest {
         excludedClasses = ['co.com.crudtest.model.*']
     }
-}
-
-tasks.named('wrapper') {
-    gradleVersion = '9.8.2'
-    validateDistributionUrl = true
-    distributionSha256Sum = '21bd5da2de49b642904077f38c0efdc7778e92b3ed0889392dca61b97e389607'
 }

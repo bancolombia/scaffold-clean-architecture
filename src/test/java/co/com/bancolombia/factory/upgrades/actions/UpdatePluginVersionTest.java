@@ -5,7 +5,10 @@ import static co.com.bancolombia.Constants.MainFiles.SETTINGS_GRADLE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -109,5 +112,19 @@ class UpdatePluginVersionTest {
             "plugins { id 'co.com.bancolombia.cleanArchitecture.settings' version \""
                 + release.getTagName()
                 + "\" }\n");
+  }
+
+  @Test
+  void shouldNotDowngradeWhenLatestReleaseIsOlder() {
+    // Arrange
+    Release release = new Release();
+    release.setTagName("4.7.7");
+    doReturn(release).when(builder).getLatestRelease();
+    builder.addFile(GRADLE_PROPERTIES, "systemProp.version=" + Utils.getVersionPlugin());
+    // Act
+    boolean applied = updater.up(builder);
+    // Assert
+    assertFalse(applied);
+    verify(builder, never()).addFile(eq(GRADLE_PROPERTIES), contains("4.7.7"));
   }
 }

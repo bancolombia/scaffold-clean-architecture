@@ -5,6 +5,7 @@ import co.com.bancolombia.plugins.ChildConventionPlugin;
 import co.com.bancolombia.plugins.DependencyOverrideConventions;
 import co.com.bancolombia.plugins.RootModuleDependencyConventions;
 import co.com.bancolombia.plugins.RootQualityConventions;
+import co.com.bancolombia.task.GeneratePipelineTask;
 import co.com.bancolombia.task.ValidateStructureTask;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.FileUtils;
@@ -102,7 +103,20 @@ public class PluginClean implements Plugin<Project> {
     project
         .getTasks()
         .withType(Wrapper.class)
-        .configureEach(wrapper -> wrapper.setGradleVersion(Constants.GRADLE_WRAPPER_VERSION));
+        .configureEach(
+            wrapper -> {
+              wrapper.setGradleVersion(Constants.GRADLE_WRAPPER_VERSION);
+              // Resolved at execution time so --gradle-version and user overrides are honored
+              wrapper.doFirst(task -> applyDefaultChecksum((Wrapper) task));
+            });
+  }
+
+  private static void applyDefaultChecksum(Wrapper wrapper) {
+    if (wrapper.getDistributionSha256Sum() == null
+        && wrapper.getDistributionType() == Wrapper.DistributionType.BIN
+        && Constants.GRADLE_WRAPPER_VERSION.equals(wrapper.getGradleVersion())) {
+      wrapper.setDistributionSha256Sum(Constants.GRADLE_WRAPPER_SHA256);
+    }
   }
 
   private void applyChildConventions(Project project) {
@@ -140,6 +154,9 @@ public class PluginClean implements Plugin<Project> {
               if (clazz == ValidateStructureTask.class) {
                 builder.action(buildValidateStructureTaskAction(cleanPluginExtension));
               }
+              if (clazz == GeneratePipelineTask.class) {
+                builder.action(buildGeneratePipelineTaskAction(cleanPluginExtension));
+              }
               return builder.build();
             });
   }
@@ -150,6 +167,12 @@ public class PluginClean implements Plugin<Project> {
     return task ->
         task.getWhitelistedDependencies()
             .set(cleanPluginExtension.getModelProps().getWhitelistedDependencies());
+  }
+
+  @NotNull
+  private Action<? extends GeneratePipelineTask> buildGeneratePipelineTaskAction(
+      CleanPluginExtension cleanPluginExtension) {
+    return task -> task.getOtel().set(cleanPluginExtension.getOtel());
   }
 
   @SuppressWarnings("unchecked")

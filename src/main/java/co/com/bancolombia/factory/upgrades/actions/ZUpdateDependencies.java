@@ -3,11 +3,13 @@ package co.com.bancolombia.factory.upgrades.actions;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
+import co.com.bancolombia.utils.offline.GradleWrapperUpdater;
 import co.com.bancolombia.utils.operations.ExternalOperations;
 import co.com.bancolombia.utils.operations.OperationsProvider;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -32,10 +34,13 @@ public class ZUpdateDependencies implements UpgradeAction {
     List<String> gradleFiles = (List<String>) builder.getParam(FILES_TO_UPDATE);
     Set<String> deps = (Set<String>) builder.getParam(DEPENDENCIES_TO_UPDATE);
 
-    if (deps.isEmpty()) {
+    boolean updateAll = deps.isEmpty();
+    if (updateAll) {
       deps =
           gradleFiles.stream()
-              .flatMap(file -> builder.findExpressions(file, "['\"].+:.+:[^\\$].+['\"]").stream())
+              .flatMap(
+                  file ->
+                      builder.findExpressions(file, DependencyRelease.DECLARATION_REGEX).stream())
               .collect(Collectors.toSet());
     }
 
@@ -45,13 +50,42 @@ public class ZUpdateDependencies implements UpgradeAction {
     String depsMsg = String.join("\n- ", deps);
     logger.lifecycle("Checking {} dependencies updates: \n- {}", dependencies.size(), depsMsg);
 
-    return dependencies.stream()
-        .distinct()
-        .map(operations::getTheLastDependencyRelease)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(release -> applyToFile(builder, gradleFiles, release))
-        .reduce(false, (current, applied) -> current || applied);
+    boolean dependenciesUpdated =
+        dependencies.stream()
+            .distinct()
+            .map(operations::getTheLastDependencyRelease)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(release -> applyToFile(builder, gradleFiles, release))
+            .reduce(false, (current, applied) -> current || applied);
+    return updateWrapper(builder, gradleFiles, updateAll) || dependenciesUpdated;
+  }
+
+  private boolean updateWrapper(ModuleBuilder builder, List<String> files, boolean updateAll) {
+    if (!updateAll) {
+      return false; // only the dependencies requested by the user must change
+    }
+    return operations
+        .getGradleWrapperFromFile()
+        .map(
+            version -> {
+              GradleWrapperUpdater updater = new GradleWrapperUpdater(operations);
+              boolean applied =
+                  files.stream()
+                      .map(file -> updateWrapper(builder, updater, version, file))
+                      .reduce(false, (current, itemApplied) -> current || itemApplied);
+              if (applied) {
+                builder.getLogger().lifecycle("Gradle wrapper updated to {}", version);
+              }
+              return applied;
+            })
+        .orElse(false);
+  }
+
+  @SneakyThrows
+  private boolean updateWrapper(
+      ModuleBuilder builder, GradleWrapperUpdater updater, String version, String file) {
+    return builder.updateFile(file, content -> updater.update(content, version));
   }
 
   @Override
@@ -78,6 +112,7 @@ public class ZUpdateDependencies implements UpgradeAction {
 
   @SneakyThrows
   private boolean update(ModuleBuilder builder, DependencyRelease release, String file) {
-    return builder.updateExpression(file, release.toRegex(), release.toString());
+    return builder.updateExpression(
+        file, release.toRegex(), Matcher.quoteReplacement(release.toString()));
   }
 }

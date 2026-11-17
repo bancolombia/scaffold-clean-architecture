@@ -9,11 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.api.tasks.options.OptionValues;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generateEntryPoint",
     shortcut = "gep",
     description = "Generate entry point in infrastructure layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateEntryPointTask extends AbstractResolvableTypeTask {
   private String pathGraphql = PATH_GRAPHQL;
   private String swaggerFile = null;

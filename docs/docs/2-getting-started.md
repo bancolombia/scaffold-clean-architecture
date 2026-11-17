@@ -8,8 +8,19 @@ sidebar_position: 2
 
 - You need Java JRE installed (Java 17 or later).
 
+:::note[Supported language]
+Java is the only language supported by the scaffold. It is not guaranteed to work correctly with other languages that
+run on the JVM.
+:::
+
+:::tip[Recommended Java Version]
+Java 25 (the latest LTS release) is recommended and is the default Java version of the generated projects. It is fully
+supported by [Spring Boot](https://docs.spring.io/spring-boot/system-requirements.html), and it allows enabling JVM
+improvements such as compact object headers (`-XX:+UseCompactObjectHeaders`) in the generated `Dockerfile`.
+:::
+
 - To use the [plugin](https://plugins.gradle.org/plugin/co.com.bancolombia.cleanArchitecture) you need Gradle version
-  9.2.1 or later.
+  9.4.1 or later.
 
 <!-- :::tip[Recommended Gradle Version]
 For optimal performance and to enable all **[Gradle cache properties](advanced/gradle-cache)**, it is recommended to use

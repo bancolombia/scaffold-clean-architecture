@@ -7,11 +7,13 @@ import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
 import java.util.Optional;
 import org.gradle.api.tasks.options.Option;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generateUseCase",
     shortcut = "guc",
     description = "Generate use case in domain layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateUseCaseTask extends AbstractCleanArchitectureDefaultTask {
   private static final String USECASE_CLASS_NAME = "UseCase";
   private String name = "";

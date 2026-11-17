@@ -8,11 +8,13 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.provider.SetProperty;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.Internal;
+import org.gradle.work.DisableCachingByDefault;
 
 @CATask(
     name = "generateAcceptanceTest",
     shortcut = "gat",
     description = "Generate subproject by karate framework in deployment layer")
+@DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public abstract class GenerateAcceptanceTestTask extends AbstractResolvableTypeTask {
 
   @Internal

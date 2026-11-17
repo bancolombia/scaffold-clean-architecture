@@ -38,6 +38,64 @@ class DependencyOverrideConventionsTest {
     assertEquals("3.2.3", resolveVersion(child, "tools.jackson.core:jackson-databind:3.0.0"));
   }
 
+  @Test
+  void shouldAlignJacksonAnnotationsWithTheOverriddenJackson3Version(@TempDir Path mavenRepo)
+      throws IOException {
+    Project root = projectWith(mavenRepo, "tools.jackson.core:3.2.4");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.21");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.22");
+
+    assertEquals(
+        "2.22", resolveVersion(root, "com.fasterxml.jackson.core:jackson-annotations:2.21"));
+  }
+
+  @Test
+  void shouldAlignJacksonAnnotationsWhenOnlyJacksonDatabindIsOverridden(@TempDir Path mavenRepo)
+      throws IOException {
+    Project root = projectWith(mavenRepo, "tools.jackson.core:jackson-databind:3.3.0");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.21");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.23");
+
+    assertEquals(
+        "2.23", resolveVersion(root, "com.fasterxml.jackson.core:jackson-annotations:2.21"));
+  }
+
+  @Test
+  void shouldKeepAnExplicitJacksonAnnotationsOverride(@TempDir Path mavenRepo) throws IOException {
+    Project root =
+        projectWith(
+            mavenRepo,
+            "tools.jackson.core:3.2.4",
+            "com.fasterxml.jackson.core:jackson-annotations:2.23");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.21");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.23");
+
+    assertEquals(
+        "2.23", resolveVersion(root, "com.fasterxml.jackson.core:jackson-annotations:2.21"));
+  }
+
+  @Test
+  void shouldNotTouchJacksonAnnotationsWithoutAJackson3Override(@TempDir Path mavenRepo)
+      throws IOException {
+    Project root = projectWith(mavenRepo, "com.fasterxml.jackson.core:jackson-core:2.22.3");
+    writePom(mavenRepo, "com.fasterxml.jackson.core", "jackson-annotations", "2.21");
+
+    assertEquals(
+        "2.21", resolveVersion(root, "com.fasterxml.jackson.core:jackson-annotations:2.21"));
+  }
+
+  private Project projectWith(Path mavenRepo, String... overrides) {
+    Project root = ProjectBuilder.builder().withName("root").build();
+    new DependencyOverrideConventions().configure(root);
+    DependenciesOverrideExtension extension =
+        root.getExtensions().getByType(DependenciesOverrideExtension.class);
+    for (String override : overrides) {
+      extension.ensure(override);
+    }
+    addMavenRepository(root, mavenRepo);
+    return root;
+  }
+
   private void addMavenRepository(Project project, Path mavenRepo) {
     project.getRepositories().maven(repository -> repository.setUrl(mavenRepo.toUri()));
   }

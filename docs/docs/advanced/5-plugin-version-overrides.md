@@ -11,7 +11,7 @@ there. If no version is specified, it resolves the plugin using the correspondin
 
 To use a different version, add or change the version directly in the root `plugins {}` block:
 
-```groovy
+```groovy title="build.gradle"
 plugins {
     id 'org.springframework.boot' version '4.2.0' apply false
     id 'org.sonarqube' version '7.6.0.1234'

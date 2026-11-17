@@ -101,6 +101,19 @@ class GenerateStructureTaskTest {
   }
 
   @Test
+  void shouldNotConfigureH2ConsoleInTheBaseStructure() throws IOException, CleanException {
+    // Arrange
+    String dir = project.getProjectDir().getPath();
+    // Act
+    task.execute();
+    // Assert
+    String yaml =
+        Files.readString(
+            Path.of(dir, "applications/app-service/src/main/resources/application.yaml"));
+    assertFalse(yaml.contains("h2"));
+  }
+
+  @Test
   void generateStructureOnExistingProject() throws IOException, CleanException {
     // Arrange
     String dir = project.getProjectDir().getPath();
@@ -187,6 +200,32 @@ class GenerateStructureTaskTest {
 
     assertTrue(buildContent.contains("cleanPlugin {"));
     assertTrue(buildContent.contains("otel = true"));
+  }
+
+  @Test
+  void shouldGenerateDockerfileWithOtelAgentWhenOtelEnabled() throws IOException, CleanException {
+    String dir = project.getProjectDir().getPath();
+    task.setOtel(BooleanOption.TRUE);
+
+    task.execute();
+    String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
+
+    assertTrue(
+        dockerfile.contains(
+            "COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar"));
+    assertTrue(dockerfile.contains("-javaagent:/app/opentelemetry-javaagent.jar"));
+  }
+
+  @Test
+  void shouldGenerateDockerfileWithoutOtelAgentWhenOtelDisabled()
+      throws IOException, CleanException {
+    String dir = project.getProjectDir().getPath();
+
+    task.execute();
+    String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
+
+    assertFalse(dockerfile.contains("opentelemetry"));
+    assertFalse(dockerfile.contains("javaagent"));
   }
 
   @Test

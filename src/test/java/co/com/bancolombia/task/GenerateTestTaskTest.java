@@ -6,10 +6,13 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -64,6 +67,12 @@ class GenerateTestTaskTest {
         "settings.gradle",
         "build.gradle",
         "README.md");
+    String buildGradle =
+        Files.readString(Path.of(TEST_DIR, "deployment/acceptance-test/build.gradle"));
+    assertTrue(buildGradle.contains("tasks.named('wrapper') {"));
+    assertTrue(
+        buildGradle.contains("distributionSha256Sum = '" + Constants.GRADLE_WRAPPER_SHA256 + "'"));
+    assertTrue(buildGradle.contains("validateDistributionUrl = true"));
   }
 
   @Test
