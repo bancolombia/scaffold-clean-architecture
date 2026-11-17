@@ -166,9 +166,10 @@ infrastructure/
 applications/
 └── app-service/
     └── src/
-        ├── main/java/co/com/bancolombia/config/
+        ├── main/java/[package]/config/
+        │   ├── McpCorsConfig.java
         │   └── McpSecurityConfig.java         # If security enabled
-        └── test/java/co/com/bancolombia/config/
+        └── test/java/[package]/config/
             └── McpSecurityConfigTest.java     # If security enabled
 ```
 
@@ -209,7 +210,13 @@ spring:
 
 jwt:
   json-exp-roles: /roles  # JSON path for role extraction
+
+cors:
+  allowed-origins: "http://localhost:6274"  # MCP Inspector, kept if already defined
 ```
+
+`McpCorsConfig` only allows the origins listed in `cors.allowed-origins` (comma separated). Set the
+origins of each environment there; wildcards are not used because credentials are allowed.
 
 ### Security and Audit Features
 

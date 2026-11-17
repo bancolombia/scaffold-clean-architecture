@@ -3,6 +3,8 @@ package co.com.bancolombia.factory.entrypoints;
 import static co.com.bancolombia.Constants.MainFiles.APP_BUILD_GRADLE;
 import static co.com.bancolombia.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
@@ -23,6 +25,10 @@ import org.junit.jupiter.api.Test;
 
 class EntryPointMcpTest {
   private static final String TEST_DIR = getTestDir(EntryPointMcpTest.class);
+  private static final String APP_CONFIG_DIR =
+      "applications/app-service/src/main/java/co/com/bancolombia/config";
+  private static final String MCP_DIR =
+      "infrastructure/entry-points/mcp-server/src/main/java/co/com/bancolombia/mcp";
 
   private ModuleBuilder builder;
   private EntryPointMcp entryPointMcp;
@@ -117,6 +123,64 @@ class EntryPointMcpTest {
     assertTrue(updated.contains("tasks.withType(JavaCompile).configureEach {"));
     assertTrue(updated.contains("if (!options.compilerArgs.contains('-parameters')) {"));
     assertEquals(1, countOccurrences(updated, "options.compilerArgs += '-parameters'"));
+  }
+
+  @Test
+  void shouldGenerateCorsConfigRestrictedToConfiguredOrigins() throws IOException, CleanException {
+    entryPointMcp.buildModule(builder);
+
+    String corsConfig = builder.readFile(APP_CONFIG_DIR + "/McpCorsConfig.java");
+    assertTrue(corsConfig.contains("package co.com.bancolombia.config;"));
+    assertTrue(corsConfig.contains("@Value(\"${cors.allowed-origins}\") List<String> origins"));
+    assertFalse(corsConfig.contains("setAllowedOriginPatterns"));
+    assertFalse(corsConfig.contains("@Profile"));
+    assertEquals("http://localhost:6274", allowedOrigins());
+  }
+
+  @Test
+  void shouldKeepExistingCorsAllowedOrigins() throws IOException, CleanException {
+    builder.appendToProperties("cors").put("allowed-origins", "http://localhost:4200");
+
+    entryPointMcp.buildModule(builder);
+
+    assertEquals("http://localhost:4200", allowedOrigins());
+  }
+
+  @Test
+  void shouldNotGenerateSecurityNorAuditWhenDisabled() throws IOException, CleanException {
+    entryPointMcp.buildModule(builder);
+
+    assertThrows(
+        IOException.class, () -> builder.readFile(APP_CONFIG_DIR + "/McpSecurityConfig.java"));
+    assertThrows(IOException.class, () -> builder.readFile(MCP_DIR + "/audit/McpAuditAspect.java"));
+  }
+
+  @Test
+  void shouldGenerateSecurityAndAuditInProjectPackageWhenEnabled()
+      throws IOException, CleanException {
+    builder.addParam("mcp-enable-security", true);
+    builder.addParam("mcp-enable-audit", true);
+
+    entryPointMcp.buildModule(builder);
+
+    assertTrue(
+        builder
+            .readFile(APP_CONFIG_DIR + "/McpSecurityConfig.java")
+            .startsWith("package co.com.bancolombia.config;"));
+    assertTrue(
+        builder
+            .readFile(
+                "applications/app-service/src/test/java/co/com/bancolombia/config/"
+                    + "McpSecurityConfigTest.java")
+            .startsWith("package co.com.bancolombia.config;"));
+    assertTrue(
+        builder
+            .readFile(MCP_DIR + "/audit/McpAuditAspect.java")
+            .startsWith("package co.com.bancolombia.mcp.audit;"));
+  }
+
+  private String allowedOrigins() {
+    return builder.appendToProperties("cors").path("allowed-origins").asString();
   }
 
   private String readGeneratedAppBuildGradle() throws IOException {

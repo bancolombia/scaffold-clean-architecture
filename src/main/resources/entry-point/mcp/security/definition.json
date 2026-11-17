@@ -1,0 +1,10 @@
+{
+  "folders": [
+    "applications/app-service/src/main/java/{{packagePath}}/config",
+    "applications/app-service/src/test/java/{{packagePath}}/config"
+  ],
+  "files": {
+    "entry-point/mcp/security/mcp-security-config.java.mustache": "applications/app-service/src/main/java/{{packagePath}}/config/McpSecurityConfig.java",
+    "entry-point/mcp/security/mcp-security-config.test.java.mustache": "applications/app-service/src/test/java/{{packagePath}}/config/McpSecurityConfigTest.java"
+  }
+}
