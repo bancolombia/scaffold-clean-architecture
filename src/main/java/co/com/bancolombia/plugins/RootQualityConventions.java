@@ -217,7 +217,7 @@ public class RootQualityConventions {
               project,
               sonarProperties,
               "sonar.coverage.jacoco.xmlReportPaths",
-              "build/reports/jacocoMergedReport/jacocoMergedReport.xml");
+              "build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml");
           setSonarProperty(
               project,
               sonarProperties,

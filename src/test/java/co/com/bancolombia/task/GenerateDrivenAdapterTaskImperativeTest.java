@@ -8,6 +8,7 @@ import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.factory.adapters.DrivenAdapterRedis;
@@ -20,6 +21,8 @@ import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 class GenerateDrivenAdapterTaskImperativeTest {
   private static final String TEST_DIR = getTestDir(GenerateDrivenAdapterTaskImperativeTest.class);
@@ -139,6 +142,14 @@ class GenerateDrivenAdapterTaskImperativeTest {
         "src/main/java/co/com/bancolombia/jpa/helper/AdapterOperations.java",
         "src/main/java/co/com/bancolombia/jpa/config/DBSecret.java",
         "src/main/java/co/com/bancolombia/jpa/config/JpaConfig.java");
+    JsonNode console =
+        new YAMLMapper()
+            .readTree(
+                Path.of(TEST_DIR, "applications/app-service/src/main/resources/application.yaml")
+                    .toFile())
+            .at("/spring/h2/console");
+    assertTrue(console.path("enabled").asBoolean());
+    assertEquals("/h2", console.path("path").asString());
   }
 
   @Test

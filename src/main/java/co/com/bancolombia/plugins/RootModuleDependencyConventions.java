@@ -95,7 +95,7 @@ public class RootModuleDependencyConventions {
               "org.springframework.boot:spring-boot-starter");
           addDependencyIfMissing(
               appService,
-              "runtimeOnly",
+              "developmentOnly",
               SPRING_BOOT_PLUGIN_ID,
               "spring-boot-devtools",
               "org.springframework.boot:spring-boot-devtools");
@@ -119,7 +119,7 @@ public class RootModuleDependencyConventions {
     }
 
     if (appService.getConfigurations().findByName(OTEL_AGENT) == null) {
-      appService.getConfigurations().create(OTEL_AGENT);
+      appService.getConfigurations().create(OTEL_AGENT).setCanBeConsumed(false);
     }
     appService
         .getDependencies()

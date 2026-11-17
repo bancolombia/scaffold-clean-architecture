@@ -56,7 +56,10 @@ public class FileUtilsTest {
   @MethodSource("encodings")
   void readFileWithEncodings(String file, String expected) throws IOException {
     Project project =
-        ProjectBuilder.builder().withProjectDir(new File("src/test/resources")).build();
+        ProjectBuilder.builder()
+            .withProjectDir(new File("src/test/resources"))
+            .withGradleUserHomeDir(new File("build/tmp/userHome"))
+            .build();
     String response = FileUtils.readFile(project, file);
 
     assertEquals(expected, response);

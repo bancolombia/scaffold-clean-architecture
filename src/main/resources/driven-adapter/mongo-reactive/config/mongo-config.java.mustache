@@ -19,7 +19,7 @@ public class MongoConfig {
     @Bean
     public MongoDBSecret dbSecret(@Value("${aws.secretName}") String secret, GenericManagerAsync manager)
             throws SecretException {
-        return manager.getSecret(secret, MongoDBSecret.class).block();
+        return manager.getSecret(secret, MongoDBSecret.class).toFuture().join();
     }
     {{/include-secret}}
     {{^include-secret}}

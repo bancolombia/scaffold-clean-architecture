@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -28,9 +29,12 @@ import org.gradle.api.artifacts.ExternalModuleDependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.attributes.Category;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
+import org.gradle.api.tasks.wrapper.Wrapper;
 import org.gradle.testfixtures.ProjectBuilder;
+import org.gradle.testing.jacoco.tasks.JacocoReport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -110,6 +114,26 @@ class PluginCleanTest {
   }
 
   @Test
+  void shouldConfigureWrapperChecksumOnlyForDefaultVersion() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+    Wrapper defaults = project.getTasks().register("defaultWrapper", Wrapper.class).get();
+    Wrapper otherVersion = project.getTasks().register("otherWrapper", Wrapper.class).get();
+    otherVersion.setGradleVersion("8.0");
+    Wrapper custom = project.getTasks().register("customWrapper", Wrapper.class).get();
+    custom.setDistributionSha256Sum("custom");
+    // Act
+    Stream.of(defaults, otherVersion, custom)
+        .forEach(wrapper -> wrapper.getActions().get(0).execute(wrapper));
+    // Assert
+    assertEquals(Constants.GRADLE_WRAPPER_VERSION, defaults.getGradleVersion());
+    assertEquals(Constants.GRADLE_WRAPPER_SHA256, defaults.getDistributionSha256Sum());
+    assertNull(otherVersion.getDistributionSha256Sum());
+    assertEquals("custom", custom.getDistributionSha256Sum());
+  }
+
+  @Test
   void shouldSkipScaffoldFiveConventionsWhenLegacyMainGradleExists(@TempDir Path tempDir)
       throws IOException {
     Files.createFile(tempDir.resolve("main.gradle"));
@@ -158,6 +182,27 @@ class PluginCleanTest {
     // Assert
     assertNotNull(project.getTasks().findByName("jacocoMergedReport"));
     assertNotNull(project.getTasks().findByName("pitestReportAggregate"));
+  }
+
+  @Test
+  void shouldWriteTheMergedJacocoReportWhereSonarAndPipelinesExpectIt() {
+    // Arrange
+    Project project = ProjectBuilder.builder().build();
+    Project child = ProjectBuilder.builder().withName("app-service").withParent(project).build();
+    child.getPluginManager().apply("java");
+
+    // Act
+    project.getPlugins().apply("co.com.bancolombia.cleanArchitecture");
+
+    // Assert
+    JacocoReport report = (JacocoReport) project.getTasks().getByName("jacocoMergedReport");
+    Path buildDir = project.getLayout().getBuildDirectory().get().getAsFile().toPath();
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml"),
+        report.getReports().getXml().getOutputLocation().get().getAsFile().toPath());
+    assertEquals(
+        buildDir.resolve("reports/jacoco/jacocoMergedReport/html"),
+        report.getReports().getHtml().getOutputLocation().get().getAsFile().toPath());
   }
 
   @Test
@@ -229,13 +274,13 @@ class PluginCleanTest {
     assertHasExternalDependency(
         appService, "implementation", "org.springframework.boot", "spring-boot-starter", null);
     assertHasExternalDependency(
-        appService, "runtimeOnly", "org.springframework.boot", "spring-boot-devtools", null);
+        appService, "developmentOnly", "org.springframework.boot", "spring-boot-devtools", null);
+    assertTrue(
+        appService.getConfigurations().getByName("runtimeOnly").getDependencies().stream()
+            .noneMatch(dependency -> "spring-boot-devtools".equals(dependency.getName())));
     assertHasExternalDependency(
         appService, "testImplementation", "tools.jackson.core", "jackson-databind", null);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
     assertHasExternalDependency(
         appService, "testImplementation", "com.tngtech.archunit", "archunit", "9.8.7");
     assertTrue(appService.getPlugins().hasPlugin("org.springframework.boot"));
@@ -305,10 +350,7 @@ class PluginCleanTest {
         "com.tngtech.archunit",
         "archunit",
         Constants.ARCH_UNIT_VERSION);
-    assertEquals(
-        1,
-        countExternalDependencies(
-            appService, "testImplementation", "com.tngtech.archunit", "archunit"));
+    assertEquals(1, countExternalDependencies(appService, "com.tngtech.archunit", "archunit"));
   }
 
   @Test
@@ -329,7 +371,12 @@ class PluginCleanTest {
         "io.opentelemetry.javaagent",
         "opentelemetry-javaagent",
         Constants.OTEL_VERSION);
+    assertFalse(appService.getConfigurations().getByName("otelAgent").isCanBeConsumed());
+    assertTrue(appService.getConfigurations().getByName("otelAgent").isCanBeResolved());
     assertNotNull(appService.getTasks().findByName("copyOtelAgent"));
+    assertEquals(
+        appService.getLayout().getBuildDirectory().dir("otel").get().getAsFile(),
+        appService.getTasks().named("copyOtelAgent", Copy.class).get().getDestinationDir());
     assertTrue(
         appService.getTasks().named("bootJar").get().getDependsOn().contains("copyOtelAgent"));
     JavaExec bootRun = appService.getTasks().named("bootRun", JavaExec.class).get();
@@ -392,9 +439,8 @@ class PluginCleanTest {
     return category != null && Category.REGULAR_PLATFORM.equals(category.getName());
   }
 
-  private long countExternalDependencies(
-      Project project, String configuration, String group, String name) {
-    return project.getConfigurations().getByName(configuration).getDependencies().stream()
+  private long countExternalDependencies(Project project, String group, String name) {
+    return project.getConfigurations().getByName("testImplementation").getDependencies().stream()
         .filter(ExternalModuleDependency.class::isInstance)
         .map(ExternalModuleDependency.class::cast)
         .filter(

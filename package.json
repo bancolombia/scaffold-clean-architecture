@@ -1,0 +1,10 @@
+{
+  "name": "scaffold-clean-architecture-release",
+  "private": true,
+  "description": "Tooling used by the release workflow (semantic-release)",
+  "devDependencies": {
+    "@semantic-release/exec": "7.1.0",
+    "@semantic-release/git": "11.0.1",
+    "semantic-release": "25.0.9"
+  }
+}

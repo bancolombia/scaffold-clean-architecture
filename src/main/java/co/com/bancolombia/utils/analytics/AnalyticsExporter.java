@@ -13,9 +13,15 @@ public class AnalyticsExporter {
   private static final String ENDPOINT = "";
 
   public static void collectMetric(AnalyticsBody body) throws IOException {
-    if (!shouldMock()) {
-      RestConsumer.postRequest(ENDPOINT, body, Map.class);
+    collectMetric(ENDPOINT, body);
+  }
+
+  // Builds from source have no endpoint (it is injected on release), so there is nothing to send
+  static void collectMetric(String endpoint, AnalyticsBody body) throws IOException {
+    if (endpoint.isBlank() || shouldMock()) {
+      return;
     }
+    RestConsumer.postRequest(endpoint, body, Map.class);
   }
 
   private static boolean shouldMock() {

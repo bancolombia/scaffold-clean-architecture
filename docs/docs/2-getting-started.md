@@ -8,6 +8,11 @@ sidebar_position: 2
 
 - You need Java JRE installed (Java 17 or later).
 
+:::note[Supported language]
+Java is the only language supported by the scaffold. It is not guaranteed to work correctly with other languages that
+run on the JVM.
+:::
+
 :::tip[Recommended Java Version]
 Java 25 (the latest LTS release) is recommended and is the default Java version of the generated projects. It is fully
 supported by [Spring Boot](https://docs.spring.io/spring-boot/system-requirements.html), and it allows enabling JVM

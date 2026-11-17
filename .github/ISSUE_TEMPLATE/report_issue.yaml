@@ -1,6 +1,6 @@
 name: Report Error
 description: Use this option to report errors in the component.
-labels: [ "c:bug" ]
+labels: ["bug"]
 body:
   - type: textarea
     validations:
