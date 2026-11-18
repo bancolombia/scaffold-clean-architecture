@@ -15,14 +15,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/bookRequest'
+              $ref: '#/components/schemas/bookSearch'
       responses:
         '200':
           description: Books found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/bookResponse'
+                $ref: '#/components/schemas/bookDetail'
 components:
   schemas:
     author:
@@ -35,7 +35,7 @@ components:
         fullName:
           type: string
           example: Jane Placeholder
-    bookRequest:
+    bookSearch:
       type: object
       description: Filters used to search books
       required:
@@ -46,7 +46,7 @@ components:
           example: Example Title
         author:
           $ref: '#/components/schemas/author'
-    bookResponse:
+    bookDetail:
       type: object
       description: Book returned by the catalog
       properties:
@@ -102,9 +102,9 @@ components:
           properties:
             name:
               type: string
-    auditResponse:
+    auditTrail:
       type: object
-      description: Parent model that is renamed and lives in another package
+      description: Parent model that lives in the response package when configured
       properties:
         createdAt:
           type: string
@@ -113,7 +113,7 @@ components:
           type: string
     loanRecord:
       allOf:
-        - $ref: '#/components/schemas/auditResponse'
+        - $ref: '#/components/schemas/auditTrail'
         - type: object
           properties:
             loanId:

@@ -5,6 +5,7 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import io.swagger.codegen.v3.DefaultGenerator;
 import io.swagger.codegen.v3.config.CodegenConfigurator;
 import io.swagger.codegen.v3.generators.DomainModelCodegen;
+import io.swagger.codegen.v3.generators.OpenApiDomainModelPlanValidator;
 import io.swagger.codegen.v3.generators.OpenApiModelPackageResolver;
 import io.swagger.v3.parser.OpenAPIV3Parser;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
@@ -69,17 +70,42 @@ public class Swagger {
 
   public static List<String> generateDomainModels(
       ModuleBuilder builder, String specPath, String modelsFilter) {
+    return generateDomainModels(builder, specPath, modelsFilter, null, null);
+  }
+
+  public static List<String> generateDomainModels(
+      ModuleBuilder builder,
+      String specPath,
+      String modelsFilter,
+      String requestSchemaKeys,
+      String responseSchemaKeys) {
     String modelPackage = domainModelPackage(builder);
     String outputDir = domainModelOutputDir(builder);
     Logger logger = builder.getLogger();
+    String resolvedSpec = resolveSpec(builder, specPath);
+    Set<String> requestKeys = OpenApiModelPackageResolver.parseSchemaKeys(requestSchemaKeys);
+    Set<String> responseKeys = OpenApiModelPackageResolver.parseSchemaKeys(responseSchemaKeys);
+
+    SwaggerParseResult parsed = new OpenAPIV3Parser().readLocation(resolvedSpec, null, null);
+    if (parsed.getOpenAPI() == null) {
+      throw new CleanDomainException("Invalid OpenAPI specification: " + parsed.getMessages());
+    }
+    List<DomainModelCodegen.ModelTarget> planned =
+        planDomainModels(parsed, modelsFilter, modelPackage, requestKeys, responseKeys);
+    OpenApiDomainModelPlanValidator.validate(
+        planned, parsed.getOpenAPI(), requestKeys, responseKeys);
 
     CodegenConfigurator configurator =
-        baseConfigurator(resolveSpec(builder, specPath), outputDir, builder.isEnableLombok());
+        baseConfigurator(resolvedSpec, outputDir, builder.isEnableLombok());
     configurator.setLang(DOMAIN_MODEL_LANG);
     configurator.setModelPackage(modelPackage);
     configurator.setSkipOverwrite(true);
     configurator.addAdditionalProperty(
         OpenApiModelPackageResolver.BASE_MODEL_PACKAGE, modelPackage);
+    configurator.addAdditionalProperty(
+        OpenApiModelPackageResolver.REQUEST_SCHEMA_KEYS, joinKeys(requestKeys));
+    configurator.addAdditionalProperty(
+        OpenApiModelPackageResolver.RESPONSE_SCHEMA_KEYS, joinKeys(responseKeys));
     configurator.addAdditionalProperty("hideGenerationTimestamp", true);
 
     List<File> generated =
@@ -169,17 +195,22 @@ public class Swagger {
 
   public static List<DomainModelCodegen.ModelTarget> planDomainModels(
       ModuleBuilder builder, String specPath, String modelsFilter) {
+    return planDomainModels(builder, specPath, modelsFilter, Set.of(), Set.of());
+  }
+
+  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
+      ModuleBuilder builder,
+      String specPath,
+      String modelsFilter,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
     SwaggerParseResult parsed =
         new OpenAPIV3Parser().readLocation(resolveSpec(builder, specPath), null, null);
     if (parsed.getOpenAPI() == null) {
       throw new CleanDomainException("Invalid OpenAPI specification: " + parsed.getMessages());
     }
-    Set<String> selected =
-        modelsFilter == null || modelsFilter.isBlank()
-            ? Set.of()
-            : Arrays.stream(modelsFilter.split(",")).map(String::trim).collect(Collectors.toSet());
-    return DomainModelCodegen.resolveTargets(
-        parsed.getOpenAPI(), selected, domainModelPackage(builder));
+    return planDomainModels(
+        parsed, modelsFilter, domainModelPackage(builder), requestSchemaKeys, responseSchemaKeys);
   }
 
   public static Path domainModelSourceRoot(ModuleBuilder builder) {
@@ -194,18 +225,22 @@ public class Swagger {
     return builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
   }
 
-  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      ModuleBuilder builder, String spec, String models, String basePackage) {
-    SwaggerParseResult parsed =
-        new OpenAPIV3Parser().readLocation(resolveSpec(builder, spec), null, null);
-    if (parsed.getOpenAPI() == null) {
-      throw new IllegalArgumentException("Invalid OpenAPI specification: " + parsed.getMessages());
-    }
+  private static List<DomainModelCodegen.ModelTarget> planDomainModels(
+      SwaggerParseResult parsed,
+      String modelsFilter,
+      String basePackage,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
     Set<String> selected =
-        models == null || models.isBlank()
+        modelsFilter == null || modelsFilter.isBlank()
             ? Set.of()
-            : Arrays.stream(models.split(",")).map(String::trim).collect(Collectors.toSet());
-    return DomainModelCodegen.resolveTargets(parsed.getOpenAPI(), selected, basePackage);
+            : Arrays.stream(modelsFilter.split(",")).map(String::trim).collect(Collectors.toSet());
+    return DomainModelCodegen.resolveTargets(
+        parsed.getOpenAPI(), selected, basePackage, requestSchemaKeys, responseSchemaKeys);
+  }
+
+  private static String joinKeys(Set<String> keys) {
+    return keys.stream().sorted().collect(Collectors.joining(","));
   }
 
   @Builder

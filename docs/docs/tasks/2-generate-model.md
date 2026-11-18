@@ -55,6 +55,17 @@ parameter `name` or `from-swagger`.
 Additionally, if you use `models`, you can specify the Schema names you want to generate (default: all schemas), 
 `models` takes the exact schema names (comma-separated, case-sensitive).
 
+Optional folder layout (only when you want it):
+
+```shell
+gradle generateModel --from-swagger=contract.yaml \
+  --request-models=[SchemaName],[SchemaName2] \
+  --response-models=[SchemaName3]
+```
+
+Schemas not listed in either option are generated under `entities` (no `request` or `response` subpackage). Schema keys are
+case-sensitive and must match `components.schemas` in the contract.
+
 ```shell
 gradle generateModel --from-swagger=[filePath.yaml] --models=[SchemaName]   
 gradle gm --from-swagger=[filePath.yaml] --models=[SchemaName]   

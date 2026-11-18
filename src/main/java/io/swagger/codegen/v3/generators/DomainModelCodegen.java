@@ -13,6 +13,9 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
   static final String SUPER_BUILDER = "x-use-super-builder";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
 
+  private Set<String> requestSchemaKeys = Set.of();
+  private Set<String> responseSchemaKeys = Set.of();
+
   public DomainModelCodegen() {
     super();
   }
@@ -39,6 +42,12 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     apiTestTemplateFiles.clear();
     apiDocTemplateFiles.clear();
     supportingFiles.clear();
+    requestSchemaKeys =
+        OpenApiModelPackageResolver.parseSchemaKeys(
+            additionalProperties.get(OpenApiModelPackageResolver.REQUEST_SCHEMA_KEYS));
+    responseSchemaKeys =
+        OpenApiModelPackageResolver.parseSchemaKeys(
+            additionalProperties.get(OpenApiModelPackageResolver.RESPONSE_SCHEMA_KEYS));
   }
 
   /**
@@ -49,9 +58,9 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
    */
   @Override
   public String toModelFilename(String name) {
-    String openapiClassName = super.toModelName(name);
-    String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
-    return OpenApiModelPackageResolver.modelFilePath(openapiClassName, domainClassName);
+    String className = super.toModelName(name);
+    return OpenApiModelPackageResolver.modelFilePath(
+        name, className, requestSchemaKeys, responseSchemaKeys);
   }
 
   @Override
@@ -64,10 +73,10 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     Map<String, String> openapiClassToPackage = new HashMap<>();
     for (String schemaKey : result.keySet()) {
       String openapiClassName = super.toModelName(schemaKey);
-      String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
       String modelPackage =
-          OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName);
-      openapiClassToDomainClass.put(openapiClassName, domainClassName);
+          OpenApiModelPackageResolver.resolvePackage(
+              baseModelPackage, schemaKey, requestSchemaKeys, responseSchemaKeys);
+      openapiClassToDomainClass.put(openapiClassName, openapiClassName);
       schemaKeyToPackage.put(schemaKey, modelPackage);
       openapiClassToPackage.put(openapiClassName, modelPackage);
     }
@@ -81,11 +90,10 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     for (Map.Entry<String, Object> entry : result.entrySet()) {
       String schemaKey = entry.getKey();
       String openapiClassName = super.toModelName(schemaKey);
-      String domainClassName = OpenApiModelPackageResolver.cleanModelName(openapiClassName);
       String modelPackage = schemaKeyToPackage.get(schemaKey);
       Map<String, Object> models = (Map<String, Object>) entry.getValue();
       models.put("package", modelPackage);
-      models.put("classname", domainClassName);
+      models.put("classname", openapiClassName);
       List<Map<String, Object>> modelList = (List<Map<String, Object>>) models.get("models");
       if (modelList == null) {
         continue;
@@ -95,7 +103,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         if (codegenModel == null) {
           continue;
         }
-        codegenModel.classname = domainClassName;
+        codegenModel.classname = openapiClassName;
         models.put(
             "imports",
             mergeImports(
@@ -257,7 +265,11 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
   }
 
   public static List<ModelTarget> resolveTargets(
-      OpenAPI openAPI, Set<String> selectedSchemas, String baseModelPackage) {
+      OpenAPI openAPI,
+      Set<String> selectedSchemas,
+      String baseModelPackage,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
     DomainModelCodegen codegen = new DomainModelCodegen();
     Set<String> schemaKeys =
         openAPI.getComponents() == null || openAPI.getComponents().getSchemas() == null
@@ -272,8 +284,9 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
       targets.add(
           new ModelTarget(
               schemaKey,
-              OpenApiModelPackageResolver.cleanModelName(openapiClassName),
-              OpenApiModelPackageResolver.resolvePackage(baseModelPackage, openapiClassName)));
+              openapiClassName,
+              OpenApiModelPackageResolver.resolvePackage(
+                  baseModelPackage, schemaKey, requestSchemaKeys, responseSchemaKeys)));
     }
     return targets;
   }

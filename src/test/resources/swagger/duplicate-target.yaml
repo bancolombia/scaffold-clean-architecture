@@ -14,9 +14,14 @@ paths:
         required: true
         content:
           application/json:
+            schema:
+              $ref: '#/components/schemas/author'
       responses:
         '200':
-          description: Books found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/author'
 components:
   schemas:
     author:

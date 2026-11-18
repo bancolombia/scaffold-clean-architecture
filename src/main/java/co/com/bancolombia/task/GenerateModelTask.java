@@ -6,13 +6,12 @@ import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.swagger.Swagger;
 import io.swagger.codegen.v3.generators.DomainModelCodegen.ModelTarget;
+import io.swagger.codegen.v3.generators.OpenApiModelPackageResolver;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.work.DisableCachingByDefault;
 
@@ -25,6 +24,8 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   private String name = "";
   private String fromOpenApi;
   private String models;
+  private String requestModels;
+  private String responseModels;
 
   @Option(option = "name", description = "Set the model name")
   public void setName(String modelName) {
@@ -43,6 +44,24 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
       description = "(Optional) Schema names you want to generate (default: all schemas)")
   public void setModels(String models) {
     this.models = models;
+  }
+
+  @Option(
+      option = "request-models",
+      description =
+          "(Optional) OpenAPI schema names to place under entities.request "
+              + "(comma-separated, exact schema keys)")
+  public void setRequestModels(String requestModels) {
+    this.requestModels = requestModels;
+  }
+
+  @Option(
+      option = "response-models",
+      description =
+          "(Optional) OpenAPI schema names to place under entities.response "
+              + "(comma-separated, exact schema keys)")
+  public void setResponseModels(String responseModels) {
+    this.responseModels = responseModels;
   }
 
   @Override
@@ -77,31 +96,15 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     if (models != null && !models.isBlank()) {
       logger.lifecycle("Schemas filter: {}", models);
     }
-    List<ModelTarget> targets = Swagger.planDomainModels(builder, fromOpenApi, models);
-    for (ModelTarget target : targets) {
-      ArchitectureValidation.validateModelName(target.className());
-    }
-    failOnDuplicateTargets(targets);
+    var requestKeys = OpenApiModelPackageResolver.parseSchemaKeys(requestModels);
+    var responseKeys = OpenApiModelPackageResolver.parseSchemaKeys(responseModels);
+    List<ModelTarget> targets =
+        Swagger.planDomainModels(builder, fromOpenApi, models, requestKeys, responseKeys);
     warnExistingTargets(targets);
 
-    List<String> classNames = Swagger.generateDomainModels(builder, fromOpenApi, models);
+    List<String> classNames =
+        Swagger.generateDomainModels(builder, fromOpenApi, models, requestModels, responseModels);
     logger.lifecycle("Generated {} domain model(s) from OpenAPI", classNames.size());
-  }
-
-  private static void failOnDuplicateTargets(List<ModelTarget> targets) {
-    Map<String, List<String>> schemasByPath =
-        targets.stream()
-            .collect(
-                Collectors.groupingBy(
-                    ModelTarget::relativePath,
-                    Collectors.mapping(ModelTarget::schemaKey, Collectors.toList())));
-    schemasByPath.forEach(
-        (path, schemaKeys) -> {
-          if (schemaKeys.size() > 1) {
-            throw new IllegalArgumentException(
-                "Schemas " + schemaKeys + " would all generate " + path);
-          }
-        });
   }
 
   private void warnExistingTargets(List<ModelTarget> targets) {

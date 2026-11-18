@@ -1,72 +1,72 @@
 package io.swagger.codegen.v3.generators;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class OpenApiModelPackageResolver {
 
   public static final String BASE_MODEL_PACKAGE = "baseModelPackage";
-
-  private static final Pattern REQUEST_OR_RESPONSE_SUFFIX =
-      Pattern.compile("(request|response)$", Pattern.CASE_INSENSITIVE);
+  public static final String REQUEST_SCHEMA_KEYS = "openApiRequestSchemaKeys";
+  public static final String RESPONSE_SCHEMA_KEYS = "openApiResponseSchemaKeys";
 
   private OpenApiModelPackageResolver() {}
 
-  /**
-   * Add the corresponding package to the class
-   *
-   * @param baseModelPackage Name of the base package
-   * @param className Contract´s model name
-   * @return base package name plus it´s corresponding folder
-   */
-  static String resolvePackage(String baseModelPackage, String className) {
-    String segment = resolveFolderSegment(className);
+  public static Set<String> parseSchemaKeys(Object raw) {
+    if (raw == null) {
+      return Set.of();
+    }
+    String value = raw.toString().trim();
+    if (value.isEmpty()) {
+      return Set.of();
+    }
+    return Arrays.stream(value.split(","))
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  static String resolvePackage(
+      String baseModelPackage,
+      String schemaKey,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
+    String segment = resolveFolderSegment(schemaKey, requestSchemaKeys, responseSchemaKeys);
     if (segment.isEmpty()) {
       return baseModelPackage;
     }
     return baseModelPackage + "." + segment;
   }
 
-  /**
-   * Separate the models into 'request' and 'response' folders, respectively.
-   *
-   * @param className Model name
-   * @return Determine whether the item should be filed under "request," "response," or neither,
-   *     based on its name.
-   */
-  static String resolveFolderSegment(String className) {
-    Matcher suffix = REQUEST_OR_RESPONSE_SUFFIX.matcher(className);
-    if (suffix.find()) {
-      return suffix.group(1).toLowerCase(Locale.ROOT);
+  static String resolveFolderSegment(
+      String schemaKey, Set<String> requestSchemaKeys, Set<String> responseSchemaKeys) {
+    if (requestSchemaKeys.contains(schemaKey)) {
+      return "request";
+    }
+    if (responseSchemaKeys.contains(schemaKey)) {
+      return "response";
     }
     return "";
   }
 
-  /**
-   * Assign the file to its corresponding folder
-   *
-   * @param originalClassName Contract´s model name
-   * @param domainClassName File name
-   * @return model file path
-   */
-  static String modelFilePath(String originalClassName, String domainClassName) {
-    String segment = resolveFolderSegment(originalClassName);
+  static String modelFilePath(
+      String schemaKey,
+      String className,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
+    String segment = resolveFolderSegment(schemaKey, requestSchemaKeys, responseSchemaKeys);
     if (segment.isEmpty()) {
-      return domainClassName;
+      return className;
     }
-    return segment + File.separator + domainClassName;
+    return segment + File.separator + className;
   }
 
-  /**
-   * Clean up model names to comply with clean architecture.
-   *
-   * @param className Model name
-   * @return model name without the word Response or Request
-   */
-  static String cleanModelName(String className) {
-    String cleaned = REQUEST_OR_RESPONSE_SUFFIX.matcher(className).replaceFirst("");
-    return cleaned.isEmpty() ? className : cleaned;
+  static String folderKind(
+      String schemaKey, Set<String> requestSchemaKeys, Set<String> responseSchemaKeys) {
+    return resolveFolderSegment(schemaKey, requestSchemaKeys, responseSchemaKeys)
+        .toUpperCase(Locale.ROOT);
   }
 }

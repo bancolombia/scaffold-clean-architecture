@@ -53,6 +53,8 @@ class GenerateModelTaskTest {
     task.setName("");
     task.setFromOpenApi(null);
     task.setModels(null);
+    task.setRequestModels(null);
+    task.setResponseModels(null);
   }
 
   @AfterAll
@@ -64,15 +66,16 @@ class GenerateModelTaskTest {
   void generatedModelsWithImports() throws IOException, CleanException {
 
     task.setFromOpenApi(SPEC);
+    task.setResponseModels("bookDetail");
     task.execute();
 
     Path generatedRoot =
         Path.of(TEST_DIR, "domain/model/src/main/java/co/com/bancolombia/model/entities");
 
     assertFilesExistsInDir(
-        MODEL_DIR, "src/main/java/co/com/bancolombia/model/entities/response/Book.java");
+        MODEL_DIR, "src/main/java/co/com/bancolombia/model/entities/response/BookDetail.java");
 
-    String book = Files.readString(generatedRoot.resolve("response/Book.java"));
+    String book = Files.readString(generatedRoot.resolve("response/BookDetail.java"));
     assertTrue(book.contains("import java.util.List;"));
     assertTrue(book.contains("import java.time.OffsetDateTime;"));
     assertTrue(book.contains("import java.math.BigDecimal;"));
@@ -108,30 +111,44 @@ class GenerateModelTaskTest {
     task.execute();
 
     assertFilesExistsInDir(ENTITIES + "/", "Author.java");
-    assertFalse(Files.exists(Path.of(ENTITIES, "response", "Book.java")));
+    assertFalse(Files.exists(Path.of(ENTITIES, "response", "BookDetail.java")));
+  }
+
+  @Test
+  void shouldKeepSchemasInEntitiesPackageWhenNoFolderOptions() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+
+    assertFilesExistsInDir(ENTITIES + "/", "Author.java", "BookSearch.java", "BookDetail.java");
+    assertFalse(Files.exists(Path.of(ENTITIES, "request")));
+    assertFalse(Files.exists(Path.of(ENTITIES, "response")));
   }
 
   @Test
   void shouldGenerateModelsFromOpenApiByRequestOrResponse() throws IOException, CleanException {
     task.setFromOpenApi(SPEC);
+    task.setRequestModels("bookSearch");
+    task.setResponseModels("bookDetail");
     task.execute();
 
     assertFilesExistsInDir(
-        ENTITIES + "/", "Author.java", "request/Book.java", "response/Book.java");
+        ENTITIES + "/", "Author.java", "request/BookSearch.java", "response/BookDetail.java");
     assertContains("Author.java", "package co.com.bancolombia.model.entities;");
-    assertContains("request/Book.java", "package co.com.bancolombia.model.entities.request;");
-    assertContains("response/Book.java", "package co.com.bancolombia.model.entities.response;");
-    assertContains("request/Book.java", "public class Book");
-    assertContains("response/Book.java", "public class Book");
+    assertContains("request/BookSearch.java", "package co.com.bancolombia.model.entities.request;");
+    assertContains(
+        "response/BookDetail.java", "package co.com.bancolombia.model.entities.response;");
+    assertContains("request/BookSearch.java", "public class BookSearch");
+    assertContains("response/BookDetail.java", "public class BookDetail");
   }
 
   @Test
   void shouldImportAndRemapReferencedOpenApiModels() throws IOException, CleanException {
     task.setFromOpenApi(SPEC);
+    task.setResponseModels("bookDetail");
     task.execute();
 
-    assertContains("response/Book.java", "import co.com.bancolombia.model.entities.Author;");
-    assertContains("response/Book.java", "private Author author");
+    assertContains("response/BookDetail.java", "import co.com.bancolombia.model.entities.Author;");
+    assertContains("response/BookDetail.java", "private Author author");
   }
 
   @Test
@@ -140,8 +157,7 @@ class GenerateModelTaskTest {
     task.setModels(" ");
     task.execute();
 
-    assertFilesExistsInDir(
-        ENTITIES + "/", "Author.java", "request/Book.java", "response/Book.java");
+    assertFilesExistsInDir(ENTITIES + "/", "Author.java", "BookSearch.java", "BookDetail.java");
   }
 
   @Test
@@ -204,10 +220,12 @@ class GenerateModelTaskTest {
   @Test
   void shouldRemapAndImportRenamedParentFromAnotherPackage() throws IOException, CleanException {
     task.setFromOpenApi(SPEC);
+    task.setResponseModels("auditTrail");
     task.execute();
 
-    assertContains("LoanRecord.java", "public class LoanRecord extends Audit");
-    assertContains("LoanRecord.java", "import co.com.bancolombia.model.entities.response.Audit;");
+    assertContains("LoanRecord.java", "public class LoanRecord extends AuditTrail");
+    assertContains(
+        "LoanRecord.java", "import co.com.bancolombia.model.entities.response.AuditTrail;");
     assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
   }
 
@@ -251,7 +269,7 @@ class GenerateModelTaskTest {
     task.execute();
 
     assertEquals("// custom content", Files.readString(existing));
-    assertFilesExistsInDir(ENTITIES + "/", "response/Book.java");
+    assertFilesExistsInDir(ENTITIES + "/", "BookSearch.java", "BookDetail.java");
   }
 
   @Test
