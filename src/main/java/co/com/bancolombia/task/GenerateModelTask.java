@@ -5,16 +5,22 @@ import co.com.bancolombia.factory.validations.architecture.ArchitectureValidatio
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.swagger.Swagger;
-import java.io.File;
+import io.swagger.codegen.v3.generators.DomainModelCodegen.ModelTarget;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.gradle.api.tasks.options.Option;
 import org.gradle.work.DisableCachingByDefault;
 
 @CATask(name = "generateModel", shortcut = "gm", description = "Generate model in domain layer")
 @DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
+
+  private static final String MODEL_SOURCE_ROOT = "domain/model/src/main/java";
 
   private String name = "";
   private String fromOpenApi;
@@ -26,7 +32,7 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
   }
 
   @Option(
-      option = "from-openapi",
+      option = "from-swagger",
       description = "Path or URL to the OpenAPI v3 specification (YAML or JSON)")
   public void setFromOpenApi(String fromOpenApi) {
     this.fromOpenApi = fromOpenApi;
@@ -41,33 +47,20 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
 
   @Override
   protected void doExecute() throws IOException, ParamNotFoundException {
-
-    // Requires a model name or an OpenAPI contract path
     boolean hasName = name != null && !name.isBlank();
     boolean hasSpec = fromOpenApi != null && !fromOpenApi.isBlank();
-
-    // if there is no folder domain/model, error
-    File modelModule = builder.resolveFile("domain/model");
-    if (!modelModule.isDirectory()) {
-      throw new IllegalStateException(
-          "domain/model module not found. Run cleanArchitecture (ca) before importing OpenAPI models.");
-    }
 
     if (!hasName && !hasSpec) {
       printHelp();
       throw new IllegalArgumentException(
-          "No model name and no OpenAPI spec, \r\n "
-              + "usage: gradle generateModel --from-openapi [path-or-url]"
+          "No model name or no OpenAPI specification, \r\n "
+              + "usage: gradle generateModel --from-swagger [path-or-url]"
               + "\r\n or \r\n"
               + "usage: gradle generateModel --name [name]");
     }
     logger.lifecycle("Clean Architecture plugin version: {}", Utils.getVersionPlugin());
     if (hasSpec) {
-      if (models != null && !models.isBlank()) {
-        logger.lifecycle("Schemas filter: {}", models);
-      }
-      List<String> classNames = Swagger.generateDomainModels(builder, fromOpenApi, models);
-      logger.lifecycle("Generated {} domain model(s) from OpenAPI", classNames.size());
+      generateFromOpenApi();
     }
     if (hasName) {
       name = Utils.capitalize(name);
@@ -80,8 +73,51 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     }
   }
 
+  private void generateFromOpenApi() throws IOException {
+    if (models != null && !models.isBlank()) {
+      logger.lifecycle("Schemas filter: {}", models);
+    }
+    List<ModelTarget> targets = Swagger.planDomainModels(builder, fromOpenApi, models);
+    for (ModelTarget target : targets) {
+      ArchitectureValidation.validateModelName(target.className());
+    }
+    failOnDuplicateTargets(targets);
+    warnExistingTargets(targets);
+
+    List<String> classNames = Swagger.generateDomainModels(builder, fromOpenApi, models);
+    logger.lifecycle("Generated {} domain model(s) from OpenAPI", classNames.size());
+  }
+
+  private static void failOnDuplicateTargets(List<ModelTarget> targets) {
+    Map<String, List<String>> schemasByPath =
+        targets.stream()
+            .collect(
+                Collectors.groupingBy(
+                    ModelTarget::relativePath,
+                    Collectors.mapping(ModelTarget::schemaKey, Collectors.toList())));
+    schemasByPath.forEach(
+        (path, schemaKeys) -> {
+          if (schemaKeys.size() > 1) {
+            throw new IllegalArgumentException(
+                "Schemas " + schemaKeys + " would all generate " + path);
+          }
+        });
+  }
+
+  private void warnExistingTargets(List<ModelTarget> targets) {
+    Path sourceRoot = Swagger.domainModelSourceRoot(builder);
+    List<String> existing =
+        targets.stream()
+            .map(ModelTarget::relativePath)
+            .filter(path -> Files.exists(sourceRoot.resolve(path)))
+            .toList();
+    if (!existing.isEmpty()) {
+      logger.warn("Skipping models that already exist: {}", existing);
+    }
+  }
+
   @Override
   protected Optional<String> resolveAnalyticsType() {
-    return Optional.of(name);
+    return Optional.ofNullable(name).filter(value -> !value.isBlank());
   }
 }
