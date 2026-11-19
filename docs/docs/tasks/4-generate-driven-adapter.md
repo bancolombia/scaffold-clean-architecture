@@ -124,7 +124,7 @@ The generated module includes:
 
 ### Proto File
 
-The generated `consumer.proto` (with its own proto package and `java_package`, so it does not collide with the gRPC entry point) includes a sample service definition that should match the server you want to consume:
+The generated `consumer.proto` includes a sample service definition that should match the server you want to consume. Its `java_package` (`[package].grpc.consumer`) keeps the generated classes from colliding with the gRPC entry point:
 
 ```protobuf
 syntax = "proto3";
@@ -152,6 +152,12 @@ message Response {
   string message = 2;
 }
 ```
+
+:::warning[Proto package must match the server]
+The proto `package` is part of the method name sent over the wire (for example `consumer.ExampleService/getById`).
+Replace `package consumer;` with the package declared in the server's proto, otherwise every call fails with
+`UNIMPLEMENTED`. Only `java_package` needs to differ from the server to avoid class collisions.
+:::
 
 ### Compiling Proto Files
 
