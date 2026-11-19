@@ -190,7 +190,7 @@ spring:
           - Tools: Executable tools
           - Resources: Access to system and user data
           - Prompts: Custom conversation templates
-
+          
           Security: Authenticated via Entra ID (Bearer Token)
         streamable-http:
           mcp-endpoint: "/mcp/${spring.application.name}"
@@ -254,12 +254,12 @@ When `--enable-audit=true` (default), the generator creates an AOP aspect that a
 
 @Component
 public class CalculatorTool {
-  @McpTool(name = "multiply", description = "Multiplies two numbers")
-  public Mono<Integer> multiply(
-          @McpToolParam(description = "First number", required = true) int a,
-          @McpToolParam(description = "Second number", required = true) int b) {
-    return Mono.just(a * b);
-  }
+    @McpTool(name = "multiply", description = "Multiplies two numbers")
+    public Mono<Integer> multiply(
+            @McpToolParam(description = "First number", required = true) int a,
+            @McpToolParam(description = "Second number", required = true) int b) {
+        return Mono.just(a * b);
+    }
 }
 ```
 
@@ -269,15 +269,15 @@ public class CalculatorTool {
 
 @Component
 public class ConfigResource {
-  @McpResource(
-          uri = "resource://config/app",
-          name = "app-config",
-          description = "Application configuration")
-  public Mono<ReadResourceResult> getConfig() {
-    return Mono.fromCallable(() -> {
-      // Implementation
-    });
-  }
+    @McpResource(
+            uri = "resource://config/app",
+            name = "app-config",
+            description = "Application configuration")
+    public Mono<ReadResourceResult> getConfig() {
+        return Mono.fromCallable(() -> {
+            // Implementation
+        });
+    }
 }
 ```
 
@@ -287,15 +287,15 @@ public class ConfigResource {
 
 @Component
 public class SupportPrompt {
-  @McpPrompt(
-          name = "customer-support",
-          description = "Generates a customer support prompt")
-  public Mono<GetPromptResult> customerSupport(
-          @McpArg(name = "issue", required = true) String issue) {
-    return Mono.fromCallable(() -> {
-      // Implementation
-    });
-  }
+    @McpPrompt(
+            name = "customer-support",
+            description = "Generates a customer support prompt")
+    public Mono<GetPromptResult> customerSupport(
+            @McpArg(name = "issue", required = true) String issue) {
+        return Mono.fromCallable(() -> {
+            // Implementation
+        });
+    }
 }
 ```
 
@@ -573,19 +573,19 @@ message CreateUserResponse {
 ```java
 @Override
 public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse>responseObserver) {
-  try {
-    // Call your use case
-    var result = createUserUseCase.execute(request.getName(), request.getEmail());
-
-    CreateUserResponse response = CreateUserResponse.newBuilder()
-            .setId(result.getId())
-            .setStatus("CREATED")
-            .build();
-
-    responseObserver.onNext(response);
-    responseObserver.onCompleted();
-  } catch (Exception e) {
-    responseObserver.onError(errorMapper.map(e));
-  }
+    try {
+        // Call your use case
+        var result = createUserUseCase.execute(request.getName(), request.getEmail());
+        
+        CreateUserResponse response = CreateUserResponse.newBuilder()
+                .setId(result.getId())
+                .setStatus("CREATED")
+                .build();
+        
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    } catch (Exception e) {
+        responseObserver.onError(errorMapper.map(e));
+    }
 }
 ```
