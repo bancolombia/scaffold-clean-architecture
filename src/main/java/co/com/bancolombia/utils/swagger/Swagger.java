@@ -69,11 +69,6 @@ public class Swagger {
   }
 
   public static List<String> generateDomainModels(
-      ModuleBuilder builder, String specPath, String modelsFilter) {
-    return generateDomainModels(builder, specPath, modelsFilter, null, null);
-  }
-
-  public static List<String> generateDomainModels(
       ModuleBuilder builder,
       String specPath,
       String modelsFilter,
@@ -191,11 +186,6 @@ public class Swagger {
       return "io.swagger.codegen.v3.generators.WebClientCodegen";
     }
     return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
-  }
-
-  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      ModuleBuilder builder, String specPath, String modelsFilter) {
-    return planDomainModels(builder, specPath, modelsFilter, Set.of(), Set.of());
   }
 
   public static List<DomainModelCodegen.ModelTarget> planDomainModels(

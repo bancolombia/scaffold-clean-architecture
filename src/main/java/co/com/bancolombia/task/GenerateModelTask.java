@@ -19,8 +19,6 @@ import org.gradle.work.DisableCachingByDefault;
 @DisableCachingByDefault(because = "Generates and modifies project files, it has side effects")
 public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
 
-  private static final String MODEL_SOURCE_ROOT = "domain/model/src/main/java";
-
   private String name = "";
   private String fromOpenApi;
   private String models;

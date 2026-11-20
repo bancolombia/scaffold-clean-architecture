@@ -13,6 +13,7 @@ import lombok.Setter;
 
 {{#models}}
 {{#model}}
+{{^isComposedModel}}
 {{#lombok}}
 {{#vendorExtensions.x-use-super-builder}}
 import lombok.experimental.SuperBuilder;
@@ -21,13 +22,17 @@ import lombok.experimental.SuperBuilder;
 import lombok.Builder;
 {{/vendorExtensions.x-use-super-builder}}
 {{/lombok}}
-
+{{/isComposedModel}}
+{{#isComposedModel}}
+{{>interface}}
+{{/isComposedModel}}
+{{^isComposedModel}}
+{{#isEnum}}
+{{>enum-outer}}
+{{/isEnum}}
 {{^isEnum}}
 {{>pojo}}
 {{/isEnum}}
-{{#isEnum}}
-
-{{>enum-outer}}
-{{/isEnum}}
+{{/isComposedModel}}
 {{/model}}
 {{/models}}

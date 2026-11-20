@@ -46,6 +46,8 @@ components:
           example: Example Title
         author:
           $ref: '#/components/schemas/author'
+        preferredIdentifier:
+          $ref: '#/components/schemas/identifierOneOf'
     bookDetail:
       type: object
       description: Book returned by the catalog
@@ -88,14 +90,78 @@ components:
             - AVAILABLE
             - BORROWED
             - LOST
+        shelfCode:
+          $ref: '#/components/schemas/sanitizedCode'
+        fulfillment:
+          $ref: '#/components/schemas/fulfillmentAnyOf'
+    isbnIdentifier:
+      type: object
+      description: Book identifier by ISBN
+      required:
+        - isbn
+      properties:
+        isbn:
+          type: string
+          example: 978-0-00-000000-0
+    libraryCardId:
+      type: object
+      description: Patron library card used as catalog key
+      required:
+        - cardNumber
+      properties:
+        cardNumber:
+          type: string
+          example: LC-88421
+    storePickup:
+      type: object
+      description: Pick up a hold at a branch
+      properties:
+        branchCode:
+          type: string
+          example: BR-NORTH
+    shipmentAddress:
+      type: object
+      description: Ship an inter-library loan
+      properties:
+        city:
+          type: string
+        postalCode:
+          type: string
+    digitalDownload:
+      type: object
+      description: Deliver an e-book license
+      properties:
+        format:
+          type: string
+          enum:
+            - EPUB
+            - PDF
+    identifierOneOf:
+      description: Composition example (oneOf) — exactly one identifier form
+      oneOf:
+        - $ref: '#/components/schemas/isbnIdentifier'
+        - $ref: '#/components/schemas/libraryCardId'
+    fulfillmentAnyOf:
+      description: Composition example (anyOf) — one or more fulfillment options
+      anyOf:
+        - $ref: '#/components/schemas/storePickup'
+        - $ref: '#/components/schemas/shipmentAddress'
+        - $ref: '#/components/schemas/digitalDownload'
+    sanitizedCode:
+      type: string
+      description: Composition example (not) — must not be whitespace-only
+      example: SHELF-A12
+      not:
+        type: string
+        pattern: '^\s*$'
     base:
       type: object
-      description: Parent model in the same package as its child
+      description: Parent model in the same package as its child (used by allOf)
       properties:
         id:
           type: string
     child:
-      description: Inherits from base
+      description: Composition example (allOf) — inherits from base
       allOf:
         - $ref: '#/components/schemas/base'
         - type: object
@@ -112,6 +178,7 @@ components:
         createdBy:
           type: string
     loanRecord:
+      description: Composition example (allOf) — extends auditTrail in response package
       allOf:
         - $ref: '#/components/schemas/auditTrail'
         - type: object

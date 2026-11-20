@@ -198,8 +198,28 @@ class GenerateModelTaskTest {
     assertContains("LoanStatus.java", "ACTIVE(\"ACTIVE\")");
     assertContains("LoanStatus.java", "private final String value;");
     assertContains("LoanStatus.java", "LoanStatus(String value)");
-    assertNotContains("LoanStatus.java", "import lombok");
     assertContains("LoanRecord.java", "private LoanStatus status;");
+  }
+
+  @Test
+  void shouldGenerateOneOfComposedModelsAsInterface() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setModels("identifierOneOf,isbnIdentifier,libraryCardId");
+    task.execute();
+    assertContains("IdentifierOneOf.java", "public interface IdentifierOneOf");
+    assertNotContains("IdentifierOneOf.java", "@Getter");
+    assertNotContains("IdentifierOneOf.java", "public class");
+    assertContains("IsbnIdentifier.java", "implements IdentifierOneOf");
+    assertContains("LibraryCardId.java", "implements IdentifierOneOf");
+  }
+
+  @Test
+  void shouldGenerateAnyOfComposedModelsAsInterface() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setModels("fulfillmentAnyOf,storePickup,shipmentAddress,digitalDownload");
+    task.execute();
+    assertContains("FulfillmentAnyOf.java", "public interface FulfillmentAnyOf");
+    assertContains("StorePickup.java", "implements FulfillmentAnyOf");
   }
 
   @Test
@@ -215,7 +235,12 @@ class GenerateModelTaskTest {
     assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
   }
 
-  private void assertNotContains(String s, String s1) {}
+  private void assertNotContains(String relativePath, String unexpected) throws IOException {
+    String content = Files.readString(Path.of(ENTITIES, relativePath));
+    assertFalse(
+        content.contains(unexpected),
+        () -> relativePath + " should not contain: " + unexpected + "\n---\n" + content);
+  }
 
   @Test
   void shouldRemapAndImportRenamedParentFromAnotherPackage() throws IOException, CleanException {

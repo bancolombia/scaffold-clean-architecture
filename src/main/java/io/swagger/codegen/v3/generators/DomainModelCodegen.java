@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class DomainModelCodegen extends AbstractScaffoldCodegen {
 
   static final String SUPER_BUILDER = "x-use-super-builder";
+  static final String IMPLEMENTS_CLAUSE = "x-implements-clause";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
 
   private Set<String> requestSchemaKeys = Set.of();
@@ -115,6 +116,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         if (codegenModel.parent != null) {
           codegenModel.parent = remapType(codegenModel.parent, openapiClassToDomainClass);
         }
+        applyImplementsClause(codegenModel, openapiClassToDomainClass);
         codegenModel.vars.forEach(this::clearNullDefault);
         allModels.add(codegenModel);
       }
@@ -146,6 +148,18 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     if ("null".equals(property.defaultValue)) {
       property.defaultValue = null;
     }
+  }
+
+  private void applyImplementsClause(
+      CodegenModel model, Map<String, String> openapiClassToDomainClass) {
+    if (model.interfaceModels == null || model.interfaceModels.isEmpty()) {
+      return;
+    }
+    String clause =
+        model.interfaceModels.stream()
+            .map(iface -> openapiClassToDomainClass.getOrDefault(iface.classname, iface.classname))
+            .collect(Collectors.joining(", ", " implements ", ""));
+    model.getVendorExtensions().put(IMPLEMENTS_CLAUSE, clause);
   }
 
   private void markInheritance(List<CodegenModel> models) {
