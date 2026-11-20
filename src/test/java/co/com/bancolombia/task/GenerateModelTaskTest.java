@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.utils.GeneratedDomainModelCompilation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +27,7 @@ class GenerateModelTaskTest {
       MODEL_DIR + "src/main/java/co/com/bancolombia/model/entities";
   private static final String SPEC =
       Path.of("src/test/resources/swagger/sample-catalog.yaml").toAbsolutePath().toString();
+  private static final String JAVA_SOURCES = MODEL_DIR + "src/main/java";
 
   private static GenerateModelTask task;
 
@@ -211,6 +213,24 @@ class GenerateModelTaskTest {
     assertNotContains("IdentifierOneOf.java", "public class");
     assertContains("IsbnIdentifier.java", "implements IdentifierOneOf");
     assertContains("LibraryCardId.java", "implements IdentifierOneOf");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @Test
+  void shouldCompileAllGeneratedDomainModelsFromSampleCatalog() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.execute();
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @Test
+  void shouldCompileGeneratedModelsWithRequestAndResponseFolders()
+      throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setRequestModels("bookSearch");
+    task.setResponseModels("bookDetail,auditTrail");
+    task.execute();
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -235,11 +255,10 @@ class GenerateModelTaskTest {
     assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
   }
 
-  private void assertNotContains(String relativePath, String unexpected) throws IOException {
+  private static void assertNotContains(String relativePath, String unexpected) throws IOException {
     String content = Files.readString(Path.of(ENTITIES, relativePath));
     assertFalse(
-        content.contains(unexpected),
-        () -> relativePath + " should not contain: " + unexpected + "\n---\n" + content);
+        content.contains(unexpected), () -> relativePath + " should not contain: " + unexpected);
   }
 
   @Test
