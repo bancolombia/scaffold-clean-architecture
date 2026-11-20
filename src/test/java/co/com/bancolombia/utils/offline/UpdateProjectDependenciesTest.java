@@ -86,7 +86,8 @@ class UpdateProjectDependenciesTest {
     // Act
     task.run();
     // Assert
-    assertEquals(originalContent, Files.readString(TEST_FILE));
+    assertEquals(
+        originalContent.replace("\r\n", "\n"), Files.readString(TEST_FILE).replace("\r\n", "\n"));
   }
 
   @Test

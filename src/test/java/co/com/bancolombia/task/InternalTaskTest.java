@@ -90,8 +90,11 @@ class InternalTaskTest {
   }
 
   private String readResourceFile(String location) throws IOException {
-    ClassLoader classLoader = getClass().getClassLoader();
-    return Files.readString(
-        Path.of(Objects.requireNonNull(classLoader.getResource(location)).getPath()));
+    try (var in =
+        Objects.requireNonNull(
+            getClass().getClassLoader().getResourceAsStream(location),
+            "Resource not found: " + location)) {
+      return new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+    }
   }
 }

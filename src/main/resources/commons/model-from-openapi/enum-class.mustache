@@ -1,0 +1,25 @@
+/**
+* {{^description}}Gets or Sets {{{name}}}{{/description}}{{#description}}{{{description}}}{{/description}}
+*/
+{{#lombok}}
+@AllArgsConstructor
+{{/lombok}}
+public enum {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{{name}}}({{#value}}{{{value}}}{{/value}}{{^value}}null{{/value}}){{^@last}},{{/@last}}{{#@last}};{{/@last}}
+{{/enumVars}}
+{{/allowableValues}}
+
+    private final {{{datatype}}} value;
+{{^lombok}}
+{{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}}({{{datatype}}} value) {
+    this.value = value;
+}
+{{/lombok}}
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+}

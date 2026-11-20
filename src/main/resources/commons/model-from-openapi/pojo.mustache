@@ -1,0 +1,31 @@
+/**
+* {{#description}}{{.}}{{/description}}{{^description}}{{classname}}{{/description}}
+*/
+{{#lombok}}
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+{{#vendorExtensions.x-use-super-builder}}
+@SuperBuilder(toBuilder = true)
+{{/vendorExtensions.x-use-super-builder}}
+{{^vendorExtensions.x-use-super-builder}}
+@Builder(toBuilder = true)
+{{/vendorExtensions.x-use-super-builder}}
+{{/lombok}}
+public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{{vendorExtensions.x-implements-clause}}} {
+{{#vars}}
+    {{#baseItems this}}
+    {{#isEnum}}
+    {{>enum-class}}
+    {{/isEnum}}
+    {{/baseItems}}
+    {{#isContainer}}
+    {{#useBeanValidation}}@Valid{{/useBeanValidation}}
+    private {{{datatypeWithEnum}}} {{name}}{{#defaultValue}}{{#required}} = {{{defaultValue}}}{{/required}}{{/defaultValue}};
+    {{/isContainer}}
+    {{^isContainer}}
+    private {{{datatypeWithEnum}}} {{name}};
+    {{/isContainer}}
+{{/vars}}
+}

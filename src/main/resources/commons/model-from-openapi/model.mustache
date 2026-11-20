@@ -1,0 +1,38 @@
+package {{package}};
+
+{{^x-is-composed-model}}
+{{#imports}}import {{import}};
+{{/imports}}
+{{#lombok}}
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+{{/lombok}}
+{{/x-is-composed-model}}
+
+{{#models}}
+{{#model}}
+{{^isComposedModel}}
+{{#lombok}}
+{{#vendorExtensions.x-use-super-builder}}
+import lombok.experimental.SuperBuilder;
+{{/vendorExtensions.x-use-super-builder}}
+{{^vendorExtensions.x-use-super-builder}}
+import lombok.Builder;
+{{/vendorExtensions.x-use-super-builder}}
+{{/lombok}}
+{{/isComposedModel}}
+{{#isComposedModel}}
+{{>interface}}
+{{/isComposedModel}}
+{{^isComposedModel}}
+{{#isEnum}}
+{{>enum-outer}}
+{{/isEnum}}
+{{^isEnum}}
+{{>pojo}}
+{{/isEnum}}
+{{/isComposedModel}}
+{{/model}}
+{{/models}}
