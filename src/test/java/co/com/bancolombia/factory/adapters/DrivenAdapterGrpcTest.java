@@ -7,8 +7,10 @@ import static co.com.bancolombia.TestUtils.deleteStructure;
 import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.exceptions.ValidationException;
 import co.com.bancolombia.task.GenerateDrivenAdapterTask;
 import co.com.bancolombia.task.GenerateStructureTask;
 import java.io.File;
@@ -134,5 +136,25 @@ class DrivenAdapterGrpcTest {
         "static://localhost:9090",
         "default:",
         "deadline:");
+  }
+
+  @Test
+  void shouldFailOnReactiveProjects() throws IOException, CleanException {
+    // Arrange
+    deleteStructure(Path.of(TEST_DIR));
+    Project project = setupProject(DrivenAdapterGrpcTest.class, GenerateStructureTask.class);
+    GenerateStructureTask taskStructure = getTask(project, GenerateStructureTask.class);
+    taskStructure.setType(GenerateStructureTask.ProjectType.REACTIVE);
+    taskStructure.execute();
+    ProjectBuilder.builder()
+        .withName("app-service")
+        .withProjectDir(new File(TEST_DIR + "/applications/app-service"))
+        .withParent(project)
+        .build();
+    GenerateDrivenAdapterTask reactiveTask = createTask(project, GenerateDrivenAdapterTask.class);
+    reactiveTask.setType("GRPC");
+
+    // Act & Assert
+    assertThrows(ValidationException.class, reactiveTask::execute);
   }
 }

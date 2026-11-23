@@ -114,9 +114,9 @@ thread forever when the server never answers. Override it with the `GRPC_CLIENT_
 call with `exampleServiceStub.withDeadlineAfter(...)` inside the adapter method. Don't set it on the stub bean: that
 deadline is computed once when the bean is created, so every call after it expires would fail.
 
-:::note[Reactive projects]
-The adapter uses a blocking stub. In reactive projects the task prints a warning; wrap the calls (for example with
-`Mono.fromCallable(...)` on `Schedulers.boundedElastic()`) so they do not block the event loop.
+:::note[Imperative projects only]
+The gRPC driven adapter is only available for imperative projects, because it uses a blocking stub. Running it in a
+reactive project fails with `This module is only available for imperative projects`.
 :::
 
 ### Dependencies
