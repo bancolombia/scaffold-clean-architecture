@@ -25,7 +25,7 @@ public enum {{classname}} {
 
     public static {{classname}} fromValue({{{dataType}}} value) {
         for ({{classname}} item : values()) {
-            if (item.value.equals(value)) {
+            if (item.value == null ? value == null : item.value.equals(value)) {
                 return item;
             }
         }

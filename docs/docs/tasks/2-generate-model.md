@@ -70,3 +70,31 @@ case-sensitive and must match `components.schemas` in the contract.
 gradle generateModel --from-swagger=[filePath.yaml] --models=[SchemaName]   
 gradle gm --from-swagger=[filePath.yaml] --models=[SchemaName]   
 ```
+
+### Class names
+
+Domain models must not use technical suffixes, so the `Dto`, `Request` and `Response` suffixes are removed from the
+class names (`bookResponse` generates `Book`, `customerRequestDto` generates `Customer`). Every reference to the schema
+in other models uses the new name. The suffixes are the ones configured in `arch.unit.forbiddenDomainSuffixes`.
+
+The task stops before writing any file when a class name is not valid:
+
+- Two schemas end up with the same name, for example `book` and `bookResponse`. Names are compared ignoring case
+  (`Book` and `BOOK` would be the same file on macOS and Windows) and across packages, so a `bookRequest` and
+  `bookResponse` pair needs `rename-models` even when you split them with `request-models` and `response-models`.
+- The name is a Java type the generated models use, such as `List`, `Map`, `Date`, `File` or `Timestamp` (for example
+  `dateResponse` would become `Date`), or a Lombok annotation such as `Builder` when Lombok is enabled.
+- The name contains a forbidden technical word (`arch.unit.forbiddenDomainClassNames`).
+
+Use `rename-models` to choose the class name of any schema (`schemaKey:ClassName` pairs, comma-separated):
+
+```shell
+gradle generateModel --from-swagger=contract.yaml --rename-models=bookResponse:BookSummary,customerRequest:CustomerCriteria
+```
+
+Inline object schemas are generated as their own models. Their key is their `title` when they have one; otherwise it is
+built from the parent schema and the property, for example `auditLog_request` for the `request` property of
+`auditLog`. If one of them collides, the error shows that key, and you can use it in `rename-models` too.
+
+The task also stops when a `$ref` cannot be resolved (missing file, wrong pointer or missing schema), instead of
+generating models that reference classes that do not exist.

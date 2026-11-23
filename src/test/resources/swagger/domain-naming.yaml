@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: Domain naming
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    author:
+      type: object
+      properties:
+        name:
+          type: string
+    bookRequestDto:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          $ref: '#/components/schemas/author'
+    auditResponse:
+      type: object
+      properties:
+        createdBy:
+          type: string
+    bookResponse:
+      allOf:
+        - $ref: '#/components/schemas/auditResponse'
+        - type: object
+          properties:
+            title:
+              type: string
+            java:
+              type: string
+            status:
+              type: integer
+              enum:
+                - 1
+                - 2
+    library:
+      type: object
+      properties:
+        booksByIsbn:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bookResponse'
+        shelves:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/bookResponse'
+    isbnCode:
+      type: string
+      pattern: '^[0-9-]+$'

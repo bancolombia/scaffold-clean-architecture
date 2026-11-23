@@ -51,8 +51,9 @@ public final class GeneratedDomainModelCompilation {
         List.of(
             "-d",
             outputDir.toString(),
-            "--release",
-            "21",
+            // Compile for the JDK running the tests (the project toolchain), and fail on warnings
+            // such as Lombok ignoring a field initializer in a builder
+            "-Werror",
             "-classpath",
             lombokJar,
             "-processorpath",

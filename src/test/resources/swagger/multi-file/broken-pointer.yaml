@@ -1,0 +1,12 @@
+openapi: 3.0.3
+info:
+  title: Contract with a wrong pointer to an existing file
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    invoice:
+      type: object
+      properties:
+        total:
+          $ref: './schemas/common.yaml#/components/schemas/mony'

@@ -5,6 +5,7 @@ import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.utils.FileUtils;
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,6 +63,29 @@ public final class ArchitectureValidation {
                       + name);
             });
     validateUseCaseName(name);
+  }
+
+  /**
+   * Removes the forbidden domain suffixes (dto, request, response by default) from the end of a
+   * class name, repeatedly, so BookRequestDto becomes Book. A name made only of a forbidden suffix
+   * is returned unchanged, so {@link #validateModelName(String)} still rejects it.
+   */
+  public static String stripForbiddenSuffixes(String name) {
+    List<String> suffixes =
+        loadForbiddenValuesFor(FORBIDDEN_DOMAIN_SUFFIXES_PROP, FORBIDDEN_DOMAIN_SUFFIXES).toList();
+    String current = name;
+    boolean stripped = true;
+    while (stripped) {
+      stripped = false;
+      for (String suffix : suffixes) {
+        if (current.length() > suffix.length() && current.endsWith(suffix)) {
+          current = current.substring(0, current.length() - suffix.length());
+          stripped = true;
+          break;
+        }
+      }
+    }
+    return current;
   }
 
   public static void validateUseCaseName(String name) {

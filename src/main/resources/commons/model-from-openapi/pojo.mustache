@@ -20,12 +20,18 @@ public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{{vendorEx
     {{>enum-class}}
     {{/isEnum}}
     {{/baseItems}}
-    {{#isContainer}}
-    {{#useBeanValidation}}@Valid{{/useBeanValidation}}
     private {{{datatypeWithEnum}}} {{name}};
-    {{/isContainer}}
-    {{^isContainer}}
-    private {{{datatypeWithEnum}}} {{name}};
-    {{/isContainer}}
 {{/vars}}
+{{^lombok}}
+{{#vars}}
+
+    public {{{datatypeWithEnum}}} {{getter}}() {
+        return {{name}};
+    }
+
+    public void {{setter}}({{{datatypeWithEnum}}} {{name}}) {
+        this.{{name}} = {{name}};
+    }
+{{/vars}}
+{{/lombok}}
 }

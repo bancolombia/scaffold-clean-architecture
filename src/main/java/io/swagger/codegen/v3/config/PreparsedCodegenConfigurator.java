@@ -5,7 +5,6 @@ import io.swagger.codegen.v3.ClientOpts;
 import io.swagger.codegen.v3.CodegenConfig;
 import io.swagger.codegen.v3.CodegenConstants;
 import io.swagger.v3.oas.models.OpenAPI;
-import java.lang.reflect.Method;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -30,17 +29,13 @@ public class PreparsedCodegenConfigurator extends CodegenConfigurator {
     return input;
   }
 
+  /**
+   * Same as the private {@code CodegenConfigurator.setSystemProperties()}, through the public
+   * getter. Verbose flags and dynamic properties are not supported: the domain generation never
+   * sets them.
+   */
   private void prepare() {
-    try {
-      Method verbose = CodegenConfigurator.class.getDeclaredMethod("setVerboseFlags");
-      verbose.setAccessible(true);
-      verbose.invoke(this);
-      Method systemProperties = CodegenConfigurator.class.getDeclaredMethod("setSystemProperties");
-      systemProperties.setAccessible(true);
-      systemProperties.invoke(this);
-    } catch (ReflectiveOperationException e) {
-      throw new IllegalStateException("Failed to prepare swagger codegen configurator", e);
-    }
+    getSystemProperties().forEach(System::setProperty);
   }
 
   private void applyConfiguratorToConfig(CodegenConfig config) {
@@ -73,8 +68,6 @@ public class PreparsedCodegenConfigurator extends CodegenConfigurator {
     checkAndSet(config, getReleaseNote(), CodegenConstants.RELEASE_NOTE);
     checkAndSet(config, getHttpUserAgent(), CodegenConstants.HTTP_USER_AGENT);
 
-    invokeHandleDynamicProperties(config);
-
     if (StringUtils.isNotEmpty(getLibrary())) {
       config.setLibrary(getLibrary());
     }
@@ -94,18 +87,6 @@ public class PreparsedCodegenConfigurator extends CodegenConfigurator {
           .put(
               CodegenConstants.TEMPLATE_DIR,
               java.nio.file.Paths.get(templateDir).toAbsolutePath().toString());
-    }
-  }
-
-  private void invokeHandleDynamicProperties(CodegenConfig config) {
-    try {
-      Method handle =
-          CodegenConfigurator.class.getDeclaredMethod(
-              "handleDynamicProperties", CodegenConfig.class);
-      handle.setAccessible(true);
-      handle.invoke(this, config);
-    } catch (ReflectiveOperationException e) {
-      throw new IllegalStateException("Failed to apply dynamic codegen properties", e);
     }
   }
 }

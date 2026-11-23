@@ -1,0 +1,12 @@
+openapi: 3.0.3
+info:
+  title: Contract with a broken external reference
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    invoice:
+      type: object
+      properties:
+        total:
+          $ref: './schemas/missing.yaml#/components/schemas/money'

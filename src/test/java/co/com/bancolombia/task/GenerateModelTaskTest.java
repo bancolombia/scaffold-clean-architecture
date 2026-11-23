@@ -19,6 +19,8 @@ import java.util.Optional;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class GenerateModelTaskTest {
   private static final String TEST_DIR = getTestDir(GenerateModelTaskTest.class);
@@ -57,6 +59,7 @@ class GenerateModelTaskTest {
     task.setModels(null);
     task.setRequestModels(null);
     task.setResponseModels(null);
+    task.setRenameModels(null);
   }
 
   @AfterAll
@@ -288,11 +291,30 @@ class GenerateModelTaskTest {
   }
 
   @Test
-  void shouldNotWriteAnyFileWhenAModelNameIsInvalid() {
-    task.setFromOpenApi(spec("invalid-name.yaml"));
+  void shouldNotWriteAnyFileWhenARenamedClassNameIsInvalid() {
+    task.setFromOpenApi(spec("domain-naming.yaml"));
+    task.setRenameModels("bookRequestDto:BookCriteria,author:AwsAuthor");
+
+    CleanDomainException error = assertThrows(CleanDomainException.class, () -> task.execute());
+    assertTrue(error.getMessage().contains("schema 'author'"), error.getMessage());
+    assertFalse(Files.exists(Path.of(ENTITIES)), "No model should be generated");
+  }
+
+  @Test
+  void shouldNotWriteAnyFileWhenTheNameOptionIsInvalid() {
+    task.setName("UserDto");
+    task.setFromOpenApi(SPEC);
 
     assertThrows(CleanDomainException.class, () -> task.execute());
     assertFalse(Files.exists(Path.of(ENTITIES)), "No model should be generated");
+  }
+
+  @Test
+  void shouldFailWhenSchemaOptionsAreUsedWithoutSpec() {
+    task.setName("customer");
+    task.setModels("author");
+
+    assertThrows(IllegalArgumentException.class, () -> task.execute());
   }
 
   @Test
@@ -301,6 +323,88 @@ class GenerateModelTaskTest {
 
     assertThrows(CleanDomainException.class, () -> task.execute());
     assertFalse(Files.exists(Path.of(ENTITIES)));
+  }
+
+  @Test
+  void shouldFailBeforeWritingWhenStrippedClassNamesCollide() {
+    task.setFromOpenApi(spec("domain-naming.yaml"));
+
+    CleanDomainException error = assertThrows(CleanDomainException.class, () -> task.execute());
+    assertTrue(error.getMessage().contains("'bookRequestDto', 'bookResponse'"), error.getMessage());
+    assertTrue(error.getMessage().contains("same class name 'Book'"), error.getMessage());
+    assertTrue(error.getMessage().contains("--rename-models"), error.getMessage());
+    assertFalse(Files.exists(Path.of(ENTITIES)));
+  }
+
+  @Test
+  void shouldStripForbiddenSuffixesAndUseTheDomainNamesEverywhere()
+      throws IOException, CleanException {
+    task.setFromOpenApi(spec("domain-naming.yaml"));
+    task.setRenameModels("bookRequestDto:BookCriteria");
+    task.setResponseModels("bookResponse");
+    task.execute();
+
+    assertFilesExistsInDir(
+        ENTITIES + "/",
+        "Author.java",
+        "BookCriteria.java",
+        "Audit.java",
+        "Library.java",
+        "response/Book.java");
+    assertFalse(Files.exists(Path.of(ENTITIES, "IsbnCode.java")), "aliases are not generated");
+    assertContains("response/Book.java", "public class Book extends Audit");
+    assertContains("response/Book.java", "import co.com.bancolombia.model.entities.Audit;");
+    assertContains("response/Book.java", "public Integer getValue()");
+    assertContains("response/Book.java", "public static StatusEnum fromValue(Integer value)");
+    assertContains("BookCriteria.java", "private Author author;");
+    assertContains("Library.java", "import co.com.bancolombia.model.entities.response.Book;");
+    assertContains("Library.java", "private Map<String, Book> booksByIsbn;");
+    assertContains("Library.java", "private List<Map<String, Book>> shelves;");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @Test
+  void shouldResolveRelativeRefsToOtherFiles() throws IOException, CleanException {
+    task.setFromOpenApi(spec("multi-file/api.yaml"));
+    task.execute();
+
+    assertFilesExistsInDir(ENTITIES + "/", "Invoice.java", "Money.java");
+    assertContains("Invoice.java", "private Money total;");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "multi-file/broken-ref.yaml",
+        "multi-file/broken-pointer.yaml",
+        "multi-file/broken-internal-ref.yaml"
+      })
+  void shouldFailWhenAReferenceCannotBeResolved(String contract) {
+    task.setFromOpenApi(spec(contract));
+
+    CleanDomainException error = assertThrows(CleanDomainException.class, () -> task.execute());
+    assertTrue(error.getMessage().contains("Unresolved references"), error.getMessage());
+    assertFalse(Files.exists(Path.of(ENTITIES)));
+  }
+
+  @Test
+  void shouldGenerateAccessorsWhenLombokIsDisabled() throws IOException, CleanException {
+    Path properties = Path.of(TEST_DIR, "gradle.properties");
+    String original = Files.readString(properties);
+    Files.writeString(properties, original.replace("lombok=true", "lombok=false"));
+    try {
+      task.setFromOpenApi(SPEC);
+      task.execute();
+    } finally {
+      Files.writeString(properties, original);
+    }
+
+    assertNotContains("Author.java", "lombok");
+    assertContains("Author.java", "public String getFullName()");
+    assertContains("Author.java", "public void setFullName(String fullName)");
+    assertNotContains("LoanStatus.java", "lombok");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test

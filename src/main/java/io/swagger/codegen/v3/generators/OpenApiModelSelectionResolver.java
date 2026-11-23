@@ -10,6 +10,7 @@ import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -98,35 +99,53 @@ public final class OpenApiModelSelectionResolver {
         + available;
   }
 
-  private static Set<String> collectReferencedSchemaKeys(Schema schema) {
+  /**
+   * {@code $ref}s in components.schemas that do not point to an existing schema. The parser only
+   * reports most of them as messages (missing file, wrong pointer, missing schema) and keeps going,
+   * which would generate models that reference classes that do not exist.
+   */
+  public static List<String> unresolvedRefs(OpenAPI openAPI) {
+    Map<String, Schema> schemas = componentsSchemas(openAPI);
     Set<String> refs = new LinkedHashSet<>();
-    collectReferencedSchemaKeys(schema, refs);
-    return refs;
+    schemas.values().forEach(schema -> collectRefs(schema, refs));
+    return refs.stream()
+        .filter(ref -> !schemas.containsKey(String.valueOf(schemaKeyFromRef(ref))))
+        .sorted()
+        .toList();
   }
 
-  private static void collectReferencedSchemaKeys(Schema schema, Set<String> refs) {
+  private static Set<String> collectReferencedSchemaKeys(Schema schema) {
+    Set<String> refs = new LinkedHashSet<>();
+    collectRefs(schema, refs);
+    return refs.stream()
+        .map(OpenApiModelSelectionResolver::schemaKeyFromRef)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  private static void collectRefs(Schema schema, Set<String> refs) {
     if (schema == null) {
       return;
     }
-    String direct = schemaKeyFromRef(schema.get$ref());
-    if (direct != null) {
-      refs.add(direct);
+    if (schema.get$ref() != null && !schema.get$ref().isBlank()) {
+      refs.add(schema.get$ref());
       return;
     }
     visitComposed(schema.getAllOf(), refs);
     visitComposed(schema.getOneOf(), refs);
     visitComposed(schema.getAnyOf(), refs);
+    collectRefs(schema.getNot(), refs);
     if (schema.getProperties() != null) {
       for (Object property : schema.getProperties().values()) {
         if (property instanceof Schema propertySchema) {
-          collectReferencedSchemaKeys(propertySchema, refs);
+          collectRefs(propertySchema, refs);
         }
       }
     }
-    collectReferencedSchemaKeys(schema.getItems(), refs);
+    collectRefs(schema.getItems(), refs);
     Object additionalProperties = schema.getAdditionalProperties();
     if (additionalProperties instanceof Schema additionalSchema) {
-      collectReferencedSchemaKeys(additionalSchema, refs);
+      collectRefs(additionalSchema, refs);
     }
   }
 
@@ -136,7 +155,7 @@ public final class OpenApiModelSelectionResolver {
     }
     for (Object part : parts) {
       if (part instanceof Schema schema) {
-        collectReferencedSchemaKeys(schema, refs);
+        collectRefs(schema, refs);
       }
     }
   }

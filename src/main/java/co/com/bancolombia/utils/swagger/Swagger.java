@@ -6,6 +6,7 @@ import io.swagger.codegen.v3.DefaultGenerator;
 import io.swagger.codegen.v3.config.CodegenConfigurator;
 import io.swagger.codegen.v3.config.PreparsedCodegenConfigurator;
 import io.swagger.codegen.v3.generators.DomainModelCodegen;
+import io.swagger.codegen.v3.generators.OpenApiDomainModelNaming;
 import io.swagger.codegen.v3.generators.OpenApiDomainModelPlanValidator;
 import io.swagger.codegen.v3.generators.OpenApiModelPackageResolver;
 import io.swagger.codegen.v3.generators.OpenApiModelSelectionResolver;
@@ -19,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
@@ -34,6 +36,7 @@ public class Swagger {
   private static final String DOMAIN_MODEL_LANG =
       "io.swagger.codegen.v3.generators.DomainModelCodegen";
   private static final String MODELS_SYSTEM_PROPERTY = "models";
+  private static final Object CODEGEN_LOCK = new Object();
 
   public static void fromBuilder(ModuleBuilder builder, String outputDir, boolean entryPoint) {
     if (builder.getStringParam("swagger-file") != null) {
@@ -69,61 +72,81 @@ public class Swagger {
     }
   }
 
-  public static OpenApiSpecContext loadOpenApiSpec(ModuleBuilder builder, String specPath) {
-    String resolved = resolveSpec(builder, specPath);
-    String content = readSpecContent(builder, specPath, resolved);
-    SwaggerParseResult parsed =
-        new OpenAPIParser().readContents(content, null, domainParseOptions());
-    if (parsed.getOpenAPI() == null) {
-      throw new CleanDomainException("Invalid OpenAPI specification: " + parsed.getMessages());
+  /**
+   * Parses the spec from its location (file path or URL), so relative {@code $ref}s to other files
+   * resolve against the spec's own folder.
+   */
+  public static OpenAPI loadOpenApiSpec(ModuleBuilder builder, String specPath) {
+    String location = resolveSpec(builder, specPath);
+    SwaggerParseResult parsed;
+    try {
+      parsed = new OpenAPIParser().readLocation(location, null, domainParseOptions());
+    } catch (Exception e) {
+      throw new CleanDomainException(
+          "Unable to read OpenAPI specification: " + location + ": " + e.getMessage());
     }
-    return new OpenApiSpecContext(parsed, content);
+    if (parsed == null || parsed.getOpenAPI() == null) {
+      throw new CleanDomainException(
+          "Invalid OpenAPI specification: " + (parsed == null ? location : parsed.getMessages()));
+    }
+    List<String> messages = parsed.getMessages() == null ? List.of() : parsed.getMessages();
+    List<String> unresolvedRefs = OpenApiModelSelectionResolver.unresolvedRefs(parsed.getOpenAPI());
+    if (!unresolvedRefs.isEmpty()) {
+      throw new CleanDomainException(
+          "Unresolved references in OpenAPI spec: "
+              + unresolvedRefs
+              + (messages.isEmpty() ? "" : ". Parser messages: " + messages));
+    }
+    messages.forEach(message -> builder.getLogger().warn("OpenAPI spec: {}", message));
+    return parsed.getOpenAPI();
   }
 
-  public static List<String> generateDomainModels(
-      ModuleBuilder builder, String specPath, String modelsFilter) {
-    return generateDomainModels(builder, specPath, modelsFilter, null, null);
-  }
-
-  public static List<String> generateDomainModels(
+  /**
+   * Resolves and validates everything that will be generated, without writing any file.
+   *
+   * @param renameModels {@code schemaKey:ClassName} pairs that override the domain class names
+   */
+  public static DomainModelPlan planDomainModels(
       ModuleBuilder builder,
-      String specPath,
+      OpenAPI openAPI,
       String modelsFilter,
-      String requestSchemaKeys,
-      String responseSchemaKeys) {
-    return generateDomainModels(
-        builder,
-        loadOpenApiSpec(builder, specPath),
-        modelsFilter,
-        requestSchemaKeys,
-        responseSchemaKeys);
-  }
-
-  public static List<String> generateDomainModels(
-      ModuleBuilder builder,
-      OpenApiSpecContext spec,
-      String modelsFilter,
-      String requestSchemaKeys,
-      String responseSchemaKeys) {
-    String modelPackage = domainModelPackage(builder);
-    String outputDir = domainModelOutputDir(builder);
-    Logger logger = builder.getLogger();
-    Set<String> requestKeys = OpenApiModelPackageResolver.parseSchemaKeys(requestSchemaKeys);
-    Set<String> responseKeys = OpenApiModelPackageResolver.parseSchemaKeys(responseSchemaKeys);
-    OpenAPI openAPI = spec.openAPI();
+      String requestModels,
+      String responseModels,
+      String renameModels) {
+    Set<String> requestKeys = OpenApiModelPackageResolver.parseSchemaKeys(requestModels);
+    Set<String> responseKeys = OpenApiModelPackageResolver.parseSchemaKeys(responseModels);
+    Map<String, String> renames = OpenApiDomainModelNaming.parseRenames(renameModels);
     Set<String> selectedKeys = OpenApiModelSelectionResolver.parseModelsFilter(modelsFilter);
     Set<String> generationKeys = resolveGenerationSchemaKeys(openAPI, selectedKeys);
-    List<DomainModelCodegen.ModelTarget> planned =
+    Map<String, String> classNames = DomainModelCodegen.resolveClassNames(openAPI, renames);
+    List<DomainModelCodegen.ModelTarget> targets =
         DomainModelCodegen.resolveTargets(
-            openAPI, generationKeys, modelPackage, requestKeys, responseKeys);
+            openAPI,
+            generationKeys,
+            domainModelPackage(builder),
+            requestKeys,
+            responseKeys,
+            classNames);
     OpenApiDomainModelPlanValidator.validate(
-        planned, openAPI, selectedKeys, requestKeys, responseKeys);
+        targets,
+        openAPI,
+        selectedKeys,
+        requestKeys,
+        responseKeys,
+        renames,
+        builder.isEnableLombok());
+    return new DomainModelPlan(
+        openAPI, targets, generationKeys, requestKeys, responseKeys, classNames);
+  }
+
+  public static List<String> generateDomainModels(ModuleBuilder builder, DomainModelPlan plan) {
+    String outputDir = domainModelOutputDir(builder);
+    Logger logger = builder.getLogger();
     PreparsedCodegenConfigurator configurator =
-        domainConfigurator(
-            outputDir, modelPackage, builder.isEnableLombok(), requestKeys, responseKeys);
-    String codegenModelsFilter = joinKeys(generationKeys);
+        domainConfigurator(outputDir, domainModelPackage(builder), builder.isEnableLombok(), plan);
     List<File> generated =
-        run(configurator, openAPI, codegenModelsFilter, outputDir, logger).stream()
+        run(configurator, plan.openAPI(), joinKeys(plan.generationKeys()), outputDir, logger)
+            .stream()
             .filter(file -> file.getName().endsWith(".java"))
             .toList();
     List<String> classNames = new ArrayList<>();
@@ -135,11 +158,7 @@ public class Swagger {
   }
 
   private static PreparsedCodegenConfigurator domainConfigurator(
-      String outputDir,
-      String modelPackage,
-      boolean lombok,
-      Set<String> requestKeys,
-      Set<String> responseKeys) {
+      String outputDir, String modelPackage, boolean lombok, DomainModelPlan plan) {
     PreparsedCodegenConfigurator configurator = new PreparsedCodegenConfigurator();
     configurator.setOutputDir(outputDir);
     configurator.addAdditionalProperty("lombok", lombok);
@@ -151,9 +170,11 @@ public class Swagger {
     configurator.addAdditionalProperty(
         OpenApiModelPackageResolver.BASE_MODEL_PACKAGE, modelPackage);
     configurator.addAdditionalProperty(
-        OpenApiModelPackageResolver.REQUEST_SCHEMA_KEYS, joinKeys(requestKeys));
+        OpenApiModelPackageResolver.REQUEST_SCHEMA_KEYS, joinKeys(plan.requestKeys()));
     configurator.addAdditionalProperty(
-        OpenApiModelPackageResolver.RESPONSE_SCHEMA_KEYS, joinKeys(responseKeys));
+        OpenApiModelPackageResolver.RESPONSE_SCHEMA_KEYS, joinKeys(plan.responseKeys()));
+    configurator.addAdditionalProperty(
+        OpenApiDomainModelNaming.DOMAIN_CLASS_NAMES, plan.classNames());
     configurator.addAdditionalProperty("hideGenerationTimestamp", true);
     return configurator;
   }
@@ -169,15 +190,19 @@ public class Swagger {
     return configurator;
   }
 
+  // Codegen reads the models filter from a JVM-wide system property, so generations that share a
+  // Gradle daemon must not overlap between setting and restoring it.
   private static List<File> run(
       CodegenConfigurator configurator, String modelsFilter, String outputDir, Logger logger) {
-    String previousModels = System.getProperty(MODELS_SYSTEM_PROPERTY);
-    try {
-      applyModelsFilter(configurator, modelsFilter);
-      return new DefaultGenerator().opts(configurator.toClientOptInput()).generate();
-    } finally {
-      restoreSystemProperty(previousModels);
-      cleanupCodegenMetadata(outputDir, logger);
+    synchronized (CODEGEN_LOCK) {
+      String previousModels = System.getProperty(MODELS_SYSTEM_PROPERTY);
+      try {
+        applyModelsFilter(configurator, modelsFilter);
+        return new DefaultGenerator().opts(configurator.toClientOptInput()).generate();
+      } finally {
+        restoreSystemProperty(previousModels);
+        cleanupCodegenMetadata(outputDir, logger);
+      }
     }
   }
 
@@ -187,13 +212,15 @@ public class Swagger {
       String modelsFilter,
       String outputDir,
       Logger logger) {
-    String previousModels = System.getProperty(MODELS_SYSTEM_PROPERTY);
-    try {
-      applyModelsFilter(configurator, modelsFilter);
-      return new DefaultGenerator().opts(configurator.toClientOptInput(openAPI)).generate();
-    } finally {
-      restoreSystemProperty(previousModels);
-      cleanupCodegenMetadata(outputDir, logger);
+    synchronized (CODEGEN_LOCK) {
+      String previousModels = System.getProperty(MODELS_SYSTEM_PROPERTY);
+      try {
+        applyModelsFilter(configurator, modelsFilter);
+        return new DefaultGenerator().opts(configurator.toClientOptInput(openAPI)).generate();
+      } finally {
+        restoreSystemProperty(previousModels);
+        cleanupCodegenMetadata(outputDir, logger);
+      }
     }
   }
 
@@ -201,30 +228,6 @@ public class Swagger {
     if (modelsFilter != null && !modelsFilter.isBlank()) {
       configurator.addSystemProperty(MODELS_SYSTEM_PROPERTY, modelsFilter.replace(" ", ""));
     }
-  }
-
-  private static String readSpecContent(ModuleBuilder builder, String specPath, String resolved) {
-    if (resolved.startsWith("http://") || resolved.startsWith("https://")) {
-      try {
-        return new CodegenConfigurator().loadSpecContent(resolved, List.of());
-      } catch (Exception e) {
-        throw new CleanDomainException(
-            "Unable to read OpenAPI URL: " + resolved + ": " + e.getMessage());
-      }
-    }
-    File specFile = builder.resolveFile(specPath);
-    if (specFile.isFile()) {
-      try {
-        return Files.readString(specFile.toPath());
-      } catch (IOException e) {
-        throw new CleanDomainException(
-            "Unable to read OpenAPI file: " + specFile.getPath() + ": " + e.getMessage());
-      }
-    }
-    throw new CleanDomainException(
-        "OpenAPI spec not found: "
-            + specPath
-            + ". Use a path relative to the project root or an http(s) URL.");
   }
 
   private static ParseOptions domainParseOptions() {
@@ -239,7 +242,7 @@ public class Swagger {
   private static String resolveSpec(ModuleBuilder builder, String specPath) {
     File specFile = builder.resolveFile(specPath);
     if (specFile.isFile()) {
-      return specFile.toURI().toString();
+      return specFile.getAbsolutePath();
     }
     if (specPath.startsWith("http://") || specPath.startsWith("https://")) {
       return specPath;
@@ -283,34 +286,13 @@ public class Swagger {
     return "io.swagger.codegen.v3.generators.RestConsumerCodegen";
   }
 
-  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      ModuleBuilder builder, String specPath, String modelsFilter) {
-    return planDomainModels(builder, specPath, modelsFilter, Set.of(), Set.of());
-  }
-
-  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      ModuleBuilder builder,
-      String specPath,
-      String modelsFilter,
-      Set<String> requestSchemaKeys,
-      Set<String> responseSchemaKeys) {
-    return planDomainModels(
-        builder,
-        loadOpenApiSpec(builder, specPath),
-        modelsFilter,
-        requestSchemaKeys,
-        responseSchemaKeys);
-  }
-
-  public static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      ModuleBuilder builder,
-      OpenApiSpecContext spec,
-      String modelsFilter,
-      Set<String> requestSchemaKeys,
-      Set<String> responseSchemaKeys) {
-    return planDomainModels(
-        spec, modelsFilter, domainModelPackage(builder), requestSchemaKeys, responseSchemaKeys);
-  }
+  public record DomainModelPlan(
+      OpenAPI openAPI,
+      List<DomainModelCodegen.ModelTarget> targets,
+      Set<String> generationKeys,
+      Set<String> requestKeys,
+      Set<String> responseKeys,
+      Map<String, String> classNames) {}
 
   public static Path domainModelSourceRoot(ModuleBuilder builder) {
     return Path.of(domainModelOutputDir(builder), JAVA_SOURCE_FOLDER);
@@ -322,28 +304,6 @@ public class Swagger {
 
   private static String domainModelOutputDir(ModuleBuilder builder) {
     return builder.getProjectDir().getPath() + "/" + DOMAIN_MODEL_MODULE;
-  }
-
-  private static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      OpenApiSpecContext spec,
-      String modelsFilter,
-      String basePackage,
-      Set<String> requestSchemaKeys,
-      Set<String> responseSchemaKeys) {
-    return planDomainModels(
-        spec.openAPI(), modelsFilter, basePackage, requestSchemaKeys, responseSchemaKeys);
-  }
-
-  private static List<DomainModelCodegen.ModelTarget> planDomainModels(
-      OpenAPI openAPI,
-      String modelsFilter,
-      String basePackage,
-      Set<String> requestSchemaKeys,
-      Set<String> responseSchemaKeys) {
-    Set<String> selectedKeys = OpenApiModelSelectionResolver.parseModelsFilter(modelsFilter);
-    Set<String> generationKeys = resolveGenerationSchemaKeys(openAPI, selectedKeys);
-    return DomainModelCodegen.resolveTargets(
-        openAPI, generationKeys, basePackage, requestSchemaKeys, responseSchemaKeys);
   }
 
   private static Set<String> resolveGenerationSchemaKeys(
