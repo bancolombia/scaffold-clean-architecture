@@ -131,6 +131,8 @@ class DrivenAdapterGrpcTest {
         "channel:",
         "example-service:",
         "target:",
-        "static://localhost:9090");
+        "static://localhost:9090",
+        "default:",
+        "deadline:");
   }
 }

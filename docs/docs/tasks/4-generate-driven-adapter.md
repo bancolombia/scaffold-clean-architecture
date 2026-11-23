@@ -105,7 +105,14 @@ spring:
       channel:
         example-service:
           target: static://localhost:9090
+          default:
+            deadline: ${GRPC_CLIENT_DEADLINE:5s}
 ```
+
+The default deadline makes every call on the channel fail with `DEADLINE_EXCEEDED` instead of blocking the calling
+thread forever when the server never answers. Override it with the `GRPC_CLIENT_DEADLINE` environment variable, or per
+call with `exampleServiceStub.withDeadlineAfter(...)` inside the adapter method. Don't set it on the stub bean: that
+deadline is computed once when the bean is created, so every call after it expires would fail.
 
 :::note[Reactive projects]
 The adapter uses a blocking stub. In reactive projects the task prints a warning; wrap the calls (for example with

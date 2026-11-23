@@ -19,6 +19,8 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  *       channel:
  *         example-service:
  *           target: static://localhost:9090
+ *           default:
+ *             deadline: ${GRPC_CLIENT_DEADLINE:5s}
  * </pre>
  *
  * @see <a href="https://docs.spring.io/spring-boot/reference/io/grpc.html">Spring Boot gRPC</a>

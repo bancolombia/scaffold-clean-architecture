@@ -20,6 +20,10 @@ public class DrivenAdapterGrpc implements ModuleFactory {
     builder
         .appendToProperties("spring.grpc.client.channel.example-service")
         .put("target", "static://localhost:9090");
+    // Default deadline so a blocking call can't hang a thread forever if the server never answers
+    builder
+        .appendToProperties("spring.grpc.client.channel.example-service.default")
+        .put("deadline", "${GRPC_CLIENT_DEADLINE:5s}");
     builder.setupFromTemplate("driven-adapter/grpc");
   }
 }
