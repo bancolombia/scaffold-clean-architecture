@@ -325,6 +325,37 @@ class GenerateModelTaskTest {
     assertEquals(Optional.of("customer"), task.resolveAnalyticsType());
   }
 
+  @Test
+  void shouldFailWhenModelsFilterUsesUnknownSchemaKey() {
+    task.setFromOpenApi(spec("sample-catalog.yaml"));
+    task.setModels("Author");
+    CleanDomainException error = assertThrows(CleanDomainException.class, () -> task.execute());
+    assertTrue(error.getMessage().contains("Unknown schema name(s) in models"));
+    assertTrue(error.getMessage().contains("author"));
+  }
+
+  @Test
+  void shouldIncludeReferencedSchemasWhenModelsFilterIsUsed() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setModels("child");
+    task.execute();
+    assertFilesExistsInDir(ENTITIES + "/", "Child.java", "Base.java");
+    assertContains("Child.java", "public class Child extends Base");
+    assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
+    assertContains("Child.java", "@SuperBuilder(toBuilder = true)");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @Test
+  void shouldIncludePropertyRefSchemasWhenModelsFilterIsUsed() throws IOException, CleanException {
+    task.setFromOpenApi(SPEC);
+    task.setModels("bookDetail");
+    task.execute();
+    assertFilesExistsInDir(ENTITIES + "/", "BookDetail.java", "Author.java");
+    assertContains("BookDetail.java", "private Author author");
+    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
   private static void assertContains(String relativePath, String expected) throws IOException {
     String content = Files.readString(Path.of(ENTITIES, relativePath));
     assertTrue(

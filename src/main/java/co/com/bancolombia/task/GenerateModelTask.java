@@ -4,6 +4,7 @@ import co.com.bancolombia.exceptions.ParamNotFoundException;
 import co.com.bancolombia.factory.validations.architecture.ArchitectureValidation;
 import co.com.bancolombia.task.annotations.CATask;
 import co.com.bancolombia.utils.Utils;
+import co.com.bancolombia.utils.swagger.OpenApiSpecContext;
 import co.com.bancolombia.utils.swagger.Swagger;
 import io.swagger.codegen.v3.generators.DomainModelCodegen.ModelTarget;
 import io.swagger.codegen.v3.generators.OpenApiModelPackageResolver;
@@ -96,12 +97,13 @@ public class GenerateModelTask extends AbstractCleanArchitectureDefaultTask {
     }
     var requestKeys = OpenApiModelPackageResolver.parseSchemaKeys(requestModels);
     var responseKeys = OpenApiModelPackageResolver.parseSchemaKeys(responseModels);
+    OpenApiSpecContext spec = Swagger.loadOpenApiSpec(builder, fromOpenApi);
     List<ModelTarget> targets =
-        Swagger.planDomainModels(builder, fromOpenApi, models, requestKeys, responseKeys);
+        Swagger.planDomainModels(builder, spec, models, requestKeys, responseKeys);
     warnExistingTargets(targets);
 
     List<String> classNames =
-        Swagger.generateDomainModels(builder, fromOpenApi, models, requestModels, responseModels);
+        Swagger.generateDomainModels(builder, spec, models, requestModels, responseModels);
     logger.lifecycle("Generated {} domain model(s) from OpenAPI", classNames.size());
   }
 

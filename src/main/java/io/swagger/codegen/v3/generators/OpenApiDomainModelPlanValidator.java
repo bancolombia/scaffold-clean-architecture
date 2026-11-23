@@ -16,9 +16,10 @@ public final class OpenApiDomainModelPlanValidator {
   public static void validate(
       List<DomainModelCodegen.ModelTarget> targets,
       OpenAPI openAPI,
+      Set<String> selectedSchemaKeys,
       Set<String> requestSchemaKeys,
       Set<String> responseSchemaKeys) {
-    validateFolderAssignments(openAPI, requestSchemaKeys, responseSchemaKeys);
+    validateFolderAssignments(openAPI, selectedSchemaKeys, requestSchemaKeys, responseSchemaKeys);
     assertNoDuplicateOutputFiles(targets);
     for (DomainModelCodegen.ModelTarget target : targets) {
       ArchitectureValidation.validateModelName(target.className());
@@ -26,7 +27,10 @@ public final class OpenApiDomainModelPlanValidator {
   }
 
   private static void validateFolderAssignments(
-      OpenAPI openAPI, Set<String> requestSchemaKeys, Set<String> responseSchemaKeys) {
+      OpenAPI openAPI,
+      Set<String> selectedSchemaKeys,
+      Set<String> requestSchemaKeys,
+      Set<String> responseSchemaKeys) {
     Set<String> overlap =
         requestSchemaKeys.stream().filter(responseSchemaKeys::contains).collect(Collectors.toSet());
     if (!overlap.isEmpty()) {
@@ -34,12 +38,19 @@ public final class OpenApiDomainModelPlanValidator {
           "A schema cannot be listed in both request-models and response-models: " + overlap);
     }
     Set<String> known = knownSchemaKeys(openAPI);
-    List<String> unknown = new ArrayList<>();
-    requestSchemaKeys.stream().filter(key -> !known.contains(key)).forEach(unknown::add);
-    responseSchemaKeys.stream().filter(key -> !known.contains(key)).forEach(unknown::add);
+    OpenApiModelSelectionResolver.validateSelectedSchemaKeys(openAPI, selectedSchemaKeys, "models");
+    validateKnownKeys(requestSchemaKeys, "request-models", known);
+    validateKnownKeys(responseSchemaKeys, "response-models", known);
+  }
+
+  private static void validateKnownKeys(Set<String> keys, String optionName, Set<String> known) {
+    if (keys.isEmpty()) {
+      return;
+    }
+    List<String> unknown = keys.stream().filter(key -> !known.contains(key)).sorted().toList();
     if (!unknown.isEmpty()) {
       throw new CleanDomainException(
-          "Unknown schema name(s) in request-models/response-models: " + unknown);
+          OpenApiModelSelectionResolver.unknownSchemaMessage(optionName, unknown, known));
     }
   }
 

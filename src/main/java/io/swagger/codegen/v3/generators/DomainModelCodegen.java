@@ -3,17 +3,21 @@ package io.swagger.codegen.v3.generators;
 import io.swagger.codegen.v3.CodegenModel;
 import io.swagger.codegen.v3.CodegenProperty;
 import io.swagger.v3.oas.models.OpenAPI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DomainModelCodegen extends AbstractScaffoldCodegen {
-
   static final String SUPER_BUILDER = "x-use-super-builder";
   static final String IMPLEMENTS_CLAUSE = "x-implements-clause";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
-
   private Set<String> requestSchemaKeys = Set.of();
   private Set<String> responseSchemaKeys = Set.of();
 
@@ -51,12 +55,6 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
             additionalProperties.get(OpenApiModelPackageResolver.RESPONSE_SCHEMA_KEYS));
   }
 
-  /**
-   * File path only (folder + .java name). Do not override {@link #toModelName(String)}: Swagger
-   * Codegen sorts models with a {@code TreeMap} on {@code toModelName(schemaKey)}; if two schemas
-   * map to the same name (e.g. bill + billResponse → Bill), one schema is dropped and response/*
-   * never appears.
-   */
   @Override
   public String toModelFilename(String name) {
     String className = super.toModelName(name);
@@ -81,12 +79,10 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
       schemaKeyToPackage.put(schemaKey, modelPackage);
       openapiClassToPackage.put(openapiClassName, modelPackage);
     }
-
     Set<String> openapiModelImports =
         openapiClassToDomainClass.keySet().stream()
             .map(this::toModelImport)
             .collect(Collectors.toSet());
-
     List<CodegenModel> allModels = new ArrayList<>();
     for (Map.Entry<String, Object> entry : result.entrySet()) {
       String schemaKey = entry.getKey();
@@ -117,11 +113,11 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
           codegenModel.parent = remapType(codegenModel.parent, openapiClassToDomainClass);
         }
         applyImplementsClause(codegenModel, openapiClassToDomainClass);
-        codegenModel.vars.forEach(this::clearNullDefault);
+        codegenModel.vars.forEach(this::clearDefaultsForLombokBuilder);
         allModels.add(codegenModel);
       }
     }
-    markInheritance(allModels);
+    markInheritance(allModels, getOpenAPI());
     return result;
   }
 
@@ -144,8 +140,11 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     return new ArrayList<>(merged.values());
   }
 
-  private void clearNullDefault(CodegenProperty property) {
+  private void clearDefaultsForLombokBuilder(CodegenProperty property) {
     if ("null".equals(property.defaultValue)) {
+      property.defaultValue = null;
+    }
+    if (Boolean.TRUE.equals(property.getIsContainer()) && property.defaultValue != null) {
       property.defaultValue = null;
     }
   }
@@ -162,20 +161,16 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     model.getVendorExtensions().put(IMPLEMENTS_CLAUSE, clause);
   }
 
-  private void markInheritance(List<CodegenModel> models) {
-    Set<String> parents =
-        models.stream()
-            .map(model -> model.parent)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
+  private void markInheritance(List<CodegenModel> models, OpenAPI openAPI) {
+    Set<String> parentsInSpec =
+        OpenApiModelSelectionResolver.allOfParentClassNames(openAPI, this::toModelName);
     for (CodegenModel model : models) {
-      if (model.parent != null || parents.contains(model.classname)) {
+      if (model.parent != null || parentsInSpec.contains(model.classname)) {
         model.getVendorExtensions().put(SUPER_BUILDER, true);
       }
     }
   }
 
-  // Remap property types so they reference the cleaned domain class names.
   private void remapPropertyTypes(
       CodegenModel model, Map<String, String> openapiClassToDomainClass) {
     for (CodegenProperty property : model.allVars) {
@@ -188,7 +183,6 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     }
   }
 
-  // Remap property type so they reference the cleaned domain class names.
   private void remapOneProperty(CodegenProperty property, Map<String, String> map) {
     property.datatype = remapType(property.datatype, map);
     property.baseType = remapType(property.baseType, map);
@@ -220,10 +214,6 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     return modelPackage();
   }
 
-  /**
-   * Package per schema is set in {@link #postProcessAllModels} via {@code models.put("package",
-   * ...)}.
-   */
   private List<Map<String, String>> buildImports(
       CodegenModel model,
       String modelPackage,
@@ -242,7 +232,6 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         collectReferencedOpenapiTypes(property.items.baseType, importOpenapiTypes);
       }
     }
-
     List<Map<String, String>> imports = new ArrayList<>();
     for (String openapiType : importOpenapiTypes) {
       String refPackage = openapiClassToPackage.get(openapiType);

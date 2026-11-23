@@ -22,7 +22,7 @@ public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{{vendorEx
     {{/baseItems}}
     {{#isContainer}}
     {{#useBeanValidation}}@Valid{{/useBeanValidation}}
-    private {{{datatypeWithEnum}}} {{name}}{{#defaultValue}}{{#required}} = {{{defaultValue}}}{{/required}}{{/defaultValue}};
+    private {{{datatypeWithEnum}}} {{name}};
     {{/isContainer}}
     {{^isContainer}}
     private {{{datatypeWithEnum}}} {{name}};

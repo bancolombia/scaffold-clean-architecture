@@ -33,7 +33,7 @@ class OpenApiDomainModelPlanValidatorTest {
         CleanDomainException.class,
         () ->
             OpenApiDomainModelPlanValidator.validate(
-                targets, parsed.getOpenAPI(), Set.of(), Set.of()));
+                targets, parsed.getOpenAPI(), Set.of(), Set.of(), Set.of()));
   }
 
   @Test
@@ -58,6 +58,10 @@ class OpenApiDomainModelPlanValidatorTest {
         CleanDomainException.class,
         () ->
             OpenApiDomainModelPlanValidator.validate(
-                targets, parsed.getOpenAPI(), Set.of("bookSearch"), Set.of("bookSearch")));
+                targets,
+                parsed.getOpenAPI(),
+                Set.of(),
+                Set.of("bookSearch"),
+                Set.of("bookSearch")));
   }
 }
