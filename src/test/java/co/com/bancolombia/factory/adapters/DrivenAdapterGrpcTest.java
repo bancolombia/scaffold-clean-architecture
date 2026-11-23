@@ -96,8 +96,8 @@ class DrivenAdapterGrpcTest {
     assertFileContains(
         TEST_DIR + "/infrastructure/driven-adapters/grpc-consumer/src/main/proto/consumer.proto",
         "syntax = \"proto3\"",
-        "service ExampleService",
-        "package consumer;",
+        "service CustomService",
+        "package grpc;",
         "java_package = \"co.com.bancolombia.grpc.consumer\"",
         "rpc getById");
   }

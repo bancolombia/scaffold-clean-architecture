@@ -1,6 +1,6 @@
 package {{package}}.grpc.consumer.config;
 
-import {{package}}.grpc.consumer.ExampleServiceGrpc;
+import {{package}}.grpc.consumer.CustomServiceGrpc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.grpc.client.GrpcChannelFactory;
@@ -32,8 +32,8 @@ public class GrpcClientConfig {
     static final String CHANNEL_NAME = "example-service";
 
     @Bean
-    ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceBlockingStub(
+    CustomServiceGrpc.CustomServiceBlockingStub customServiceBlockingStub(
             GrpcChannelFactory channelFactory) {
-        return ExampleServiceGrpc.newBlockingStub(channelFactory.createChannel(CHANNEL_NAME));
+        return CustomServiceGrpc.newBlockingStub(channelFactory.createChannel(CHANNEL_NAME));
     }
 }

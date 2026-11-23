@@ -19,13 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class GrpcConsumerAdapterTest {
 
     @Mock
-    private ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+    private CustomServiceGrpc.CustomServiceBlockingStub customServiceStub;
 
     private GrpcConsumerAdapter grpcConsumerAdapter;
 
     @BeforeEach
     void setUp() {
-        grpcConsumerAdapter = new GrpcConsumerAdapter(exampleServiceStub);
+        grpcConsumerAdapter = new GrpcConsumerAdapter(customServiceStub);
     }
 
     @Test
@@ -36,22 +36,22 @@ class GrpcConsumerAdapterTest {
                 .setId(testId)
                 .setMessage("Success response")
                 .build();
-        when(exampleServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
+        when(customServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
         // Act
         String result = grpcConsumerAdapter.getById(testId);
         // Assert
         assertEquals("Success response", result);
-        verify(exampleServiceStub).getById(any(Request.class));
+        verify(customServiceStub).getById(any(Request.class));
     }
 
     @Test
     void shouldHandleGrpcError() {
         // Arrange
         String testId = "test-id";
-        when(exampleServiceStub.getById(any(Request.class)))
+        when(customServiceStub.getById(any(Request.class)))
                 .thenThrow(new StatusRuntimeException(Status.UNAVAILABLE));
         // Act & Assert
         assertThrows(IllegalStateException.class, () -> grpcConsumerAdapter.getById(testId));
-        verify(exampleServiceStub).getById(any(Request.class));
+        verify(customServiceStub).getById(any(Request.class));
     }
 }

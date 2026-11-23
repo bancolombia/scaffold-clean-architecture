@@ -111,7 +111,7 @@ spring:
 
 The default deadline makes every call on the channel fail with `DEADLINE_EXCEEDED` instead of blocking the calling
 thread forever when the server never answers. Override it with the `GRPC_CLIENT_DEADLINE` environment variable, or per
-call with `exampleServiceStub.withDeadlineAfter(...)` inside the adapter method. Don't set it on the stub bean: that
+call with `customServiceStub.withDeadlineAfter(...)` inside the adapter method. Don't set it on the stub bean: that
 deadline is computed once when the bean is created, so every call after it expires would fail.
 
 :::note[Imperative projects only]
@@ -131,21 +131,25 @@ The generated module includes:
 
 ### Proto File
 
-The generated `consumer.proto` includes a sample service definition that should match the server you want to consume. Its `java_package` (`[package].grpc.consumer`) keeps the generated classes from colliding with the gRPC entry point:
+The generated `consumer.proto` includes a sample service definition that should match the server you want to consume.
+By default it uses the same proto `package` and service as the [gRPC entry point](./5-generate-entry-point.md#usage-example-for-grpc-server)
+(`package grpc;`, `service CustomService`), so a consumer generated with `gda --type grpc` can call a server generated
+with `gep --type grpc` without changes. Its `java_package` (`[package].grpc.consumer`) keeps the generated classes from
+colliding with the entry point:
 
 ```protobuf
 syntax = "proto3";
 
-package consumer;
+package grpc;
 
 option java_multiple_files = true;
 option java_package = "co.com.bancolombia.grpc.consumer";
-option java_outer_classname = "ExampleServiceProto";
+option java_outer_classname = "CustomServiceProto";
 
 // Example gRPC Service for client consumption
 // TODO: Replace this with the actual service definition from the server you want to consume.
-// The proto file should match the server's proto definition.
-service ExampleService {
+// A client may declare only the methods it calls.
+service CustomService {
   // Get resource by ID
   rpc getById(Request) returns (Response);
 }
@@ -160,10 +164,11 @@ message Response {
 }
 ```
 
-:::warning[Proto package must match the server]
-The proto `package` is part of the method name sent over the wire (for example `consumer.ExampleService/getById`).
-Replace `package consumer;` with the package declared in the server's proto, otherwise every call fails with
-`UNIMPLEMENTED`. Only `java_package` needs to differ from the server to avoid class collisions.
+:::warning[Proto package and service must match the server]
+The proto `package` and `service` name are part of the method name sent over the wire (for example
+`grpc.CustomService/getById`). When consuming a different server, use the `package` and service declared in its proto,
+otherwise every call fails with `UNIMPLEMENTED`. Only `java_package` needs to differ from the server to avoid class
+collisions.
 :::
 
 ### Compiling Proto Files
@@ -204,7 +209,7 @@ public interface ExampleGateway {
 @RequiredArgsConstructor
 public class GrpcConsumerAdapter implements ExampleGateway {
 
-    private final ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+    private final CustomServiceGrpc.CustomServiceBlockingStub customServiceStub;
 
     @Override
     public String getById(String id) {
@@ -213,7 +218,7 @@ public class GrpcConsumerAdapter implements ExampleGateway {
             Request request = Request.newBuilder()
                     .setId(id)
                     .build();
-            Response response = exampleServiceStub.getById(request);
+            Response response = customServiceStub.getById(request);
             return response.getMessage();
         } catch (StatusRuntimeException e) {
             log.error("gRPC call failed with status: {}", e.getStatus().getCode());
@@ -255,13 +260,13 @@ The generated test class uses Mockito to mock the gRPC stub:
 @ExtendWith(MockitoExtension.class)
 class GrpcConsumerAdapterTest {
     @Mock
-    private ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+    private CustomServiceGrpc.CustomServiceBlockingStub customServiceStub;
     
     private GrpcConsumerAdapter grpcConsumerAdapter;
 
     @BeforeEach
     void setUp() {
-        grpcConsumerAdapter = new GrpcConsumerAdapter(exampleServiceStub);
+        grpcConsumerAdapter = new GrpcConsumerAdapter(customServiceStub);
     }
 
     @Test
@@ -272,14 +277,14 @@ class GrpcConsumerAdapterTest {
                 .setId(testId)
                 .setMessage("Success response")
                 .build();
-        when(exampleServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
+        when(customServiceStub.getById(any(Request.class))).thenReturn(mockResponse);
         
         // Act
         String result = grpcConsumerAdapter.getById(testId);
         
         // Assert
         assertEquals("Success response", result);
-        verify(exampleServiceStub).getById(any(Request.class));
+        verify(customServiceStub).getById(any(Request.class));
     }
 }
 ```

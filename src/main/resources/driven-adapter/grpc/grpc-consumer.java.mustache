@@ -1,6 +1,6 @@
 package {{package}}.grpc.consumer;
 
-import {{package}}.grpc.consumer.ExampleServiceGrpc;
+import {{package}}.grpc.consumer.CustomServiceGrpc;
 import io.grpc.StatusRuntimeException;
 {{#lombok}}
 import lombok.RequiredArgsConstructor;
@@ -34,11 +34,11 @@ public class GrpcConsumerAdapter // implements Gateway from domain
     private static final Logger log = LoggerFactory.getLogger(GrpcConsumerAdapter.class);
     {{/lombok}}
 
-    private final ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub;
+    private final CustomServiceGrpc.CustomServiceBlockingStub customServiceStub;
     {{^lombok}}
 
-    public GrpcConsumerAdapter(ExampleServiceGrpc.ExampleServiceBlockingStub exampleServiceStub) {
-        this.exampleServiceStub = exampleServiceStub;
+    public GrpcConsumerAdapter(CustomServiceGrpc.CustomServiceBlockingStub customServiceStub) {
+        this.customServiceStub = customServiceStub;
     }
     {{/lombok}}
 
@@ -56,7 +56,7 @@ public class GrpcConsumerAdapter // implements Gateway from domain
             Request request = Request.newBuilder()
                     .setId(id)
                     .build();
-            return exampleServiceStub.getById(request).getMessage();
+            return customServiceStub.getById(request).getMessage();
         } catch (StatusRuntimeException e) {
             // Log only the status: the payload may contain sensitive data
             log.error("gRPC call failed with status: {}", e.getStatus().getCode());
