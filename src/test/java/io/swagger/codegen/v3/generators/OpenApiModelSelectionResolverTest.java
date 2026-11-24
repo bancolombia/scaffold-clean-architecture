@@ -41,12 +41,14 @@ class OpenApiModelSelectionResolverTest {
                     .toString(),
                 null,
                 null);
+    var openAPI = parsed.getOpenAPI();
+    Set<String> selectedKeys = Set.of("Author");
     CleanDomainException error =
         assertThrows(
             CleanDomainException.class,
             () ->
                 OpenApiModelSelectionResolver.validateSelectedSchemaKeys(
-                    parsed.getOpenAPI(), Set.of("Author"), "models"));
+                    openAPI, selectedKeys, "models"));
     assertTrue(error.getMessage().contains("Unknown schema name(s) in models"));
     assertTrue(error.getMessage().contains("Author"));
     assertTrue(error.getMessage().contains("author"));

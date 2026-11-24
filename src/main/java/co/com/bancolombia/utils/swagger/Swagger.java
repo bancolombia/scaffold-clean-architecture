@@ -331,7 +331,8 @@ public class Swagger {
 
   private static Set<String> resolveGenerationSchemaKeys(
       OpenAPI openAPI, Set<String> selectedKeys) {
-    OpenApiModelSelectionResolver.validateSelectedSchemaKeys(openAPI, selectedKeys, "models");
+    OpenApiModelSelectionResolver.validateSelectedSchemaKeys(
+        openAPI, selectedKeys, OpenApiModelSelectionResolver.MODELS_OPTION);
     if (selectedKeys.isEmpty()) {
       return Set.of();
     }

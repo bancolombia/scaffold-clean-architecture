@@ -24,6 +24,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
   static final String CONTAINER_MODEL = "x-is-container-model";
   static final String IMPLEMENTS_CLAUSE = "x-implements-clause";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
+  private static final String IMPORT = "import";
   private Set<String> requestSchemaKeys = Set.of();
   private Set<String> responseSchemaKeys = Set.of();
   private Map<String, String> domainClassNames = Map.of();
@@ -140,13 +141,13 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     if (codegenImports instanceof List<?> list) {
       for (Object item : list) {
         Map<String, String> imp = (Map<String, String>) item;
-        String fqcn = imp.get("import");
+        String fqcn = imp.get(IMPORT);
         if (fqcn != null && !baseModelImports.contains(fqcn)) {
           merged.putIfAbsent(fqcn, imp);
         }
       }
     }
-    domainImports.forEach(imp -> merged.putIfAbsent(imp.get("import"), imp));
+    domainImports.forEach(imp -> merged.putIfAbsent(imp.get(IMPORT), imp));
     return new ArrayList<>(merged.values());
   }
 
@@ -237,7 +238,7 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
         continue;
       }
       Map<String, String> entry = new HashMap<>();
-      entry.put("import", refPackage + "." + type);
+      entry.put(IMPORT, refPackage + "." + type);
       imports.add(entry);
     }
     return imports;
@@ -313,10 +314,8 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
     List<ModelTarget> targets = new ArrayList<>();
     for (Map.Entry<String, Schema> entry : componentsSchemas(openAPI).entrySet()) {
       String schemaKey = entry.getKey();
-      if (!selectedSchemas.isEmpty() && !selectedSchemas.contains(schemaKey)) {
-        continue;
-      }
-      if (isTypeAlias(entry.getValue())) {
+      if ((!selectedSchemas.isEmpty() && !selectedSchemas.contains(schemaKey))
+          || isTypeAlias(entry.getValue())) {
         continue;
       }
       targets.add(

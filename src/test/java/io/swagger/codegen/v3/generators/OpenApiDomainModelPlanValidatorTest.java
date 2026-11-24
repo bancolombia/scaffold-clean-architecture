@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 class OpenApiDomainModelPlanValidatorTest {
   private static final String BASE_PACKAGE = "co.com.bancolombia.model.entities";
+  private static final Set<String> NO_KEYS = Set.of();
 
   @Test
   void shouldFailWhenTwoSchemasTargetTheSameClassName() {
@@ -24,18 +25,7 @@ class OpenApiDomainModelPlanValidatorTest {
             new DomainModelCodegen.ModelTarget("author", "Author", BASE_PACKAGE),
             new DomainModelCodegen.ModelTarget("Author", "Author", BASE_PACKAGE + ".response"));
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets,
-                    parse("duplicate-target.yaml"),
-                    Set.of(),
-                    Set.of(),
-                    Set.of(),
-                    Map.of(),
-                    true));
+    CleanDomainException error = assertInvalid(targets, parse("duplicate-target.yaml"), Map.of());
     assertTrue(error.getMessage().contains("map to the same class name 'Author'"));
     assertTrue(error.getMessage().contains("--rename-models"));
   }
@@ -45,17 +35,13 @@ class OpenApiDomainModelPlanValidatorTest {
     OpenAPI openAPI = parse("sample-catalog.yaml");
     List<DomainModelCodegen.ModelTarget> targets = targets(openAPI, Map.of());
 
+    Set<String> bothFolders = Set.of("bookSearch");
+
     assertThrows(
         CleanDomainException.class,
         () ->
             OpenApiDomainModelPlanValidator.validate(
-                targets,
-                openAPI,
-                Set.of(),
-                Set.of("bookSearch"),
-                Set.of("bookSearch"),
-                Map.of(),
-                true));
+                targets, openAPI, NO_KEYS, bothFolders, bothFolders, Map.of(), true));
   }
 
   @Test
@@ -64,12 +50,7 @@ class OpenApiDomainModelPlanValidatorTest {
     Map<String, String> renames = Map.of("unknownSchema", "Something");
     List<DomainModelCodegen.ModelTarget> targets = targets(openAPI, renames);
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets, openAPI, Set.of(), Set.of(), Set.of(), renames, true));
+    CleanDomainException error = assertInvalid(targets, openAPI, renames);
     assertTrue(error.getMessage().contains("Unknown schema name(s) in rename-models"));
   }
 
@@ -80,18 +61,7 @@ class OpenApiDomainModelPlanValidatorTest {
             new DomainModelCodegen.ModelTarget("a", "AwsAccount", BASE_PACKAGE),
             new DomainModelCodegen.ModelTarget("b", "KafkaEvent", BASE_PACKAGE));
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets,
-                    parse("sample-catalog.yaml"),
-                    Set.of(),
-                    Set.of(),
-                    Set.of(),
-                    Map.of(),
-                    true));
+    CleanDomainException error = assertInvalid(targets, parse("sample-catalog.yaml"), Map.of());
     assertTrue(error.getMessage().contains("schema 'a'"));
     assertTrue(error.getMessage().contains("schema 'b'"));
   }
@@ -103,18 +73,7 @@ class OpenApiDomainModelPlanValidatorTest {
             new DomainModelCodegen.ModelTarget("bookDto", "Book", BASE_PACKAGE),
             new DomainModelCodegen.ModelTarget("BOOK", "BOOK", BASE_PACKAGE));
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets,
-                    parse("sample-catalog.yaml"),
-                    Set.of(),
-                    Set.of(),
-                    Set.of(),
-                    Map.of(),
-                    true));
+    CleanDomainException error = assertInvalid(targets, parse("sample-catalog.yaml"), Map.of());
     assertTrue(error.getMessage().contains("'BOOK' / 'Book'"), error.getMessage());
   }
 
@@ -125,18 +84,7 @@ class OpenApiDomainModelPlanValidatorTest {
             new DomainModelCodegen.ModelTarget("Date", "java.util.Date", BASE_PACKAGE),
             new DomainModelCodegen.ModelTarget("author", "Author", BASE_PACKAGE));
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets,
-                    parse("sample-catalog.yaml"),
-                    Set.of(),
-                    Set.of(),
-                    Set.of(),
-                    Map.of(),
-                    true));
+    CleanDomainException error = assertInvalid(targets, parse("sample-catalog.yaml"), Map.of());
     assertTrue(error.getMessage().contains("schema 'Date'"), error.getMessage());
     assertTrue(error.getMessage().contains("java.util.Date"), error.getMessage());
     assertTrue(error.getMessage().contains("Rename these schemas"), error.getMessage());
@@ -148,12 +96,7 @@ class OpenApiDomainModelPlanValidatorTest {
     Map<String, String> renames = Map.of("author", "List");
     List<DomainModelCodegen.ModelTarget> targets = targets(openAPI, renames);
 
-    CleanDomainException error =
-        assertThrows(
-            CleanDomainException.class,
-            () ->
-                OpenApiDomainModelPlanValidator.validate(
-                    targets, openAPI, Set.of(), Set.of(), Set.of(), renames, true));
+    CleanDomainException error = assertInvalid(targets, openAPI, renames);
     assertTrue(error.getMessage().contains("clashes with a Java or Lombok type"));
   }
 
@@ -178,24 +121,24 @@ class OpenApiDomainModelPlanValidatorTest {
     assertDoesNotThrow(
         () ->
             OpenApiDomainModelPlanValidator.validate(
-                targets, openAPI, Set.of(), Set.of(), Set.of(), renames, false));
+                targets, openAPI, NO_KEYS, NO_KEYS, NO_KEYS, renames, false));
   }
 
   @Test
   void shouldValidateRenamedSchemasThatAreNotGenerated() {
     Map<String, String> renames = Map.of("author", "AwsAuthor");
 
-    assertThrows(
+    assertInvalid(List.of(), parse("sample-catalog.yaml"), renames);
+  }
+
+  /** Validates with every schema selected and without request or response folders. */
+  private static CleanDomainException assertInvalid(
+      List<DomainModelCodegen.ModelTarget> targets, OpenAPI openAPI, Map<String, String> renames) {
+    return assertThrows(
         CleanDomainException.class,
         () ->
             OpenApiDomainModelPlanValidator.validate(
-                List.of(),
-                parse("sample-catalog.yaml"),
-                Set.of(),
-                Set.of(),
-                Set.of(),
-                renames,
-                true));
+                targets, openAPI, NO_KEYS, NO_KEYS, NO_KEYS, renames, true));
   }
 
   private static List<DomainModelCodegen.ModelTarget> targets(
