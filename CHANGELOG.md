@@ -1,5 +1,40 @@
 # Changelog
 
+## [v5.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.3.0) (2026-11-24)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.1...v5.3.0)
+
+**Security fixes:**
+
+- chore: MCP CORS template default profile allows any origin with credentials [\#1054](https://github.com/bancolombia/scaffold-clean-architecture/issues/1054)
+
+**Closed issues:**
+
+- chore: analytics notice shown but AnalyticsExporter endpoint is empty [\#1051](https://github.com/bancolombia/scaffold-clean-architecture/issues/1051)
+- ci: pin GitHub Actions to commit SHAs and version semantic-release [\#1049](https://github.com/bancolombia/scaffold-clean-architecture/issues/1049)
+- community: tag issues with 'good first issue' for new contributors [\#1004](https://github.com/bancolombia/scaffold-clean-architecture/issues/1004)
+- chore: triage unlabeled issues and close stale milestone [\#1003](https://github.com/bancolombia/scaffold-clean-architecture/issues/1003)
+- docs: add CONTRIBUTING.md redirect in repository root [\#1001](https://github.com/bancolombia/scaffold-clean-architecture/issues/1001)
+- docs: add CODE\_OF\_CONDUCT.md [\#1000](https://github.com/bancolombia/scaffold-clean-architecture/issues/1000)
+
+**Merged pull requests:**
+
+- build\(deps\): bump amannn/action-semantic-pull-request from 6.1.2 to 6.1.3 [\#1099](https://github.com/bancolombia/scaffold-clean-architecture/pull/1099) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump step-security/harden-runner from 2.22.4 to 2.23.0 [\#1098](https://github.com/bancolombia/scaffold-clean-architecture/pull/1098) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/create-github-app-token from 3.3.0 to 3.4.0 [\#1097](https://github.com/bancolombia/scaffold-clean-architecture/pull/1097) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump ossf/scorecard-action from 2.5.0 to 2.6.0 [\#1096](https://github.com/bancolombia/scaffold-clean-architecture/pull/1096) ([dependabot[bot]](https://github.com/apps/dependabot))
+- build\(deps\): bump actions/dependency-review-action from 5.0.0 to 5.0.1 [\#1095](https://github.com/bancolombia/scaffold-clean-architecture/pull/1095) ([dependabot[bot]](https://github.com/apps/dependabot))
+- docs: add CODE\_OF\_CONDUCT.md \(\#1000\) [\#1094](https://github.com/bancolombia/scaffold-clean-architecture/pull/1094) ([kidnapperblack](https://github.com/kidnapperblack))
+- build\(deps-dev\): bump semantic-release from 25.0.9 to 26.0.1 [\#1093](https://github.com/bancolombia/scaffold-clean-architecture/pull/1093) ([dependabot[bot]](https://github.com/apps/dependabot))
+- chore\(deps\): update dependencies [\#1092](https://github.com/bancolombia/scaffold-clean-architecture/pull/1092) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- chore: use existing bug and enhancement labels in the issue templates [\#1091](https://github.com/bancolombia/scaffold-clean-architecture/pull/1091) ([luisgomez29](https://github.com/luisgomez29))
+- ci: pin GitHub Actions to commit SHAs and install semantic-release with npm ci [\#1090](https://github.com/bancolombia/scaffold-clean-architecture/pull/1090) ([luisgomez29](https://github.com/luisgomez29))
+- chore: restrict the MCP CORS config to configured origins and generate MCP config in the project package [\#1089](https://github.com/bancolombia/scaffold-clean-architecture/pull/1089) ([luisgomez29](https://github.com/luisgomez29))
+- chore: skip the analytics request when the endpoint is not configured [\#1088](https://github.com/bancolombia/scaffold-clean-architecture/pull/1088) ([luisgomez29](https://github.com/luisgomez29))
+- chore: avoid clean u failing on build outputs and document the Gradle wrapper configured by the plugin [\#1086](https://github.com/bancolombia/scaffold-clean-architecture/pull/1086) ([luisgomez29](https://github.com/luisgomez29))
+- docs: add CONTRIBUTING.MD redirect in repository root [\#1085](https://github.com/bancolombia/scaffold-clean-architecture/pull/1085) ([JCarolina11](https://github.com/JCarolina11))
+- feat: support for generating domain models from an OpenAPI v3 contract [\#1068](https://github.com/bancolombia/scaffold-clean-architecture/pull/1068) ([isabelvallejo](https://github.com/isabelvallejo))
+
 ## [v5.2.1](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.2.1) (2026-11-11)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.0...v5.2.1)
