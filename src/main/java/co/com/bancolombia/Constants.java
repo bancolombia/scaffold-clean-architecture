@@ -13,29 +13,29 @@ public final class Constants {
   public static final String PATH_GRAPHQL = "/graphql";
 
   // Dependencies
-  public static final String SECRETS_VERSION = "4.5.5";
-  public static final String SPRING_BOOT_VERSION = "4.1.2";
+  public static final String SECRETS_VERSION = "4.5.6";
+  public static final String SPRING_BOOT_VERSION = "4.2.0";
   public static final String LOMBOK_VERSION = "1.18.48";
-  public static final String REACTIVE_COMMONS_VERSION = "7.8.0";
+  public static final String REACTIVE_COMMONS_VERSION = "7.9.0";
   public static final String REACTIVE_COMMONS_MAPPER_VERSION = "0.1.0";
-  public static final String BLOCK_HOUND_VERSION = "1.0.18.RELEASE";
-  public static final String AWS_BOM_VERSION = "2.57.13";
+  public static final String BLOCK_HOUND_VERSION = "1.0.19.RELEASE";
+  public static final String AWS_BOM_VERSION = "2.59.8";
   public static final String COMMONS_JMS_VERSION = "3.1.6";
   public static final String ARCH_UNIT_VERSION = "1.5.1";
   public static final String OKHTTP_VERSION = "5.5.1";
   public static final String RESILIENCE_4J_VERSION = "2.4.0";
-  public static final String BIN_STASH_VERSION = "2.1.5";
-  public static final String SPRING_DOC_OPENAPI_VERSION = "3.2.0";
+  public static final String BIN_STASH_VERSION = "2.2.0";
+  public static final String SPRING_DOC_OPENAPI_VERSION = "3.2.1";
   public static final String CLOUD_EVENTS_VERSION = "5.1.0";
-  public static final String SPRING_AI_VERSION = "2.0.2";
+  public static final String SPRING_AI_VERSION = "2.1.0";
   public static final String SPRING_MCP_SECURITY_VERSION = "0.1.14";
   public static final String JACKSON_VERSION = "3.3.0";
   public static final String JACKSON_2_VERSION = "2.23.0";
   public static final String PITEST_VERSION = "1.30.2";
   public static final String PITEST_HISTORY_VERSION = "0.0.1";
   public static final String PITEST_JUNIT5_VERSION = "1.2.3";
-  public static final String GRPC_VERSION = "1.85.1";
-  public static final String OTEL_VERSION = "2.33.1";
+  public static final String GRPC_VERSION = "1.86.0";
+  public static final String OTEL_VERSION = "2.34.0";
 
   /**
    * Must match the protobuf-java version managed by the Spring Boot BOM ({@link
@@ -47,16 +47,16 @@ public final class Constants {
   // Gradle plugins
   public static final String PLUGIN_VERSION = "5.2.1";
   public static final String JACOCO_VERSION = "0.8.16";
-  public static final String SONAR_VERSION = "7.5.0.8588";
+  public static final String SONAR_VERSION = "7.6.0.18749";
   public static final String COBERTURA_VERSION = "4.0.0";
   public static final String DEPENDENCY_CHECK_VERSION = "13.0.0";
   public static final String GRADLE_PITEST_VERSION = "1.19.0";
   public static final String GRADLE_PROTOBUF_VERSION = "0.10.1";
 
   // Custom
-  public static final String GRADLE_WRAPPER_VERSION = "9.9.1";
+  public static final String GRADLE_WRAPPER_VERSION = "9.9.2";
   public static final String GRADLE_WRAPPER_SHA256 =
-      "d8a18a7a841dd5df825d35a685fad6f2d7f12ac0c280e57b67c27b4a520ba228";
+      "971fcd7150ca4ba04852c0b2ca0d2d0ab9468e14b03473eab19528809914c76b";
 
   @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class MainFiles {
