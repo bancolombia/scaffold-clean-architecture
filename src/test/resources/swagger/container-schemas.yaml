@@ -1,0 +1,40 @@
+openapi: 3.0.1
+info:
+  title: Container schemas
+  description: Fictional contract used only for plugin tests.
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    pet:
+      type: object
+      properties:
+        name:
+          type: string
+    pets:
+      type: array
+      items:
+        $ref: '#/components/schemas/pet'
+    petIndex:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/pet'
+    shelf:
+      type: object
+      properties:
+        pets:
+          $ref: '#/components/schemas/pets'
+        index:
+          $ref: '#/components/schemas/petIndex'
+    marker:
+      type: object
+    premiumPet:
+      allOf:
+        - $ref: '#/components/schemas/pet'
+    taggedPets:
+      allOf:
+        - $ref: '#/components/schemas/pets'
+        - type: object
+          properties:
+            label:
+              type: string

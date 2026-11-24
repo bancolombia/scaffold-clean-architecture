@@ -13,10 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.VersioningStrategy;
 import co.com.bancolombia.exceptions.CleanException;
+import co.com.bancolombia.utils.GeneratedModelCompilation;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.jupiter.api.AfterAll;
@@ -25,7 +28,8 @@ import org.junit.jupiter.api.Test;
 
 class GenerateEntryPointTaskReactiveTest {
   private static final String TEST_DIR = getTestDir(GenerateEntryPointTaskReactiveTest.class);
-  public static final String SWAGGER_FILE = "src/test/resources/swagger/pet-store.yaml";
+  public static final String SWAGGER_FILE =
+      Path.of("src/test/resources/swagger/pet-store.yaml").toAbsolutePath().toString();
   private static GenerateEntryPointTask task;
 
   @BeforeAll
@@ -163,6 +167,92 @@ class GenerateEntryPointTaskReactiveTest {
         "src/main/java/co/com/bancolombia/api/PetApiRouter.java",
         "src/main/java/co/com/bancolombia/api/PetApiHandler.java",
         "src/main/java/co/com/bancolombia/api/model/Pet.java");
+  }
+
+  @Test
+  void generateEntryPointReactiveWebFromSwaggerRelativeToProjectWithCompilableModels()
+      throws IOException, CleanException {
+    // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/reactive-web"));
+    Files.copy(
+        Path.of("src/test/resources/swagger/sample-catalog.yaml"),
+        Path.of(TEST_DIR, "sample-catalog.yaml"),
+        StandardCopyOption.REPLACE_EXISTING);
+    task.setType("WEBFLUX");
+    task.setFromSwagger("sample-catalog.yaml");
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    String modelDir =
+        TEST_DIR
+            + "/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/model";
+
+    try {
+      // Act
+      task.execute();
+    } finally {
+      task.setFromSwagger(null);
+    }
+    // Assert
+    assertFileContains(modelDir + "/LoanStatus.java", "public enum LoanStatus {");
+    assertFileContains(
+        modelDir + "/IdentifierOneOf.java",
+        "@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)",
+        "@JsonSubTypes.Type(value = IsbnIdentifier.class)",
+        "@JsonSubTypes.Type(value = LibraryCardId.class)",
+        "public interface IdentifierOneOf {");
+    assertFileContains(
+        modelDir + "/StorePickup.java", "public class StorePickup implements FulfillmentAnyOf {");
+    GeneratedModelCompilation.assertCompiles(Path.of(modelDir), JsonTypeInfo.class);
+  }
+
+  @Test
+  void generateEntryPointReactiveWebFromSwaggerFileUriWithJacksonReadyModels()
+      throws IOException, CleanException {
+    // Arrange
+    deleteStructure(Path.of(TEST_DIR, "/infrastructure/entry-points/reactive-web"));
+    task.setType("WEBFLUX");
+    task.setFromSwagger(
+        Path.of("src/test/resources/swagger/rest-polymorphism.yaml")
+            .toAbsolutePath()
+            .toUri()
+            .toString());
+    task.setRouter(AbstractCleanArchitectureDefaultTask.BooleanOption.TRUE);
+    String modelDir =
+        TEST_DIR
+            + "/infrastructure/entry-points/reactive-web/src/main/java/co/com/bancolombia/api/model";
+
+    try {
+      // Act
+      task.execute();
+    } finally {
+      task.setFromSwagger(null);
+    }
+    // Assert
+    assertFileContains(
+        modelDir + "/PaymentMethod.java",
+        "@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY,"
+            + " property = \"kind\", visible = true)",
+        "@JsonSubTypes.Type(value = Card.class, name = \"CARD\")",
+        "@JsonSubTypes.Type(value = Transfer.class, name = \"transfer\")");
+    assertFileContains(
+        modelDir + "/Priority.java",
+        "NUMBER_10(10)",
+        "@JsonValue\n    public Integer getValue()",
+        "@JsonCreator\n    public static Priority fromValue(Integer value)");
+    assertFileContains(
+        modelDir + "/PaymentRequest.java",
+        "@JsonValue\n        public Integer getValue()",
+        "@JsonCreator\n        public static RetriesEnum fromValue(Integer value)");
+    // Enum options cannot implement the interface
+    assertFileContains(
+        modelDir + "/StatusInfo.java", "@JsonSubTypes.Type(value = StatusDetail.class)");
+    assertFalse(
+        Files.readString(Path.of(modelDir, "StatusInfo.java")).contains("StatusCode.class"));
+    // Child that repeats its parent's enum keeps the Jackson imports for its own enum
+    assertFileContains(
+        modelDir + "/ChannelChild.java",
+        "import com.fasterxml.jackson.annotation.JsonValue;",
+        "public enum ChannelEnum {");
+    GeneratedModelCompilation.assertCompiles(Path.of(modelDir), JsonTypeInfo.class);
   }
 
   @Test

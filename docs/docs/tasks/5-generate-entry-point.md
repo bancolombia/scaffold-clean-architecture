@@ -31,14 +31,14 @@ gradle gep --type [entryPointType]
 | **restmvc**           | API REST (Spring Boot Starter Webmvc)   | `--server`           | `tomcat`, `jetty`                     | `tomcat`               |
 |                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
 |                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 | 
-|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
+|                       |                                        | `--from-swagger`     | Contract path or URL (see below)      | `swagger.yaml`         |
 |                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
 | **rsocket**           | Rsocket Controller Entry Point         | -                    | -                                     | -                      |
 | **sqs**               | SQS Listener                           | -                    | -                                     | -                      |
 | **webflux**           | API REST (Spring Boot Starter WebFlux) | `--router`           | `true`, `false`                       | `true`                 |
 |                       |                                        | `--authorization`    | `true`, `false`                       | `false`                |
 |                       |                                        | `--versioning`       | `HEADER`, `PATH`, `NONE`              | `NONE`                 |
-|                       |                                        | `--from-swagger`     | File path                             | `swagger.yaml`         |
+|                       |                                        | `--from-swagger`     | Contract path or URL (see below)      | `swagger.yaml`         |
 |                       |                                        | `--swagger`          | `true`, `false`                       | `false`                |
 | **kafkastrimzi**      | Kafka Strimzi Consumer Entry Point     | `--name`             | String                                | -                      |
 |                       |                                        | `--topic-consumer`  | String (topic name)                   | `test-with-registries` |
@@ -46,6 +46,18 @@ gradle gep --type [entryPointType]
 |                       |                                        | `--agent-enable-kafka` | `true`, `false`                     | `true`                 |
 |                       |                                        | `--agent-enable-mcp-client` | `true`, `false`                | `true`                 |
 |                       |                                        | `--agent-role`       | `collaborative`, `supervisor`, `hybrid` | `collaborative`     |
+
+`--from-swagger` receives the OpenAPI contract file (`.yaml` or `.json`) in one of these forms:
+
+- A path relative to the project root, for example `--from-swagger=swagger.yaml` or `--from-swagger=contracts/swagger.yaml`.
+- An absolute path, for example `--from-swagger=C:\contracts\swagger.yaml` or `--from-swagger=/home/user/contracts/swagger.yaml`.
+- A `file:` URI, for example `--from-swagger=file:///home/user/contracts/swagger.yaml`.
+- An `http(s)` URL that returns the contract file itself, for example `--from-swagger=https://example.com/api/swagger.yaml`.
+  A web page such as the Swagger UI does not work; use the URL of the YAML or JSON document it loads.
+
+```shell
+gradle gep --type=webflux --from-swagger=swagger.yaml
+```
 
 Additionally, if you'll use a `restmvc`, you can specify the web server on which the application will run. By default,
 Tomcat.

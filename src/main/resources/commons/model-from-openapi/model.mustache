@@ -9,16 +9,20 @@ package {{package}};
 {{^isComposedModel}}
 {{^isEnum}}
 {{#lombok}}
+{{#vendorExtensions.x-has-own-vars}}
 import lombok.AllArgsConstructor;
+{{/vendorExtensions.x-has-own-vars}}
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+{{^vendorExtensions.x-is-container-model}}
 {{#vendorExtensions.x-use-super-builder}}
 import lombok.experimental.SuperBuilder;
 {{/vendorExtensions.x-use-super-builder}}
 {{^vendorExtensions.x-use-super-builder}}
 import lombok.Builder;
 {{/vendorExtensions.x-use-super-builder}}
+{{/vendorExtensions.x-is-container-model}}
 {{/lombok}}
 {{/isEnum}}
 {{/isComposedModel}}

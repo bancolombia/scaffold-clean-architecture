@@ -4,12 +4,6 @@ package {{package}};
 import java.util.Objects;
 {{#imports}}import {{import}};
 {{/imports}}
-{{#lombok}}
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-{{/lombok}}
 {{#serializableModel}}
 import java.io.Serializable;
 {{/serializableModel}}
@@ -42,16 +36,37 @@ import javax.xml.bind.annotation.*;
 
 {{#models}}
 {{#model}}
-{{!#isComposedModel}}
-{{!>interface}}
-{{!/isComposedModel}}
-{{!^isComposedModel}}
-{{!#isEnum}}
-{{!>enumOuterClass}}
-{{!/isEnum}}
+{{#isComposedModel}}
+{{#vendorExtensions.x-has-subtypes}}
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+{{/vendorExtensions.x-has-subtypes}}
+
+{{>interface}}
+{{/isComposedModel}}
+{{^isComposedModel}}
+{{#isEnum}}
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+{{>enum-outer}}
+{{/isEnum}}
 {{^isEnum}}
+{{#vendorExtensions.x-has-inline-enums}}
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+{{/vendorExtensions.x-has-inline-enums}}
+{{#lombok}}
+{{#vendorExtensions.x-has-own-vars}}
+import lombok.AllArgsConstructor;
+{{/vendorExtensions.x-has-own-vars}}
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+{{/lombok}}
+
 {{>pojo}}
 {{/isEnum}}
-{{!/isComposedModel}}
+{{/isComposedModel}}
 {{/model}}
 {{/models}}

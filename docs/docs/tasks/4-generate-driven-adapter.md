@@ -29,12 +29,24 @@ gradle gda --type [drivenAdapterType]
 | **redis**                | Redis                          | `--mode`            | `template`, `repository`              | `template`            |
 |                          |                                | `--secret`          | `true`, `false`                       | `false`               |
 | **restconsumer**         | Rest Client Consumer           | `--url`             | String (URL)                          | -                     |
-|                          |                                | `--from-swagger`    | File path                             | `swagger.yaml`        |
+|                          |                                | `--from-swagger`    | Contract path or URL (see below)      | `swagger.yaml`        |
 | **rsocket**              | RSocket Requester              | -                   | -                                     | -                     |
 | **s3**                   | AWS Simple Storage Service     | -                   | -                                     | -                     |
 | **secrets**              | Secrets Manager Bancolombia    | `--secrets-backend` | `aws_secrets_manager`, `vault`        | `aws_secrets_manager` |
 | **secretskafkastrimzi**  | Secrets for Kafka Strimzi      | `--secret-name`     | String                                | -                     |
 | **sqs**                  | SQS message sender             | -                   | -                                     | -                     |
+
+`--from-swagger` receives the OpenAPI contract file (`.yaml` or `.json`) in one of these forms:
+
+- A path relative to the project root, for example `--from-swagger=swagger.yaml` or `--from-swagger=contracts/swagger.yaml`.
+- An absolute path, for example `--from-swagger=C:\contracts\swagger.yaml` or `--from-swagger=/home/user/contracts/swagger.yaml`.
+- A `file:` URI, for example `--from-swagger=file:///home/user/contracts/swagger.yaml`.
+- An `http(s)` URL that returns the contract file itself, for example `--from-swagger=https://example.com/api/swagger.yaml`.
+  A web page such as the Swagger UI does not work; use the URL of the YAML or JSON document it loads.
+
+```shell
+gradle gda --type=restconsumer --from-swagger=swagger.yaml
+```
 
 _**This task will generate something like that:**_
 

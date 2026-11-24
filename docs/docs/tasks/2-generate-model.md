@@ -14,6 +14,14 @@ parameter `name` or `from-swagger`.
    gradle gm --from-swagger [contractPath]
   ```
 
+`--from-swagger` receives the OpenAPI contract file (`.yaml` or `.json`) in one of these forms:
+
+- A path relative to the project root, for example `--from-swagger=swagger.yaml` or `--from-swagger=contracts/swagger.yaml`.
+- An absolute path, for example `--from-swagger=C:\contracts\swagger.yaml` or `--from-swagger=/home/user/contracts/swagger.yaml`.
+- A `file:` URI, for example `--from-swagger=file:///home/user/contracts/swagger.yaml`.
+- An `http(s)` URL that returns the contract file itself, for example `--from-swagger=https://example.com/api/swagger.yaml`.
+  A web page such as the Swagger UI does not work; use the URL of the YAML or JSON document it loads.
+
 **_This task will generate something like this if running parameter `name`:_**
 
    ```bash
@@ -85,6 +93,9 @@ The task stops before writing any file when a class name is not valid:
 - The name is a Java type the generated models use, such as `List`, `Map`, `Date`, `File` or `Timestamp` (for example
   `dateResponse` would become `Date`), or a Lombok annotation such as `Builder` when Lombok is enabled.
 - The name contains a forbidden technical word (`arch.unit.forbiddenDomainClassNames`).
+- The schema key is a type the generator maps to Java, such as `Date`, `File`, `UUID`, `List` or `Map`. The generator
+  would use the Java type instead of generating the schema, so rename the schema in the contract (`rename-models` does
+  not help in this case).
 
 Use `rename-models` to choose the class name of any schema (`schemaKey:ClassName` pairs, comma-separated):
 
@@ -95,6 +106,9 @@ gradle generateModel --from-swagger=contract.yaml --rename-models=bookResponse:B
 Inline object schemas are generated as their own models. Their key is their `title` when they have one; otherwise it is
 built from the parent schema and the property, for example `auditLog_request` for the `request` property of
 `auditLog`. If one of them collides, the error shows that key, and you can use it in `rename-models` too.
+
+Top-level `array` and `map` schemas (`type: object` with `additionalProperties`) are generated as classes that extend
+`ArrayList` or `HashMap`, without a Lombok builder.
 
 The task also stops when a `$ref` cannot be resolved (missing file, wrong pointer or missing schema), instead of
 generating models that reference classes that do not exist.

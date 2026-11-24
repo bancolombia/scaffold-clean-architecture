@@ -16,6 +16,8 @@ import io.swagger.v3.parser.core.models.ParseOptions;
 import io.swagger.v3.parser.core.models.SwaggerParseResult;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -39,14 +41,15 @@ public class Swagger {
   private static final Object CODEGEN_LOCK = new Object();
 
   public static void fromBuilder(ModuleBuilder builder, String outputDir, boolean entryPoint) {
-    if (builder.getStringParam("swagger-file") != null) {
+    String swaggerFile = builder.getStringParam("swagger-file");
+    if (swaggerFile != null) {
       generate(
           SwaggerOptions.builder()
               .reactive(builder.isReactive())
               .lombok(builder.isEnableLombok())
               .entryPoint(entryPoint)
               .router(builder.getBooleanParam("task-param-router"))
-              .swagger(builder.getStringParam("swagger-file"))
+              .swagger(resolveSpec(builder, swaggerFile))
               .logger(builder.getLogger())
               .outputDir(builder.getProjectDir() + "/" + outputDir)
               .packageName(
@@ -239,18 +242,38 @@ public class Swagger {
     return options;
   }
 
+  /**
+   * Returns the absolute path of a spec given as a file path (relative to the project root or
+   * absolute) or a {@code file:} URI, or the URL itself when it is an http(s) URL.
+   */
   private static String resolveSpec(ModuleBuilder builder, String specPath) {
-    File specFile = builder.resolveFile(specPath);
-    if (specFile.isFile()) {
-      return specFile.getAbsolutePath();
-    }
     if (specPath.startsWith("http://") || specPath.startsWith("https://")) {
       return specPath;
+    }
+    File specFile =
+        specPath.startsWith("file:") ? fromFileUri(specPath) : builder.resolveFile(specPath);
+    if (specFile.isFile()) {
+      return specFile.getAbsolutePath();
     }
     throw new CleanDomainException(
         "OpenAPI spec not found: "
             + specPath
-            + ". Use a path relative to the project root or an http(s) URL.");
+            + ". Use a file path (relative to the project root or absolute), a file: URI or an"
+            + " http(s) URL.");
+  }
+
+  private static File fromFileUri(String uri) {
+    try {
+      return Path.of(URI.create(uri)).toFile();
+    } catch (IllegalArgumentException | FileSystemNotFoundException e) {
+      throw new CleanDomainException(
+          "Invalid file: URI for the OpenAPI spec: "
+              + uri
+              + " ("
+              + e.getMessage()
+              + "). Use an absolute URI such as file:///path/to/swagger.yaml and encode spaces as"
+              + " %20, or pass the file path instead.");
+    }
   }
 
   private static void restoreSystemProperty(String previousValue) {

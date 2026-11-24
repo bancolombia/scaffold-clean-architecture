@@ -9,7 +9,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -20,12 +22,16 @@ import javax.tools.ToolProvider;
 import lombok.Getter;
 
 /**
- * Compiles generated OpenAPI domain model sources with Lombok (mirrors a real Gradle model module).
+ * Compiles sources generated from an OpenAPI contract with Lombok and the given libraries (mirrors
+ * a real Gradle module).
  */
-public final class GeneratedDomainModelCompilation {
-  private GeneratedDomainModelCompilation() {}
+public final class GeneratedModelCompilation {
+  private GeneratedModelCompilation() {}
 
-  public static void assertCompiles(Path javaSourceRoot) throws IOException {
+  /**
+   * @param libraries classes whose jars must be on the compile classpath, e.g. Jackson annotations
+   */
+  public static void assertCompiles(Path javaSourceRoot, Class<?>... libraries) throws IOException {
     assumeTrue(
         ToolProvider.getSystemJavaCompiler() != null,
         "JDK with compiler (not JRE-only) is required for compilation check");
@@ -33,17 +39,22 @@ public final class GeneratedDomainModelCompilation {
     if (sources.isEmpty()) {
       fail("No .java sources under " + javaSourceRoot);
     }
-    String lombokJar = lombokJarPath();
+    String lombokJar = jarPath(Getter.class);
+    String classpath =
+        Stream.concat(
+                Stream.of(lombokJar),
+                Arrays.stream(libraries).map(GeneratedModelCompilation::jarPath))
+            .collect(Collectors.joining(File.pathSeparator));
     Path outputDir = Files.createTempDirectory("generated-domain-models-compile");
     try {
-      compile(sources, outputDir, lombokJar);
+      compile(sources, outputDir, classpath, lombokJar);
     } finally {
       deleteRecursively(outputDir);
     }
   }
 
-  private static void compile(List<File> sources, Path outputDir, String lombokJar)
-      throws IOException {
+  private static void compile(
+      List<File> sources, Path outputDir, String classpath, String lombokJar) throws IOException {
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
     StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
@@ -55,7 +66,7 @@ public final class GeneratedDomainModelCompilation {
             // such as Lombok ignoring a field initializer in a builder
             "-Werror",
             "-classpath",
-            lombokJar,
+            classpath,
             "-processorpath",
             lombokJar,
             "-parameters");
@@ -72,7 +83,7 @@ public final class GeneratedDomainModelCompilation {
 
   private static String formatDiagnostics(
       DiagnosticCollector<JavaFileObject> diagnostics, List<File> sources) {
-    StringBuilder out = new StringBuilder("Generated domain models failed to compile.\n");
+    StringBuilder out = new StringBuilder("Generated models failed to compile.\n");
     boolean hasErrors = false;
     for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
       if (diagnostic.getKind() != Diagnostic.Kind.ERROR) {
@@ -106,12 +117,11 @@ public final class GeneratedDomainModelCompilation {
     return files;
   }
 
-  private static String lombokJarPath() {
+  private static String jarPath(Class<?> type) {
     try {
-      return Path.of(Getter.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-          .toString();
+      return Path.of(type.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
     } catch (URISyntaxException e) {
-      throw new IllegalStateException("Unable to resolve Lombok jar on the test classpath", e);
+      throw new IllegalStateException("Unable to resolve the jar of " + type.getName(), e);
     }
   }
 

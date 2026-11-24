@@ -57,8 +57,10 @@ public final class OpenApiDomainModelPlanValidator {
       boolean lombok) {
     validateFolderAssignments(openAPI, selectedSchemaKeys, requestSchemaKeys, responseSchemaKeys);
     validateKnownKeys(renames.keySet(), "rename-models", knownSchemaKeys(openAPI));
+    Map<String, String> importMapping = codegenImportMapping();
+    assertSchemaKeysAreNotImportMapped(targets, importMapping);
     assertUniqueClassNames(targets);
-    assertValidClassNames(targets, renames, reservedClassNames(lombok));
+    assertValidClassNames(targets, renames, reservedClassNames(importMapping.keySet(), lombok));
   }
 
   /**
@@ -66,12 +68,48 @@ public final class OpenApiDomainModelPlanValidator {
    * mapping (File, Timestamp, LocalTime...) and skips schemas named like one of them.
    */
   static Set<String> reservedClassNames(boolean lombok) {
+    return reservedClassNames(codegenImportMapping().keySet(), lombok);
+  }
+
+  private static Set<String> reservedClassNames(Set<String> importMappedTypes, boolean lombok) {
     Set<String> reserved = new HashSet<>(JAVA_TYPES);
-    reserved.addAll(new DomainModelCodegen().importMapping().keySet());
+    reserved.addAll(importMappedTypes);
     if (lombok) {
       reserved.addAll(LOMBOK_TYPES);
     }
     return reserved;
+  }
+
+  /** The import mapping codegen uses while generating, including the types added by processOpts. */
+  private static Map<String, String> codegenImportMapping() {
+    DomainModelCodegen codegen = new DomainModelCodegen();
+    codegen.processOpts();
+    return codegen.importMapping();
+  }
+
+  /**
+   * Codegen does not generate a schema whose key is in its import mapping and uses the mapped Java
+   * type instead, so renaming its class cannot help: the schema itself must be renamed.
+   */
+  private static void assertSchemaKeysAreNotImportMapped(
+      List<DomainModelCodegen.ModelTarget> targets, Map<String, String> importMapping) {
+    List<String> errors =
+        targets.stream()
+            .map(DomainModelCodegen.ModelTarget::schemaKey)
+            .filter(importMapping::containsKey)
+            .sorted()
+            .map(
+                key ->
+                    "schema '"
+                        + key
+                        + "': the generator maps this schema name to the Java type '"
+                        + importMapping.get(key)
+                        + "' and would not generate it")
+            .collect(Collectors.toCollection(ArrayList::new));
+    if (!errors.isEmpty()) {
+      errors.add("Rename these schemas in the OpenAPI contract.");
+      throw new CleanDomainException(String.join(System.lineSeparator(), errors));
+    }
   }
 
   private static void validateFolderAssignments(

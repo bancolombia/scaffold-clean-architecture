@@ -24,7 +24,8 @@ import org.junit.jupiter.api.Test;
 
 class GenerateEntryPointTaskImperativeTest {
   private static final String TEST_DIR = getTestDir(GenerateEntryPointTaskImperativeTest.class);
-  public static final String SWAGGER_FILE = "src/test/resources/swagger/pet-store.yaml";
+  public static final String SWAGGER_FILE =
+      Path.of("src/test/resources/swagger/pet-store.yaml").toAbsolutePath().toString();
   private static GenerateEntryPointTask task;
 
   @BeforeAll

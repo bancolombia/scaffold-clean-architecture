@@ -119,6 +119,30 @@ class OpenApiDomainModelPlanValidatorTest {
   }
 
   @Test
+  void shouldRejectSchemaKeysThatCodegenMapsToJavaTypes() {
+    List<DomainModelCodegen.ModelTarget> targets =
+        List.of(
+            new DomainModelCodegen.ModelTarget("Date", "java.util.Date", BASE_PACKAGE),
+            new DomainModelCodegen.ModelTarget("author", "Author", BASE_PACKAGE));
+
+    CleanDomainException error =
+        assertThrows(
+            CleanDomainException.class,
+            () ->
+                OpenApiDomainModelPlanValidator.validate(
+                    targets,
+                    parse("sample-catalog.yaml"),
+                    Set.of(),
+                    Set.of(),
+                    Set.of(),
+                    Map.of(),
+                    true));
+    assertTrue(error.getMessage().contains("schema 'Date'"), error.getMessage());
+    assertTrue(error.getMessage().contains("java.util.Date"), error.getMessage());
+    assertTrue(error.getMessage().contains("Rename these schemas"), error.getMessage());
+  }
+
+  @Test
   void shouldRejectClassNamesThatClashWithJavaOrLombokTypes() {
     OpenAPI openAPI = parse("sample-catalog.yaml");
     Map<String, String> renames = Map.of("author", "List");
@@ -141,7 +165,8 @@ class OpenApiDomainModelPlanValidatorTest {
     assertTrue(withLombok.containsAll(Set.of("File", "Timestamp", "LocalTime", "List", "Builder")));
     assertTrue(withoutLombok.containsAll(Set.of("File", "Timestamp", "List")));
     assertFalse(withoutLombok.contains("Builder"));
-    assertFalse(withLombok.contains("Objects"));
+    // Added to the import mapping by processOpts, which codegen runs before generating
+    assertTrue(withoutLombok.contains("Objects"));
   }
 
   @Test

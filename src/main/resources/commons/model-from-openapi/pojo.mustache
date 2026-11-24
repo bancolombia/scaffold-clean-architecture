@@ -5,13 +5,17 @@
 @Getter
 @Setter
 @NoArgsConstructor
+{{#vendorExtensions.x-has-own-vars}}
 @AllArgsConstructor
+{{/vendorExtensions.x-has-own-vars}}
+{{^vendorExtensions.x-is-container-model}}
 {{#vendorExtensions.x-use-super-builder}}
 @SuperBuilder(toBuilder = true)
 {{/vendorExtensions.x-use-super-builder}}
 {{^vendorExtensions.x-use-super-builder}}
 @Builder(toBuilder = true)
 {{/vendorExtensions.x-use-super-builder}}
+{{/vendorExtensions.x-is-container-model}}
 {{/lombok}}
 public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{{vendorExtensions.x-implements-clause}}} {
 {{#vars}}

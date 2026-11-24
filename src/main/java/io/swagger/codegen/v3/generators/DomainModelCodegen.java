@@ -1,5 +1,6 @@
 package io.swagger.codegen.v3.generators;
 
+import io.swagger.codegen.v3.CodegenConstants;
 import io.swagger.codegen.v3.CodegenModel;
 import io.swagger.codegen.v3.CodegenProperty;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.models.media.MapSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 
 public class DomainModelCodegen extends AbstractScaffoldCodegen {
   static final String SUPER_BUILDER = "x-use-super-builder";
+  static final String CONTAINER_MODEL = "x-is-container-model";
   static final String IMPLEMENTS_CLAUSE = "x-implements-clause";
   private static final Pattern GENERIC_TYPE = Pattern.compile("(\\w+)<(.+)>");
   private Set<String> requestSchemaKeys = Set.of();
@@ -170,11 +173,37 @@ public class DomainModelCodegen extends AbstractScaffoldCodegen {
   private void markInheritance(List<CodegenModel> models, OpenAPI openAPI) {
     Set<String> parentsInSpec =
         OpenApiModelSelectionResolver.allOfParentClassNames(openAPI, this::toModelName);
+    Map<String, CodegenModel> byClassName = new HashMap<>();
+    models.forEach(model -> byClassName.put(model.classname, model));
     for (CodegenModel model : models) {
-      if (model.parent != null || parentsInSpec.contains(model.classname)) {
+      if (isContainerModel(model)) {
+        // Extends ArrayList or HashMap, which have no Lombok builder to extend
+        model.getVendorExtensions().put(CONTAINER_MODEL, true);
+      } else if ((model.parent != null || parentsInSpec.contains(model.classname))
+          && !extendsContainerModel(model, byClassName)) {
+        // @SuperBuilder needs a @SuperBuilder on every superclass; the others keep @Builder
         model.getVendorExtensions().put(SUPER_BUILDER, true);
       }
     }
+  }
+
+  private static boolean extendsContainerModel(
+      CodegenModel model, Map<String, CodegenModel> byClassName) {
+    Set<String> visited = new HashSet<>();
+    for (CodegenModel current = byClassName.get(model.parent);
+        current != null && visited.add(current.classname);
+        current = byClassName.get(current.parent)) {
+      if (isContainerModel(current)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isContainerModel(CodegenModel model) {
+    Map<String, Object> extensions = model.getVendorExtensions();
+    return Boolean.TRUE.equals(extensions.get(CodegenConstants.IS_ARRAY_MODEL_EXT_NAME))
+        || Boolean.TRUE.equals(extensions.get(CodegenConstants.IS_MAP_CONTAINER_EXT_NAME));
   }
 
   private String getBaseModelPackage() {

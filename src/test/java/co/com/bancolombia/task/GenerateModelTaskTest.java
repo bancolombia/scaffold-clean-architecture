@@ -1,5 +1,6 @@
 package co.com.bancolombia.task;
 
+import static co.com.bancolombia.TestUtils.assertFileContains;
 import static co.com.bancolombia.TestUtils.assertFilesExistsInDir;
 import static co.com.bancolombia.TestUtils.createTask;
 import static co.com.bancolombia.TestUtils.deleteStructure;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import co.com.bancolombia.exceptions.CleanDomainException;
 import co.com.bancolombia.exceptions.CleanException;
-import co.com.bancolombia.utils.GeneratedDomainModelCompilation;
+import co.com.bancolombia.utils.GeneratedModelCompilation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -216,14 +217,14 @@ class GenerateModelTaskTest {
     assertNotContains("IdentifierOneOf.java", "public class");
     assertContains("IsbnIdentifier.java", "implements IdentifierOneOf");
     assertContains("LibraryCardId.java", "implements IdentifierOneOf");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
   void shouldCompileAllGeneratedDomainModelsFromSampleCatalog() throws IOException, CleanException {
     task.setFromOpenApi(SPEC);
     task.execute();
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -233,7 +234,7 @@ class GenerateModelTaskTest {
     task.setRequestModels("bookSearch");
     task.setResponseModels("bookDetail,auditTrail");
     task.execute();
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -326,6 +327,35 @@ class GenerateModelTaskTest {
   }
 
   @Test
+  void shouldGenerateCompilableModelsForEmptyAndContainerSchemas()
+      throws IOException, CleanException {
+    task.setFromOpenApi(spec("container-schemas.yaml"));
+    task.execute();
+
+    assertFileContains(ENTITIES + "/Pets.java", "public class Pets extends ArrayList<Pet> {");
+    assertFileContains(
+        ENTITIES + "/PetIndex.java", "public class PetIndex extends HashMap<String, Pet> {");
+    assertNotContains("Pets.java", "Builder");
+    assertNotContains("Marker.java", "@AllArgsConstructor");
+    assertNotContains("PremiumPet.java", "@AllArgsConstructor");
+    // A container parent has no builder, so its child cannot use @SuperBuilder
+    assertFileContains(
+        ENTITIES + "/TaggedPets.java",
+        "@Builder(toBuilder = true)",
+        "public class TaggedPets extends Pets {");
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+  }
+
+  @Test
+  void shouldExplainAnInvalidFileUri() {
+    task.setFromOpenApi("file:///contracts/my contract.yaml");
+
+    CleanDomainException error = assertThrows(CleanDomainException.class, () -> task.execute());
+    assertTrue(error.getMessage().contains("Invalid file: URI"), error.getMessage());
+    assertTrue(error.getMessage().contains("%20"), error.getMessage());
+  }
+
+  @Test
   void shouldFailBeforeWritingWhenStrippedClassNamesCollide() {
     task.setFromOpenApi(spec("domain-naming.yaml"));
 
@@ -360,7 +390,7 @@ class GenerateModelTaskTest {
     assertContains("Library.java", "import co.com.bancolombia.model.entities.response.Book;");
     assertContains("Library.java", "private Map<String, Book> booksByIsbn;");
     assertContains("Library.java", "private List<Map<String, Book>> shelves;");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -370,7 +400,7 @@ class GenerateModelTaskTest {
 
     assertFilesExistsInDir(ENTITIES + "/", "Invoice.java", "Money.java");
     assertContains("Invoice.java", "private Money total;");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @ParameterizedTest
@@ -404,7 +434,7 @@ class GenerateModelTaskTest {
     assertContains("Author.java", "public String getFullName()");
     assertContains("Author.java", "public void setFullName(String fullName)");
     assertNotContains("LoanStatus.java", "lombok");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -447,7 +477,7 @@ class GenerateModelTaskTest {
     assertContains("Child.java", "public class Child extends Base");
     assertContains("Base.java", "@SuperBuilder(toBuilder = true)");
     assertContains("Child.java", "@SuperBuilder(toBuilder = true)");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   @Test
@@ -457,7 +487,7 @@ class GenerateModelTaskTest {
     task.execute();
     assertFilesExistsInDir(ENTITIES + "/", "BookDetail.java", "Author.java");
     assertContains("BookDetail.java", "private Author author");
-    GeneratedDomainModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
+    GeneratedModelCompilation.assertCompiles(Path.of(JAVA_SOURCES));
   }
 
   private static void assertContains(String relativePath, String expected) throws IOException {
