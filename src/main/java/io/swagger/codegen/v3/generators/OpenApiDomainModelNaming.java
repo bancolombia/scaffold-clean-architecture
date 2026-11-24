@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public final class OpenApiDomainModelNaming {
 
   public static final String DOMAIN_CLASS_NAMES = "openApiDomainClassNames";
-  private static final Pattern CLASS_NAME = Pattern.compile("[A-Z][A-Za-z0-9_]*");
+  private static final Pattern CLASS_NAME = Pattern.compile("[A-Z]\\w*");
 
   private OpenApiDomainModelNaming() {}
 

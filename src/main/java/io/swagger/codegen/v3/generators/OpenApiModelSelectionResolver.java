@@ -12,13 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** Expands {@code --models} with schema dependencies and validates keys against the contract. */
 public final class OpenApiModelSelectionResolver {
+  /** Name of the option that selects the schemas to generate, used in error messages. */
+  public static final String MODELS_OPTION = "models";
+
   private static final Pattern COMPONENTS_SCHEMA_REF = Pattern.compile("#/components/schemas/(.+)");
 
   private OpenApiModelSelectionResolver() {}
@@ -69,7 +72,7 @@ public final class OpenApiModelSelectionResolver {
   }
 
   public static Set<String> allOfParentClassNames(
-      OpenAPI openAPI, Function<String, String> schemaKeyToClassName) {
+      OpenAPI openAPI, UnaryOperator<String> schemaKeyToClassName) {
     Set<String> parentKeys = new LinkedHashSet<>();
     for (Schema schema : componentsSchemas(openAPI).values()) {
       if (schema.getAllOf() == null) {

@@ -100,11 +100,11 @@ public final class OpenApiDomainModelPlanValidator {
             .sorted()
             .map(
                 key ->
-                    "schema '"
-                        + key
-                        + "': the generator maps this schema name to the Java type '"
-                        + importMapping.get(key)
-                        + "' and would not generate it")
+                    schemaError(
+                        key,
+                        "the generator maps this schema name to the Java type '"
+                            + importMapping.get(key)
+                            + "' and would not generate it"))
             .collect(Collectors.toCollection(ArrayList::new));
     if (!errors.isEmpty()) {
       errors.add("Rename these schemas in the OpenAPI contract.");
@@ -124,7 +124,8 @@ public final class OpenApiDomainModelPlanValidator {
           "A schema cannot be listed in both request-models and response-models: " + overlap);
     }
     Set<String> known = knownSchemaKeys(openAPI);
-    OpenApiModelSelectionResolver.validateSelectedSchemaKeys(openAPI, selectedSchemaKeys, "models");
+    OpenApiModelSelectionResolver.validateSelectedSchemaKeys(
+        openAPI, selectedSchemaKeys, OpenApiModelSelectionResolver.MODELS_OPTION);
     validateKnownKeys(requestSchemaKeys, "request-models", known);
     validateKnownKeys(responseSchemaKeys, "response-models", known);
   }
@@ -185,6 +186,10 @@ public final class OpenApiDomainModelPlanValidator {
     }
   }
 
+  private static String schemaError(String schemaKey, String message) {
+    return "schema '" + schemaKey + "': " + message;
+  }
+
   private static void assertValidClassNames(
       List<DomainModelCodegen.ModelTarget> targets,
       Map<String, String> renames,
@@ -197,17 +202,17 @@ public final class OpenApiDomainModelPlanValidator {
       String className = entry.getValue();
       if (reservedClassNames.contains(className)) {
         errors.add(
-            "schema '"
-                + entry.getKey()
-                + "': class name '"
-                + className
-                + "' clashes with a Java or Lombok type used by the generated models");
+            schemaError(
+                entry.getKey(),
+                "class name '"
+                    + className
+                    + "' clashes with a Java or Lombok type used by the generated models"));
         continue;
       }
       try {
         ArchitectureValidation.validateModelName(className);
       } catch (CleanDomainException e) {
-        errors.add("schema '" + entry.getKey() + "': " + e.getMessage());
+        errors.add(schemaError(entry.getKey(), e.getMessage()));
       }
     }
     if (!errors.isEmpty()) {
