@@ -6,7 +6,7 @@ If you discover a security vulnerability in **Scaffold Clean Architecture**, ple
 
 Security issues can be reported by contacting the project maintainers using the following channel:
 
-- **Email:** MaintainersDevsecopsEngine@googlegroups.com
+- **Email:** [oficina_open_source@bancolombia.com.co](mailto:oficina_open_source@bancolombia.com.co)
 
 When reporting a vulnerability, please include as much relevant information as possible to help us understand and address the issue effectively.
 
