@@ -1,0 +1,10 @@
+{
+  "folders": [
+    "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/audit",
+    "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/audit"
+  ],
+  "files": {
+    "entry-point/mcp/audit/McpAuditAspect.java.mustache": "infrastructure/entry-points/mcp-server/src/main/java/{{packagePath}}/mcp/audit/McpAuditAspect.java",
+    "entry-point/mcp/audit/McpAuditAspectTest.java.mustache": "infrastructure/entry-points/mcp-server/src/test/java/{{packagePath}}/mcp/audit/McpAuditAspectTest.java"
+  }
+}

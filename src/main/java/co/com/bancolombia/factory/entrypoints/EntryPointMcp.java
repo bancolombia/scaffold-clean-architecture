@@ -7,12 +7,15 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.ModuleFactory;
 import co.com.bancolombia.factory.validations.ReactiveTypeValidation;
 import java.io.IOException;
+import tools.jackson.databind.node.ObjectNode;
 
 public class EntryPointMcp implements ModuleFactory {
 
   private static final String SPRING_AI_MCP_SERVER = "spring.ai.mcp.server";
   private static final String SPRING_AI_MCP_SERVER_CAPABILITIES =
       "spring.ai.mcp.server.capabilities";
+  private static final String ALLOWED_ORIGINS = "allowed-origins";
+  private static final String MCP_INSPECTOR_ORIGIN = "http://localhost:6274";
   private static final String JAVA_COMPILE_PARAMETERS_SENTINEL =
       "options.compilerArgs += '-parameters'";
   private static final String JAVA_COMPILE_PARAMETERS_BLOCK =
@@ -34,6 +37,7 @@ public class EntryPointMcp implements ModuleFactory {
     boolean enableResources = builder.getBooleanParam("mcp-enable-resources");
     boolean enablePrompts = builder.getBooleanParam("mcp-enable-prompts");
     boolean enableSecurity = builder.getBooleanParam("mcp-enable-security");
+    boolean enableAudit = builder.getBooleanParam("mcp-enable-audit");
 
     // Validate that at least one capability is enabled
     if (!enableTools && !enableResources && !enablePrompts) {
@@ -43,6 +47,12 @@ public class EntryPointMcp implements ModuleFactory {
 
     // Setup module from templates
     builder.setupFromTemplate("entry-point/mcp");
+    if (enableSecurity) {
+      builder.setupFromTemplate("entry-point/mcp/security");
+    }
+    if (enableAudit) {
+      builder.setupFromTemplate("entry-point/mcp/audit");
+    }
 
     // Add MCP configuration to app-service application.yaml
     addMcpConfigToAppService(builder, enableTools, enableResources, enablePrompts, enableSecurity);
@@ -103,6 +113,8 @@ public class EntryPointMcp implements ModuleFactory {
     builder.appendToProperties(SPRING_AI_MCP_SERVER_CAPABILITIES).put("prompt", enablePrompts);
     builder.appendToProperties(SPRING_AI_MCP_SERVER_CAPABILITIES).put("completion", false);
 
+    addCorsAllowedOrigins(builder);
+
     // Request timeout
     builder.appendToProperties(SPRING_AI_MCP_SERVER).put("request-timeout", "30s");
 
@@ -116,5 +128,13 @@ public class EntryPointMcp implements ModuleFactory {
           return content.replaceAll(
               JAVA_COMPILE_OPTIONS_REGEX, "$1" + JAVA_COMPILE_PARAMETERS_BLOCK);
         });
+  }
+
+  // cors.allowed-origins is shared with the other web entry points, so keep any existing value
+  private static void addCorsAllowedOrigins(ModuleBuilder builder) {
+    ObjectNode cors = builder.appendToProperties("cors");
+    if (!cors.has(ALLOWED_ORIGINS)) {
+      cors.put(ALLOWED_ORIGINS, MCP_INSPECTOR_ORIGIN);
+    }
   }
 }

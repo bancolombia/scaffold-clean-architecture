@@ -1,0 +1,39 @@
+package {{package}}.config;
+
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.OPTIONS;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+@Configuration
+public class McpCorsConfig {
+
+    private static final List<String> ALLOWED_METHODS = List.of(GET.name(), POST.name(),
+            PUT.name(), DELETE.name(), OPTIONS.name());
+
+    // Runs before Spring Security so preflight requests are answered without a token
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    CorsWebFilter mcpCorsWebFilter(@Value("${cors.allowed-origins}") List<String> origins) {
+        var config = new CorsConfiguration();
+        config.setAllowCredentials(Boolean.TRUE);
+        config.setAllowedOrigins(origins);
+        config.setAllowedMethods(ALLOWED_METHODS);
+        config.setAllowedHeaders(List.of(CorsConfiguration.ALL));
+
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return new CorsWebFilter(source);
+    }
+}
