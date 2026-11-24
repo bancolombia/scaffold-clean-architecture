@@ -1,9 +1,6 @@
 /**
 * {{^description}}Gets or Sets {{{name}}}{{/description}}{{#description}}{{{description}}}{{/description}}
 */
-{{#lombok}}
-@AllArgsConstructor
-{{/lombok}}
 public enum {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} {
 {{#allowableValues}}
 {{#enumVars}}
@@ -12,14 +9,28 @@ public enum {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum
 {{/allowableValues}}
 
     private final {{{datatype}}} value;
-{{^lombok}}
-{{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}}({{{datatype}}} value) {
-    this.value = value;
-}
-{{/lombok}}
+
+    {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}}({{{datatype}}} value) {
+        this.value = value;
+    }
+
+    @JsonValue
+    public {{{datatype}}} getValue() {
+        return value;
+    }
 
     @Override
     public String toString() {
         return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} fromValue({{{datatype}}} value) {
+        for ({{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} item : values()) {
+            if (item.value == null ? value == null : item.value.equals(value)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
 }

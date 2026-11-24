@@ -6,9 +6,11 @@
 @Getter
 @Setter
 @NoArgsConstructor
+{{#vendorExtensions.x-has-own-vars}}
 @AllArgsConstructor
+{{/vendorExtensions.x-has-own-vars}}
 {{/lombok}}
-public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializableModel}} implements Serializable {{#interfaceModels}}, {{classname}}{{^@last}}, {{/@last}}{{#@last}} {{/@last}}{{/interfaceModels}}{{/serializableModel}}{{^serializableModel}}{{#interfaceModels}}{{#@first}}implements {{/@first}}{{classname}}{{^@last}}, {{/@last}}{{#@last}}{{/@last}}{{/interfaceModels}}{{/serializableModel}} {
+public class {{classname}}{{#parent}} extends {{{parent}}}{{/parent}}{{#serializableModel}} implements Serializable {{#interfaceModels}}, {{classname}}{{^@last}}, {{/@last}}{{#@last}} {{/@last}}{{/interfaceModels}}{{/serializableModel}}{{^serializableModel}}{{#interfaceModels}}{{#@first}} implements {{/@first}}{{classname}}{{^@last}}, {{/@last}}{{#@last}}{{/@last}}{{/interfaceModels}}{{/serializableModel}} {
 {{#vars}}
     {{#baseItems this}}
     {{#isEnum}}

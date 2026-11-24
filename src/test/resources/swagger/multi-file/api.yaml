@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: Multi file contract
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    invoice:
+      type: object
+      properties:
+        id:
+          type: string
+        total:
+          $ref: './schemas/common.yaml#/components/schemas/money'

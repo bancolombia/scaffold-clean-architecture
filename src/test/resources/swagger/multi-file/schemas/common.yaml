@@ -1,0 +1,14 @@
+openapi: 3.0.3
+info:
+  title: Common schemas
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    money:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string

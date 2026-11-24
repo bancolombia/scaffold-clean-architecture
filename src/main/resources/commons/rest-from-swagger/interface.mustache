@@ -1,0 +1,18 @@
+/**
+* {{#description}}{{.}}{{/description}}{{^description}}{{classname}}{{/description}}
+*/
+{{#vendorExtensions.x-has-subtypes}}
+{{#vendorExtensions.x-discriminator-property}}
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "{{.}}", visible = true)
+{{/vendorExtensions.x-discriminator-property}}
+{{^vendorExtensions.x-discriminator-property}}
+@JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
+{{/vendorExtensions.x-discriminator-property}}
+@JsonSubTypes({
+{{#vendorExtensions.x-subtypes}}
+    @JsonSubTypes.Type(value = {{classname}}.class{{#x-subtype-name}}, name = "{{.}}"{{/x-subtype-name}}){{^@last}},{{/@last}}
+{{/vendorExtensions.x-subtypes}}
+})
+{{/vendorExtensions.x-has-subtypes}}
+public interface {{{classname}}} {
+}

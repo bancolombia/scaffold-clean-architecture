@@ -1,0 +1,109 @@
+openapi: 3.0.1
+info:
+  title: Rest polymorphism
+  description: Fictional contract used only for plugin tests.
+  version: 1.0.0
+paths:
+  /payments:
+    post:
+      operationId: createPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/paymentRequest'
+      responses:
+        '200':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+components:
+  schemas:
+    priority:
+      type: integer
+      enum:
+        - 10
+        - 20
+    paymentRequest:
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/priority'
+        retries:
+          type: integer
+          enum:
+            - 1
+            - 3
+        method:
+          $ref: '#/components/schemas/paymentMethod'
+        status:
+          $ref: '#/components/schemas/statusInfo'
+        channel:
+          $ref: '#/components/schemas/channelChild'
+    paymentMethod:
+      oneOf:
+        - $ref: '#/components/schemas/card'
+        - $ref: '#/components/schemas/transfer'
+      discriminator:
+        propertyName: kind
+        mapping:
+          CARD: '#/components/schemas/card'
+    card:
+      type: object
+      properties:
+        kind:
+          type: string
+        number:
+          type: string
+    transfer:
+      type: object
+      properties:
+        kind:
+          type: string
+        number:
+          type: string
+    receipt:
+      type: object
+    signedReceipt:
+      allOf:
+        - $ref: '#/components/schemas/receipt'
+    statusInfo:
+      oneOf:
+        - $ref: '#/components/schemas/statusCode'
+        - $ref: '#/components/schemas/statusDetail'
+    statusCode:
+      type: string
+      enum:
+        - OK
+        - FAILED
+    statusDetail:
+      type: object
+      properties:
+        message:
+          type: string
+    channelBase:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+    channelChild:
+      allOf:
+        - $ref: '#/components/schemas/channelBase'
+        - type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+            channel:
+              type: string
+              enum:
+                - WEB
+                - MOBILE

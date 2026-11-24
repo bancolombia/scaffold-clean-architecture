@@ -1,0 +1,34 @@
+/**
+* {{^description}}Gets or Sets {{{name}}}{{/description}}{{#description}}{{{description}}}{{/description}}
+*/
+public enum {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{{name}}}({{#value}}{{{value}}}{{/value}}{{^value}}null{{/value}}){{^@last}},{{/@last}}{{#@last}};{{/@last}}
+{{/enumVars}}
+{{/allowableValues}}
+
+    private final {{{datatype}}} value;
+
+    {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}}({{{datatype}}} value) {
+        this.value = value;
+    }
+
+    public {{{datatype}}} getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    public static {{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} fromValue({{{datatype}}} value) {
+        for ({{#datatypeWithEnum}}{{{.}}}{{/datatypeWithEnum}}{{^datatypeWithEnum}}{{classname}}{{/datatypeWithEnum}} item : values()) {
+            if (item.value == null ? value == null : item.value.equals(value)) {
+                return item;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+}
