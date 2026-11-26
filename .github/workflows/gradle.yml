@@ -54,13 +54,20 @@ jobs:
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      # The pinned google-java-format (1.28.0, see build.gradle) only runs on JDK 17, the JDK the
+      # project is developed with, so the format is checked there and the build runs on JDK 25
+      - name: Set up JDK 17
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Validate code formatting
+        run: ./gradlew spotlessCheck
       - name: Set up JDK 25
         uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: 'temurin'
           java-version: 25
-      - name: Validate code formatting
-        run: ./gradlew spotlessCheck
       - name: Execute build test and report
         run: ./gradlew jacocoTestReport --refresh-dependencies --no-daemon --continue
       - name: Run sonar
