@@ -1,0 +1,39 @@
+package {{package}}.grpc.consumer.config;
+
+import {{package}}.grpc.consumer.CustomServiceGrpc;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.client.GrpcChannelFactory;
+
+/**
+ * gRPC client configuration.
+ *
+ * <p>The channel is resolved by name, so every setting under
+ * {@code spring.grpc.client.channel.example-service} (target, ssl, deadline, keepalive...)
+ * is applied.</p>
+ *
+ * <pre>
+ * spring:
+ *   grpc:
+ *     client:
+ *       channel:
+ *         example-service:
+ *           target: static://localhost:9090
+ *           default:
+ *             deadline: ${GRPC_CLIENT_DEADLINE:5s}
+ * </pre>
+ *
+ * @see <a href="https://docs.spring.io/spring-boot/reference/io/grpc.html">Spring Boot gRPC</a>
+ */
+@Configuration
+public class GrpcClientConfig {
+
+    // Must match the channel name in application.yaml
+    static final String CHANNEL_NAME = "example-service";
+
+    @Bean
+    CustomServiceGrpc.CustomServiceBlockingStub customServiceBlockingStub(
+            GrpcChannelFactory channelFactory) {
+        return CustomServiceGrpc.newBlockingStub(channelFactory.createChannel(CHANNEL_NAME));
+    }
+}
