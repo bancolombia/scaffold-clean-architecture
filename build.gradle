@@ -266,7 +266,14 @@ def filesToFormat = providers.gradleProperty('files')
 
 spotless {
     java {
-        googleJavaFormat()
+        // Pinned so the format does not depend on the JDK that runs Gradle: without a version,
+        // Spotless picks the newest google-java-format the JVM supports (1.28.0 on JDK 17, 2.0.0 on
+        // JDK 21+), so builds on different JDKs format the code differently. 1.28.0 is the latest
+        // version that runs on JDK 17, the JDK the project is developed with; it does not run on
+        // JDK 25, so CI checks the format on JDK 17.
+        // TODO: update to the latest google-java-format (and reformat the code) once the project
+        //  uses Java 21.
+        googleJavaFormat('1.28.0')
         target filesToFormat
         targetExclude '**/examples-ca/**', '**/UtilsTest.java'
     }
