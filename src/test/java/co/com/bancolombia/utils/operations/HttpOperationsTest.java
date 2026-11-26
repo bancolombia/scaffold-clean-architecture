@@ -164,6 +164,21 @@ class HttpOperationsTest {
   }
 
   @Test
+  void getGradlePluginVersionKeepsThePluginDeclaration() {
+    // Arrange: as UpdateProjectDependencies reads it from id 'x' version 'y'
+    DependencyRelease release = DependencyRelease.from("id org.springframework.boot version 4.0.0");
+    String buildGradle = "id 'org.springframework.boot' version '4.0.0'";
+    // Act
+    Optional<DependencyRelease> result = operations.getLatestGradlePluginVersion(release);
+    // Assert
+    assertTrue(result.isPresent());
+    assertTrue(result.get().isGradlePlugin());
+    assertEquals(
+        "id 'org.springframework.boot' version '4.1.2'",
+        buildGradle.replaceAll(result.get().toRegex(), result.get().toString()));
+  }
+
+  @Test
   void getDependencyVersion() {
     // Arrange
     DependencyRelease release = DependencyRelease.from("some.dependency:name");

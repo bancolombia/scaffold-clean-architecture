@@ -141,6 +141,7 @@ public class HttpOperations implements ExternalOperations {
       endpoint = endpointResolver.apply(dependency);
       var metadata = RestConsumer.getRequest(endpoint, MavenMetadata.class, true);
       var release = metadata.toDependencyRelease();
+      release.setGradlePlugin(dependency.isGradlePlugin());
       if (!isSafeRelease(dependency, release)) {
         logger.warn(
             "Ignoring unexpected release {} for dependency {} from {}",
