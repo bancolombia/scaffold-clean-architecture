@@ -1,5 +1,23 @@
 # Changelog
 
+## [v5.4.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.4.0) (2026-11-26)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.3.0...v5.4.0)
+
+**Security fixes:**
+
+- docs\(security\): SECURITY.md contact email bounces; document private vulnerability reporting [\#1056](https://github.com/bancolombia/scaffold-clean-architecture/issues/1056)
+- chore: remove orphan mcp-client security-config template \(permitAll + CSRF disabled\) [\#1052](https://github.com/bancolombia/scaffold-clean-architecture/issues/1052)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependencies [\#1105](https://github.com/bancolombia/scaffold-clean-architecture/pull/1105) ([app-toolkit-opensource-innersource[bot]](https://github.com/apps/app-toolkit-opensource-innersource))
+- chore\(deps\): keep the Gradle plugin form when updating plugin versions [\#1103](https://github.com/bancolombia/scaffold-clean-architecture/pull/1103) ([luisgomez29](https://github.com/luisgomez29))
+- docs\(security\): update the maintainers contact email [\#1102](https://github.com/bancolombia/scaffold-clean-architecture/pull/1102) ([luisgomez29](https://github.com/luisgomez29))
+- ci: fix sonar and docs deploy on master and remove the Codecov upload [\#1101](https://github.com/bancolombia/scaffold-clean-architecture/pull/1101) ([luisgomez29](https://github.com/luisgomez29))
+- chore: remove orphan mcp-client templates [\#1100](https://github.com/bancolombia/scaffold-clean-architecture/pull/1100) ([lyn1dev](https://github.com/lyn1dev))
+- feat: Add gRPC Client Consumer Driven Adapter [\#1030](https://github.com/bancolombia/scaffold-clean-architecture/pull/1030) ([Daniel7R](https://github.com/Daniel7R))
+
 ## [v5.3.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/v5.3.0) (2026-11-24)
 
 [Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v5.2.1...v5.3.0)
@@ -2126,15 +2144,15 @@
 
 ## [2.0.0](https://github.com/bancolombia/scaffold-clean-architecture/tree/2.0.0) (2021-11-17)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...2.0.0)
-
-## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
-
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...v2.0.0RELEASE)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/untagged-e6951c62b2620cdb7ffd...2.0.0)
 
 ## [untagged-e6951c62b2620cdb7ffd](https://github.com/bancolombia/scaffold-clean-architecture/tree/untagged-e6951c62b2620cdb7ffd) (2021-11-16)
 
-[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...untagged-e6951c62b2620cdb7ffd)
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/v2.0.0RELEASE...untagged-e6951c62b2620cdb7ffd)
+
+## [v2.0.0RELEASE](https://github.com/bancolombia/scaffold-clean-architecture/tree/v2.0.0RELEASE) (2021-11-16)
+
+[Full Changelog](https://github.com/bancolombia/scaffold-clean-architecture/compare/1.9.9...v2.0.0RELEASE)
 
 **Implemented enhancements:**
 
