@@ -5,17 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.LookupResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +36,17 @@ class UpdateProjectDependenciesTest {
 
   @BeforeEach
   void setup() throws IOException {
+    lenient().when(operations.findLatestPluginVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient().when(operations.findLatestGradleVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findGradleDistributionSha256(anyString(), anyString()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestDependency(any()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.notFound("test"));
     Path original = Path.of(UpdateProjectDependencies.BUILD_GRADLE_FILE);
     Files.deleteIfExists(TEST_FILE);
     Files.copy(original, TEST_FILE);
@@ -49,40 +62,40 @@ class UpdateProjectDependenciesTest {
   void shouldUpdateDependencies() throws IOException {
     // Arrange
     DependencyRelease dependencyRelease =
-        DependencyRelease.from("com.github.spullara.mustache.java:compiler:TEST_VERSION");
-    when(operations.getTheLastDependencyRelease(any())).thenReturn(Optional.of(dependencyRelease));
+        DependencyRelease.from("com.github.spullara.mustache.java:compiler:999.0.0");
+    when(operations.findLatestDependency(any())).thenReturn(LookupResult.found(dependencyRelease));
 
-    DependencyRelease pluginRelease =
-        DependencyRelease.from("id org.sonarqube version GRADLE_VERSION");
-    when(operations.getLatestGradlePluginVersion(any())).thenReturn(Optional.of(pluginRelease));
+    DependencyRelease pluginRelease = DependencyRelease.from("id org.sonarqube version 999.1.0");
+    when(operations.findLatestGradlePlugin(any())).thenReturn(LookupResult.found(pluginRelease));
     // Act
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
     assertNotEquals(result, originalContent);
-    assertTrue(result.contains("TEST_VERSION"));
-    assertTrue(result.contains("GRADLE_VERSION"));
+    assertTrue(result.contains("com.github.spullara.mustache.java:compiler:999.0.0"));
+    assertTrue(result.contains("id 'org.sonarqube' version '999.1.0'"));
   }
 
   @Test
   void shouldUpdateWrapperVersionAndChecksumTogether() throws IOException {
     // Arrange
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
-    when(operations.getGradleDistributionSha256("9.9.0", "bin"))
-        .thenReturn(Optional.of(NEW_SHA256));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.0.0"));
+    when(operations.findGradleDistributionSha256("99.0.0", "bin"))
+        .thenReturn(LookupResult.found(NEW_SHA256));
     // Act
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
-    assertTrue(result.contains("gradleVersion = '9.9.0'"));
+    assertTrue(result.contains("gradleVersion = '99.0.0'"));
     assertTrue(result.contains("distributionSha256Sum = '" + NEW_SHA256 + "'"));
   }
 
   @Test
   void shouldKeepWrapperWhenChecksumIsNotAvailable() throws IOException {
     // Arrange
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
-    when(operations.getGradleDistributionSha256("9.9.0", "bin")).thenReturn(Optional.empty());
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.0.0"));
+    when(operations.findGradleDistributionSha256("99.0.0", "bin"))
+        .thenReturn(LookupResult.notFound("test"));
     // Act
     task.run();
     // Assert
@@ -94,14 +107,14 @@ class UpdateProjectDependenciesTest {
   void shouldOnlyUpdateVersionWhenWrapperHasNoChecksum() throws IOException {
     // Arrange
     Files.writeString(TEST_FILE, "tasks.named('wrapper') {\n  gradleVersion = '9.8.2'\n}\n");
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.0.0"));
     // Act
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
-    assertTrue(result.contains("gradleVersion = '9.9.0'"));
+    assertTrue(result.contains("gradleVersion = '99.0.0'"));
     assertFalse(result.contains("distributionSha256Sum"));
-    verify(operations, never()).getGradleDistributionSha256(any(), any());
+    verify(operations, never()).findGradleDistributionSha256(any(), any());
   }
 
   @Test
@@ -116,35 +129,35 @@ class UpdateProjectDependenciesTest {
           distributionSha256Sum = 'old'
         }
         """);
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
-    when(operations.getGradleDistributionSha256("9.9.0", "all"))
-        .thenReturn(Optional.of(NEW_SHA256));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.0.0"));
+    when(operations.findGradleDistributionSha256("99.0.0", "all"))
+        .thenReturn(LookupResult.found(NEW_SHA256));
     // Act
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
-    assertTrue(result.contains("gradleVersion = '9.9.0'"));
+    assertTrue(result.contains("gradleVersion = '99.0.0'"));
     assertTrue(result.contains("distributionSha256Sum = '" + NEW_SHA256 + "'"));
   }
 
   @Test
   void shouldWriteVersionsWithDollarSignLiterally() throws IOException {
     // Arrange
-    when(operations.getTheLastDependencyRelease(any()))
+    when(operations.findLatestDependency(any()))
         .thenReturn(
-            Optional.of(
+            LookupResult.found(
                 DependencyRelease.from("com.github.spullara.mustache.java:compiler:1.2$1")));
-    when(operations.getLatestGradlePluginVersion(any()))
-        .thenReturn(Optional.of(DependencyRelease.from("id org.sonarqube version 5.0$1")));
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9$1"));
-    when(operations.getGradleDistributionSha256("9.9$1", "bin"))
-        .thenReturn(Optional.of(NEW_SHA256));
+    when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.found(DependencyRelease.from("id org.sonarqube version 5.0$1")));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.9$1"));
+    when(operations.findGradleDistributionSha256("99.9$1", "bin"))
+        .thenReturn(LookupResult.found(NEW_SHA256));
     // Act
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
     assertTrue(result.contains("'com.github.spullara.mustache.java:compiler:1.2$1'"));
     assertTrue(result.contains("id 'org.sonarqube' version '5.0$1'"));
-    assertTrue(result.contains("gradleVersion = '9.9$1'"));
+    assertTrue(result.contains("gradleVersion = '99.9$1'"));
   }
 }

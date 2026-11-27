@@ -3,6 +3,7 @@ package co.com.bancolombia.models;
 import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,10 +35,19 @@ public class DependencyRelease {
   public static final String DECLARATION_REGEX =
       "['\"][^'\"\\s]+:[^'\"\\s]+:[^$'\"\\s][^'\"\\s]*['\"]";
 
+  /**
+   * Finds {@code id 'plugin' version 'x'} declarations; a version given by a variable, such as
+   * {@code "$springBootVersion"}, is left out because it is not written here.
+   */
+  public static final String PLUGIN_DECLARATION_REGEX =
+      "id\\s+['\"][^'\"\\s]+['\"]\\s+version\\s+['\"][^$'\"\\s][^'\"\\s]*['\"]";
+
   public String toRegex() {
     if (isGradlePlugin()) {
       return String.format(
-          "id\\s+['\"]%s['\"]\\s+version\\s+['\"][^'\"]*['\"]", Pattern.quote(this.getGroup()));
+          // A version given by a variable, such as "$sonarVersion", is not replaced
+          "id\\s+['\"]%s['\"]\\s+version\\s+['\"][^$'\"\\s][^'\"\\s]*['\"]",
+          Pattern.quote(this.getGroup()));
     }
     return String.format(
         "['\"]%s:%s:[^$'\"\\s][^'\"\\s]*['\"]",
@@ -58,6 +68,12 @@ public class DependencyRelease {
           && rel.getArtifact().equals(getArtifact());
     }
     return super.equals(obj);
+  }
+
+  /** Consistent with equals, so duplicated dependencies are removed in sets and distinct(). */
+  @Override
+  public int hashCode() {
+    return Objects.hash(getGroup(), getArtifact());
   }
 
   public boolean isNewest(DependencyRelease current) {

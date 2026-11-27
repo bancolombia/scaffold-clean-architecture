@@ -4,16 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
 import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.LookupResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +33,17 @@ class ZUpdateDependenciesTest {
 
   @BeforeEach
   void setup() throws IOException {
+    lenient().when(operations.findLatestPluginVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient().when(operations.findLatestGradleVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findGradleDistributionSha256(anyString(), anyString()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestDependency(any()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.notFound("test"));
     Path original = Path.of(UpdateDependencies.CONSTANTS_PATH);
     Path destination = Path.of(TEST_PATH);
     Files.deleteIfExists(destination);
@@ -50,11 +63,12 @@ class ZUpdateDependenciesTest {
     DependencyRelease dependencyRelease = DependencyRelease.from("a:b:1.0.0");
     Release release = new Release();
     release.setTagName("1.2.3");
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of(newVersion));
-    when(operations.getGradleDistributionSha256(newVersion, "bin"))
-        .thenReturn(Optional.of(NEW_SHA256));
-    when(operations.getLatestGradlePluginVersion(any())).thenReturn(Optional.of(dependencyRelease));
-    when(operations.getTheLastDependencyRelease(any())).thenReturn(Optional.of(dependencyRelease));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found(newVersion));
+    when(operations.findGradleDistributionSha256(newVersion, "bin"))
+        .thenReturn(LookupResult.found(NEW_SHA256));
+    when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.found(dependencyRelease));
+    when(operations.findLatestDependency(any())).thenReturn(LookupResult.found(dependencyRelease));
     // Act
     task.run();
     // Assert
@@ -68,8 +82,9 @@ class ZUpdateDependenciesTest {
   void shouldKeepGradleWrapperWhenChecksumIsNotAvailable() throws IOException {
     // Arrange
     String newVersion = Constants.GRADLE_WRAPPER_VERSION + "-next";
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of(newVersion));
-    when(operations.getGradleDistributionSha256(newVersion, "bin")).thenReturn(Optional.empty());
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found(newVersion));
+    when(operations.findGradleDistributionSha256(newVersion, "bin"))
+        .thenReturn(LookupResult.notFound("test"));
     // Act
     task.run();
     // Assert

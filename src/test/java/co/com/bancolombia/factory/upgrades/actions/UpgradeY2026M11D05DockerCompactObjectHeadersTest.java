@@ -90,4 +90,26 @@ class UpgradeY2026M11D05DockerCompactObjectHeadersTest {
   void shouldSkipWhenThereIsNoDockerfile() {
     assertFalse(updater.up(builder));
   }
+
+  @Test
+  void shouldUpdateEveryDockerfileInsideTheDeploymentFolder() throws IOException {
+    java.nio.file.Path deployment = builder.getProjectDir().toPath().resolve("deployment");
+    java.nio.file.Path nested = deployment.resolve("docker").resolve("Dockerfile");
+    java.nio.file.Path other = deployment.resolve("native").resolve("Dockerfile");
+    Files.createDirectories(nested.getParent());
+    Files.createDirectories(other.getParent());
+    Files.writeString(nested, DOCKERFILE_TEMPLATE.formatted("25", ""));
+    Files.writeString(other, DOCKERFILE_TEMPLATE.formatted("25", ""));
+
+    assertTrue(updater.up(builder));
+
+    String expected = DOCKERFILE_TEMPLATE.formatted("25", "-XX:+UseCompactObjectHeaders ").strip();
+    assertEquals(expected, builder.readFile(nested.toString()));
+    assertEquals(expected, builder.readFile(other.toString()));
+  }
+
+  @Test
+  void shouldSkipWhenThereIsNoDeploymentFolder() {
+    assertFalse(updater.up(builder));
+  }
 }

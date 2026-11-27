@@ -6,11 +6,15 @@ import static co.com.bancolombia.TestUtils.getTask;
 import static co.com.bancolombia.TestUtils.getTestDir;
 import static co.com.bancolombia.TestUtils.setupProject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +24,7 @@ import co.com.bancolombia.task.GenerateStructureTask;
 import co.com.bancolombia.utils.FileUtils;
 import co.com.bancolombia.utils.Utils;
 import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.LookupResult;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,6 +48,17 @@ class ModuleBuilderTest {
 
   @BeforeEach
   void setup() throws IOException, CleanException {
+    lenient().when(operations.findLatestPluginVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient().when(operations.findLatestGradleVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findGradleDistributionSha256(anyString(), anyString()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestDependency(any()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.notFound("test"));
     deleteStructure(Path.of(TEST_DIR));
     Project project = setupProject(ModuleBuilderTest.class, GenerateStructureTask.class);
 
@@ -103,7 +119,7 @@ class ModuleBuilderTest {
     Release release = new Release();
     release.setTagName("999.0.0");
     release.setPublishedAt(OffsetDateTime.now());
-    when(operations.getLatestPluginVersion()).thenReturn(release);
+    when(operations.findLatestPluginVersion()).thenReturn(LookupResult.found(release));
     // Act
     Release loaded = builder.getLatestRelease();
     // Assert
@@ -112,11 +128,22 @@ class ModuleBuilderTest {
   }
 
   @Test
+  void shouldHaveNoLatestReleaseWhenItCanNotBeChecked() {
+    when(operations.findLatestPluginVersion())
+        .thenReturn(LookupResult.failed("https://plugins.gradle.org", "HTTP 503"));
+
+    assertNull(builder.getLatestRelease());
+    assertNull(builder.getLatestRelease());
+    verify(styledTextOutput, never()).append("gradle u");
+    verify(operations, times(1)).findLatestPluginVersion();
+  }
+
+  @Test
   void shouldNotSuggestUpdateWhenPluginIsNewerThanLatestRelease() {
     Release release = new Release();
     release.setTagName("0.0.1");
     release.setPublishedAt(OffsetDateTime.now());
-    when(operations.getLatestPluginVersion()).thenReturn(release);
+    when(operations.findLatestPluginVersion()).thenReturn(LookupResult.found(release));
     // Act
     Release loaded = builder.getLatestRelease();
     // Assert
@@ -129,7 +156,7 @@ class ModuleBuilderTest {
     Release release = new Release();
     release.setTagName(Utils.getVersionPlugin());
     release.setPublishedAt(OffsetDateTime.now());
-    when(operations.getLatestPluginVersion()).thenReturn(release);
+    when(operations.findLatestPluginVersion()).thenReturn(LookupResult.found(release));
     // Act
     builder.getLatestRelease();
     // Assert

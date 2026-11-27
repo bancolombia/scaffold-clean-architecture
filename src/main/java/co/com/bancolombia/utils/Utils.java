@@ -11,8 +11,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -204,7 +206,17 @@ public class Utils {
         .map(MatchResult::group)
         .map(s -> s.replace("'", ""))
         .map(s -> s.replace("\"", ""))
-        .collect(Collectors.toSet());
+        // In the order of the file, so lookups and logs are the same on every run
+        .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  /** The major version of a release, or empty for a placeholder such as CURRENT_LOCAL_VERSION. */
+  public static OptionalInt majorVersionOf(String version) {
+    try {
+      return OptionalInt.of(Integer.parseInt(version.split("\\.")[0]));
+    } catch (NumberFormatException e) {
+      return OptionalInt.empty();
+    }
   }
 
   public static boolean isStableVersion(String version) {

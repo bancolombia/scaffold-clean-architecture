@@ -5,7 +5,9 @@ import static co.com.bancolombia.factory.upgrades.actions.ZUpdateDependencies.FI
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -15,10 +17,10 @@ import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.utils.operations.ExternalOperations;
+import co.com.bancolombia.utils.operations.LookupResult;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import org.gradle.api.Project;
 import org.gradle.api.logging.Logger;
@@ -39,6 +41,17 @@ class ZUpdateDependenciesTest {
 
   @BeforeEach
   void setup() throws IOException {
+    lenient().when(operations.findLatestPluginVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient().when(operations.findLatestGradleVersion()).thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findGradleDistributionSha256(anyString(), anyString()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestDependency(any()))
+        .thenReturn(LookupResult.notFound("test"));
+    lenient()
+        .when(operations.findLatestGradlePlugin(any()))
+        .thenReturn(LookupResult.notFound("test"));
     when(project.getName()).thenReturn("UtilsTest");
     when(project.getLogger()).thenReturn(logger);
     when(project.getProjectDir()).thenReturn(Files.createTempDirectory("sample").toFile());
@@ -61,8 +74,8 @@ class ZUpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of(dependency));
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
-        .thenReturn(Optional.of(release));
+    when(operations.findLatestDependency(any(DependencyRelease.class)))
+        .thenReturn(LookupResult.found(release));
     // add possible files
     builder.addFile(file, current);
 
@@ -85,8 +98,8 @@ class ZUpdateDependenciesTest {
     String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
-        .thenReturn(Optional.of(release));
+    when(operations.findLatestDependency(any(DependencyRelease.class)))
+        .thenReturn(LookupResult.found(release));
     // add possible files
     builder.addFile(file, current);
     // Act
@@ -117,9 +130,9 @@ class ZUpdateDependenciesTest {
             .formatted("c".repeat(64));
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(operations.getGradleWrapperFromFile()).thenReturn(Optional.of("9.9.0"));
-    when(operations.getGradleDistributionSha256("9.9.0", "bin"))
-        .thenReturn(Optional.of("c".repeat(64)));
+    when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("9.9.0"));
+    when(operations.findGradleDistributionSha256("9.9.0", "bin"))
+        .thenReturn(LookupResult.found("c".repeat(64)));
     builder.addFile(file, current);
     // Act
     boolean applied = updater.up(builder);
@@ -140,7 +153,7 @@ class ZUpdateDependenciesTest {
     boolean applied = updater.up(builder);
     // Assert
     assertFalse(applied);
-    verify(operations, never()).getGradleWrapperFromFile();
+    verify(operations, never()).findLatestGradleVersion();
   }
 
   @Test
@@ -148,17 +161,43 @@ class ZUpdateDependenciesTest {
     DependencyRelease release = new DependencyRelease();
     release.setGroup("group");
     release.setArtifact("dependency-name");
-    release.setVersion("1.2.4$1");
+    release.setVersion("999.2.4$1");
     String file = "./main.gradle";
     String current = "dependencies {\n\timplementation 'group:dependency-name:1.2.3'\n}";
-    String expected = "dependencies {\n\timplementation 'group:dependency-name:1.2.4$1'\n}";
+    String expected = "dependencies {\n\timplementation 'group:dependency-name:999.2.4$1'\n}";
     when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
     when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
-    when(operations.getTheLastDependencyRelease(any(DependencyRelease.class)))
-        .thenReturn(Optional.of(release));
+    when(operations.findLatestDependency(any(DependencyRelease.class)))
+        .thenReturn(LookupResult.found(release));
     builder.addFile(file, current);
 
     assertTrue(updater.up(builder));
     verify(builder).addFile(file, expected);
+  }
+
+  @Test
+  void shouldUpdateGradlePluginsWithAVersionButNotThePluginsOfThisProject() {
+    String file = "./build.gradle";
+    String current =
+        """
+        plugins {
+            id 'co.com.bancolombia.cleanArchitecture.settings' version '5.4.0'
+            id 'org.springframework.boot' version '4.1.2' apply false
+            id 'org.sonarqube'
+        }
+        """;
+    DependencyRelease boot = DependencyRelease.from("id org.springframework.boot version 4.2.0");
+    when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
+    when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(file));
+    when(operations.findLatestGradlePlugin(any(DependencyRelease.class)))
+        .thenReturn(LookupResult.found(boot));
+    builder.addFile(file, current);
+
+    assertTrue(updater.up(builder));
+
+    verify(builder)
+        .addFile(
+            file, current.replace("version '4.1.2' apply false", "version '4.2.0' apply false"));
+    verify(operations).findLatestGradlePlugin(any(DependencyRelease.class));
   }
 }

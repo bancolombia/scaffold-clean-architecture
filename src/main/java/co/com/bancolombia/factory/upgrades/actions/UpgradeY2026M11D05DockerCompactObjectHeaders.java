@@ -1,6 +1,7 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
-import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
+import static co.com.bancolombia.Constants.MainFiles.DEPLOYMENT_DIR;
+import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE_NAME;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -16,9 +17,13 @@ public class UpgradeY2026M11D05DockerCompactObjectHeaders implements UpgradeActi
   @Override
   public boolean up(ModuleBuilder builder) {
     try {
-      return builder.updateFile(DOCKERFILE, this::addFlag);
+      boolean applied = false;
+      for (String dockerfile : builder.findFiles(DEPLOYMENT_DIR, DOCKERFILE_NAME)) {
+        applied |= builder.updateFile(dockerfile, this::addFlag);
+      }
+      return applied;
     } catch (IOException e) {
-      builder.getLogger().debug("Dockerfile not found, skipping: {}", e.getMessage());
+      builder.getLogger().debug("Can't read a Dockerfile, skipping: {}", e.getMessage());
       return false;
     }
   }

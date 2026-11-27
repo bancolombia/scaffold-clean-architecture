@@ -45,6 +45,7 @@ public final class Constants {
   public static final String PROTOBUF_VERSION = "4.35.1";
 
   // Gradle plugins
+  public static final String PLUGIN_ID = "co.com.bancolombia.cleanArchitecture";
   public static final String PLUGIN_VERSION = "5.4.0";
   public static final String JACOCO_VERSION = "0.8.16";
   public static final String SONAR_VERSION = "7.6.0.18749";
@@ -63,6 +64,8 @@ public final class Constants {
     public static final String BUILD_GRADLE = "./build.gradle";
     public static final String MAIN_GRADLE = "./main.gradle";
     public static final String SETTINGS_GRADLE = "./settings.gradle";
+    public static final String DEPLOYMENT_DIR = "./deployment";
+    public static final String DOCKERFILE_NAME = "Dockerfile";
     public static final String DOCKERFILE = "./deployment/Dockerfile";
     public static final String APP_BUILD_GRADLE = "./applications/app-service/build.gradle";
     public static final String APPLICATION_PROPERTIES =
