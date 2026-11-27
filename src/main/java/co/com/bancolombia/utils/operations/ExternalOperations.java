@@ -2,17 +2,20 @@ package co.com.bancolombia.utils.operations;
 
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.Release;
-import java.util.Optional;
 
+/**
+ * Lookups in external sources. They only query: deciding whether a result is newer than the current
+ * version is up to the caller.
+ */
 public interface ExternalOperations {
 
-  Release getLatestPluginVersion();
+  LookupResult<Release> findLatestPluginVersion();
 
-  Optional<DependencyRelease> getTheLastDependencyRelease(DependencyRelease dependency);
+  LookupResult<DependencyRelease> findLatestDependency(DependencyRelease dependency);
 
-  Optional<DependencyRelease> getLatestGradlePluginVersion(DependencyRelease dependency);
+  LookupResult<DependencyRelease> findLatestGradlePlugin(DependencyRelease dependency);
 
-  Optional<String> getGradleWrapperFromFile();
+  LookupResult<String> findLatestGradleVersion();
 
-  Optional<String> getGradleDistributionSha256(String version, String distributionType);
+  LookupResult<String> findGradleDistributionSha256(String version, String distributionType);
 }

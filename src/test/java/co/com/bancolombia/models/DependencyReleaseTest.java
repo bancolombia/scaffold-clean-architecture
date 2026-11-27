@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import co.com.bancolombia.utils.Utils;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
@@ -103,5 +105,54 @@ class DependencyReleaseTest {
 
     assertTrue(Utils.findExpressions(content, DependencyRelease.DECLARATION_REGEX).isEmpty());
     assertEquals(content, update(content, flyway));
+  }
+
+  @Test
+  void shouldRemoveDuplicatedDependenciesWithDifferentVersions() {
+    Set<DependencyRelease> dependencies =
+        new HashSet<>(
+            List.of(
+                DependencyRelease.from("org.foo:bar:1.0.0"),
+                DependencyRelease.from("org.foo:bar:2.0.0")));
+
+    assertEquals(1, dependencies.size());
+    assertEquals(
+        DependencyRelease.from("org.foo:bar:1.0.0").hashCode(),
+        DependencyRelease.from("org.foo:bar:2.0.0").hashCode());
+  }
+
+  @Test
+  void shouldNotReplaceAPluginVersionGivenByAVariable() {
+    DependencyRelease plugin = DependencyRelease.from("id org.sonarqube version 7.6");
+    plugin.setGradlePlugin(true);
+    String buildGradle =
+        "id 'org.sonarqube' version '7.0'\nid 'org.sonarqube' version \"$sonarVersion\"";
+
+    assertEquals(
+        "id 'org.sonarqube' version '7.6'\nid 'org.sonarqube' version \"$sonarVersion\"",
+        buildGradle.replaceAll(plugin.toRegex(), plugin.toString()));
+  }
+
+  @Test
+  void shouldUpdateOnlyOlderDeclarationsInSingleQuotesKeepingTheClassifier() {
+    DependencyRelease latest = DependencyRelease.from("io.netty:netty-epoll:4.2.0");
+    String content =
+        """
+                    implementation 'io.netty:netty-epoll:4.1.0:linux-x86_64'
+                    implementation "io.netty:netty-epoll:4.1.0"
+                    implementation 'io.netty:netty-epoll:5.0.0-M1'""";
+
+    assertEquals(
+        """
+                    implementation 'io.netty:netty-epoll:4.2.0:linux-x86_64'
+                    implementation 'io.netty:netty-epoll:4.2.0'
+                    implementation 'io.netty:netty-epoll:5.0.0-M1'""",
+        latest.updateOlderDeclarations(content));
+  }
+
+  @Test
+  void shouldReadTheVersionOfADeclarationWithClassifier() {
+    assertEquals(
+        "4.1.0", DependencyRelease.from("io.netty:netty-epoll:4.1.0:linux-x86_64").getVersion());
   }
 }

@@ -385,4 +385,25 @@ public class FileUtilsTest {
     BC,
     D
   }
+
+  @Test
+  void shouldFailAtOnceWhenTheFileDoesNotExist() {
+    java.io.File missing = new java.io.File("build/not-existing/Dockerfile");
+
+    assertThrows(
+        java.nio.file.NoSuchFileException.class, () -> FileUtils.readFileAsString(missing, null));
+  }
+
+  @Test
+  void shouldReadUtf8AndIso88591FilesAndNormalizeLineBreaks() throws java.io.IOException {
+    java.nio.file.Path dir = java.nio.file.Files.createTempDirectory("charsets");
+    java.nio.file.Path utf8 = dir.resolve("utf8.txt");
+    java.nio.file.Path iso = dir.resolve("iso.txt");
+    java.nio.file.Files.writeString(utf8, "canción\r\nañó\n");
+    java.nio.file.Files.writeString(
+        iso, "canción\r\nañó\n", java.nio.charset.StandardCharsets.ISO_8859_1);
+
+    assertEquals("canción\nañó", FileUtils.readFileAsString(utf8.toFile(), null));
+    assertEquals("canción\nañó", FileUtils.readFileAsString(iso.toFile(), null));
+  }
 }

@@ -1,7 +1,8 @@
 package co.com.bancolombia.factory.upgrades.actions;
 
 import static co.com.bancolombia.Constants.MainFiles.BUILD_GRADLE;
-import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE;
+import static co.com.bancolombia.Constants.MainFiles.DEPLOYMENT_DIR;
+import static co.com.bancolombia.Constants.MainFiles.DOCKERFILE_NAME;
 
 import co.com.bancolombia.factory.ModuleBuilder;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
@@ -28,7 +29,11 @@ public class UpgradeY2026M11D07DockerOtelAgent implements UpgradeAction {
       if (!OTEL_ENABLED.matcher(builder.readFile(BUILD_GRADLE)).find()) {
         return false;
       }
-      return builder.updateFile(DOCKERFILE, this::addAgent);
+      boolean applied = false;
+      for (String dockerfile : builder.findFiles(DEPLOYMENT_DIR, DOCKERFILE_NAME)) {
+        applied |= update(builder, dockerfile);
+      }
+      return applied;
     } catch (IOException e) {
       builder
           .getLogger()
@@ -73,5 +78,15 @@ public class UpgradeY2026M11D07DockerOtelAgent implements UpgradeAction {
   @Override
   public String description() {
     return "Add the OpenTelemetry agent to the Dockerfile when cleanPlugin.otel is enabled";
+  }
+
+  /** A Dockerfile that can't be read is skipped, so the others are still updated. */
+  private boolean update(ModuleBuilder builder, String dockerfile) {
+    try {
+      return builder.updateFile(dockerfile, this::addAgent);
+    } catch (IOException e) {
+      builder.getLogger().debug("Can't read {}, skipping: {}", dockerfile, e.getMessage());
+      return false;
+    }
   }
 }

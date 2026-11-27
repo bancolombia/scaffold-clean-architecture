@@ -52,7 +52,7 @@ public class RestConsumer {
   private static String executeForBody(Request request) throws IOException {
     try (Response response = client.newCall(request).execute()) {
       if (!response.isSuccessful()) {
-        throw new IOException("HTTP " + response.code() + " for " + request.url());
+        throw new HttpStatusException(response.code(), request.url().toString());
       }
       return response.body().string();
     }
