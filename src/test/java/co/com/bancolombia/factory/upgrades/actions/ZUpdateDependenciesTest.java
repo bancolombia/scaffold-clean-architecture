@@ -200,4 +200,23 @@ class ZUpdateDependenciesTest {
             file, current.replace("version '4.1.2' apply false", "version '4.2.0' apply false"));
     verify(operations).findLatestGradlePlugin(any(DependencyRelease.class));
   }
+
+  @Test
+  void shouldUpdateTheOlderDeclarationOfAnArtifactDeclaredInSeveralFiles() {
+    String newerFile = "./a.gradle";
+    String olderFile = "./b.gradle";
+    String newer = "dependencies {\n\timplementation 'group:artifact:1.5.0'\n}";
+    String older = "dependencies {\n\timplementation 'group:artifact:1.0.0'\n}";
+    when(builder.getParam(DEPENDENCIES_TO_UPDATE)).thenReturn(Set.of());
+    when(builder.getParam(FILES_TO_UPDATE)).thenReturn(List.of(newerFile, olderFile));
+    when(operations.findLatestDependency(any(DependencyRelease.class)))
+        .thenReturn(LookupResult.found(DependencyRelease.from("group:artifact:1.5.0")));
+    builder.addFile(newerFile, newer);
+    builder.addFile(olderFile, older);
+
+    assertTrue(updater.up(builder));
+
+    verify(builder).addFile(olderFile, newer);
+    verify(operations).findLatestDependency(any(DependencyRelease.class));
+  }
 }

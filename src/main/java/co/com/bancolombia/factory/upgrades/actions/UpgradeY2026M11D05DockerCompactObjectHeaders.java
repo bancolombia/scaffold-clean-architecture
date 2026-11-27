@@ -19,7 +19,7 @@ public class UpgradeY2026M11D05DockerCompactObjectHeaders implements UpgradeActi
     try {
       boolean applied = false;
       for (String dockerfile : builder.findFiles(DEPLOYMENT_DIR, DOCKERFILE_NAME)) {
-        applied |= builder.updateFile(dockerfile, this::addFlag);
+        applied |= update(builder, dockerfile);
       }
       return applied;
     } catch (IOException e) {
@@ -43,5 +43,15 @@ public class UpgradeY2026M11D05DockerCompactObjectHeaders implements UpgradeActi
   @Override
   public String description() {
     return "Add -XX:+UseCompactObjectHeaders to JAVA_OPTS in the Dockerfile when using Java 25";
+  }
+
+  /** A Dockerfile that can't be read is skipped, so the others are still updated. */
+  private boolean update(ModuleBuilder builder, String dockerfile) {
+    try {
+      return builder.updateFile(dockerfile, this::addFlag);
+    } catch (IOException e) {
+      builder.getLogger().debug("Can't read {}, skipping: {}", dockerfile, e.getMessage());
+      return false;
+    }
   }
 }

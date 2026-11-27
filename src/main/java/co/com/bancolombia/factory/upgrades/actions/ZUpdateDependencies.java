@@ -12,7 +12,6 @@ import co.com.bancolombia.utils.operations.OperationsProvider;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -45,23 +44,24 @@ public class ZUpdateDependencies implements UpgradeAction {
               .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    Set<DependencyRelease> dependencies =
-        deps.stream()
-            .map(DependencyRelease::from)
-            .collect(Collectors.toCollection(LinkedHashSet::new));
+    // Every declaration, also of the same artifact with another version: the lookup keeps the
+    // oldest
+    List<DependencyRelease> dependencies = deps.stream().map(DependencyRelease::from).toList();
 
     String depsMsg = String.join("\n- ", deps);
     logger.lifecycle("Checking {} dependencies updates: \n- {}", dependencies.size(), depsMsg);
 
     DependencyLookup.Result result = DependencyLookup.lookup(dependencies, operations, logger);
-    boolean dependenciesUpdated =
-        result.updates().stream()
-            .map(DependencyLookup.Update::latest)
-            .map(release -> applyToFile(builder, gradleFiles, release))
-            .reduce(false, (current, applied) -> current || applied);
-    if (!dependencies.isEmpty()) {
-      result.logSummary(logger);
+    int updated = 0;
+    for (DependencyLookup.Update update : result.updates()) {
+      if (applyToFile(builder, gradleFiles, update.latest())) {
+        updated++;
+      }
     }
+    if (!dependencies.isEmpty()) {
+      result.logSummary(logger, updated);
+    }
+    boolean dependenciesUpdated = updated > 0;
     return updateWrapper(builder, gradleFiles, updateAll) || dependenciesUpdated;
   }
 
@@ -130,7 +130,6 @@ public class ZUpdateDependencies implements UpgradeAction {
 
   @SneakyThrows
   private boolean update(ModuleBuilder builder, DependencyRelease release, String file) {
-    return builder.updateExpression(
-        file, release.toRegex(), Matcher.quoteReplacement(release.toString()));
+    return builder.updateFile(file, release::updateOlderDeclarations);
   }
 }

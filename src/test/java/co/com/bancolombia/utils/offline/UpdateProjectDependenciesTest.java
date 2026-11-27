@@ -146,9 +146,9 @@ class UpdateProjectDependenciesTest {
     when(operations.findLatestDependency(any()))
         .thenReturn(
             LookupResult.found(
-                DependencyRelease.from("com.github.spullara.mustache.java:compiler:1.2$1")));
+                DependencyRelease.from("com.github.spullara.mustache.java:compiler:99.2$1")));
     when(operations.findLatestGradlePlugin(any()))
-        .thenReturn(LookupResult.found(DependencyRelease.from("id org.sonarqube version 5.0$1")));
+        .thenReturn(LookupResult.found(DependencyRelease.from("id org.sonarqube version 99.0$1")));
     when(operations.findLatestGradleVersion()).thenReturn(LookupResult.found("99.9$1"));
     when(operations.findGradleDistributionSha256("99.9$1", "bin"))
         .thenReturn(LookupResult.found(NEW_SHA256));
@@ -156,8 +156,8 @@ class UpdateProjectDependenciesTest {
     task.run();
     // Assert
     String result = Files.readString(TEST_FILE);
-    assertTrue(result.contains("'com.github.spullara.mustache.java:compiler:1.2$1'"));
-    assertTrue(result.contains("id 'org.sonarqube' version '5.0$1'"));
+    assertTrue(result.contains("'com.github.spullara.mustache.java:compiler:99.2$1'"));
+    assertTrue(result.contains("id 'org.sonarqube' version '99.0$1'"));
     assertTrue(result.contains("gradleVersion = '99.9$1'"));
   }
 }

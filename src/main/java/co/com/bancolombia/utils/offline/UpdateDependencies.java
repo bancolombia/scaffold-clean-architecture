@@ -1,6 +1,7 @@
 package co.com.bancolombia.utils.offline;
 
 import co.com.bancolombia.Constants;
+import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.models.UpdateSettings;
 import co.com.bancolombia.utils.FileUtils;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,22 +69,30 @@ public class UpdateDependencies {
       String content,
       List<UpdateSettings.Dependency> dependencies,
       Function<DependencyRelease, LookupResult<DependencyRelease>> finder) {
-    // Looked up in the order of the settings; the names are kept by instance, not by equality
+    // Looked up in the order of the settings; an artifact can hold the version of several fields
     List<DependencyRelease> current = new ArrayList<>();
-    Map<DependencyRelease, String> names = new IdentityHashMap<>();
+    Map<DependencyRelease, List<String>> names = new LinkedHashMap<>();
     for (UpdateSettings.Dependency dependency : dependencies) {
       DependencyRelease release = DependencyRelease.from(dependency.getPackageName());
       release.setVersion(Constants.getVersion(dependency.getName()));
       current.add(release);
-      names.put(release, dependency.getName());
+      names.computeIfAbsent(release, key -> new ArrayList<>()).add(dependency.getName());
     }
     String updated = content;
+    int applied = 0;
     DependencyLookup.Result result = DependencyLookup.lookup(current, finder, LOGGER);
     for (DependencyLookup.Update update : result.updates()) {
-      updated = updateVersion(updated, names.get(update.current()), update.latest().getVersion());
-      LOGGER.lifecycle("Dependency updated: {}", update.latest());
+      DependencyRelease latest = update.latest();
+      for (String name : names.get(update.current())) {
+        // Only the fields that are older: one field can already be newer than another
+        if (UpdateUtils.isNewerVersion(Constants.getVersion(name), latest.getVersion())) {
+          updated = updateVersion(updated, name, latest.getVersion());
+          applied++;
+          LOGGER.lifecycle("Dependency updated: {} ({})", latest, name);
+        }
+      }
     }
-    result.logSummary(LOGGER);
+    result.logSummary(LOGGER, applied);
     return updated;
   }
 

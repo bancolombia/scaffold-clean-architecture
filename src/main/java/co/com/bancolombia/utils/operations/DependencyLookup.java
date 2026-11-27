@@ -31,11 +31,14 @@ public class DependencyLookup {
   public record Result(List<Update> updates, int upToDate, int notFound, int failed) {
     static final Result EMPTY = new Result(List.of(), 0, 0, 0);
 
-    /** Logged by the caller once the updates are applied, so it closes what was done. */
-    public void logSummary(Logger logger) {
+    /**
+     * Logged by the caller once the updates are applied, with how many were written: an update can
+     * find nothing to replace, such as a version given by a variable.
+     */
+    public void logSummary(Logger logger, int updated) {
       logger.lifecycle(
           "Dependencies: {} updated, {} up to date, {} not found, {} failed",
-          updates.size(),
+          updated,
           upToDate,
           notFound,
           failed);

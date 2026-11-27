@@ -12,7 +12,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -58,19 +57,24 @@ public class UpdateProjectDependencies {
     Set<String> declarations =
         new LinkedHashSet<>(Utils.findExpressions(content, DependencyRelease.DECLARATION_REGEX));
     declarations.addAll(Utils.findExpressions(content, DependencyRelease.PLUGIN_DECLARATION_REGEX));
+    // Every declaration, also of the same artifact with another version: the lookup keeps the
+    // oldest
     List<DependencyRelease> dependencies =
-        declarations.stream().map(DependencyRelease::from).distinct().toList();
+        declarations.stream().map(DependencyRelease::from).toList();
     DependencyLookup.Result result = DependencyLookup.lookup(dependencies, operations, LOGGER);
     String updated = content;
+    int applied = 0;
     for (DependencyLookup.Update update : result.updates()) {
       DependencyRelease release = update.latest();
-      updated =
-          Utils.replaceExpression(
-              updated, release.toRegex(), Matcher.quoteReplacement(release.toString()));
-      LOGGER.lifecycle("Dependency updated: {}", release);
+      String next = release.updateOlderDeclarations(updated);
+      if (!next.equals(updated)) {
+        applied++;
+        LOGGER.lifecycle("Dependency updated: {}", release);
+      }
+      updated = next;
     }
     if (!dependencies.isEmpty()) {
-      result.logSummary(LOGGER);
+      result.logSummary(LOGGER, applied);
     }
     return updated;
   }

@@ -132,4 +132,27 @@ class DependencyReleaseTest {
         "id 'org.sonarqube' version '7.6'\nid 'org.sonarqube' version \"$sonarVersion\"",
         buildGradle.replaceAll(plugin.toRegex(), plugin.toString()));
   }
+
+  @Test
+  void shouldUpdateOnlyOlderDeclarationsKeepingQuotesAndClassifier() {
+    DependencyRelease latest = DependencyRelease.from("io.netty:netty-epoll:4.2.0");
+    String content =
+        """
+                    implementation 'io.netty:netty-epoll:4.1.0:linux-x86_64'
+                    implementation "io.netty:netty-epoll:4.1.0"
+                    implementation 'io.netty:netty-epoll:5.0.0-M1'""";
+
+    assertEquals(
+        """
+                    implementation 'io.netty:netty-epoll:4.2.0:linux-x86_64'
+                    implementation "io.netty:netty-epoll:4.2.0"
+                    implementation 'io.netty:netty-epoll:5.0.0-M1'""",
+        latest.updateOlderDeclarations(content));
+  }
+
+  @Test
+  void shouldReadTheVersionOfADeclarationWithClassifier() {
+    assertEquals(
+        "4.1.0", DependencyRelease.from("io.netty:netty-epoll:4.1.0:linux-x86_64").getVersion());
+  }
 }

@@ -45,7 +45,7 @@ class DependencyLookupTest {
 
     assertEquals(List.of(new DependencyLookup.Update(outdated, newer)), result.updates());
     verify(logger).info("{} has a newer version {}", outdated, "1.1.0");
-    result.logSummary(logger);
+    result.logSummary(logger, result.updates().size());
     verify(logger).info("{} is up to date", upToDate);
     verify(logger).warn("{} not found in {}", missing.toString(), SOURCE);
     verify(logger).warn("Can't check {} in {}: {}", broken.toString(), SOURCE, "HTTP 500");

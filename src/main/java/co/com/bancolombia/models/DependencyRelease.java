@@ -4,6 +4,7 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Objects;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,30 @@ public class DependencyRelease {
         Pattern.quote(this.getGroup()), Pattern.quote(this.getArtifact()));
   }
 
+  /**
+   * Writes this release over the declarations of its artifact that are older, keeping their quotes
+   * and classifier. A declaration that is the same or newer, such as a milestone, is not changed.
+   */
+  public String updateOlderDeclarations(String content) {
+    return Pattern.compile(toRegex())
+        .matcher(content)
+        .replaceAll(match -> Matcher.quoteReplacement(updated(match.group())));
+  }
+
+  private String updated(String declaration) {
+    String unquoted = declaration.replace("'", "").replace("\"", "");
+    if (!isNewest(from(unquoted))) {
+      return declaration;
+    }
+    if (isGradlePlugin()) {
+      return toString();
+    }
+    String[] parts = unquoted.split(":", 4);
+    String classifier = parts.length == 4 ? ":" + parts[3] : "";
+    char quote = declaration.charAt(0);
+    return quote + getGroup() + ":" + getArtifact() + ":" + getVersion() + classifier + quote;
+  }
+
   public boolean valid() {
     return getGroup() != null && getArtifact() != null;
   }
@@ -94,7 +119,8 @@ public class DependencyRelease {
         release.setGroup(parts[0]);
         release.setArtifact(parts[1]);
       }
-      if (parts.length == 3) {
+      if (parts.length >= 3) {
+        // A fourth part is a classifier, such as linux-x86_64, that is kept on update
         release.setVersion(parts[2]);
       }
     }
