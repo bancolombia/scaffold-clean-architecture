@@ -15,8 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -27,7 +31,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import lombok.AccessLevel;
@@ -81,18 +84,33 @@ public class FileUtils {
     return readFileAsString(file, logger);
   }
 
+  /**
+   * Reads a file once, as UTF-8 when its bytes are valid UTF-8 and as ISO-8859-1 otherwise, which
+   * decodes any byte. Line breaks become \\n and the last one is dropped. A file that does not
+   * exist fails at once with {@link NoSuchFileException}.
+   */
   public static String readFileAsString(File file, Logger logger) throws IOException {
-    try (Stream<String> lines = Files.lines(Paths.get(file.toURI()))) {
-      return lines.collect(Collectors.joining("\n"));
-    } catch (Exception e) {
-      logException(e, logger, file, "UTF_8");
+    Path path = file.toPath();
+    if (Files.notExists(path)) {
+      throw new NoSuchFileException(file.getAbsolutePath());
     }
-    try (Stream<String> lines = Files.lines(Paths.get(file.toURI()), StandardCharsets.ISO_8859_1)) {
-      return lines.collect(Collectors.joining("\n"));
-    } catch (Exception e) {
-      logException(e, logger, file, "ISO_8859_1");
+    return decode(Files.readAllBytes(path), file, logger).lines().collect(Collectors.joining("\n"));
+  }
+
+  private static String decode(byte[] bytes, File file, Logger logger) {
+    try {
+      return StandardCharsets.UTF_8
+          .newDecoder()
+          .onMalformedInput(CodingErrorAction.REPORT)
+          .onUnmappableCharacter(CodingErrorAction.REPORT)
+          .decode(ByteBuffer.wrap(bytes))
+          .toString();
+    } catch (CharacterCodingException e) {
+      if (logger != null) {
+        logger.debug("{} is not UTF-8, reading it as ISO-8859-1", file.getAbsolutePath());
+      }
+      return new String(bytes, StandardCharsets.ISO_8859_1);
     }
-    return new String(Files.readAllBytes(Paths.get(file.toURI())));
   }
 
   public static List<File> finderSubProjects(String dirPath) {
@@ -305,16 +323,6 @@ public class FileUtils {
             property);
       }
       return defaultValue;
-    }
-  }
-
-  private static void logException(Exception e, Logger logger, File file, String charset) {
-    if (logger != null) {
-      logger.warn(
-          "Error '{}' reading file {} with charset '{}'",
-          e.getMessage(),
-          file.getAbsoluteFile(),
-          charset);
     }
   }
 }
