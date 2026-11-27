@@ -56,8 +56,9 @@ public class DependencyRelease {
   }
 
   /**
-   * Writes this release over the declarations of its artifact that are older, keeping their quotes
-   * and classifier. A declaration that is the same or newer, such as a milestone, is not changed.
+   * Writes this release over the declarations of its artifact that are older, keeping their
+   * classifier and in single quotes, as Gradle recommends for strings without variables. A
+   * declaration that is the same or newer, such as a milestone, is not changed.
    */
   public String updateOlderDeclarations(String content) {
     return Pattern.compile(toRegex())
@@ -75,8 +76,7 @@ public class DependencyRelease {
     }
     String[] parts = unquoted.split(":", 4);
     String classifier = parts.length == 4 ? ":" + parts[3] : "";
-    char quote = declaration.charAt(0);
-    return quote + getGroup() + ":" + getArtifact() + ":" + getVersion() + classifier + quote;
+    return "'" + getGroup() + ":" + getArtifact() + ":" + getVersion() + classifier + "'";
   }
 
   public boolean valid() {

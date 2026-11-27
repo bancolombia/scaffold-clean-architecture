@@ -134,7 +134,7 @@ class DependencyReleaseTest {
   }
 
   @Test
-  void shouldUpdateOnlyOlderDeclarationsKeepingQuotesAndClassifier() {
+  void shouldUpdateOnlyOlderDeclarationsInSingleQuotesKeepingTheClassifier() {
     DependencyRelease latest = DependencyRelease.from("io.netty:netty-epoll:4.2.0");
     String content =
         """
@@ -145,7 +145,7 @@ class DependencyReleaseTest {
     assertEquals(
         """
                     implementation 'io.netty:netty-epoll:4.2.0:linux-x86_64'
-                    implementation "io.netty:netty-epoll:4.2.0"
+                    implementation 'io.netty:netty-epoll:4.2.0'
                     implementation 'io.netty:netty-epoll:5.0.0-M1'""",
         latest.updateOlderDeclarations(content));
   }
