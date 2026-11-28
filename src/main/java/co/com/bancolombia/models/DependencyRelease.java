@@ -34,7 +34,7 @@ public class DependencyRelease {
 
   /** Finds quoted {@code group:artifact:version} declarations, one per string literal. */
   public static final String DECLARATION_REGEX =
-      "['\"][^'\"\\s]+:[^'\"\\s]+:[^$'\"\\s][^'\"\\s]*['\"]";
+      "['\"][^'\":\\s]++:[^'\":\\s]++:[^$'\"\\s][^'\"\\s]*+['\"]";
 
   /**
    * Finds {@code id 'plugin' version 'x'} declarations; a version given by a variable, such as
@@ -85,8 +85,7 @@ public class DependencyRelease {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof DependencyRelease) {
-      DependencyRelease rel = (DependencyRelease) obj;
+    if (obj instanceof DependencyRelease rel) {
       return rel.valid()
           && valid()
           && rel.getGroup().equals(getGroup())

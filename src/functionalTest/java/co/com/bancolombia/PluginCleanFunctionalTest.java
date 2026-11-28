@@ -17,6 +17,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.file.SimplePathVisitor;
 import org.gradle.testkit.runner.BuildResult;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.Test;
 /** A simple functional test for the 'co.com.bancolombia.greeting' plugin. */
 @SuppressWarnings("DataFlowIssue")
 public class PluginCleanFunctionalTest {
+  private static final Logger LOGGER = Logger.getLogger(PluginCleanFunctionalTest.class.getName());
 
   public static final String BUILD_FUNCTIONAL_TEST_README_MD = "build/functionalTest/README.md";
   public static final String BUILD_FUNCTIONAL_TEST_GITIGNORE = "build/functionalTest/.gitignore";
@@ -118,7 +120,7 @@ public class PluginCleanFunctionalTest {
             }
           });
     } catch (IOException e) {
-      System.out.println("error delete Structure " + e.getMessage());
+      LOGGER.warning(() -> "error delete Structure " + e.getMessage());
     }
   }
 
