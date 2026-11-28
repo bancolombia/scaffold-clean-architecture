@@ -8,6 +8,7 @@ import co.com.bancolombia.factory.upgrades.UpdateUtils;
 import co.com.bancolombia.factory.upgrades.UpgradeAction;
 import co.com.bancolombia.utils.Utils;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -20,19 +21,19 @@ import java.util.regex.Pattern;
  * <ul>
  *   <li>In every module, resilience4j-spring-boot3 becomes resilience4j-spring-boot4, at least in
  *       the version that the plugin generates.
- *   <li>In the rest consumer and the Cognito token provider, which are clients, the webflux and
- *       webmvc starters and their test starters become the webclient and restclient ones. A web
- *       server belongs to an entry point or to app-service, so it is not kept in these adapters.
- *   <li>When one of these adapters was the only module that declared the server starter, it is
+ *   <li>In the driven adapters, such as the rest consumer and the Cognito token provider, whatever
+ *       their folder is named, the webflux and webmvc starters and their test starters become the
+ *       webclient and restclient ones. A driven adapter is a client: a web server belongs to an
+ *       entry point or to app-service, so it is not kept in these modules.
+ *   <li>When the driven adapters were the only modules that declared the server starter, it is
  *       added to app-service, so the application keeps its web server, for example for Actuator.
  * </ul>
  */
 public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
   private static final String BOOT = "org.springframework.boot:";
-  private static final List<String> CLIENT_MODULES =
-      List.of(
-          "infrastructure/driven-adapters/rest-consumer/build.gradle",
-          "infrastructure/driven-adapters/cognito-token-provider/build.gradle");
+  // Any module inside the driven adapters folder, so a renamed one is upgraded too
+  private static final Pattern CLIENT_MODULE =
+      Pattern.compile("^infrastructure/driven-adapters/.+/build\\.gradle$");
   private static final Map<String, String> CLIENT_STARTERS =
       Map.of(
           "spring-boot-starter-webflux", "spring-boot-starter-webclient",
@@ -64,10 +65,13 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
       builder.getLogger().debug("Can't list the Gradle files, skipping: {}", e.getMessage());
       return false;
     }
-    List<String> serversToKeep = serversOnlyInClients(builder, files);
+    Path projectDir = builder.getProjectDir().toPath();
+    List<String> clients = files.stream().filter(file -> isClientModule(projectDir, file)).toList();
+    List<String> others = files.stream().filter(file -> !clients.contains(file)).toList();
+    List<String> serversToKeep = serversOnlyInClients(builder, clients, others);
     boolean applied = false;
     for (String file : files) {
-      applied |= update(builder, file);
+      applied |= update(builder, file, clients.contains(file));
     }
     for (String server : serversToKeep) {
       applied |= addToAppService(builder, server);
@@ -76,18 +80,11 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
   }
 
   /** The server starters that only the client adapters declare, which would be lost otherwise. */
-  private static List<String> serversOnlyInClients(ModuleBuilder builder, List<String> files) {
+  private static List<String> serversOnlyInClients(
+      ModuleBuilder builder, List<String> clients, List<String> others) {
     return SERVER_STARTERS.stream()
-        .filter(
-            server ->
-                files.stream()
-                    .filter(UpgradeY2026M11D27RestClientsSpringBoot4::isClientModule)
-                    .anyMatch(file -> declares(builder, file, server)))
-        .filter(
-            server ->
-                files.stream()
-                    .filter(file -> !isClientModule(file))
-                    .noneMatch(file -> declares(builder, file, server)))
+        .filter(server -> clients.stream().anyMatch(file -> declares(builder, file, server)))
+        .filter(server -> others.stream().noneMatch(file -> declares(builder, file, server)))
         .toList();
   }
 
@@ -131,23 +128,21 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
       if (added) {
         builder
             .getLogger()
-            .lifecycle(
-                "{} moved to app-service, the rest client adapters no longer declare it", server);
+            .lifecycle("{} moved to app-service, the driven adapters no longer declare it", server);
       }
       return added;
     } catch (IOException e) {
       builder
           .getLogger()
           .warn(
-              "Add {} to the module that starts the web server: the rest client adapters no longer"
+              "Add {} to the module that starts the web server: the driven adapters no longer"
                   + " declare it",
               server);
       return false;
     }
   }
 
-  private boolean update(ModuleBuilder builder, String file) {
-    boolean client = isClientModule(file);
+  private boolean update(ModuleBuilder builder, String file, boolean client) {
     try {
       return builder.updateFile(
           file,
@@ -161,9 +156,15 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
     }
   }
 
-  private static boolean isClientModule(String file) {
-    String path = file.replace('\\', '/');
-    return CLIENT_MODULES.stream().anyMatch(path::endsWith);
+  /** Whether the file, relative to the project, is the build file of a driven adapter. */
+  private static boolean isClientModule(Path projectDir, String file) {
+    Path path = Path.of(file);
+    String relative =
+        (path.isAbsolute() ? projectDir.toAbsolutePath().relativize(path) : path)
+            .normalize()
+            .toString()
+            .replace('\\', '/');
+    return CLIENT_MODULE.matcher(relative).matches();
   }
 
   /**
@@ -245,6 +246,6 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
   @Override
   public String description() {
     return "Use Resilience4j for Spring Boot 4, and the webclient and restclient starters in the"
-        + " rest consumer and the Cognito token provider";
+        + " driven adapters, such as the rest consumer and the Cognito token provider";
   }
 }

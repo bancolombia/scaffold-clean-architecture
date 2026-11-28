@@ -251,6 +251,25 @@ class UpgradeY2026M11D27RestClientsSpringBoot4Test {
     assertEquals(appService, read(APP_SERVICE));
   }
 
+  @Test
+  void shouldUpgradeADrivenAdapterWithAnotherFolderName() throws IOException {
+    String renamed = "infrastructure/driven-adapters/employee-consumer/build.gradle";
+    write(renamed, REACTIVE_CONSUMER);
+    write(
+        ENTRY_POINT,
+        "dependencies {\n    implementation 'org.springframework.boot:spring-boot-starter-webflux'\n}\n");
+
+    assertTrue(updater.up(builder));
+
+    String updated = read(renamed);
+    assertTrue(
+        updated.contains(
+            "implementation 'org.springframework.boot:spring-boot-starter-webclient'"));
+    assertTrue(updated.contains("spring-boot-starter-webclient-test'"));
+    assertFalse(updated.contains("spring-boot-starter-webflux"));
+    assertTrue(read(ENTRY_POINT).contains("spring-boot-starter-webflux'"));
+  }
+
   private void write(String path, String content) throws IOException {
     Path file = projectDir.resolve(path);
     Files.createDirectories(file.getParent());
