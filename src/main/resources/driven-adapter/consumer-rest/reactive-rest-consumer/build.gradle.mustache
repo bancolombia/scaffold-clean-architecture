@@ -1,13 +1,12 @@
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{RESILIENCE_4J_VERSION}}'
+    implementation 'org.springframework.boot:spring-boot-starter-webclient'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot4:{{RESILIENCE_4J_VERSION}}'
     implementation 'io.github.resilience4j:resilience4j-reactor:{{RESILIENCE_4J_VERSION}}'
     {{#metrics}}
     implementation 'io.micrometer:micrometer-core'
     {{/metrics}}
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webclient-test'
     testImplementation 'com.squareup.okhttp3:okhttp:{{OKHTTP_VERSION}}'
     testImplementation 'com.squareup.okhttp3:mockwebserver:{{OKHTTP_VERSION}}'
-
 }
