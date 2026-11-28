@@ -54,7 +54,8 @@ public class UpgradeY2026M11D27RestClientsSpringBoot4 implements UpgradeAction {
       Pattern.compile(Pattern.quote(RESILIENCE4J) + "([\\w-]+):(\\d[^'\"\\s]*)(?=['\"])");
   private static final Pattern MAIN_CONFIGURATION =
       Pattern.compile(
-          "(?m)^[ \\t]*(implementation|api|runtimeOnly)\\s*\\(?\\s*['\"]([^'\"]+)['\"]");
+          // Possessive and unambiguous: the spaces before and after the parenthesis are not shared
+          "(?m)^[ \\t]*+(implementation|api|runtimeOnly)\\s*+(?:\\(\\s*+)?['\"]([^'\"]++)['\"]");
 
   @Override
   public boolean up(ModuleBuilder builder) {
