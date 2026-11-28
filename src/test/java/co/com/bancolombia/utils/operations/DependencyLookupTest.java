@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import org.gradle.api.logging.Logger;
@@ -143,10 +145,12 @@ class DependencyLookupTest {
         List.of(
             DependencyRelease.from("group:first:1.0.0"),
             DependencyRelease.from("group:second:1.0.0"));
+    // Never released: each lookup waits until the interruption cancels it
+    CountDownLatch never = new CountDownLatch(1);
     Function<DependencyRelease, LookupResult<DependencyRelease>> slow =
         dependency -> {
           try {
-            Thread.sleep(5_000);
+            never.await(5, TimeUnit.SECONDS);
           } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
           }

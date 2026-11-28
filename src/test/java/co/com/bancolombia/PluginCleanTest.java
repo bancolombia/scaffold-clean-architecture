@@ -29,6 +29,7 @@ import org.gradle.api.artifacts.ExternalModuleDependency;
 import org.gradle.api.artifacts.ProjectDependency;
 import org.gradle.api.attributes.Category;
 import org.gradle.api.internal.project.ProjectInternal;
+import org.gradle.api.plugins.PluginContainer;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.JavaExec;
 import org.gradle.api.tasks.bundling.Jar;
@@ -140,10 +141,11 @@ class PluginCleanTest {
     Project project =
         ProjectBuilder.builder().withProjectDir(tempDir.toFile()).withName("legacy").build();
 
+    PluginContainer plugins = project.getPlugins();
+
     GradleException exception =
         assertThrows(
-            GradleException.class,
-            () -> project.getPlugins().apply("co.com.bancolombia.cleanArchitecture"));
+            GradleException.class, () -> plugins.apply("co.com.bancolombia.cleanArchitecture"));
 
     assertNotNull(exception);
     assertFalse(project.getPlugins().hasPlugin("java"));
