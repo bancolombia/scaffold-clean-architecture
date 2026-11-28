@@ -253,7 +253,7 @@ sonar {
         property "sonar.junit.reportPaths", "build/test-results/test"
         property "sonar.java-coveragePlugin", "jacoco"
         property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/report.xml"
-        property "sonar.tests", "src/test/java"
+        property "sonar.tests", "src/test/java,src/functionalTest/java"
         property "sonar.exclusions", "docs/**,.github/**,src/functionalTest/**,src/test/**,**/**models**," +
                 "**/**exceptions**,**/examples-ca/**,**/LocalTasks.java"
         property "sonar.sourceEncoding", "UTF-8"
