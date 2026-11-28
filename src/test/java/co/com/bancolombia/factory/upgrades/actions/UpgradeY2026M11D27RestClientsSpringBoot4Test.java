@@ -270,6 +270,21 @@ class UpgradeY2026M11D27RestClientsSpringBoot4Test {
     assertTrue(read(ENTRY_POINT).contains("spring-boot-starter-webflux'"));
   }
 
+  @Test
+  void shouldFindTheMainDeclarationsWithOrWithoutParentheses() {
+    String starter = "spring-boot-starter-webflux";
+
+    assertTrue(
+        UpgradeY2026M11D27RestClientsSpringBoot4.declaresForMain(
+            "    implementation 'org.springframework.boot:spring-boot-starter-webflux'", starter));
+    assertTrue(
+        UpgradeY2026M11D27RestClientsSpringBoot4.declaresForMain(
+            "runtimeOnly ( \"org.springframework.boot:spring-boot-starter-webflux\")", starter));
+    assertFalse(
+        UpgradeY2026M11D27RestClientsSpringBoot4.declaresForMain(
+            "testImplementation 'org.springframework.boot:spring-boot-starter-webflux'", starter));
+  }
+
   private void write(String path, String content) throws IOException {
     Path file = projectDir.resolve(path);
     Files.createDirectories(file.getParent());
