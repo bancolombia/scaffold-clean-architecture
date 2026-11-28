@@ -24,12 +24,16 @@ import com.github.mustachejava.MustacheFactory;
 import com.github.mustachejava.resolver.DefaultResolver;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -48,6 +52,7 @@ public class ModuleBuilder {
   private final DefaultResolver resolver = new DefaultResolver();
   private final MustacheFactory mustacheFactory = new DefaultMustacheFactory();
   private final Map<String, FileModel> files = new ConcurrentHashMap<>();
+  private boolean latestReleaseChecked;
   private final List<String> dirs = new ArrayList<>();
   private final List<String> dirsToDelete = new ArrayList<>();
   private final Map<String, Object> params = new HashMap<>();
@@ -355,6 +360,33 @@ public class ModuleBuilder {
     }
   }
 
+  /**
+   * The files with the given name in a folder of the project or its subfolders, on disk or pending
+   * to be written, sorted, so each is updated once and in the same order.
+   */
+  public List<String> findFiles(String folder, String fileName) throws IOException {
+    File root = FileUtils.resolveFile(projectDir, folder).getCanonicalFile();
+    Set<String> found = new TreeSet<>();
+    if (root.isDirectory()) {
+      try (Stream<Path> paths = Files.walk(root.toPath())) {
+        paths
+            .filter(Files::isRegularFile)
+            .filter(path -> fileName.equals(path.getFileName().toString()))
+            .map(path -> path.toFile().getAbsolutePath())
+            .forEach(found::add);
+      } catch (UncheckedIOException e) {
+        // Files.walk reports a folder that can't be read this way
+        throw e.getCause();
+      }
+    }
+    String prefix = root.getPath() + File.separator;
+    files.keySet().stream()
+        .filter(path -> path.startsWith(prefix))
+        .filter(path -> fileName.equals(new File(path).getName()))
+        .forEach(found::add);
+    return List.copyOf(found);
+  }
+
   public boolean updateFile(String path, FileUpdater updater) throws IOException {
     String content = readFile(path);
     String newContent = updater.update(content);
@@ -366,7 +398,9 @@ public class ModuleBuilder {
   }
 
   public Release getLatestRelease() {
-    if (params.get(LATEST_RELEASE) == null) {
+    // Checked once per run, also when it can't be checked, so it is not queried and warned again
+    if (!latestReleaseChecked) {
+      latestReleaseChecked = true;
       loadLatestRelease();
     }
     return (Release) params.get(LATEST_RELEASE);
@@ -416,7 +450,16 @@ public class ModuleBuilder {
   }
 
   private void loadLatestRelease() {
-    Release latestRelease = operations.getLatestPluginVersion();
+    if (Utils.majorVersionOf(Utils.getVersionPlugin()).isEmpty()) {
+      // Local builds use a placeholder version that has no releases to compare with
+      logger.debug("Plugin version {} has no releases", Utils.getVersionPlugin());
+      return;
+    }
+    Release latestRelease =
+        operations
+            .findLatestPluginVersion()
+            .valueOrWarn(logger, "the latest plugin version")
+            .orElse(null);
     if (latestRelease != null) {
       String latest = latestRelease.getTagName();
       if (latest.equals(Utils.getVersionPlugin())) {

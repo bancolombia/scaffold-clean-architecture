@@ -1,9 +1,10 @@
 package co.com.bancolombia.utils.operations;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import co.com.bancolombia.Constants;
 import co.com.bancolombia.models.DependencyRelease;
+import co.com.bancolombia.utils.Utils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,37 +16,29 @@ class MockOperationsTest {
   @Mock private DependencyRelease dependencyRelease;
 
   @Test
-  void getLatestPluginVersion() {
-    // Act
-    // Assert
-    assertNull(operations.getLatestPluginVersion());
+  void shouldReportEverythingAsUpToDate() {
+    assertEquals(
+        Utils.getVersionPlugin(), found(operations.findLatestPluginVersion()).getTagName());
+    assertEquals(
+        LookupResult.found(Constants.GRADLE_WRAPPER_VERSION), operations.findLatestGradleVersion());
+    assertEquals(
+        LookupResult.found(Constants.GRADLE_WRAPPER_SHA256),
+        operations.findGradleDistributionSha256(Constants.GRADLE_WRAPPER_VERSION, "bin"));
+    assertEquals(
+        LookupResult.found(dependencyRelease), operations.findLatestDependency(dependencyRelease));
+    assertEquals(
+        LookupResult.found(dependencyRelease),
+        operations.findLatestGradlePlugin(dependencyRelease));
   }
 
   @Test
-  void getGradleWrapperFromFile() {
-    // Act
-    // Assert
-    assertTrue(operations.getGradleWrapperFromFile().isEmpty());
+  void shouldNotFindTheChecksumOfAnotherGradleVersion() {
+    assertEquals(
+        LookupResult.notFound(MockOperations.SOURCE),
+        operations.findGradleDistributionSha256("0.0.0", "bin"));
   }
 
-  @Test
-  void getGradleDistributionSha256() {
-    // Act
-    // Assert
-    assertTrue(operations.getGradleDistributionSha256("9.8.2", "bin").isEmpty());
-  }
-
-  @Test
-  void getLatestGradlePluginVersion() {
-    // Act
-    // Assert
-    assertTrue(operations.getLatestGradlePluginVersion(dependencyRelease).isEmpty());
-  }
-
-  @Test
-  void shouldGetReal() {
-    // Act
-    // Assert
-    assertTrue(operations.getTheLastDependencyRelease(dependencyRelease).isEmpty());
+  private static <T> T found(LookupResult<T> result) {
+    return result.toOptional().orElseThrow();
   }
 }

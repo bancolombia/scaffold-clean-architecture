@@ -1,5 +1,6 @@
 package co.com.bancolombia.utils;
 
+import co.com.bancolombia.models.DependencyRelease;
 import co.com.bancolombia.Constants;
 import co.com.bancolombia.exceptions.CleanException;
 import co.com.bancolombia.exceptions.ParamNotFoundException;
@@ -437,6 +438,15 @@ class UtilsTest {
 
         String result = Utils.replaceGroup(text, regex, "", 4);
         assertEquals(expectedText, result);
+    }
+
+    @Test
+    void shouldFindExpressionsInTheOrderOfTheFile() {
+      String content = "'c:c:1.0'\n'a:a:1.0'\n'b:b:1.0'\n'a:a:1.0'";
+
+      assertEquals(
+          List.of("c:c:1.0", "a:a:1.0", "b:b:1.0"),
+          List.copyOf(Utils.findExpressions(content, DependencyRelease.DECLARATION_REGEX)));
     }
 
     private enum Options {
