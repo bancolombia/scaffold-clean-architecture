@@ -42,7 +42,7 @@
         },
         {
             "name": "RESILIENCE_4J_VERSION",
-            "packageName": "io.github.resilience4j:resilience4j-spring-boot3"
+            "packageName": "io.github.resilience4j:resilience4j-spring-boot4"
         },
         {
             "name": "BIN_STASH_VERSION",
