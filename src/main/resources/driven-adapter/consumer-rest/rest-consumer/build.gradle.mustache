@@ -1,7 +1,8 @@
 dependencies {
     implementation project(':model')
     implementation 'org.springframework:spring-context'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'io.github.resilience4j:resilience4j-spring-boot3:{{RESILIENCE_4J_VERSION}}'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
+    implementation 'io.github.resilience4j:resilience4j-spring-boot4:{{RESILIENCE_4J_VERSION}}'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
     testImplementation 'com.squareup.okhttp3:mockwebserver:{{OKHTTP_VERSION}}'
 }
