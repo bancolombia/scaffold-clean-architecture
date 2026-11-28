@@ -375,7 +375,7 @@ class PluginCleanTest {
     assertTrue(appService.getConfigurations().getByName("otelAgent").isCanBeResolved());
     assertNotNull(appService.getTasks().findByName("copyOtelAgent"));
     assertEquals(
-        appService.getLayout().getBuildDirectory().dir("otel").get().getAsFile(),
+        appService.getLayout().getBuildDirectory().dir("libs").get().getAsFile(),
         appService.getTasks().named("copyOtelAgent", Copy.class).get().getDestinationDir());
     assertTrue(
         appService.getTasks().named("bootJar").get().getDependsOn().contains("copyOtelAgent"));

@@ -78,8 +78,8 @@ class UpgradeY2026M11D07DockerOtelAgentTest {
         FROM eclipse-temurin:25-jdk-alpine
         RUN addgroup -S appgroup && adduser -S appuser -G appgroup
         WORKDIR /app
-        COPY *.jar demo.jar
-        COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+        COPY UtilsTest.jar demo.jar
+        COPY opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
         RUN chown -R appuser:appgroup /app
         ENV JAVA_OPTS="-javaagent:/app/opentelemetry-javaagent.jar -XX:+UseCompactObjectHeaders -XX:MaxRAMPercentage=70"
         USER appuser
@@ -99,13 +99,47 @@ class UpgradeY2026M11D07DockerOtelAgentTest {
         """
         FROM eclipse-temurin:25-jdk-alpine
         VOLUME /tmp
-        COPY *.jar demo.jar
-        COPY otel/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar
+        COPY UtilsTest.jar demo.jar
+        COPY opentelemetry-javaagent.jar /opentelemetry-javaagent.jar
         ENV JAVA_OPTS="-javaagent:/opentelemetry-javaagent.jar -Xshareclasses:name=cacheapp -XX:MaxRAMPercentage=70"
         USER appuser
         ENTRYPOINT [ "/bin/sh", "-c", "java $JAVA_OPTS -jar /demo.jar" ]
         """,
         builder.readFile(DOCKERFILE));
+  }
+
+  @Test
+  void shouldMoveTheAgentFromTheOtelFolderToTheFolderOfTheJar() throws IOException {
+    builder.addFile(BUILD_GRADLE, OTEL_ENABLED);
+    builder.addFile(
+        DOCKERFILE,
+        """
+        WORKDIR /app
+        COPY *.jar demo.jar
+        COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+        ENV JAVA_OPTS="-javaagent:/app/opentelemetry-javaagent.jar -XX:MaxRAMPercentage=70"
+        """);
+
+    assertTrue(updater.up(builder));
+
+    assertEquals(
+        """
+        WORKDIR /app
+        COPY UtilsTest.jar demo.jar
+        COPY opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+        ENV JAVA_OPTS="-javaagent:/app/opentelemetry-javaagent.jar -XX:MaxRAMPercentage=70"
+        """,
+        builder.readFile(DOCKERFILE));
+  }
+
+  @Test
+  void shouldKeepTheJarNameWhenTheDockerfileDoesNotUseAWildcard() throws IOException {
+    builder.addFile(BUILD_GRADLE, OTEL_ENABLED);
+    builder.addFile(DOCKERFILE, WITH_WORKDIR.replace("COPY *.jar", "COPY build/demo.jar"));
+
+    assertTrue(updater.up(builder));
+
+    assertTrue(builder.readFile(DOCKERFILE).contains("COPY build/demo.jar demo.jar\n"));
   }
 
   @Test

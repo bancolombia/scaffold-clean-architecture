@@ -211,9 +211,10 @@ class GenerateStructureTaskTest {
     String dockerfile = Files.readString(Path.of(dir, "deployment", "Dockerfile"));
 
     assertTrue(
-        dockerfile.contains(
-            "COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar"));
+        dockerfile.contains("COPY opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar"));
     assertTrue(dockerfile.contains("-javaagent:/app/opentelemetry-javaagent.jar"));
+    // build/libs holds the jar and the agent, so a wildcard would copy both
+    assertFalse(dockerfile.contains("COPY *.jar"));
   }
 
   @Test

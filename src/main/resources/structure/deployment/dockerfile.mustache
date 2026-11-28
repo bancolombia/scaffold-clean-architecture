@@ -10,9 +10,9 @@ FROM eclipse-temurin:25-jdk-alpine
 # NOTE: If the Java base image already provides the user and its permissions, remove this line
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
-COPY *.jar {{projectName}}.jar
+COPY {{projectName}}.jar {{projectName}}.jar
 {{#otel}}
-COPY otel/opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
+COPY opentelemetry-javaagent.jar /app/opentelemetry-javaagent.jar
 {{/otel}}
 # NOTE: If the Java base image already provides the user and its permissions, remove this line
 RUN chown -R appuser:appgroup /app

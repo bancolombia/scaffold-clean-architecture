@@ -27,6 +27,7 @@ public class RootModuleDependencyConventions {
   private static final String SPRING_BOOT_PLUGIN_ID = "org.springframework.boot";
   private static final String COPY_OTEL_AGENT = "copyOtelAgent";
   private static final String OTEL_AGENT = "otelAgent";
+  private static final String LIBS = "libs";
 
   public void configure(Project rootProject) {
     Set<String> excludedFromApp = resolveExcludedModulesFromApp(rootProject);
@@ -134,7 +135,7 @@ public class RootModuleDependencyConventions {
             Copy.class,
             task -> {
               task.from(appService.getConfigurations().getByName(OTEL_AGENT));
-              task.into(appService.getLayout().getBuildDirectory().dir("otel"));
+              task.into(appService.getLayout().getBuildDirectory().dir(LIBS));
               task.rename(file -> "opentelemetry-javaagent.jar");
             });
 
@@ -142,7 +143,7 @@ public class RootModuleDependencyConventions {
 
     File otelAgentJar =
         new File(
-            appService.getLayout().getBuildDirectory().dir("otel").get().getAsFile(),
+            appService.getLayout().getBuildDirectory().dir(LIBS).get().getAsFile(),
             "opentelemetry-javaagent.jar");
     appService
         .getTasks()

@@ -108,14 +108,15 @@ convention configures `app-service` with:
 
 - An `otelAgent` configuration depending on `io.opentelemetry.javaagent:opentelemetry-javaagent`
   at the plugin-managed version. It is resolvable but not consumable by other projects.
-- A `copyOtelAgent` task that copies the agent to `applications/app-service/build/otel/opentelemetry-javaagent.jar`.
+- A `copyOtelAgent` task that copies the agent to `applications/app-service/build/libs/opentelemetry-javaagent.jar`,
+  next to the `bootJar`.
 - `bootJar` depending on `copyOtelAgent`.
 - `bootRun` attaching the agent via `-javaagent`.
 
 :::warning[Don't forget the agent in your Docker image]
-The generated `Dockerfile` expects an `otel` folder with the agent next to the `bootJar` in the Docker build context.
-The agent is generated in `applications/app-service/build/otel`, so copy that folder next to the jar before building
-the image, otherwise the build will fail.
+The generated `Dockerfile` expects `opentelemetry-javaagent.jar` next to the `bootJar` in the Docker build context.
+Both are generated in `applications/app-service/build/libs`, so use that folder as the build context (the generated
+pipelines already publish it as the artifact), otherwise the image build will fail.
 :::
 
 :::tip[Verify the agent dependency]
